@@ -4730,7 +4730,7 @@ textarea.form-control-lg {
   display: flex;
   height: 1rem;
   overflow: hidden;
-  font-size: 0.75rem;
+  font-size: smaller;
   background-color: #e9ecef;
   border-radius: 0.25rem;
 }
