@@ -757,8 +757,8 @@
   }
 
   .col-lg-4 {
-    flex: content;
-    width: 100%;
+    flex: 0 0 auto;
+    width: 80%;
   }
 
   .col-lg-5 {

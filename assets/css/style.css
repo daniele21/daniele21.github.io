@@ -626,6 +626,11 @@ section {
   background-color: #149ddd;
 }
 
+.col-lg-4-bis {
+flex: 0 0 auto;
+width: 100%;
+}
+
 .portfolio-details .portfolio-info {
   padding: 30px;
   box-shadow: 0px 0 30px rgba(5, 13, 24, 0.08);
