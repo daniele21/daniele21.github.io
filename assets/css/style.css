@@ -15,6 +15,11 @@ flex: 0 0 auto;
 width: 33%;
 }
 
+.col-lg-7 {
+flex: 0 0 auto;
+width: 100%;
+}
+
 body {
   font-family: "Open Sans", sans-serif;
   color: #272829;
@@ -157,6 +162,12 @@ h1, h2, h3, h4, h5, h6 {
 .nav-menu > ul > li {
   position: relative;
   white-space: nowrap;
+}
+
+.awards-row .content {
+  padding-right: 20px; /* Adjust the value as needed */
+  margin-top: 30px;
+  padding-left: 70px; /* Adjust the value as needed */
 }
 
 .nav-menu a {
@@ -454,7 +465,7 @@ section {
 .resume .resume-title {
   font-size: 26px;
   font-weight: 700;
-  margin-top: 20px;
+  margin-top: 60px;
   margin-bottom: 20px;
   color: #050d18;
 }
@@ -647,6 +658,13 @@ flex: 0 0 auto;
 width: 45%;
 }
 
+.col-lg-4-quater {
+    flex: 0 0 auto;
+  width: 33%;
+    margin-top: 20px;
+    margin-right: auto;
+    margin-left: inherit;
+}
 .portfolio-details .portfolio-info {
   padding: 30px;
   box-shadow: 0px 0 30px rgba(5, 13, 24, 0.08);
@@ -1092,4 +1110,237 @@ width: 45%;
     width: auto;
     padding-right: 20px 15px;
   }
+}
+
+}
+/* Assuming your flex container is already defined like this: */
+.flex-container {
+    display: flex;
+    align-items: stretch; /* This makes children stretch to fill the container */
+
+}
+
+/* You can add a class to the flex item containing the image */
+.flex-item-centered-image {
+    display: flex;
+    justify-content: center; /* Center the image horizontally */
+    align-items: center; /* Center the image vertically */
+}
+
+.image-button {
+    width: 100px; /* Adjust based on your image's aspect ratio */
+    height: auto;
+    transition: transform 0.2s ease; /* Smooth transition for scaling */
+    cursor: pointer; /* Change the cursor to indicate it's clickable */
+}
+
+.image-button:hover {
+    transform: scale(1.05); /* Slightly increase the image size on hover */
+}
+
+/* Optional: add a box-shadow or border for emphasis */
+.image-button:hover {
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.project-item {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    margin-bottom: 30px; /* Add some space between project items */
+    background-color: rgb(13 65 253 / 9%); /* This is a light gray, you can choose any light color */
+    padding: 20px;
+    border-radius: 8px; /* Optional: to add rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: to add subtle shadow */
+    transition: all 1s ease; /* Smooth transition for any hover effects */
+}
+
+.project-image {
+    flex: 0 0 30%; /* Allocate 30% of the space and don't grow or shrink */
+    padding-right: 20px; /* Optional: add some space between the image and the description */
+}
+
+.project-image img {
+    width: 100%; /* Make the image responsive within its container */
+    height: auto;
+    border-radius: 5px; /* Optional: add rounded corners to the image */
+    margin-right: 50px;
+}
+
+.project-description {
+    flex: 0 0 70%; /* Allocate 70% of the space and don't grow or shrink */
+    padding-left: 50px;
+}
+
+/* Style for the 'Learn more' button, adjust according to your needs */
+.about-btn {
+    display: inline-block;
+    padding: 10px 25px; /* Adjust padding to make the button larger */
+    text-decoration: none;
+    color: #ffffff; /* Text color */
+    background-image: linear-gradient(45deg, #007bff, #6610f2); /* Gradient background */
+    border: none; /* Remove border */
+    border-radius: 25px; /* Increase border-radius for rounded corners */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    font-weight: bold; /* Make the text bold */
+    cursor: pointer; /* Ensure it looks clickable */
+    margin-top: 20px;
+}
+
+.about-btn:hover, .about-btn:focus {
+    background-image: linear-gradient(45deg, #0056b3, #520d9e); /* Darker gradient on hover/focus */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Larger shadow on hover/focus */
+    transform: translateY(-2px); /* Slight move up */
+}
+
+.about-btn:active {
+    background-image: linear-gradient(45deg, #003973, #4b0078); /* Even darker gradient on active */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Smaller shadow on active */
+    transform: translateY(0); /* Back to original position */
+}
+
+.about-btn-2 {
+    display: inline-block;
+    padding: 10px 25px; /* Adjust padding to make the button larger */
+    text-decoration: none;
+    color: #ffffff; /* Text color */
+    background-image: linear-gradient(45deg, #007bff, #6610f2); /* Gradient background */
+    border: none; /* Remove border */
+    border-radius: 25px; /* Increase border-radius for rounded corners */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    font-weight: bold; /* Make the text bold */
+    cursor: pointer; /* Ensure it looks clickable */
+    margin-top: 0px;
+    margin-bottom: 30px;
+}
+
+.about-btn-2:hover, .about-btn-2:focus {
+    background-image: linear-gradient(45deg, #0056b3, #520d9e); /* Darker gradient on hover/focus */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Larger shadow on hover/focus */
+    transform: translateY(-2px); /* Slight move up */
+}
+
+.about-btn-2:active {
+    background-image: linear-gradient(45deg, #003973, #4b0078); /* Even darker gradient on active */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Smaller shadow on active */
+    transform: translateY(0); /* Back to original position */
+}
+
+
+.skills-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background: linear-gradient(145deg, #d8e9ff, #ededee);
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.skill-category {
+    display: flex;
+    flex-direction: column;
+}
+.skills-list {
+    display: flex; /* This line aligns items horizontally */
+    flex-wrap: wrap; /* Allows items to wrap to the next line if not enough space */
+    gap: 10px; /* Adds some space between items */
+}
+.skill-category h3 {
+    color: #444;
+    height: 100px;
+    display: flex;
+    align-items: center; /* Vertical centering */
+    justify-content: center; /* Horizontal centering */
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    background: #163b6b;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.skill-category ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.skill-category ul li {
+    background-color: #cddeef;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 50px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.skill-category ul li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.skill-item {
+    position: relative;
+    padding: 10px;
+    margin-block:5px;
+    background-color: #fff;
+    border-radius: 50px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+    overflow: visible;
+    transition: all 0.3s ease; /* Smooth transition for the hover effect */
+}
+
+
+
+.details {
+    position: absolute;
+    top: 100%; /* Start hidden below the item */
+    left: 0;
+    width: 100%;
+    background-color: rgb(22 59 107); /* Semi-transparent black background */
+    color: black;
+    visibility: hidden; /* Hide by default */
+    opacity: 0; /* Start fully transparent */
+    transition: opacity 0.3s, visibility 0.3s, top 0.3s; /* Smooth transition */
+    z-index: 10; /* Ensure the details overlay properly */
+}
+
+.overlay {
+    position: absolute;
+    bottom:40px;
+    left: 50%; /* Center the overlay */
+    transform: translateX(-50%) scale(0); /* Start scaled down and centered */
+    width: 150%; /* Larger than the skill-item */
+    background-color: rgb(38 69 110 / 98%); /* Semi-transparent black */
+    color: black;
+    padding: 15px;
+    border-radius: 20px;
+    z-index: 5;
+    transition: transform 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size:12px;
+}
+
+.overlay-content {
+    text-align: center;
+    width:-webkit-fill-available;
+
+}
+
+
+.skill-item:hover .overlay {
+    transform: translateX(-50%) scale(1); /* Scale up to full size on hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.skill-item:hover {
+    z-index: 10; /* Ensure the skill item and its overlay are above other content */
+    color:#163b6b;
+    font-size:20px;
 }

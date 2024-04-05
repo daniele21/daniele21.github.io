@@ -253,4 +253,82 @@
     })
   });
 
+    var ctxPie = document.getElementById('skillsPieChart').getContext('2d');
+    var skillsPieChart = new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+            labels: ['Python', 'Machine Learning', 'Deep Learning', 'Data Analysis', 'NLP'],
+            datasets: [{
+                label: 'Skill Distribution',
+                data: [30, 40, 50, 30, 30], // Example values, adjust accordingly
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true
+    }
+});
+
+var ctxBubble = document.getElementById('techBubbleChart').getContext('2d');
+var techBubbleChart = new Chart(ctxBubble, {
+    type: 'bubble',
+    data: {
+        datasets: [{
+            label: 'Technologies Proficiency',
+            data: [{
+                x: 20,
+                y: 30,
+                r: 15
+            }, {
+                x: 40,
+                y: 10,
+                r: 10
+            }, {
+                x: 10,
+                y: 20,
+                r: 20
+            }, {
+                x: 80,
+                y: 80,
+                r: 5
+            }], // Example data, adjust x (experience), y (interest), and r (proficiency) values accordingly
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            xAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+
+
+
+
+
 })()
