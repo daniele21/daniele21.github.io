@@ -37,6 +37,14 @@
   <link rel="stylesheet" href="bootstrap-icons.css">
 </head>
 <body class="text-center">
+  <div id="header-include"></div>
+  <script>
+    fetch('../../../../header.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('header-include').innerHTML = data;
+      });
+  </script>
 
   <h1>bootstrap-icons</h1>
 

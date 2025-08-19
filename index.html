@@ -1,1076 +1,746 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
-
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Daniele's Portfolio</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
-    <meta name="google-site-verification" content="GBGdlp4vT4o4M9tmpfp3pQKeeZV3auXtqfZWCEiIvJU"/>
+  <title>Daniele Moltisanti — Principal Data Scientist & Speaker</title>
+  <meta name="description" content="Principal Data Scientist & AI Strategy Lead. Speaker on Data & AI Operating Models, GenAI adoption, and governance. Founder of stAI Tuned.">
+  <meta name="keywords" content="Daniele Moltisanti, Principal Data Scientist, AI speaker, data leadership, AI operating model, GenAI governance">
+  <meta name="google-site-verification" content="GBGdlp4vT4o4M9tmpfp3pQKeeZV3auXtqfZWCEiIvJU"/>
 
-    <!-- Favicons -->
-    <link href="assets/img/logo.png" rel="icon">
-    <link href="assets/img/logo.png" rel="apple-touch-icon">
+  <!-- Favicons -->
+  <link href="assets/img/logo.png" rel="icon">
+  <link href="assets/img/logo.png" rel="apple-touch-icon">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-          rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
 
-    <!-- Vendor CSS Files -->
-    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-    <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-216820607-1"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+  <!-- Global site tag (gtag.js) - GA (legacy UA kept as-is) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-216820607-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-216820607-1');
+  </script>
 
-          gtag('config', 'UA-216820607-1');
-
-
-
-
-    </script>
-
-    <!-- =======================================================
-    * Template Name: iPortfolio - v3.1.0
-    * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
+  <!-- =======================================================
+  * Template: iPortfolio - v3.1.0 (BootstrapMade)
+  ======================================================== -->
 </head>
 
 <body>
+  <div id="header-include"></div>
+  <script>
+    fetch('header.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('header-include').innerHTML = data;
+      });
+  </script>
 
 <!-- ======= Mobile nav toggle button ======= -->
 <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
 
-<!-- ======= Header ======= -->
-<header id="header">
-    <div class="d-flex flex-column">
-
-        <div class="profile">
-            <img src="assets/img/profile-photo-4MB-crop.jpg" alt="" class="img-fluid rounded-circle">
-            <h1 class="text-light"><a href="index.html">Daniele Moltisanti</a></h1>
-            <div class="social-links mt-3 text-center">
-                <!--          <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>-->
-                <!--          <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>-->
-                <!--          <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>-->
-                <a href="https://github.com/daniele21?tab=repositories" class="github"><i class="bi bi-github"></i></a>
-                <a href="https://www.linkedin.com/in/daniele-moltisanti/" class="linkedin"><i
-                        class="bx bxl-linkedin"></i></a>
-            </div>
-        </div>
-
-        <nav id="navbar" class="nav-menu navbar">
-        <ul>
-          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
-          <li><a href="#about" class="nav-link scrollto"><i class="bx bx-user"></i> <span>About Me</span></a></li>
-          <li><a href="#skills" class="nav-link scrollto"><i class="bx bx-medal"></i> <span>Skills</span></a></li>
-          <li><a href="#expertise" class="nav-link scrollto"><i class="bx bx-trophy"></i> <span>Expertise</span></a></li>
-          <li><a href="#initiative" class="nav-link scrollto"><i class="bx bx-layer"></i> <span>Initiatives</span></a></li>
-          <li><a href="#projects" class="nav-link scrollto"><i class="bx bx-code-curly"></i> <span>Projects</span></a></li>
-          <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Resume</span></a></li>
-          <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>
-        </ul>
-      </nav><!-- .nav-menu -->
-    </div>
-</header><!-- End Header -->
-
 <!-- ======= Hero Section ======= -->
 <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
-    <div class="hero-container" data-aos="fade-in">
-        <h1>Daniele Moltisanti</h1>
-        <p>I'm <span class="typed" data-typed-items="Data Scientist, Machine Learning Engineer"></span></p>
+  <div class="hero-container text-center position-relative py-5 w-100 d-flex justify-content-center align-items-center" data-aos="fade-in">
+  <div class="shadow-lg px-4 px-md-5 py-4 hero-glass" style="max-width: 800px; display: inline-block; border: 1.5px solid rgba(120,120,255,0.18); background: rgba(255,255,255,0.47); backdrop-filter: blur(12px) saturate(160%); -webkit-backdrop-filter: blur(12px) saturate(160%); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18); border-radius: 4rem;">
+      <h1 class="display-3 fw-bold mb-2" style="background: linear-gradient(90deg, #2f7ff6 30%, #102cf2 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Daniele Moltisanti</h1>
+      <br>
+      <h2 class="mb-3 text-dark-50">Principal Data Scientist & AI Strategy Lead</h2>
+      <h3 class="lead mb-4 text-dark semibold">Scaling AI, GenAI, and Data Science with impact.<br></h3>
+      <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center gap-3 mt-4">
+        <!-- <span class="badge bg-success fs-6 px-3 py-2 mb-2 mb-sm-0 shadow-sm"><i class="bi bi-broadcast-pin me-2"></i>Available for speaking</span> -->
+        <a class="btn btn-primary btn-lg px-4 shadow-sm" href="#speaking"><i class="bi bi-mic me-2"></i>Request a talk</a>
+        <a class="btn btn-outline-dark btn-lg px-4 shadow-sm" href="#contact"><i class="bi bi-envelope me-2"></i>Contact me</a>
+      </div>
     </div>
+  </div>
 </section><!-- End Hero -->
 
 <main id="main">
 
-    <!-- ======= About Section ======= -->
-
-    <section id="about" class="about">
-        <div class="container">
-            <div class="section-title">
-                <h2>About Me</h2>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 pt-4 pt-lg-0 content" data-aos="fade-right">
-                    <img src="assets/img/profile-photo-4MB-crop.jpg" class="img-fluid" alt="Daniele Moltisanti">
-                </div>
-                <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-                    <h3>Data Scientist & Machine Learning Engineer</h3>
-                    <p>
-                        A results-driven Data Scientist with a strong technical background, experienced in leading
-                        successful data-driven projects and high-performing teams. Specializing in leveraging Generative
-                        AI to deliver innovative solutions. Passionate about spreading AI culture through my initiative
-                        stAI tuned.
-                    </p>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <ul>
-                                <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>danielemoltisanti@gmail.com</span>
-                                </li>
-                                <li><i class="bi bi-chevron-right"></i> <strong>Contact:</strong>
-                                    <span>+39 3337337311</span></li>
-                                <li><i class="bi bi-chevron-right"></i> <strong>LinkedIn:</strong> <span><a
-                                        href="www.linkedin.com/in/daniele-moltisanti">Profile</a></span></li>
-                            </ul>
-                        </div>
-                        <div class="col-lg-6">
-                            <ul>
-                                <li><i class="bi bi-chevron-right"></i> <strong>Latest Role:</strong> <span>Lead Data Scientist at Sky Italia</span>
-                                </li>
-                                <li><i class="bi bi-chevron-right"></i> <strong>Skills Focus:</strong> <span>Machine Learning, Deep Learning, NLP</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+  <!-- ======= Speaking Section ======= -->
+  <section id="speaking" class="services section-bg">
+    <div class="container">
+      <div class="section-title">
+        <h2>Speaking</h2>
+        <p>Invite me for keynotes, brown-bags or panels. Formats 25–45 minutes · IT/EN · Online/On-site.</p>
+        <div class="mt-3">
+          <span class="badge rounded-pill bg-secondary me-1">AI Strategy & Operating Models</span>
+          <span class="badge rounded-pill bg-secondary me-1">Measuring AI Adoption & ROI</span>
+          <span class="badge rounded-pill bg-secondary me-1">GenAI Governance & Evaluation</span>
+          <span class="badge rounded-pill bg-secondary me-1">Data Science Leadership</span>
         </div>
-        <div class="row awards-row">
-
-            <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-right">
-                <h3>Awards</h3>
-                <div class="row">
-                    <div class="col-lg-7 ">
-                        <ul>
-                            <li><i class="bi bi-chevron-right"></i> <strong>Nova 111 List (Italy) 2022:</strong>Recognized
-                                as a top talent in Entertainment, Media & Communications among professionals under 35,
-                                highlighting my contributions and impact in the field.
-                            </li>
-                            <a href="https://www.novatalent.com/111/italy/list/2022#winners" class="about-btn-2">Nova
-                                111 2022 <i
-                                        class="bx bx-chevron-right"></i></a>
-                            <li><i class="bi bi-chevron-right"></i> <strong>Nova Talent Member:</strong>Merit-based
-                                access network where the top 3% of global talents connect with each others
-                                .
-                            </li>
-                            <a href="https://digital-agent.novatalent.net/open/certificate/688ZDUTDSW6G8KCVO3NX8F379"
-                               class="about-btn-2">Membership Certification <i
-                                    class="bx bx-chevron-right"></i></a>
-                        </ul>
-
-                    </div>
-
-
-                </div>
-
+      </div>
+      <div class="row g-4 mt-2">
+        <!-- Talk 1 -->
+        <div class="col-md-4" data-aos="fade-up">
+          <div class="card h-100 shadow border-0 rounded-4">
+            <div class="card-body d-flex flex-column align-items-center text-center p-4">
+              <div class="mb-2"><i class="bi bi-graph-up fs-1 text-primary"></i></div>
+              <h5 class="card-title mb-2">From Slide to Impact: The Operating System for AI</h5>
+              <p class="mb-3">A.C.E. (Adoption · Cost · Evaluation) and the 3Rs (Reuse · Rituals · Risk) to move from demos to measurable results.</p>
+              <a href="#contact" class="btn btn-outline-primary btn-sm mt-auto"><i class="bi bi-mic me-1"></i>Request this talk</a>
             </div>
-            <div class="col-lg-4-quater" data-aos="fade-left">
-                <img src="assets/img/Nova 111.png" class="img-fluid" alt="Daniele Moltisanti">
-
-                <!--      </div>-->
-                <!--            <p>-->
-                <!--              My career is dedicated to exploring the frontiers of AI, developing advanced algorithms that drive business transformation, and mentoring the next generation of data scientists. I thrive in environments where innovation is at the forefront of solving complex problems.-->
-                <!--            </p>-->
-                <!--          </div>-->
-
-            </div>
+          </div>
         </div>
-    </section>
-    <!-- ======= Skills Section ======= -->
-    <section id="skills" class="skills section-bg">
-        <div class="container">
-        <div class="section-title">
-            <h2>Skills</h2>
+        <!-- Talk 2 -->
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="card h-100 shadow border-0 rounded-4">
+            <div class="card-body d-flex flex-column align-items-center text-center p-4">
+              <div class="mb-2"><i class="bi bi-speedometer2 fs-1 text-success"></i></div>
+              <h5 class="card-title mb-2">Metrics that Matter: Measuring Adoption (not only Accuracy)</h5>
+              <p class="mb-3">Build the minimum viable adoption dashboard, set realistic targets, connect cost-per-answer/insight to P&amp;L.</p>
+              <a href="#contact" class="btn btn-outline-success btn-sm mt-auto"><i class="bi bi-mic me-1"></i>Request this talk</a>
+            </div>
+          </div>
         </div>
-        <div class="skills-container">
-<div class="skill-category">
-            <h3>NLP & Generative AI</h3>
-
-            <div class="skill-item"> NLTK | Spacy | Gensim
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Sky Italia</strong>: Clustering Analysis on conversations</li>
-                            <li><strong>Sky Italia</strong>: Topic Modeling algorithm</li>
-                            <li><strong>Youtility Center</strong>: Clustering Analysis on chatbot conversations</li>
-                        </ul>
-                    </div>
-                </div>
+        <!-- Talk 3 -->
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="card h-100 shadow border-0 rounded-4">
+            <div class="card-body d-flex flex-column align-items-center text-center p-4">
+              <div class="mb-2"><i class="bi bi-shield-check fs-1 text-warning"></i></div>
+              <h5 class="card-title mb-2">GenAI Governance, Safety & Evaluation</h5>
+              <a href="#contact" class="btn btn-outline-warning btn-sm mt-auto"><i class="bi bi-mic me-1"></i>Request this talk</a>
             </div>
-
-            <div class="skill-item"> Langchain
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Sky Italia</strong>: Q&A Agent</li>
-                            <li><strong>Sky Italia</strong>: GenAI Hackathon organised by Sky & Google</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Hugging Face
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Sky Italia</strong>: Q&A Agent</li>
-                            <li><strong>Sky Italia</strong>: Use of OpenSource Embedding and LLMs</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> LLM
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Sky Italia</strong>: OpenSource Embeddings</li>
-                            <li><strong>Sky Italia</strong>: OpenSource LLMs</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-
-        <div class="skill-category">
-            <h3>Programming Languages & Frameworks</h3>
-            <div class="skill-item"> Python
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li>From University on, I used mainly Python</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Pytorch
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Sky Italia</strong>: Propensity Models & Synthetic Data Generation</li>
-                            <li><strong>Coach</strong> for Pytorch course</li>
-                            <li><strong>Master Thesis</strong>: Anomaly Detection on Images</li>
-                            <li><strong>Personal Project</strong>: Financial Anomaly Detection & Forecasting</li>
-                            <li><strong>Personal Project</strong>: Genre Detection</li>
-                            <li><strong>Personal Project</strong>: Soccer Match Prediction</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Tensorflow / Keras
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Accenture</strong>: Custom NER algorithm</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Scikit-Learn
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Sky Italia</strong>: Models for classification/regression tasks</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> SQL
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Sky Italia</strong>: ETL for the ML Processing</li>
-                            <li><strong>Sky Italia</strong>: Analysis on Data</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="skill-category">
-            <h3>Cloud Platforms</h3>
-
-            <div class="skill-item"> Google Cloud Platform
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Sky Italia</strong></li>
-                            <li><strong>Accenture</strong></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Amazon Web Services
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Youtility Center</strong></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="skill-category">
-            <h3>Development Tools</h3>
-
-            <div class="skill-item"> Docker & Docker-Compose
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Youtility Center</strong>: Test Deployment of Chatbot ecosystem</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Apache Airflow
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>Sky Italia</strong>: Deployment & Scheduling of ML pipeline for ETL and model training/prediction</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Git
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li>All project I did were versioned using Git</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="skill-category">
-            <h3>Soft Skills</h3>
-            <div class="skill-item"> Leadership
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li><strong>stAI tuned</strong>: led projects and more than 10 people</li>
-                            <li><strong>Sky Italia</strong>: led data science projects</li>
-                            <li><strong>Youtility Center</strong>: led the end-to-end chatbot pipeline and people working on that</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Problem-Solving
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li>Every time I need to find a solution to a specific problem</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Communication
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li>With Technical People</li>
-                            <li>With Non-Technical People, explaining the value of the data science model outcome</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Organization
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li>I base each activity on a strong organization</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="skill-category">
-            <h3>Languages</h3>
-            <div class="skill-item"> Italian
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li>Native</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> English
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li>Professional level</li>
-                            <li>B2 Level Certification</li>
-                            <li>University & work in english</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> Spanish
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li>Professional Level</li>
-                            <li>Lived 6 months in Valencia, Spain</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-item"> French
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <ul>
-                            <li>Basic knowledge</li>
-                            <li>A1 Level</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+      </div>
+      <p class="mt-4 small text-muted">COI-safe: educational content only—no references to employer projects, stacks or confidential metrics.</p>
     </div>
+  </section>
+
+  <!-- ======= Initiatives Section ======= -->
+  <section id="initiatives" class="initiatives">
+    <div class="container">
+      <div class="section-title">
+        <h2>Initiatives</h2>
+        <p>Side projects around AI education and community.</p>
+      </div>
+      <div class="row g-4">
+        <!-- Stai Tuned -->
+        <div class="col-md-6 col-lg-6" data-aos="fade-up">
+          <div class="card h-100 shadow border-0 rounded-4">
+            <div class="row g-0 align-items-center">
+              <div class="col-4 text-center p-3">
+                <img src="assets/img/Ai_White & Blue Logo.png" class="img-fluid rounded-3 shadow-sm mb-2" style="max-width:80px;" alt="Stai Tuned">
+              </div>
+              <div class="col-8">
+                <div class="card-body p-2">
+                  <h5 class="card-title mb-1"><i class="bi bi-broadcast-pin text-primary me-2"></i>stAI tuned</h5>
+                  <p class="mb-2">Media & education project sharing practical AI insights and culture.</p>
+                  <ul class="mb-2 ps-3">
+                    <li class="mb-1"><strong>80+ articles</strong> (and growing)</li>
+                    <li class="mb-1"><strong>LinkedIn network ~7k</strong> (active posting/reposts)</li>
+                  </ul>
+                  <div class="d-flex flex-wrap gap-2">
+                    <a href="https://staituned.com/meet/member/daniele-moltisanti" class="btn btn-outline-primary btn-sm">My Articles <i class="bx bx-chevron-right"></i></a>
+                    <a href="https://staituned.com" class="btn btn-outline-secondary btn-sm">Website <i class="bx bx-chevron-right"></i></a>
+                    <a href="https://www.linkedin.com/company/stai-tuned/" class="btn btn-outline-info btn-sm">LinkedIn <i class="bx bx-chevron-right"></i></a>
+                  </div>
+                </div>
+              </div>
             </div>
-</section>
-
-
-     <section id="expertise" class="expertise">
-        <div class="container">
-
-            <div class="section-title">
-                <h2>Expertise</h2>
-                <p>Here you find the expertise from my work experiences</p>
-            </div>
-
-            <div class="project-item" data-aos="fade-up">
-                <div class="project-image">
-                    <img src="assets/img/gen-ai.webp" class="img-fluid" alt="Project Image Description">
-                </div>
-                <div class="project-description">
-                    <h4><strong>Generative AI</strong> </h4>
-                    <br>
-                    <li><strong>Q&A Agent</strong>: developed a conversational assistant, trained on a specific domain, to answer on specific question related to the given domain.
-                        Used langchain and a multi-LLM orchestration through the langchain tools.
-                    </li>
-                    <br>
-                    <li><strong>Prompt Engineering</strong>: the strong use of GenAI tools make me understand the effective and efficient ways to take advantages from the LLMs.
-                    Able to refine prompts for reaching correct answers from LLMs. Experienced with the most known LLM tool like GPT, Gemini, but
-                    also with open-source LLMs, from Hugging Face, using LlamaCpp</li>
-                    <br>
-                    <li><strong>Synthetic Data Generation</strong>: developed a Diffusion Model able to generate synthetic data from tabular datasets,
-                        taking care of the privacy and utility of those synthetic data. This model was created from scratch in Pytorch</li>
-                    <br>
-                    <li><strong>Participation to GenAI Hackathon</strong>: enrolled in a GenAI hackathon organised by Sky Group and Google, implementing
-                        one business use case using GenAI, using Langchain framework and Palm as LLM</li>
-                    <br>
-                </div>
-
-                </div>
-
-            <div class="project-item" data-aos="fade-up">
-
-                <div class="project-description">
-                    <h4><strong>Predictive Analytics</strong> </h4>
-                    <br>
-                    <li><strong>Propensity Models</strong>: developed models for predicting the customer behaviour,
-                        contributing to improve the customer lifetime value. Used Supervised and Semi-Supervised Learning models.
-                    </li>
-                    <br>
-                    <li><strong>Time-Series Analysis</strong>: conducted now-casting of financial time-series data to detect anomalies and identify trends, aiding in data-driven decision-making processes</li>
-                    <br>
-                </div>
-                <div class="project-image">
-                    <img src="assets/img/predictive-analytics.webp" class="img-fluid" alt="Project Image Description">
-                </div>
-            </div>
-
-
-            <div class="project-item" data-aos="fade-up">
-                <div class="project-image">
-                    <img src="assets/img/nlp.webp" alt="Project Image Description">
-                </div>
-                <div class="project-description">
-                    <h4><strong>Advanced NLP Analytics</strong> </h4>
-                    <br>
-                    <li><strong>Topic Modeling</strong>: developed various models that assign the topic to a given text,
-                        working both on short texts and long texts, using Semi-Supervised and Unsupervised Learning Approaches.
-                    </li>
-                    <br>
-                    <li><strong>Clustering Analysis</strong>: working on producing analysis basing on the sentence meanings, using word and sentence embeddings pre-trained</li>
-                    <br>
-                    <li><strong>Virtual Assistant</strong>: developed various custom virtual assistant in python, using the Rasa framework, basing on specific domain
-                        Took care of the architecture and deployment phases, implementing a asynchronous server that handled and orchestrated various chatbot.
-                    </li>
-                    <br>
-                    <li><strong>Named Entity Recognition (NER)</strong>: developed a custom NER for extracting entities automatically.
-                    The NER model was based on char and word embeddings trained and fine-tuned on the available dataset</li>
-                    <br>
-
-                </div>
-            </div>
-
-            <div class="project-item" data-aos="fade-up">
-
-                <div class="project-description">
-                    <h4><strong>Computer Vision</strong> </h4>
-                    <br>
-                    <li><strong>Image Denoising</strong>: worked on denoising document ID image to improve the OCR performance in detect the text
-                    </li>
-                    <br>
-                    <li><strong>Anomaly Detection</strong>: detect anomalies on images, using an research approach of processing the image
-                        in a patch-wise way
-                    </li>
-                    <br>
-                    <li><strong>Background Subtraction</strong>: implemented a Gaussian mixture model on highway videos for removing the cars on the foreground
-                    </li>
-                    <br>
-
-                </div>
-                <div class="project-image">
-                    <img src="assets/img/cv.webp" alt="Project Image Description">
-                </div>
-            </div>
-
-
-
-            </div>
-
-
-            <!-- Repeat for other projects -->
-
+          </div>
         </div>
-    </section>
-
-    <!-- ======= Projects Section ======= -->
-    <section id="initiatives" class="initiatives">
-        <div class="container">
-
-            <div class="section-title">
-                <h2>Initiatives</h2>
-                <p>Here are some of the projects I've worked on, related to my AI passion.</p>
+        <!-- Nova Mentor -->
+        <div class="col-md-6 col-lg-6" data-aos="fade-up">
+          <div class="card h-100 shadow border-0 rounded-4">
+            <div class="row g-0 align-items-center">
+              <div class="col-4 text-center p-3">
+                <img src="assets/img/nova.png" class="img-fluid rounded-3 shadow-sm mb-2" style="max-width:80px;" alt="Nova Mentor">
+              </div>
+              <div class="col-8">
+                <div class="card-body p-2">
+                  <h5 class="card-title mb-1"><i class="bi bi-people text-success me-2"></i>Nova Mentor</h5>
+                  <p class="mb-2">Mentoring university students on career paths.</p>
+                  <ul class="mb-2 ps-3">
+                    <li class="mb-1">Mentored Italian and Spanish students</li>
+                  </ul>
+                  <a href="https://digital-agent.novatalent.net/open/certificate/688ZDUTDSW6G8KCVO3NX8F379" class="btn btn-outline-success btn-sm">Mentor Certification <i class="bx bx-chevron-right"></i></a>
+                </div>
+              </div>
             </div>
-
-            <div class="project-item" data-aos="fade-up">
-                <div class="project-image">
-                    <img src="assets/img/Ai_White & Blue Logo.png" alt="Project Image Description">
-                </div>
-                <div class="project-description">
-                    <h4>stAI Tuned</h4>
-                    <p>Open Knowledge Community where each member shares his knowledge and research bites related to an
-                        AI topic in the real life.</p>
-
-                    <p><strong>Goal</strong>: spreading AI insights and the AI culture from practical applications to
-                        courious news.
-                        stAI tuned is live on the blog website, Linkedin (addressed to an expert audience) Instagram and
-                        Tiktok
-                        (addressed to a newbie audience) accounts.</p>
-
-                    Achievements:
-                    <li>1300+ follower on Linkedin</li>
-                    <li>500+ follower Instagram</li>
-                    <li>Up to 14k views and 8% of engagement rate in last 12 posts on Instagram</li>
-                    <li>Blog: 35+ articles | 250+ active users | 600+ sessions</li>
-
-                    <a href="https://staituned.com/meet/member/daniele-moltisanti" class="about-btn">My Articles <i
-                            class="bx bx-chevron-right"></i></a>
-                    <a href="https://staituned.com" class="about-btn">stAI tuned | Blog Website <i
-                            class="bx bx-chevron-right"></i></a>
-                    <a href="https://www.linkedin.com/company/stai-tuned/" class="about-btn">Linkedin <i
-                            class="bx bx-chevron-right"></i></a>
-
-                </div>
-            </div>
-            <div class="project-item" data-aos="fade-up">
-
-                <div class="project-image">
-                    <img src="assets/img/nova.png" class="img-fluid" alt="Project Image Description">
-                </div>
-                <div class="project-description">
-                    <h4>Nova Mentor</h4>
-                    <p>Mentoring university students in their growth, defining their own career path</p>
-                    <li><strong>4</strong> mentored students </li>
-                    <li>Mentored<strong> italian and spanish</strong> students</li>
-                    <!--                <a href="project-details.html" class="about-btn">Learn more <i class="bx bx-chevron-right"></i></a>-->
-                <a href="https://digital-agent.novatalent.net/open/certificate/688ZDUTDSW6G8KCVO3NX8F379" class="about-btn">Mentor Certification <i
-                            class="bx bx-chevron-right"></i></a>
-                </div>
-            </div>
-            <div class="project-item" data-aos="fade-up">
-
-                <div class="project-description">
-                    <h4>AI Coach | Profession AI</h4>
-                    <p>As a Coach I review and help students of <em>ProfessionAI Master Courses</em> in writing the
-                        Machine Learning solution to a given problem</p>
-                    <li><strong>150+</strong> Projects reviewed</li>
-                    <li><strong>3</strong> type of ML Projects</li>
-                    <li>Support during development of the solution, if needed</li>
-                    <!--                <a href="project-details.html" class="about-btn">Learn more <i class="bx bx-chevron-right"></i></a>-->
-                </div>
-                <div class="project-image">
-                    <img src="assets/img/ai-coach.webp" class="img-fluid" alt="Project Image Description">
-                </div>
-            </div>
-            <div class="project-item" data-aos="fade-up">
-                <div class="project-image">
-                    <img src="assets/img/Ai teacher.webp" class="img-fluid" alt="Project Image Description">
-                </div>
-                <div class="project-description">
-                    <h4>Deep Learning Course | Pytorch</h4>
-                    <p>7 practical hours of Deep Learning course where learning:</p>
-
-                    <li>what is an artificial neural network</li>
-                    <li>how to create it in pytorch</li>
-                    <li>practical lab sessions</li>
-                    <a href="https://deeplearningitalia.com/corsi/pytorch-c0052/" class="about-btn">Course <i
-                            class="bx bx-chevron-right"></i></a>
-                    <a href="https://github.com/DeepLearningItalia/Una_guida_completa_a_Pytorch" class="about-btn">Github
-                        Lab Sessions <i class="bx bx-chevron-right"></i></a>
-                </div>
-
-            </div>
-
-
-            <!-- Repeat for other projects -->
-
+          </div>
         </div>
-    </section>
-
-
-    <section id="projects" class="portfolio section-bg">
-        <div class="container">
-
-
-
-            <div class="section-title">
-                <h2>Personal Projects</h2>
-                <p>Here are some personal projects developed in my free time and my university career</p>
+        <!-- AI Coach -->
+        <div class="col-md-6 col-lg-6" data-aos="fade-up">
+          <div class="card h-100 shadow border-0 rounded-4">
+            <div class="row g-0 align-items-center">
+              <div class="col-4 text-center p-3">
+                <img src="assets/img/ai-coach.webp" class="img-fluid rounded-3 shadow-sm mb-2" style="max-width:80px;" alt="AI Coach">
+              </div>
+              <div class="col-8">
+                <div class="card-body p-2">
+                  <h5 class="card-title mb-1"><i class="bi bi-person-check text-warning me-2"></i>AI Coach · Profession AI</h5>
+                  <p class="mb-2">Reviewing student projects and guiding ML solutions.</p>
+                  <ul class="mb-2 ps-3">
+                    <li class="mb-1"><strong>150+ projects</strong> reviewed across multiple ML tracks</li>
+                  </ul>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+        <!-- Deep Learning Course -->
+        <div class="col-md-6 col-lg-6" data-aos="fade-up">
+          <div class="card h-100 shadow border-0 rounded-4">
+            <div class="row g-0 align-items-center">
+              <div class="col-4 text-center p-3">
+                <img src="assets/img/Ai teacher.webp" class="img-fluid rounded-3 shadow-sm mb-2" style="max-width:80px;" alt="Deep Learning Course">
+              </div>
+              <div class="col-8">
+                <div class="card-body p-2">
+                  <h5 class="card-title mb-1"><i class="bi bi-cpu text-danger me-2"></i>Deep Learning Course · PyTorch</h5>
+                  <p class="mb-2">7 hours of hands-on sessions: fundamentals, building models, labs.</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <a href="https://deeplearningitalia.com/corsi/pytorch-c0052/" class="btn btn-outline-danger btn-sm">Course <i class="bx bx-chevron-right"></i></a>
+                    <a href="https://github.com/DeepLearningItalia/Una_guida_completa_a_Pytorch" class="btn btn-outline-dark btn-sm">Lab Sessions <i class="bx bx-chevron-right"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            <div class="row" data-aos="fade-up">
-                <div class="col-lg-12 d-flex justify-content-center">
-                    <ul id="portfolio-flters">
-                        <li data-filter="*" class="filter-active">All</li>
-                        <li data-filter=".filter-cv">Computer Vision</li>
-                        <li data-filter=".filter-ts">Time Series Forecasting</li>
-                        <li data-filter=".filter-nlp">NLP</li>
-                        <li data-filter=".filter-finance">Finance</li>
+  <!-- ======= About Section ======= -->
+  <section id="about" class="about">
+    <div class="container">
+      <div class="section-title">
+        <h2>About</h2>
+      </div>
+      <div class="row justify-content-center">
+  <div class="col-lg-12">
+          <div class="card shadow-lg border-0 rounded-4 p-4" style="background:rgba(255,255,255,0.97);">
+            <div class="row align-items-center g-4">
+              <div class="col-md-4 text-center" data-aos="fade-right">
+                <img src="assets/img/profile-photo-4MB-crop.jpg" class="img-fluid rounded-circle border border-3 border-primary shadow mb-3" style="max-width: 180px;" alt="Daniele Moltisanti">
+                <h3 class="mt-2 mb-0 fw-bold text-primary">Daniele Moltisanti</h3>
+                <span class="badge bg-primary mb-2">Principal Data Scientist</span><br>
+                <span class="badge bg-secondary mb-3">AI Strategy Lead</span>
+                <div class="d-flex flex-column align-items-center gap-2 mt-2">
+                  <a href="mailto:danielemoltisanti@gmail.com" class="btn btn-outline-dark btn-sm w-100"><i class="bi bi-envelope me-1"></i>Email</a>
+                  <a href="https://www.linkedin.com/in/daniele-moltisanti/" class="btn btn-outline-primary btn-sm w-100" target="_blank" rel="noopener"><i class="bi bi-linkedin me-1"></i>LinkedIn</a>
+                </div>
+              </div>
+              <div class="col-md-8" data-aos="fade-left">
+                <h4 class="fw-semibold mb-2">About Me</h4>
+                <p class="lead mb-2">Principal Data Scientist &amp; AI Strategy Lead with 5+ years across AI/ML, NLP and GenAI.</p>
+                <ul class="list-unstyled mb-2">
+                  <li><i class="bi bi-lightbulb me-2 text-warning"></i>Shaping the AI technical strategy @ <strong>Sky Italia</strong></li>
+                  <li><i class="bi bi-people me-2 text-info"></i>Leading cross-functional teams</li>
+                  <li><i class="bi bi-rocket-takeoff me-2 text-danger"></i>Turning research into scalable, business-ready solutions for media & telco</li>
+                  <li><i class="bi bi-mortarboard me-2 text-success"></i>Coaching aspiring data scientists</li>
+                </ul>
+                <p class="mb-2">I write and curate <em><a href="https://staituned.com/author/Daniele-Moltisanti" target="_blank" rel="noopener">stAI Tuned</a></em>, an AI media/education project, and I speak about AI &amp; Innovation, the application of GenAI to real business problems, and Data Science growth.</p>
+                <br>
+            
+                <!-- <div class="row g-2 mb-2"> -->
+                  <!-- <div class="col-12 col-md-6">
+                    <div class="bg-light rounded-3 p-2 h-100">
+                      <i class="bi bi-briefcase me-1 text-primary"></i> <strong>Latest Role:</strong> Principal Data Scientist @ Sky Italia
+                    </div>
+                  </div> -->
+                  <!-- <div class="col-12 col-md-6"> -->
+                    <div class="bg-light rounded-3 p-2 h-100">
+                      <i class="bi bi-bullseye me-1 text-success"></i> <strong>Focus:</strong> AI Strategy · GenAI/NLP · Executive Communication · Leadership
+                    </div>
+                  <!-- </div> -->
+                <!-- </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Awards -->
+      <div class="row awards-row mt-4 justify-content-center">
+  <div class="col-lg-12">
+          <div class="card shadow border-0 rounded-4 p-4 h-100" style="background:rgba(250,250,255,0.98);">
+            <div class="row align-items-center g-4">
+              <div class="col-md-8" data-aos="fade-right">
+                <h3 class="fw-semibold mb-3"><i class="bi bi-award text-warning me-2"></i>Awards</h3>
+                <ul class="list-unstyled mb-0">
+                  <li class="mb-3 d-flex align-items-start">
+                    <span class="me-3"><i class="bi bi-trophy-fill text-warning fs-4"></i></span>
+                    <div>
+                      <span class="badge bg-primary mb-1">2022</span><br>
+                      <strong>Nova 111 List (Italy):</strong> <span class="text-muted">Top talent in Entertainment, Media & Communications under 35.</span><br>
+                      <a href="https://www.novatalent.com/111/italy/list/2022#winners" class="btn btn-outline-primary btn-sm mt-1" target="_blank" rel="noopener">Nova 111 2022 <i class="bx bx-chevron-right"></i></a>
+                    </div>
+                  </li>
+                  <li class="mb-3 d-flex align-items-start">
+                    <span class="me-3"><i class="bi bi-stars text-info fs-4"></i></span>
+                    <div>
+                      <span class="badge bg-secondary mb-1">Nova Talent</span><br>
+                      <strong>Nova Talent Member:</strong> <span class="text-muted">Merit-based network connecting the top 3% of global talent.</span><br>
+                      <a href="https://digital-agent.novatalent.net/open/certificate/688ZDUTDSW6G8KCVO3NX8F379" class="btn btn-outline-info btn-sm mt-1" target="_blank" rel="noopener">Membership Certification <i class="bx bx-chevron-right"></i></a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-4 d-flex align-items-center justify-content-center" data-aos="fade-left">
+                <img src="assets/img/Nova 111.png" class="img-fluid rounded-3 shadow" style="max-width:180px;" alt="Nova 111">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= Expertise Section (unchanged structure, light edits) ======= -->
+    <section id="expertise" class="expertise">
+    <div class="container">
+      <div class="section-title">
+        <h2>Expertise</h2>
+        <p>Key areas from my work experience, with hands-on impact and leadership.</p>
+      </div>
+      <div class="row g-4">
+        <!-- Generative AI -->
+        <div class="col-md-6 col-lg-6" data-aos="fade-up">
+          <div class="card h-100 shadow border-0 text-end">
+            <div class="row g-0 align-items-center justify-content-center">
+              <div class="col-12 p-3">
+                <img src="assets/img/gen-ai.webp" class="img-fluid rounded-3 shadow-sm mb-2 d-block mx-auto" style="max-width:100px;" alt="Generative AI">
+                <div class="card-body p-2">
+                  <h5 class="card-title mb-2 text-center"><span class="badge bg-primary me-2">GenAI</span>Generative AI</h5>
+                  <ul class="mb-2 ps-0 text-start" style="list-style-position: inside;">
+                    <li class="mb-2"><strong>Q&A Agent:</strong> Built a conversational assistant trained on domain-specific data using LangChain and multi-LLM orchestration.</li>
+                    <li class="mb-2"><strong>Prompt Engineering:</strong> Refined prompts for LLMs (GPT, Gemini, open-source via Hugging Face/LlamaCpp) to maximize answer quality.</li>
+                    <li class="mb-2"><strong>Synthetic Data Generation:</strong> Developed a custom Diffusion Model in PyTorch for privacy-preserving tabular data synthesis.</li>
+                    <li class="mb-2"><strong>GenAI Hackathon:</strong> Finalist at Sky Group & Google hackathon, delivering a business use case with LangChain and PaLM.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Predictive Analytics -->
+        <div class="col-md-6 col-lg-6" data-aos="fade-up">
+          <div class="card h-100 shadow border-0 text-end">
+            <div class="row g-0 align-items-center justify-content-center">
+              <div class="col-12 p-3">
+                <img src="assets/img/predictive-analytics.webp" class="img-fluid rounded-3 shadow-sm mb-2 d-block mx-auto" style="max-width:100px;" alt="Predictive Analytics">
+                <div class="card-body p-2">
+                  <h5 class="card-title mb-2 text-center"><span class="badge bg-success me-2">Analytics</span>Predictive Analytics</h5>
+                  <ul class="mb-2 ps-0 text-start" style="list-style-position: inside;">
+                    <li class="mb-2"><strong>Propensity Models:</strong> Built models to predict customer behavior and improve lifetime value (Supervised & Semi-Supervised Learning).</li>
+                    <li class="mb-2"><strong>Time-Series Analysis:</strong> Now-casting financial data to detect anomalies and trends for data-driven decisions.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- NLP Analytics -->
+        <div class="col-md-6 col-lg-6" data-aos="fade-up">
+          <div class="card h-100 shadow border-0 text-end">
+            <div class="row g-0 align-items-center justify-content-center">
+              <div class="col-12 p-3">
+                <img src="assets/img/nlp.webp" class="img-fluid rounded-3 shadow-sm mb-2 d-block mx-auto" style="max-width:100px;" alt="NLP Analytics">
+                <div class="card-body p-2">
+                  <h5 class="card-title mb-2 text-center"><span class="badge bg-info me-2">NLP</span>Advanced NLP Analytics</h5>
+                  <ul class="mb-2 ps-0 text-start" style="list-style-position: inside;">
+                    <li class="mb-2"><strong>Topic Modeling:</strong> Built models for topic assignment on short/long texts (Semi/Unsupervised Learning).</li>
+                    <li class="mb-2"><strong>Clustering Analysis:</strong> Semantic analysis using pre-trained word/sentence embeddings.</li>
+                    <li class="mb-2"><strong>Virtual Assistant:</strong> Developed custom assistants in Python (Rasa), including async server orchestration.</li>
+                    <li class="mb-2"><strong>Named Entity Recognition:</strong> Custom NER with char/word embeddings, fine-tuned on proprietary data.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Computer Vision -->
+        <div class="col-md-6 col-lg-6" data-aos="fade-up">
+          <div class="card h-100 shadow border-0 text-end">
+            <div class="row g-0 align-items-center justify-content-center">
+              <div class="col-12 p-3">
+                <img src="assets/img/cv.webp" class="img-fluid rounded-3 shadow-sm mb-2 d-block mx-auto" style="max-width:100px;" alt="Computer Vision">
+                <div class="card-body p-2">
+                  <h5 class="card-title mb-2 text-center"><span class="badge bg-warning text-dark me-2">CV</span>Computer Vision</h5>
+                  <ul class="mb-2 ps-0 text-start" style="list-style-position: inside;">
+                    <li class="mb-2"><strong>Image Denoising:</strong> Enhanced ID document images to improve OCR accuracy.</li>
+                    <li class="mb-2"><strong>Anomaly Detection:</strong> Patch-wise image analysis for anomaly detection.</li>
+                    <li class="mb-2"><strong>Background Subtraction:</strong> Gaussian mixture model for foreground removal in highway videos.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= Resume Section ======= -->
+  <section id="resume" class="resume">
+    <div class="container">
+      <div class="section-title mb-4"><h2>Resume</h2></div>
+      <div class="row g-4">
+        <!-- Experience Column -->
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="card shadow-lg border-0 rounded-4 h-100">
+            <div class="card-body p-4">
+              <h3 class="resume-title mb-4"><i class="bi bi-briefcase-fill text-primary me-2"></i>Professional Experience</h3>
+              <!-- Sky Italia — Principal Data Scientist -->
+              <div class="mb-4 pb-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h4 class="mb-0 fw-bold">Principal Data Scientist</h4>
+                  <span class="badge bg-primary">Jul 2025 – Present</span>
+                </div>
+                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Sky Italia — Milan, Lombardy, Italy <span class="badge bg-light text-dark ms-2">Hybrid</span></div>
+                <p>Leading the Data Science technical strategy with a focus on GenAI & NLP. I design tailored solutions to real business problems, involve stakeholders early, explain trade-offs in plain language, and supervise delivery from PoC to production.</p>
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                    <p class="mb-1 fw-semibold text-primary">Key responsibilities</p>
+                    <ul class="mb-2 ps-3">
+                      <li class="mb-1"><em>Roadmap & standards:</em> set DS architecture, guardrails and portfolio priorities.</li>
+                      <li class="mb-1"><em>Innovation to scale:</em> drive PoC/PoV work and industrialize winners with reusable patterns, tooling and governance.</li>
+                      <li class="mb-1"><em>Executive communication:</em> clarify design choices, pros/cons and expected impact to secure sponsorship and budget.</li>
+                      <li class="mb-1"><em>Stakeholder adoption:</em> translate pain points into outcomes, drive change, and measure results.</li>
+                      <li class="mb-1"><em>Technical oversight:</em> design reviews, make/buy, cost–risk–performance trade-offs, vendor selection.</li>
                     </ul>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <p class="mb-1 fw-semibold text-success">Selected achievements</p>
+                    <ul class="mb-2 ps-3">
+                      <li class="mb-1">Launched the first in-house GenAI analysis tool at Sky Italia, from concept to rollout.</li>
+                      <li class="mb-1">Automated customer understanding on high-volume interaction data, improving targeting and decision speed.</li>
+                    </ul>
+                    <p class="mb-0 small text-muted"><strong>Keywords:</strong> Technical Leadership, AI Strategy, GenAI, NLP</p>
+                  </div>
                 </div>
+              </div>
+              <!-- Sky Italia — Lead Data Scientist -->
+              <div class="mb-4 pb-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h4 class="mb-0 fw-bold">Lead Data Scientist</h4>
+                  <span class="badge bg-secondary">Mar 2022 – Aug 2025</span>
+                </div>
+                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Sky Italia — Milan, Lombardy, Italy</div>
+                <p>I led cross-functional teams delivering AI initiatives in ML, NLP and Generative AI for the media & telco domain.</p>
+                <p class="mb-1 fw-semibold text-primary">Key responsibilities & achievements</p>
+                <ul class="mb-2 ps-3">
+                  <li class="mb-1">Owned the end-to-end lifecycle from PoC to production, improving operational efficiency.</li>
+                  <li class="mb-1">Reduced churn through predictive models for marketing.</li>
+                  <li class="mb-1">Implemented NLP & GenAI solutions that significantly improved process efficiency.</li>
+                  <li class="mb-1">Aligned DS strategies with business goals through proactive stakeholder engagement.</li>
+                  <li class="mb-1">Mentored and supervised data scientists, fostering a learning and innovation culture.</li>
+                </ul>
+                <p class="mb-0 small text-muted"><strong>Stack:</strong> Python, PyTorch, SQL, GCP, Airflow, GenAI (LLMs) · <strong>Keywords:</strong> NLP, Generative AI, Predictive Modeling, Stakeholder Management, Mentoring</p>
+              </div>
+              <!-- Accenture -->
+              <div class="mb-4 pb-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h4 class="mb-0 fw-bold">Data Scientist</h4>
+                  <span class="badge bg-info text-dark">May 2020 – Jan 2021</span>
+                </div>
+                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Accenture S.p.A. — Milan, Italy</div>
+                <ul class="mb-2 ps-3">
+                  <li class="mb-1">Custom NER for document understanding; CV denoising to boost OCR.</li>
+                  <li class="mb-1">Projects on GCP (compute, PaaS, storage).</li>
+                </ul>
+                <p class="mb-0 small text-muted"><strong>Stack:</strong> Python, PyTorch, TensorFlow, Keras, OpenCV, GCP</p>
+              </div>
+              <!-- Blue Reply -->
+              <div class="mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h4 class="mb-0 fw-bold">AI Engineer — Internship</h4>
+                  <span class="badge bg-warning text-dark">Sep 2018 – Feb 2019</span>
+                </div>
+                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Blue Reply — Milan, Italy</div>
+                <ul class="mb-2 ps-3">
+                  <li class="mb-1">Built a visual classifier for a fashion virtual assistant; integrated via REST/Telegram.</li>
+                </ul>
+                <p class="mb-0 small text-muted"><strong>Stack:</strong> Python, PyTorch, IBM Watson</p>
+              </div>
             </div>
-
-            <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="100">
-
-                <div class="col-lg-4 col-md-6 portfolio-item filter-ts filter-finance">
-                    <div class="portfolio-wrap">
-                        <img src="assets/img/portfolio/portfolio_analysis_1.png" class="img-fluid" alt="">
-                        <div class="portfolio-links">
-                            <!--                <a href="assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                            <a href="portfolio_analysis.html" title="More Details"><i class="bx bx-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 portfolio-item filter-nlp filter-finance">
-                    <div class="portfolio-wrap">
-                        <img src="assets/img/portfolio/Sentiment-Analysis-scaled.png" class="img-fluid" alt="">
-                        <div class="portfolio-links">
-                            <!--                <a href="assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                            <a href="Sentiment_analysis.html" title="More Details"><i class="bx bx-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 portfolio-item filter-nlp">
-                    <div class="portfolio-wrap">
-                        <img src="assets/img/portfolio/genre detection.png" class="img-fluid" alt="">
-                        <div class="portfolio-links">
-                            <!--                <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                            <a href="NLP_genre_detection.html" title="More Details"><i class="bx bx-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 portfolio-item filter-ts">
-                    <div class="portfolio-wrap">
-                        <img src="assets/img/portfolio/soccer.png" class="img-fluid" alt="">
-                        <div class="portfolio-links">
-                            <!--                <a href="assets/img/portfolio/soccer.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                            <a href="Soccer_Prediction.html" title="More Details"><i class="bx bx-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 portfolio-item filter-cv">
-                    <div class="portfolio-wrap">
-                        <img src="assets/img/portfolio/anomaly_detection_1.png" class="img-fluid" alt="">
-                        <div class="portfolio-links">
-                            <!--                <a href="assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                            <a href="Ganomaly.html" title="More Details"><i class="bx bx-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 portfolio-item filter-cv">
-                    <div class="portfolio-wrap">
-                        <img src="assets/img/portfolio/bg_sub_1.png" class="img-fluid" alt="">
-                        <div class="portfolio-links">
-                            <!--                <a href="assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                            <a href="Background_Subtraction.html" title="More Details"><i class="bx bx-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-lg-4 col-md-6 portfolio-item filter-ts">
-                    <div class="portfolio-wrap">
-                        <img src="assets/img/portfolio/airqo_1.png" class="img-fluid" alt="">
-                        <div class="portfolio-links">
-                            <!--                <a href="assets/img/portfolio/portfolio-5.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                            <a href="airqo.html" title="More Details"><i class="bx bx-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 portfolio-item filter-ts filter-finance">
-                    <div class="portfolio-wrap">
-                        <img src="assets/img/portfolio/finance.png" class="img-fluid" alt="">
-                        <div class="portfolio-links">
-                            <!--                <a href="assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                            <a href="finance_forecasting.html" title="More Details"><i class="bx bx-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-lg-4 col-md-6 portfolio-item filter-ts">
-                    <div class="portfolio-wrap">
-                        <img src="assets/img/portfolio/fraud.png" class="img-fluid" alt="">
-                        <div class="portfolio-links">
-                            <!--                <a href="assets/img/portfolio/portfolio-7.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                            <a href="fraud_detection.html" title="More Details"><i class="bx bx-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!--          <div class="col-lg-4 col-md-6 portfolio-item filter-ts">-->
-                <!--            <div class="portfolio-wrap">-->
-                <!--              <img src="assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt="">-->
-                <!--              <div class="portfolio-links">-->
-                <!--                <a href="assets/img/portfolio/portfolio-8.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                <!--                <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>-->
-                <!--              </div>-->
-                <!--            </div>-->
-                <!--          </div>-->
-
-                <!--          <div class="col-lg-4 col-md-6 portfolio-item filter-nlp">-->
-                <!--            <div class="portfolio-wrap">-->
-                <!--              <img src="assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">-->
-                <!--              <div class="portfolio-links">-->
-                <!--                <a href="assets/img/portfolio/portfolio-9.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Project View"><i class="bx bx-plus"></i></a>-->
-                <!--                <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>-->
-                <!--              </div>-->
-                <!--            </div>-->
-                <!--          </div>-->
-
-            </div>
-
+          </div>
         </div>
-    </section><!-- End Portfolio Section -->
-
-
-    <!-- ======= Resume Section ======= -->
-    <section id="resume" class="resume">
-        <div class="container">
-
-            <div class="section-title">
-                <h2>Resume</h2>
-                <!--          <p>I'm a Data Scientist passionate about making advantage of data for solving real case problems, through AI algorithms. Specialized in NLP techniques and Technical Manager of Conversational AI projects. I'm Google Cloud Certified, experienced also in Computer Vision algorithms and investing my free time into Time-Series Forecasting algorithms for finance. </p>-->
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-                    <h3 class="resume-title">Professional Experience</h3>
-
-
-                    <div class="resume-item">
-                        <h4>Lead Data Scientist</h4>
-                        <h5>03/2022 - Present</h5>
-                        <p><em>Sky Italia, Milan, Italy</em></p>
-                        <ul>
-                            <li><em>Led</em> technically small project teams of data scientists (up to 2 data scientist), providing both mentorship and hands-on support in daily tasks and career growth</li>
-                            <li><em>Actively collaborated</em> with cross-functional teams implementing <strong>Machine Learning solutions</strong> for reducing the churn rate up to 30%</li>
-                            <li><em>Developed and executed</em> a technical strategy for automatizing manual business processes for the continuous improvement of the <strong>Virtual Agent</strong>, using <strong>ML and NLP</strong>, enhancing operational efficiency by 50%</li>
-                            <li><em>Implemented</em> a topic modeling algorithm on conversational text within the <strong>Virtual Agent</strong> channel, achieving a 40% reduction in conversation analysis time</li>
-                            <li><em>Introduced and experimented</em> <strong>Generative AI techniques</strong> to create a smart data assistant, significantly enhancing data accessibility, visualization, and decision-making processes for Data Employees, leading to a 40% reduction in data retrieval times.</li>
-                        </ul>
-
-                        <p><strong>Tools</strong>: Python, Pytorch, SQL, GCP, Airflow, Generative AI, Langchain, LLM</p>
-                    </div>
-
-                    <div class="resume-item">
-                        <h4>R&D Data Scientist</h4>
-                        <h5>01/2021 - 03/2022</h5>
-                        <p><em>Youtility Center (Gruppo Distribuzione SPA,. Milan, Italy</em></p>
-                        <ul>
-                            <li>Managing <strong>Technical</strong> aspects of <strong>Conversational AI</strong>
-                                projects (chatbots).
-                            </li>
-                            <li>Achieved over <strong>95%</strong> accuracy relative to NLU (natural language
-                                understanding) models.
-                            </li>
-                            <li>Achieved over <strong>95%</strong> accuracy relative to NLG (natural language
-                                generation) models.
-                            </li>
-                            <li>Handled <strong>complex</strong> chatbot (more then 150 intents).</li>
-                            <li>Developing and managing the backend and the <strong>infrastructure</strong> needed for
-                                the conversational models
-                            </li>
-                            <li>Developed <strong>multi-bot infrastructure</strong>, managing multiple bots inference
-                                <strong>in parallel</strong>.
-                            </li>
-                            <li>Developed <strong>multi-language</strong> and <strong>multi-domain</strong> chatbots.
-                            </li>
-                            <li>Making use of <strong>AWS</strong> services, such as storage (<strong>S3</strong>), IaaS
-                                (<strong>EC2</strong>) and database (<strong>Aurora</strong>).
-                            </li>
-                        </ul>
-                        <p><strong>Tools</strong>: Python, Tensorflow 2.x, AWS, Rasa 2.x, Docker, Docker-Compose, NLTK,
-                            Spacy, SQL</p>
-                    </div>
-
-                    <div class="resume-item">
-                        <h4>Data Scientist</h4>
-                        <h5>05/2020 - 01/2021</h5>
-                        <p><em>Accenture S.p.A., Milan, Italy</em></p>
-                        <ul>
-                            <li>Developed a <strong>custom NER</strong> model for the document understanding task
-                                related to Financial Industry, starting from a small dataset.
-                            </li>
-                            <li>Achieved over <strong>95%</strong> accuracy relative to the entity classification of
-                                documents, even if the small input data.
-                            </li>
-                            <li><strong>R&D</strong> relative to NLP tasks such as Entity Extraction and <strong>Named
-                                Entity Recognition</strong> (NER).
-                            </li>
-                            <li>Developed a custom Computer Vision denoising model for <strong>noise reduction</strong>
-                                in documents, achieving relevant improvements for the OCR task.
-                            </li>
-                            <li>Developed projects making use of <strong>Google Cloud Platform</strong> (GCP) services,
-                                such as IaaS (compute instances), PaaS (app engine), storage
-                            </li>
-                        </ul>
-                        <p><strong>Tools</strong>: Python, Pytorch, Tensorflow 2.x, Keras, CUDA, Git, OpenCV, GCP</p>
-                    </div>
-
-                    <div class="resume-item">
-                        <h4>AI engineer - Internship</h4>
-                        <h5>09/2018 - 02/2019</h5>
-                        <p><em>Blue reply, Milan, Italy</em></p>
-                        <ul>
-                            <li>Contributed in the development of a <strong>virtual assistant</strong>, where I
-                                developed the cognitive model for classifying fashion items in images.
-                            </li>
-                            <li>Experienced with <strong>IBM Watson</strong> services.</li>
-                            <li>Integrated the cognitive model into the telegram channel, handling RestAPI.</li>
-                        </ul>
-                        <p><strong>Tools</strong>: Python, Pytorch, CUDA, Git, IBM Watson</p>
-
-                    </div>
-
+        <!-- Education Column -->
+        <div class="col-lg-6" data-aos="fade-up">
+          <div class="card shadow-lg border-0 rounded-4 h-100">
+            <div class="card-body p-4">
+              <h3 class="resume-title mb-4"><i class="bi bi-mortarboard-fill text-success me-2"></i>Education</h3>
+              <div class="mb-4 pb-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h4 class="mb-0 fw-bold">Master's Thesis Researcher</h4>
+                  <span class="badge bg-success">2019 – 2020</span>
                 </div>
-
-                <div class="col-lg-6" data-aos="fade-up">
-                    <!--            <h3 class="resume-title">Summary</h3>-->
-                    <!--            <div class="resume-item pb-0">-->
-                    <!--              <h4>Alex Smith</h4>-->
-                    <!--              <p><em>Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing user-centered digital/print marketing material from initial concept to final, polished deliverable.</em></p>-->
-                    <!--              <ul>-->
-                    <!--                <li>Portland par 127,Orlando, FL</li>-->
-                    <!--                <li>(123) 456-7891</li>-->
-                    <!--                <li>alice.barkley@example.com</li>-->
-                    <!--              </ul>-->
-                    <!--            </div>-->
-
-                    <h3 class="resume-title">Education</h3>
-                    <div class="resume-item">
-                        <h4>Master's Thesis Researcher</h4>
-                        <h5>2019 - 2020</h5>
-                        <p><em>Politecnico di Milano, Milan, Italy</em></p>
-                        <p><em>Title</em>: "Anomaly Detection through Ganomaly: patch-wise training and transfer
-                            learning"</p>
-                        <p><em>Goals</em>: introducing improvements to the Ganomaly state-of-the-art for Anomaly
-                            Detection in order to achieve a more efficient training for any-dimension images and a more
-                            effective performances through the transfer learning technique.</p>
-                    </div>
-
-                    <div class="resume-item">
-                        <h4>Master's Degree in Computer Science and Engineering</h4>
-                        <h5>2017 - 2020</h5>
-                        <p><em>Politecnico di Milano, Milan, Italy</em></p>
-                        <p>Artificial Intelligence path
-                        <p>
-
-                    </div>
-                    <div class="resume-item">
-                        <h4>Athens Programme - Intensive University Cource - From Complexity to Intelligence </h4>
-                        <h5>2019</h5>
-                        <p><em>Telecom Paris-Tech, Paris, France</em></p>
-                        <p>Participation to the European Athens Programme, attending an intensive course related to the
-                            complexity aspect with respect to the artificial intelligence algorithms</p>
-                    </div>
-                    <div class="resume-item">
-                        <h4>Erasmus+ project at Universitat Politecnica de Valencia</h4>
-                        <h5>2018</h5>
-                        <p><em>Universitat Politecnica de Valencia, Valencia, Spain</em></p>
-
-                    </div>
-                    <div class="resume-item">
-                        <h4>Bachelor's Degree in Computer Engineering</h4>
-                        <h5>2014 - 2017</h5>
-                        <p><em>Politecnico di Milano, Milan, Italy</em></p>
-
-                    </div>
-                    <h3 class="resume-title">Languages</h3>
-                    <div class="resume-item">
-                        <h4>Italian</h4>
-                        <!--              <p><em>Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing user-centered digital/print marketing material from initial concept to final, polished deliverable.</em></p>-->
-                        <ul>
-                            <li>Native</li>
-                        </ul>
-                    </div>
-                    <div class="resume-item">
-                        <h4>English</h4>
-                        <!--              <p><em>Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing user-centered digital/print marketing material from initial concept to final, polished deliverable.</em></p>-->
-                        <ul>
-                            <li>B2 Level - TOEIC | ETS Global B.V.</li>
-                        </ul>
-                    </div>
-                    <div class="resume-item">
-                        <h4>Spanish</h4>
-                        <!--              <p><em>Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing user-centered digital/print marketing material from initial concept to final, polished deliverable.</em></p>-->
-                        <ul>
-                            <li>B2 Level - FIDESCU</li>
-                        </ul>
-                    </div>
-                    <!--            </div>-->
-                    <h3 class="resume-title">Certifications</h3>
-                    <div class="resume-item">
-                        <h4>Associate Cloud Engineer</h4>
-                        <h6><a href="https://www.credential.net/317ddacf-e54f-4e4f-8f3b-813be02d76bf"> See
-                            Credential</a></h6>
-                        <p><em>Google Cloud Platform - 09/2020</em></p>
-
-                    </div>
+                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Politecnico di Milano — Milan, Italy</div>
+                <p class="mb-1"><em>Title:</em> "Anomaly Detection through Ganomaly: patch-wise training and transfer learning"</p>
+              </div>
+              <div class="mb-4 pb-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h4 class="mb-0 fw-bold">M.Sc. Computer Science and Engineering (AI track)</h4>
+                  <span class="badge bg-secondary">2017 – 2020</span>
                 </div>
-
-
+                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Politecnico di Milano — Milan, Italy</div>
+              </div>
+              <div class="mb-4 pb-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h4 class="mb-0 fw-bold">Athens Programme — From Complexity to Intelligence</h4>
+                  <span class="badge bg-info text-dark">2019</span>
+                </div>
+                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Telecom Paris — Paris, France</div>
+              </div>
+              <div class="mb-4 pb-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h4 class="mb-0 fw-bold">Erasmus+</h4>
+                  <span class="badge bg-warning text-dark">2018</span>
+                </div>
+                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Universitat Politècnica de València — Valencia, Spain</div>
+              </div>
+              <div class="mb-4 pb-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h4 class="mb-0 fw-bold">B.Sc. Computer Engineering</h4>
+                  <span class="badge bg-primary">2014 – 2017</span>
+                </div>
+                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Politecnico di Milano — Milan, Italy</div>
+              </div>
+              <h3 class="resume-title mb-3 mt-4"><i class="bi bi-translate text-info me-2"></i>Languages</h3>
+              <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item px-0"><strong>Italian:</strong> Native</li>
+                <li class="list-group-item px-0"><strong>English:</strong> B2 TOEIC</li>
+                <li class="list-group-item px-0"><strong>Spanish:</strong> B2 — lived 6 months in Valencia</li>
+              </ul>
+              <h3 class="resume-title mb-3"><i class="bi bi-award-fill text-warning me-2"></i>Certifications</h3>
+              <div class="mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <h4 class="mb-0 fw-bold">Google Cloud — Associate Cloud Engineer</h4>
+                  <a href="https://www.credential.net/317ddacf-e54f-4e4f-8f3b-813be02d76bf" class="badge bg-info text-dark" target="_blank">See credential</a>
+                </div>
+                <div class="text-muted mb-1"><em>Issued 09/2020</em></div>
+              </div>
             </div>
-
+          </div>
         </div>
-    </section><!-- End Resume Section -->
+      </div>
+    </div>
+  </section>
 
-
-
-    <!-- ======= Contact Section ======= -->
-    <section id="contact" class="contact">
-        <div class="container">
-
-            <div class="section-title">
-                <h2>Contact</h2>
-                <!--          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>-->
+    <!-- ======= Skills (Leadership-first) ======= -->
+    <section id="skills" class="skills section-bg">
+    <div class="container">
+      <div class="section-title mb-4">
+        <h2>Skills</h2>
+        <p>Tech Leadership for Data Science, with hands-on fluency to review designs, de-risk delivery, and scale what works.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-6" data-aos="fade-up">
+          <div class="card shadow border-0 rounded-4 h-100">
+            <div class="card-body p-4">
+              <h3 class="h5 mb-3"><i class="bi bi-diagram-3 text-primary me-2"></i>Leadership & Strategy</h3>
+              <ul class="list-unstyled mb-0">
+                <li class="mb-3"><i class="bi bi-diagram-3 me-2 text-primary"></i><strong>AI Strategy:</strong> roadmap, guardrails, make/buy, vendor due diligence.</li>
+                <li class="mb-3"><i class="bi bi-lightning-charge me-2 text-warning"></i><strong>From PoC to Scale:</strong> reusable patterns, platform tooling, rollout playbooks.</li>
+                <li class="mb-3"><i class="bi bi-people me-2 text-info"></i><strong>Stakeholder Leadership:</strong> executive communication, change management, team rituals.</li>
+              </ul>
             </div>
-
-            <div class="row" data-aos="fade-in">
-
-                <div class="col-lg-5 d-flex align-items-stretch">
-                    <div class="info">
-                        <div class="address">
-                            <i class="bi bi-geo-alt"></i>
-                            <h4>Location:</h4>
-                            <p>Milan, Italy</p>
-                        </div>
-
-                        <div class="email">
-                            <i class="bi bi-envelope" href="mailto: danielemoltisanti@gmail.com"></i>
-                            <h4>Email:</h4>
-                            <a href="mailto: danielemoltisanti@live.it"><p>danielemoltisanti@gmail.com</p></a>
-                        </div>
-
-                        <!--                        <div class="phone">-->
-                        <!--                            <i class="bi bi-phone"></i>-->
-                        <!--                            <h4>Call:</h4>-->
-                        <!--                            <a href="tel:+393337337311"><p>+39 3337337311</p></a>-->
-                        <!--                        </div>-->
-
-
-                        <!--              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe>-->
-                    </div>
-
-                </div>
-
-                <!--          <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">-->
-                <!--            <form action="forms/contact.php" method="post" role="form" class="php-email-form">-->
-                <!--              <div class="row">-->
-                <!--                <div class="form-group col-md-6">-->
-                <!--                  <label for="name">Your Name</label>-->
-                <!--                  <input type="text" name="name" class="form-control" id="name" required>-->
-                <!--                </div>-->
-                <!--                <div class="form-group col-md-6">-->
-                <!--                  <label for="name">Your Email</label>-->
-                <!--                  <input type="email" class="form-control" name="email" id="email" required>-->
-                <!--                </div>-->
-                <!--              </div>-->
-                <!--              <div class="form-group">-->
-                <!--                <label for="name">Subject</label>-->
-                <!--                <input type="text" class="form-control" name="subject" id="subject" required>-->
-                <!--              </div>-->
-                <!--              <div class="form-group">-->
-                <!--                <label for="name">Message</label>-->
-                <!--                <textarea class="form-control" name="message" rows="10" required></textarea>-->
-                <!--              </div>-->
-                <!--              <div class="my-3">-->
-                <!--                <div class="loading">Loading</div>-->
-                <!--                <div class="error-message"></div>-->
-                <!--                <div class="sent-message">Your message has been sent. Thank you!</div>-->
-                <!--              </div>-->
-                <!--              <div class="text-center"><button type="submit">Send Message</button></div>-->
-                <!--            </form>-->
-                <!--          </div>-->
-
-            </div>
-
+          </div>
         </div>
-    </section><!-- End Contact Section -->
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="card shadow border-0 rounded-4 h-100">
+            <div class="card-body p-4">
+              <h3 class="h5 mb-3"><i class="bi bi-chat-square-text text-success me-2"></i>GenAI & NLP Strategy / Design Reviews</h3>
+              <ul class="list-unstyled mb-0">
+                <li class="mb-3"><i class="bi bi-chat-square-text me-2 text-success"></i><strong>GenAI solution patterns:</strong> retrieval-augmented Q&A, agents/tools, evaluation before demo.</li>
+                <li class="mb-3"><i class="bi bi-sliders me-2 text-secondary"></i><strong>Quality & Cost control:</strong> test sets, human-in-the-loop, cost per answer/insight.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-12">
+          <div class="card shadow border-0 rounded-4">
+            <div class="card-body p-4">
+              <h3 class="h6 text-uppercase text-muted mb-3"><i class="bi bi-cpu me-2"></i>Representative technologies (hands-on when needed)</h3>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-filetype-py me-1"></i>Python</span>
+                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-lightning-charge me-1"></i>PyTorch</span>
+                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-link-45deg me-1"></i>LangChain</span>
+                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-emoji-smile me-1"></i>Hugging Face</span>
+                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-database me-1"></i>SQL</span>
+                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-arrow-repeat me-1"></i>Airflow</span>
+                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-cloud me-1"></i>GCP</span>
+                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-cloud me-1"></i>AWS</span>
+                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-box me-1"></i>Docker</span>
+                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-git me-1"></i>Git</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </section>
 
+  <!-- ======= Projects Section ======= -->
+<section id="projects" class="portfolio section-bg">
+  <div class="container">
+    <div class="section-title mb-4">
+      <h2>Personal Projects</h2>
+      <p>Here are some personal projects developed in my free time and my university career</p>
+    </div>
+    <div class="row mb-3" data-aos="fade-up">
+      <div class="col-lg-12 d-flex justify-content-center">
+        <ul id="portfolio-flters" class="nav nav-pills mb-3">
+          <li class="nav-item"><a class="nav-link active" data-filter="*">All</a></li>
+          <li class="nav-item"><a class="nav-link" data-filter=".filter-cv">Computer Vision</a></li>
+          <li class="nav-item"><a class="nav-link" data-filter=".filter-ts">Time Series Forecasting</a></li>
+          <li class="nav-item"><a class="nav-link" data-filter=".filter-nlp">NLP</a></li>
+          <li class="nav-item"><a class="nav-link" data-filter=".filter-finance">Finance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="row portfolio-container g-4" data-aos="fade-up" data-aos-delay="100">
+      <!-- Project Card Example -->
+      <div class="col-lg-4 col-md-6 portfolio-item filter-ts filter-finance">
+        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
+          <img src="assets/img/portfolio/portfolio_analysis_1.png" class="card-img-top" alt="Portfolio Analysis">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title mb-2"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i>Portfolio Analysis</h5>
+            <a href="portfolio_analysis.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 portfolio-item filter-nlp filter-finance">
+        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
+          <img src="assets/img/portfolio/Sentiment-Analysis-scaled.png" class="card-img-top" alt="Sentiment Analysis">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title mb-2"><i class="bi bi-emoji-smile text-success me-2"></i>Sentiment Analysis</h5>
+            <a href="Sentiment_analysis.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 portfolio-item filter-nlp">
+        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
+          <img src="assets/img/portfolio/genre detection.png" class="card-img-top" alt="Genre Detection">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title mb-2"><i class="bi bi-music-note-beamed text-info me-2"></i>Genre Detection</h5>
+            <a href="NLP_genre_detection.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 portfolio-item filter-ts">
+        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
+          <img src="assets/img/portfolio/soccer.png" class="card-img-top" alt="Soccer Prediction">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title mb-2"><i class="bi bi-trophy text-warning me-2"></i>Soccer Prediction</h5>
+            <a href="Soccer_Prediction.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 portfolio-item filter-cv">
+        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
+          <img src="assets/img/portfolio/anomaly_detection_1.png" class="card-img-top" alt="Anomaly Detection">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title mb-2"><i class="bi bi-exclamation-triangle text-danger me-2"></i>Anomaly Detection</h5>
+            <a href="Ganomaly.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 portfolio-item filter-cv">
+        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
+          <img src="assets/img/portfolio/bg_sub_1.png" class="card-img-top" alt="Background Subtraction">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title mb-2"><i class="bi bi-layers text-secondary me-2"></i>Background Subtraction</h5>
+            <a href="Background_Subtraction.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 portfolio-item filter-ts">
+        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
+          <img src="assets/img/portfolio/airqo_1.png" class="card-img-top" alt="AirQo Forecasting">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title mb-2"><i class="bi bi-cloud-sun text-info me-2"></i>AirQo Forecasting</h5>
+            <a href="airqo.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 portfolio-item filter-ts filter-finance">
+        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
+          <img src="assets/img/portfolio/finance.png" class="card-img-top" alt="Finance Forecasting">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title mb-2"><i class="bi bi-currency-dollar text-success me-2"></i>Finance Forecasting</h5>
+            <a href="finance_forecasting.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 portfolio-item filter-ts">
+        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
+          <img src="assets/img/portfolio/fraud.png" class="card-img-top" alt="Fraud Detection">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title mb-2"><i class="bi bi-shield-lock text-danger me-2"></i>Fraud Detection</h5>
+            <a href="fraud_detection.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- End Portfolio Section -->
+
+  <!-- ======= Contact Section ======= -->
+<section id="contact" class="contact">
+  <div class="container">
+    <div class="section-title mb-4"><h2>Contact</h2></div>
+    <div class="row justify-content-center" data-aos="fade-in">
+      <div class="col-lg-6">
+        <div class="card shadow-lg border-0 rounded-4 p-4">
+          <div class="card-body">
+            <div class="mb-4 text-center">
+              <i class="bi bi-envelope-paper-heart fs-1 text-primary mb-2"></i>
+              <h3 class="fw-bold mb-1">Let's Connect</h3>
+              <p class="text-muted mb-0">I'm based in Milan, Italy and open to speaking, collaborations, and new opportunities.</p>
+            </div>
+            <div class="mb-3 d-flex align-items-center">
+              <i class="bi bi-geo-alt fs-4 text-success me-3"></i>
+              <div>
+                <h5 class="mb-0">Location</h5>
+                <p class="mb-0">Milan, Italy</p>
+              </div>
+            </div>
+            <div class="mb-3 d-flex align-items-center">
+              <i class="bi bi-envelope fs-4 text-info me-3"></i>
+              <div>
+                <h5 class="mb-0">Email</h5>
+                <p class="mb-0"><a href="mailto:danielemoltisanti@gmail.com">danielemoltisanti@gmail.com</a></p>
+              </div>
+            </div>
+            <div class="d-flex flex-wrap gap-2 justify-content-center mt-4">
+              <a class="btn btn-primary btn-lg px-4" href="mailto:danielemoltisanti@gmail.com?subject=Speaking%20Invitation"><i class="bi bi-mic me-1"></i>Invite me to speak</a>
+              <a class="btn btn-outline-secondary btn-lg px-4" href="#speaking"><i class="bi bi-list-columns me-1"></i>View topics</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- End Contact Section -->
 
 </main><!-- End #main -->
 
-<!--   ======= Footer =======-->
-
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-        class="bi bi-arrow-up-short"></i></a>
+<!-- ======= Footer ======= -->
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <!-- Vendor JS Files -->
 <script src="assets/vendor/aos/aos.js"></script>
@@ -1086,6 +756,27 @@
 <!-- Template Main JS File -->
 <script src="assets/js/main.js"></script>
 
-</body>
+<!-- Schema.org for speaker discoverability -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Daniele Moltisanti",
+  "jobTitle": "Principal Data Scientist",
+  "url": "https://staituned.com/author/Daniele-Moltisanti",
+  "sameAs": ["https://www.linkedin.com/in/daniele-moltisanti/"],
+  "knowsAbout": ["AI operating models","Data Science leadership","AI governance","GenAI adoption"],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Public Speaking",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "From Slide to Impact: The Operating System for AI" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Metrics that Matter: Measuring Adoption (not only Accuracy)" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "GenAI Governance, Safety & Evaluation" } }
+    ]
+  }
+}
+</script>
 
+</body>
 </html>

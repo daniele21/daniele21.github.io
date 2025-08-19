@@ -36,34 +36,57 @@
 </head>
 
 <body>
+  <div id="header-include"></div>
+  <script>
+    fetch('header.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('header-include').innerHTML = data;
+      });
+  </script>
+  <div id="header-include"></div>
+  <script>
+    fetch('header.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('header-include').innerHTML = data;
+      });
+  </script>
+  <div id="header-include"></div>
+  <script>
+    fetch('header.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('header-include').innerHTML = data;
+      });
+  </script>
 
   <!-- ======= Mobile nav toggle button ======= -->
   <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
 
   <!-- ======= Header ======= -->
   <header id="header">
-    <div class="d-flex flex-column">
-
-      <div class="profile">
-        <img src="assets/img/IMG_20220129_002235_reduced.png" alt="" class="img-fluid rounded-circle">
-        <h1 class="text-light"><a href="index.html">Daniele Moltisanti</a></h1>
-        <div class="social-links mt-3 text-center">
-<!--          <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>-->
-<!--          <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>-->
-<!--          <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>-->
-<!--          <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>-->
-          <a href="https://www.linkedin.com/in/daniele-moltisanti/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+    <div class="d-flex flex-column align-items-center bg-white bg-opacity-90 shadow-sm p-4 mb-3" style="border-radius: 2.5rem; border: 1.5px solid #e3e8f7; backdrop-filter: blur(8px) saturate(120%); -webkit-backdrop-filter: blur(8px) saturate(120%); box-shadow: 0 2px 12px 0 rgba(180, 200, 255, 0.10); max-width: 340px; margin: 0 auto;">
+      <div class="profile d-flex flex-column align-items-center mb-3">
+        <img src="assets/img/profile-photo-4MB-crop.jpg" alt="Daniele Moltisanti" class="img-fluid rounded-circle border border-2 border-primary shadow-sm mb-2" style="width: 110px; height: 110px; object-fit: cover;">
+        <h1 class="fw-bold text-primary mb-1 text-center" style="font-size: 1.5rem;"><a href="index.html" class="text-decoration-none text-primary">Daniele Moltisanti</a></h1>
+        <div class="social-links d-flex justify-content-center gap-3 mt-2">
+          <a href="https://github.com/daniele21?tab=repositories" class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: #f5f7fa; color: #222; border: 1px solid #e3e8f7; transition: background 0.2s;" aria-label="GitHub"><i class="bi bi-github fs-5"></i></a>
+          <a href="https://www.linkedin.com/in/daniele-moltisanti/" class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: #f5f7fa; color: #0a66c2; border: 1px solid #e3e8f7; transition: background 0.2s;" aria-label="LinkedIn"><i class="bx bxl-linkedin fs-5"></i></a>
         </div>
       </div>
 
-      <nav id="navbar" class="nav-menu navbar">
-        <ul>
-          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
-          <li><a href="#about" class="nav-link scrollto"><i class="bx bx-user"></i> <span>About</span></a></li>
-          <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Resume</span></a></li>
-          <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a></li>
-          <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Experties</span></a></li>
-          <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>
+      <nav id="navbar" class="nav-menu navbar w-100">
+        <ul class="nav flex-column gap-1">
+          <li class="nav-item"><a href="index.html#hero" class="nav-link scrollto rounded-pill px-3 py-2 d-flex align-items-center gap-2" style="color: #2f3a4c;"><i class="bx bx-home"></i><span>Home</span></a></li>
+          <li class="nav-item"><a href="index.html#speaking" class="nav-link scrollto rounded-pill px-3 py-2 d-flex align-items-center gap-2" style="color: #2f3a4c;"><i class="bx bx-microphone"></i><span>Speaking</span></a></li>
+          <li class="nav-item"><a href="index.html#initiatives" class="nav-link scrollto rounded-pill px-3 py-2 d-flex align-items-center gap-2" style="color: #2f3a4c;"><i class="bx bx-news"></i><span>Writing</span></a></li>
+          <li class="nav-item"><a href="index.html#about" class="nav-link scrollto rounded-pill px-3 py-2 d-flex align-items-center gap-2" style="color: #2f3a4c;"><i class="bx bx-user"></i><span>About</span></a></li>
+          <li class="nav-item"><a href="index.html#expertise" class="nav-link scrollto rounded-pill px-3 py-2 d-flex align-items-center gap-2" style="color: #2f3a4c;"><i class="bx bx-trophy"></i><span>Expertise</span></a></li>
+          <li class="nav-item"><a href="index.html#resume" class="nav-link scrollto rounded-pill px-3 py-2 d-flex align-items-center gap-2" style="color: #2f3a4c;"><i class="bx bx-file-blank"></i><span>Resume</span></a></li>
+          <li class="nav-item"><a href="index.html#skills" class="nav-link scrollto rounded-pill px-3 py-2 d-flex align-items-center gap-2" style="color: #2f3a4c;"><i class="bx bx-medal"></i><span>Skills</span></a></li>
+          <li class="nav-item"><a href="index.html#projects" class="nav-link scrollto rounded-pill px-3 py-2 d-flex align-items-center gap-2" style="color: #2f3a4c;"><i class="bx bx-code-curly"></i><span>Projects</span></a></li>
+          <li class="nav-item"><a href="index.html#contact" class="nav-link scrollto rounded-pill px-3 py-2 d-flex align-items-center gap-2" style="color: #2f3a4c;"><i class="bx bx-envelope"></i><span>Contact</span></a></li>
         </ul>
       </nav><!-- .nav-menu -->
     </div>

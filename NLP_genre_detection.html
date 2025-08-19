@@ -37,45 +37,23 @@
 </head>
 
 <body>
+    <div id="header-include"></div>
+    <script>
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-include').innerHTML = data;
+            });
+    </script>
+    <div id="header-include"></div>
+    <script>
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-include').innerHTML = data;
+            });
+    </script>
 
-<!-- ======= Mobile nav toggle button ======= -->
-<i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
-
-<!-- ======= Header ======= -->
-<header id="header">
-    <div class="d-flex flex-column">
-
-        <div class="profile">
-            <img src="assets/img/IMG_20220129_002235_reduced.png" alt="" class="img-fluid rounded-circle">
-            <h1 class="text-light"><a href="index.html">Daniele Moltisanti</a></h1>
-            <div class="social-links mt-3 text-center">
-                <!--          <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>-->
-                <!--          <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>-->
-                <!--          <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>-->
-          <a href="https://github.com/daniele21?tab=repositories" class="github"><i class="bi bi-github"></i></a>
-                <a href="https://www.linkedin.com/in/daniele-moltisanti/" class="linkedin"><i
-                        class="bx bxl-linkedin"></i></a>
-            </div>
-        </div>
-
-        <nav id="navbar" class="nav-menu navbar">
-            <ul>
-                <li><a href="index.html#hero" class="nav-link scrollto active"><i class="bx bx-home"></i>
-                    <span>Home</span></a></li>
-                <li><a href="index.html#about" class="nav-link scrollto"><i class="bx bx-user"></i>
-                    <span>About</span></a></li>
-                <li><a href="index.html#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i>
-                    <span>Resume</span></a></li>
-                <li><a href="index.html#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a>
-                </li>
-                <li><a href="index.html#services" class="nav-link scrollto"><i class="bx bx-server"></i>
-                    <span>Experties</span></a></li>
-                <li><a href="index.html#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i>
-                    <span>Contact</span></a></li>
-            </ul>
-        </nav><!-- .nav-menu -->
-    </div>
-</header><!-- End Header -->
 
 <main id="main">
 

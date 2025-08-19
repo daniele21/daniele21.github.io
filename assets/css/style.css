@@ -85,7 +85,7 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 9997;
   transition: all 0.5s;
   padding: 0 15px;
-  background: #040b14;
+  background: #ffffff12;
   overflow-y: auto;
 }
 
@@ -189,6 +189,21 @@ h1, h2, h3, h4, h5, h6 {
 .nav-menu a:hover, .nav-menu .active, .nav-menu li:hover > a {
   text-decoration: none;
   color: #fff;
+}
+
+/* Make the active nav-link more evident */
+.nav-menu .nav-link.active, .nav-menu .nav-link.active:focus {
+  background: linear-gradient(90deg, #2f7ff6 30%, #102cf2 70%);
+  color: #fff !important;
+  font-weight: 700;
+  box-shadow: 0 2px 12px 0 rgba(47,127,246,0.10);
+  border: 1.5px solid #2f7ff6;
+  outline: 0;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.nav-menu .nav-link.active i {
+  color: #fff !important;
+}
 }
 
 .nav-menu a:hover i, .nav-menu .active i, .nav-menu li:hover > a i {

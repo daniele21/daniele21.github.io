@@ -31,6 +31,22 @@
 </head>
 
 <body>
+    <div id="header-include"></div>
+    <script>
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-include').innerHTML = data;
+            });
+    </script>
+    <div id="header-include"></div>
+    <script>
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-include').innerHTML = data;
+            });
+    </script>
 
 <!-- ======= Mobile nav toggle button ======= -->
 <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
