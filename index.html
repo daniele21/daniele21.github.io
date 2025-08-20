@@ -28,6 +28,47 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
+  <!-- HERO: mobile responsiveness fix -->
+  <style>
+    @media (max-width: 991.98px) {
+      #hero {
+        height: auto !important;
+        min-height: 100dvh;
+        padding-top: 72px;
+        padding-bottom: 24px;
+        justify-content: flex-start !important;
+        overflow: visible;
+      }
+      .hero-glass {
+        border-radius: 1.5rem !important;
+        padding: 1rem !important;
+        background: color-mix(in oklab, white 80%, #eaf2ff) !important;
+        backdrop-filter: blur(6px) saturate(120%) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(120%) !important;
+      }
+      .hero-glass h1 { font-size: clamp(28px, 9vw, 40px); line-height: 1.1; margin-bottom: .25rem; }
+      .hero-glass h2 { font-size: clamp(16px, 4.5vw, 20px); }
+      .hero-glass h3 { font-size: clamp(14px, 4vw, 18px); }
+    }
+    @media (min-width: 992px) {
+      #hero { min-height: 100vh; }
+      #hero::before {
+        content: "";
+        position: absolute;
+        inset: auto 0 8%;
+        margin: auto;
+        width: min(800px, 90vw);
+        height: 40%;
+        filter: blur(60px);
+        opacity: .45;
+        pointer-events: none;
+        background: radial-gradient(50% 60% at 50% 50%, #6aa2ff 0%, transparent 70%);
+        z-index: 0;
+      }
+      #hero > .hero-container { position: relative; z-index: 1; }
+    }
+  </style>
+
   <!-- Global site tag (gtag.js) - GA (legacy UA kept as-is) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-216820607-1"></script>
   <script>
@@ -58,15 +99,86 @@
 <!-- ======= Hero Section ======= -->
 <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
   <div class="hero-container text-center position-relative py-5 w-100 d-flex justify-content-center align-items-center" data-aos="fade-in">
-  <div class="shadow-lg px-4 px-md-5 py-4 hero-glass" style="max-width: 800px; display: inline-block; border: 1.5px solid rgba(120,120,255,0.18); background: rgba(255,255,255,0.47); backdrop-filter: blur(12px) saturate(160%); -webkit-backdrop-filter: blur(12px) saturate(160%); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18); border-radius: 4rem;">
+  <div class="shadow-lg px-4 px-md-5 py-4 hero-glass" style="max-width: 1000px; display: inline-block; border: 1.5px solid rgba(120,120,255,0.18); background: color-mix(in oklab, white 80%, #eaf2ff); backdrop-filter: blur(12px) saturate(160%); -webkit-backdrop-filter: blur(12px) saturate(160%); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18); border-radius: 4rem;">
       <h1 class="display-3 fw-bold mb-2" style="background: linear-gradient(90deg, #2f7ff6 30%, #102cf2 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Daniele Moltisanti</h1>
       <br>
       <h2 class="mb-3 text-dark-50">Principal Data Scientist & AI Strategy Lead</h2>
       <h3 class="lead mb-4 text-dark semibold">Scaling AI, GenAI, and Data Science with impact.<br></h3>
+      <!-- Micro-proof line -->
+      <div class="small text-muted mb-3" style="font-size:0.98rem; letter-spacing:0.01em;">
+        Nova 111 award &bull; 150+ projects reviewed &bull; 80+ articles
+      </div>
       <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center gap-3 mt-4">
         <!-- <span class="badge bg-success fs-6 px-3 py-2 mb-2 mb-sm-0 shadow-sm"><i class="bi bi-broadcast-pin me-2"></i>Available for speaking</span> -->
-        <a class="btn btn-primary btn-lg px-4 shadow-sm" href="#speaking"><i class="bi bi-mic me-2"></i>Request a talk</a>
-        <a class="btn btn-outline-dark btn-lg px-4 shadow-sm" href="#contact"><i class="bi bi-envelope me-2"></i>Contact me</a>
+  <div class="row g-3 justify-content-center w-100">
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card h-100 border-0 shadow-sm text-center cta-card">
+        <div class="card-body py-4">
+          <div class="mb-2"><i class="bi bi-mic fs-2 text-primary"></i></div>
+          <div class="fw-semibold mb-2">Interested in having me speak at your event?</div>
+          <a class="btn btn-primary btn-lg px-4 shadow-sm w-100" href="#speaking">Book a keynote</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card h-100 border-0 shadow-sm text-center cta-card">
+        <div class="card-body py-4">
+          <div class="mb-2"><i class="bi bi-people fs-2 text-success"></i></div>
+          <div class="fw-semibold mb-2">Looking for career tips or mentorship?</div>
+          <a class="btn btn-success btn-lg px-4 shadow-sm w-100" href="https://calendly.com/danielemoltisanti/mentoring">Book mentoring</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card h-100 border-0 shadow-sm text-center cta-card">
+        <div class="card-body py-4">
+          <div class="mb-2"><i class="bi bi-lightbulb fs-2 text-warning"></i></div>
+          <div class="fw-semibold mb-2">Need expert advice on AI strategy or solutions?</div>
+          <a class="btn btn-warning btn-lg px-4 shadow-sm w-100 text-dark" href="https://calendly.com/d/cv5f-rc8-m3m/ai-advisory-meeting">Schedule AI advisory</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card h-100 border-0 shadow-sm text-center cta-card">
+        <div class="card-body py-4">
+          <div class="mb-2"><i class="bi bi-envelope fs-2 text-dark"></i></div>
+          <div class="fw-semibold mb-2">Want to connect or discuss a collaboration?</div>
+          <a class="btn btn-outline-dark btn-lg px-4 shadow-sm w-100" href="#contact">Contact me</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    @media (max-width: 767.98px) {
+      .cta-card { margin-bottom: 1rem; }
+    }
+    .cta-card {
+      border-radius: 2rem !important;
+      background: color-mix(in oklab, white 80%, #eaf2ff);
+      backdrop-filter: blur(4px) saturate(120%);
+      -webkit-backdrop-filter: blur(4px) saturate(120%);
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .cta-card .card-body {
+      border-radius: 2rem;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .cta-card .card-body > .btn {
+      margin-top: auto;
+    }
+    .cta-card .btn:hover, .cta-card .btn:focus {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+    }
+    /* Icon style consistency: ensure outline icons and stroke weight */
+    .cta-card .bi {
+      stroke-width: 1.5;
+      vertical-align: middle;
+    }
+  </style>
       </div>
     </div>
   </div>
@@ -81,9 +193,8 @@
         <h2>Speaking</h2>
         <p>Invite me for keynotes, brown-bags or panels. Formats 25–45 minutes · IT/EN · Online/On-site.</p>
         <div class="mt-3">
-          <span class="badge rounded-pill bg-secondary me-1">AI Strategy & Operating Models</span>
-          <span class="badge rounded-pill bg-secondary me-1">Measuring AI Adoption & ROI</span>
-          <span class="badge rounded-pill bg-secondary me-1">GenAI Governance & Evaluation</span>
+          <span class="badge rounded-pill bg-secondary me-1">AI Strategy</span>
+          <span class="badge rounded-pill bg-secondary me-1">GenAI Solutions for the business</span>
           <span class="badge rounded-pill bg-secondary me-1">Data Science Leadership</span>
         </div>
       </div>
@@ -92,9 +203,12 @@
         <div class="col-md-4" data-aos="fade-up">
           <div class="card h-100 shadow border-0 rounded-4">
             <div class="card-body d-flex flex-column align-items-center text-center p-4">
-              <div class="mb-2"><i class="bi bi-graph-up fs-1 text-primary"></i></div>
-              <h5 class="card-title mb-2">From Slide to Impact: The Operating System for AI</h5>
-              <p class="mb-3">A.C.E. (Adoption · Cost · Evaluation) and the 3Rs (Reuse · Rituals · Risk) to move from demos to measurable results.</p>
+              <div class="mb-2"><i class="bi bi-check-circle fs-1 text-primary"></i></div>
+              <h5 class="card-title mb-2">Evaluation-First GenAI: Ship with Confidence</h5>
+              <p class="mb-3">Build a repeatable evaluation & monitoring pipelines (offline + online) for GenAI solutions.<br>
+              <!-- <strong>Live demo:</strong> golden set → LLM-judge + human adjudication → CI gate.<br>
+              <strong>Take-home:</strong> eval harness template (tests, thresholds, promotion checklist) -->
+            </p>
               <a href="#contact" class="btn btn-outline-primary btn-sm mt-auto"><i class="bi bi-mic me-1"></i>Request this talk</a>
             </div>
           </div>
@@ -104,8 +218,9 @@
           <div class="card h-100 shadow border-0 rounded-4">
             <div class="card-body d-flex flex-column align-items-center text-center p-4">
               <div class="mb-2"><i class="bi bi-speedometer2 fs-1 text-success"></i></div>
-              <h5 class="card-title mb-2">Metrics that Matter: Measuring Adoption (not only Accuracy)</h5>
-              <p class="mb-3">Build the minimum viable adoption dashboard, set realistic targets, connect cost-per-answer/insight to P&amp;L.</p>
+              <h5 class="card-title mb-2">Build, Buy, Fine-Tune or RAG ?</h5>
+              <p class="mb-3">Take the right choice for GenAI solutions. 
+                Avoid lock-in and overspend with a no-business decision framework.</p>
               <a href="#contact" class="btn btn-outline-success btn-sm mt-auto"><i class="bi bi-mic me-1"></i>Request this talk</a>
             </div>
           </div>
@@ -115,13 +230,16 @@
           <div class="card h-100 shadow border-0 rounded-4">
             <div class="card-body d-flex flex-column align-items-center text-center p-4">
               <div class="mb-2"><i class="bi bi-shield-check fs-1 text-warning"></i></div>
-              <h5 class="card-title mb-2">GenAI Governance, Safety & Evaluation</h5>
-              <a href="#contact" class="btn btn-outline-warning btn-sm mt-auto"><i class="bi bi-mic me-1"></i>Request this talk</a>
+              <h5 class="card-title mb-2">Guardrails, Not Handcuffs</h5>
+              <p class="mb-3">Move faster with GenAI by constraining it well.
+                Add policy-by-design, safe step limits, and audit-ready traces to ship faster, not slower.
+                Limits are the runway, not the fence.</p>
+              <a href="#contact" class="btn btn-outline-success btn-sm mt-auto"><i class="bi bi-mic me-1"></i>Request this talk</a>
             </div>
           </div>
         </div>
       </div>
-      <p class="mt-4 small text-muted">COI-safe: educational content only—no references to employer projects, stacks or confidential metrics.</p>
+      <!-- <p class="mt-4 small text-muted">COI-safe: educational content only—no references to employer projects, stacks or confidential metrics.</p> -->
     </div>
   </section>
 
@@ -172,7 +290,10 @@
                   <ul class="mb-2 ps-3">
                     <li class="mb-1">Mentored Italian and Spanish students</li>
                   </ul>
-                  <a href="https://digital-agent.novatalent.net/open/certificate/688ZDUTDSW6G8KCVO3NX8F379" class="btn btn-outline-success btn-sm">Mentor Certification <i class="bx bx-chevron-right"></i></a>
+                  <div class="d-flex flex-wrap gap-2">
+                    <a href="https://calendly.com/danielemoltisanti/mentoring" class="btn btn-success btn-sm">Ask for mentoring <i class="bi bi-person-plus"></i></a>
+                    <a href="https://digital-agent.novatalent.net/open/certificate/688ZDUTDSW6G8KCVO3NX8F379" class="btn btn-outline-success btn-sm">Mentor Certification <i class="bx bx-chevron-right"></i></a>
+                  </div>
                 </div>
               </div>
             </div>
