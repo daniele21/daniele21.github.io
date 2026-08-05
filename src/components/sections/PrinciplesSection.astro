@@ -1,0 +1,69 @@
+---
+/**
+ * PrinciplesSection - Guiding Principles pill row.
+ */
+import { principles } from '../../content/principles';
+---
+
+<section class="section section-principles" id="principles" aria-labelledby="principles-title">
+  <div class="shell">
+    <div class="section-heading reveal">
+      <div>
+        <p class="section-kicker">GUIDING PRINCIPLES</p>
+        <h2 id="principles-title">Privacy-first is an architecture discipline</h2>
+      </div>
+      <p>How decisions are made across the infrastructure and application layers.</p>
+    </div>
+
+    <div class="principle-row reveal" aria-label="Guiding product and engineering principles">
+      {principles.map((p, index) => (
+        <div class="principle-item">
+          {index === 0 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>}
+          {index === 1 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>}
+          {index === 2 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>}
+          {index === 3 && <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>}
+          {index === 4 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>}
+          <span>{p.title}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .principle-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+
+  .principle-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 12px 20px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    color: var(--ink-muted);
+    background: rgba(255, 255, 255, 0.8);
+    font-size: var(--text-small);
+    font-weight: 650;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .principle-item svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: var(--accent-blue);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (max-width: 580px) {
+    .principle-row { justify-content: flex-start; }
+  }
+</style>

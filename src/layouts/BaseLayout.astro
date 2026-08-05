@@ -1,0 +1,77 @@
+---
+/**
+ * BaseLayout - Root layout for all pages.
+ * Manages document metadata, global styles, structured data, and shared header/footer.
+ */
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import { siteMetadata } from '../content/site';
+
+import '../styles/tokens.css';
+import '../styles/reset.css';
+import '../styles/layout.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = siteMetadata.title,
+  description = siteMetadata.description,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <meta name="theme-color" content="#f7f9ff">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href={siteMetadata.canonical}>
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- Open Graph & Social Cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content={siteMetadata.socialTitle}>
+  <meta property="og:description" content={siteMetadata.socialDescription}>
+  <meta property="og:url" content={siteMetadata.canonical}>
+  <meta property="og:image" content={siteMetadata.ogImage}>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={siteMetadata.socialDescription}>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": siteMetadata.canonical,
+    "image": `${siteMetadata.canonical}images/profile-photo.jpg`,
+    "sameAs": [
+      "https://github.com/daniele21",
+      "https://www.linkedin.com/in/daniele-moltisanti/",
+      "https://staituned.com"
+    ],
+    "knowsAbout": [
+      "Local AI", "On-device inference", "Privacy-first product design",
+      "Large language models", "Speech recognition", "Android AI"
+    ]
+  })} />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <SiteHeader />
+  <main id="main">
+    <slot />
+  </main>
+  <SiteFooter />
+  <script src="../scripts/site.ts"></script>
+</body>
+</html>

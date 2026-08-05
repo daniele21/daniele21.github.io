@@ -1,0 +1,61 @@
+---
+/**
+ * AboutSection - Personal bio and profile photo.
+ */
+---
+
+<section class="section section-about" id="about" aria-labelledby="about-title">
+  <div class="shell about-grid">
+    <div class="about-copy reveal">
+      <p class="section-kicker">ABOUT</p>
+      <h2 id="about-title">I work where AI infrastructure, product strategy and communication meet.</h2>
+      <p>I am Daniele Moltisanti, a data and AI professional based in Milan. My work combines technical architecture, product thinking and the ability to turn complex AI systems into understandable decisions and usable experiences.</p>
+      <p>Alongside my professional work, I build local-first infrastructure and privacy-first products in public. I also write about AI architecture and strategy through stAI tuned and LinkedIn.</p>
+      <p>I am particularly interested in the last mile between a working model and a reliable product: integration, observability, evaluation, packaging, user experience and strategic adoption.</p>
+    </div>
+
+    <div class="about-photo-wrapper reveal">
+      <img src="/images/profile-photo.jpg" alt="Daniele Moltisanti" class="about-photo" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(40px, 6vw, 80px);
+    align-items: start;
+  }
+
+  .about-copy p {
+    margin-top: var(--space-4);
+    color: var(--ink-muted);
+    font-size: var(--text-body);
+    line-height: 1.7;
+  }
+
+  .about-photo-wrapper {
+    position: relative;
+  }
+
+  .about-photo {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  @media (max-width: 1040px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+
+    .about-photo {
+      max-width: 320px;
+    }
+  }
+</style>

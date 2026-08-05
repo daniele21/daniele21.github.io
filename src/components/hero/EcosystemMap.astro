@@ -1,0 +1,391 @@
+---
+/**
+ * EcosystemMap - Vector UI recreation of the reference ecosystem diagram.
+ * All surfaces, connectors, icons and labels are native SVG elements.
+ */
+---
+
+<figure class="ecosystem-map reveal" aria-labelledby="ecosystem-map-caption">
+  <figcaption id="ecosystem-map-caption" class="sr-only">
+    Applications such as ClosedRoom and Aura Finance are built on local LLM,
+    speech recognition and Android infrastructure running on private user-owned
+    devices, with no cloud required.
+  </figcaption>
+
+  <svg
+    class="ecosystem-diagram"
+    viewBox="0 0 740 390"
+    role="img"
+    aria-hidden="true"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <defs>
+      <linearGradient id="app-surface" x1="0" y1="0" x2="0.9" y2="1">
+        <stop offset="0" stop-color="#fbffff" />
+        <stop offset="0.58" stop-color="#f2fbfb" />
+        <stop offset="1" stop-color="#e6f7f7" />
+      </linearGradient>
+      <linearGradient id="app-edge" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#dcf3f3" />
+        <stop offset="1" stop-color="#c8e8e9" />
+      </linearGradient>
+
+      <linearGradient id="infra-surface" x1="0.08" y1="0" x2="0.85" y2="1">
+        <stop offset="0" stop-color="#fbfcff" />
+        <stop offset="0.62" stop-color="#f0f3ff" />
+        <stop offset="1" stop-color="#e7ecff" />
+      </linearGradient>
+      <linearGradient id="infra-edge" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#e7ecff" />
+        <stop offset="1" stop-color="#d5def8" />
+      </linearGradient>
+
+      <linearGradient id="hardware-surface" x1="0.08" y1="0" x2="0.84" y2="1">
+        <stop offset="0" stop-color="#ffffff" />
+        <stop offset="0.58" stop-color="#f7f9fd" />
+        <stop offset="1" stop-color="#edf2f9" />
+      </linearGradient>
+      <linearGradient id="hardware-edge" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#eef3f9" />
+        <stop offset="1" stop-color="#dfe7f2" />
+      </linearGradient>
+
+      <radialGradient id="surface-glow" cx="50%" cy="0" r="76%">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.92" />
+        <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+      </radialGradient>
+
+      <filter id="layer-shadow" x="-12%" y="-18%" width="124%" height="150%">
+        <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#415982" flood-opacity="0.13" />
+      </filter>
+      <filter id="floor-shadow" x="-20%" y="-250%" width="140%" height="600%">
+        <feGaussianBlur stdDeviation="10" />
+      </filter>
+
+      <symbol id="icon-camera" viewBox="0 0 32 32">
+        <rect x="5" y="7" width="21" height="21" rx="3.6" />
+        <circle cx="15.5" cy="17.5" r="5" />
+        <path d="m10 7 1.6-3h7.2L20.4 7M26 11h2" />
+      </symbol>
+      <symbol id="icon-aura" viewBox="0 0 32 32">
+        <path d="M11 12V8a5 5 0 0 1 10 0v4M13 8v6m6-6v6" />
+        <path d="M10 15h12c0 3 4 3.5 4 7.5 0 3.5-2.4 5.7-5.6 5.7H11c-3.2 0-5-2.2-5-5.7 0-4 4-4.5 4-7.5Z" />
+        <path d="M11.5 22.5h9" />
+      </symbol>
+      <symbol id="icon-cube" viewBox="0 0 32 32">
+        <path d="m16 3 10 5.8-10 6-10-6L16 3Z" />
+        <path d="m6 8.8 10 6 10-6v10L16 25 6 18.8v-10Z" />
+        <path d="M16 14.8V29M6 23l10 6 10-6v-4.2M11.5 6l9 5.5" />
+      </symbol>
+      <symbol id="icon-wave" viewBox="0 0 32 32">
+        <path d="M3 14v4M7.3 10v12M11.6 5v22M15.9 11v10M20.2 3v26M24.5 9v14M28.8 13v6" />
+      </symbol>
+      <symbol id="icon-phone" viewBox="0 0 32 32">
+        <rect x="9" y="3" width="14" height="26" rx="2.4" />
+        <path d="M14 6h4M15 25.5h2" />
+      </symbol>
+      <symbol id="icon-laptop" viewBox="0 0 32 32">
+        <path d="M8 7h16l1.5 15h-19L8 7Z" />
+        <path d="m6.5 22-3 5h25l-3-5M13 24.5h6" />
+      </symbol>
+      <symbol id="icon-shield" viewBox="0 0 32 32">
+        <path d="M16 3 27 8v7c0 7-4.6 11.4-11 14C9.6 26.4 5 22 5 15V8l11-5Z" />
+        <path d="m11 16 3 3 7-8" />
+      </symbol>
+    </defs>
+
+    <ellipse class="floor-shadow" cx="430" cy="356" rx="205" ry="9" />
+
+    <g class="connector connector--left connector--app">
+      <path d="M168 53H204" />
+      <circle cx="204" cy="53" r="2.8" />
+    </g>
+    <g class="connector connector--left connector--infra">
+      <path d="M168 166H185" />
+      <circle cx="185" cy="166" r="2.8" />
+    </g>
+    <g class="connector connector--left connector--hardware">
+      <path d="M140 280H177" />
+      <circle cx="177" cy="280" r="2.8" />
+    </g>
+
+    <g class="connector connector--right">
+      <path d="M665 83H714V294H687" />
+      <path d="M674 182H714" />
+      <circle class="dot-app" cx="665" cy="83" r="2.8" />
+      <circle class="dot-infra" cx="674" cy="182" r="2.8" />
+      <circle class="dot-hardware" cx="687" cy="294" r="2.8" />
+    </g>
+
+    <g class="side-label side-label--app">
+      <text class="label-title" x="57" y="52">APPLICATIONS</text>
+      <text class="label-copy" x="57" y="72">Built on the stack</text>
+    </g>
+    <g class="side-label side-label--infra">
+      <text class="label-title" x="57" y="164">INFRASTRUCTURE</text>
+      <text class="label-copy" x="57" y="184">The foundation</text>
+    </g>
+    <g class="side-label side-label--hardware">
+      <text class="label-title" x="57" y="278">HARDWARE</text>
+      <text class="label-copy" x="57" y="298">Local &amp; decentralized</text>
+    </g>
+
+    <g class="layer layer--hardware">
+      <path
+        class="layer-edge"
+        d="M168 317H690v23c0 14-9 22-23 22H191c-14 0-22-8-22-22l-1-23Z"
+        fill="url(#hardware-edge)"
+        stroke="#c7d2e3"
+      />
+      <path
+        class="layer-surface"
+        d="M220 252h412c11 0 18 4 26 13l30 56c8 11-1 18-16 18H186c-15 0-23-8-15-19l35-55c5-9 9-13 14-13Z"
+        fill="url(#hardware-surface)"
+        stroke="#c8d3e4"
+      />
+      <path
+        class="surface-highlight"
+        d="M220 253h412c11 0 18 4 26 13l29 54c7 10-1 17-15 17H186c-14 0-21-7-14-17l34-54c5-9 9-13 14-13Z"
+        fill="url(#surface-glow)"
+      />
+
+      <use class="feature-icon hardware-icon" href="#icon-laptop" x="216" y="284" width="30" height="30" />
+      <text class="feature-title" x="261" y="292">Your Device</text>
+      <text class="feature-copy" x="261" y="309">Laptop / Desktop</text>
+
+      <use class="feature-icon hardware-icon" href="#icon-phone" x="375" y="282" width="29" height="29" />
+      <text class="feature-title" x="414" y="292">Mobile Device</text>
+      <text class="feature-copy" x="414" y="309">Android</text>
+
+      <use class="feature-icon hardware-icon" href="#icon-shield" x="521" y="281" width="31" height="31" />
+      <text class="feature-title" x="564" y="291">
+        <tspan x="564" dy="0">No Cloud</tspan>
+        <tspan x="564" dy="16">Required</tspan>
+      </text>
+    </g>
+
+    <g class="layer layer--infrastructure">
+      <path
+        class="layer-edge"
+        d="M174 202h503v24c0 16-10 24-24 25H197c-14-1-23-9-23-24v-25Z"
+        fill="url(#infra-edge)"
+        stroke="#aabcf0"
+      />
+      <path
+        class="layer-surface"
+        d="M232 134h384c11 0 19 4 27 13l34 54c8 12-1 23-17 23H192c-16 0-25-11-17-23l42-54c6-9 9-13 15-13Z"
+        fill="url(#infra-surface)"
+        stroke="#a6bbf5"
+      />
+      <path
+        class="surface-highlight"
+        d="M232 135h384c11 0 19 4 27 13l33 52c7 11-1 22-16 22H192c-15 0-23-10-16-21l41-53c6-9 9-13 15-13Z"
+        fill="url(#surface-glow)"
+      />
+
+      <line class="feature-separator" x1="349" y1="158" x2="349" y2="207" />
+      <line class="feature-separator" x1="499" y1="158" x2="499" y2="207" />
+
+      <use class="feature-icon infra-icon" href="#icon-cube" x="218" y="166" width="31" height="31" />
+      <text class="feature-title" x="261" y="164">
+        <tspan x="261" dy="0">Local LLM</tspan>
+        <tspan x="261" dy="16">Server</tspan>
+      </text>
+      <text class="feature-copy" x="261" y="207">Inference</text>
+
+      <use class="feature-icon infra-icon" href="#icon-wave" x="369" y="166" width="30" height="30" />
+      <text class="feature-title" x="413" y="164">
+        <tspan x="413" dy="0">Local ASR</tspan>
+        <tspan x="413" dy="16">Server</tspan>
+      </text>
+      <text class="feature-copy" x="413" y="207">Speech</text>
+
+      <use class="feature-icon infra-icon" href="#icon-phone" x="523" y="165" width="29" height="29" />
+      <text class="feature-title" x="562" y="164">
+        <tspan x="562" dy="0">Android LLM</tspan>
+        <tspan x="562" dy="16">Harness</tspan>
+      </text>
+      <text class="feature-copy" x="562" y="207">On-device runtime</text>
+    </g>
+
+    <g class="layer layer--applications">
+      <path
+        class="layer-edge"
+        d="M189 83h474v24c0 15-9 24-23 25H213c-14-1-23-9-23-24l-1-25Z"
+        fill="url(#app-edge)"
+        stroke="#90cecf"
+      />
+      <path
+        class="layer-surface"
+        d="M243 23h343c12 0 20 4 28 13l47 54c9 11 0 19-15 19H205c-15 0-24-8-15-19l39-54c6-9 9-13 14-13Z"
+        fill="url(#app-surface)"
+        stroke="#91d1d2"
+      />
+      <path
+        class="surface-highlight"
+        d="M243 24h343c12 0 20 4 28 13l46 52c8 10 0 18-14 18H205c-14 0-23-8-14-18l38-52c6-9 9-13 14-13Z"
+        fill="url(#surface-glow)"
+      />
+
+      <use class="feature-icon app-icon" href="#icon-camera" x="252" y="52" width="31" height="31" />
+      <text class="feature-title" x="299" y="51">ClosedRoom</text>
+      <text class="feature-copy" x="299" y="70">
+        <tspan x="299" dy="0">Private meeting</tspan>
+        <tspan x="299" dy="14">intelligence</tspan>
+      </text>
+
+      <use class="feature-icon app-icon" href="#icon-aura" x="410" y="51" width="31" height="31" />
+      <text class="feature-title" x="456" y="51">Aura Finance</text>
+      <text class="feature-copy" x="456" y="70">
+        <tspan x="456" dy="0">Privacy-first</tspan>
+        <tspan x="456" dy="14">personal finance</tspan>
+      </text>
+
+      <text class="more-label" x="575" y="73">+ More</text>
+    </g>
+  </svg>
+
+  <ol class="sr-only">
+    <li>Applications: ClosedRoom, Aura Finance, and more.</li>
+    <li>Infrastructure: Local LLM Server, Local ASR Server, and Android LLM Harness.</li>
+    <li>Hardware: laptop, desktop, and Android devices, with no cloud required.</li>
+  </ol>
+</figure>
+
+<style>
+  .ecosystem-map {
+    width: 100%;
+    max-width: 740px;
+    margin: 0 auto;
+    overflow: visible;
+  }
+
+  .ecosystem-diagram {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    font-family: var(--font-body);
+  }
+
+  .floor-shadow {
+    fill: #7890b6;
+    opacity: 0.16;
+    filter: url(#floor-shadow);
+  }
+
+  .layer {
+    filter: url(#layer-shadow);
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 240ms cubic-bezier(0.2, 0.78, 0.25, 1), filter 240ms ease;
+  }
+
+  .layer:hover {
+    filter: url(#layer-shadow) brightness(1.012);
+    transform: translateY(-3px);
+  }
+
+  .layer-surface,
+  .layer-edge {
+    stroke-width: 0.9;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .surface-highlight { opacity: 0.26; }
+
+  .connector {
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 1.15;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .connector path { stroke-dasharray: 1 5; }
+  .connector--app { color: #0c9697; stroke: currentColor; fill: currentColor; }
+  .connector--infra { color: #1d5fec; stroke: currentColor; fill: currentColor; }
+  .connector--hardware { color: #7484a4; stroke: currentColor; fill: currentColor; }
+  .connector--right { stroke: #86bfd2; }
+  .connector--right .dot-app { fill: #078f90; stroke: none; }
+  .connector--right .dot-infra { fill: #175cff; stroke: none; }
+  .connector--right .dot-hardware { fill: #7182a3; stroke: none; }
+
+  .label-title,
+  .label-copy,
+  .feature-title,
+  .feature-copy,
+  .more-label {
+    text-rendering: geometricPrecision;
+  }
+
+  .label-title {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.15px;
+  }
+
+  .label-copy {
+    fill: #53617d;
+    font-size: 9px;
+    font-weight: 520;
+  }
+
+  .side-label--app .label-title { fill: #078f90; }
+  .side-label--infra .label-title { fill: #175ce2; }
+  .side-label--hardware .label-title { fill: #687894; }
+
+  .feature-icon {
+    fill: none;
+    stroke-width: 2.15;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .app-icon { color: #078f90; stroke: currentColor; }
+  .infra-icon { color: #175cff; stroke: currentColor; }
+  .hardware-icon { color: #7182a3; stroke: currentColor; }
+
+  .feature-title {
+    fill: #172342;
+    font-size: 10.5px;
+    font-weight: 720;
+  }
+
+  .feature-copy {
+    fill: #3f4d69;
+    font-size: 9.2px;
+    font-weight: 500;
+  }
+
+  .more-label {
+    fill: #263653;
+    font-size: 9px;
+    font-weight: 650;
+  }
+
+  .feature-separator {
+    stroke: #b9c7e4;
+    stroke-width: 0.75;
+    opacity: 0.62;
+    vector-effect: non-scaling-stroke;
+  }
+
+  @media (max-width: 620px) {
+    .ecosystem-map {
+      width: calc(100% + 20px);
+      margin-inline: -10px;
+    }
+
+    .label-title { font-size: 11px; }
+    .label-copy { font-size: 9.6px; }
+    .feature-title { font-size: 10.9px; }
+    .feature-copy { font-size: 9.6px; }
+    .more-label { font-size: 9.4px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .layer {
+      transition: none;
+    }
+  }
+</style>

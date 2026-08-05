@@ -1,0 +1,122 @@
+---
+/**
+ * InfrastructureSection - Section containing the three pillars and the architecture relationship diagram.
+ */
+import PillarCard from './PillarCard.astro';
+import { pillars } from '../../content/pillars';
+---
+
+<section class="section section-stack" id="infrastructure" aria-labelledby="stack-title">
+  <div class="shell">
+    <div class="section-heading reveal">
+      <div>
+        <p class="section-kicker">THE INFRASTRUCTURE STACK (THREE PILLARS)</p>
+        <h2 id="stack-title">Three infrastructure pillars</h2>
+      </div>
+      <p>Each project solves a different part of the local-AI product stack. Reusable infrastructure, not isolated experiments.</p>
+    </div>
+
+    <div class="pillar-grid">
+      {pillars.map((pillar) => (
+        <PillarCard pillar={pillar} />
+      ))}
+    </div>
+
+    <!-- Architecture Relationship Diagram -->
+    <div class="architecture-strip reveal" id="how-it-connects" aria-label="Architecture relationship diagram">
+      <p class="architecture-label">ARCHITECTURE RELATIONSHIP</p>
+      <div class="architecture-nodes">
+        <span class="architecture-node architecture-node-teal">Local LLM Server</span>
+        <span class="architecture-node architecture-node-blue">Local ASR Server</span>
+        <span class="architecture-node architecture-node-violet">Android LLM Harness</span>
+      </div>
+      <div class="architecture-line" aria-hidden="true"></div>
+      <div class="architecture-output">
+        <span>APIs / Protocols (gRPC, WebSocket, Local IPC)</span>
+        <strong>Reference Applications (ClosedRoom, Aura Finance)</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-stack {
+    background: rgba(255, 255, 255, 0.55);
+    border-block: 1px solid rgba(220, 228, 243, 0.62);
+  }
+
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .architecture-strip {
+    margin-top: var(--space-12);
+    padding: clamp(26px, 4vw, 44px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+  }
+
+  .architecture-label {
+    margin: 0 0 var(--space-6);
+    color: var(--accent-blue);
+    font-size: var(--text-xs);
+    font-weight: 850;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .architecture-nodes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .architecture-node {
+    display: grid;
+    place-items: center;
+    min-height: 56px;
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    font-weight: 750;
+    font-size: var(--text-small);
+  }
+
+  .architecture-node-teal { color: #087b7b; background: #eafaf8; border: 1px solid #8ddbd4; }
+  .architecture-node-blue { color: #1b50ca; background: #edf2ff; border: 1px solid #9eb9ff; }
+  .architecture-node-violet { color: #503fc2; background: #f1efff; border: 1px solid #b4a9ff; }
+
+  .architecture-line {
+    width: 1px;
+    height: 32px;
+    margin: 0 auto;
+    background: linear-gradient(var(--accent-blue), transparent);
+  }
+
+  .architecture-output {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: min(100%, 480px);
+    padding: var(--space-4) var(--space-6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-muted);
+  }
+
+  .architecture-output span { color: var(--ink-muted); font-size: var(--text-xs); }
+  .architecture-output strong { color: var(--ink); font-size: var(--text-small); }
+
+  @media (max-width: 1040px) {
+    .pillar-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 820px) {
+    .architecture-nodes { grid-template-columns: 1fr; }
+    .architecture-line { height: 24px; }
+  }
+</style>

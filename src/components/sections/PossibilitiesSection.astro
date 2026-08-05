@@ -1,0 +1,91 @@
+---
+/**
+ * PossibilitiesSection - "What This Enables" grid.
+ */
+import { enablements } from '../../content/principles';
+---
+
+<section class="section section-enables" id="possibilities" aria-labelledby="enables-title">
+  <div class="shell">
+    <div class="section-heading reveal">
+      <div>
+        <p class="section-kicker">WHAT THIS ENABLES</p>
+        <h2 id="enables-title">What the stack can make easier next</h2>
+      </div>
+      <p>These are exploration areas the foundations can support, not announced products.</p>
+    </div>
+
+    <div class="enablement-grid">
+      {enablements.map((item, index) => (
+        <article class="enablement-card reveal">
+          {index === 0 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg>}
+          {index === 1 && <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M16 10h5M8 8v8M5 11h6"/></svg>}
+          {index === 2 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>}
+          {index === 3 && <svg aria-hidden="true" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>}
+          {index === 4 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>}
+          {index === 5 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.7 5.2c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"/></svg>}
+          {index === 6 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>}
+          {index === 7 && <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>}
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .enablement-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .enablement-card {
+    min-height: 200px;
+    padding: var(--space-6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+
+  .enablement-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .enablement-card svg {
+    width: 32px;
+    height: 32px;
+    fill: none;
+    stroke: var(--accent-blue);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .enablement-card:nth-child(2) svg,
+  .enablement-card:nth-child(4) svg { stroke: var(--accent-teal); }
+  .enablement-card:nth-child(3) svg { stroke: var(--accent-violet); }
+
+  .enablement-card h3 {
+    margin: var(--space-5) 0 var(--space-2);
+    font-size: 1.1rem;
+  }
+
+  .enablement-card p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+  }
+
+  @media (max-width: 1040px) {
+    .enablement-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 580px) {
+    .enablement-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,199 @@
+---
+/**
+ * PillarCard - Card component for an individual infrastructure pillar.
+ */
+import type { Pillar } from '../../types/content';
+
+interface Props {
+  pillar: Pillar;
+}
+
+const { pillar } = Astro.props;
+
+const iconClassMap = {
+  teal: 'project-icon-teal',
+  blue: 'project-icon-blue',
+  violet: 'project-icon-violet',
+};
+---
+
+<article class="project-card pillar-card reveal">
+  <div class="project-card-top">
+    <span class={`project-icon ${iconClassMap[pillar.accent]}`} aria-hidden="true">
+      {pillar.accent === 'teal' && (
+        <svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/><path d="m8 9.8 8-4.5"/></svg>
+      )}
+      {pillar.accent === 'blue' && (
+        <svg viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10v4"/></svg>
+      )}
+      {pillar.accent === 'violet' && (
+        <svg viewBox="0 0 24 24"><path d="M7 8h10v10H7zM9 5 7.5 3M15 5 16.5 3M5 10H3M21 10h-2M9 12v2M15 12v2"/></svg>
+      )}
+    </span>
+    <span class={`status ${pillar.status === 'experimental' ? 'status-progress' : 'status-active'}`}>{pillar.statusLabel}</span>
+  </div>
+  <h3>{pillar.name}</h3>
+  <p class="project-role">{pillar.role}</p>
+  <div class="tech-tags">
+    {pillar.technologies.map((tech) => (
+      <span>{tech}</span>
+    ))}
+  </div>
+  <details class="project-disclosure">
+    <summary>Explore the pillar <span aria-hidden="true">+</span></summary>
+    <div class="disclosure-body">
+      <p>{pillar.description}</p>
+      <ul>
+        {pillar.capabilities.slice(0, 3).map((cap) => (
+          <li>{cap}</li>
+        ))}
+      </ul>
+      <div class="project-links">
+        <a href={pillar.repositoryUrl} target="_blank" rel="noreferrer">View repository ↗</a>
+      </div>
+    </div>
+  </details>
+</article>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-md);
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+
+  .project-card:hover {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .project-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .project-icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    box-shadow: 0 12px 26px rgba(41, 74, 140, 0.15);
+  }
+
+  .project-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .project-icon-teal { background: linear-gradient(145deg, #0fa6a4, #077b86); }
+  .project-icon-blue { background: linear-gradient(145deg, #397dff, #284dcc); }
+  .project-icon-violet { background: linear-gradient(145deg, #6f5bf3, #4235bf); }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    min-height: 24px;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.67rem;
+    font-weight: 850;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .status-active { color: var(--status-active-text); background: var(--status-active-bg); }
+  .status-progress { color: var(--status-progress-text); background: var(--status-progress-bg); }
+
+  .project-card h3 {
+    margin: var(--space-5) 0 var(--space-2);
+    font-size: 1.38rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .project-role {
+    margin-bottom: var(--space-4);
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: auto;
+    padding-top: var(--space-4);
+    font-size: var(--text-xs);
+    color: var(--ink-subtle);
+    font-weight: 600;
+  }
+
+  .tech-tags span + span::before {
+    content: "·";
+    margin-right: var(--space-2);
+  }
+
+  .project-disclosure {
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .project-disclosure summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--accent-blue);
+    font-weight: 700;
+    font-size: var(--text-small);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .project-disclosure summary::-webkit-details-marker { display: none; }
+  .project-disclosure summary span { font-size: 1.2rem; transition: transform 160ms ease; }
+  .project-disclosure[open] summary span { transform: rotate(45deg); }
+
+  .disclosure-body {
+    padding-top: var(--space-3);
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+  }
+
+  .disclosure-body ul {
+    padding-left: var(--space-5);
+    margin-top: var(--space-2);
+  }
+
+  .disclosure-body li { margin-bottom: var(--space-1); }
+
+  .project-links { margin-top: var(--space-4); }
+
+  .project-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: var(--text-small);
+  }
+
+  .project-links a:hover { text-decoration: underline; }
+</style>

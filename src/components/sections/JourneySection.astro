@@ -1,0 +1,118 @@
+---
+/**
+ * JourneySection - "Building in Public" grid of 6 journey links.
+ */
+import { journeyLinks } from '../../content/principles';
+---
+
+<section class="section section-journey" id="journey" aria-labelledby="journey-title">
+  <div class="shell">
+    <div class="section-heading reveal">
+      <div>
+        <p class="section-kicker">BUILDING IN PUBLIC</p>
+        <h2 id="journey-title">Code, decisions and evidence-not only outcomes</h2>
+      </div>
+      <p>Work becomes strategically useful when the implementation, trade-offs and lessons are distributed in public.</p>
+    </div>
+
+    <div class="journey-grid">
+      {journeyLinks.map((item) => (
+        <a class="journey-card reveal" href={item.url} target="_blank" rel="noreferrer">
+          {item.iconType === 'github' && (
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7A5.4 5.4 0 0 0 19.4 4 5 5 0 0 0 19.3.5S18.2.1 15 2a13.4 13.4 0 0 0-6 0C5.8.1 4.7.5 4.7.5A5 5 0 0 0 4.6 4a5.4 5.4 0 0 0-1.4 3.7c0 5.4 3.5 6.6 6.8 7A4.8 4.8 0 0 0 9 18v4"/><path d="M9 19c-3 .9-3-1.5-4-2"/></svg>
+          )}
+          {item.iconType === 'linkedin' && (
+            <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="9" width="4" height="12"/><path d="M5 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM11 21V9h4v2c1-2 6-3 6 3v7h-4v-6c0-2-2-3-3-1v7z"/></svg>
+          )}
+          {item.iconType === 'stai' && (
+            <span class="text-icon" aria-hidden="true">stAI</span>
+          )}
+          {item.iconType === 'gauge' && (
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+          )}
+          {item.iconType === 'book' && (
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          )}
+          {item.iconType === 'flask' && (
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M10 2v7.31L4.75 20.5a1 1 0 0 0 .85 1.5h12.8a1 1 0 0 0 .85-1.5L14 9.31V2"/></svg>
+          )}
+          <span><strong>{item.title}</strong><small>{item.description}</small></span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-journey {
+    background: rgba(255, 255, 255, 0.6);
+    border-block: 1px solid rgba(220, 228, 243, 0.65);
+  }
+
+  .journey-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .journey-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 110px;
+    padding: var(--space-5);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  .journey-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+  }
+
+  .journey-card svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .journey-card strong {
+    display: block;
+    font-size: var(--text-small);
+    color: var(--ink);
+  }
+
+  .journey-card small {
+    display: block;
+    margin-top: 2px;
+    color: var(--ink-muted);
+    font-size: var(--text-xs);
+    line-height: 1.35;
+  }
+
+  .text-icon {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+  }
+
+  @media (max-width: 1040px) {
+    .journey-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 580px) {
+    .journey-grid { grid-template-columns: 1fr; }
+  }
+</style>

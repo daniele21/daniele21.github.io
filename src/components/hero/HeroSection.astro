@@ -1,0 +1,181 @@
+---
+/**
+ * HeroSection - Primary top section matching target design reference.
+ */
+import EcosystemMap from './EcosystemMap.astro';
+---
+
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="shell hero-grid">
+    <div class="hero-copy reveal">
+      <div class="eyebrow-pill">LOCAL-FIRST AI INFRASTRUCTURE</div>
+      <h1 id="hero-title">
+        Building the infrastructure<br />
+        for <span class="blue-text">privacy-first</span> AI products.
+      </h1>
+      <p class="hero-lede">
+        I design reusable infrastructure for local LLM inference, private speech recognition and Android on-device AI - then validate it through real desktop and mobile applications.
+      </p>
+
+      <div class="hero-actions" aria-label="Primary actions">
+        <a class="button button-primary" href="#infrastructure">Explore the infrastructure <span aria-hidden="true">→</span></a>
+        <a class="button button-secondary" href="#journey">Follow the build journey <span aria-hidden="true">↗</span></a>
+      </div>
+
+      <ul class="trust-row" aria-label="Guiding principles">
+        <li>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>
+          Local by default
+        </li>
+        <li>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
+          Privacy by architecture
+        </li>
+        <li>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg>
+          Open and auditable
+        </li>
+      </ul>
+    </div>
+
+    <div class="hero-visual">
+      <EcosystemMap />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: clamp(40px, 5vw, 80px) 0 60px;
+    overflow: clip;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(24px, 3.5vw, 56px);
+  }
+
+  .hero-copy {
+    max-width: 560px;
+  }
+
+  .eyebrow-pill {
+    display: inline-block;
+    padding: 5px 13px;
+    border-radius: 999px;
+    background: #eef4ff;
+    color: var(--accent-blue);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+  }
+
+  .hero h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 3.4vw, 3.2rem);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .blue-text {
+    color: var(--accent-blue);
+  }
+
+  .hero-lede {
+    margin: var(--space-4) 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-lg);
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 48px;
+    padding: 10px 22px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 750;
+    font-size: var(--text-small);
+    transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .button:hover { transform: translateY(-2px); }
+
+  .button-primary {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-dark));
+    box-shadow: 0 12px 28px rgba(23, 92, 255, 0.22);
+  }
+  .button-primary:hover { box-shadow: 0 16px 36px rgba(23, 92, 255, 0.28); }
+
+  .button-secondary {
+    color: var(--accent-blue);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--border-strong);
+  }
+  .button-secondary:hover { background: #ffffff; box-shadow: var(--shadow-sm); }
+
+  .trust-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+    font-weight: 650;
+  }
+
+  .trust-row li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .trust-row svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (max-width: 1040px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .hero-copy {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .hero { padding-top: 24px; padding-bottom: 24px; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .button { width: 100%; }
+    .trust-row { display: grid; grid-template-columns: 1fr; gap: var(--space-2); }
+  }
+</style>
