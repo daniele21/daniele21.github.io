@@ -1,33 +1,40 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Daniele Moltisanti — Privacy-first AI infrastructure</title>
-  <meta name="description" content="Daniele Moltisanti builds reusable local-AI infrastructure and validates it through privacy-first products across desktop and Android.">
+  <title>Daniele Moltisanti - Building Privacy-First AI Products</title>
+  <meta name="description"
+    content="I build reusable local-AI infrastructure for desktop and Android, then validate it through privacy-first products such as ClosedRoom and Aura Finance.">
   <meta name="theme-color" content="#f7f9ff">
   <meta name="color-scheme" content="light">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://daniele21.github.io/">
   <link rel="icon" href="assets/site/favicon.svg" type="image/svg+xml">
+  <link rel="shortcut icon" href="favicon.ico">
   <link rel="manifest" href="site.webmanifest">
-  <link rel="stylesheet" href="assets/site/site.css">
 
+  <!-- Open Graph & Social Cards -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Building the infrastructure for privacy-first AI products">
-  <meta property="og:description" content="Local inference, speech recognition and Android runtimes, validated through real privacy-first applications.">
+  <meta property="og:description"
+    content="Local LLMs, private speech recognition and Android on-device inference, tested through real applications.">
   <meta property="og:url" content="https://daniele21.github.io/">
   <meta property="og:image" content="https://daniele21.github.io/assets/site/social-card.svg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Daniele Moltisanti — Privacy-first AI infrastructure">
-  <meta name="twitter:description" content="Reusable local-AI infrastructure for privacy-first products across desktop and Android.">
+  <meta name="twitter:title" content="Daniele Moltisanti - Building Privacy-First AI Products">
+  <meta name="twitter:description"
+    content="Local LLMs, private speech recognition and Android on-device inference, tested through real applications.">
 
+  <!-- Structured Data JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Daniele Moltisanti",
     "url": "https://daniele21.github.io/",
+    "image": "https://daniele21.github.io/assets/img/profile-photo.jpg",
     "sameAs": [
       "https://github.com/daniele21",
       "https://www.linkedin.com/in/daniele-moltisanti/",
@@ -43,11 +50,23 @@
     ]
   }
   </script>
-  <script src="assets/site/site.js" defer></script>
+
+  <!-- CSS Design System Modules -->
+  <link rel="stylesheet" href="assets/site/css/tokens.css">
+  <link rel="stylesheet" href="assets/site/css/reset.css">
+  <link rel="stylesheet" href="assets/site/css/layout.css">
+  <link rel="stylesheet" href="assets/site/css/components.css">
+  <link rel="stylesheet" href="assets/site/css/hero.css">
+  <link rel="stylesheet" href="assets/site/css/sections.css">
+  <link rel="stylesheet" href="assets/site/css/responsive.css">
+
+  <script src="assets/site/js/site.js" defer></script>
 </head>
+
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <!-- Header & Navigation -->
   <header class="site-header" data-header>
     <div class="shell header-inner">
       <a class="brand" href="#top" aria-label="Daniele Moltisanti, home">
@@ -62,8 +81,9 @@
 
       <nav class="site-nav" id="site-navigation" aria-label="Primary navigation" data-navigation>
         <a href="#vision">Vision</a>
-        <a href="#stack">Infrastructure</a>
+        <a href="#infrastructure">Infrastructure</a>
         <a href="#applications">Applications</a>
+        <a href="#principles">Principles</a>
         <a href="#journey">Journey</a>
         <a href="#about">About</a>
         <a class="nav-cta" href="#collaborate">Collaborate</a>
@@ -72,43 +92,55 @@
   </header>
 
   <main id="main">
+    <!-- Hero Section -->
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="shell hero-grid">
         <div class="hero-copy reveal">
-          <p class="eyebrow">Local-first AI infrastructure</p>
+          <p class="eyebrow">LOCAL-FIRST AI INFRASTRUCTURE</p>
           <h1 id="hero-title">Building the infrastructure for <span>privacy-first AI products.</span></h1>
-          <p class="hero-lede">I build reusable local inference, speech recognition and Android runtime layers, then validate them through real applications with sensitive data and real product constraints.</p>
+          <p class="hero-lede">I design reusable infrastructure for local LLM inference, private speech recognition and
+            Android on-device AI - then validate it through real desktop and mobile applications.</p>
 
           <div class="hero-actions" aria-label="Primary actions">
-            <a class="button button-primary" href="#stack">Explore the infrastructure <span aria-hidden="true">→</span></a>
-            <a class="button button-secondary" href="#journey">Follow the build <span aria-hidden="true">↗</span></a>
+            <a class="button button-primary" href="#infrastructure">Explore the infrastructure <span
+                aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="#journey">Follow the build journey <span
+                aria-hidden="true">↗</span></a>
           </div>
 
           <ul class="trust-row" aria-label="Guiding principles">
             <li>
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z" />
+              </svg>
               Local by default
             </li>
             <li>
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z" />
+                <path d="m9 12 2 2 4-5" />
+              </svg>
               Privacy by architecture
             </li>
             <li>
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16" />
+              </svg>
               Open and auditable
             </li>
           </ul>
         </div>
 
-        <div class="hero-system reveal" aria-label="Local-first AI stack: hardware supports infrastructure, which enables applications">
+        <div class="hero-system reveal"
+          aria-label="Local-first AI stack: hardware supports infrastructure, which enables applications">
           <div class="system-label system-label-apps">Applications <span>Built on the stack</span></div>
           <div class="system-layer layer-apps">
             <div class="system-item">
-              <span class="mini-icon">C</span>
+              <img src="assets/img/closedroom/light-mode-logo.png" alt="ClosedRoom Logo" class="mini-icon-img">
               <span><strong>ClosedRoom</strong><small>Private meeting intelligence</small></span>
             </div>
             <div class="system-item">
-              <span class="mini-icon">A</span>
+              <img src="assets/img/aura/aura-logo-light.png" alt="Aura Finance Logo" class="mini-icon-img">
               <span><strong>Aura Finance</strong><small>Privacy-first personal finance</small></span>
             </div>
             <span class="system-more">+ future products</span>
@@ -116,207 +148,210 @@
 
           <div class="system-label system-label-infra">Infrastructure <span>Three reusable pillars</span></div>
           <div class="system-layer layer-infra">
-            <div class="system-item compact"><span class="node node-teal"></span><span><strong>Local LLM</strong><small>Inference</small></span></div>
-            <div class="system-item compact"><span class="node node-blue"></span><span><strong>Local ASR</strong><small>Speech</small></span></div>
-            <div class="system-item compact"><span class="node node-violet"></span><span><strong>Android LLM</strong><small>On-device</small></span></div>
+            <div class="system-item compact"><span class="node node-teal"></span><span><strong>Local
+                  LLM</strong><small>Inference</small></span></div>
+            <div class="system-item compact"><span class="node node-blue"></span><span><strong>Local
+                  ASR</strong><small>Speech</small></span></div>
+            <div class="system-item compact"><span class="node node-violet"></span><span><strong>Android
+                  LLM</strong><small>On-device</small></span></div>
           </div>
 
           <div class="system-label system-label-hardware">Hardware <span>Local and decentralised</span></div>
           <div class="system-layer layer-hardware">
             <div class="system-item compact">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v11H4zM2 19h20"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4 5h16v11H4zM2 19h20" />
+              </svg>
               <span><strong>Your computer</strong><small>Desktop / laptop</small></span>
             </div>
             <div class="system-item compact">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <rect x="7" y="2" width="10" height="20" rx="2" />
+                <path d="M11 18h2" />
+              </svg>
               <span><strong>Your phone</strong><small>Android</small></span>
             </div>
             <div class="system-item compact">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z" />
+                <path d="m9 12 2 2 4-5" />
+              </svg>
               <span><strong>Data control</strong><small>Cloud not required</small></span>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Problem & Vision Section -->
       <div class="shell purpose-grid" id="vision">
         <article class="purpose-card reveal">
           <span class="purpose-icon purpose-icon-vision" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12Z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
           </span>
           <div>
-            <p class="section-kicker">Vision</p>
-            <h2>AI that stays close to the user and the user's data.</h2>
-            <p>A future where useful AI can operate directly on personal devices, under explicit user control, without making the cloud the default destination for every sensitive interaction.</p>
+            <p class="section-kicker">THE GAP</p>
+            <h2>Running a model locally is not enough.</h2>
+            <p>Product-grade local AI requires far more than weights on a device:</p>
+            <ul class="problem-list">
+              <li>Runtime lifecycle, compatibility and updates</li>
+              <li>Observability, performance and quality signals</li>
+              <li>Hardware constraints and memory adaptation</li>
+              <li>UX and developer ergonomics</li>
+            </ul>
           </div>
         </article>
 
         <article class="purpose-card reveal">
           <span class="purpose-icon purpose-icon-mission" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3"/></svg>
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="8" />
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 2v3M22 12h-3" />
+            </svg>
           </span>
           <div>
-            <p class="section-kicker">Mission</p>
-            <h2>Reduce the distance between a local model demo and a reliable product.</h2>
-            <p>Build reusable infrastructure, validate it through real applications and publish the evidence needed to create better privacy-first products across desktop and mobile.</p>
+            <p class="section-kicker">VISION & MISSION</p>
+            <h2>A local-first AI infrastructure layer for real-world products.</h2>
+            <p><strong>Vision:</strong> Local AI as the default compute substrate for privacy, sovereignty and
+              resilience.</p>
+            <p style="margin-top: 8px;"><strong>Mission:</strong> Build fundamental infrastructure so builders can ship
+              exceptional privacy-first AI experiences.</p>
           </div>
         </article>
       </div>
     </section>
 
-    <section class="section section-stack" id="stack" aria-labelledby="stack-title">
+    <!-- Infrastructure Pillars Section -->
+    <section class="section section-stack" id="infrastructure" aria-labelledby="stack-title">
       <div class="shell">
         <div class="section-heading reveal">
           <div>
-            <p class="section-kicker">The foundation</p>
+            <p class="section-kicker">THE INFRASTRUCTURE STACK (THREE PILLARS)</p>
             <h2 id="stack-title">Three infrastructure pillars</h2>
           </div>
-          <p>Each project solves a different part of the local-AI product stack. The landing keeps the first layer simple; technical detail is available when it becomes useful.</p>
+          <p>Each project solves a different part of the local-AI product stack. Reusable infrastructure, not isolated
+            experiments.</p>
         </div>
 
         <div class="pillar-grid">
+          <!-- Pillar 1: Local LLM Server -->
           <article class="project-card pillar-card reveal">
             <div class="project-card-top">
               <span class="project-icon project-icon-teal" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/><path d="m8 9.8 8-4.5"/></svg>
+                <svg viewBox="0 0 24 24">
+                  <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z" />
+                  <path d="m4 7.5 8 4.5 8-4.5M12 12v9" />
+                  <path d="m8 9.8 8-4.5" />
+                </svg>
               </span>
-              <span class="status status-experimental">Experimental</span>
+              <span class="status status-active">ACTIVE</span>
             </div>
             <h3>Local LLM Server</h3>
-            <p class="project-role">A stable local inference layer between applications and fragmented desktop model engines.</p>
+            <p class="project-role">High-performance local inference server with model lifecycle, routing and telemetry.
+            </p>
+            <div class="tech-tags">
+              <span>Rust</span>
+              <span>gRPC</span>
+              <span>Quantization</span>
+              <span>Tooling</span>
+            </div>
             <details class="project-disclosure">
               <summary>Explore the pillar <span aria-hidden="true">+</span></summary>
               <div class="disclosure-body">
-                <p>Provides an OpenAI-compatible API, runtime lifecycle, backend abstraction, model switching and observability across GGUF and MLX workflows.</p>
+                <p>Provides an OpenAI-compatible API across local backends such as GGUF and MLX, managing model
+                  lifecycle, resident runtimes and telemetry.</p>
                 <ul>
-                  <li>Desktop inference and orchestration</li>
-                  <li>Explicit model and backend management</li>
-                  <li>Runtime telemetry and live diagnostics</li>
+                  <li>OpenAI-compatible local API</li>
+                  <li>GGUF and Apple Silicon backends</li>
+                  <li>Runtime model switching & telemetry</li>
                 </ul>
                 <div class="project-links">
-                  <a href="https://github.com/daniele21/local-llm-server" target="_blank" rel="noreferrer">View repository ↗</a>
+                  <a href="https://github.com/daniele21/local-llm-server" target="_blank" rel="noreferrer">View
+                    repository ↗</a>
                 </div>
               </div>
             </details>
           </article>
 
+          <!-- Pillar 2: Local ASR Server -->
           <article class="project-card pillar-card reveal">
             <div class="project-card-top">
               <span class="project-icon project-icon-blue" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10v4"/></svg>
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10v4" />
+                </svg>
               </span>
-              <span class="status status-experimental">Experimental</span>
+              <span class="status status-active">ACTIVE</span>
             </div>
             <h3>Local ASR Server</h3>
-            <p class="project-role">A private speech layer for recording, transcribing and structuring sensitive audio locally.</p>
+            <p class="project-role">Privacy-first speech recognition server optimized for accuracy and latency.</p>
+            <div class="tech-tags">
+              <span>Whisper</span>
+              <span>VAD</span>
+              <span>Streaming</span>
+              <span>Diarization</span>
+            </div>
             <details class="project-disclosure">
               <summary>Explore the pillar <span aria-hidden="true">+</span></summary>
               <div class="disclosure-body">
-                <p>Handles microphone and system-audio capture, local session storage and Whisper transcription on Apple Silicon.</p>
+                <p>Handles microphone and system audio capture, local session storage and Whisper transcription on Apple
+                  Silicon.</p>
                 <ul>
-                  <li>Private meeting and audio capture</li>
-                  <li>Local speech-to-text workflows</li>
-                  <li>Reusable API for downstream products</li>
+                  <li>Microphone & system audio capture</li>
+                  <li>Local Whisper transcription</li>
+                  <li>Structured session storage & API</li>
                 </ul>
                 <div class="project-links">
-                  <a href="https://github.com/daniele21/local-asr-server" target="_blank" rel="noreferrer">View repository ↗</a>
+                  <a href="https://github.com/daniele21/local-asr-server" target="_blank" rel="noreferrer">View
+                    repository ↗</a>
                 </div>
               </div>
             </details>
           </article>
 
+          <!-- Pillar 3: Android Local LLM Harness -->
           <article class="project-card pillar-card reveal">
             <div class="project-card-top">
               <span class="project-icon project-icon-violet" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M7 8h10v10H7zM9 5 7.5 3M15 5 16.5 3M5 10H3M21 10h-2M9 12v2M15 12v2"/></svg>
+                <svg viewBox="0 0 24 24">
+                  <path d="M7 8h10v10H7zM9 5 7.5 3M15 5 16.5 3M5 10H3M21 10h-2M9 12v2M15 12v2" />
+                </svg>
               </span>
-              <span class="status status-progress">In progress</span>
+              <span class="status status-progress">IN PROGRESS</span>
             </div>
             <h3>Android Local LLM Harness</h3>
-            <p class="project-role">Reusable on-device inference infrastructure for native and Capacitor Android applications.</p>
+            <p class="project-role">On-device LLM runtime harness for Android apps with tight resource control.</p>
+            <div class="tech-tags">
+              <span>Kotlin</span>
+              <span>ML Runtime</span>
+              <span>Memory</span>
+              <span>Offline</span>
+            </div>
             <details class="project-disclosure">
               <summary>Explore the pillar <span aria-hidden="true">+</span></summary>
               <div class="disclosure-body">
-                <p>Moves beyond a one-off model demo with explicit GGUF management, lifecycle, streaming, cancellation, memory evidence, telemetry and health checks.</p>
+                <p>Reusable runtime for embedding GGUF models in native and Capacitor Android applications with explicit
+                  lifecycle and diagnostics.</p>
                 <ul>
-                  <li>Embedded-first Android runtime</li>
-                  <li>GGUF import and integrity verification</li>
-                  <li>Observability, benchmarks and diagnostics</li>
+                  <li>GGUF import & verification</li>
+                  <li>Streaming, cancellation & memory controls</li>
+                  <li>Health checks & performance benchmarks</li>
                 </ul>
                 <div class="project-links">
-                  <a href="https://github.com/daniele21/android-local-llm-harness" target="_blank" rel="noreferrer">View repository ↗</a>
-                </div>
-              </div>
-            </details>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-applications" id="applications" aria-labelledby="applications-title">
-      <div class="shell">
-        <div class="section-heading reveal">
-          <div>
-            <p class="section-kicker">Proving grounds</p>
-            <h2 id="applications-title">Applications that expose real constraints</h2>
-          </div>
-          <p>The applications are deliberately secondary to the infrastructure. Their job is to test privacy, packaging, performance and user experience in real domains.</p>
-        </div>
-
-        <div class="application-grid">
-          <article class="application-card reveal">
-            <div class="application-identity">
-              <span class="application-logo closedroom-logo" aria-hidden="true">C</span>
-              <div>
-                <span class="status status-prototype">Prototype</span>
-                <h3>ClosedRoom</h3>
-                <p class="application-tagline">Privacy-first meeting intelligence.</p>
-              </div>
-            </div>
-            <p>Combines local audio capture, transcription and LLM analysis to keep sensitive conversations on the user's machine.</p>
-            <details class="project-disclosure application-disclosure">
-              <summary>See what it validates <span aria-hidden="true">+</span></summary>
-              <div class="disclosure-body">
-                <ul>
-                  <li>Local ASR and LLM integration</li>
-                  <li>Installable desktop packaging</li>
-                  <li>Meeting summaries and action extraction</li>
-                </ul>
-                <div class="project-links">
-                  <a href="https://github.com/daniele21/local-asr-server" target="_blank" rel="noreferrer">Explore the ASR engine ↗</a>
-                </div>
-              </div>
-            </details>
-          </article>
-
-          <article class="application-card reveal">
-            <div class="application-identity">
-              <span class="application-logo aura-logo" aria-hidden="true">A</span>
-              <div>
-                <span class="status status-progress">In development</span>
-                <h3>Aura Finance</h3>
-                <p class="application-tagline">Privacy-first personal finance.</p>
-              </div>
-            </div>
-            <p>A mobile-first local-data product that tests data ownership, optional encrypted backup and clear financial decision support.</p>
-            <details class="project-disclosure application-disclosure">
-              <summary>See what it validates <span aria-hidden="true">+</span></summary>
-              <div class="disclosure-body">
-                <ul>
-                  <li>Local-first financial data model</li>
-                  <li>Encrypted optional cloud backup</li>
-                  <li>Future proving ground for Android on-device AI</li>
-                </ul>
-                <div class="project-links">
-                  <a href="https://github.com/daniele21/personal-budget" target="_blank" rel="noreferrer">View repository ↗</a>
+                  <a href="https://github.com/daniele21/android-local-llm-harness" target="_blank" rel="noreferrer">View
+                    repository ↗</a>
                 </div>
               </div>
             </details>
           </article>
         </div>
 
-        <div class="architecture-strip reveal" aria-label="Three infrastructure pillars support reference applications and future privacy-first products">
-          <p class="architecture-label">Architecture at a glance</p>
+        <!-- Architecture Relationship Diagram -->
+        <div class="architecture-strip reveal" id="how-it-connects" aria-label="Architecture relationship diagram">
+          <p class="architecture-label">ARCHITECTURE RELATIONSHIP</p>
           <div class="architecture-nodes">
             <span class="architecture-node architecture-node-teal">Local LLM Server</span>
             <span class="architecture-node architecture-node-blue">Local ASR Server</span>
@@ -324,131 +359,378 @@
           </div>
           <div class="architecture-line" aria-hidden="true"></div>
           <div class="architecture-output">
-            <span>Reference applications</span>
-            <strong>ClosedRoom · Aura Finance · future products</strong>
+            <span>APIs / Protocols (gRPC, WebSocket, Local IPC)</span>
+            <strong>Reference Applications (ClosedRoom, Aura Finance)</strong>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section section-enables" id="principles" aria-labelledby="enables-title">
+    <!-- Reference Applications Section -->
+    <section class="section section-applications" id="applications" aria-labelledby="applications-title">
       <div class="shell">
         <div class="section-heading reveal">
           <div>
-            <p class="section-kicker">Future enablement</p>
+            <p class="section-kicker">REFERENCE APPLICATIONS (PROVING GROUNDS)</p>
+            <h2 id="applications-title">Built to prove the stack in the real world</h2>
+          </div>
+          <p>The applications validate privacy, packaging, performance and user experience under real constraints.</p>
+        </div>
+
+        <div class="application-grid">
+          <!-- Application 1: ClosedRoom -->
+          <article class="application-card reveal">
+            <div class="application-identity">
+              <img src="assets/img/closedroom/light-mode-logo.png" alt="ClosedRoom logo" class="application-logo-img">
+              <div>
+                <span class="status status-active">ACTIVE</span>
+                <h3>ClosedRoom</h3>
+                <p class="application-tagline">Privacy-first meeting intelligence.</p>
+              </div>
+            </div>
+            <p>Record, transcribe and understand meetings without sending the room to the cloud. Local-first meeting
+              capture, transcription and insights.</p>
+            <div class="feature-badges">
+              <span class="feature-badge">Transcription</span>
+              <span class="feature-badge">Summaries</span>
+              <span class="feature-badge">Action Items</span>
+              <span class="feature-badge">Search</span>
+            </div>
+            <details class="project-disclosure" style="margin-top: 20px;">
+              <summary>What it validates <span aria-hidden="true">+</span></summary>
+              <div class="disclosure-body">
+                <ul>
+                  <li>End-to-end local audio capture & LLM analysis</li>
+                  <li>Local ASR and LLM Server integration</li>
+                  <li>Installable desktop application packaging & UX</li>
+                </ul>
+                <div class="project-links">
+                  <a href="https://github.com/daniele21/local-asr-server" target="_blank" rel="noreferrer">Explore the
+                    engine ↗</a>
+                </div>
+              </div>
+            </details>
+          </article>
+
+          <!-- Application 2: Aura Finance -->
+          <article class="application-card reveal">
+            <div class="application-identity">
+              <img src="assets/img/aura/aura-logo-light.png" alt="Aura Finance logo" class="application-logo-img">
+              <div>
+                <span class="status status-progress">IN PROGRESS</span>
+                <h3>Aura Finance</h3>
+                <p class="application-tagline">Privacy-first personal finance.</p>
+              </div>
+            </div>
+            <p>Understand personal finances without handing over full financial history. Local AI for spending insights,
+              forecasting and planning.</p>
+            <div class="feature-badges">
+              <span class="feature-badge">Spending Insights</span>
+              <span class="feature-badge">Forecasting</span>
+              <span class="feature-badge">Budgets</span>
+              <span class="feature-badge">Privacy First</span>
+            </div>
+            <details class="project-disclosure" style="margin-top: 20px;">
+              <summary>What it validates <span aria-hidden="true">+</span></summary>
+              <div class="disclosure-body">
+                <ul>
+                  <li>Local-first financial data model</li>
+                  <li>Encrypted optional backup</li>
+                  <li>Future proving ground for Android on-device AI</li>
+                </ul>
+                <div class="project-links">
+                  <a href="https://github.com/daniele21/personal-budget" target="_blank" rel="noreferrer">View
+                    repository ↗</a>
+                </div>
+              </div>
+            </details>
+          </article>
+        </div>
+
+        <div class="apps-note reveal">
+          <svg style="width:20px;height:20px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2"
+            viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4M12 8h.01" />
+          </svg>
+          <span>Reference applications validate the stack and drive real-world requirements. They are not the goal - the
+            infrastructure is.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- What This Enables Section -->
+    <section class="section section-enables" id="possibilities" aria-labelledby="enables-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <div>
+            <p class="section-kicker">WHAT THIS ENABLES</p>
             <h2 id="enables-title">What the stack can make easier next</h2>
           </div>
-          <p>These are application areas the foundations may support, not promises that every product already exists.</p>
+          <p>These are exploration areas the foundations can support, not announced products.</p>
         </div>
 
         <div class="enablement-grid">
           <article class="enablement-card reveal">
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M4 5h16v11H8l-4 4z" />
+              <path d="M8 9h8M8 12h5" />
+            </svg>
             <h3>Meeting intelligence</h3>
-            <p>Capture, transcribe and analyse conversations locally.</p>
+            <p>Private, local summaries and insights from audio.</p>
           </article>
-          <article class="enablement-card reveal">
-            <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M16 10h5M8 8v8M5 11h6"/></svg>
-            <h3>Personal finance</h3>
-            <p>Private classification, insights and planning around sensitive data.</p>
-          </article>
-          <article class="enablement-card reveal">
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
-            <h3>Document analysis</h3>
-            <p>Extract and understand information without default cloud exposure.</p>
-          </article>
-          <article class="enablement-card reveal">
-            <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M10 6h4M11 18h2"/></svg>
-            <h3>Mobile AI applications</h3>
-            <p>On-device features that work offline and keep control with the user.</p>
-          </article>
-        </div>
 
-        <div class="principle-row reveal" aria-label="Product and engineering principles">
-          <span>Local by default</span>
-          <span>Privacy by architecture</span>
-          <span>Observable and measurable</span>
-          <span>Reusable across applications</span>
-          <span>Evidence over claims</span>
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="M16 10h5M8 8v8M5 11h6" />
+            </svg>
+            <h3>Personal finance</h3>
+            <p>Local analysis, forecasting and transaction planning.</p>
+          </article>
+
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M6 3h8l4 4v14H6z" />
+              <path d="M14 3v5h5M9 13h6M9 17h4" />
+            </svg>
+            <h3>Document analysis</h3>
+            <p>Understand and extract data without default cloud exposure.</p>
+          </article>
+
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <h3>Professional assistants</h3>
+            <p>Domain-aware copilots that keep workflows private.</p>
+          </article>
+
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+            <h3>Personal knowledge</h3>
+            <p>Your notes, your models, your complete control.</p>
+          </article>
+
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path
+                d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.7 5.2c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z" />
+            </svg>
+            <h3>Offline productivity</h3>
+            <p>Work anywhere without compromising sensitive privacy.</p>
+          </article>
+
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <path d="m9 12 2 2 4-4" />
+            </svg>
+            <h3>Sensitive-data workflows</h3>
+            <p>Handle confidential data safely without leaving the device.</p>
+          </article>
+
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect x="7" y="2" width="10" height="20" rx="2" />
+              <path d="M11 18h2" />
+            </svg>
+            <h3>Mobile AI applications</h3>
+            <p>Powerful experiences on-device, completely offline-first.</p>
+          </article>
         </div>
       </div>
     </section>
 
+    <!-- Guiding Principles Section -->
+    <section class="section section-principles" id="principles" aria-labelledby="principles-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <div>
+            <p class="section-kicker">GUIDING PRINCIPLES</p>
+            <h2 id="principles-title">Privacy-first is an architecture discipline</h2>
+          </div>
+          <p>How decisions are made across the infrastructure and application layers.</p>
+        </div>
+
+        <div class="principle-row reveal" aria-label="Guiding product and engineering principles">
+          <div class="principle-item">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z" />
+            </svg>
+            <span>Local by default</span>
+          </div>
+
+          <div class="principle-item">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z" />
+              <path d="m9 12 2 2 4-5" />
+            </svg>
+            <span>Privacy by architecture</span>
+          </div>
+
+          <div class="principle-item">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M18 20V10M12 20V4M6 20v-6" />
+            </svg>
+            <span>Observable and measurable</span>
+          </div>
+
+          <div class="principle-item">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            <span>Reusable across applications</span>
+          </div>
+
+          <div class="principle-item">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+            <span>Evidence over claims</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Building in Public Section -->
     <section class="section section-journey" id="journey" aria-labelledby="journey-title">
       <div class="shell">
         <div class="section-heading reveal">
           <div>
-            <p class="section-kicker">Building in public</p>
-            <h2 id="journey-title">Code, decisions and evidence—not only outcomes</h2>
+            <p class="section-kicker">BUILDING IN PUBLIC</p>
+            <h2 id="journey-title">Code, decisions and evidence-not only outcomes</h2>
           </div>
-          <p>The work becomes strategically useful when the implementation, trade-offs and lessons are distributed as clearly as the final product.</p>
+          <p>Work becomes strategically useful when the implementation, trade-offs and lessons are distributed in
+            public.</p>
         </div>
 
         <div class="journey-grid">
-          <a class="journey-card reveal" href="https://github.com/daniele21?tab=repositories" target="_blank" rel="noreferrer">
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7A5.4 5.4 0 0 0 19.4 4 5 5 0 0 0 19.3.5S18.2.1 15 2a13.4 13.4 0 0 0-6 0C5.8.1 4.7.5 4.7.5A5 5 0 0 0 4.6 4a5.4 5.4 0 0 0-1.4 3.7c0 5.4 3.5 6.6 6.8 7A4.8 4.8 0 0 0 9 18v4"/><path d="M9 19c-3 .9-3-1.5-4-2"/></svg>
+          <a class="journey-card reveal" href="https://github.com/daniele21?tab=repositories" target="_blank"
+            rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path
+                d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7A5.4 5.4 0 0 0 19.4 4 5 5 0 0 0 19.3.5S18.2.1 15 2a13.4 13.4 0 0 0-6 0C5.8.1 4.7.5 4.7.5A5 5 0 0 0 4.6 4a5.4 5.4 0 0 0-1.4 3.7c0 5.4 3.5 6.6 6.8 7A4.8 4.8 0 0 0 9 18v4" />
+              <path d="M9 19c-3 .9-3-1.5-4-2" />
+            </svg>
             <span><strong>GitHub</strong><small>Source code, issues and roadmaps</small></span>
             <span aria-hidden="true">↗</span>
           </a>
-          <a class="journey-card reveal" href="https://www.linkedin.com/in/daniele-moltisanti/" target="_blank" rel="noreferrer">
-            <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="9" width="4" height="12"/><path d="M5 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM11 21V9h4v2c1-2 6-3 6 3v7h-4v-6c0-2-2-3-3-1v7z"/></svg>
-            <span><strong>LinkedIn</strong><small>Architecture notes, progress and strategy</small></span>
+
+          <a class="journey-card reveal" href="https://www.linkedin.com/in/daniele-moltisanti/" target="_blank"
+            rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect x="3" y="9" width="4" height="12" />
+              <path d="M5 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM11 21V9h4v2c1-2 6-3 6 3v7h-4v-6c0-2-2-3-3-1v7z" />
+            </svg>
+            <span><strong>LinkedIn</strong><small>Architecture notes and milestones</small></span>
             <span aria-hidden="true">↗</span>
           </a>
+
           <a class="journey-card reveal" href="https://staituned.com" target="_blank" rel="noreferrer">
             <span class="text-icon" aria-hidden="true">stAI</span>
-            <span><strong>stAI tuned</strong><small>Long-form AI education and experiments</small></span>
+            <span><strong>stAI tuned</strong><small>Model evals, tuning and experiments</small></span>
             <span aria-hidden="true">↗</span>
           </a>
-          <a class="journey-card reveal" href="https://github.com/daniele21/android-local-llm-harness" target="_blank" rel="noreferrer">
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+
+          <a class="journey-card reveal" href="https://github.com/daniele21/android-local-llm-harness" target="_blank"
+            rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+            </svg>
             <span><strong>Benchmarks</strong><small>Device evidence, latency and memory</small></span>
             <span aria-hidden="true">↗</span>
           </a>
+
+          <a class="journey-card reveal" href="https://github.com/daniele21/local-llm-server" target="_blank"
+            rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+            <span><strong>Architecture notes</strong><small>Design docs and decision records</small></span>
+            <span aria-hidden="true">↗</span>
+          </a>
+
+          <a class="journey-card reveal" href="https://staituned.com" target="_blank" rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M10 2v7.31L4.75 20.5a1 1 0 0 0 .85 1.5h12.8a1 1 0 0 0 .85-1.5L14 9.31V2" />
+            </svg>
+            <span><strong>Experiments</strong><small>Prototypes and research logs</small></span>
+            <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </div>
     </section>
 
+    <!-- About Section -->
     <section class="section section-about" id="about" aria-labelledby="about-title">
       <div class="shell about-grid">
         <div class="about-copy reveal">
-          <p class="section-kicker">About</p>
-          <h2 id="about-title">Infrastructure, product and communication in one direction.</h2>
-          <p>I am a lead data scientist and builder working across applied AI architecture, product development and technical communication. These projects are where I test how local and open-weight models move from an experiment into something people can actually use.</p>
+          <p class="section-kicker">ABOUT</p>
+          <h2 id="about-title">I work where AI infrastructure, product strategy and communication meet.</h2>
+          <p>I am Daniele Moltisanti, a data and AI professional based in Milan. My work combines technical
+            architecture, product thinking and the ability to turn complex AI systems into understandable decisions and
+            usable experiences.</p>
+          <p>Alongside my professional work, I build local-first infrastructure and privacy-first products in public. I
+            also write about AI architecture and strategy through stAI tuned and LinkedIn.</p>
+          <p>I am particularly interested in the last mile between a working model and a reliable product: integration,
+            observability, evaluation, packaging, user experience and strategic adoption.</p>
         </div>
-        <div class="about-proof reveal">
-          <p>The work is intentionally pragmatic:</p>
-          <ul>
-            <li>local when it provides meaningful privacy, control or cost benefits;</li>
-            <li>cloud when the workload genuinely requires it;</li>
-            <li>explicit about maturity, evidence and limitations.</li>
-          </ul>
+
+        <div class="about-photo-wrapper reveal">
+          <img src="assets/img/profile-photo.jpg" alt="Daniele Moltisanti" class="about-photo">
         </div>
       </div>
     </section>
 
+    <!-- Collaboration Section -->
     <section class="collaboration" id="collaborate" aria-labelledby="collaboration-title">
       <div class="shell collaboration-inner reveal">
         <div>
-          <p class="section-kicker">Open to relevant conversations</p>
-          <h2 id="collaboration-title">Let's build or evaluate a privacy-first AI product.</h2>
-          <p>Local-AI feasibility, architecture, Android on-device inference, product prototypes, testing and benchmarking.</p>
+          <p class="section-kicker">COLLABORATE</p>
+          <h2 id="collaboration-title">Let's build the future of local AI.</h2>
+          <p>Open to collaboration, feedback and interesting problems across local AI feasibility, architecture, Android
+            on-device inference and privacy-first applications.</p>
+          <div class="collaboration-info" style="margin-top: 20px;">
+            <span><svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg> danielemoltisanti@gmail.com</span>
+            <span><svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24">
+                <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg> Milan, Italy</span>
+          </div>
         </div>
+
         <div class="collaboration-actions">
-          <a class="button button-primary" href="mailto:danielemoltisanti@gmail.com">Get in touch <span aria-hidden="true">→</span></a>
-          <a class="text-link" href="https://www.linkedin.com/in/daniele-moltisanti/" target="_blank" rel="noreferrer">Connect on LinkedIn ↗</a>
+          <a class="button button-primary" href="mailto:danielemoltisanti@gmail.com">Get in touch <span
+              aria-hidden="true">→</span></a>
+          <a class="button button-secondary" href="https://www.linkedin.com/in/daniele-moltisanti/" target="_blank"
+            rel="noreferrer" style="color:#fff;border-color:rgba(255,255,255,0.4);background:transparent;">Connect on
+            LinkedIn ↗</a>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="shell footer-inner">
       <div class="footer-brand">
         <span class="brand-mark" aria-hidden="true">DM</span>
         <span>Daniele Moltisanti</span>
       </div>
-      <p>Built as a lightweight, privacy-conscious static site.</p>
+      <p>Built with local-first principles as a lightweight static site.</p>
       <div class="footer-links">
         <a href="https://github.com/daniele21" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://www.linkedin.com/in/daniele-moltisanti/" target="_blank" rel="noreferrer">LinkedIn</a>
@@ -457,4 +739,5 @@
     </div>
   </footer>
 </body>
+
 </html>

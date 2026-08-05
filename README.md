@@ -1,4 +1,4 @@
-# Daniele Moltisanti — Personal landing page
+# Daniele Moltisanti - Personal landing page
 
 Greenfield static implementation of the personal positioning site documented in [`docs/personal-landing`](docs/personal-landing/README.md).
 
@@ -35,10 +35,10 @@ Then open `http://localhost:8080`.
 
 ## Main files
 
-- `index.html` — semantic page structure and content
-- `assets/site/site.css` — design system and responsive layout
-- `assets/site/site.js` — navigation and reveal behavior
-- `.github/workflows/pages.yml` — GitHub Pages deployment
+- `index.html` - semantic page structure and content
+- `assets/site/site.css` - design system and responsive layout
+- `assets/site/site.js` - navigation and reveal behavior
+- `.github/workflows/pages.yml` - GitHub Pages deployment
 
 ## Verification
 
