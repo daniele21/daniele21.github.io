@@ -10,9 +10,9 @@ import { journeyLinks } from '../../content/principles';
     <div class="section-heading reveal">
       <div>
         <p class="section-kicker">BUILDING IN PUBLIC</p>
-        <h2 id="journey-title">Code, decisions and evidence-not only outcomes</h2>
+        <h2 id="journey-title">Code, decisions, and evidence — <em>not just outcomes</em></h2>
       </div>
-      <p>Work becomes strategically useful when the implementation, trade-offs and lessons are distributed in public.</p>
+      <p>Engineering work becomes most valuable when <strong>architecture trade-offs, code, and learnings</strong> are shared openly.</p>
     </div>
 
     <div class="journey-grid">
@@ -36,7 +36,7 @@ import { journeyLinks } from '../../content/principles';
           {item.iconType === 'flask' && (
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M10 2v7.31L4.75 20.5a1 1 0 0 0 .85 1.5h12.8a1 1 0 0 0 .85-1.5L14 9.31V2"/></svg>
           )}
-          <span><strong>{item.title}</strong><small>{item.description}</small></span>
+          <span><strong>{item.title}</strong><small set:html={item.description}></small></span>
           <span aria-hidden="true">↗</span>
         </a>
       ))}

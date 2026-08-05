@@ -33,7 +33,7 @@ const iconClassMap = {
     <span class={`status ${pillar.status === 'experimental' ? 'status-progress' : 'status-active'}`}>{pillar.statusLabel}</span>
   </div>
   <h3>{pillar.name}</h3>
-  <p class="project-role">{pillar.role}</p>
+  <p class="project-role" set:html={pillar.role}></p>
   <div class="tech-tags">
     {pillar.technologies.map((tech) => (
       <span>{tech}</span>
@@ -42,10 +42,10 @@ const iconClassMap = {
   <details class="project-disclosure">
     <summary>Explore the pillar <span aria-hidden="true">+</span></summary>
     <div class="disclosure-body">
-      <p>{pillar.description}</p>
+      <p set:html={pillar.description}></p>
       <ul>
         {pillar.capabilities.slice(0, 3).map((cap) => (
-          <li>{cap}</li>
+          <li set:html={cap}></li>
         ))}
       </ul>
       <div class="project-links">

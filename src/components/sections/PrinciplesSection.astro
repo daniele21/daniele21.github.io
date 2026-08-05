@@ -10,9 +10,9 @@ import { principles } from '../../content/principles';
     <div class="section-heading reveal">
       <div>
         <p class="section-kicker">GUIDING PRINCIPLES</p>
-        <h2 id="principles-title">Privacy-first is an architecture discipline</h2>
+        <h2 id="principles-title">Privacy-first is an <strong>architectural discipline</strong></h2>
       </div>
-      <p>How decisions are made across the infrastructure and application layers.</p>
+      <p>Tenets guiding technical decisions across <em>infrastructure and application layers</em>.</p>
     </div>
 
     <div class="principle-row reveal" aria-label="Guiding product and engineering principles">
@@ -23,7 +23,7 @@ import { principles } from '../../content/principles';
           {index === 2 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>}
           {index === 3 && <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>}
           {index === 4 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>}
-          <span>{p.title}</span>
+          <span set:html={p.title}></span>
         </div>
       ))}
     </div>

@@ -17,10 +17,10 @@ const { application } = Astro.props;
     <div>
       <span class={`status ${application.status === 'experimental' ? 'status-progress' : 'status-active'}`}>{application.statusLabel}</span>
       <h3>{application.name}</h3>
-      <p class="application-tagline">{application.tagline}</p>
+      <p class="application-tagline" set:html={application.tagline}></p>
     </div>
   </div>
-  <p>{application.description}</p>
+  <p set:html={application.description}></p>
   <div class="feature-badges">
     {application.features.map((feature) => (
       <span class="feature-badge">{feature}</span>
@@ -31,7 +31,7 @@ const { application } = Astro.props;
     <div class="disclosure-body">
       <ul>
         {application.validates.map((item) => (
-          <li>{item}</li>
+          <li set:html={item}></li>
         ))}
       </ul>
       {application.repositoryUrl && (

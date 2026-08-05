@@ -9,17 +9,16 @@ export const pillars: Pillar[] = [
     id: 'local-llm-server',
     label: 'DESKTOP REASONING',
     name: 'Local LLM Server',
-    role: 'High-performance local inference server with model lifecycle, routing and telemetry.',
+    role: 'High-performance <strong>local inference server</strong> with model lifecycle, dynamic routing and telemetry.',
     problem:
-      'Local applications should not need to couple their product logic to every inference backend, model format or runtime process.',
+      'Local applications should not need to couple product logic to <em>inference backend complexities</em>, model formats or runtime processes.',
     description:
-      'Provides an OpenAI-compatible API across local backends such as GGUF and MLX, managing model lifecycle, resident runtimes and telemetry.',
+      'Provides an <strong>OpenAI-compatible API</strong> across local backends such as <em>GGUF</em> and <em>Apple Silicon MLX</em>, managing resident runtimes, configuration and telemetry.',
     capabilities: [
-      'OpenAI-compatible local API',
-      'GGUF and Apple Silicon backends',
-      'Runtime model switching',
-      'Multiple resident models',
-      'Web UI, logs and telemetry',
+      '<strong>OpenAI-compatible</strong> local API',
+      '<strong>GGUF</strong> and <em>Apple Silicon (MLX)</em> backends',
+      '<strong>Runtime model switching</strong> & multi-residency',
+      'Web UI, logs and <em>real-time telemetry</em>',
     ],
     strategicContribution:
       'It separates product experience from inference complexity, allowing multiple applications to reuse the same local reasoning layer.',
@@ -33,17 +32,16 @@ export const pillars: Pillar[] = [
     id: 'local-asr-server',
     label: 'PRIVATE SPEECH',
     name: 'Local ASR Server',
-    role: 'Privacy-first speech recognition server optimized for accuracy and latency.',
+    role: 'Privacy-first <strong>speech recognition server</strong> optimized for sub-second latency and accuracy.',
     problem:
-      'Meeting and voice data is highly sensitive, yet speech products often require sending recordings to remote infrastructure.',
+      'Meeting audio is <em>highly sensitive</em>, yet speech products routinely offload raw recordings to remote cloud infrastructure.',
     description:
-      'Handles microphone and system audio capture, local session storage and Whisper transcription on Apple Silicon.',
+      'Handles <strong>microphone & system audio capture</strong>, local session storage, and <em>Whisper transcription</em> on Apple Silicon with zero cloud calls.',
     capabilities: [
-      'Microphone and system-audio capture',
-      'Local Whisper transcription',
-      'Structured session storage',
-      'OpenAI-compatible transcription endpoint',
-      'Reusable desktop integration',
+      '<strong>Microphone & system-audio</strong> capture',
+      'Local <strong>Whisper transcription</strong> with VAD',
+      '<strong>OpenAI-compatible</strong> audio endpoint',
+      'Structured <em>session storage & diarization</em>',
     ],
     strategicContribution:
       'It creates a private speech-to-text foundation that can feed local reasoning workflows without making remote transcription the default.',
@@ -57,17 +55,16 @@ export const pillars: Pillar[] = [
     id: 'android-local-llm-harness',
     label: 'ON-DEVICE MOBILE AI',
     name: 'Android Local LLM Harness',
-    role: 'On-device LLM runtime harness for Android apps with tight resource control.',
+    role: 'On-device <strong>LLM runtime harness</strong> for Android apps with strict resource control.',
     problem:
-      'Running an LLM on Android requires more than native bindings: applications need model integrity, lifecycle, memory handling, cancellation, telemetry and device evidence.',
+      'Running LLMs on Android demands <em>rigorous resource management</em>: model integrity, memory bounds, prompt cancellation and telemetry.',
     description:
-      'Reusable runtime for embedding GGUF models in native and Capacitor Android applications with explicit lifecycle and diagnostics.',
+      'Reusable runtime for embedding <strong>GGUF models</strong> in native <em>Kotlin</em> and <em>Capacitor</em> Android applications with lifecycle control and diagnostics.',
     capabilities: [
-      'GGUF import and integrity verification',
-      'Model and context lifecycle',
-      'Streaming and cancellation',
-      'Memory and thermal observations',
-      'Health checks and performance benchmarks',
+      '<strong>GGUF import</strong> & cryptographic integrity check',
+      'Managed <strong>model and context lifecycle</strong>',
+      'Real-time <strong>streaming & cancellation</strong>',
+      'Device <em>memory, thermal & latency benchmarks</em>',
     ],
     strategicContribution:
       'It extends the privacy-first stack from desktop to mobile and aims to reduce the repeated engineering required to add local models to Android products.',

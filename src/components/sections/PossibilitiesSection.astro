@@ -10,9 +10,9 @@ import { enablements } from '../../content/principles';
     <div class="section-heading reveal">
       <div>
         <p class="section-kicker">WHAT THIS ENABLES</p>
-        <h2 id="enables-title">What the stack can make easier next</h2>
+        <h2 id="enables-title">What the stack makes <strong>easier to build next</strong></h2>
       </div>
-      <p>These are exploration areas the foundations can support, not announced products.</p>
+      <p>Exploration areas unlocked by the core <em>local AI infrastructure</em>, not announced products.</p>
     </div>
 
     <div class="enablement-grid">
@@ -27,7 +27,7 @@ import { enablements } from '../../content/principles';
           {index === 6 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>}
           {index === 7 && <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>}
           <h3>{item.title}</h3>
-          <p>{item.description}</p>
+          <p set:html={item.description}></p>
         </article>
       ))}
     </div>
