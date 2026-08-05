@@ -1,4 +1,4 @@
-# 06 — SEO, Analytics and Accessibility
+# 06 - SEO, Analytics and Accessibility
 
 ## 1. Search strategy
 

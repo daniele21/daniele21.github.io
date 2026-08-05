@@ -1,4 +1,4 @@
-# 07 — Acceptance Criteria and Roadmap
+# 07 - Acceptance Criteria and Roadmap
 
 ## 1. Purpose
 
@@ -255,7 +255,7 @@ Create a launch evidence folder or PR attachments containing:
 
 ## 11. Delivery roadmap
 
-### Milestone 1 — Strategy approved
+### Milestone 1 - Strategy approved
 
 Deliverables:
 
@@ -270,7 +270,7 @@ Completion condition:
 - Daniele confirms the three pillars/reference-applications hierarchy;
 - no unresolved strategic ambiguity remains.
 
-### Milestone 2 — Evidence and asset readiness
+### Milestone 2 - Evidence and asset readiness
 
 Deliverables:
 
@@ -287,7 +287,7 @@ Completion condition:
 
 - no placeholder destination is required for core page sections.
 
-### Milestone 3 — UX and visual design
+### Milestone 3 - UX and visual design
 
 Deliverables:
 
@@ -307,7 +307,7 @@ Completion condition:
 - design does not resemble the legacy portfolio;
 - infrastructure visibly dominates the project narrative.
 
-### Milestone 4 — Foundation implementation
+### Milestone 4 - Foundation implementation
 
 Deliverables:
 
@@ -324,7 +324,7 @@ Completion condition:
 - no legacy dependency is imported;
 - clean build and validation pass.
 
-### Milestone 5 — Core narrative implementation
+### Milestone 5 - Core narrative implementation
 
 Deliverables:
 
@@ -340,7 +340,7 @@ Completion condition:
 - strategy is understandable without the lower half of the page;
 - responsive and keyboard behavior passes.
 
-### Milestone 6 — Product evidence implementation
+### Milestone 6 - Product evidence implementation
 
 Deliverables:
 
@@ -355,7 +355,7 @@ Completion condition:
 - current versus future capabilities are unambiguous;
 - applications clearly validate the stack.
 
-### Milestone 7 — Journey and conversion
+### Milestone 7 - Journey and conversion
 
 Deliverables:
 
@@ -370,7 +370,7 @@ Completion condition:
 
 - all defined audiences have an intentional next step.
 
-### Milestone 8 — Launch readiness
+### Milestone 8 - Launch readiness
 
 Deliverables:
 
@@ -388,7 +388,7 @@ Completion condition:
 
 ## 12. Post-launch roadmap
 
-### Phase A — Validate positioning
+### Phase A - Validate positioning
 
 First four to six weeks:
 
@@ -398,7 +398,7 @@ First four to six weeks:
 - review collaboration enquiries;
 - adjust copy before adding more features.
 
-### Phase B — Strengthen evidence
+### Phase B - Strengthen evidence
 
 - publish Android device matrix;
 - add benchmark summaries;
@@ -407,7 +407,7 @@ First four to six weeks:
 - add product workflow clips with captions;
 - link technical articles to relevant sections.
 
-### Phase C — Add project depth
+### Phase C - Add project depth
 
 Possible additions:
 
@@ -420,7 +420,7 @@ Possible additions:
 
 Do not add these until the single-page positioning has been validated.
 
-### Phase D — Localization
+### Phase D - Localization
 
 Add Italian after:
 
@@ -429,7 +429,7 @@ Add Italian after:
 - navigation and metadata strategy are defined;
 - long-copy responsive tests pass.
 
-### Phase E — Product conversion
+### Phase E - Product conversion
 
 As products mature, add only evidence-backed conversions:
 

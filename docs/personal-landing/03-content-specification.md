@@ -1,4 +1,4 @@
-# 03 — Content Specification
+# 03 - Content Specification
 
 This document provides recommended English copy for the first landing-page release. The copy is implementation-ready but should remain editable through a centralized content model.
 
@@ -27,7 +27,7 @@ Avoid:
 
 ### Page title
 
-`Daniele Moltisanti — Building Privacy-First AI Products`
+`Daniele Moltisanti - Building Privacy-First AI Products`
 
 ### Meta description
 
@@ -72,7 +72,7 @@ Avoid:
 
 ### Supporting paragraph
 
-`I design reusable infrastructure for local LLM inference, private speech recognition and Android on-device AI — then validate it through real desktop and mobile applications.`
+`I design reusable infrastructure for local LLM inference, private speech recognition and Android on-device AI - then validate it through real desktop and mobile applications.`
 
 ### Primary CTA
 
@@ -100,7 +100,7 @@ Do not place awards, years of experience or generic role labels between the head
 
 ### Body
 
-`A local model demo can work on one machine, with one configuration and one happy path. A product must handle model distribution, hardware limits, memory, cancellation, failures, telemetry, packaging and user experience — while keeping sensitive data under control.`
+`A local model demo can work on one machine, with one configuration and one happy path. A product must handle model distribution, hardware limits, memory, cancellation, failures, telemetry, packaging and user experience - while keeping sensitive data under control.`
 
 `That missing product layer is where I am focusing my work.`
 
@@ -503,7 +503,7 @@ The landing must visually separate current capabilities from future experimentat
 
 **Product before demo**
 
-`A useful local-AI system must survive installation, setup, failure and repeated use — not only generate one successful response.`
+`A useful local-AI system must survive installation, setup, failure and repeated use - not only generate one successful response.`
 
 ### Principle 6
 
@@ -590,7 +590,7 @@ Secondary:
 
 ### Body
 
-`I am interested in conversations where local or on-device AI can create a real advantage — especially when privacy, offline use, cost predictability or control over the model matters.`
+`I am interested in conversations where local or on-device AI can create a real advantage - especially when privacy, offline use, cost predictability or control over the model matters.`
 
 ### Conversation areas
 

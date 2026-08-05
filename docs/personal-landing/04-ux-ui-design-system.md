@@ -1,4 +1,4 @@
-# 04 — UX/UI Design System
+# 04 - UX/UI Design System
 
 ## 1. Design objective
 

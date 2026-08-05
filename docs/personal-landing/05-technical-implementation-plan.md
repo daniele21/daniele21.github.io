@@ -1,4 +1,4 @@
-# 05 — Technical Implementation Plan
+# 05 - Technical Implementation Plan
 
 ## 1. Implementation objective
 
@@ -354,7 +354,7 @@ Because the repository is `daniele21.github.io`, production can use the root pat
 
 ## 10. Development phases
 
-### Phase 0 — Confirm content and evidence
+### Phase 0 - Confirm content and evidence
 
 Tasks:
 
@@ -373,7 +373,7 @@ Exit criteria:
 - every CTA has a destination or is intentionally omitted;
 - current versus future capabilities are clearly classified.
 
-### Phase 1 — Project foundation
+### Phase 1 - Project foundation
 
 Tasks:
 
@@ -392,7 +392,7 @@ Exit criteria:
 - no legacy CSS or JavaScript imported;
 - content validation operational.
 
-### Phase 2 — Core narrative
+### Phase 2 - Core narrative
 
 Tasks:
 
@@ -410,7 +410,7 @@ Exit criteria:
 - pillars have equal strategic prominence;
 - basic keyboard navigation passes.
 
-### Phase 3 — Product evidence
+### Phase 3 - Product evidence
 
 Tasks:
 
@@ -427,7 +427,7 @@ Exit criteria:
 - product images contain no sensitive information;
 - all media has accessible alternatives.
 
-### Phase 4 — Journey and conversion
+### Phase 4 - Journey and conversion
 
 Tasks:
 
@@ -444,7 +444,7 @@ Exit criteria:
 - contact works without unnecessary data collection;
 - analytics events map to the documented success model.
 
-### Phase 5 — Quality and launch
+### Phase 5 - Quality and launch
 
 Tasks:
 

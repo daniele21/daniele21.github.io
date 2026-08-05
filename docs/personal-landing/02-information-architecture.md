@@ -1,4 +1,4 @@
-# 02 — Information Architecture
+# 02 - Information Architecture
 
 ## 1. Page model
 
@@ -295,13 +295,13 @@ Explain how decisions are made across the ecosystem.
 
 #### Required principles
 
-1. **Local by default** — process data on the user's device when the workload and hardware allow it.
-2. **Privacy by architecture** — reduce data exposure structurally rather than relying only on policy language.
-3. **Explicit model control** — make model selection, artifacts and fallback behavior visible.
-4. **Observable and measurable** — treat latency, memory, health and failures as product concerns.
-5. **Product before demo** — validate packaging, UX and recovery, not only inference output.
-6. **Honest trade-offs** — communicate device limits, quality differences and maturity clearly.
-7. **Reusable foundations** — solve shared infrastructure problems once, then apply them to multiple products.
+1. **Local by default** - process data on the user's device when the workload and hardware allow it.
+2. **Privacy by architecture** - reduce data exposure structurally rather than relying only on policy language.
+3. **Explicit model control** - make model selection, artifacts and fallback behavior visible.
+4. **Observable and measurable** - treat latency, memory, health and failures as product concerns.
+5. **Product before demo** - validate packaging, UX and recovery, not only inference output.
+6. **Honest trade-offs** - communicate device limits, quality differences and maturity clearly.
+7. **Reusable foundations** - solve shared infrastructure problems once, then apply them to multiple products.
 
 #### Optional interaction
 
@@ -426,7 +426,7 @@ Do not embed an opaque third-party scheduler as the only way to make contact.
 
 ## 4. User journeys
 
-### Journey A — Technical leader
+### Journey A - Technical leader
 
 1. Reads hero.
 2. Understands strategic problem.
@@ -435,7 +435,7 @@ Do not embed an opaque third-party scheduler as the only way to make contact.
 5. Reviews reference application.
 6. Uses collaboration CTA.
 
-### Journey B — Developer
+### Journey B - Developer
 
 1. Arrives from a LinkedIn technical post at a section anchor.
 2. Reviews one pillar.
@@ -443,7 +443,7 @@ Do not embed an opaque third-party scheduler as the only way to make contact.
 4. Opens repository or testing guide.
 5. Returns to build updates or collaboration.
 
-### Journey C — Potential product user
+### Journey C - Potential product user
 
 1. Arrives from a ClosedRoom or Aura link.
 2. Understands product benefit.
@@ -451,7 +451,7 @@ Do not embed an opaque third-party scheduler as the only way to make contact.
 4. Learns that the product is part of a broader stack.
 5. Opens product destination or beta information.
 
-### Journey D — Hiring manager
+### Journey D - Hiring manager
 
 1. Understands positioning in hero.
 2. Sees evidence of infrastructure depth.

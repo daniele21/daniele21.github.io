@@ -1,4 +1,4 @@
-# Personal Landing Page — Product Documentation
+# Personal Landing Page - Product Documentation
 
 This directory defines a complete greenfield redesign of Daniele Moltisanti's personal landing page.
 
@@ -14,9 +14,9 @@ Daniele is not presenting a collection of unrelated side projects. He is buildin
 
 The ecosystem has three infrastructure pillars:
 
-1. **Local LLM Server** — local reasoning and generation for desktop applications.
-2. **Local ASR Server** — local audio capture and speech-to-text.
-3. **Android Local LLM Harness** — reusable on-device inference infrastructure for native and Capacitor Android applications.
+1. **Local LLM Server** - local reasoning and generation for desktop applications.
+2. **Local ASR Server** - local audio capture and speech-to-text.
+3. **Android Local LLM Harness** - reusable on-device inference infrastructure for native and Capacitor Android applications.
 
 Two reference applications validate those pillars against real product constraints:
 

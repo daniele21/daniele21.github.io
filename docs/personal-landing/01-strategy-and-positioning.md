@@ -1,4 +1,4 @@
-# 01 — Strategy and Positioning
+# 01 - Strategy and Positioning
 
 ## 1. Strategic thesis
 
@@ -70,7 +70,7 @@ Daniele is working to reduce the distance between a local model demo and a relia
 
 The ecosystem must always be explained through three levels.
 
-### Level 1 — Infrastructure pillars
+### Level 1 - Infrastructure pillars
 
 These are reusable capabilities intended to support multiple applications.
 
@@ -107,7 +107,7 @@ Strategic contribution:
 - addresses lifecycle, memory, cancellation, telemetry and diagnostics;
 - creates integration paths for native and Capacitor applications.
 
-### Level 2 — Reference applications
+### Level 2 - Reference applications
 
 These applications are not equal to the infrastructure pillars. Their purpose is to validate the infrastructure against real product requirements.
 
@@ -129,7 +129,7 @@ Validation role:
 - provides a future application context for Android on-device AI;
 - proves that privacy-first architecture must be reflected in product decisions, not only model hosting.
 
-### Level 3 — Future enablement
+### Level 3 - Future enablement
 
 The long-term outcome is not limited to meetings and personal finance. The same foundations can support future privacy-first applications for:
 
