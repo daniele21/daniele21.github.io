@@ -1,903 +1,460 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daniele Moltisanti — Privacy-first AI infrastructure</title>
+  <meta name="description" content="Daniele Moltisanti builds reusable local-AI infrastructure and validates it through privacy-first products across desktop and Android.">
+  <meta name="theme-color" content="#f7f9ff">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://daniele21.github.io/">
+  <link rel="icon" href="assets/site/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="assets/site/site.css">
 
-  <title>Daniele Moltisanti — Principal Data Scientist & Speaker</title>
-  <meta name="description" content="Principal Data Scientist & AI Strategy Lead. Speaker on Data & AI Operating Models, GenAI adoption, and governance. Founder of stAI Tuned.">
-  <meta name="keywords" content="Daniele Moltisanti, Principal Data Scientist, AI speaker, data leadership, AI operating model, GenAI governance">
-  <meta name="google-site-verification" content="GBGdlp4vT4o4M9tmpfp3pQKeeZV3auXtqfZWCEiIvJU"/>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Building the infrastructure for privacy-first AI products">
+  <meta property="og:description" content="Local inference, speech recognition and Android runtimes, validated through real privacy-first applications.">
+  <meta property="og:url" content="https://daniele21.github.io/">
+  <meta property="og:image" content="https://daniele21.github.io/assets/site/social-card.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Daniele Moltisanti — Privacy-first AI infrastructure">
+  <meta name="twitter:description" content="Reusable local-AI infrastructure for privacy-first products across desktop and Android.">
 
-  <!-- Favicons -->
-  <link href="assets/img/logo.png" rel="icon">
-  <link href="assets/img/logo.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
-
-  <!-- HERO: mobile responsiveness fix -->
-  <style>
-    @media (max-width: 991.98px) {
-      #hero {
-        height: auto !important;
-        min-height: 100dvh;
-        padding-top: 72px;
-        padding-bottom: 24px;
-        justify-content: flex-start !important;
-        overflow: visible;
-      }
-      .hero-glass {
-        border-radius: 1.5rem !important;
-        padding: 1rem !important;
-        background: color-mix(in oklab, white 80%, #eaf2ff) !important;
-        backdrop-filter: blur(6px) saturate(120%) !important;
-        -webkit-backdrop-filter: blur(6px) saturate(120%) !important;
-      }
-      .hero-glass h1 { font-size: clamp(28px, 9vw, 40px); line-height: 1.1; margin-bottom: .25rem; }
-      .hero-glass h2 { font-size: clamp(16px, 4.5vw, 20px); }
-      .hero-glass h3 { font-size: clamp(14px, 4vw, 18px); }
-    }
-    @media (min-width: 992px) {
-      #hero { min-height: 100vh; }
-      #hero::before {
-        content: "";
-        position: absolute;
-        inset: auto 0 8%;
-        margin: auto;
-        width: min(800px, 90vw);
-        height: 40%;
-        filter: blur(60px);
-        opacity: .45;
-        pointer-events: none;
-        background: radial-gradient(50% 60% at 50% 50%, #6aa2ff 0%, transparent 70%);
-        z-index: 0;
-      }
-      #hero > .hero-container { position: relative; z-index: 1; }
-    }
-  </style>
-
-  <!-- Global site tag (gtag.js) - GA (legacy UA kept as-is) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-216820607-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-216820607-1');
-  </script>
-
-  <!-- =======================================================
-  * Template: iPortfolio - v3.1.0 (BootstrapMade)
-  ======================================================== -->
-</head>
-
-<body>
-  <div id="header-include"></div>
-  <script>
-    fetch('header.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('header-include').innerHTML = data;
-      });
-  </script>
-
-<!-- ======= Mobile nav toggle button ======= -->
-<i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
-
-<!-- ======= Hero Section ======= -->
-<section id="hero" class="d-flex flex-column justify-content-center align-items-center">
-  <div class="hero-container text-center position-relative py-5 w-100 d-flex justify-content-center align-items-center" data-aos="fade-in">
-  <div class="shadow-lg px-4 px-md-5 py-4 hero-glass" style="max-width: 1000px; display: inline-block; border: 1.5px solid rgba(120,120,255,0.18); background: color-mix(in oklab, white 80%, #eaf2ff); backdrop-filter: blur(12px) saturate(160%); -webkit-backdrop-filter: blur(12px) saturate(160%); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18); border-radius: 4rem;">
-      <h1 class="display-3 fw-bold mb-2" style="background: linear-gradient(90deg, #2f7ff6 30%, #102cf2 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Daniele Moltisanti</h1>
-      <br>
-      <h2 class="mb-3 text-dark-50">Principal Data Scientist & AI Strategy Lead</h2>
-      <h3 class="lead mb-4 text-dark semibold">Scaling AI, GenAI, and Data Science with impact.<br></h3>
-      <!-- Micro-proof line -->
-      <div class="small text-muted mb-3" style="font-size:0.98rem; letter-spacing:0.01em;">
-        Nova 111 award &bull; 150+ projects reviewed &bull; 80+ articles
-      </div>
-      <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center gap-3 mt-4">
-        <!-- <span class="badge bg-success fs-6 px-3 py-2 mb-2 mb-sm-0 shadow-sm"><i class="bi bi-broadcast-pin me-2"></i>Available for speaking</span> -->
-  <div class="row g-3 justify-content-center w-100">
-    <div class="col-12 col-md-6 col-lg-3">
-      <div class="card h-100 border-0 shadow-sm text-center cta-card">
-        <div class="card-body py-4">
-          <div class="mb-2"><i class="bi bi-mic fs-2 text-primary"></i></div>
-          <div class="fw-semibold mb-2">Interested in having me speak at your event?</div>
-          <a class="btn btn-primary btn-lg px-4 shadow-sm w-100" href="#speaking">Book a keynote</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-3">
-      <div class="card h-100 border-0 shadow-sm text-center cta-card">
-        <div class="card-body py-4">
-          <div class="mb-2"><i class="bi bi-people fs-2 text-success"></i></div>
-          <div class="fw-semibold mb-2">Looking for career tips or mentorship?</div>
-          <a class="btn btn-success btn-lg px-4 shadow-sm w-100" href="https://calendly.com/danielemoltisanti/mentoring">Book mentoring</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-3">
-      <div class="card h-100 border-0 shadow-sm text-center cta-card">
-        <div class="card-body py-4">
-          <div class="mb-2"><i class="bi bi-lightbulb fs-2 text-warning"></i></div>
-          <div class="fw-semibold mb-2">Need expert advice on AI strategy or solutions?</div>
-          <a class="btn btn-warning btn-lg px-4 shadow-sm w-100 text-dark" href="https://calendly.com/d/cv5f-rc8-m3m/ai-advisory-meeting">Schedule AI advisory</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-3">
-      <div class="card h-100 border-0 shadow-sm text-center cta-card">
-        <div class="card-body py-4">
-          <div class="mb-2"><i class="bi bi-envelope fs-2 text-dark"></i></div>
-          <div class="fw-semibold mb-2">Want to connect or discuss a collaboration?</div>
-          <a class="btn btn-outline-dark btn-lg px-4 shadow-sm w-100" href="#contact">Contact me</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <style>
-    @media (max-width: 767.98px) {
-      .cta-card { margin-bottom: 1rem; }
-    }
-    .cta-card {
-      border-radius: 2rem !important;
-      background: color-mix(in oklab, white 80%, #eaf2ff);
-      backdrop-filter: blur(4px) saturate(120%);
-      -webkit-backdrop-filter: blur(4px) saturate(120%);
-      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .cta-card .card-body {
-      border-radius: 2rem;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-    .cta-card .card-body > .btn {
-      margin-top: auto;
-    }
-    .cta-card .btn:hover, .cta-card .btn:focus {
-      transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
-    }
-    /* Icon style consistency: ensure outline icons and stroke weight */
-    .cta-card .bi {
-      stroke-width: 1.5;
-      vertical-align: middle;
-    }
-  </style>
-      </div>
-    </div>
-  </div>
-</section><!-- End Hero -->
-
-<main id="main">
-
-  <!-- ======= Speaking Section ======= -->
-  <section id="speaking" class="services section-bg">
-    <div class="container">
-      <div class="section-title">
-        <h2>Speaking</h2>
-        <p>Invite me for keynotes, brown-bags or panels. Formats 25–45 minutes · IT/EN · Online/On-site.</p>
-        <div class="mt-3">
-          <span class="badge rounded-pill bg-secondary me-1">AI Strategy</span>
-          <span class="badge rounded-pill bg-secondary me-1">GenAI Solutions for the business</span>
-          <span class="badge rounded-pill bg-secondary me-1">Data Science Leadership</span>
-        </div>
-      </div>
-      <div class="row g-4 mt-2">
-        <!-- Talk 1 -->
-        <div class="col-md-4" data-aos="fade-up">
-          <div class="card h-100 shadow border-0 rounded-4">
-            <div class="card-body d-flex flex-column align-items-center text-center p-4">
-              <div class="mb-2"><i class="bi bi-check-circle fs-1 text-primary"></i></div>
-              <h5 class="card-title mb-2">Evaluation-First GenAI: Ship with Confidence</h5>
-              <p class="mb-3">Build a repeatable evaluation & monitoring pipelines (offline + online) for GenAI solutions.<br>
-              <!-- <strong>Live demo:</strong> golden set → LLM-judge + human adjudication → CI gate.<br>
-              <strong>Take-home:</strong> eval harness template (tests, thresholds, promotion checklist) -->
-            </p>
-              <a href="#contact" class="btn btn-outline-primary btn-sm mt-auto"><i class="bi bi-mic me-1"></i>Request this talk</a>
-            </div>
-          </div>
-        </div>
-        <!-- Talk 2 -->
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-          <div class="card h-100 shadow border-0 rounded-4">
-            <div class="card-body d-flex flex-column align-items-center text-center p-4">
-              <div class="mb-2"><i class="bi bi-speedometer2 fs-1 text-success"></i></div>
-              <h5 class="card-title mb-2">Build, Buy, Fine-Tune or RAG ?</h5>
-              <p class="mb-3">Take the right choice for GenAI solutions. 
-                Avoid lock-in and overspend with a no-business decision framework.</p>
-              <a href="#contact" class="btn btn-outline-success btn-sm mt-auto"><i class="bi bi-mic me-1"></i>Request this talk</a>
-            </div>
-          </div>
-        </div>
-        <!-- Talk 3 -->
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-          <div class="card h-100 shadow border-0 rounded-4">
-            <div class="card-body d-flex flex-column align-items-center text-center p-4">
-              <div class="mb-2"><i class="bi bi-shield-check fs-1 text-warning"></i></div>
-              <h5 class="card-title mb-2">Guardrails, Not Handcuffs</h5>
-              <p class="mb-3">Move faster with GenAI by constraining it well.
-                Add policy-by-design, safe step limits, and audit-ready traces to ship faster, not slower.
-                Limits are the runway, not the fence.</p>
-              <a href="#contact" class="btn btn-outline-success btn-sm mt-auto"><i class="bi bi-mic me-1"></i>Request this talk</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- <p class="mt-4 small text-muted">COI-safe: educational content only—no references to employer projects, stacks or confidential metrics.</p> -->
-    </div>
-  </section>
-
-  <!-- ======= Initiatives Section ======= -->
-  <section id="initiatives" class="initiatives">
-    <div class="container">
-      <div class="section-title">
-        <h2>Initiatives</h2>
-        <p>Side projects around AI education and community.</p>
-      </div>
-      <div class="row g-4">
-        <!-- Stai Tuned -->
-        <div class="col-md-6 col-lg-6" data-aos="fade-up">
-          <div class="card h-100 shadow border-0 rounded-4">
-            <div class="row g-0 align-items-center">
-              <div class="col-4 text-center p-3">
-                <img src="assets/img/Ai_White & Blue Logo.png" class="img-fluid rounded-3 shadow-sm mb-2" style="max-width:80px;" alt="Stai Tuned">
-              </div>
-              <div class="col-8">
-                <div class="card-body p-2">
-                  <h5 class="card-title mb-1"><i class="bi bi-broadcast-pin text-primary me-2"></i>stAI tuned</h5>
-                  <p class="mb-2">Media & education project sharing practical AI insights and culture.</p>
-                  <ul class="mb-2 ps-3">
-                    <li class="mb-1"><strong>80+ articles</strong> (and growing)</li>
-                    <li class="mb-1"><strong>LinkedIn network ~7k</strong> (active posting/reposts)</li>
-                  </ul>
-                  <div class="d-flex flex-wrap gap-2">
-                    <a href="https://staituned.com/meet/member/daniele-moltisanti" class="btn btn-outline-primary btn-sm">My Articles <i class="bx bx-chevron-right"></i></a>
-                    <a href="https://staituned.com" class="btn btn-outline-secondary btn-sm">Website <i class="bx bx-chevron-right"></i></a>
-                    <a href="https://www.linkedin.com/company/stai-tuned/" class="btn btn-outline-info btn-sm">LinkedIn <i class="bx bx-chevron-right"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Nova Mentor -->
-        <div class="col-md-6 col-lg-6" data-aos="fade-up">
-          <div class="card h-100 shadow border-0 rounded-4">
-            <div class="row g-0 align-items-center">
-              <div class="col-4 text-center p-3">
-                <img src="assets/img/nova.png" class="img-fluid rounded-3 shadow-sm mb-2" style="max-width:80px;" alt="Nova Mentor">
-              </div>
-              <div class="col-8">
-                <div class="card-body p-2">
-                  <h5 class="card-title mb-1"><i class="bi bi-people text-success me-2"></i>Nova Mentor</h5>
-                  <p class="mb-2">Mentoring university students on career paths.</p>
-                  <ul class="mb-2 ps-3">
-                    <li class="mb-1">Mentored Italian and Spanish students</li>
-                  </ul>
-                  <div class="d-flex flex-wrap gap-2">
-                    <a href="https://calendly.com/danielemoltisanti/mentoring" class="btn btn-success btn-sm">Ask for mentoring <i class="bi bi-person-plus"></i></a>
-                    <a href="https://digital-agent.novatalent.net/open/certificate/688ZDUTDSW6G8KCVO3NX8F379" class="btn btn-outline-success btn-sm">Mentor Certification <i class="bx bx-chevron-right"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- AI Coach -->
-        <div class="col-md-6 col-lg-6" data-aos="fade-up">
-          <div class="card h-100 shadow border-0 rounded-4">
-            <div class="row g-0 align-items-center">
-              <div class="col-4 text-center p-3">
-                <img src="assets/img/ai-coach.webp" class="img-fluid rounded-3 shadow-sm mb-2" style="max-width:80px;" alt="AI Coach">
-              </div>
-              <div class="col-8">
-                <div class="card-body p-2">
-                  <h5 class="card-title mb-1"><i class="bi bi-person-check text-warning me-2"></i>AI Coach · Profession AI</h5>
-                  <p class="mb-2">Reviewing student projects and guiding ML solutions.</p>
-                  <ul class="mb-2 ps-3">
-                    <li class="mb-1"><strong>150+ projects</strong> reviewed across multiple ML tracks</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Deep Learning Course -->
-        <div class="col-md-6 col-lg-6" data-aos="fade-up">
-          <div class="card h-100 shadow border-0 rounded-4">
-            <div class="row g-0 align-items-center">
-              <div class="col-4 text-center p-3">
-                <img src="assets/img/Ai teacher.webp" class="img-fluid rounded-3 shadow-sm mb-2" style="max-width:80px;" alt="Deep Learning Course">
-              </div>
-              <div class="col-8">
-                <div class="card-body p-2">
-                  <h5 class="card-title mb-1"><i class="bi bi-cpu text-danger me-2"></i>Deep Learning Course · PyTorch</h5>
-                  <p class="mb-2">7 hours of hands-on sessions: fundamentals, building models, labs.</p>
-                  <div class="d-flex flex-wrap gap-2">
-                    <a href="https://deeplearningitalia.com/corsi/pytorch-c0052/" class="btn btn-outline-danger btn-sm">Course <i class="bx bx-chevron-right"></i></a>
-                    <a href="https://github.com/DeepLearningItalia/Una_guida_completa_a_Pytorch" class="btn btn-outline-dark btn-sm">Lab Sessions <i class="bx bx-chevron-right"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= About Section ======= -->
-  <section id="about" class="about">
-    <div class="container">
-      <div class="section-title">
-        <h2>About</h2>
-      </div>
-      <div class="row justify-content-center">
-  <div class="col-lg-12">
-          <div class="card shadow-lg border-0 rounded-4 p-4" style="background:rgba(255,255,255,0.97);">
-            <div class="row align-items-center g-4">
-              <div class="col-md-4 text-center" data-aos="fade-right">
-                <img src="assets/img/profile-photo-4MB-crop.jpg" class="img-fluid rounded-circle border border-3 border-primary shadow mb-3" style="max-width: 180px;" alt="Daniele Moltisanti">
-                <h3 class="mt-2 mb-0 fw-bold text-primary">Daniele Moltisanti</h3>
-                <span class="badge bg-primary mb-2">Principal Data Scientist</span><br>
-                <span class="badge bg-secondary mb-3">AI Strategy Lead</span>
-                <div class="d-flex flex-column align-items-center gap-2 mt-2">
-                  <a href="mailto:danielemoltisanti@gmail.com" class="btn btn-outline-dark btn-sm w-100"><i class="bi bi-envelope me-1"></i>Email</a>
-                  <a href="https://www.linkedin.com/in/daniele-moltisanti/" class="btn btn-outline-primary btn-sm w-100" target="_blank" rel="noopener"><i class="bi bi-linkedin me-1"></i>LinkedIn</a>
-                </div>
-              </div>
-              <div class="col-md-8" data-aos="fade-left">
-                <h4 class="fw-semibold mb-2">About Me</h4>
-                <p class="lead mb-2">Principal Data Scientist &amp; AI Strategy Lead with 5+ years across AI/ML, NLP and GenAI.</p>
-                <ul class="list-unstyled mb-2">
-                  <li><i class="bi bi-lightbulb me-2 text-warning"></i>Shaping the AI technical strategy @ <strong>Sky Italia</strong></li>
-                  <li><i class="bi bi-people me-2 text-info"></i>Leading cross-functional teams</li>
-                  <li><i class="bi bi-rocket-takeoff me-2 text-danger"></i>Turning research into scalable, business-ready solutions for media & telco</li>
-                  <li><i class="bi bi-mortarboard me-2 text-success"></i>Coaching aspiring data scientists</li>
-                </ul>
-                <p class="mb-2">I write and curate <em><a href="https://staituned.com/author/Daniele-Moltisanti" target="_blank" rel="noopener">stAI Tuned</a></em>, an AI media/education project, and I speak about AI &amp; Innovation, the application of GenAI to real business problems, and Data Science growth.</p>
-                <br>
-            
-                <!-- <div class="row g-2 mb-2"> -->
-                  <!-- <div class="col-12 col-md-6">
-                    <div class="bg-light rounded-3 p-2 h-100">
-                      <i class="bi bi-briefcase me-1 text-primary"></i> <strong>Latest Role:</strong> Principal Data Scientist @ Sky Italia
-                    </div>
-                  </div> -->
-                  <!-- <div class="col-12 col-md-6"> -->
-                    <div class="bg-light rounded-3 p-2 h-100">
-                      <i class="bi bi-bullseye me-1 text-success"></i> <strong>Focus:</strong> AI Strategy · GenAI/NLP · Executive Communication · Leadership
-                    </div>
-                  <!-- </div> -->
-                <!-- </div> -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Awards -->
-      <div class="row awards-row mt-4 justify-content-center">
-  <div class="col-lg-12">
-          <div class="card shadow border-0 rounded-4 p-4 h-100" style="background:rgba(250,250,255,0.98);">
-            <div class="row align-items-center g-4">
-              <div class="col-md-8" data-aos="fade-right">
-                <h3 class="fw-semibold mb-3"><i class="bi bi-award text-warning me-2"></i>Awards</h3>
-                <ul class="list-unstyled mb-0">
-                  <li class="mb-3 d-flex align-items-start">
-                    <span class="me-3"><i class="bi bi-trophy-fill text-warning fs-4"></i></span>
-                    <div>
-                      <span class="badge bg-primary mb-1">2022</span><br>
-                      <strong>Nova 111 List (Italy):</strong> <span class="text-muted">Top talent in Entertainment, Media & Communications under 35.</span><br>
-                      <a href="https://www.novatalent.com/111/italy/list/2022#winners" class="btn btn-outline-primary btn-sm mt-1" target="_blank" rel="noopener">Nova 111 2022 <i class="bx bx-chevron-right"></i></a>
-                    </div>
-                  </li>
-                  <li class="mb-3 d-flex align-items-start">
-                    <span class="me-3"><i class="bi bi-stars text-info fs-4"></i></span>
-                    <div>
-                      <span class="badge bg-secondary mb-1">Nova Talent</span><br>
-                      <strong>Nova Talent Member:</strong> <span class="text-muted">Merit-based network connecting the top 3% of global talent.</span><br>
-                      <a href="https://digital-agent.novatalent.net/open/certificate/688ZDUTDSW6G8KCVO3NX8F379" class="btn btn-outline-info btn-sm mt-1" target="_blank" rel="noopener">Membership Certification <i class="bx bx-chevron-right"></i></a>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="col-md-4 d-flex align-items-center justify-content-center" data-aos="fade-left">
-                <img src="assets/img/Nova 111.png" class="img-fluid rounded-3 shadow" style="max-width:180px;" alt="Nova 111">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= Expertise Section (unchanged structure, light edits) ======= -->
-    <section id="expertise" class="expertise">
-    <div class="container">
-      <div class="section-title">
-        <h2>Expertise</h2>
-        <p>Key areas from my work experience, with hands-on impact and leadership.</p>
-      </div>
-      <div class="row g-4">
-        <!-- Generative AI -->
-        <div class="col-md-6 col-lg-6" data-aos="fade-up">
-          <div class="card h-100 shadow border-0 text-end">
-            <div class="row g-0 align-items-center justify-content-center">
-              <div class="col-12 p-3">
-                <img src="assets/img/gen-ai.webp" class="img-fluid rounded-3 shadow-sm mb-2 d-block mx-auto" style="max-width:100px;" alt="Generative AI">
-                <div class="card-body p-2">
-                  <h5 class="card-title mb-2 text-center"><span class="badge bg-primary me-2">GenAI</span>Generative AI</h5>
-                  <ul class="mb-2 ps-0 text-start" style="list-style-position: inside;">
-                    <li class="mb-2"><strong>Q&A Agent:</strong> Built a conversational assistant trained on domain-specific data using LangChain and multi-LLM orchestration.</li>
-                    <li class="mb-2"><strong>Prompt Engineering:</strong> Refined prompts for LLMs (GPT, Gemini, open-source via Hugging Face/LlamaCpp) to maximize answer quality.</li>
-                    <li class="mb-2"><strong>Synthetic Data Generation:</strong> Developed a custom Diffusion Model in PyTorch for privacy-preserving tabular data synthesis.</li>
-                    <li class="mb-2"><strong>GenAI Hackathon:</strong> Finalist at Sky Group & Google hackathon, delivering a business use case with LangChain and PaLM.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Predictive Analytics -->
-        <div class="col-md-6 col-lg-6" data-aos="fade-up">
-          <div class="card h-100 shadow border-0 text-end">
-            <div class="row g-0 align-items-center justify-content-center">
-              <div class="col-12 p-3">
-                <img src="assets/img/predictive-analytics.webp" class="img-fluid rounded-3 shadow-sm mb-2 d-block mx-auto" style="max-width:100px;" alt="Predictive Analytics">
-                <div class="card-body p-2">
-                  <h5 class="card-title mb-2 text-center"><span class="badge bg-success me-2">Analytics</span>Predictive Analytics</h5>
-                  <ul class="mb-2 ps-0 text-start" style="list-style-position: inside;">
-                    <li class="mb-2"><strong>Propensity Models:</strong> Built models to predict customer behavior and improve lifetime value (Supervised & Semi-Supervised Learning).</li>
-                    <li class="mb-2"><strong>Time-Series Analysis:</strong> Now-casting financial data to detect anomalies and trends for data-driven decisions.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- NLP Analytics -->
-        <div class="col-md-6 col-lg-6" data-aos="fade-up">
-          <div class="card h-100 shadow border-0 text-end">
-            <div class="row g-0 align-items-center justify-content-center">
-              <div class="col-12 p-3">
-                <img src="assets/img/nlp.webp" class="img-fluid rounded-3 shadow-sm mb-2 d-block mx-auto" style="max-width:100px;" alt="NLP Analytics">
-                <div class="card-body p-2">
-                  <h5 class="card-title mb-2 text-center"><span class="badge bg-info me-2">NLP</span>Advanced NLP Analytics</h5>
-                  <ul class="mb-2 ps-0 text-start" style="list-style-position: inside;">
-                    <li class="mb-2"><strong>Topic Modeling:</strong> Built models for topic assignment on short/long texts (Semi/Unsupervised Learning).</li>
-                    <li class="mb-2"><strong>Clustering Analysis:</strong> Semantic analysis using pre-trained word/sentence embeddings.</li>
-                    <li class="mb-2"><strong>Virtual Assistant:</strong> Developed custom assistants in Python (Rasa), including async server orchestration.</li>
-                    <li class="mb-2"><strong>Named Entity Recognition:</strong> Custom NER with char/word embeddings, fine-tuned on proprietary data.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Computer Vision -->
-        <div class="col-md-6 col-lg-6" data-aos="fade-up">
-          <div class="card h-100 shadow border-0 text-end">
-            <div class="row g-0 align-items-center justify-content-center">
-              <div class="col-12 p-3">
-                <img src="assets/img/cv.webp" class="img-fluid rounded-3 shadow-sm mb-2 d-block mx-auto" style="max-width:100px;" alt="Computer Vision">
-                <div class="card-body p-2">
-                  <h5 class="card-title mb-2 text-center"><span class="badge bg-warning text-dark me-2">CV</span>Computer Vision</h5>
-                  <ul class="mb-2 ps-0 text-start" style="list-style-position: inside;">
-                    <li class="mb-2"><strong>Image Denoising:</strong> Enhanced ID document images to improve OCR accuracy.</li>
-                    <li class="mb-2"><strong>Anomaly Detection:</strong> Patch-wise image analysis for anomaly detection.</li>
-                    <li class="mb-2"><strong>Background Subtraction:</strong> Gaussian mixture model for foreground removal in highway videos.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= Resume Section ======= -->
-  <section id="resume" class="resume">
-    <div class="container">
-      <div class="section-title mb-4"><h2>Resume</h2></div>
-      <div class="row g-4">
-        <!-- Experience Column -->
-        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-          <div class="card shadow-lg border-0 rounded-4 h-100">
-            <div class="card-body p-4">
-              <h3 class="resume-title mb-4"><i class="bi bi-briefcase-fill text-primary me-2"></i>Professional Experience</h3>
-              <!-- Sky Italia — Principal Data Scientist -->
-              <div class="mb-4 pb-3 border-bottom">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h4 class="mb-0 fw-bold">Principal Data Scientist</h4>
-                  <span class="badge bg-primary">Jul 2025 – Present</span>
-                </div>
-                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Sky Italia — Milan, Lombardy, Italy <span class="badge bg-light text-dark ms-2">Hybrid</span></div>
-                <p>Leading the Data Science technical strategy with a focus on GenAI & NLP. I design tailored solutions to real business problems, involve stakeholders early, explain trade-offs in plain language, and supervise delivery from PoC to production.</p>
-                <div class="row">
-                  <div class="col-12 col-md-6">
-                    <p class="mb-1 fw-semibold text-primary">Key responsibilities</p>
-                    <ul class="mb-2 ps-3">
-                      <li class="mb-1"><em>Roadmap & standards:</em> set DS architecture, guardrails and portfolio priorities.</li>
-                      <li class="mb-1"><em>Innovation to scale:</em> drive PoC/PoV work and industrialize winners with reusable patterns, tooling and governance.</li>
-                      <li class="mb-1"><em>Executive communication:</em> clarify design choices, pros/cons and expected impact to secure sponsorship and budget.</li>
-                      <li class="mb-1"><em>Stakeholder adoption:</em> translate pain points into outcomes, drive change, and measure results.</li>
-                      <li class="mb-1"><em>Technical oversight:</em> design reviews, make/buy, cost–risk–performance trade-offs, vendor selection.</li>
-                    </ul>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <p class="mb-1 fw-semibold text-success">Selected achievements</p>
-                    <ul class="mb-2 ps-3">
-                      <li class="mb-1">Launched the first in-house GenAI analysis tool at Sky Italia, from concept to rollout.</li>
-                      <li class="mb-1">Automated customer understanding on high-volume interaction data, improving targeting and decision speed.</li>
-                    </ul>
-                    <p class="mb-0 small text-muted"><strong>Keywords:</strong> Technical Leadership, AI Strategy, GenAI, NLP</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Sky Italia — Lead Data Scientist -->
-              <div class="mb-4 pb-3 border-bottom">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h4 class="mb-0 fw-bold">Lead Data Scientist</h4>
-                  <span class="badge bg-secondary">Mar 2022 – Aug 2025</span>
-                </div>
-                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Sky Italia — Milan, Lombardy, Italy</div>
-                <p>I led cross-functional teams delivering AI initiatives in ML, NLP and Generative AI for the media & telco domain.</p>
-                <p class="mb-1 fw-semibold text-primary">Key responsibilities & achievements</p>
-                <ul class="mb-2 ps-3">
-                  <li class="mb-1">Owned the end-to-end lifecycle from PoC to production, improving operational efficiency.</li>
-                  <li class="mb-1">Reduced churn through predictive models for marketing.</li>
-                  <li class="mb-1">Implemented NLP & GenAI solutions that significantly improved process efficiency.</li>
-                  <li class="mb-1">Aligned DS strategies with business goals through proactive stakeholder engagement.</li>
-                  <li class="mb-1">Mentored and supervised data scientists, fostering a learning and innovation culture.</li>
-                </ul>
-                <p class="mb-0 small text-muted"><strong>Stack:</strong> Python, PyTorch, SQL, GCP, Airflow, GenAI (LLMs) · <strong>Keywords:</strong> NLP, Generative AI, Predictive Modeling, Stakeholder Management, Mentoring</p>
-              </div>
-              <!-- Accenture -->
-              <div class="mb-4 pb-3 border-bottom">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h4 class="mb-0 fw-bold">Data Scientist</h4>
-                  <span class="badge bg-info text-dark">May 2020 – Jan 2021</span>
-                </div>
-                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Accenture S.p.A. — Milan, Italy</div>
-                <ul class="mb-2 ps-3">
-                  <li class="mb-1">Custom NER for document understanding; CV denoising to boost OCR.</li>
-                  <li class="mb-1">Projects on GCP (compute, PaaS, storage).</li>
-                </ul>
-                <p class="mb-0 small text-muted"><strong>Stack:</strong> Python, PyTorch, TensorFlow, Keras, OpenCV, GCP</p>
-              </div>
-              <!-- Blue Reply -->
-              <div class="mb-2">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h4 class="mb-0 fw-bold">AI Engineer — Internship</h4>
-                  <span class="badge bg-warning text-dark">Sep 2018 – Feb 2019</span>
-                </div>
-                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Blue Reply — Milan, Italy</div>
-                <ul class="mb-2 ps-3">
-                  <li class="mb-1">Built a visual classifier for a fashion virtual assistant; integrated via REST/Telegram.</li>
-                </ul>
-                <p class="mb-0 small text-muted"><strong>Stack:</strong> Python, PyTorch, IBM Watson</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Education Column -->
-        <div class="col-lg-6" data-aos="fade-up">
-          <div class="card shadow-lg border-0 rounded-4 h-100">
-            <div class="card-body p-4">
-              <h3 class="resume-title mb-4"><i class="bi bi-mortarboard-fill text-success me-2"></i>Education</h3>
-              <div class="mb-4 pb-3 border-bottom">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h4 class="mb-0 fw-bold">Master's Thesis Researcher</h4>
-                  <span class="badge bg-success">2019 – 2020</span>
-                </div>
-                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Politecnico di Milano — Milan, Italy</div>
-                <p class="mb-1"><em>Title:</em> "Anomaly Detection through Ganomaly: patch-wise training and transfer learning"</p>
-              </div>
-              <div class="mb-4 pb-3 border-bottom">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h4 class="mb-0 fw-bold">M.Sc. Computer Science and Engineering (AI track)</h4>
-                  <span class="badge bg-secondary">2017 – 2020</span>
-                </div>
-                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Politecnico di Milano — Milan, Italy</div>
-              </div>
-              <div class="mb-4 pb-3 border-bottom">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h4 class="mb-0 fw-bold">Athens Programme — From Complexity to Intelligence</h4>
-                  <span class="badge bg-info text-dark">2019</span>
-                </div>
-                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Telecom Paris — Paris, France</div>
-              </div>
-              <div class="mb-4 pb-3 border-bottom">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h4 class="mb-0 fw-bold">Erasmus+</h4>
-                  <span class="badge bg-warning text-dark">2018</span>
-                </div>
-                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Universitat Politècnica de València — Valencia, Spain</div>
-              </div>
-              <div class="mb-4 pb-3 border-bottom">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h4 class="mb-0 fw-bold">B.Sc. Computer Engineering</h4>
-                  <span class="badge bg-primary">2014 – 2017</span>
-                </div>
-                <div class="text-muted mb-2"><i class="bi bi-building me-1"></i>Politecnico di Milano — Milan, Italy</div>
-              </div>
-              <h3 class="resume-title mb-3 mt-4"><i class="bi bi-translate text-info me-2"></i>Languages</h3>
-              <ul class="list-group list-group-flush mb-4">
-                <li class="list-group-item px-0"><strong>Italian:</strong> Native</li>
-                <li class="list-group-item px-0"><strong>English:</strong> B2 TOEIC</li>
-                <li class="list-group-item px-0"><strong>Spanish:</strong> B2 — lived 6 months in Valencia</li>
-              </ul>
-              <h3 class="resume-title mb-3"><i class="bi bi-award-fill text-warning me-2"></i>Certifications</h3>
-              <div class="mb-2">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <h4 class="mb-0 fw-bold">Google Cloud — Associate Cloud Engineer</h4>
-                  <a href="https://www.credential.net/317ddacf-e54f-4e4f-8f3b-813be02d76bf" class="badge bg-info text-dark" target="_blank">See credential</a>
-                </div>
-                <div class="text-muted mb-1"><em>Issued 09/2020</em></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-    <!-- ======= Skills (Leadership-first) ======= -->
-    <section id="skills" class="skills section-bg">
-    <div class="container">
-      <div class="section-title mb-4">
-        <h2>Skills</h2>
-        <p>Tech Leadership for Data Science, with hands-on fluency to review designs, de-risk delivery, and scale what works.</p>
-      </div>
-      <div class="row g-4">
-        <div class="col-lg-6" data-aos="fade-up">
-          <div class="card shadow border-0 rounded-4 h-100">
-            <div class="card-body p-4">
-              <h3 class="h5 mb-3"><i class="bi bi-diagram-3 text-primary me-2"></i>Leadership & Strategy</h3>
-              <ul class="list-unstyled mb-0">
-                <li class="mb-3"><i class="bi bi-diagram-3 me-2 text-primary"></i><strong>AI Strategy:</strong> roadmap, guardrails, make/buy, vendor due diligence.</li>
-                <li class="mb-3"><i class="bi bi-lightning-charge me-2 text-warning"></i><strong>From PoC to Scale:</strong> reusable patterns, platform tooling, rollout playbooks.</li>
-                <li class="mb-3"><i class="bi bi-people me-2 text-info"></i><strong>Stakeholder Leadership:</strong> executive communication, change management, team rituals.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-          <div class="card shadow border-0 rounded-4 h-100">
-            <div class="card-body p-4">
-              <h3 class="h5 mb-3"><i class="bi bi-chat-square-text text-success me-2"></i>GenAI & NLP Strategy / Design Reviews</h3>
-              <ul class="list-unstyled mb-0">
-                <li class="mb-3"><i class="bi bi-chat-square-text me-2 text-success"></i><strong>GenAI solution patterns:</strong> retrieval-augmented Q&A, agents/tools, evaluation before demo.</li>
-                <li class="mb-3"><i class="bi bi-sliders me-2 text-secondary"></i><strong>Quality & Cost control:</strong> test sets, human-in-the-loop, cost per answer/insight.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row mt-4" data-aos="fade-up" data-aos-delay="200">
-        <div class="col-12">
-          <div class="card shadow border-0 rounded-4">
-            <div class="card-body p-4">
-              <h3 class="h6 text-uppercase text-muted mb-3"><i class="bi bi-cpu me-2"></i>Representative technologies (hands-on when needed)</h3>
-              <div class="d-flex flex-wrap gap-2">
-                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-filetype-py me-1"></i>Python</span>
-                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-lightning-charge me-1"></i>PyTorch</span>
-                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-link-45deg me-1"></i>LangChain</span>
-                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-emoji-smile me-1"></i>Hugging Face</span>
-                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-database me-1"></i>SQL</span>
-                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-arrow-repeat me-1"></i>Airflow</span>
-                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-cloud me-1"></i>GCP</span>
-                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-cloud me-1"></i>AWS</span>
-                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-box me-1"></i>Docker</span>
-                <span class="badge rounded-pill bg-light text-dark border"><i class="bi bi-git me-1"></i>Git</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </section>
-
-  <!-- ======= Projects Section ======= -->
-<section id="projects" class="portfolio section-bg">
-  <div class="container">
-    <div class="section-title mb-4">
-      <h2>Personal Projects</h2>
-      <p>Here are some personal projects developed in my free time and my university career</p>
-    </div>
-    <div class="row mb-3" data-aos="fade-up">
-      <div class="col-lg-12 d-flex justify-content-center">
-        <ul id="portfolio-flters" class="nav nav-pills mb-3">
-          <li class="nav-item"><a class="nav-link active" data-filter="*">All</a></li>
-          <li class="nav-item"><a class="nav-link" data-filter=".filter-cv">Computer Vision</a></li>
-          <li class="nav-item"><a class="nav-link" data-filter=".filter-ts">Time Series Forecasting</a></li>
-          <li class="nav-item"><a class="nav-link" data-filter=".filter-nlp">NLP</a></li>
-          <li class="nav-item"><a class="nav-link" data-filter=".filter-finance">Finance</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="row portfolio-container g-4" data-aos="fade-up" data-aos-delay="100">
-      <!-- Project Card Example -->
-      <div class="col-lg-4 col-md-6 portfolio-item filter-ts filter-finance">
-        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
-          <img src="assets/img/portfolio/portfolio_analysis_1.png" class="card-img-top" alt="Portfolio Analysis">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title mb-2"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i>Portfolio Analysis</h5>
-            <a href="portfolio_analysis.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6 portfolio-item filter-nlp filter-finance">
-        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
-          <img src="assets/img/portfolio/Sentiment-Analysis-scaled.png" class="card-img-top" alt="Sentiment Analysis">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title mb-2"><i class="bi bi-emoji-smile text-success me-2"></i>Sentiment Analysis</h5>
-            <a href="Sentiment_analysis.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6 portfolio-item filter-nlp">
-        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
-          <img src="assets/img/portfolio/genre detection.png" class="card-img-top" alt="Genre Detection">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title mb-2"><i class="bi bi-music-note-beamed text-info me-2"></i>Genre Detection</h5>
-            <a href="NLP_genre_detection.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6 portfolio-item filter-ts">
-        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
-          <img src="assets/img/portfolio/soccer.png" class="card-img-top" alt="Soccer Prediction">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title mb-2"><i class="bi bi-trophy text-warning me-2"></i>Soccer Prediction</h5>
-            <a href="Soccer_Prediction.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6 portfolio-item filter-cv">
-        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
-          <img src="assets/img/portfolio/anomaly_detection_1.png" class="card-img-top" alt="Anomaly Detection">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title mb-2"><i class="bi bi-exclamation-triangle text-danger me-2"></i>Anomaly Detection</h5>
-            <a href="Ganomaly.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6 portfolio-item filter-cv">
-        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
-          <img src="assets/img/portfolio/bg_sub_1.png" class="card-img-top" alt="Background Subtraction">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title mb-2"><i class="bi bi-layers text-secondary me-2"></i>Background Subtraction</h5>
-            <a href="Background_Subtraction.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6 portfolio-item filter-ts">
-        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
-          <img src="assets/img/portfolio/airqo_1.png" class="card-img-top" alt="AirQo Forecasting">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title mb-2"><i class="bi bi-cloud-sun text-info me-2"></i>AirQo Forecasting</h5>
-            <a href="airqo.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6 portfolio-item filter-ts filter-finance">
-        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
-          <img src="assets/img/portfolio/finance.png" class="card-img-top" alt="Finance Forecasting">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title mb-2"><i class="bi bi-currency-dollar text-success me-2"></i>Finance Forecasting</h5>
-            <a href="finance_forecasting.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6 portfolio-item filter-ts">
-        <div class="card h-100 shadow border-0 rounded-4 portfolio-card">
-          <img src="assets/img/portfolio/fraud.png" class="card-img-top" alt="Fraud Detection">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title mb-2"><i class="bi bi-shield-lock text-danger me-2"></i>Fraud Detection</h5>
-            <a href="fraud_detection.html" class="btn btn-outline-primary btn-sm mt-auto"><i class="bx bx-link"></i> More Details</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section><!-- End Portfolio Section -->
-
-  <!-- ======= Contact Section ======= -->
-<section id="contact" class="contact">
-  <div class="container">
-    <div class="section-title mb-4"><h2>Contact</h2></div>
-    <div class="row justify-content-center" data-aos="fade-in">
-      <div class="col-lg-6">
-        <div class="card shadow-lg border-0 rounded-4 p-4">
-          <div class="card-body">
-            <div class="mb-4 text-center">
-              <i class="bi bi-envelope-paper-heart fs-1 text-primary mb-2"></i>
-              <h3 class="fw-bold mb-1">Let's Connect</h3>
-              <p class="text-muted mb-0">I'm based in Milan, Italy and open to speaking, collaborations, and new opportunities.</p>
-            </div>
-            <div class="mb-3 d-flex align-items-center">
-              <i class="bi bi-geo-alt fs-4 text-success me-3"></i>
-              <div>
-                <h5 class="mb-0">Location</h5>
-                <p class="mb-0">Milan, Italy</p>
-              </div>
-            </div>
-            <div class="mb-3 d-flex align-items-center">
-              <i class="bi bi-envelope fs-4 text-info me-3"></i>
-              <div>
-                <h5 class="mb-0">Email</h5>
-                <p class="mb-0"><a href="mailto:danielemoltisanti@gmail.com">danielemoltisanti@gmail.com</a></p>
-              </div>
-            </div>
-            <div class="d-flex flex-wrap gap-2 justify-content-center mt-4">
-              <a class="btn btn-primary btn-lg px-4" href="mailto:danielemoltisanti@gmail.com?subject=Speaking%20Invitation"><i class="bi bi-mic me-1"></i>Invite me to speak</a>
-              <a class="btn btn-outline-secondary btn-lg px-4" href="#speaking"><i class="bi bi-list-columns me-1"></i>View topics</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section><!-- End Contact Section -->
-
-</main><!-- End #main -->
-
-<!-- ======= Footer ======= -->
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-<!-- Vendor JS Files -->
-<script src="assets/vendor/aos/aos.js"></script>
-<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-<script src="assets/vendor/php-email-form/validate.js"></script>
-<script src="assets/vendor/purecounter/purecounter.js"></script>
-<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-<script src="assets/vendor/typed.js/typed.min.js"></script>
-<script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-
-<!-- Template Main JS File -->
-<script src="assets/js/main.js"></script>
-
-<!-- Schema.org for speaker discoverability -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Daniele Moltisanti",
-  "jobTitle": "Principal Data Scientist",
-  "url": "https://staituned.com/author/Daniele-Moltisanti",
-  "sameAs": ["https://www.linkedin.com/in/daniele-moltisanti/"],
-  "knowsAbout": ["AI operating models","Data Science leadership","AI governance","GenAI adoption"],
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "Public Speaking",
-    "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "From Slide to Impact: The Operating System for AI" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Metrics that Matter: Measuring Adoption (not only Accuracy)" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "GenAI Governance, Safety & Evaluation" } }
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": "https://daniele21.github.io/",
+    "sameAs": [
+      "https://github.com/daniele21",
+      "https://www.linkedin.com/in/daniele-moltisanti/",
+      "https://staituned.com"
+    ],
+    "knowsAbout": [
+      "Local AI",
+      "On-device inference",
+      "Privacy-first product design",
+      "Large language models",
+      "Speech recognition",
+      "Android AI"
     ]
   }
-}
-</script>
+  </script>
+  <script src="assets/site/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
+  <header class="site-header" data-header>
+    <div class="shell header-inner">
+      <a class="brand" href="#top" aria-label="Daniele Moltisanti, home">
+        <span class="brand-mark" aria-hidden="true">DM</span>
+        <span class="brand-name">Daniele Moltisanti</span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle>
+        <span class="sr-only">Open navigation</span>
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" id="site-navigation" aria-label="Primary navigation" data-navigation>
+        <a href="#vision">Vision</a>
+        <a href="#stack">Infrastructure</a>
+        <a href="#applications">Applications</a>
+        <a href="#journey">Journey</a>
+        <a href="#about">About</a>
+        <a class="nav-cta" href="#collaborate">Collaborate</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="shell hero-grid">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">Local-first AI infrastructure</p>
+          <h1 id="hero-title">Building the infrastructure for <span>privacy-first AI products.</span></h1>
+          <p class="hero-lede">I build reusable local inference, speech recognition and Android runtime layers, then validate them through real applications with sensitive data and real product constraints.</p>
+
+          <div class="hero-actions" aria-label="Primary actions">
+            <a class="button button-primary" href="#stack">Explore the infrastructure <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="#journey">Follow the build <span aria-hidden="true">↗</span></a>
+          </div>
+
+          <ul class="trust-row" aria-label="Guiding principles">
+            <li>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>
+              Local by default
+            </li>
+            <li>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
+              Privacy by architecture
+            </li>
+            <li>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg>
+              Open and auditable
+            </li>
+          </ul>
+        </div>
+
+        <div class="hero-system reveal" aria-label="Local-first AI stack: hardware supports infrastructure, which enables applications">
+          <div class="system-label system-label-apps">Applications <span>Built on the stack</span></div>
+          <div class="system-layer layer-apps">
+            <div class="system-item">
+              <span class="mini-icon">C</span>
+              <span><strong>ClosedRoom</strong><small>Private meeting intelligence</small></span>
+            </div>
+            <div class="system-item">
+              <span class="mini-icon">A</span>
+              <span><strong>Aura Finance</strong><small>Privacy-first personal finance</small></span>
+            </div>
+            <span class="system-more">+ future products</span>
+          </div>
+
+          <div class="system-label system-label-infra">Infrastructure <span>Three reusable pillars</span></div>
+          <div class="system-layer layer-infra">
+            <div class="system-item compact"><span class="node node-teal"></span><span><strong>Local LLM</strong><small>Inference</small></span></div>
+            <div class="system-item compact"><span class="node node-blue"></span><span><strong>Local ASR</strong><small>Speech</small></span></div>
+            <div class="system-item compact"><span class="node node-violet"></span><span><strong>Android LLM</strong><small>On-device</small></span></div>
+          </div>
+
+          <div class="system-label system-label-hardware">Hardware <span>Local and decentralised</span></div>
+          <div class="system-layer layer-hardware">
+            <div class="system-item compact">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v11H4zM2 19h20"/></svg>
+              <span><strong>Your computer</strong><small>Desktop / laptop</small></span>
+            </div>
+            <div class="system-item compact">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+              <span><strong>Your phone</strong><small>Android</small></span>
+            </div>
+            <div class="system-item compact">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
+              <span><strong>Data control</strong><small>Cloud not required</small></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="shell purpose-grid" id="vision">
+        <article class="purpose-card reveal">
+          <span class="purpose-icon purpose-icon-vision" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </span>
+          <div>
+            <p class="section-kicker">Vision</p>
+            <h2>AI that stays close to the user and the user's data.</h2>
+            <p>A future where useful AI can operate directly on personal devices, under explicit user control, without making the cloud the default destination for every sensitive interaction.</p>
+          </div>
+        </article>
+
+        <article class="purpose-card reveal">
+          <span class="purpose-icon purpose-icon-mission" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3"/></svg>
+          </span>
+          <div>
+            <p class="section-kicker">Mission</p>
+            <h2>Reduce the distance between a local model demo and a reliable product.</h2>
+            <p>Build reusable infrastructure, validate it through real applications and publish the evidence needed to create better privacy-first products across desktop and mobile.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-stack" id="stack" aria-labelledby="stack-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <div>
+            <p class="section-kicker">The foundation</p>
+            <h2 id="stack-title">Three infrastructure pillars</h2>
+          </div>
+          <p>Each project solves a different part of the local-AI product stack. The landing keeps the first layer simple; technical detail is available when it becomes useful.</p>
+        </div>
+
+        <div class="pillar-grid">
+          <article class="project-card pillar-card reveal">
+            <div class="project-card-top">
+              <span class="project-icon project-icon-teal" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/><path d="m8 9.8 8-4.5"/></svg>
+              </span>
+              <span class="status status-experimental">Experimental</span>
+            </div>
+            <h3>Local LLM Server</h3>
+            <p class="project-role">A stable local inference layer between applications and fragmented desktop model engines.</p>
+            <details class="project-disclosure">
+              <summary>Explore the pillar <span aria-hidden="true">+</span></summary>
+              <div class="disclosure-body">
+                <p>Provides an OpenAI-compatible API, runtime lifecycle, backend abstraction, model switching and observability across GGUF and MLX workflows.</p>
+                <ul>
+                  <li>Desktop inference and orchestration</li>
+                  <li>Explicit model and backend management</li>
+                  <li>Runtime telemetry and live diagnostics</li>
+                </ul>
+                <div class="project-links">
+                  <a href="https://github.com/daniele21/local-llm-server" target="_blank" rel="noreferrer">View repository ↗</a>
+                </div>
+              </div>
+            </details>
+          </article>
+
+          <article class="project-card pillar-card reveal">
+            <div class="project-card-top">
+              <span class="project-icon project-icon-blue" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10v4"/></svg>
+              </span>
+              <span class="status status-experimental">Experimental</span>
+            </div>
+            <h3>Local ASR Server</h3>
+            <p class="project-role">A private speech layer for recording, transcribing and structuring sensitive audio locally.</p>
+            <details class="project-disclosure">
+              <summary>Explore the pillar <span aria-hidden="true">+</span></summary>
+              <div class="disclosure-body">
+                <p>Handles microphone and system-audio capture, local session storage and Whisper transcription on Apple Silicon.</p>
+                <ul>
+                  <li>Private meeting and audio capture</li>
+                  <li>Local speech-to-text workflows</li>
+                  <li>Reusable API for downstream products</li>
+                </ul>
+                <div class="project-links">
+                  <a href="https://github.com/daniele21/local-asr-server" target="_blank" rel="noreferrer">View repository ↗</a>
+                </div>
+              </div>
+            </details>
+          </article>
+
+          <article class="project-card pillar-card reveal">
+            <div class="project-card-top">
+              <span class="project-icon project-icon-violet" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 8h10v10H7zM9 5 7.5 3M15 5 16.5 3M5 10H3M21 10h-2M9 12v2M15 12v2"/></svg>
+              </span>
+              <span class="status status-progress">In progress</span>
+            </div>
+            <h3>Android Local LLM Harness</h3>
+            <p class="project-role">Reusable on-device inference infrastructure for native and Capacitor Android applications.</p>
+            <details class="project-disclosure">
+              <summary>Explore the pillar <span aria-hidden="true">+</span></summary>
+              <div class="disclosure-body">
+                <p>Moves beyond a one-off model demo with explicit GGUF management, lifecycle, streaming, cancellation, memory evidence, telemetry and health checks.</p>
+                <ul>
+                  <li>Embedded-first Android runtime</li>
+                  <li>GGUF import and integrity verification</li>
+                  <li>Observability, benchmarks and diagnostics</li>
+                </ul>
+                <div class="project-links">
+                  <a href="https://github.com/daniele21/android-local-llm-harness" target="_blank" rel="noreferrer">View repository ↗</a>
+                </div>
+              </div>
+            </details>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-applications" id="applications" aria-labelledby="applications-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <div>
+            <p class="section-kicker">Proving grounds</p>
+            <h2 id="applications-title">Applications that expose real constraints</h2>
+          </div>
+          <p>The applications are deliberately secondary to the infrastructure. Their job is to test privacy, packaging, performance and user experience in real domains.</p>
+        </div>
+
+        <div class="application-grid">
+          <article class="application-card reveal">
+            <div class="application-identity">
+              <span class="application-logo closedroom-logo" aria-hidden="true">C</span>
+              <div>
+                <span class="status status-prototype">Prototype</span>
+                <h3>ClosedRoom</h3>
+                <p class="application-tagline">Privacy-first meeting intelligence.</p>
+              </div>
+            </div>
+            <p>Combines local audio capture, transcription and LLM analysis to keep sensitive conversations on the user's machine.</p>
+            <details class="project-disclosure application-disclosure">
+              <summary>See what it validates <span aria-hidden="true">+</span></summary>
+              <div class="disclosure-body">
+                <ul>
+                  <li>Local ASR and LLM integration</li>
+                  <li>Installable desktop packaging</li>
+                  <li>Meeting summaries and action extraction</li>
+                </ul>
+                <div class="project-links">
+                  <a href="https://github.com/daniele21/local-asr-server" target="_blank" rel="noreferrer">Explore the ASR engine ↗</a>
+                </div>
+              </div>
+            </details>
+          </article>
+
+          <article class="application-card reveal">
+            <div class="application-identity">
+              <span class="application-logo aura-logo" aria-hidden="true">A</span>
+              <div>
+                <span class="status status-progress">In development</span>
+                <h3>Aura Finance</h3>
+                <p class="application-tagline">Privacy-first personal finance.</p>
+              </div>
+            </div>
+            <p>A mobile-first local-data product that tests data ownership, optional encrypted backup and clear financial decision support.</p>
+            <details class="project-disclosure application-disclosure">
+              <summary>See what it validates <span aria-hidden="true">+</span></summary>
+              <div class="disclosure-body">
+                <ul>
+                  <li>Local-first financial data model</li>
+                  <li>Encrypted optional cloud backup</li>
+                  <li>Future proving ground for Android on-device AI</li>
+                </ul>
+                <div class="project-links">
+                  <a href="https://github.com/daniele21/personal-budget" target="_blank" rel="noreferrer">View repository ↗</a>
+                </div>
+              </div>
+            </details>
+          </article>
+        </div>
+
+        <div class="architecture-strip reveal" aria-label="Three infrastructure pillars support reference applications and future privacy-first products">
+          <p class="architecture-label">Architecture at a glance</p>
+          <div class="architecture-nodes">
+            <span class="architecture-node architecture-node-teal">Local LLM Server</span>
+            <span class="architecture-node architecture-node-blue">Local ASR Server</span>
+            <span class="architecture-node architecture-node-violet">Android LLM Harness</span>
+          </div>
+          <div class="architecture-line" aria-hidden="true"></div>
+          <div class="architecture-output">
+            <span>Reference applications</span>
+            <strong>ClosedRoom · Aura Finance · future products</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-enables" id="principles" aria-labelledby="enables-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <div>
+            <p class="section-kicker">Future enablement</p>
+            <h2 id="enables-title">What the stack can make easier next</h2>
+          </div>
+          <p>These are application areas the foundations may support, not promises that every product already exists.</p>
+        </div>
+
+        <div class="enablement-grid">
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg>
+            <h3>Meeting intelligence</h3>
+            <p>Capture, transcribe and analyse conversations locally.</p>
+          </article>
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M16 10h5M8 8v8M5 11h6"/></svg>
+            <h3>Personal finance</h3>
+            <p>Private classification, insights and planning around sensitive data.</p>
+          </article>
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+            <h3>Document analysis</h3>
+            <p>Extract and understand information without default cloud exposure.</p>
+          </article>
+          <article class="enablement-card reveal">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M10 6h4M11 18h2"/></svg>
+            <h3>Mobile AI applications</h3>
+            <p>On-device features that work offline and keep control with the user.</p>
+          </article>
+        </div>
+
+        <div class="principle-row reveal" aria-label="Product and engineering principles">
+          <span>Local by default</span>
+          <span>Privacy by architecture</span>
+          <span>Observable and measurable</span>
+          <span>Reusable across applications</span>
+          <span>Evidence over claims</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-journey" id="journey" aria-labelledby="journey-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <div>
+            <p class="section-kicker">Building in public</p>
+            <h2 id="journey-title">Code, decisions and evidence—not only outcomes</h2>
+          </div>
+          <p>The work becomes strategically useful when the implementation, trade-offs and lessons are distributed as clearly as the final product.</p>
+        </div>
+
+        <div class="journey-grid">
+          <a class="journey-card reveal" href="https://github.com/daniele21?tab=repositories" target="_blank" rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7A5.4 5.4 0 0 0 19.4 4 5 5 0 0 0 19.3.5S18.2.1 15 2a13.4 13.4 0 0 0-6 0C5.8.1 4.7.5 4.7.5A5 5 0 0 0 4.6 4a5.4 5.4 0 0 0-1.4 3.7c0 5.4 3.5 6.6 6.8 7A4.8 4.8 0 0 0 9 18v4"/><path d="M9 19c-3 .9-3-1.5-4-2"/></svg>
+            <span><strong>GitHub</strong><small>Source code, issues and roadmaps</small></span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a class="journey-card reveal" href="https://www.linkedin.com/in/daniele-moltisanti/" target="_blank" rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="9" width="4" height="12"/><path d="M5 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM11 21V9h4v2c1-2 6-3 6 3v7h-4v-6c0-2-2-3-3-1v7z"/></svg>
+            <span><strong>LinkedIn</strong><small>Architecture notes, progress and strategy</small></span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a class="journey-card reveal" href="https://staituned.com" target="_blank" rel="noreferrer">
+            <span class="text-icon" aria-hidden="true">stAI</span>
+            <span><strong>stAI tuned</strong><small>Long-form AI education and experiments</small></span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a class="journey-card reveal" href="https://github.com/daniele21/android-local-llm-harness" target="_blank" rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+            <span><strong>Benchmarks</strong><small>Device evidence, latency and memory</small></span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-about" id="about" aria-labelledby="about-title">
+      <div class="shell about-grid">
+        <div class="about-copy reveal">
+          <p class="section-kicker">About</p>
+          <h2 id="about-title">Infrastructure, product and communication in one direction.</h2>
+          <p>I am a lead data scientist and builder working across applied AI architecture, product development and technical communication. These projects are where I test how local and open-weight models move from an experiment into something people can actually use.</p>
+        </div>
+        <div class="about-proof reveal">
+          <p>The work is intentionally pragmatic:</p>
+          <ul>
+            <li>local when it provides meaningful privacy, control or cost benefits;</li>
+            <li>cloud when the workload genuinely requires it;</li>
+            <li>explicit about maturity, evidence and limitations.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="collaboration" id="collaborate" aria-labelledby="collaboration-title">
+      <div class="shell collaboration-inner reveal">
+        <div>
+          <p class="section-kicker">Open to relevant conversations</p>
+          <h2 id="collaboration-title">Let's build or evaluate a privacy-first AI product.</h2>
+          <p>Local-AI feasibility, architecture, Android on-device inference, product prototypes, testing and benchmarking.</p>
+        </div>
+        <div class="collaboration-actions">
+          <a class="button button-primary" href="mailto:danielemoltisanti@gmail.com">Get in touch <span aria-hidden="true">→</span></a>
+          <a class="text-link" href="https://www.linkedin.com/in/daniele-moltisanti/" target="_blank" rel="noreferrer">Connect on LinkedIn ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">DM</span>
+        <span>Daniele Moltisanti</span>
+      </div>
+      <p>Built as a lightweight, privacy-conscious static site.</p>
+      <div class="footer-links">
+        <a href="https://github.com/daniele21" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/daniele-moltisanti/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="https://staituned.com" target="_blank" rel="noreferrer">stAI tuned</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
