@@ -6,6 +6,6 @@ export default defineConfig({
   site: 'https://daniele21.github.io',
   base: process.env.ASTRO_BASE || '/',
   build: {
-    assets: '_assets',
+    assets: 'assets',
   },
 });

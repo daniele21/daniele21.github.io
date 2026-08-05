@@ -13,7 +13,7 @@ const { application } = Astro.props;
 
 <article class="application-card reveal">
   <div class="application-identity">
-    <img src={application.logoPath} alt={`${application.name} logo`} class="application-logo-img" />
+    <img src={`${import.meta.env.BASE_URL}${application.logoPath.replace(/^\//, '')}`} alt={`${application.name} logo`} class="application-logo-img" />
     <div>
       <span class={`status ${application.status === 'experimental' ? 'status-progress' : 'status-active'}`}>{application.statusLabel}</span>
       <h3>{application.name}</h3>
