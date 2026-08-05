@@ -448,12 +448,24 @@
   color: #ffffff;
 }
 
+.collaboration h2 strong,
+.collaboration strong {
+  color: #93c5fd;
+  font-weight: 700;
+}
+
 .collaboration p {
   max-width: 740px;
   margin-top: var(--space-4);
   margin-bottom: 0;
   color: #cbd8f5;
   font-size: var(--text-body);
+}
+
+.collaboration p em,
+.collaboration em {
+  color: #ffffff;
+  font-style: italic;
 }
 
 .collaboration-actions {

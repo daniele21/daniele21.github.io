@@ -43,8 +43,8 @@ a {
 }
 
 strong, b {
-  font-weight: 650;
-  color: var(--ink);
+  font-weight: 700;
+  color: inherit;
 }
 
 em, i {
