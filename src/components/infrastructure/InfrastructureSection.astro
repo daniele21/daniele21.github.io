@@ -119,8 +119,14 @@ import { pillars } from '../../content/pillars';
   }
 
   @media (max-width: 820px) {
-    .architecture-nodes { grid-template-columns: 1fr; }
+    .architecture-nodes { grid-template-columns: 1fr; gap: var(--space-2); }
     .architecture-line { height: 24px; }
   }
+
+  @media (max-width: 580px) {
+    .architecture-strip { padding: 20px 16px; margin-top: var(--space-8); }
+    .architecture-output { width: 100%; min-width: 0; padding: 12px 14px; }
+  }
 </style>
+
 

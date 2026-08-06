@@ -148,12 +148,25 @@ import { socialLinks } from '../../content/site';
   @media (max-width: 820px) {
     .collaboration-inner {
       grid-template-columns: 1fr;
+      gap: var(--space-6);
     }
 
     .collaboration-actions {
-      align-items: flex-start;
+      align-items: stretch;
       min-width: 0;
+      width: 100%;
+    }
+
+    .collaboration-actions .button {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .collaboration-inner {
+      padding: 28px 20px;
     }
   }
 </style>
+
 

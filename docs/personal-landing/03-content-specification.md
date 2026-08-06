@@ -27,7 +27,7 @@ Avoid:
 
 ### Page title
 
-`Daniele Moltisanti - Building Privacy-First AI Products`
+`Daniele Moltisanti`
 
 ### Meta description
 
