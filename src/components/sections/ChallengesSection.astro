@@ -1,0 +1,135 @@
+---
+/**
+ * ChallengesSection - Technical gap and difficulty explanation section.
+ * Positioned after Vision/Mission to contextualize why infrastructure is needed.
+ */
+---
+
+<section class="section section-challenges" id="challenges" aria-labelledby="challenges-heading">
+  <div class="shell">
+    <div class="challenges-card reveal">
+      <div class="challenges-header">
+        <p class="section-kicker">FROM LOCAL MODELS TO REAL PRODUCTS</p>
+        <h2 id="challenges-heading">Running a model locally is <em>only the beginning.</em></h2>
+        <p class="challenges-intro">
+          Shipping product-grade, privacy-first AI requires far more than weights on a device. It demands solving four key technical challenges:
+        </p>
+      </div>
+
+      <div class="challenges-grid">
+        <article class="challenge-item">
+          <div class="challenge-num">01</div>
+          <div>
+            <h3>Runtime lifecycle</h3>
+            <p>Model management, hardware compatibility, dynamic switching & zero-downtime updates.</p>
+          </div>
+        </article>
+
+        <article class="challenge-item">
+          <div class="challenge-num">02</div>
+          <div>
+            <h3>Observability & telemetry</h3>
+            <p>Performance tracking, latency metrics, accuracy signals & memory profiling without privacy leakage.</p>
+          </div>
+        </article>
+
+        <article class="challenge-item">
+          <div class="challenge-num">03</div>
+          <div>
+            <h3>Hardware adaptation</h3>
+            <p>RAM/VRAM constraints, resident memory optimization & thermal management on desktop and mobile.</p>
+          </div>
+        </article>
+
+        <article class="challenge-item">
+          <div class="challenge-num">04</div>
+          <div>
+            <h3>Developer ergonomics</h3>
+            <p>Unified OpenAI-compatible APIs, reliable local IPC & intuitive user experiences.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-challenges {
+    padding: clamp(60px, 8vw, 110px) 0;
+  }
+
+  .challenges-card {
+    padding: clamp(32px, 4vw, 56px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .challenges-header {
+    max-width: 680px;
+    margin-bottom: var(--space-10);
+  }
+
+  .challenges-header h2 {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+
+  .challenges-intro {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-lg);
+    line-height: 1.6;
+  }
+
+  .challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6) var(--space-8);
+  }
+
+  .challenge-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+
+  .challenge-num {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: #edf2ff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    line-height: 1;
+    margin-top: 3px;
+  }
+
+  .challenge-item h3 {
+    margin: 0 0 var(--space-1);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .challenge-item p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .challenges-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+  }
+</style>

@@ -14,28 +14,16 @@ import EcosystemMap from './EcosystemMap.astro';
         for <span class="blue-text">privacy-first</span> AI products.
       </h1>
       <p class="hero-lede">
-        I design <strong>reusable infrastructure</strong> for <em>local LLM inference</em>, <em>private speech recognition</em>, and <em>Android on-device AI</em> — then validate it through real-world <strong>desktop and mobile applications</strong>.
+        I build the <strong>local AI foundations</strong> that let products understand, transcribe and reason <em>without making the cloud the default destination for sensitive data.</em>
+      </p>
+      <p class="hero-lede-detail">
+        Current work spans local LLM inference, private speech recognition and Android on-device runtimes.
       </p>
 
       <div class="hero-actions" aria-label="Primary actions">
-        <a class="button button-primary" href="#infrastructure">Explore the infrastructure <span aria-hidden="true">→</span></a>
+        <a class="button button-primary" href="#infrastructure">Explore the three pillars <span aria-hidden="true">→</span></a>
         <a class="button button-secondary" href="#journey">Follow the build journey <span aria-hidden="true">↗</span></a>
       </div>
-
-      <ul class="trust-row" aria-label="Guiding principles">
-        <li>
-          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>
-          <strong>Local</strong> by default
-        </li>
-        <li>
-          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
-          <strong>Privacy</strong> by architecture
-        </li>
-        <li>
-          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg>
-          <strong>Open & auditable</strong>
-        </li>
-      </ul>
     </div>
 
     <div class="hero-visual">
@@ -95,6 +83,13 @@ import EcosystemMap from './EcosystemMap.astro';
     line-height: 1.6;
   }
 
+  .hero-lede-detail {
+    margin: var(--space-2) 0 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
@@ -134,34 +129,6 @@ import EcosystemMap from './EcosystemMap.astro';
   }
   .button-secondary:hover { background: #ffffff; box-shadow: var(--shadow-sm); }
 
-  .trust-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3) var(--space-5);
-    margin: var(--space-6) 0 0;
-    padding: 0;
-    list-style: none;
-    color: var(--ink-muted);
-    font-size: var(--text-small);
-    font-weight: 650;
-  }
-
-  .trust-row li {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-  }
-
-  .trust-row svg {
-    width: 18px;
-    height: 18px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
   @media (max-width: 1040px) {
     .hero-grid {
       grid-template-columns: 1fr;
@@ -176,6 +143,5 @@ import EcosystemMap from './EcosystemMap.astro';
     .hero { padding-top: 24px; padding-bottom: 24px; }
     .hero-actions { flex-direction: column; align-items: stretch; }
     .button { width: 100%; }
-    .trust-row { display: grid; grid-template-columns: 1fr; gap: var(--space-2); }
   }
 </style>

@@ -1,0 +1,130 @@
+---
+/**
+ * VisionMissionSection - Clean, high-impact section immediately after the hero.
+ * Highlights the aspirational vision, core mission, and key guiding principles.
+ */
+---
+
+<section class="section section-vision-mission" id="vision" aria-labelledby="vision-heading">
+  <div class="shell">
+    <div class="vision-mission-container reveal">
+      <div class="vm-block">
+        <p class="section-kicker">VISION</p>
+        <h2 id="vision-heading" class="vm-text">
+          A future where <strong>useful AI runs close to personal data</strong> and remains under the user’s control.
+        </h2>
+      </div>
+
+      <div class="vm-divider" aria-hidden="true"></div>
+
+      <div class="vm-block">
+        <p class="section-kicker">MISSION</p>
+        <p class="vm-mission-text">
+          Build <strong>reusable local-AI infrastructure</strong> that makes privacy-first products easier to create across desktop and mobile.
+        </p>
+      </div>
+
+      <ul class="vm-principles-row" aria-label="Foundational principles">
+        <li>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>
+          <span><strong>Local</strong> by default</span>
+        </li>
+        <li>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
+          <span><strong>Privacy</strong> by architecture</span>
+        </li>
+        <li>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg>
+          <span><strong>Open & auditable</strong></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-vision-mission {
+    padding: clamp(60px, 7vw, 100px) 0;
+    background: linear-gradient(180deg, rgba(247, 249, 255, 0.4) 0%, rgba(238, 244, 255, 0.6) 100%);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .vision-mission-container {
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .vm-block {
+    margin-bottom: var(--space-6);
+  }
+
+  .vm-text {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .vm-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--accent-blue);
+    opacity: 0.3;
+    margin: var(--space-8) auto;
+    border-radius: 2px;
+  }
+
+  .vm-mission-text {
+    margin: 0;
+    font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+    line-height: 1.5;
+    color: var(--ink-muted);
+    font-weight: 450;
+  }
+
+  .vm-principles-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3) var(--space-6);
+    margin: var(--space-10) 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+  }
+
+  .vm-principles-row li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .vm-principles-row svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: var(--accent-blue);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (max-width: 580px) {
+    .vm-principles-row {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+  }
+</style>
