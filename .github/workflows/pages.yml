@@ -36,6 +36,7 @@ jobs:
         with:
           folder: ./dist
           branch: gh-pages
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
           clean-exclude: |
             dev
             pr-preview
