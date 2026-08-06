@@ -2,16 +2,24 @@
 /**
  * AboutSection - Personal bio and profile photo.
  */
+import { socialLinks } from '../../content/site';
 ---
 
 <section class="section section-about" id="about" aria-labelledby="about-title">
   <div class="shell about-grid">
     <div class="about-copy reveal">
-      <p class="section-kicker">ABOUT</p>
+      <p class="section-kicker">ABOUT DANIELE</p>
       <h2 id="about-title">I work where <strong>AI infrastructure</strong>, <strong>product strategy</strong>, and <strong>clear engineering</strong> intersect.</h2>
-      <p>I am <strong>Daniele Moltisanti</strong>, a data and AI professional based in Milan. My work combines <em>technical architecture</em>, <em>product thinking</em>, and the ability to transform complex AI research into understandable decisions and reliable, intuitive software.</p>
-      <p>Alongside my professional work, I build <strong>local-first infrastructure</strong> and <strong>privacy-first products</strong> in public, writing about AI architecture and strategy through <em>stAI tuned</em> and <em>LinkedIn</em>.</p>
-      <p>I am particularly focused on the <em>last mile</em> of local AI: <strong>observability, latency, model lifecycle, packaging, user experience</strong>, and <strong>strategic adoption</strong>.</p>
+      <p>I am <strong>Daniele Moltisanti</strong>, an AI technical leader and builder based in Milan. My work combines <em>technical architecture</em>, <em>product thinking</em>, and the ability to transform complex AI research into understandable decisions and reliable, intuitive software.</p>
+      <p>Alongside my independent work, I lead and design AI initiatives in complex organisations, translating technical possibilities into systems that can be adopted, governed, and scaled.</p>
+      <p>I also write, teach, and speak about AI architecture, strategy, and the path from experimentation to reliable products.</p>
+      
+      <div class="about-links">
+        <a class="about-link" href={socialLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
+        <a class="about-link" href={socialLinks.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+        <a class="about-link" href={socialLinks.staituned} target="_blank" rel="noreferrer">stAI tuned ↗</a>
+        <span class="about-link-muted" title="Coming soon">Speaking & public work <small>(coming soon)</small></span>
+      </div>
     </div>
 
     <div class="about-photo-wrapper reveal">
@@ -19,6 +27,7 @@
     </div>
   </div>
 </section>
+
 
 <style>
   .about-grid {
@@ -34,6 +43,53 @@
     font-size: var(--text-body);
     line-height: 1.7;
   }
+
+  .about-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .about-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--ink);
+    font-size: var(--text-small);
+    font-weight: 650;
+    text-decoration: none;
+    transition: border-color var(--duration-fast) ease,
+                color var(--duration-fast) ease,
+                transform var(--duration-fast) ease;
+  }
+
+  .about-link:hover {
+    border-color: var(--border-strong);
+    color: var(--accent-blue);
+    transform: translateY(-2px);
+  }
+
+  .about-link-muted {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    color: var(--ink-subtle);
+    font-size: var(--text-small);
+    font-weight: 500;
+  }
+
+  .about-link-muted small {
+    opacity: 0.7;
+    font-size: var(--text-xs);
+  }
+
 
   .about-photo-wrapper {
     position: relative;

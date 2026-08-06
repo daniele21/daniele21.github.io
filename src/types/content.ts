@@ -72,6 +72,14 @@ export interface JourneyLink {
   iconType: 'github' | 'linkedin' | 'stai' | 'gauge' | 'book' | 'flask';
 }
 
+/** Professional credibility proof point */
+export interface CredibilityProof {
+  title: string;
+  subtitle: string;
+  description: string;
+  iconType: 'leadership' | 'articles' | 'mentoring' | 'award';
+}
+
 /** Site metadata for SEO */
 export interface SiteMetadata {
   title: string;

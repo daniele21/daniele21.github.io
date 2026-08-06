@@ -20,9 +20,11 @@ export const navigation: NavItem[] = [
   { label: 'Infrastructure', href: '#infrastructure' },
   { label: 'Applications', href: '#applications' },
   { label: 'Principles', href: '#principles' },
-  { label: 'Journey', href: '#journey' },
+  { label: 'Evidence', href: '#credibility' },
+  { label: 'Knowledge', href: '#journey' },
   { label: 'About', href: '#about' },
 ];
+
 
 export const socialLinks = {
   github: 'https://github.com/daniele21',

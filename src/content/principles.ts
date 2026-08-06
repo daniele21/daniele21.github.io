@@ -25,38 +25,21 @@ export const enablements: Enablement[] = [
 export const journeyLinks: JourneyLink[] = [
   {
     title: 'GitHub',
-    description: 'Source code, issues & <em>architecture roadmaps</em>',
+    description: 'The code and technical implementation: repositories, roadmaps, and open tools.',
     url: 'https://github.com/daniele21?tab=repositories',
     iconType: 'github',
   },
   {
-    title: 'LinkedIn',
-    description: 'Technical writing & <em>milestone updates</em>',
-    url: 'https://www.linkedin.com/in/daniele-moltisanti/',
-    iconType: 'linkedin',
-  },
-  {
     title: 'stAI tuned',
-    description: 'Model evals, fine-tuning & <em>LLM research</em>',
+    description: 'Long-form analysis, practical AI knowledge, model evals, and system design.',
     url: 'https://staituned.com',
     iconType: 'stai',
   },
   {
-    title: 'Benchmarks',
-    description: 'Device metrics, <em>latency & memory profiles</em>',
-    url: 'https://github.com/daniele21/android-local-llm-harness',
-    iconType: 'gauge',
-  },
-  {
-    title: 'Architecture notes',
-    description: 'Design docs & <em>architectural decision records</em>',
-    url: 'https://github.com/daniele21/local-llm-server',
-    iconType: 'book',
-  },
-  {
-    title: 'Experiments',
-    description: 'Prototypes, benchmarks & <em>exploratory logs</em>',
-    url: 'https://staituned.com',
-    iconType: 'flask',
+    title: 'LinkedIn',
+    description: 'Ideas, architecture trade-offs, experiments, and engineering lessons in public.',
+    url: 'https://www.linkedin.com/in/daniele-moltisanti/',
+    iconType: 'linkedin',
   },
 ];
+
