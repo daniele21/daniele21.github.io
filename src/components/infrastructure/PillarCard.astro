@@ -63,13 +63,20 @@ const iconClassMap = {
     padding: var(--space-6);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    background: var(--surface-card);
-    box-shadow: var(--shadow-md);
-    transition: transform 150ms ease, box-shadow 150ms ease;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-base) var(--ease-out-expo),
+                box-shadow var(--duration-base) var(--ease-out-expo),
+                border-color var(--duration-base) ease,
+                background-color var(--duration-base) ease;
   }
 
   .project-card:hover {
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-6px);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
   }
 
   .project-card-top {
@@ -86,7 +93,13 @@ const iconClassMap = {
     height: 56px;
     border-radius: var(--radius-md);
     color: #ffffff;
-    box-shadow: 0 12px 26px rgba(41, 74, 140, 0.15);
+    box-shadow: 0 10px 24px rgba(41, 74, 140, 0.18);
+    transition: transform var(--duration-base) var(--ease-out-expo), box-shadow var(--duration-base) ease;
+  }
+
+  .project-card:hover .project-icon {
+    transform: scale(1.06);
+    box-shadow: 0 14px 30px rgba(23, 92, 255, 0.28);
   }
 
   .project-icon svg {
@@ -121,9 +134,12 @@ const iconClassMap = {
 
   .project-card h3 {
     margin: var(--space-5) 0 var(--space-2);
-    font-size: 1.38rem;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
+    font-family: var(--font-body);
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--ink);
   }
 
   .project-role {
@@ -164,10 +180,15 @@ const iconClassMap = {
     font-size: var(--text-small);
     cursor: pointer;
     list-style: none;
+    transition: color var(--duration-fast) ease;
+  }
+
+  .project-disclosure summary:hover {
+    color: var(--accent-blue-light);
   }
 
   .project-disclosure summary::-webkit-details-marker { display: none; }
-  .project-disclosure summary span { font-size: 1.2rem; transition: transform 160ms ease; }
+  .project-disclosure summary span { font-size: 1.2rem; transition: transform var(--duration-fast) ease; }
   .project-disclosure[open] summary span { transform: rotate(45deg); }
 
   .disclosure-body {
@@ -193,7 +214,12 @@ const iconClassMap = {
     text-decoration: none;
     font-weight: 700;
     font-size: var(--text-small);
+    transition: color var(--duration-fast) ease;
   }
 
-  .project-links a:hover { text-decoration: underline; }
+  .project-links a:hover {
+    color: var(--accent-blue-light);
+    text-decoration: underline;
+  }
 </style>
+

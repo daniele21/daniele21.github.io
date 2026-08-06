@@ -1,17 +1,20 @@
 ---
 /**
- * SiteFooter - Footer component.
+ * SiteFooter - Footer component with dynamic copyright year.
  */
 import { socialLinks } from '../../content/site';
+
+const currentYear = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="shell footer-inner">
-    <div class="footer-brand">
-      <span class="brand-mark" aria-hidden="true">DM</span>
-      <span>Daniele Moltisanti</span>
+    <div class="brand">
+      <img src={`${import.meta.env.BASE_URL}images/sign_1.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-light" height="36" />
+      <img src={`${import.meta.env.BASE_URL}images/sign_dark.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-dark" height="36" />
+      <span class="brand-name">Daniele Moltisanti</span>
     </div>
-    <p>Built with local-first principles as a lightweight Astro static site.</p>
+    <p>© {currentYear} · Built with local-first principles as a lightweight Astro static site.</p>
     <div class="footer-links">
       <a href={socialLinks.github} target="_blank" rel="noreferrer">GitHub</a>
       <a href={socialLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
@@ -36,29 +39,13 @@ import { socialLinks } from '../../content/site';
     border-top: 1px solid var(--border-subtle);
   }
 
-  .footer-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3);
-    color: var(--ink);
-    font-weight: 750;
-  }
 
-  .footer-brand .brand-mark {
-    display: inline-grid;
-    place-items: center;
-    width: 32px;
-    height: 32px;
-    border: 1px solid var(--ink);
-    border-radius: 9px;
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    letter-spacing: -0.08em;
-  }
+
 
   .footer-inner p {
     margin: 0;
     text-align: center;
+    color: var(--ink-muted);
   }
 
   .footer-links {
@@ -67,13 +54,32 @@ import { socialLinks } from '../../content/site';
   }
 
   .footer-links a {
+    position: relative;
     text-decoration: none;
     color: var(--ink-muted);
-    transition: color 150ms ease;
+    transition: color var(--duration-fast) ease;
+  }
+
+  .footer-links a::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background-color: var(--accent-blue);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--duration-base) var(--ease-out-expo);
   }
 
   .footer-links a:hover {
     color: var(--accent-blue);
+  }
+
+  .footer-links a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   @media (max-width: 820px) {
@@ -84,3 +90,4 @@ import { socialLinks } from '../../content/site';
     }
   }
 </style>
+

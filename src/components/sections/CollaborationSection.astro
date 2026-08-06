@@ -30,6 +30,7 @@ import { socialLinks } from '../../content/site';
   }
 
   .collaboration-inner {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
@@ -38,9 +39,21 @@ import { socialLinks } from '../../content/site';
     border-radius: var(--radius-xl);
     color: #ffffff;
     background:
-      radial-gradient(circle at 86% 10%, rgba(95, 119, 255, 0.45), transparent 20rem),
+      radial-gradient(circle at 86% 10%, rgba(95, 119, 255, 0.45), transparent 22rem),
       linear-gradient(135deg, #0c1c43, #153d91);
-    box-shadow: 0 28px 80px rgba(18, 48, 108, 0.25);
+    box-shadow: 0 28px 80px rgba(18, 48, 108, 0.3);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .collaboration-inner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.4;
+    pointer-events: none;
   }
 
   .collaboration .section-kicker {
@@ -50,6 +63,9 @@ import { socialLinks } from '../../content/site';
   .collaboration h2 {
     max-width: 780px;
     color: #ffffff;
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 2.8vw, 2.4rem);
+    line-height: 1.2;
   }
 
   .collaboration h2 strong,
@@ -73,6 +89,8 @@ import { socialLinks } from '../../content/site';
   }
 
   .collaboration-actions {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -91,19 +109,26 @@ import { socialLinks } from '../../content/site';
     text-decoration: none;
     font-weight: 750;
     font-size: var(--text-small);
-    transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+    transition: transform var(--duration-base) var(--ease-out-expo),
+                box-shadow var(--duration-base) var(--ease-out-expo),
+                background-color var(--duration-fast) ease;
     cursor: pointer;
     border: none;
   }
 
+  .button:hover {
+    transform: translateY(-3px);
+  }
+
   .collaboration .button-primary {
-    color: var(--accent-blue);
+    color: #0c1c43;
     background: #ffffff;
-    box-shadow: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   }
 
   .collaboration .button-primary:hover {
-    background: var(--surface-muted);
+    background: #f0f4ff;
+    box-shadow: 0 12px 32px rgba(255, 255, 255, 0.3);
   }
 
   .collaboration-info {
@@ -131,3 +156,4 @@ import { socialLinks } from '../../content/site';
     }
   }
 </style>
+

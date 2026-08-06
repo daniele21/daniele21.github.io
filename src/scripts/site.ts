@@ -1,6 +1,6 @@
 /**
  * Client-side interactive script.
- * Handles sticky header shadow, mobile menu toggle, and scroll reveal animations.
+ * Handles sticky header shadow, theme toggle, mobile menu toggle, and scroll reveal animations.
  */
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('js');
@@ -17,6 +17,27 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
+  }
+
+  // Theme toggle logic
+  const themeToggle = document.querySelector('[data-theme-toggle]');
+  if (themeToggle) {
+    const updateToggleState = (theme: string) => {
+      themeToggle.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`);
+      themeToggle.setAttribute('title', `Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`);
+    };
+
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    updateToggleState(currentTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const activeTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', activeTheme);
+      try {
+        localStorage.setItem('theme', activeTheme);
+      } catch (e) {}
+      updateToggleState(activeTheme);
+    });
   }
 
   // Mobile navigation menu toggle
@@ -64,8 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       {
         root: null,
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.1,
+        rootMargin: '0px 0px -30px 0px',
       }
     );
 
@@ -74,3 +95,4 @@ document.addEventListener('DOMContentLoaded', () => {
     revealElements.forEach((el) => el.classList.add('is-visible'));
   }
 });
+

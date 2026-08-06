@@ -37,7 +37,7 @@ import { journeyLinks } from '../../content/principles';
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M10 2v7.31L4.75 20.5a1 1 0 0 0 .85 1.5h12.8a1 1 0 0 0 .85-1.5L14 9.31V2"/></svg>
           )}
           <span><strong>{item.title}</strong><small set:html={item.description}></small></span>
-          <span aria-hidden="true">↗</span>
+          <span class="journey-arrow" aria-hidden="true">↗</span>
         </a>
       ))}
     </div>
@@ -46,8 +46,9 @@ import { journeyLinks } from '../../content/principles';
 
 <style>
   .section-journey {
-    background: rgba(255, 255, 255, 0.6);
-    border-block: 1px solid rgba(220, 228, 243, 0.65);
+    background: var(--surface-canvas);
+    border-block: 1px solid var(--border-subtle);
+    transition: background-color var(--duration-base) ease;
   }
 
   .journey-grid {
@@ -65,14 +66,18 @@ import { journeyLinks } from '../../content/principles';
     padding: var(--space-5);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    background: var(--surface-card);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     text-decoration: none;
     box-shadow: var(--shadow-sm);
-    transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    transition: transform var(--duration-base) var(--ease-out-expo),
+                border-color var(--duration-base) ease,
+                box-shadow var(--duration-base) var(--ease-out-expo);
   }
 
   .journey-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
     border-color: var(--border-strong);
     box-shadow: var(--shadow-md);
   }
@@ -85,6 +90,12 @@ import { journeyLinks } from '../../content/principles';
     stroke-width: 1.6;
     stroke-linecap: round;
     stroke-linejoin: round;
+    transition: stroke var(--duration-fast) ease, transform var(--duration-fast) ease;
+  }
+
+  .journey-card:hover svg {
+    stroke: var(--accent-blue);
+    transform: scale(1.1);
   }
 
   .journey-card strong {
@@ -101,11 +112,29 @@ import { journeyLinks } from '../../content/principles';
     line-height: 1.35;
   }
 
+  .journey-arrow {
+    display: inline-block;
+    color: var(--ink-subtle);
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: transform var(--duration-base) var(--ease-out-expo), color var(--duration-fast) ease;
+  }
+
+  .journey-card:hover .journey-arrow {
+    color: var(--accent-blue);
+    transform: translate(3px, -3px);
+  }
+
   .text-icon {
     font-family: var(--font-display);
     font-size: 1.2rem;
     font-weight: 700;
     color: var(--accent-blue);
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .journey-card:hover .text-icon {
+    transform: scale(1.1);
   }
 
   @media (max-width: 1040px) {
@@ -116,3 +145,4 @@ import { journeyLinks } from '../../content/principles';
     .journey-grid { grid-template-columns: 1fr; }
   }
 </style>
+

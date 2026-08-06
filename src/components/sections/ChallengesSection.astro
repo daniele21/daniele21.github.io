@@ -62,8 +62,16 @@
     padding: clamp(32px, 4vw, 56px);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    background: var(--surface-card);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     box-shadow: var(--shadow-sm);
+    transition: border-color var(--duration-base) ease, box-shadow var(--duration-base) ease;
+  }
+
+  .challenges-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
   }
 
   .challenges-header {
@@ -75,8 +83,8 @@
     margin: 0 0 var(--space-3);
     font-family: var(--font-display);
     font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-    line-height: 1.18;
-    letter-spacing: -0.025em;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
     color: var(--ink);
   }
 
@@ -98,6 +106,14 @@
     grid-template-columns: auto 1fr;
     gap: var(--space-4);
     align-items: start;
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--duration-fast) ease, transform var(--duration-fast) ease;
+  }
+
+  .challenge-item:hover {
+    background-color: var(--surface-muted);
+    transform: translateX(4px);
   }
 
   .challenge-num {
@@ -105,11 +121,17 @@
     font-size: 0.85rem;
     font-weight: 700;
     color: var(--accent-blue);
-    background: #edf2ff;
+    background: var(--surface-blue);
+    border: 1px solid var(--border-subtle);
     padding: 4px 8px;
     border-radius: 6px;
     line-height: 1;
     margin-top: 3px;
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .challenge-item:hover .challenge-num {
+    transform: scale(1.1);
   }
 
   .challenge-item h3 {
@@ -133,3 +155,4 @@
     }
   }
 </style>
+

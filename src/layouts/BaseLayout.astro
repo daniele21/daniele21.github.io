@@ -39,12 +39,28 @@ const robotsContent = isPreview
   <title>{title}</title>
   <meta name="description" content={description}>
   <meta name="theme-color" content="#f7f9ff">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light dark">
   <meta name="robots" content={robotsContent}>
   <link rel="canonical" href={siteMetadata.canonical}>
   <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.png`} type="image/png">
   <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}favicon.png`}>
   <link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`}>
+
+  <!-- Google Fonts: Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+
+  <!-- Anti-flash inline theme initialization -->
+  <script is:inline>
+    (function () {
+      try {
+        const storedTheme = localStorage.getItem('theme');
+        const theme = storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- Open Graph & Social Cards -->
   <meta property="og:type" content="website">

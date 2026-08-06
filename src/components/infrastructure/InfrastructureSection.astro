@@ -41,8 +41,9 @@ import { pillars } from '../../content/pillars';
 
 <style>
   .section-stack {
-    background: rgba(255, 255, 255, 0.55);
-    border-block: 1px solid rgba(220, 228, 243, 0.62);
+    background: var(--surface-canvas);
+    border-block: 1px solid var(--border-subtle);
+    transition: background-color var(--duration-base) ease;
   }
 
   .pillar-grid {
@@ -56,7 +57,9 @@ import { pillars } from '../../content/pillars';
     padding: clamp(26px, 4vw, 44px);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    background: rgba(255, 255, 255, 0.85);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     box-shadow: var(--shadow-sm);
     text-align: center;
   }
@@ -86,9 +89,9 @@ import { pillars } from '../../content/pillars';
     font-size: var(--text-small);
   }
 
-  .architecture-node-teal { color: #087b7b; background: #eafaf8; border: 1px solid #8ddbd4; }
-  .architecture-node-blue { color: #1b50ca; background: #edf2ff; border: 1px solid #9eb9ff; }
-  .architecture-node-violet { color: #503fc2; background: #f1efff; border: 1px solid #b4a9ff; }
+  .architecture-node-teal { color: var(--accent-teal); background: var(--status-active-bg); border: 1px solid var(--accent-teal-light); }
+  .architecture-node-blue { color: var(--accent-blue); background: var(--status-progress-bg); border: 1px solid var(--accent-blue-light); }
+  .architecture-node-violet { color: var(--accent-violet); background: var(--surface-violet); border: 1px solid var(--accent-violet-light); }
 
   .architecture-line {
     width: 1px;
@@ -120,3 +123,4 @@ import { pillars } from '../../content/pillars';
     .architecture-line { height: 24px; }
   }
 </style>
+

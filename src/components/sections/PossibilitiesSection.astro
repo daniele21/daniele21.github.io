@@ -42,18 +42,47 @@ import { enablements } from '../../content/principles';
   }
 
   .enablement-card {
+    position: relative;
     min-height: 200px;
     padding: var(--space-6);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    background: var(--surface-card);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     box-shadow: var(--shadow-sm);
-    transition: transform 150ms ease, box-shadow 150ms ease;
+    overflow: hidden;
+    transition: transform var(--duration-base) var(--ease-out-expo),
+                box-shadow var(--duration-base) var(--ease-out-expo),
+                border-color var(--duration-base) ease;
+  }
+
+  .enablement-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-blue);
+    opacity: 0.8;
+  }
+
+  .enablement-card:nth-child(2)::before,
+  .enablement-card:nth-child(5)::before,
+  .enablement-card:nth-child(8)::before {
+    background: var(--accent-teal);
+  }
+
+  .enablement-card:nth-child(3)::before,
+  .enablement-card:nth-child(6)::before {
+    background: var(--accent-violet);
   }
 
   .enablement-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
     box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
   }
 
   .enablement-card svg {
@@ -64,21 +93,31 @@ import { enablements } from '../../content/principles';
     stroke-width: 1.6;
     stroke-linecap: round;
     stroke-linejoin: round;
+    transition: transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  .enablement-card:hover svg {
+    transform: scale(1.12);
   }
 
   .enablement-card:nth-child(2) svg,
-  .enablement-card:nth-child(4) svg { stroke: var(--accent-teal); }
-  .enablement-card:nth-child(3) svg { stroke: var(--accent-violet); }
+  .enablement-card:nth-child(5) svg,
+  .enablement-card:nth-child(8) svg { stroke: var(--accent-teal); }
+  .enablement-card:nth-child(3) svg,
+  .enablement-card:nth-child(6) svg { stroke: var(--accent-violet); }
 
   .enablement-card h3 {
     margin: var(--space-5) 0 var(--space-2);
     font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
   }
 
   .enablement-card p {
     margin: 0;
     color: var(--ink-muted);
     font-size: var(--text-small);
+    line-height: 1.5;
   }
 
   @media (max-width: 1040px) {
@@ -89,3 +128,4 @@ import { enablements } from '../../content/principles';
     .enablement-grid { grid-template-columns: 1fr; }
   }
 </style>
+
