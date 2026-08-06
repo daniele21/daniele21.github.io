@@ -1,81 +1,335 @@
 ---
 /**
- * PrinciplesSection - Guiding Principles pill row.
+ * PrinciplesSection - Prominent Guiding Architectural Principles.
+ * Redesigned into executive pillar cards with descriptions, gradient avatars,
+ * number badges, and signature brand accents.
  */
 import { principles } from '../../content/principles';
 ---
 
 <section class="section section-principles" id="principles" aria-labelledby="principles-title">
+  <div class="brand-ambient-glow" aria-hidden="true"></div>
+
   <div class="shell">
-    <div class="section-heading reveal">
+    <div class="section-heading">
       <div>
-        <p class="section-kicker">GUIDING PRINCIPLES</p>
-        <h2 id="principles-title">Privacy-first is an <strong>architectural discipline</strong></h2>
+        <p class="section-kicker">
+          <span class="kicker-dot"></span>
+          GUIDING ARCHITECTURAL PRINCIPLES
+        </p>
+        <h2 id="principles-title">
+          Privacy-first is an <span class="brand-signature-text">architectural discipline</span>
+        </h2>
       </div>
-      <p>Tenets guiding technical decisions across <em>infrastructure and application layers</em>.</p>
+      <p class="section-subtitle">
+        Core tenets guiding engineering decisions across <em>infrastructure and application layers</em>.
+      </p>
     </div>
 
-    <div class="principle-row reveal" aria-label="Guiding product and engineering principles">
+    <div class="principles-grid">
       {principles.map((p, index) => (
-        <div class="principle-item">
-          {index === 0 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>}
-          {index === 1 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>}
-          {index === 2 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>}
-          {index === 3 && <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>}
-          {index === 4 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>}
-          <span set:html={p.title}></span>
-        </div>
+        <article class={`principle-card col-step-${(index % 4) + 1}`}>
+          <div class="card-top-bar" aria-hidden="true"></div>
+
+          <div class="card-header">
+            <div class="icon-avatar">
+              {index === 0 && (
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+              )}
+              {index === 1 && (
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>
+              )}
+              {index === 2 && (
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+              )}
+              {index === 3 && (
+                <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              )}
+              {index === 4 && (
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              )}
+            </div>
+
+            <span class="number-badge">0{index + 1}</span>
+          </div>
+
+          <div class="card-body">
+            <h3 set:html={p.title}></h3>
+            <p>{p.description}</p>
+          </div>
+        </article>
       ))}
     </div>
   </div>
 </section>
 
 <style>
-  .principle-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-3);
-    margin-top: var(--space-8);
+  .section-principles {
+    position: relative;
+    background: var(--surface-canvas);
+    border-block: 1px solid var(--border-subtle);
+    padding: clamp(60px, 8vw, 96px) 0;
+    overflow: hidden;
   }
 
-  .principle-item {
+  .brand-ambient-glow {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 850px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.08), transparent 70%);
+    filter: blur(85px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  [data-theme="dark"] .brand-ambient-glow {
+    background: radial-gradient(ellipse at center, rgba(34, 211, 238, 0.1), transparent 75%);
+  }
+
+  .shell {
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-10);
+  }
+
+  .section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: #1d4ed8;
+    margin-bottom: var(--space-2);
+  }
+
+  [data-theme="dark"] .section-kicker {
+    color: #38bdf8;
+  }
+
+  .kicker-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1d4ed8;
+    box-shadow: 0 0 10px #2563eb;
+    animation: kicker-pulse 2s infinite ease-in-out;
+  }
+
+  @keyframes kicker-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.4); opacity: 1; }
+  }
+
+  .brand-signature-text {
+    background-image: linear-gradient(90deg, #1d4ed8 0%, #0891b2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: #1d4ed8;
+    display: inline-block;
+    font-weight: 850;
+  }
+
+  [data-theme="dark"] .brand-signature-text {
+    background-image: linear-gradient(90deg, #60a5fa 0%, #22d3ee 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: #60a5fa;
+  }
+
+  .section-subtitle {
+    margin: 0;
+    font-size: var(--text-body);
+    color: var(--ink-muted);
+    max-width: 420px;
+    text-align: right;
+  }
+
+  /* Grid Architecture */
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .principle-card {
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+    padding: 28px 24px;
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+    transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 300ms ease;
+    overflow: hidden;
+  }
+
+  /* Center the 4th and 5th items nicely on 3-col grid */
+  .principle-card:nth-child(4) {
+    grid-column: 1 / span 1;
+  }
+
+  @media (min-width: 1041px) {
+    .principles-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .principle-card:nth-child(1),
+    .principle-card:nth-child(2),
+    .principle-card:nth-child(3) {
+      grid-column: span 2;
+    }
+    .principle-card:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    .principle-card:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+  }
+
+  /* Subtle Shimmer Sweep */
+  .principle-card::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -70%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transform: rotate(25deg);
+    transition: left 750ms cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+
+  .principle-card:hover::after {
+    left: 140%;
+  }
+
+  .principle-card:hover {
+    transform: translateY(-6px);
+  }
+
+  /* Top Accent Bar per Column */
+  .card-top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+  }
+
+  .principle-card.col-step-1 .card-top-bar { background: #1d4ed8 !important; }
+  .principle-card.col-step-2 .card-top-bar { background: #2563eb !important; }
+  .principle-card.col-step-3 .card-top-bar { background: #0284c7 !important; }
+  .principle-card.col-step-4 .card-top-bar { background: #0891b2 !important; }
+
+  .card-header {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
-    padding: 12px 22px;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-full);
-    color: var(--ink);
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    font-size: var(--text-small);
-    font-weight: 650;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--duration-fast) ease,
-                border-color var(--duration-fast) ease,
-                box-shadow var(--duration-fast) ease;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
   }
 
-  .principle-item:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent-blue-light);
-    box-shadow: var(--shadow-md);
+  /* Icon Avatars with Column Color Accent */
+  .icon-avatar {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #1d4ed8;
+    transition: transform var(--duration-fast) ease;
   }
 
-  .principle-item svg {
-    width: 18px;
-    height: 18px;
+  .principle-card.col-step-1 .icon-avatar { background: #1d4ed8 !important; box-shadow: 0 4px 14px rgba(29, 78, 216, 0.35); }
+  .principle-card.col-step-2 .icon-avatar { background: #2563eb !important; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); }
+  .principle-card.col-step-3 .icon-avatar { background: #0284c7 !important; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); }
+  .principle-card.col-step-4 .icon-avatar { background: #0891b2 !important; box-shadow: 0 4px 14px rgba(8, 145, 178, 0.35); }
+
+  .principle-card:hover .icon-avatar {
+    transform: scale(1.08) rotate(-2deg);
+  }
+
+  .icon-avatar svg {
+    width: 24px;
+    height: 24px;
     fill: none;
-    stroke: var(--accent-blue);
-    stroke-width: 1.8;
+    stroke: #ffffff !important;
+    stroke-width: 2.2;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
+  /* Number Badges */
+  .number-badge {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 850;
+    padding: 3px 9px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+
+  .principle-card.col-step-1 .number-badge { color: #1d4ed8 !important; background: rgba(29, 78, 216, 0.12) !important; border: 1.5px solid rgba(29, 78, 216, 0.35) !important; }
+  .principle-card.col-step-2 .number-badge { color: #2563eb !important; background: rgba(37, 99, 235, 0.12) !important; border: 1.5px solid rgba(37, 99, 235, 0.35) !important; }
+  .principle-card.col-step-3 .number-badge { color: #0284c7 !important; background: rgba(2, 132, 199, 0.12) !important; border: 1.5px solid rgba(2, 132, 199, 0.35) !important; }
+  .principle-card.col-step-4 .number-badge { color: #0891b2 !important; background: rgba(8, 145, 178, 0.12) !important; border: 1.5px solid rgba(8, 145, 178, 0.35) !important; }
+
+  [data-theme="dark"] .principle-card.col-step-1 .number-badge { color: #60a5fa !important; background: rgba(96, 165, 250, 0.18) !important; border-color: rgba(96, 165, 250, 0.45) !important; }
+  [data-theme="dark"] .principle-card.col-step-2 .number-badge { color: #60a5fa !important; background: rgba(96, 165, 250, 0.18) !important; border-color: rgba(96, 165, 250, 0.45) !important; }
+  [data-theme="dark"] .principle-card.col-step-3 .number-badge { color: #38bdf8 !important; background: rgba(56, 189, 248, 0.18) !important; border-color: rgba(56, 189, 248, 0.45) !important; }
+  [data-theme="dark"] .principle-card.col-step-4 .number-badge { color: #22d3ee !important; background: rgba(34, 211, 238, 0.18) !important; border-color: rgba(34, 211, 238, 0.45) !important; }
+
+  /* Hover Card Borders */
+  .principle-card.col-step-1:hover { border-color: #1d4ed8; box-shadow: 0 16px 36px rgba(29, 78, 216, 0.22); }
+  .principle-card.col-step-2:hover { border-color: #2563eb; box-shadow: 0 16px 36px rgba(37, 99, 235, 0.22); }
+  .principle-card.col-step-3:hover { border-color: #0284c7; box-shadow: 0 16px 36px rgba(2, 132, 199, 0.22); }
+  .principle-card.col-step-4:hover { border-color: #0891b2; box-shadow: 0 16px 36px rgba(8, 145, 178, 0.22); }
+
+  .card-body h3 {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+
+  .card-body p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1040px) {
+    .section-heading { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+    .section-subtitle { text-align: left; max-width: 100%; }
+    .principles-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .principle-card:nth-child(4) { grid-column: auto; }
+  }
+
   @media (max-width: 580px) {
-    .principle-row { justify-content: flex-start; }
+    .principles-grid { grid-template-columns: 1fr; }
+    .principle-card { padding: var(--space-5); }
   }
 </style>
 

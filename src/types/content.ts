@@ -78,6 +78,9 @@ export interface CredibilityProof {
   subtitle: string;
   description: string;
   iconType: 'leadership' | 'articles' | 'mentoring' | 'award';
+  metric?: string;
+  tag?: string;
+  accent?: 'indigo' | 'cyan' | 'blue' | 'amber';
 }
 
 /** Site metadata for SEO */

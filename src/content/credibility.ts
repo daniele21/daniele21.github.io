@@ -16,6 +16,9 @@ export const credibilityProofs: CredibilityProof[] = [
     description:
       'Experience leading AI initiatives in complex organisations, turning experiments into adopted, governed, and scaled systems.',
     iconType: 'leadership',
+    metric: 'Enterprise',
+    tag: 'Scale & Governance',
+    accent: 'indigo',
   },
   {
     title: '80+ Articles Published',
@@ -23,6 +26,9 @@ export const credibilityProofs: CredibilityProof[] = [
     description:
       'Long-form research, model evaluations, and practical LLM insights shared with the technical community.',
     iconType: 'articles',
+    metric: '80+',
+    tag: 'Research & Insights',
+    accent: 'cyan',
   },
   {
     title: '150+ AI Projects Reviewed',
@@ -30,6 +36,9 @@ export const credibilityProofs: CredibilityProof[] = [
     description:
       'Hands-on feedback, architecture guidance, and mentoring for emerging AI engineers and technical teams.',
     iconType: 'mentoring',
+    metric: '150+',
+    tag: 'Engineering Mentorship',
+    accent: 'blue',
   },
   {
     title: 'Nova 111 (2022)',
@@ -37,5 +46,8 @@ export const credibilityProofs: CredibilityProof[] = [
     description:
       'Selected by Nova Talent among emerging Italian talent driving innovation and technology leadership.',
     iconType: 'award',
+    metric: 'Top 111',
+    tag: 'Award & Recognition',
+    accent: 'amber',
   },
 ];
