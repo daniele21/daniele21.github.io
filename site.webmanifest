@@ -1,0 +1,20 @@
+{
+  "name": "Daniele Moltisanti",
+  "short_name": "Daniele Moltisanti",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f9ff",
+  "theme_color": "#f7f9ff",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
