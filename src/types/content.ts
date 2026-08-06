@@ -34,7 +34,7 @@ export interface Pillar {
 
 /** Reference application data */
 export interface ReferenceApplication {
-  id: 'closedroom' | 'aura-finance';
+  id: 'closedroom' | 'redact-guard' | 'aura-finance';
   category: string;
   name: string;
   tagline: string;

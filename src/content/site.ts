@@ -7,11 +7,11 @@ import type { SiteMetadata, NavItem } from '../types/content';
 export const siteMetadata: SiteMetadata = {
   title: 'Daniele Moltisanti - Building Privacy-First AI Products',
   description:
-    'I build reusable local-AI infrastructure for desktop and Android, then validate it through privacy-first products such as ClosedRoom and Aura Finance.',
+    'I build reusable local AI and data-protection foundations across desktop and mobile, validated through privacy-first products like ClosedRoom, RedactGuard, and Aura Finance.',
   canonical: 'https://daniele21.github.io/',
   socialTitle: 'Building the infrastructure for privacy-first AI products',
   socialDescription:
-    'Local LLMs, private speech recognition and Android on-device inference, tested through real applications.',
+    'Local inference, private speech recognition, document anonymization, and Android on-device AI, validated through real applications.',
   ogImage: 'https://daniele21.github.io/social-card.svg',
 };
 

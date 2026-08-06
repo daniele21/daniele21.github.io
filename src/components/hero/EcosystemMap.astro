@@ -7,8 +7,8 @@
 
 <figure class="ecosystem-map reveal" aria-labelledby="ecosystem-map-caption">
   <figcaption id="ecosystem-map-caption" class="sr-only">
-    Applications such as ClosedRoom and Aura Finance are built on local LLM,
-    speech recognition and Android infrastructure running on private user-owned
+    Applications such as ClosedRoom, RedactGuard, and Aura Finance are built on local LLM,
+    speech recognition, and Android infrastructure running on private user-owned
     devices, with no cloud required.
   </figcaption>
 
@@ -71,6 +71,12 @@
         <path d="M11 12V8a5 5 0 0 1 10 0v4M13 8v6m6-6v6" />
         <path d="M10 15h12c0 3 4 3.5 4 7.5 0 3.5-2.4 5.7-5.6 5.7H11c-3.2 0-5-2.2-5-5.7 0-4 4-4.5 4-7.5Z" />
         <path d="M11.5 22.5h9" />
+      </symbol>
+      <symbol id="icon-redact" viewBox="0 0 32 32">
+        <path d="M5 3h14l6 6v10M19 3v6h6M5 3v24c0 1.1.9 2 2 2h12" />
+        <path d="M9 10h10M9 14h13M9 18h11M9 22h8" stroke-width="2.6" />
+        <path d="M22 22v-2.5a2.5 2.5 0 0 1 5 0V22" />
+        <rect x="20.5" y="22" width="8" height="7" rx="1" fill="currentColor" />
       </symbol>
       <symbol id="icon-cube" viewBox="0 0 32 32">
         <path d="m16 3 10 5.8-10 6-10-6L16 3Z" />
@@ -233,27 +239,35 @@
           fill="url(#surface-glow)"
         />
 
-        <use class="feature-icon app-icon" href="#icon-camera" x="252" y="52" width="31" height="31" />
-        <text class="feature-title" x="299" y="51">ClosedRoom</text>
-        <text class="feature-copy" x="299" y="70">
-          <tspan x="299" dy="0">Private meeting</tspan>
-          <tspan x="299" dy="14">intelligence</tspan>
+        <line class="feature-separator" x1="348" y1="46" x2="348" y2="92" />
+        <line class="feature-separator" x1="498" y1="46" x2="498" y2="92" />
+
+        <use class="feature-icon app-icon" href="#icon-camera" x="212" y="52" width="30" height="30" />
+        <text class="feature-title" x="248" y="51">ClosedRoom</text>
+        <text class="feature-copy" x="248" y="70">
+          <tspan x="248" dy="0">Private</tspan>
+          <tspan x="248" dy="14">conversations</tspan>
         </text>
 
-        <use class="feature-icon app-icon" href="#icon-aura" x="410" y="51" width="31" height="31" />
-        <text class="feature-title" x="456" y="51">Aura Finance</text>
-        <text class="feature-copy" x="456" y="70">
-          <tspan x="456" dy="0">Privacy-first</tspan>
-          <tspan x="456" dy="14">personal finance</tspan>
+        <use class="feature-icon app-icon" href="#icon-redact" x="362" y="52" width="30" height="30" />
+        <text class="feature-title" x="398" y="51">RedactGuard</text>
+        <text class="feature-copy" x="398" y="70">
+          <tspan x="398" dy="0">Sensitive</tspan>
+          <tspan x="398" dy="14">documents</tspan>
         </text>
 
-        <text class="more-label" x="575" y="73">+ More</text>
+        <use class="feature-icon app-icon" href="#icon-aura" x="512" y="52" width="30" height="30" />
+        <text class="feature-title" x="548" y="51">Aura Finance</text>
+        <text class="feature-copy" x="548" y="70">
+          <tspan x="548" dy="0">Financial</tspan>
+          <tspan x="548" dy="14">data</tspan>
+        </text>
       </g>
     </g>
   </svg>
 
   <ol class="sr-only">
-    <li>Applications: ClosedRoom, Aura Finance, and more.</li>
+    <li>Applications: ClosedRoom, RedactGuard, and Aura Finance.</li>
     <li>Infrastructure: Local LLM Server, Local ASR Server, and Android LLM Harness.</li>
     <li>Hardware: laptop, desktop, and Android devices, with no cloud required.</li>
   </ol>

@@ -7,7 +7,7 @@ import type { ReferenceApplication } from '../types/content';
 export const applications: ReferenceApplication[] = [
   {
     id: 'closedroom',
-    category: 'PRIVATE MEETING INTELLIGENCE',
+    category: 'PRIVATE CONVERSATIONS',
     name: 'ClosedRoom',
     tagline: 'Privacy-first <strong>meeting intelligence</strong>.',
     headline:
@@ -16,12 +16,12 @@ export const applications: ReferenceApplication[] = [
       'Local-first meeting capture, Whisper transcription and structured insights. <strong>Your conversations stay 100% on-device.</strong>',
     features: ['Transcription', 'Summaries', 'Action Items', 'Search'],
     validates: [
-      'End-to-end <strong>local audio capture & LLM analysis</strong>',
-      'Integration between <em>Local ASR</em> and <em>Local LLM Server</em>',
-      'Installable <strong>desktop app packaging & user experience</strong>',
+      'Local <strong>ASR & private speech recognition</strong>',
+      'Local <strong>LLM analysis & structured insights</strong>',
+      'Installable <strong>desktop app packaging & offline workflows</strong>',
     ],
     learning:
-      'ClosedRoom forces the infrastructure to work as a product, not only as two independent servers.',
+      'ClosedRoom demonstrates that sensitive voice conversations can be recorded, transcribed, and synthesized entirely on-device without cloud dependencies.',
     status: 'active-development',
     statusLabel: 'ACTIVE',
     logoPath: '/images/closedroom/logo.png',
@@ -30,8 +30,32 @@ export const applications: ReferenceApplication[] = [
       'Meeting audio → Local ASR Server → Transcript → Local LLM Server → Summary and actions',
   },
   {
+    id: 'redact-guard',
+    category: 'SENSITIVE DOCUMENTS',
+    name: 'RedactGuard',
+    tagline: 'Local <strong>document anonymization & PII protection</strong>.',
+    headline:
+      'Detect personal information, review redactions, and export safer documents <em>entirely locally.</em>',
+    description:
+      'A local document-anonymisation workflow that detects PII via local LLMs, provides human-in-the-loop review, and selectively redacts sensitive data. <strong>Data minimisation built into the architecture.</strong>',
+    features: ['Doc Intelligence', 'PII Detection', 'Human Review', 'Selective Redaction', 'Safe Export'],
+    validates: [
+      'Local <strong>document intelligence & PII detection</strong>',
+      'Human review & <strong>selective AI redaction</strong>',
+      'Data minimisation & <strong>safe document portability</strong>',
+    ],
+    learning:
+      'RedactGuard demonstrates that privacy-first AI goes beyond offline processing: it gives users explicit control and data minimisation before sharing documents.',
+    status: 'active-development',
+    statusLabel: 'ACTIVE',
+    logoPath: '/images/redact-guard/logo.png',
+    repositoryUrl: 'https://github.com/daniele21/redact-guard',
+    currentRelationship:
+      'PDF → Docling Markdown → Local LLM PII Detection → User Review → Selective Redaction → Anonymized Export',
+  },
+  {
     id: 'aura-finance',
-    category: 'LOCAL-FIRST PERSONAL FINANCE',
+    category: 'PERSONAL FINANCIAL DATA',
     name: 'Aura Finance',
     tagline: 'Privacy-first <strong>personal finance</strong>.',
     headline:
@@ -40,12 +64,12 @@ export const applications: ReferenceApplication[] = [
       'Local AI for transaction categorization, forecasting and budget planning. <strong>Your financial data never leaves your device.</strong>',
     features: ['Spending Insights', 'Forecasting', 'Budgets', 'Privacy First'],
     validates: [
-      '<strong>Local-first financial data model</strong> & local reasoning',
-      'Zero-knowledge <em>encrypted optional cloud sync</em>',
-      'Proving ground for <em>Android on-device AI</em> integration',
+      '<strong>Privacy-first product design</strong> & local data model',
+      'Mobile UX & <em>local storage sovereignty</em>',
+      'Proving ground for <em>Android on-device AI integration</em>',
     ],
     learning:
-      'Aura Finance tests whether privacy-first choices can remain understandable and useful in an everyday consumer product.',
+      'Aura Finance demonstrates data sovereignty, keeping financial records strictly under the user’s control with optional encrypted sync.',
     status: 'experimental',
     statusLabel: 'IN PROGRESS',
     logoPath: '/images/aura/logo.png',
