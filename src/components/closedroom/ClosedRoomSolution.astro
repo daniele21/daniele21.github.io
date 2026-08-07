@@ -1,0 +1,161 @@
+---
+/**
+ * ClosedRoomSolution.astro
+ * Solution flow section ("The product idea").
+ */
+import { closedRoomData } from '../../content/closedRoom';
+
+const { solution } = closedRoomData;
+---
+
+<section class="section" id="solution">
+  <div class="shell">
+    <div class="solution-card reveal">
+      <div class="solution-intro">
+        <div class="kicker">{solution.kicker}</div>
+        <h2>
+          {solution.titleLine1}<br />
+          <span class="teal-accent">{solution.titleLine2}</span>
+        </h2>
+        <p class="lead">{solution.lede}</p>
+      </div>
+
+      <div class="flow-grid">
+        {solution.steps.map((item) => (
+          <div class="flow-step">
+            <div class="flow-num">{item.step}</div>
+            <b>{item.title}</b>
+            <span>{item.description}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: clamp(60px, 7vw, 96px) 0;
+  }
+
+  .solution-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+    gap: clamp(28px, 4vw, 48px);
+    align-items: center;
+    padding: clamp(32px, 4.5vw, 56px);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, #0b2539, #16435e 68%, #0f766e);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .solution-card::after {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    right: -145px;
+    bottom: -185px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(119, 236, 216, 0.22), transparent 68%);
+    pointer-events: none;
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: #9dd7e9;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.2vw, 2.8rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-top: 0;
+    margin-bottom: var(--space-3);
+    font-weight: 800;
+    color: #ffffff;
+  }
+
+  .teal-accent {
+    color: #76e0ce;
+  }
+
+  .lead {
+    font-size: var(--text-body-lg);
+    line-height: 1.65;
+    color: #d7e8ef;
+    margin: 0;
+  }
+
+  .flow-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .flow-step {
+    min-height: 120px;
+    padding: var(--space-4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    transition: transform var(--duration-fast) ease, background-color var(--duration-fast) ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.14);
+    }
+  }
+
+  .flow-num {
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #0b2539;
+    font-family: var(--font-display);
+    font-size: 0.76rem;
+    font-weight: 850;
+  }
+
+  .flow-step b {
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: #ffffff;
+  }
+
+  .flow-step span {
+    display: block;
+    color: #cfe2e9;
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 980px) {
+    .solution-card {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 650px) {
+    .flow-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

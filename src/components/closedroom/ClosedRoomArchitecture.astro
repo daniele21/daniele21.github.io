@@ -1,0 +1,147 @@
+---
+/**
+ * ClosedRoomArchitecture.astro
+ * System architecture diagram and technical breakdown.
+ */
+import { closedRoomData } from '../../content/closedRoom';
+
+interface Props {
+  baseUrl: string;
+}
+
+const { baseUrl } = Astro.props;
+const { architecture } = closedRoomData;
+---
+
+<section class="section" id="architecture">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div class="kicker">{architecture.kicker}</div>
+      <h2>
+        {architecture.titleLine1}<br />
+        <span class="accent-text">{architecture.titleLine2}</span>
+      </h2>
+      <p class="lead">{architecture.lede}</p>
+    </div>
+
+    <div class="arch-card reveal">
+      <img
+        data-zoomable
+        src={`${baseUrl}/${architecture.image.replace(/^\//, '')}`}
+        alt="ClosedRoom detailed technical architecture diagram"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="arch-grid reveal">
+      {architecture.points.map((pt) => (
+        <div class="arch-item">
+          <h3>{pt.title}</h3>
+          <p>{pt.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: clamp(60px, 7vw, 96px) 0;
+  }
+
+  .section-head {
+    max-width: 780px;
+    margin-bottom: var(--space-8);
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-top: 0;
+    margin-bottom: var(--space-3);
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .accent-text {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .lead {
+    font-size: var(--text-body-lg);
+    line-height: 1.65;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  .arch-card {
+    padding: 12px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-lg);
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-lg);
+      display: block;
+    }
+  }
+
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+
+  .arch-item {
+    padding: var(--space-5);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .arch-item h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--space-2);
+    color: var(--ink);
+  }
+
+  .arch-item p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+  }
+
+  @media (max-width: 980px) {
+    .arch-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

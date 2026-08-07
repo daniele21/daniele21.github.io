@@ -1,0 +1,172 @@
+---
+/**
+ * ClosedRoomProblem.astro
+ * Problem breakdown section ("Why ClosedRoom exists").
+ */
+import { closedRoomData } from '../../content/closedRoom';
+
+const { problem } = closedRoomData;
+---
+
+<section class="section section-alt" id="why">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div class="kicker">{problem.kicker}</div>
+      <h2>
+        {problem.titleLine1}<br />
+        <span class="accent-text">{problem.titleLine2}</span>
+      </h2>
+      <p class="lead">{problem.lede}</p>
+    </div>
+
+    <div class="problem-grid reveal">
+      {problem.items.map((item) => (
+        <article class="card">
+          <div class={`icon ${item.color}`}>{item.id}</div>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="statement reveal" set:html={problem.statement.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: clamp(60px, 7vw, 96px) 0;
+  }
+
+  .section-alt {
+    background: var(--surface-muted);
+    border-block: 1px solid var(--border-subtle);
+  }
+
+  .section-head {
+    max-width: 780px;
+    margin-bottom: var(--space-8);
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-top: 0;
+    margin-bottom: var(--space-3);
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .accent-text {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .lead {
+    font-size: var(--text-body-lg);
+    line-height: 1.65;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  .card {
+    padding: var(--space-6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    margin-bottom: var(--space-4);
+    border-radius: var(--radius-md);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+
+  .icon.blue {
+    color: var(--accent-blue);
+    background: var(--surface-blue);
+  }
+
+  .icon.teal {
+    color: var(--accent-teal);
+    background: var(--surface-teal);
+  }
+
+  .icon.violet {
+    color: var(--accent-violet);
+    background: var(--surface-violet);
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--space-2);
+    color: var(--ink);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.925rem;
+    line-height: 1.6;
+    color: var(--ink-muted);
+  }
+
+  .statement {
+    margin-top: var(--space-6);
+    padding: var(--space-5) var(--space-6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--surface-blue), var(--surface-card) 78%);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.5;
+
+    :global(strong) {
+      color: var(--accent-blue-dark, var(--accent-blue));
+      font-weight: 800;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .problem-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

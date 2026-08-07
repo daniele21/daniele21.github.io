@@ -27,6 +27,7 @@ export const applications: ReferenceApplication[] = [
     status: 'active-development',
     statusLabel: 'ACTIVE',
     logoPath: '/images/closedroom/logo.png',
+    pageUrl: '/closedroom',
     repositoryUrl: 'https://github.com/daniele21/local-asr-server',
     currentRelationship:
       'Meeting audio → Local ASR Server → Transcript → Local LLM Server → Summary and actions',

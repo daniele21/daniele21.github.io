@@ -33,6 +33,11 @@ export const navigation: NavItem[] = [
     href: '#applications',
     children: [
       {
+        label: 'ClosedRoom',
+        href: 'closedroom',
+        logoPath: 'images/closedroom/logo.png',
+      },
+      {
         label: 'RedactGuard',
         href: 'redact-guard',
         logoPath: 'images/redact-guard/logo.png',

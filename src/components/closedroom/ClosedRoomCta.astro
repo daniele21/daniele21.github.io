@@ -1,0 +1,108 @@
+---
+/**
+ * ClosedRoomCta.astro
+ * Call to action banner at the bottom of ClosedRoom subpage.
+ */
+import { closedRoomData } from '../../content/closedRoom';
+
+const { cta } = closedRoomData;
+---
+
+<section class="section">
+  <div class="shell">
+    <div class="cta-box reveal">
+      <div class="cta-content">
+        <div class="kicker">{cta.kicker}</div>
+        <h2>
+          {cta.titleLine1}<br />
+          <span class="teal-accent">{cta.titleLine2}</span>
+        </h2>
+        <p>{cta.lede}</p>
+      </div>
+
+      <a class="button button-cta" href={cta.githubUrl} target="_blank" rel="noreferrer">
+        Explore the project <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: clamp(60px, 7vw, 96px) 0;
+  }
+
+  .cta-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: clamp(24px, 4vw, 48px);
+    padding: clamp(36px, 5vw, 56px);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, #0b2539, #16435e 68%, #0f766e);
+    color: #ffffff;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: #9dd7e9;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.2vw, 2.8rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-top: 0;
+    margin-bottom: var(--space-3);
+    font-weight: 800;
+    color: #ffffff;
+  }
+
+  .teal-accent {
+    color: #76e0ce;
+  }
+
+  p {
+    color: #d6e6ec;
+    margin: 0;
+    max-width: 680px;
+    font-size: var(--text-body-lg);
+    line-height: 1.6;
+  }
+
+  .button-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    background: #ffffff;
+    color: var(--surface-inverse);
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: 800;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  @media (max-width: 980px) {
+    .cta-box {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

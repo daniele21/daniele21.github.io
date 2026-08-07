@@ -43,7 +43,11 @@
   :global(.surface-shot img),
   :global(.product-screenshot img),
   :global(.hero-architecture-image),
-  :global(.tech-img) {
+  :global(.tech-img),
+  :global(.visual-stage img),
+  :global(.app-shot img),
+  :global(.shot img),
+  :global(.arch-card img) {
     cursor: zoom-in !important;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
@@ -54,7 +58,11 @@
   :global(.gateway-visual img:hover),
   :global(.tech-panel img:hover),
   :global(.surface-shot img:hover),
-  :global(.product-screenshot img:hover) {
+  :global(.product-screenshot img:hover),
+  :global(.visual-stage img:hover),
+  :global(.app-shot img:hover),
+  :global(.shot img:hover),
+  :global(.arch-card img:hover) {
     transform: scale(1.015);
   }
 
@@ -279,6 +287,10 @@
       '.hero-architecture-image',
       '.tech-img',
       'img.zoomable',
+      '.visual-stage img',
+      '.app-shot img',
+      '.shot img',
+      '.arch-card img',
     ].join(', ');
 
     function attachZoomListeners() {

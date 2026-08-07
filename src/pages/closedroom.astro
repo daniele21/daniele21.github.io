@@ -1,0 +1,59 @@
+---
+/**
+ * closedroom.astro
+ * Modular deep-dive page for ClosedRoom project.
+ * Composes dedicated section components from src/components/closedroom/
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ClosedRoomHeader from '../components/closedroom/ClosedRoomHeader.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ClosedRoomHero from '../components/closedroom/ClosedRoomHero.astro';
+import ClosedRoomProblem from '../components/closedroom/ClosedRoomProblem.astro';
+import ClosedRoomSolution from '../components/closedroom/ClosedRoomSolution.astro';
+import ClosedRoomValues from '../components/closedroom/ClosedRoomValues.astro';
+import ClosedRoomProduct from '../components/closedroom/ClosedRoomProduct.astro';
+import ClosedRoomFlow from '../components/closedroom/ClosedRoomFlow.astro';
+import ClosedRoomArchitecture from '../components/closedroom/ClosedRoomArchitecture.astro';
+import ClosedRoomTrust from '../components/closedroom/ClosedRoomTrust.astro';
+import ClosedRoomCta from '../components/closedroom/ClosedRoomCta.astro';
+
+import { closedRoomData } from '../content/closedRoom';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Why ClosedRoom', href: '#why' },
+  { label: 'Solution', href: '#solution' },
+  { label: 'Product Proof', href: '#product' },
+  { label: 'End-to-End Flow', href: '#flow' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Privacy Boundary', href: '#trust' },
+];
+---
+
+<BaseLayout
+  title={closedRoomData.meta.title}
+  description={closedRoomData.meta.description}
+>
+  <ClosedRoomHeader baseUrl={baseUrl} slot="header" />
+
+  <ProductSubHeader
+    title="ClosedRoom"
+    badge="Mac App"
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/local-asr-server/tree/speaker_detection' }}
+  />
+
+  <main id="top">
+    <ClosedRoomHero baseUrl={baseUrl} />
+    <ClosedRoomProblem />
+    <ClosedRoomSolution />
+    <ClosedRoomValues />
+    <ClosedRoomProduct baseUrl={baseUrl} />
+    <ClosedRoomFlow baseUrl={baseUrl} />
+    <ClosedRoomArchitecture baseUrl={baseUrl} />
+    <ClosedRoomTrust />
+    <ClosedRoomCta />
+  </main>
+</BaseLayout>
