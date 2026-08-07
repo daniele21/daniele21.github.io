@@ -96,7 +96,7 @@ export interface RedactGuardData {
 
 export const redactGuardData: RedactGuardData = {
   meta: {
-    title: "RedactGuard — Local-first document anonymization",
+    title: "RedactGuard, Local-first document anonymization",
     description: "Detect sensitive data locally, review every finding, and share only what is needed.",
   },
   hero: {

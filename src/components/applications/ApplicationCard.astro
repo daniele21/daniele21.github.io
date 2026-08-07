@@ -9,9 +9,13 @@ interface Props {
 }
 
 const { application } = Astro.props;
+const targetUrl = application.pageUrl ? `${import.meta.env.BASE_URL}${application.pageUrl.replace(/^\//, '')}` : null;
 ---
 
-<article class="application-card reveal">
+<article 
+  class={`application-card reveal ${targetUrl ? 'is-clickable' : ''}`}
+  data-href={targetUrl || undefined}
+>
   <div class="card-top-bar">
     {application.microLabel ? (
       <span class="app-micro-label">{application.microLabel}</span>
@@ -22,8 +26,8 @@ const { application } = Astro.props;
     <img src={`${import.meta.env.BASE_URL}${application.logoPath.replace(/^\//, '')}`} alt={`${application.name} logo`} class="application-logo-img" />
     <div>
       <h3>
-        {application.pageUrl ? (
-          <a href={`${import.meta.env.BASE_URL}${application.pageUrl.replace(/^\//, '')}`} class="app-title-link">
+        {targetUrl ? (
+          <a href={targetUrl} class="app-title-link">
             {application.name} →
           </a>
         ) : (
@@ -60,16 +64,32 @@ const { application } = Astro.props;
         ))}
       </ul>
       <div class="project-links">
-        {application.pageUrl && (
-          <a href={`${import.meta.env.BASE_URL}${application.pageUrl.replace(/^\//, '')}`} class="deep-dive-btn">Read Deep-Dive →</a>
+        {targetUrl && (
+          <a href={targetUrl} class="deep-dive-btn">Read Deep-Dive →</a>
         )}
         {application.repositoryUrl && (
-          <a href={application.repositoryUrl} target="_blank" rel="noreferrer">View repository ↗</a>
+          <a href={application.repositoryUrl} target="_blank" rel="noreferrer" class="repo-link">View repository ↗</a>
         )}
       </div>
     </div>
   </details>
 </article>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.application-card.is-clickable').forEach((card) => {
+    card.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      // Do not trigger card navigation if clicking interactive elements inside
+      if (target.closest('a, details, summary, button')) {
+        return;
+      }
+      const href = card.dataset.href;
+      if (href) {
+        window.location.href = href;
+      }
+    });
+  });
+</script>
 
 <style>
   .application-card {
@@ -86,6 +106,10 @@ const { application } = Astro.props;
     transition: transform var(--duration-base) var(--ease-out-expo),
                 box-shadow var(--duration-base) var(--ease-out-expo),
                 border-color var(--duration-base) ease;
+  }
+
+  .application-card.is-clickable {
+    cursor: pointer;
   }
 
   .application-card:hover {

@@ -1,7 +1,7 @@
 ---
 /**
  * RedactGuardHero.astro
- * Hero section for RedactGuard subpage, 100% aligned with Home Hero dimensions and typography.
+ * Hero section for RedactGuard subpage with compact, elegant screenshot card.
  */
 import { redactGuardData } from '../../content/redactGuard';
 interface Props {
@@ -184,15 +184,20 @@ const { hero } = redactGuardData;
   .hero-visual {
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-xl);
-    padding: 12px;
+    padding: 10px;
     background: var(--surface-card);
     box-shadow: var(--shadow-lg);
+    max-width: 480px;
+    margin-inline: auto;
+    width: 100%;
   }
 
   .hero-visual img {
     border-radius: var(--radius-lg);
     width: 100%;
     height: auto;
+    max-height: 380px;
+    object-fit: contain;
     cursor: zoom-in;
   }
 

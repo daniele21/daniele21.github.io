@@ -39,7 +39,7 @@ export const navigation: NavItem[] = [
       },
       {
         label: 'Aura Finance',
-        href: '#applications',
+        href: 'aura-finance',
         logoPath: 'images/aura/logo.png',
       },
     ],

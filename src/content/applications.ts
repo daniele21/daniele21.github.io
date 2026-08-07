@@ -80,6 +80,7 @@ export const applications: ReferenceApplication[] = [
     status: 'experimental',
     statusLabel: 'IN PROGRESS',
     logoPath: '/images/aura/logo.png',
+    pageUrl: '/aura-finance',
     repositoryUrl: 'https://github.com/daniele21/personal-budget',
     currentRelationship: 'Local-first financial data and optional encrypted backup',
     futureRelationship:

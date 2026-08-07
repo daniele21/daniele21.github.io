@@ -121,7 +121,7 @@ export interface HarnessData {
 
 export const harnessData: HarnessData = {
   meta: {
-    title: "Harness — Local AI Gateway for Android",
+    title: "Harness, Local AI Gateway for Android",
     description: "Harness is a local-first Android AI infrastructure project: one gateway, shared model and runtime foundations, measurable on-device inference.",
   },
   hero: {

@@ -1,8 +1,7 @@
 ---
 /**
- * HarnessHeader.astro
- * Dedicated sticky header for the Harness subpage matching SiteHeader 100%.
- * Features ultra-minimalist text + official app logo dropdown menus for Infrastructure and Applications.
+ * AuraHeader.astro
+ * Dedicated sticky header for Aura Finance subpage matching SiteHeader 100%.
  */
 import { navigation } from '../../content/site';
 
@@ -21,9 +20,9 @@ function getHref(href: string) {
 
 <header class="site-header" slot="header" data-header>
   <div class="shell header-inner">
-    <a class="brand" href={`${baseUrl}/#top`} aria-label="Daniele Moltisanti, home">
-      <img src={`${baseUrl}/images/sign_1.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-light" height="36" />
-      <img src={`${baseUrl}/images/sign_dark.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-dark" height="36" />
+    <a class="brand" href={`${import.meta.env.BASE_URL}`} aria-label="Daniele Moltisanti, home">
+      <img src={`${import.meta.env.BASE_URL}images/sign_1.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-light" height="36" />
+      <img src={`${import.meta.env.BASE_URL}images/sign_dark.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-dark" height="36" />
       <span class="brand-name">Daniele Moltisanti</span>
     </a>
 
@@ -78,7 +77,7 @@ function getHref(href: string) {
           <a href={getHref(item.href)} class="nav-link">{item.label}</a>
         )
       ))}
-      <a class="nav-cta" href="https://github.com/daniele21/android-local-llm-harness" target="_blank" rel="noreferrer">GitHub ↗</a>
+      <a class="nav-cta" href="https://github.com/daniele21/personal-budget/tree/new-features" target="_blank" rel="noreferrer">GitHub ↗</a>
     </nav>
   </div>
 </header>
@@ -197,7 +196,6 @@ function getHref(href: string) {
     transform-origin: left;
   }
 
-  /* Ultra-minimalist Dropdown Menu */
   .nav-dropdown {
     position: relative;
     display: inline-flex;

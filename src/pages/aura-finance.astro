@@ -1,0 +1,57 @@
+---
+/**
+ * aura-finance.astro
+ * Modular deep-dive page for Aura Finance project.
+ * Composes dedicated section components from src/components/aurafinance/
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AuraHeader from '../components/aurafinance/AuraHeader.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import AuraHero from '../components/aurafinance/AuraHero.astro';
+import AuraWhy from '../components/aurafinance/AuraWhy.astro';
+import AuraSolution from '../components/aurafinance/AuraSolution.astro';
+import AuraBenefits from '../components/aurafinance/AuraBenefits.astro';
+import AuraProduct from '../components/aurafinance/AuraProduct.astro';
+import AuraPayment from '../components/aurafinance/AuraPayment.astro';
+import AuraArchitecture from '../components/aurafinance/AuraArchitecture.astro';
+import AuraCta from '../components/aurafinance/AuraCta.astro';
+
+import { auraFinanceData } from '../content/auraFinance';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Why Aura', href: '#why' },
+  { label: 'Solution', href: '#solution' },
+  { label: 'Benefits', href: '#benefits' },
+  { label: 'Product', href: '#product' },
+  { label: 'Payment Detection', href: '#payment' },
+  { label: 'Architecture', href: '#architecture' },
+];
+---
+
+<BaseLayout
+  title={auraFinanceData.meta.title}
+  description={auraFinanceData.meta.description}
+>
+  <AuraHeader baseUrl={baseUrl} slot="header" />
+
+  <ProductSubHeader
+    title="Aura Finance"
+    badge="Active App"
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/personal-budget/tree/new-features' }}
+  />
+
+  <main id="top">
+    <AuraHero baseUrl={baseUrl} />
+    <AuraWhy />
+    <AuraSolution />
+    <AuraBenefits />
+    <AuraProduct baseUrl={baseUrl} />
+    <AuraPayment baseUrl={baseUrl} />
+    <AuraArchitecture baseUrl={baseUrl} />
+    <AuraCta />
+  </main>
+</BaseLayout>

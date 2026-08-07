@@ -36,6 +36,8 @@
 <style>
   /* Global zoomable image indicator styles */
   :global(img.zoomable),
+  :global(img[data-zoomable]),
+  :global([data-zoomable] img),
   :global(.gateway-visual img),
   :global(.tech-panel img),
   :global(.surface-shot img),
@@ -47,6 +49,8 @@
   }
 
   :global(img.zoomable:hover),
+  :global(img[data-zoomable]:hover),
+  :global([data-zoomable] img:hover),
   :global(.gateway-visual img:hover),
   :global(.tech-panel img:hover),
   :global(.surface-shot img:hover),
@@ -265,18 +269,20 @@
     }
 
     // Click on target images to open modal
-    function attachZoomListeners() {
-      const selectors = [
-        '.gateway-visual img',
-        '.tech-panel img',
-        '.surface-shot img',
-        '.product-screenshot img',
-        '.hero-architecture-image',
-        '.tech-img',
-        'img.zoomable',
-      ];
+    const ZOOM_SELECTOR = [
+      'img[data-zoomable]',
+      '[data-zoomable] img',
+      '.gateway-visual img',
+      '.tech-panel img',
+      '.surface-shot img',
+      '.product-screenshot img',
+      '.hero-architecture-image',
+      '.tech-img',
+      'img.zoomable',
+    ].join(', ');
 
-      const images = document.querySelectorAll<HTMLImageElement>(selectors.join(', '));
+    function attachZoomListeners() {
+      const images = document.querySelectorAll<HTMLImageElement>(ZOOM_SELECTOR);
       images.forEach((img) => {
         if (img.dataset.hasZoomListener) return;
         img.dataset.hasZoomListener = 'true';
@@ -292,6 +298,20 @@
     }
 
     attachZoomListeners();
+
+    // Global click delegation fallback for dynamically rendered images
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const img = target.closest<HTMLImageElement>(ZOOM_SELECTOR);
+      if (img) {
+        e.preventDefault();
+        e.stopPropagation();
+        const src = img.getAttribute('src') || img.src;
+        const alt = img.getAttribute('alt') || img.title || '';
+        openModal(src, alt);
+      }
+    });
 
     // Re-attach periodically or after DOM updates
     const observer = new MutationObserver(() => attachZoomListeners());

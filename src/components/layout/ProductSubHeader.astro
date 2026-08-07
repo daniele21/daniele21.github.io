@@ -63,7 +63,7 @@ const { title, badge, links, cta } = Astro.props;
 <style>
   .product-subheader {
     position: sticky;
-    top: var(--header-height);
+    top: 0;
     z-index: 40;
     height: 48px;
     background: var(--glass-bg);
@@ -219,7 +219,7 @@ const { title, badge, links, cta } = Astro.props;
 
     // Adjust scroll padding for sections dynamically
     document.querySelectorAll<HTMLElement>('.section, .hero').forEach((sec) => {
-      sec.style.scrollMarginTop = 'calc(var(--header-height) + 56px)';
+      sec.style.scrollMarginTop = '56px';
     });
 
     // IntersectionObserver for ScrollSpy
