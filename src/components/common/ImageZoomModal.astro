@@ -1,0 +1,368 @@
+---
+/**
+ * ImageZoomModal - Reusable Lightbox & Image Zoom component.
+ * Allows users to click on diagrams, architecture visuals, and product screenshots
+ * to open a high-resolution, interactive zoom overlay with mouse wheel zoom, pan,
+ * keyboard shortcuts (ESC to close), and mobile touch support.
+ */
+---
+
+<div id="image-zoom-modal" class="image-zoom-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Image Viewer">
+  <div class="image-zoom-backdrop" id="image-zoom-backdrop"></div>
+  <div class="image-zoom-dialog">
+    <div class="image-zoom-toolbar">
+      <div class="image-zoom-caption" id="image-zoom-caption"></div>
+      <div class="image-zoom-actions">
+        <button type="button" class="image-zoom-btn" id="image-zoom-out" aria-label="Zoom out" title="Zoom out (−)">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+        </button>
+        <button type="button" class="image-zoom-btn" id="image-zoom-in" aria-label="Zoom in" title="Zoom in (+)">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+        </button>
+        <button type="button" class="image-zoom-btn" id="image-zoom-reset" aria-label="Reset zoom" title="Reset zoom (1:1)">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        </button>
+        <button type="button" class="image-zoom-btn image-zoom-close-btn" id="image-zoom-close" aria-label="Close preview" title="Close (ESC)">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+    <div class="image-zoom-viewport" id="image-zoom-viewport">
+      <img id="image-zoom-img" src="" alt="" class="image-zoom-img" draggable="false" />
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Global zoomable image indicator styles */
+  :global(img.zoomable),
+  :global(.gateway-visual img),
+  :global(.tech-panel img),
+  :global(.surface-shot img),
+  :global(.product-screenshot img),
+  :global(.hero-architecture-image),
+  :global(.tech-img) {
+    cursor: zoom-in !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  :global(img.zoomable:hover),
+  :global(.gateway-visual img:hover),
+  :global(.tech-panel img:hover),
+  :global(.surface-shot img:hover),
+  :global(.product-screenshot img:hover) {
+    transform: scale(1.015);
+  }
+
+  /* Lightbox Modal Base */
+  .image-zoom-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .image-zoom-modal.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .image-zoom-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(9, 13, 22, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .image-zoom-dialog {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    width: 95vw;
+    height: 92vh;
+    max-width: 1400px;
+    max-height: 900px;
+    margin: auto;
+    border-radius: 20px;
+    background: rgba(17, 24, 39, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+  }
+
+  .image-zoom-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 20px;
+    background: rgba(15, 23, 42, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+  }
+
+  .image-zoom-caption {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+  }
+
+  .image-zoom-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .image-zoom-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+  }
+
+  .image-zoom-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .image-zoom-close-btn {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+    margin-left: 8px;
+  }
+
+  .image-zoom-close-btn:hover {
+    background: rgba(239, 68, 68, 0.8);
+    color: #ffffff;
+    border-color: #ef4444;
+  }
+
+  .image-zoom-viewport {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    user-select: none;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .image-zoom-viewport.is-dragging {
+    cursor: grabbing;
+  }
+
+  .image-zoom-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transform-origin: center center;
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('image-zoom-modal');
+    const backdrop = document.getElementById('image-zoom-backdrop');
+    const closeBtn = document.getElementById('image-zoom-close');
+    const zoomInBtn = document.getElementById('image-zoom-in');
+    const zoomOutBtn = document.getElementById('image-zoom-out');
+    const resetBtn = document.getElementById('image-zoom-reset');
+    const viewport = document.getElementById('image-zoom-viewport');
+    const zoomImg = document.getElementById('image-zoom-img') as HTMLImageElement | null;
+    const caption = document.getElementById('image-zoom-caption');
+
+    if (!modal || !zoomImg || !viewport) return;
+
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+
+    const MIN_SCALE = 1;
+    const MAX_SCALE = 4;
+    const SCALE_STEP = 0.3;
+
+    function applyTransform(smooth = true) {
+      if (!zoomImg) return;
+      zoomImg.style.transition = smooth ? 'transform 0.18s ease-out' : 'none';
+      zoomImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+
+    function resetZoom() {
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+      applyTransform(true);
+    }
+
+    function openModal(src: string, altText: string) {
+      if (!zoomImg || !modal) return;
+      zoomImg.src = src;
+      zoomImg.alt = altText || 'Image Preview';
+      if (caption) caption.textContent = altText || 'Image Preview';
+      resetZoom();
+      modal.classList.add('is-active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      if (!modal) return;
+      modal.classList.remove('is-active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      setTimeout(() => {
+        if (zoomImg) zoomImg.src = '';
+      }, 250);
+    }
+
+    // Zoom controls
+    function zoomIn() {
+      if (scale < MAX_SCALE) {
+        scale = Math.min(MAX_SCALE, scale + SCALE_STEP);
+        applyTransform(true);
+      }
+    }
+
+    function zoomOut() {
+      if (scale > MIN_SCALE) {
+        scale = Math.max(MIN_SCALE, scale - SCALE_STEP);
+        if (scale === 1) {
+          translateX = 0;
+          translateY = 0;
+        }
+        applyTransform(true);
+      }
+    }
+
+    // Click on target images to open modal
+    function attachZoomListeners() {
+      const selectors = [
+        '.gateway-visual img',
+        '.tech-panel img',
+        '.surface-shot img',
+        '.product-screenshot img',
+        '.hero-architecture-image',
+        '.tech-img',
+        'img.zoomable',
+      ];
+
+      const images = document.querySelectorAll<HTMLImageElement>(selectors.join(', '));
+      images.forEach((img) => {
+        if (img.dataset.hasZoomListener) return;
+        img.dataset.hasZoomListener = 'true';
+        img.classList.add('zoomable');
+        img.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const src = img.getAttribute('src') || img.src;
+          const alt = img.getAttribute('alt') || img.title || '';
+          openModal(src, alt);
+        });
+      });
+    }
+
+    attachZoomListeners();
+
+    // Re-attach periodically or after DOM updates
+    const observer = new MutationObserver(() => attachZoomListeners());
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Event handlers
+    if (backdrop) backdrop.addEventListener('click', closeModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (zoomInBtn) zoomInBtn.addEventListener('click', zoomIn);
+    if (zoomOutBtn) zoomOutBtn.addEventListener('click', zoomOut);
+    if (resetBtn) resetBtn.addEventListener('click', resetZoom);
+
+    // Double click viewport to toggle zoom
+    viewport.addEventListener('dblclick', () => {
+      if (scale > 1) {
+        resetZoom();
+      } else {
+        scale = 2;
+        applyTransform(true);
+      }
+    });
+
+    // Wheel zoom
+    viewport.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? SCALE_STEP : -SCALE_STEP;
+      const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale + delta));
+      if (newScale !== scale) {
+        scale = newScale;
+        if (scale === 1) {
+          translateX = 0;
+          translateY = 0;
+        }
+        applyTransform(false);
+      }
+    }, { passive: false });
+
+    // Drag / Pan functionality
+    viewport.addEventListener('pointerdown', (e) => {
+      if (scale <= 1) return;
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      viewport.classList.add('is-dragging');
+      viewport.setPointerCapture(e.pointerId);
+    });
+
+    viewport.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      applyTransform(false);
+    });
+
+    const stopDragging = (e: PointerEvent) => {
+      if (!isDragging) return;
+      isDragging = false;
+      viewport.classList.remove('is-dragging');
+      try {
+        viewport.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+    };
+
+    viewport.addEventListener('pointerup', stopDragging);
+    viewport.addEventListener('pointercancel', stopDragging);
+
+    // Keyboard ESC to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+        closeModal();
+      }
+    });
+  });
+</script>

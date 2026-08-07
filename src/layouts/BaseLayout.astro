@@ -5,6 +5,7 @@
  */
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
+import ImageZoomModal from '../components/common/ImageZoomModal.astro';
 import { siteMetadata } from '../content/site';
 
 import '../styles/tokens.css';
@@ -97,6 +98,7 @@ const robotsContent = isPreview
     <slot />
   </main>
   <SiteFooter />
+  <ImageZoomModal />
   <script src="../scripts/site.ts"></script>
 </body>
 </html>

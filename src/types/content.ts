@@ -28,6 +28,7 @@ export interface Pillar {
   repositoryUrl: string;
   architectureUrl?: string;
   testUrl?: string;
+  pageUrl?: string;
   /** Color accent identifier for visual differentiation */
   accent: 'teal' | 'blue' | 'violet';
 }

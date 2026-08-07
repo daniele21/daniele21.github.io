@@ -72,6 +72,7 @@ export const pillars: Pillar[] = [
     statusLabel: 'IN PROGRESS',
     technologies: ['Kotlin', 'ML Runtime', 'Memory', 'Offline'],
     repositoryUrl: 'https://github.com/daniele21/android-local-llm-harness',
+    pageUrl: '/android-local-llm-harness',
     accent: 'violet',
   },
 ];
