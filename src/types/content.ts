@@ -97,8 +97,21 @@ export interface SiteMetadata {
   ogImage: string;
 }
 
+/** Sub-navigation item for dropdowns */
+export interface NavSubItem {
+  label: string;
+  description?: string;
+  href: string;
+  badge?: string;
+  icon?: string;
+  logoPath?: string;
+  isHarnessSvg?: boolean;
+  external?: boolean;
+}
+
 /** Navigation item */
 export interface NavItem {
   label: string;
   href: string;
+  children?: NavSubItem[];
 }

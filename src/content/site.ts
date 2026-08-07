@@ -17,8 +17,33 @@ export const siteMetadata: SiteMetadata = {
 
 export const navigation: NavItem[] = [
   { label: 'Why local-first', href: '#why-local-first' },
-  { label: 'Infrastructure', href: '#infrastructure' },
-  { label: 'Applications', href: '#applications' },
+  {
+    label: 'Infrastructure',
+    href: '#infrastructure',
+    children: [
+      {
+        label: 'Android Local LLM Harness',
+        href: 'android-local-llm-harness',
+        logoPath: 'images/harness/logo.svg',
+      },
+    ],
+  },
+  {
+    label: 'Applications',
+    href: '#applications',
+    children: [
+      {
+        label: 'RedactGuard',
+        href: 'redact-guard',
+        logoPath: 'images/redact-guard/logo.png',
+      },
+      {
+        label: 'Aura Finance',
+        href: '#applications',
+        logoPath: 'images/aura/logo.png',
+      },
+    ],
+  },
   { label: 'Track record', href: '#credibility' },
   { label: 'Knowledge', href: '#journey' },
   { label: 'About', href: '#about' },

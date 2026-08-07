@@ -63,11 +63,58 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    navigation.querySelectorAll('a').forEach((link) => {
+    navigation.querySelectorAll('a:not(.dropdown-toggle)').forEach((link) => {
       link.addEventListener('click', () => {
         menuToggle.setAttribute('aria-expanded', 'false');
         navigation.classList.remove('is-open');
       });
+    });
+  }
+
+  // Dropdown interactivity (touch devices, keyboard, outside click)
+  const dropdowns = document.querySelectorAll<HTMLElement>('[data-dropdown]');
+  if (dropdowns.length > 0) {
+    const closeAllDropdowns = () => {
+      dropdowns.forEach((dropdown) => {
+        dropdown.removeAttribute('data-open');
+        const toggle = dropdown.querySelector('[data-dropdown-toggle]');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      });
+    };
+
+    dropdowns.forEach((dropdown) => {
+      const toggle = dropdown.querySelector<HTMLElement>('[data-dropdown-toggle]');
+      if (!toggle) return;
+
+      toggle.addEventListener('click', (e) => {
+        // On mobile screen sizes (<=820px), prevent default to toggle accordion sub-menu
+        if (window.innerWidth <= 820) {
+          e.preventDefault();
+          const isOpen = dropdown.getAttribute('data-open') === 'true';
+          closeAllDropdowns();
+          if (!isOpen) {
+            dropdown.setAttribute('data-open', 'true');
+            toggle.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as Node;
+      let insideDropdown = false;
+      dropdowns.forEach((dropdown) => {
+        if (dropdown.contains(target)) insideDropdown = true;
+      });
+      if (!insideDropdown) {
+        closeAllDropdowns();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAllDropdowns();
+      }
     });
   }
 
