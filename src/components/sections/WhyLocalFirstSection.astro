@@ -39,7 +39,10 @@
       <article class="dependency-card reveal">
         <span class="dependency-index">02</span>
         <h3>Cost dependency</h3>
-        <p>Turn recurring inference into fixed capacity costs instead of per-token fees.</p>
+        <p>
+          Shift suitable recurring workloads from per-token variable costs
+          toward infrastructure capacity you control.
+        </p>
       </article>
 
       <article class="dependency-card reveal">
@@ -63,20 +66,43 @@
 
         <article class="evidence-item">
           <strong class="evidence-number">61 days</strong>
-          <p>Window between Claude Opus 4.1 deprecation notice and total API retirement.</p>
+          <p>
+            Between Claude Opus 4.1's deprecation notice
+            and API retirement in 2026.
+          </p>
+          <span class="evidence-source">Anthropic · Model lifecycle documentation</span>
         </article>
 
         <article class="evidence-item">
           <strong class="evidence-number">71%</strong>
-          <p>Of IT decision-makers actively maintain an AI-provider exit strategy.</p>
+          <p>
+            Of surveyed Italian IT decision-makers say their organisation
+            has an AI-provider exit strategy.
+          </p>
+          <span class="evidence-source">
+            Red Hat survey · 41% still expect moderate or significant
+            continuity impact when switching
+          </span>
         </article>
 
         <article class="evidence-item">
           <strong class="evidence-number">4B</strong>
-          <p>Qwen3.5-4B delivers 79.1 MMLU-Pro locally with 262k context window.</p>
+          <p>
+            Qwen3.5-4B reports 79.1 MMLU-Pro
+            with a 262k native context window.
+          </p>
+          <span class="evidence-source">
+            Qwen model card · benchmark results should be validated
+            against the target workload
+          </span>
         </article>
 
       </div>
+
+      <p class="evidence-note">
+        These signals don't make local AI the answer to every workload.
+        They make architectural optionality increasingly worth evaluating.
+      </p>
 
     </div>
 
@@ -224,6 +250,22 @@
     color: var(--ink-muted);
     font-size: var(--text-xs);
     line-height: 1.5;
+  }
+
+  .evidence-source {
+    display: block;
+    margin-top: var(--space-2);
+    color: var(--ink-subtle);
+    font-size: 0.68rem;
+    line-height: 1.45;
+  }
+
+  .evidence-note {
+    max-width: 720px;
+    margin: var(--space-5) 0 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-xs);
+    line-height: 1.55;
   }
 
 

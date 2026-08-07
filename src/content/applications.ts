@@ -59,17 +59,17 @@ export const applications: ReferenceApplication[] = [
     name: 'Aura Finance',
     tagline: 'Privacy-first <strong>personal finance</strong>.',
     headline:
-      'Gain deep spending insights <em>without exposing your financial history.</em>',
+      'Manage personal finances <em>without making the cloud the default home for your financial history.</em>',
     description:
-      'Local AI for transaction categorization, forecasting and budget planning. <strong>Your financial data never leaves your device.</strong>',
-    features: ['Spending Insights', 'Forecasting', 'Budgets', 'Privacy First'],
+      'A local-first personal finance application where transactions, budgets, reports and preferences live on-device first, with optional encrypted cloud backup.',
+    features: ['Local Data', 'Reports', 'Budgets', 'Encrypted Backup'],
     validates: [
       '<strong>Privacy-first product design</strong> & local data model',
       'Mobile UX & <em>local storage sovereignty</em>',
-      'Proving ground for <em>Android on-device AI integration</em>',
+      'Future proving ground for <em>Android on-device AI integration</em>',
     ],
     learning:
-      'Aura Finance demonstrates data sovereignty, keeping financial records strictly under the user’s control with optional encrypted sync.',
+      'Aura Finance explores data sovereignty before AI is introduced: financial records stay local-first, while future on-device intelligence can be added without changing that privacy model.',
     status: 'experimental',
     statusLabel: 'IN PROGRESS',
     logoPath: '/images/aura/logo.png',

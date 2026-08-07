@@ -7,7 +7,7 @@ import type { SiteMetadata, NavItem } from '../types/content';
 export const siteMetadata: SiteMetadata = {
   title: 'Daniele Moltisanti - Product-Grade Local AI',
   description:
-    'Researching product-grade local AI: how open-weight models and local runtimes can reduce closed-model dependency, protect sensitive data, and give products more control over lifecycle, cost and runtime.',
+    'Researching product-grade local AI: when open-weight models and local runtimes can reduce closed-model dependency, protect sensitive data, and give products more control over lifecycle, cost and runtime.',
   canonical: 'https://daniele21.github.io/',
   socialTitle: 'Local-first AI: more control over models, data and runtime',
   socialDescription:
@@ -19,7 +19,7 @@ export const navigation: NavItem[] = [
   { label: 'Why local-first', href: '#why-local-first' },
   { label: 'Infrastructure', href: '#infrastructure' },
   { label: 'Applications', href: '#applications' },
-  { label: 'Evidence', href: '#credibility' },
+  { label: 'Track record', href: '#credibility' },
   { label: 'Knowledge', href: '#journey' },
   { label: 'About', href: '#about' },
 ];
