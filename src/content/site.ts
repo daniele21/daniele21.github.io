@@ -5,21 +5,20 @@
 import type { SiteMetadata, NavItem } from '../types/content';
 
 export const siteMetadata: SiteMetadata = {
-  title: 'Daniele Moltisanti - Building Privacy-First AI Products',
+  title: 'Daniele Moltisanti - Product-Grade Local AI',
   description:
-    'I build reusable local AI and data-protection foundations across desktop and mobile, validated through privacy-first products like ClosedRoom, RedactGuard, and Aura Finance.',
+    'Researching product-grade local AI: how open-weight models and local runtimes can reduce closed-model dependency, protect sensitive data, and give products more control over lifecycle, cost and runtime.',
   canonical: 'https://daniele21.github.io/',
-  socialTitle: 'Building the infrastructure for privacy-first AI products',
+  socialTitle: 'Local-first AI: more control over models, data and runtime',
   socialDescription:
-    'Local inference, private speech recognition, document anonymization, and Android on-device AI, validated through real applications.',
+    'Research, experiments and open-source infrastructure for moving suitable AI workloads from closed-only APIs to local-first architectures.',
   ogImage: 'https://daniele21.github.io/social-card.svg',
 };
 
 export const navigation: NavItem[] = [
-  { label: 'Vision', href: '#vision' },
+  { label: 'Why local-first', href: '#why-local-first' },
   { label: 'Infrastructure', href: '#infrastructure' },
   { label: 'Applications', href: '#applications' },
-  { label: 'Principles', href: '#principles' },
   { label: 'Evidence', href: '#credibility' },
   { label: 'Knowledge', href: '#journey' },
   { label: 'About', href: '#about' },

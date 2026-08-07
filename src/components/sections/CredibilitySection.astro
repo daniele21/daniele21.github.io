@@ -23,11 +23,6 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
           Proven capability to <span class="gold-gradient-text">deliver at scale</span>
         </h2>
       </div>
-      
-      <div class="quote-card">
-        <p class="quote-text">"{credibilityIntro.quote}"</p>
-        <span class="quote-author">— Daniele Moltisanti</span>
-      </div>
     </div>
 
     <div class="credibility-grid">
@@ -122,7 +117,7 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     font-size: var(--text-xs);
     font-weight: 850;
     letter-spacing: 0.08em;
-    color: #78350f;
+    color: #b45309;
     margin-bottom: var(--space-2);
   }
 
@@ -134,8 +129,8 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #d97706;
-    box-shadow: 0 0 10px #f59e0b;
+    background: #f59e0b;
+    box-shadow: 0 0 12px #f59e0b;
     animation: gold-kicker-pulse 2s infinite ease-in-out;
   }
 
@@ -145,7 +140,7 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
   }
 
   .gold-gradient-text {
-    background: linear-gradient(135deg, #713f12 0%, #b45309 45%, #92400e 100%);
+    background: linear-gradient(135deg, #b45309 0%, #d97706 35%, #eab308 70%, #ca8a04 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 800;
@@ -155,37 +150,6 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     background: linear-gradient(135deg, #fef08a 0%, #ffd700 40%, #f59e0b 80%, #d97706 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-  }
-
-  /* Quote Card */
-  .quote-card {
-    position: relative;
-    padding: var(--space-5) var(--space-6);
-    background: var(--surface-card);
-    border: 1px solid var(--border-subtle);
-    border-left: 4px solid #d97706;
-    border-radius: var(--radius-md);
-    box-shadow: 0 4px 20px rgba(217, 119, 6, 0.06);
-  }
-
-  .quote-text {
-    margin: 0 0 var(--space-2);
-    font-size: var(--text-small);
-    line-height: 1.6;
-    color: var(--ink-muted);
-    font-style: italic;
-  }
-
-  .quote-author {
-    font-size: var(--text-xs);
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #78350f;
-  }
-
-  [data-theme="dark"] .quote-author {
-    color: #fde047;
   }
 
   /* Grid Layout */
@@ -205,7 +169,7 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     border-radius: var(--radius-md);
     background: var(--surface-card);
     border: 1px solid var(--border-subtle);
-    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.05);
+    box-shadow: 0 4px 24px rgba(217, 119, 6, 0.08);
     transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 320ms cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 320ms ease;
@@ -220,7 +184,7 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     left: -70%;
     width: 50%;
     height: 200%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.25), transparent);
     transform: rotate(25deg);
     transition: left 750ms cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
@@ -239,10 +203,10 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     height: 4px;
   }
 
-  .credibility-card[data-accent="gold-min"] .card-top-bar { background: linear-gradient(90deg, #d97706, #f59e0b); }
-  .credibility-card[data-accent="gold-med"] .card-top-bar { background: linear-gradient(90deg, #b45309, #d4af37); }
-  .credibility-card[data-accent="gold-high"] .card-top-bar { background: linear-gradient(90deg, #92400e, #ca8a04); }
-  .credibility-card[data-accent="gold-max"] .card-top-bar { background: linear-gradient(90deg, #713f12, #f59e0b, #ffd700); }
+  .credibility-card[data-accent="gold-min"] .card-top-bar { background: linear-gradient(90deg, #f59e0b, #d97706); }
+  .credibility-card[data-accent="gold-med"] .card-top-bar { background: linear-gradient(90deg, #eab308, #ca8a04); }
+  .credibility-card[data-accent="gold-high"] .card-top-bar { background: linear-gradient(90deg, #d4af37, #b45309); }
+  .credibility-card[data-accent="gold-max"] .card-top-bar { background: linear-gradient(90deg, #ffd700, #f59e0b, #d97706); }
 
   /* Card Header Row */
   .card-header {
@@ -252,7 +216,7 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     margin-bottom: var(--space-4);
   }
 
-  /* Metallic Gold Icon Avatars - High Contrast Fills */
+  /* Metallic Gold Icon Avatars */
   .icon-avatar {
     display: inline-flex;
     align-items: center;
@@ -263,10 +227,10 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     transition: transform var(--duration-fast) ease;
   }
 
-  .credibility-card[data-accent="gold-min"] .icon-avatar { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); box-shadow: 0 4px 14px rgba(217, 119, 6, 0.28); }
-  .credibility-card[data-accent="gold-med"] .icon-avatar { background: linear-gradient(135deg, #b45309 0%, #d4af37 100%); box-shadow: 0 4px 16px rgba(180, 83, 9, 0.32); }
-  .credibility-card[data-accent="gold-high"] .icon-avatar { background: linear-gradient(135deg, #92400e 0%, #ca8a04 100%); box-shadow: 0 4px 16px rgba(146, 64, 14, 0.35); }
-  .credibility-card[data-accent="gold-max"] .icon-avatar { background: linear-gradient(135deg, #713f12 0%, #b45309 50%, #ffd700 100%); box-shadow: 0 4px 18px rgba(113, 63, 18, 0.38); }
+  .credibility-card[data-accent="gold-min"] .icon-avatar { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); }
+  .credibility-card[data-accent="gold-med"] .icon-avatar { background: linear-gradient(135deg, #eab308 0%, #b45309 100%); box-shadow: 0 4px 16px rgba(234, 179, 8, 0.35); }
+  .credibility-card[data-accent="gold-high"] .icon-avatar { background: linear-gradient(135deg, #d4af37 0%, #ca8a04 100%); box-shadow: 0 4px 16px rgba(212, 175, 55, 0.38); }
+  .credibility-card[data-accent="gold-max"] .icon-avatar { background: linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #d97706 100%); box-shadow: 0 4px 18px rgba(255, 215, 0, 0.4); }
 
   .credibility-card:hover .icon-avatar {
     transform: scale(1.08) rotate(-2deg);
@@ -282,7 +246,7 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     stroke-linejoin: round;
   }
 
-  /* Metric Badges per Gold Level - High Contrast Text */
+  /* Metric Badges per Gold Level */
   .metric-badge {
     display: inline-flex;
     align-items: center;
@@ -294,17 +258,17 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     text-transform: uppercase;
   }
 
-  .credibility-card[data-accent="gold-min"] .metric-badge { background: rgba(217, 119, 6, 0.12); border: 1.5px solid rgba(217, 119, 6, 0.4); color: #78350f; }
-  .credibility-card[data-accent="gold-med"] .metric-badge { background: rgba(180, 83, 9, 0.12); border: 1.5px solid rgba(180, 83, 9, 0.4); color: #854d0e; }
-  .credibility-card[data-accent="gold-high"] .metric-badge { background: rgba(146, 64, 14, 0.12); border: 1.5px solid rgba(146, 64, 14, 0.4); color: #92400e; }
-  .credibility-card[data-accent="gold-max"] .metric-badge { background: rgba(113, 63, 18, 0.14); border: 1.5px solid rgba(113, 63, 18, 0.45); color: #713f12; }
+  .credibility-card[data-accent="gold-min"] .metric-badge { background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.45); color: #b45309; }
+  .credibility-card[data-accent="gold-med"] .metric-badge { background: rgba(234, 179, 8, 0.14); border: 1.5px solid rgba(234, 179, 8, 0.45); color: #b45309; }
+  .credibility-card[data-accent="gold-high"] .metric-badge { background: rgba(212, 175, 55, 0.16); border: 1.5px solid rgba(212, 175, 55, 0.5); color: #b45309; }
+  .credibility-card[data-accent="gold-max"] .metric-badge { background: rgba(255, 215, 0, 0.18); border: 1.5px solid rgba(255, 215, 0, 0.55); color: #b45309; }
 
   [data-theme="dark"] .credibility-card[data-accent="gold-min"] .metric-badge { background: rgba(253, 230, 138, 0.18); border-color: rgba(253, 230, 138, 0.45); color: #fde047; }
   [data-theme="dark"] .credibility-card[data-accent="gold-med"] .metric-badge { background: rgba(254, 240, 138, 0.18); border-color: rgba(254, 240, 138, 0.45); color: #fef08a; }
   [data-theme="dark"] .credibility-card[data-accent="gold-high"] .metric-badge { background: rgba(250, 219, 109, 0.2); border-color: rgba(250, 219, 109, 0.5); color: #fadb6d; }
   [data-theme="dark"] .credibility-card[data-accent="gold-max"] .metric-badge { background: rgba(255, 215, 0, 0.25); border-color: rgba(255, 215, 0, 0.55); color: #fff176; }
 
-  /* Card Body & Category Tag - Deep Readable Colors */
+  /* Card Body & Category Tag */
   .card-body {
     flex-grow: 1;
     margin-bottom: var(--space-4);
@@ -319,10 +283,10 @@ const goldAccents = ['gold-min', 'gold-med', 'gold-high', 'gold-max'] as const;
     margin-bottom: var(--space-2);
   }
 
-  .credibility-card[data-accent="gold-min"] .card-tag { color: #78350f; }
-  .credibility-card[data-accent="gold-med"] .card-tag { color: #854d0e; }
-  .credibility-card[data-accent="gold-high"] .card-tag { color: #92400e; }
-  .credibility-card[data-accent="gold-max"] .card-tag { color: #713f12; }
+  .credibility-card[data-accent="gold-min"] .card-tag { color: #b45309; }
+  .credibility-card[data-accent="gold-med"] .card-tag { color: #b45309; }
+  .credibility-card[data-accent="gold-high"] .card-tag { color: #b45309; }
+  .credibility-card[data-accent="gold-max"] .card-tag { color: #b45309; }
 
   [data-theme="dark"] .credibility-card[data-accent="gold-min"] .card-tag { color: #fde047; }
   [data-theme="dark"] .credibility-card[data-accent="gold-med"] .card-tag { color: #fef08a; }

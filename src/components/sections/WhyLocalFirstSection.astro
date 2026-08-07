@@ -1,0 +1,309 @@
+---
+/**
+ * WhyLocalFirstSection
+ *
+ * Explains the strategic problem before introducing the technical solution.
+ * Local-first is presented as optionality, not as an anti-cloud position.
+ */
+---
+
+<section
+  class="section why-local-first"
+  id="why-local-first"
+  aria-labelledby="why-local-first-title"
+>
+  <div class="shell">
+
+    <div class="why-heading reveal">
+      <p class="section-kicker">WHY LOCAL-FIRST</p>
+
+      <h2 id="why-local-first-title">
+        The problem isn't the cloud.
+        <strong>It's depending on intelligence you don't control.</strong>
+      </h2>
+
+      <p class="why-sub">
+        Closed APIs are powerful. The risk is making them your <strong>only execution path</strong>.
+      </p>
+    </div>
+
+
+    <div class="dependency-grid">
+
+      <article class="dependency-card reveal">
+        <span class="dependency-index">01</span>
+        <h3>Model lifecycle</h3>
+        <p>Pin models and migrate on your timeline, not the provider's forced deprecations.</p>
+      </article>
+
+      <article class="dependency-card reveal">
+        <span class="dependency-index">02</span>
+        <h3>Cost dependency</h3>
+        <p>Turn recurring inference into fixed capacity costs instead of per-token fees.</p>
+      </article>
+
+      <article class="dependency-card reveal">
+        <span class="dependency-index">03</span>
+        <h3>Data boundaries</h3>
+        <p>Keep sensitive processing and private data strictly on infrastructure you control.</p>
+      </article>
+
+      <article class="dependency-card reveal">
+        <span class="dependency-index">04</span>
+        <h3>Exit optionality</h3>
+        <p>Build alternative execution paths before provider lock-in forces your hand.</p>
+      </article>
+
+    </div>
+
+
+    <div class="evidence-block reveal">
+
+      <div class="evidence-grid">
+
+        <article class="evidence-item">
+          <strong class="evidence-number">61 days</strong>
+          <p>Window between Claude Opus 4.1 deprecation notice and total API retirement.</p>
+        </article>
+
+        <article class="evidence-item">
+          <strong class="evidence-number">71%</strong>
+          <p>Of IT decision-makers actively maintain an AI-provider exit strategy.</p>
+        </article>
+
+        <article class="evidence-item">
+          <strong class="evidence-number">4B</strong>
+          <p>Qwen3.5-4B delivers 79.1 MMLU-Pro locally with 262k context window.</p>
+        </article>
+
+      </div>
+
+    </div>
+
+
+    <div class="local-first-thesis reveal">
+
+      <div class="thesis-header">
+        <p class="section-kicker">LOCAL-FIRST ≠ LOCAL-ONLY</p>
+        <h3>
+          Use frontier models when you need capability, 
+          <strong>not because you have no other choice.</strong>
+        </h3>
+      </div>
+
+      <div class="thesis-principles">
+        <div class="principle-chip">
+          <span class="chip-dot dot-teal"></span>
+          <span><strong>Local</strong> where sufficient</span>
+        </div>
+        <div class="principle-chip">
+          <span class="chip-dot dot-blue"></span>
+          <span><strong>Cloud</strong> where valuable</span>
+        </div>
+        <div class="principle-chip">
+          <span class="chip-dot dot-indigo"></span>
+          <span><strong>Portable</strong> by design</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<style>
+  .why-local-first {
+    background: var(--surface-card);
+  }
+
+  .why-heading {
+    max-width: 820px;
+    margin-bottom: var(--space-8);
+  }
+
+  .why-heading h2 {
+    margin: 0;
+    max-width: 780px;
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 2.5vw, 2.3rem);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .why-heading h2 strong {
+    color: var(--accent-blue);
+  }
+
+  .why-heading > p:last-child {
+    max-width: 720px;
+    margin: var(--space-3) 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body);
+    line-height: 1.55;
+  }
+
+
+  .dependency-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .dependency-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-5);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-canvas);
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .dependency-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  .dependency-index {
+    display: block;
+    margin-bottom: var(--space-2);
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 700;
+  }
+
+  .dependency-card h3 {
+    margin: 0 0 var(--space-2);
+    font-size: 1.05rem;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .dependency-card p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-xs);
+    line-height: 1.55;
+  }
+
+
+  .evidence-block {
+    margin-top: var(--space-6);
+    padding: var(--space-5) var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--surface-muted);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .evidence-item {
+    padding-right: var(--space-4);
+  }
+
+  .evidence-number {
+    display: block;
+    margin-bottom: var(--space-1);
+    color: var(--accent-blue);
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 2.4vw, 2.2rem);
+    line-height: 1.1;
+  }
+
+  .evidence-item p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+  }
+
+
+  .local-first-thesis {
+    margin-top: var(--space-8);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(180deg, var(--surface-canvas) 0%, var(--surface-card) 100%);
+    border: 1px solid var(--border-subtle);
+    text-align: center;
+  }
+
+  .thesis-header {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .thesis-header h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2vw, 1.65rem);
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .thesis-header h3 strong {
+    color: var(--accent-blue);
+  }
+
+  /* Principles Chips */
+  .thesis-principles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+
+  .principle-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    background: var(--surface-canvas);
+    border: 1px solid var(--border-subtle);
+    font-size: var(--text-xs);
+    color: var(--ink);
+  }
+
+  .principle-chip strong {
+    font-weight: 700;
+  }
+
+  .chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .dot-teal { background: var(--accent-teal); }
+  .dot-blue { background: var(--accent-blue); }
+  .dot-indigo { background: #6366f1; }
+
+
+  @media (max-width: 1024px) {
+    .dependency-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .dependency-grid,
+    .evidence-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .evidence-item {
+      padding-right: 0;
+    }
+  }
+</style>
