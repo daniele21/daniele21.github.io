@@ -1,0 +1,115 @@
+---
+/**
+ * HarnessProblems.astro
+ * Structural challenges section.
+ */
+import { harnessData } from '../../content/harness';
+const { problems } = harnessData;
+---
+
+<section class="section tight" id="why">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">{problems.eyebrow}</div>
+        <h2>{problems.title}</h2>
+      </div>
+      <p>{problems.sub}</p>
+    </div>
+
+    <div class="problem-grid">
+      {problems.items.map((item) => (
+        <article class="problem-card reveal">
+          <div class="icon-box">{item.id}</div>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-8);
+    align-items: flex-end;
+    margin-bottom: var(--space-8);
+  }
+
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 2.8vw, 2.8rem);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: var(--space-2) 0 0;
+  }
+
+  .section-head p {
+    max-width: 600px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body);
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+
+  .problem-card {
+    padding: var(--space-6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    min-height: 230px;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  }
+
+  .problem-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+  }
+
+  .problem-card h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    color: var(--ink);
+    margin: 0 0 var(--space-2);
+  }
+
+  .icon-box {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    display: grid;
+    place-items: center;
+    background: var(--surface-blue);
+    color: var(--accent-blue);
+    font-weight: 800;
+    margin-bottom: var(--space-5);
+  }
+
+  .problem-card:nth-child(2) .icon-box { background: var(--surface-teal); color: var(--accent-teal); }
+  .problem-card:nth-child(3) .icon-box { background: var(--surface-violet); color: var(--accent-violet); }
+  .problem-card:nth-child(4) .icon-box { background: var(--status-prototype-bg); color: var(--accent-amber); }
+
+  .problem-card p {
+    font-size: var(--text-small);
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  @media (max-width: 1020px) {
+    .problem-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 760px) {
+    .problem-grid { grid-template-columns: 1fr; }
+  }
+</style>

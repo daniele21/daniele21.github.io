@@ -1,0 +1,96 @@
+---
+/**
+ * HarnessValues.astro
+ * Design values section matching prototype (3).
+ */
+import { harnessData } from '../../content/harness';
+const { values } = harnessData;
+---
+
+<section class="section tight">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">{values.eyebrow}</div>
+        <h2>{values.title}</h2>
+      </div>
+      <p>{values.sub}</p>
+    </div>
+
+    <div class="values-grid">
+      {values.items.map((item) => (
+        <article class="value-card reveal">
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-8);
+    align-items: flex-end;
+    margin-bottom: var(--space-8);
+  }
+
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 2.8vw, 2.8rem);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: var(--space-2) 0 0;
+  }
+
+  .section-head p {
+    max-width: 600px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body);
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  .value-card {
+    padding: var(--space-6);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .value-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+  }
+
+  .value-card h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    color: var(--ink);
+    margin: 0 0 var(--space-2);
+  }
+
+  .value-card p {
+    font-size: var(--text-small);
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  @media (max-width: 1020px) {
+    .values-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 760px) {
+    .values-grid { grid-template-columns: 1fr; }
+  }
+</style>

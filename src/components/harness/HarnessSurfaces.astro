@@ -1,0 +1,142 @@
+---
+/**
+ * HarnessSurfaces.astro
+ * Mobile screenshots surface grid matching prototype (3).
+ */
+import { harnessData } from '../../content/harness';
+interface Props {
+  baseUrl: string;
+}
+const { baseUrl } = Astro.props;
+const { surfaces } = harnessData;
+---
+
+<section class="section tight" id="product">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">{surfaces.eyebrow}</div>
+        <h2>{surfaces.title}</h2>
+      </div>
+      <p>{surfaces.sub}</p>
+    </div>
+
+    <div class="surface-grid">
+      {surfaces.items.map((item) => (
+        <article class="surface-card reveal">
+          <div class="surface-shot">
+            <img loading="lazy" data-zoomable src={`${baseUrl}/${item.image}`} alt={`Harness ${item.title} screen`} />
+          </div>
+          <div class="surface-copy">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="boundary reveal">
+      <strong>Security Boundary:</strong> {surfaces.securityNotice}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-8);
+    align-items: flex-end;
+    margin-bottom: var(--space-8);
+  }
+
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 2.8vw, 2.8rem);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: var(--space-2) 0 0;
+  }
+
+  .section-head p {
+    max-width: 600px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body);
+  }
+
+  .surface-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+
+  .surface-card {
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .surface-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+  }
+
+  .surface-shot {
+    aspect-ratio: 9 / 16;
+    background: linear-gradient(160deg, var(--surface-blue), var(--surface-muted));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .surface-shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    cursor: zoom-in;
+  }
+
+  .surface-copy {
+    padding: 16px;
+  }
+
+  .surface-copy h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .surface-copy p {
+    font-size: var(--text-xs);
+    color: var(--ink-subtle);
+    margin: 5px 0 0;
+  }
+
+  .boundary {
+    margin-top: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border-subtle);
+    background: var(--status-prototype-bg);
+    border-radius: var(--radius-md);
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+  }
+
+  .boundary strong {
+    color: var(--accent-amber);
+  }
+
+  @media (max-width: 1020px) {
+    .surface-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 760px) {
+    .surface-grid { grid-template-columns: 1fr; }
+  }
+</style>

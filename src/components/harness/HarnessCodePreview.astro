@@ -1,0 +1,76 @@
+---
+/**
+ * HarnessCodePreview.astro
+ * Developer boundary Kotlin code snippet preview matching prototype (3).
+ */
+import { harnessData } from '../../content/harness';
+const { code } = harnessData;
+---
+
+<section class="section tight">
+  <div class="shell">
+    <div class="code-wrap">
+      <div class="reveal">
+        <div class="eyebrow">{code.eyebrow}</div>
+        <h2>{code.title}</h2>
+        <p class="code-sub">{code.sub}</p>
+      </div>
+      <div class="reveal">
+        <pre aria-label="LocalLlmClient example"><code><span class="kw">val</span> prepared = client.<span class="fn">prepare</span>(applicationId, useCaseId)
+check(prepared.ready)
+
+<span class="kw">val</span> sessionId = client.<span class="fn">createSession</span>(applicationId, useCaseId)
+<span class="kw">val</span> handle = client.<span class="fn">generate</span>(
+    request = generationRequest(sessionId, applicationId, useCaseId),
+    listener = generationListener,
+)
+
+handle.<span class="fn">cancel</span>()</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .code-wrap {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .code-wrap h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 2.8vw, 2.8rem);
+    line-height: 1.12;
+    color: var(--ink);
+    margin: var(--space-2) 0 0;
+  }
+
+  .code-sub {
+    color: var(--ink-muted);
+    line-height: 1.6;
+    font-size: var(--text-body);
+    margin-top: var(--space-3);
+  }
+
+  pre {
+    margin: 0;
+    background: #0b1220;
+    color: #e2e8f0;
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    overflow: auto;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    border: 1px solid #1e293b;
+    box-shadow: var(--shadow-md);
+  }
+
+  code .kw { color: #93c5fd; }
+  code .fn { color: #5eead4; }
+
+  @media (max-width: 1020px) {
+    .code-wrap { grid-template-columns: 1fr; }
+  }
+</style>

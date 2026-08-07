@@ -93,11 +93,15 @@ const robotsContent = isPreview
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <SiteHeader />
+  <slot name="header">
+    <SiteHeader />
+  </slot>
   <main id="main">
     <slot />
   </main>
-  <SiteFooter />
+  <slot name="footer">
+    <SiteFooter />
+  </slot>
   <ImageZoomModal />
   <script src="../scripts/site.ts"></script>
 </body>

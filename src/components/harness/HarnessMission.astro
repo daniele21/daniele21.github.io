@@ -1,0 +1,98 @@
+---
+/**
+ * HarnessMission.astro
+ * Mission band & core principles.
+ */
+import { harnessData } from '../../content/harness';
+const { mission } = harnessData;
+---
+
+<section class="mission-band">
+  <div class="shell mission-grid">
+    <div class="reveal">
+      <div class="eyebrow">{mission.eyebrow}</div>
+      <h2 class="mission-statement">{mission.statement}</h2>
+    </div>
+    <div class="reveal">
+      <p class="hero-lede">{mission.lede}</p>
+      <div class="principles">
+        {mission.principles.map((item) => (
+          <div class={`principle border-${item.color}`}>
+            <strong>{item.title}</strong>
+            <span>{item.subtitle}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mission-band {
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    padding: var(--space-12) 0;
+  }
+
+  .mission-grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  .mission-statement {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.2vw, 3.2rem);
+    line-height: 1.14;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .hero-lede {
+    font-size: clamp(1.02rem, 1.25vw, 1.15rem);
+    color: var(--ink-muted);
+    line-height: 1.62;
+    margin: 0 0 var(--space-5);
+  }
+
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .principle {
+    padding: var(--space-4);
+    border-left: 3px solid var(--accent-blue);
+    background: var(--surface-muted);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+
+  .principle.border-teal { border-color: var(--accent-teal); }
+  .principle.border-violet { border-color: var(--accent-violet); }
+
+  .principle strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .principle span {
+    font-size: var(--text-xs);
+    color: var(--ink-subtle);
+  }
+
+  @media (max-width: 1020px) {
+    .mission-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 760px) {
+    .principles { grid-template-columns: 1fr; }
+  }
+</style>

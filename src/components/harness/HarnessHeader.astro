@@ -1,0 +1,210 @@
+---
+/**
+ * HarnessHeader.astro
+ * Dedicated sticky header for the Harness subpage.
+ */
+interface Props {
+  baseUrl: string;
+}
+const { baseUrl } = Astro.props;
+---
+
+<header class="site-header" slot="header" data-header>
+  <div class="shell header-inner">
+    <a class="brand" href={`${baseUrl}/#top`} aria-label="Daniele Moltisanti home">
+      <img src={`${baseUrl}/images/sign_1.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-light" height="36" />
+      <img src={`${baseUrl}/images/sign_dark.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-dark" height="36" />
+      <span class="brand-name">Daniele Moltisanti</span>
+    </a>
+
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle color theme" data-theme-toggle>
+        <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </svg>
+      </button>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle>
+        <span class="sr-only">Open navigation</span>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <nav class="site-nav" id="site-navigation" aria-label="Primary navigation" data-navigation>
+      <a href={`${baseUrl}/`} class="nav-link">← Portfolio</a>
+      <a href="#why" class="nav-link">Why</a>
+      <a href="#product" class="nav-link">Product</a>
+      <a href="#architecture" class="nav-link">Architecture</a>
+      <a href="#status" class="nav-link">Status</a>
+      <a class="nav-cta" href="https://github.com/daniele21/android-local-llm-harness" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-height);
+    transition: background-color var(--duration-base) var(--ease-in-out-smooth),
+                border-color var(--duration-base) var(--ease-in-out-smooth),
+                box-shadow var(--duration-base) var(--ease-in-out-smooth);
+  }
+
+  .site-header.is-scrolled {
+    background: var(--glass-bg);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+  }
+
+  .header-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .brand-signature {
+    height: 36px;
+    width: auto;
+  }
+
+  .brand-signature-dark { display: none; }
+  [data-theme="dark"] .brand-signature-light { display: none; }
+  [data-theme="dark"] .brand-signature-dark { display: block; }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-body);
+    letter-spacing: -0.02em;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-muted);
+    color: var(--ink);
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: transform var(--duration-fast) ease,
+                background-color var(--duration-fast) ease,
+                border-color var(--duration-fast) ease,
+                color var(--duration-fast) ease;
+  }
+
+  .theme-toggle:hover {
+    transform: scale(1.08);
+    border-color: var(--accent-blue-light);
+    color: var(--accent-blue);
+  }
+
+  .theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sun-icon { display: block; }
+  .moon-icon { display: none; }
+  [data-theme="dark"] .sun-icon { display: none; }
+  [data-theme="dark"] .moon-icon { display: block; }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .nav-link {
+    font-size: var(--text-small);
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) ease;
+  }
+
+  .nav-link:hover {
+    color: var(--accent-blue);
+  }
+
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--ink);
+    font-size: var(--text-small);
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+  }
+
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent-blue-light);
+    color: var(--accent-blue);
+  }
+
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 38px;
+    height: 38px;
+    padding: 8px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-muted);
+    cursor: pointer;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--ink);
+    border-radius: 1px;
+  }
+
+  @media (max-width: 760px) {
+    .site-nav { display: none; }
+    .menu-toggle { display: flex; }
+  }
+</style>
