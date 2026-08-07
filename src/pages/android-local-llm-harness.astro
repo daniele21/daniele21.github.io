@@ -6,6 +6,7 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HarnessHeader from '../components/harness/HarnessHeader.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import HarnessHero from '../components/harness/HarnessHero.astro';
 import HarnessMission from '../components/harness/HarnessMission.astro';
 import HarnessProblems from '../components/harness/HarnessProblems.astro';
@@ -21,6 +22,16 @@ import HarnessCta from '../components/harness/HarnessCta.astro';
 import { harnessData } from '../content/harness';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Why Harness', href: '#why' },
+  { label: 'Concept', href: '#concept' },
+  { label: 'Surfaces', href: '#product' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'API Code', href: '#code' },
+  { label: 'Status', href: '#status' },
+];
 ---
 
 <BaseLayout
@@ -29,15 +40,24 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 >
   <HarnessHeader baseUrl={baseUrl} slot="header" />
 
-  <HarnessHero baseUrl={baseUrl} />
-  <HarnessMission />
-  <HarnessProblems />
-  <HarnessConcept />
-  <HarnessSurfaces baseUrl={baseUrl} />
-  <HarnessArchitecture baseUrl={baseUrl} />
-  <HarnessValues />
-  <HarnessRoadmap />
-  <HarnessCodePreview />
-  <HarnessMaturity />
-  <HarnessCta baseUrl={baseUrl} />
+  <ProductSubHeader
+    title="Android LLM Harness"
+    badge="Spec & Prototype"
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness' }}
+  />
+
+  <main id="top">
+    <HarnessHero baseUrl={baseUrl} />
+    <HarnessMission />
+    <HarnessProblems />
+    <HarnessConcept />
+    <HarnessSurfaces baseUrl={baseUrl} />
+    <HarnessArchitecture baseUrl={baseUrl} />
+    <HarnessValues />
+    <HarnessRoadmap />
+    <HarnessCodePreview />
+    <HarnessMaturity />
+    <HarnessCta baseUrl={baseUrl} />
+  </main>
 </BaseLayout>

@@ -6,6 +6,7 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RedactGuardHeader from '../components/redactguard/RedactGuardHeader.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import RedactGuardHero from '../components/redactguard/RedactGuardHero.astro';
 import RedactGuardProblem from '../components/redactguard/RedactGuardProblem.astro';
 import RedactGuardSolution from '../components/redactguard/RedactGuardSolution.astro';
@@ -17,6 +18,15 @@ import RedactGuardCta from '../components/redactguard/RedactGuardCta.astro';
 import { redactGuardData } from '../content/redactGuard';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Problem', href: '#problem' },
+  { label: 'Solution', href: '#solution' },
+  { label: 'Benefits', href: '#benefits' },
+  { label: 'Product', href: '#product' },
+  { label: 'Architecture', href: '#architecture' },
+];
 ---
 
 <BaseLayout
@@ -24,6 +34,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   description={redactGuardData.meta.description}
 >
   <RedactGuardHeader baseUrl={baseUrl} slot="header" />
+
+  <ProductSubHeader
+    title="RedactGuard"
+    badge="v1.0"
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/redact-guard' }}
+  />
 
   <main id="top">
     <RedactGuardHero baseUrl={baseUrl} />

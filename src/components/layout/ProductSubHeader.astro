@@ -1,0 +1,259 @@
+---
+/**
+ * ProductSubHeader.astro
+ * Sticky sub-navigation bar for product deep-dive pages.
+ * Sits directly below SiteHeader with index scrolling, active scroll-spy, and mobile pill bar.
+ */
+export interface SubHeaderLink {
+  label: string;
+  href: string;
+}
+
+export interface Props {
+  title: string;
+  badge?: string;
+  links: SubHeaderLink[];
+  cta?: {
+    label: string;
+    href: string;
+  };
+}
+
+const { title, badge, links, cta } = Astro.props;
+---
+
+<div class="product-subheader" data-product-subheader>
+  <div class="shell subheader-inner">
+    <div class="subheader-brand">
+      <a href="#top" class="subheader-title-link">
+        <span class="subheader-title">{title}</span>
+      </a>
+      {badge && <span class="subheader-badge">{badge}</span>}
+    </div>
+
+    <nav class="subheader-nav" aria-label="Page section navigation">
+      <ul class="subheader-links">
+        {links.map((link, index) => (
+          <li>
+            <a
+              href={link.href}
+              class={`subheader-link ${index === 0 ? 'is-active' : ''}`}
+              data-sublink
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    {cta && (
+      <a
+        href={cta.href}
+        class="subheader-cta"
+        target={cta.href.startsWith('http') ? '_blank' : '_self'}
+        rel={cta.href.startsWith('http') ? 'noreferrer' : ''}
+      >
+        {cta.label}
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .product-subheader {
+    position: sticky;
+    top: var(--header-height);
+    z-index: 40;
+    height: 48px;
+    background: var(--glass-bg);
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+    transition: background-color var(--duration-base) ease, border-color var(--duration-base) ease;
+  }
+
+  .subheader-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .subheader-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-shrink: 0;
+  }
+
+  .subheader-title-link {
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .subheader-title {
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .subheader-badge {
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: var(--surface-blue);
+    color: var(--accent-blue);
+    border: 1px solid var(--border-subtle);
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .subheader-nav {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .subheader-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .subheader-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  .subheader-link {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) ease, background-color var(--duration-fast) ease;
+  }
+
+  .subheader-link:hover {
+    color: var(--accent-blue);
+    background: var(--surface-muted);
+  }
+
+  .subheader-link.is-active {
+    color: var(--accent-blue);
+    background: var(--surface-blue);
+    font-weight: 700;
+  }
+
+  .subheader-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    color: var(--ink);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all var(--duration-fast) ease;
+  }
+
+  .subheader-cta:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  @media (max-width: 768px) {
+    .subheader-inner {
+      gap: var(--space-2);
+    }
+    .subheader-brand {
+      display: none; /* Keep subheader lightweight on narrow screens */
+    }
+    .subheader-nav {
+      width: 100%;
+      justify-content: flex-start;
+    }
+    .subheader-cta {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Client-side ScrollSpy & Smooth Scroll for ProductSubHeader
+   */
+  function initProductSubHeader() {
+    const subheaderLinks = document.querySelectorAll<HTMLAnchorElement>('[data-sublink]');
+    if (!subheaderLinks.length) return;
+
+    // Collect target sections
+    const sections: HTMLElement[] = [];
+    subheaderLinks.forEach((link) => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        const target = document.querySelector<HTMLElement>(href);
+        if (target) sections.push(target);
+      }
+    });
+
+    if (!sections.length) return;
+
+    // Adjust scroll padding for sections dynamically
+    document.querySelectorAll<HTMLElement>('.section, .hero').forEach((sec) => {
+      sec.style.scrollMarginTop = 'calc(var(--header-height) + 56px)';
+    });
+
+    // IntersectionObserver for ScrollSpy
+    const observerOptions: IntersectionObserverInit = {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          if (id) {
+            subheaderLinks.forEach((link) => {
+              const href = link.getAttribute('href');
+              if (href === `#${id}`) {
+                link.classList.add('is-active');
+              } else {
+                link.classList.remove('is-active');
+              }
+            });
+          }
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((sec) => observer.observe(sec));
+  }
+
+  // Run on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProductSubHeader);
+  } else {
+    initProductSubHeader();
+  }
+</script>
