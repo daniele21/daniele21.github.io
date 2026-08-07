@@ -12,21 +12,38 @@ const { application } = Astro.props;
 ---
 
 <article class="application-card reveal">
+  <div class="card-top-bar">
+    {application.microLabel ? (
+      <span class="app-micro-label">{application.microLabel}</span>
+    ) : <span></span>}
+    <span class={`status ${application.status === 'experimental' ? 'status-progress' : 'status-active'}`}>{application.statusLabel}</span>
+  </div>
   <div class="application-identity">
     <img src={`${import.meta.env.BASE_URL}${application.logoPath.replace(/^\//, '')}`} alt={`${application.name} logo`} class="application-logo-img" />
     <div>
-      <span class={`status ${application.status === 'experimental' ? 'status-progress' : 'status-active'}`}>{application.statusLabel}</span>
       <h3>{application.name}</h3>
       <p class="application-tagline" set:html={application.tagline}></p>
     </div>
   </div>
-  <p set:html={application.description}></p>
+  <p class="application-description" set:html={application.description}></p>
   <div class="feature-badges">
     {application.features.map((feature) => (
       <span class="feature-badge">{feature}</span>
     ))}
   </div>
-  <details class="project-disclosure" style="margin-top: 20px;">
+  {application.provesLine && (
+    <div class="app-proves-bar">
+      <div class="proves-badge">
+        <svg class="proves-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <polyline points="9 12 11 14 15 10"/>
+        </svg>
+        <span>PROVES</span>
+      </div>
+      <span class="proves-text">{application.provesLine.replace(/^PROVES\s*(?:→|->)\s*/i, '')}</span>
+    </div>
+  )}
+  <details class="project-disclosure">
     <summary>What it validates <span aria-hidden="true">+</span></summary>
     <div class="disclosure-body">
       <ul>
@@ -45,15 +62,16 @@ const { application } = Astro.props;
 
 <style>
   .application-card {
-    padding: clamp(28px, 4vw, 40px);
+    padding: clamp(24px, 3.5vw, 36px);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
+    grid-row: span 6;
+    display: grid;
+    grid-template-rows: subgrid;
     transition: transform var(--duration-base) var(--ease-out-expo),
                 box-shadow var(--duration-base) var(--ease-out-expo),
                 border-color var(--duration-base) ease;
@@ -65,10 +83,30 @@ const { application } = Astro.props;
     box-shadow: var(--shadow-md);
   }
 
-  .application-identity {
+  .card-top-bar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin: 0;
+    width: 100%;
+  }
+
+  .app-micro-label {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .application-identity {
+    display: flex;
+    align-items: flex-start;
     gap: var(--space-4);
+    margin: 0;
   }
 
   .application-logo-img {
@@ -98,12 +136,14 @@ const { application } = Astro.props;
     color: var(--ink);
     font-weight: 700;
     font-size: var(--text-small);
+    line-height: 1.35;
   }
 
-  .application-card > p {
-    margin: var(--space-5) 0 0;
+  .application-description {
+    margin: 0;
     color: var(--ink-muted);
     font-size: var(--text-small);
+    line-height: 1.55;
   }
 
   .status {
@@ -117,6 +157,7 @@ const { application } = Astro.props;
     font-weight: 850;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    margin-left: auto;
   }
 
   .status-active { color: var(--status-active-text); background: var(--status-active-bg); }
@@ -125,8 +166,9 @@ const { application } = Astro.props;
   .feature-badges {
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
     gap: var(--space-2);
-    margin-top: var(--space-4);
+    margin: 0;
   }
 
   .feature-badge {
@@ -150,8 +192,57 @@ const { application } = Astro.props;
     border-color: var(--accent-blue-light);
   }
 
+  .app-proves-bar {
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.04) 0%, rgba(59, 130, 246, 0.08) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.16);
+    border-left: 3px solid var(--accent-blue);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);
+    transition: all var(--duration-fast) ease;
+  }
+
+  .application-card:hover .app-proves-bar {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.07) 0%, rgba(59, 130, 246, 0.12) 100%);
+    border-color: rgba(37, 99, 235, 0.28);
+    border-left-color: var(--accent-blue);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+  }
+
+  .proves-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-blue);
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 850;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.22);
+  }
+
+  .proves-icon {
+    flex-shrink: 0;
+  }
+
+  .proves-text {
+    font-size: 0.8rem;
+    font-weight: 650;
+    color: var(--ink);
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+  }
+
   .project-disclosure {
-    margin-top: var(--space-4);
+    margin: 0;
     padding-top: var(--space-3);
     border-top: 1px solid var(--border-subtle);
   }
@@ -200,6 +291,18 @@ const { application } = Astro.props;
   .project-links a:hover {
     color: var(--accent-blue-light);
     text-decoration: underline;
+  }
+
+  @media (max-width: 1040px) {
+    .application-card {
+      grid-row: auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .app-proves-bar {
+      margin-top: auto;
+    }
   }
 
   @media (max-width: 580px) {

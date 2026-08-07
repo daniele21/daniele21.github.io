@@ -36,6 +36,8 @@ export interface Pillar {
 export interface ReferenceApplication {
   id: 'closedroom' | 'redact-guard' | 'aura-finance';
   category: string;
+  microLabel?: string;
+  provesLine?: string;
   name: string;
   tagline: string;
   headline: string;

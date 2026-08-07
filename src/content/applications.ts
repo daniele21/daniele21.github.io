@@ -8,6 +8,8 @@ export const applications: ReferenceApplication[] = [
   {
     id: 'closedroom',
     category: 'PRIVATE CONVERSATIONS',
+    microLabel: 'PROTECTS CONVERSATIONS',
+    provesLine: 'PROVES → Local speech + reasoning',
     name: 'ClosedRoom',
     tagline: 'Privacy-first <strong>meeting intelligence</strong>.',
     headline:
@@ -32,6 +34,8 @@ export const applications: ReferenceApplication[] = [
   {
     id: 'redact-guard',
     category: 'SENSITIVE DOCUMENTS',
+    microLabel: 'PROTECTS DOCUMENTS',
+    provesLine: 'PROVES → Local PII detection + minimisation',
     name: 'RedactGuard',
     tagline: 'Local <strong>document anonymization & PII protection</strong>.',
     headline:
@@ -56,6 +60,8 @@ export const applications: ReferenceApplication[] = [
   {
     id: 'aura-finance',
     category: 'PERSONAL FINANCIAL DATA',
+    microLabel: 'PROTECTS FINANCIAL DATA',
+    provesLine: 'PROVES → Local-first data architecture',
     name: 'Aura Finance',
     tagline: 'Privacy-first <strong>personal finance</strong>.',
     headline:

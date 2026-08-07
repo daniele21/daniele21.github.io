@@ -27,16 +27,33 @@ const iconClassMap = {
         <svg viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10v4"/></svg>
       )}
       {pillar.accent === 'violet' && (
-        <svg viewBox="0 0 24 24"><path d="M7 8h10v10H7zM9 5 7.5 3M15 5 16.5 3M5 10H3M21 10h-2M9 12v2M15 12v2"/></svg>
+        <svg viewBox="0 0 100 100" class="harness-symbol-svg">
+          <path fill="#7C5CFC" d="M8,8 L33,20 L33,42 L16,50 L33,58 L33,80 L8,92 Z" />
+          <path fill="#25C2A0" d="M92,8 L67,20 L67,42 L84,50 L67,58 L67,80 L92,92 Z" />
+          <path fill="#7C5CFC" d="M41.964,48.724 H44.643 V51.276 H41.964 Z" />
+          <path fill="#6467EB" d="M46.429,48.724 H49.107 V51.276 H46.429 Z" />
+          <path fill="#3E97CD" d="M50.893,48.724 H53.571 V51.276 H50.893 Z" />
+          <path fill="#25C2A0" d="M55.357,48.724 H58.036 V51.276 H55.357 Z" />
+        </svg>
       )}
     </span>
     <span class={`status ${pillar.status === 'experimental' ? 'status-progress' : 'status-active'}`}>{pillar.statusLabel}</span>
   </div>
   <h3>{pillar.name}</h3>
-  <p class="project-role" set:html={pillar.role}></p>
+
+  <div class="pillar-problem-block">
+    <span class="pillar-block-label">PROBLEM</span>
+    <p set:html={pillar.problem}></p>
+  </div>
+
+  <div class="pillar-solution-block">
+    <span class="pillar-block-label">SOLUTION</span>
+    <p set:html={pillar.role}></p>
+  </div>
+
   <div class="tech-tags">
     {pillar.technologies.map((tech) => (
-      <span>{tech}</span>
+      <span class="tech-pill">{tech}</span>
     ))}
   </div>
   <details class="project-disclosure">
@@ -112,9 +129,20 @@ const iconClassMap = {
     stroke-linejoin: round;
   }
 
+  .project-icon svg.harness-symbol-svg {
+    width: 34px;
+    height: 34px;
+    fill: none;
+    stroke: none;
+  }
+
   .project-icon-teal { background: linear-gradient(145deg, #0fa6a4, #077b86); }
   .project-icon-blue { background: linear-gradient(145deg, #397dff, #284dcc); }
-  .project-icon-violet { background: linear-gradient(145deg, #6f5bf3, #4235bf); }
+  .project-icon-violet {
+    background: #ffffff;
+    border: 1px solid rgba(124, 92, 252, 0.2);
+    box-shadow: 0 8px 20px rgba(124, 92, 252, 0.12);
+  }
 
   .status {
     display: inline-flex;
@@ -133,7 +161,7 @@ const iconClassMap = {
   .status-progress { color: var(--status-progress-text); background: var(--status-progress-bg); }
 
   .project-card h3 {
-    margin: var(--space-5) 0 var(--space-2);
+    margin: var(--space-4) 0 var(--space-2);
     font-family: var(--font-body);
     font-size: 1.35rem;
     font-weight: 700;
@@ -142,27 +170,73 @@ const iconClassMap = {
     color: var(--ink);
   }
 
-  .project-role {
-    margin-bottom: var(--space-4);
+  .pillar-problem-block,
+  .pillar-solution-block {
+    margin-top: var(--space-3);
+  }
+
+  .pillar-block-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    margin-bottom: 2px;
+  }
+
+  .pillar-problem-block .pillar-block-label {
+    color: var(--ink-subtle);
+  }
+
+  .pillar-problem-block p {
+    margin: 0;
+    font-size: var(--text-xs);
     color: var(--ink-muted);
-    font-size: var(--text-small);
-    line-height: 1.5;
+    line-height: 1.45;
+  }
+
+  .pillar-solution-block .pillar-block-label {
+    color: var(--accent-blue);
+  }
+
+  .pillar-solution-block p {
+    margin: 0;
+    font-size: var(--text-xs);
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.45;
   }
 
   .tech-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    align-items: center;
+    gap: 6px;
     margin-top: auto;
     padding-top: var(--space-4);
-    font-size: var(--text-xs);
-    color: var(--ink-subtle);
-    font-weight: 600;
   }
 
-  .tech-tags span + span::before {
-    content: "·";
-    margin-right: var(--space-2);
+  .tech-tags span,
+  .tech-pill {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: var(--surface-blue);
+    border: 1px solid var(--border-subtle);
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    transition: background-color var(--duration-fast) ease, border-color var(--duration-fast) ease, transform var(--duration-fast) ease;
+  }
+
+  .tech-tags span:hover,
+  .tech-pill:hover {
+    background: var(--surface-card);
+    border-color: var(--accent-blue-light);
+    transform: translateY(-1px);
   }
 
   .project-disclosure {

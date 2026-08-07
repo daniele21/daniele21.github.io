@@ -12,42 +12,38 @@ export const credibilityIntro = {
 export const credibilityProofs: CredibilityProof[] = [
   {
     title: 'AI Technical Leadership',
-    subtitle: 'From prototype to production',
+    subtitle: 'Prototype → production',
     description:
       'Experience leading AI initiatives in complex organisations, turning experiments into adopted, governed, and scaled systems.',
     iconType: 'leadership',
     metric: 'Enterprise',
     tag: 'Scale & Governance',
-    accent: 'indigo',
   },
   {
-    title: '80+ Articles Published',
-    subtitle: 'Knowledge shared through stAI tuned',
+    title: 'Articles Published',
+    subtitle: 'Research & insights',
     description:
-      'Long-form research, model evaluations, and practical LLM insights shared with the technical community.',
+      'Long-form research, model evaluations, and practical LLM insights shared with the technical community through stAI tuned.',
     iconType: 'articles',
     metric: '80+',
     tag: 'Research & Insights',
-    accent: 'cyan',
   },
   {
-    title: '150+ AI Projects Reviewed',
-    subtitle: 'Mentoring & technical education',
+    title: 'AI Projects Reviewed',
+    subtitle: 'Technical mentoring',
     description:
       'Hands-on feedback, architecture guidance, and mentoring for emerging AI engineers and technical teams.',
     iconType: 'mentoring',
     metric: '150+',
     tag: 'Engineering Mentorship',
-    accent: 'blue',
   },
   {
-    title: 'Nova 111 (2022)',
-    subtitle: 'Recognised top talent',
+    title: 'Nova Talent',
+    subtitle: 'Recognition',
     description:
       'Selected by Nova Talent among emerging Italian talent driving innovation and technology leadership.',
     iconType: 'award',
-    metric: 'Top 111',
+    metric: 'Top Nova 111',
     tag: 'Award & Recognition',
-    accent: 'amber',
   },
 ];
