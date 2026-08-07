@@ -1,73 +1,16 @@
-name: Deploy Preview to GitHub Pages
+name: Deploy Preview to GitHub Pages (paused)
 
 on:
-  push:
-    branches: [dev]
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-
-concurrency:
-  group: preview-${{ github.ref }}
-  cancel-in-progress: true
+  workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
-  dev-preview:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+  preview-paused:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build with Astro for Dev
-        env:
-          ASTRO_BASE: /dev/
-        run: npx astro build
-
-      - name: Deploy Dev Preview to gh-pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: ./dist
-          target-folder: dev
-          branch: gh-pages
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-
-  pr-preview:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build with Astro for PR Preview
-        env:
-          ASTRO_BASE: /pr-preview/pr-${{ github.event.number }}/
-        run: npx astro build
-
-      - name: Deploy PR Preview
-        uses: rossjrw/pr-preview-action@v1
-        with:
-          source-dir: ./dist
-          preview-directory: pr-preview
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Explain preview status
+        run: |
+          echo "Preview deployment is temporarily paused."
+          echo "Production now deploys through the official GitHub Pages artifact workflow."
