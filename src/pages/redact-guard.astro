@@ -1,0 +1,37 @@
+---
+/**
+ * redact-guard.astro
+ * Modular deep-dive page for RedactGuard project.
+ * Composes dedicated section components from src/components/redactguard/
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RedactGuardHeader from '../components/redactguard/RedactGuardHeader.astro';
+import RedactGuardHero from '../components/redactguard/RedactGuardHero.astro';
+import RedactGuardProblem from '../components/redactguard/RedactGuardProblem.astro';
+import RedactGuardSolution from '../components/redactguard/RedactGuardSolution.astro';
+import RedactGuardBenefits from '../components/redactguard/RedactGuardBenefits.astro';
+import RedactGuardProduct from '../components/redactguard/RedactGuardProduct.astro';
+import RedactGuardArchitecture from '../components/redactguard/RedactGuardArchitecture.astro';
+import RedactGuardCta from '../components/redactguard/RedactGuardCta.astro';
+
+import { redactGuardData } from '../content/redactGuard';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+---
+
+<BaseLayout
+  title={redactGuardData.meta.title}
+  description={redactGuardData.meta.description}
+>
+  <RedactGuardHeader baseUrl={baseUrl} slot="header" />
+
+  <main id="top">
+    <RedactGuardHero baseUrl={baseUrl} />
+    <RedactGuardProblem />
+    <RedactGuardSolution />
+    <RedactGuardBenefits />
+    <RedactGuardProduct baseUrl={baseUrl} />
+    <RedactGuardArchitecture baseUrl={baseUrl} />
+    <RedactGuardCta />
+  </main>
+</BaseLayout>

@@ -21,7 +21,15 @@ const { application } = Astro.props;
   <div class="application-identity">
     <img src={`${import.meta.env.BASE_URL}${application.logoPath.replace(/^\//, '')}`} alt={`${application.name} logo`} class="application-logo-img" />
     <div>
-      <h3>{application.name}</h3>
+      <h3>
+        {application.pageUrl ? (
+          <a href={`${import.meta.env.BASE_URL}${application.pageUrl.replace(/^\//, '')}`} class="app-title-link">
+            {application.name} →
+          </a>
+        ) : (
+          application.name
+        )}
+      </h3>
       <p class="application-tagline" set:html={application.tagline}></p>
     </div>
   </div>
@@ -51,11 +59,14 @@ const { application } = Astro.props;
           <li set:html={item}></li>
         ))}
       </ul>
-      {application.repositoryUrl && (
-        <div class="project-links">
+      <div class="project-links">
+        {application.pageUrl && (
+          <a href={`${import.meta.env.BASE_URL}${application.pageUrl.replace(/^\//, '')}`} class="deep-dive-btn">Read Deep-Dive →</a>
+        )}
+        {application.repositoryUrl && (
           <a href={application.repositoryUrl} target="_blank" rel="noreferrer">View repository ↗</a>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   </details>
 </article>
@@ -127,8 +138,19 @@ const { application } = Astro.props;
 
   .application-identity h3 {
     margin: 4px 0 2px;
-    font-size: 1.35rem;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
     color: var(--ink);
+  }
+
+  .app-title-link {
+    color: var(--ink);
+    text-decoration: none;
+    transition: color var(--duration-fast) ease;
+  }
+
+  .app-title-link:hover {
+    color: var(--accent-blue);
   }
 
   .application-tagline {

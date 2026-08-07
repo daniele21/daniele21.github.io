@@ -53,6 +53,7 @@ export const applications: ReferenceApplication[] = [
     status: 'active-development',
     statusLabel: 'ACTIVE',
     logoPath: '/images/redact-guard/logo.png',
+    pageUrl: '/redact-guard',
     repositoryUrl: 'https://github.com/daniele21/redact-guard',
     currentRelationship:
       'PDF → Docling Markdown → Local LLM PII Detection → User Review → Selective Redaction → Anonymized Export',

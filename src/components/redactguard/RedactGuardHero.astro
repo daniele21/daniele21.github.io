@@ -1,0 +1,213 @@
+---
+/**
+ * RedactGuardHero.astro
+ * Hero section for RedactGuard subpage, 100% aligned with Home Hero dimensions and typography.
+ */
+import { redactGuardData } from '../../content/redactGuard';
+interface Props {
+  baseUrl: string;
+}
+const { baseUrl } = Astro.props;
+const { hero } = redactGuardData;
+---
+
+<section class="hero redactguard-hero" id="top">
+  <div class="shell hero-grid">
+    <div class="hero-copy reveal">
+      <div class="eyebrow-pill">{hero.eyebrow}</div>
+      <h1>{hero.titleLine1}<br><span class="blue-text">{hero.titleLine2}</span></h1>
+      <p class="hero-lede" set:html={hero.lede.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}></p>
+
+      <div class="hero-actions" aria-label="Primary actions">
+        <a class="button button-primary" href="#solution">See how it works <span aria-hidden="true">→</span></a>
+        <a class="button button-secondary" href="https://github.com/daniele21/redact-guard" target="_blank" rel="noreferrer">View source <span aria-hidden="true">↗</span></a>
+      </div>
+
+      <div class="pills">
+        {hero.pills.map((pill) => (
+          <span class="pill" set:html={pill.replace(/(Local|Custom|Human)/g, '<strong>$1</strong>')} />
+        ))}
+      </div>
+    </div>
+
+    <div class="hero-visual reveal">
+      <img
+        data-zoomable
+        src={`${baseUrl}/${hero.imageHero}`}
+        alt="RedactGuard review screen with detected sensitive data and redaction controls"
+      />
+      <div class="visual-caption">
+        <span>{hero.imageCaptionLeft}</span>
+        <span>{hero.imageCaptionRight}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: clamp(40px, 5vw, 80px) 0 60px;
+    position: relative;
+    overflow: clip;
+  }
+
+  .redactguard-hero::before {
+    content: "";
+    position: absolute;
+    width: 650px;
+    height: 650px;
+    border-radius: 50%;
+    right: -240px;
+    top: -280px;
+    background: radial-gradient(circle, rgba(13, 148, 136, 0.14), transparent 68%);
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(24px, 3.5vw, 56px);
+  }
+
+  .hero-copy {
+    max-width: 560px;
+  }
+
+  .eyebrow-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--surface-blue);
+    color: var(--accent-blue);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.08);
+  }
+
+  .hero-copy h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 3.4vw, 3.2rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .blue-text {
+    color: var(--accent-blue);
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-lede {
+    margin: var(--space-4) 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-lg);
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 48px;
+    padding: 10px 24px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 750;
+    font-size: var(--text-small);
+    overflow: hidden;
+    transition: transform var(--duration-base) var(--ease-out-expo),
+                box-shadow var(--duration-base) var(--ease-out-expo),
+                background-color var(--duration-fast) ease,
+                border-color var(--duration-fast) ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .button:hover {
+    transform: translateY(-3px);
+  }
+
+  .button-primary {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue));
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.28);
+  }
+
+  .button-secondary {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: var(--space-5);
+  }
+
+  .pill {
+    padding: 6px 12px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    color: var(--ink-muted);
+    font-size: var(--text-xs);
+    font-weight: 600;
+  }
+
+  .pill strong {
+    color: var(--accent-blue);
+  }
+
+  .hero-visual {
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-xl);
+    padding: 12px;
+    background: var(--surface-card);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .hero-visual img {
+    border-radius: var(--radius-lg);
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+  }
+
+  .visual-caption {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 10px;
+    padding: 4px 6px;
+    color: var(--ink-subtle);
+    font-size: var(--text-xs);
+    font-weight: 600;
+  }
+
+  @media (max-width: 1020px) {
+    .hero-grid { grid-template-columns: 1fr; }
+  }
+</style>

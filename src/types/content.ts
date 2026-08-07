@@ -49,6 +49,7 @@ export interface ReferenceApplication {
   status: ProjectStatus;
   statusLabel: string;
   logoPath: string;
+  pageUrl?: string;
   productUrl?: string;
   repositoryUrl?: string;
   currentRelationship: string;
