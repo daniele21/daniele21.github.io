@@ -19,6 +19,13 @@ const { hero } = localLlmServerData;
     <div class="hero-grid">
       <div class="hero-content reveal">
         <div class="hero-eyebrow-row">
+          <img
+            src={`${baseUrl}/images/local-llm-server/logo.svg`}
+            alt="Local LLM Server logo"
+            class="hero-logo-img"
+            width="32"
+            height="32"
+          />
           <span class="hero-eyebrow">{hero.eyebrow}</span>
           <div class="hero-badges">
             {hero.badges.map((b) => (
@@ -108,6 +115,17 @@ const { hero } = localLlmServerData;
     align-items: center;
     gap: var(--space-3);
     margin-bottom: var(--space-3);
+  }
+
+  .hero-logo-img {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    background: #090d16;
+    border: 1px solid rgba(13, 148, 136, 0.4);
+    box-shadow: 0 4px 16px rgba(13, 148, 136, 0.3);
+    flex-shrink: 0;
   }
 
   .hero-eyebrow {

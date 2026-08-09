@@ -12,6 +12,7 @@ export interface SubHeaderLink {
 export interface Props {
   title: string;
   badge?: string;
+  logoPath?: string;
   links: SubHeaderLink[];
   cta?: {
     label: string;
@@ -19,13 +20,23 @@ export interface Props {
   };
 }
 
-const { title, badge, links, cta } = Astro.props;
+const { title, badge, logoPath, links, cta } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 ---
 
 <div class="product-subheader" data-product-subheader>
   <div class="shell subheader-inner">
     <div class="subheader-brand">
       <a href="#top" class="subheader-title-link">
+        {logoPath && (
+          <img
+            src={`${baseUrl}/${logoPath.replace(/^\//, '')}`}
+            alt=""
+            class="subheader-logo-img"
+            width="20"
+            height="20"
+          />
+        )}
         <span class="subheader-title">{title}</span>
       </a>
       {badge && <span class="subheader-badge">{badge}</span>}
@@ -89,8 +100,21 @@ const { title, badge, links, cta } = Astro.props;
   }
 
   .subheader-title-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     text-decoration: none;
     color: var(--ink);
+  }
+
+  .subheader-logo-img {
+    width: 22px;
+    height: 22px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #090d16;
+    border: 1px solid rgba(13, 148, 136, 0.3);
+    flex-shrink: 0;
   }
 
   .subheader-title {

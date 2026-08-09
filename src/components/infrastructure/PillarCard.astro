@@ -21,14 +21,18 @@ const iconClassMap = {
 
 <article class="project-card pillar-card reveal">
   <div class="project-card-top">
-    <span class={`project-icon ${iconClassMap[pillar.accent]}`} aria-hidden="true">
-      {pillar.accent === 'teal' && (
+    <span class={`project-icon ${pillar.id === 'local-llm-server' ? 'project-icon-local-llm' : iconClassMap[pillar.accent]}`} aria-hidden="true">
+      {pillar.id === 'local-llm-server' ? (
+        <img
+          src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/local-llm-server/logo.svg`}
+          alt="Local LLM Server logo"
+          class="pillar-logo-img"
+          width="56"
+          height="56"
+        />
+      ) : pillar.accent === 'teal' ? (
         <svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/><path d="m8 9.8 8-4.5"/></svg>
-      )}
-      {pillar.accent === 'blue' && (
-        <svg viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10v4"/></svg>
-      )}
-      {pillar.accent === 'violet' && (
+      ) : pillar.accent === 'violet' ? (
         <svg viewBox="0 0 100 100" class="harness-symbol-svg">
           <path fill="#7C5CFC" d="M8,8 L33,20 L33,42 L16,50 L33,58 L33,80 L8,92 Z" />
           <path fill="#25C2A0" d="M92,8 L67,20 L67,42 L84,50 L67,58 L67,80 L92,92 Z" />
@@ -37,6 +41,8 @@ const iconClassMap = {
           <path fill="#3E97CD" d="M50.893,48.724 H53.571 V51.276 H50.893 Z" />
           <path fill="#25C2A0" d="M55.357,48.724 H58.036 V51.276 H55.357 Z" />
         </svg>
+      ) : (
+        <svg viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10v4"/></svg>
       )}
     </span>
     <span class={`status ${pillar.status === 'experimental' ? 'status-progress' : 'status-active'}`}>{pillar.statusLabel}</span>
@@ -158,6 +164,22 @@ const iconClassMap = {
     background: #ffffff;
     border: 1px solid rgba(124, 92, 252, 0.2);
     box-shadow: 0 8px 20px rgba(124, 92, 252, 0.12);
+  }
+
+  .project-icon-local-llm {
+    background: #090d16;
+    border: 1px solid rgba(13, 148, 136, 0.4);
+    box-shadow: 0 8px 24px rgba(13, 148, 136, 0.25);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .pillar-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    display: block;
   }
 
   .status {

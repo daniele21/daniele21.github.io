@@ -203,6 +203,9 @@ export interface ChallengeItem {
   number: string;
   title: string;
   description: string;
+  icon?: string;
+  accent?: 'blue' | 'teal' | 'violet' | 'indigo';
+  tags?: string[];
 }
 
 /** Challenges section copy */

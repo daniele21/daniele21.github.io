@@ -123,24 +123,36 @@ export const homeContent: HomeContent = {
         title: 'Runtime lifecycle',
         description:
           'Model management, hardware compatibility, dynamic switching & zero-downtime updates.',
+        icon: 'lifecycle',
+        accent: 'blue',
+        tags: ['Model Management', 'Dynamic Switching', 'Zero-Downtime'],
       },
       {
         number: '02',
         title: 'Observability & telemetry',
         description:
           'Performance tracking, latency metrics, accuracy signals & memory profiling without privacy leakage.',
+        icon: 'telemetry',
+        accent: 'teal',
+        tags: ['Latency Metrics', 'Memory Profiling', 'Privacy-Safe'],
       },
       {
         number: '03',
         title: 'Hardware adaptation',
         description:
           'RAM/VRAM constraints, resident memory optimization & thermal management on desktop and mobile.',
+        icon: 'hardware',
+        accent: 'violet',
+        tags: ['VRAM Optimization', 'Thermal Control', 'Cross-Platform'],
       },
       {
         number: '04',
         title: 'Developer ergonomics',
         description:
           'Unified OpenAI-compatible APIs, reliable local IPC & intuitive user experiences.',
+        icon: 'ergonomics',
+        accent: 'indigo',
+        tags: ['OpenAI Compatible', 'Local IPC', 'Intuitive UX'],
       },
     ],
   },
