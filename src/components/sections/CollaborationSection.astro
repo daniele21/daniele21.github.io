@@ -2,34 +2,35 @@
 /**
  * CollaborationSection - Dark card CTA section with contact email and location.
  */
-import { socialLinks } from '../../content/site';
+import { socialLinks, getContent } from '../../content';
+
+const { collaboration: col } = getContent().home;
 ---
 
 <section class="collaboration" id="collaborate" aria-labelledby="collaboration-title">
   <div class="shell collaboration-inner reveal">
     <div>
-      <p class="section-kicker">COLLABORATE</p>
+      <p class="section-kicker">{col.kicker}</p>
       <h2 id="collaboration-title">
-        Exploring whether part of your AI stack <br>
-        <strong> should move local?</strong>
+        {col.titleLine1} <br>
+        <strong> {col.titleHighlight}</strong>
       </h2>
       <p>
-        I'm interested in real workloads: benchmarking a closed-vs-local task,
-        testing models and devices, designing hybrid architectures,
-        or exploring privacy-sensitive AI workflows.
+        {col.description}
       </p>
       <div class="collaboration-info" style="margin-top: 20px;">
-        <span><svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> {socialLinks.email}</span>
-        <span><svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg> Milan, Italy</span>
+        <span><svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> {col.email}</span>
+        <span><svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg> {col.location}</span>
       </div>
     </div>
 
     <div class="collaboration-actions">
-      <a class="button button-primary" href={`mailto:${socialLinks.email}`}>Discuss a workload <span aria-hidden="true">→</span></a>
-      <a class="button button-secondary" href={socialLinks.linkedin} target="_blank" rel="noreferrer" style="color:#fff;border-color:rgba(255,255,255,0.4);background:transparent;">Connect on LinkedIn ↗</a>
+      <a class="button button-primary" href={`mailto:${col.email}`}>{col.primaryActionLabel} <span aria-hidden="true">→</span></a>
+      <a class="button button-secondary" href={socialLinks.linkedin} target="_blank" rel="noreferrer" style="color:#fff;border-color:rgba(255,255,255,0.4);background:transparent;">{col.secondaryActionLabel}</a>
     </div>
   </div>
 </section>
+
 
 <style>
   .collaboration {

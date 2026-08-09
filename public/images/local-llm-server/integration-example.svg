@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750">
+  <defs>
+    <linearGradient id="ie-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="750" rx="16" fill="url(#ie-bg)" />
+  <rect width="1200" height="48" rx="16" fill="#1E293B" />
+  <rect y="32" width="1200" height="16" fill="#1E293B" />
+  <circle cx="24" cy="24" r="6" fill="#EF4444" />
+  <circle cx="44" cy="24" r="6" fill="#F59E0B" />
+  <circle cx="64" cy="24" r="6" fill="#10B981" />
+  <text x="100" y="29" fill="#94A3B8" font-family="sans-serif" font-size="14" font-weight="600">Local LLM Server — Interactive OpenAPI / Swagger UI &amp; SDK Examples</text>
+
+  <g transform="translate(40, 70)">
+    <!-- Left Column: Interactive API Docs -->
+    <rect x="0" y="0" width="530" height="630" rx="12" fill="#020617" stroke="#334155" stroke-width="1" />
+    <text x="24" y="35" fill="#38BDF8" font-family="sans-serif" font-size="16" font-weight="700">OpenAI-Compatible Endpoints (/v1)</text>
+
+    <!-- Endpoint Item 1 -->
+    <rect x="20" y="60" width="490" height="54" rx="8" fill="#0F172A" stroke="#10B981" stroke-width="1" />
+    <rect x="32" y="74" width="56" height="26" rx="4" fill="#065F46" />
+    <text x="44" y="92" fill="#34D399" font-family="monospace" font-size="12" font-weight="700">POST</text>
+    <text x="100" y="92" fill="#F8FAFC" font-family="monospace" font-size="14" font-weight="600">/v1/chat/completions</text>
+
+    <!-- Endpoint Item 2 -->
+    <rect x="20" y="128" width="490" height="54" rx="8" fill="#0F172A" stroke="#2563EB" stroke-width="1" />
+    <rect x="32" y="142" width="56" height="26" rx="4" fill="#1E3A8A" />
+    <text x="48" y="160" fill="#60A5FA" font-family="monospace" font-size="12" font-weight="700">GET</text>
+    <text x="100" y="160" fill="#F8FAFC" font-family="monospace" font-size="14" font-weight="600">/v1/models</text>
+
+    <!-- Endpoint Item 3 (Admin) -->
+    <rect x="20" y="196" width="490" height="54" rx="8" fill="#0F172A" stroke="#7C3AED" stroke-width="1" />
+    <rect x="32" y="210" width="56" height="26" rx="4" fill="#4C1D95" />
+    <text x="44" y="228" fill="#C084FC" font-family="monospace" font-size="12" font-weight="700">POST</text>
+    <text x="100" y="228" fill="#F8FAFC" font-family="monospace" font-size="14" font-weight="600">/admin/runtime/switch</text>
+
+    <!-- Response Payload Box -->
+    <rect x="20" y="270" width="490" height="340" rx="8" fill="#0F172A" />
+    <text x="40" y="300" fill="#94A3B8" font-family="sans-serif" font-size="12" font-weight="700">LIVE OPENAPI SPEC RESPONSE SCHEMA</text>
+    <text x="40" y="330" fill="#A7F3D0" font-family="monospace" font-size="12">{</text>
+    <text x="60" y="355" fill="#93C5FD" font-family="monospace" font-size="12">"id": "chatcmpl-7f89a2b",</text>
+    <text x="60" y="380" fill="#93C5FD" font-family="monospace" font-size="12">"object": "chat.completion",</text>
+    <text x="60" y="405" fill="#93C5FD" font-family="monospace" font-size="12">"created": 1723193400,</text>
+    <text x="60" y="430" fill="#93C5FD" font-family="monospace" font-size="12">"model": "nemotron-nano-4b-q8",</text>
+    <text x="60" y="455" fill="#93C5FD" font-family="monospace" font-size="12">"choices": [{ "message": { "role": "assistant", "content": "..." } }],</text>
+    <text x="60" y="480" fill="#93C5FD" font-family="monospace" font-size="12">"usage": { "prompt_tokens": 142, "completion_tokens": 247 }</text>
+    <text x="40" y="505" fill="#A7F3D0" font-family="monospace" font-size="12">}</text>
+
+    <!-- Right Column: Python Client SDK -->
+    <rect x="560" y="0" width="550" height="630" rx="12" fill="#020617" stroke="#334155" stroke-width="1" />
+    <text x="584" y="35" fill="#10B981" font-family="sans-serif" font-size="16" font-weight="700">Python Integration (OpenAI SDK)</text>
+    
+    <text x="584" y="75" fill="#E2E8F0" font-family="monospace" font-size="13"><tspan fill="#F7768E">from</tspan> openai <tspan fill="#F7768E">import</tspan> OpenAI</text>
+    <text x="584" y="115" fill="#E2E8F0" font-family="monospace" font-size="13">client = OpenAI(</text>
+    <text x="614" y="145" fill="#E2E8F0" font-family="monospace" font-size="13">base_url=<tspan fill="#9ECE6A">"http://127.0.0.1:1235/v1"</tspan>,</text>
+    <text x="614" y="175" fill="#E2E8F0" font-family="monospace" font-size="13">api_key=<tspan fill="#9ECE6A">"local"</tspan></text>
+    <text x="584" y="205" fill="#E2E8F0" font-family="monospace" font-size="13">)</text>
+
+    <text x="584" y="255" fill="#E2E8F0" font-family="monospace" font-size="13">response = client.chat.completions.create(</text>
+    <text x="614" y="285" fill="#E2E8F0" font-family="monospace" font-size="13">model=<tspan fill="#9ECE6A">"nemotron-nano-4b-q8"</tspan>,</text>
+    <text x="614" y="315" fill="#E2E8F0" font-family="monospace" font-size="13">messages=[{</text>
+    <text x="644" y="345" fill="#9ECE6A">"role"<tspan fill="#E2E8F0">:</tspan> "user"<tspan fill="#E2E8F0">,</tspan></text>
+    <text x="644" y="375" fill="#9ECE6A">"content"<tspan fill="#E2E8F0">:</tspan> "Extract decisions."</text>
+    <text x="614" y="405" fill="#E2E8F0" font-family="monospace" font-size="13">}],</text>
+    <text x="614" y="435" fill="#E2E8F0" font-family="monospace" font-size="13">stream=<tspan fill="#BB9AF7">True</tspan></text>
+    <text x="584" y="465" fill="#E2E8F0" font-family="monospace" font-size="13">)</text>
+
+    <text x="584" y="525" fill="#E2E8F0" font-family="monospace" font-size="13"><tspan fill="#F7768E">for</tspan> chunk <tspan fill="#F7768E">in</tspan> response:</text>
+    <text x="614" y="555" fill="#E2E8F0" font-family="monospace" font-size="13">print(chunk.choices[0].delta.content <tspan fill="#F7768E">or</tspan> <tspan fill="#9ECE6A">""</tspan>, end=<tspan fill="#9ECE6A">""</tspan>)</text>
+  </g>
+</svg>

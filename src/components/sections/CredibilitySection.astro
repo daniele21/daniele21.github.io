@@ -3,22 +3,25 @@
  * CredibilitySection - Professional Track Record & Proof Points.
  * Engineering and research credibility designed in clean blue/neutral aesthetic.
  */
-import { credibilityProofs } from '../../content/credibility';
+import { credibilityProofs, getContent } from '../../content';
+
+const { credibility: cred } = getContent().home;
 ---
 
 <section class="section section-credibility" id="credibility" aria-labelledby="credibility-title">
   <div class="shell">
     <div class="section-heading reveal">
       <div>
-        <p class="section-kicker">PROFESSIONAL TRACK RECORD</p>
+        <p class="section-kicker">{cred.kicker}</p>
         <h2 id="credibility-title">
-          Research backed by <strong>real-world AI delivery</strong>
+          {cred.titlePrefix}<strong>{cred.titleHighlight}</strong>
         </h2>
       </div>
       <p class="credibility-intro-text">
-        Local-first research and engineering built on years spent evaluating, designing, and scaling AI systems in complex enterprise environments.
+        {cred.introText}
       </p>
     </div>
+
 
     <div class="credibility-grid">
       {credibilityProofs.map((item) => (

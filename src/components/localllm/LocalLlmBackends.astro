@@ -1,0 +1,150 @@
+---
+/**
+ * LocalLlmBackends.astro
+ * Backend engine comparison table component.
+ */
+import { localLlmServerData } from '../../content/localLlmServer';
+
+const { backends } = localLlmServerData;
+---
+
+<section class="section" id="backends">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div class="kicker">{backends.eyebrow}</div>
+      <h2>{backends.title}</h2>
+      <p class="lead">{backends.sub}</p>
+    </div>
+
+    <div class="table-wrapper reveal">
+      <table class="backend-table">
+        <thead>
+          <tr>
+            <th>Backend Engine</th>
+            <th>Format</th>
+            <th>Execution Model</th>
+            <th>Current Role &amp; Target Workloads</th>
+          </tr>
+        </thead>
+        <tbody>
+          {backends.matrix.map((row) => (
+            <tr>
+              <td class="cell-backend">
+                <code>{row.backend}</code>
+              </td>
+              <td>
+                <span class="format-badge">{row.format}</span>
+              </td>
+              <td class="cell-exec">{row.execution}</td>
+              <td class="cell-role">{row.role}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: clamp(60px, 7vw, 96px) 0;
+  }
+
+  .section-head {
+    max-width: 760px;
+    margin-bottom: var(--space-8);
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--space-3) 0;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .lead {
+    font-size: var(--text-body-lg);
+    line-height: 1.6;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .backend-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.9rem;
+  }
+
+  .backend-table th {
+    padding: 14px 20px;
+    background: var(--surface-muted);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 750;
+    font-size: 0.84rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .backend-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--ink-muted);
+  }
+
+  .backend-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .cell-backend code {
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-blue);
+    color: var(--accent-blue);
+    font-family: var(--font-mono, monospace);
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  .format-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--ink);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .cell-exec {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .cell-role {
+    line-height: 1.5;
+  }
+</style>

@@ -2,19 +2,20 @@
 /**
  * SiteFooter - Footer component with dynamic copyright year.
  */
-import { socialLinks } from '../../content/site';
+import { socialLinks, getContent } from '../../content';
 
+const { footer: ftr } = getContent().common;
 const currentYear = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="shell footer-inner">
     <div class="brand">
-      <img src={`${import.meta.env.BASE_URL}images/sign_1.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-light" height="36" />
-      <img src={`${import.meta.env.BASE_URL}images/sign_dark.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-dark" height="36" />
-      <span class="brand-name">Daniele Moltisanti</span>
+      <img src={`${import.meta.env.BASE_URL}images/sign_1.png`} alt={ftr.brandAltLight} class="brand-signature brand-signature-light" height="36" />
+      <img src={`${import.meta.env.BASE_URL}images/sign_dark.png`} alt={ftr.brandAltDark} class="brand-signature brand-signature-dark" height="36" />
+      <span class="brand-name">{ftr.brandName}</span>
     </div>
-    <p>© {currentYear}</p>
+    <p>{ftr.copyrightTemplate.replace('{year}', currentYear.toString())}</p>
     <div class="footer-links">
       <a href={socialLinks.github} target="_blank" rel="noreferrer">GitHub</a>
       <a href={socialLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
@@ -22,6 +23,7 @@ const currentYear = new Date().getFullYear();
     </div>
   </div>
 </footer>
+
 
 <style>
   .site-footer {

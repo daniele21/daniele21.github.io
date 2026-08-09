@@ -3,17 +3,19 @@
  * InfrastructureSection - Section containing the three pillars and the architecture relationship diagram.
  */
 import PillarCard from './PillarCard.astro';
-import { pillars } from '../../content/pillars';
+import { pillars, getContent } from '../../content';
+
+const { infrastructure: infra } = getContent().home;
 ---
 
 <section class="section section-stack" id="infrastructure" aria-labelledby="stack-title">
   <div class="shell">
     <div class="section-heading reveal">
       <div>
-        <p class="section-kicker">THE INFRASTRUCTURE STACK (THREE PILLARS)</p>
-        <h2 id="stack-title">Three infrastructure pillars</h2>
+        <p class="section-kicker">{infra.kicker}</p>
+        <h2 id="stack-title">{infra.title}</h2>
       </div>
-      <p>Each project solves a different part of the local-AI product stack. Reusable infrastructure, not isolated experiments.</p>
+      <p>{infra.subtitle}</p>
     </div>
 
     <div class="pillar-grid">
@@ -24,20 +26,21 @@ import { pillars } from '../../content/pillars';
 
     <!-- Architecture Relationship Diagram -->
     <div class="architecture-strip reveal" id="how-it-connects" aria-label="Architecture relationship diagram">
-      <p class="architecture-label">ARCHITECTURE RELATIONSHIP</p>
+      <p class="architecture-label">{infra.architectureLabel}</p>
       <div class="architecture-nodes">
-        <span class="architecture-node architecture-node-teal">Local LLM Server</span>
-        <span class="architecture-node architecture-node-blue">Local ASR Server</span>
-        <span class="architecture-node architecture-node-violet">Android LLM Harness</span>
+        {infra.nodes.map((node) => (
+          <span class={`architecture-node architecture-node-${node.accent}`}>{node.label}</span>
+        ))}
       </div>
       <div class="architecture-line" aria-hidden="true"></div>
       <div class="architecture-output">
-        <span>APIs / Protocols (gRPC, WebSocket, Local IPC)</span>
-        <strong>Reference Applications (ClosedRoom, RedactGuard, Aura Finance)</strong>
+        <span>{infra.protocolsText}</span>
+        <strong>{infra.outputAppsText}</strong>
       </div>
     </div>
   </div>
 </section>
+
 
 <style>
   .section-stack {

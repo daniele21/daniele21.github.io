@@ -2,31 +2,40 @@
 /**
  * AboutSection - Personal bio and profile photo.
  */
-import { socialLinks } from '../../content/site';
+import { socialLinks, getContent } from '../../content';
+
+const { about } = getContent().home;
 ---
 
 <section class="section section-about" id="about" aria-labelledby="about-title">
   <div class="shell about-grid">
     <div class="about-copy reveal">
-      <p class="section-kicker">ABOUT DANIELE</p>
-      <h2 id="about-title">I work where <strong>AI infrastructure</strong>, <strong>product strategy</strong>, and <strong>clear engineering</strong> intersect.</h2>
-      <p>I am <strong>Daniele Moltisanti</strong>, an AI technical leader and builder based in Milan. My work combines <em>technical architecture</em>, <em>product thinking</em>, and the ability to transform complex AI research into understandable decisions and reliable, intuitive software.</p>
-      <p>Alongside my independent work, I lead and design AI initiatives in complex organisations, translating technical possibilities into systems that can be adopted, governed, and scaled.</p>
-      <p>I also write, teach, and speak about AI architecture, strategy, and the path from experimentation to reliable products.</p>
+      <p class="section-kicker">{about.kicker}</p>
+      <h2 id="about-title">
+        {about.titlePrefix}<strong>{about.titleHighlight1}</strong>{about.titleMiddle}<strong>{about.titleHighlight2}</strong>{about.titleSuffix}
+      </h2>
+      {about.paragraphs.map((p, idx) => (
+        idx === 0 ? (
+          <p>I am <strong>Daniele Moltisanti</strong>, an AI technical leader and builder based in Milan. My work combines <em>technical architecture</em>, <em>product thinking</em>, and the ability to transform complex AI research into understandable decisions and reliable, intuitive software.</p>
+        ) : (
+          <p>{p}</p>
+        )
+      ))}
       
       <div class="about-links">
-        <a class="about-link" href={socialLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
-        <a class="about-link" href={socialLinks.github} target="_blank" rel="noreferrer">GitHub ↗</a>
-        <a class="about-link" href={socialLinks.staituned} target="_blank" rel="noreferrer">stAI tuned ↗</a>
-        <span class="about-link-muted" title="Coming soon">Speaking & public work <small>(coming soon)</small></span>
+        <a class="about-link" href={socialLinks.linkedin} target="_blank" rel="noreferrer">{about.links.linkedin}</a>
+        <a class="about-link" href={socialLinks.github} target="_blank" rel="noreferrer">{about.links.github}</a>
+        <a class="about-link" href={socialLinks.staituned} target="_blank" rel="noreferrer">{about.links.stai}</a>
+        <span class="about-link-muted" title="Coming soon">{about.links.speakingLabel} <small>{about.links.speakingSub}</small></span>
       </div>
     </div>
 
     <div class="about-photo-wrapper reveal">
-      <img src={`${import.meta.env.BASE_URL}images/profile-photo.jpg`} alt="Daniele Moltisanti" class="about-photo" />
+      <img src={`${import.meta.env.BASE_URL}images/profile-photo.jpg`} alt={about.photoAlt} class="about-photo" />
     </div>
   </div>
 </section>
+
 
 
 <style>

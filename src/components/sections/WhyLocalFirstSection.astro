@@ -5,6 +5,9 @@
  * Explains the strategic problem before introducing the technical solution.
  * Local-first is presented as optionality, not as an anti-cloud position.
  */
+import { getContent } from '../../content';
+
+const { whyLocalFirst: wlf } = getContent().home;
 ---
 
 <section
@@ -15,110 +18,45 @@
   <div class="shell">
 
     <div class="why-heading reveal">
-      <p class="section-kicker">WHY LOCAL-FIRST</p>
+      <p class="section-kicker">{wlf.kicker}</p>
 
       <h2 id="why-local-first-title">
-        The problem isn't the cloud.
-        <strong>It's depending on intelligence you don't control.</strong>
+        {wlf.titlePrefix}
+        <strong>{wlf.titleHighlight}</strong>
       </h2>
 
       <p class="why-sub">
-        Closed APIs are powerful. The risk is making them your <strong>only execution path</strong>.
+        {wlf.subtitlePrefix}<strong>{wlf.subtitleHighlight}</strong>{wlf.subtitleSuffix}
       </p>
     </div>
 
 
     <div class="dependency-grid">
-
-      <article class="dependency-card reveal">
-        <div>
-          <span class="dependency-index">01</span>
-          <h3>Model lifecycle</h3>
-          <div class="dependency-flow">
-            <div class="flow-problem-box">
-              <span class="pain-tag">PAIN POINT</span>
-              <p class="flow-problem">Provider deprecates model</p>
-            </div>
-            <span class="flow-arrow">↓</span>
-            <div class="flow-consequence-box">
-              <span class="consequence-tag">RISK</span>
-              <p class="flow-consequence">Forced migration + revalidation</p>
-            </div>
-          </div>
-        </div>
-        <div class="flow-outcome">
-          <span>LOCAL-FIRST SOLUTION</span>
-          <p>Pin the model. Migrate on your timeline.</p>
-        </div>
-      </article>
-
-      <article class="dependency-card reveal">
-        <div>
-          <span class="dependency-index">02</span>
-          <h3>Cost dependency</h3>
-          <div class="dependency-flow">
-            <div class="flow-problem-box">
-              <span class="pain-tag">PAIN POINT</span>
-              <p class="flow-problem">Per-token API pricing at scale</p>
-            </div>
-            <span class="flow-arrow">↓</span>
-            <div class="flow-consequence-box">
-              <span class="consequence-tag">RISK</span>
-              <p class="flow-consequence">Unpredictable recurring costs</p>
+      {wlf.dependencyCards.map((card) => (
+        <article class="dependency-card reveal">
+          <div>
+            <span class="dependency-index">{card.index}</span>
+            <h3>{card.title}</h3>
+            <div class="dependency-flow">
+              <div class="flow-problem-box">
+                <span class="pain-tag">{card.painLabel}</span>
+                <p class="flow-problem">{card.painText}</p>
+              </div>
+              <span class="flow-arrow">↓</span>
+              <div class="flow-consequence-box">
+                <span class="consequence-tag">{card.riskLabel}</span>
+                <p class="flow-consequence">{card.riskText}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="flow-outcome">
-          <span>LOCAL-FIRST SOLUTION</span>
-          <p>Shift suitable workloads to fixed capacity.</p>
-        </div>
-      </article>
-
-      <article class="dependency-card reveal">
-        <div>
-          <span class="dependency-index">03</span>
-          <h3>Data boundaries</h3>
-          <div class="dependency-flow">
-            <div class="flow-problem-box">
-              <span class="pain-tag">PAIN POINT</span>
-              <p class="flow-problem">Raw data sent to cloud APIs</p>
-            </div>
-            <span class="flow-arrow">↓</span>
-            <div class="flow-consequence-box">
-              <span class="consequence-tag">RISK</span>
-              <p class="flow-consequence">Privacy risks & compliance friction</p>
-            </div>
+          <div class="flow-outcome">
+            <span>{card.solutionLabel}</span>
+            <p>{card.solutionText}</p>
           </div>
-        </div>
-        <div class="flow-outcome">
-          <span>LOCAL-FIRST SOLUTION</span>
-          <p>Keep sensitive processing 100% on-device.</p>
-        </div>
-      </article>
-
-      <article class="dependency-card reveal">
-        <div>
-          <span class="dependency-index">04</span>
-          <h3>Exit optionality</h3>
-          <div class="dependency-flow">
-            <div class="flow-problem-box">
-              <span class="pain-tag">PAIN POINT</span>
-              <p class="flow-problem">Proprietary API lock-in</p>
-            </div>
-            <span class="flow-arrow">↓</span>
-            <div class="flow-consequence-box">
-              <span class="consequence-tag">RISK</span>
-              <p class="flow-consequence">High switching cost on terms change</p>
-            </div>
-          </div>
-        </div>
-        <div class="flow-outcome">
-          <span>LOCAL-FIRST SOLUTION</span>
-          <p>Build alternative local execution paths.</p>
-        </div>
-      </article>
-
+        </article>
+      ))}
     </div>
+
 
 <!-- Clean Evidence Bar (Moved after dark thesis block) -->
     <div class="evidence-block reveal">

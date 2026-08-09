@@ -3,56 +3,37 @@
  * ChallengesSection - Technical gap and difficulty explanation section.
  * Positioned after Vision/Mission to contextualize why infrastructure is needed.
  */
+import { getContent } from '../../content';
+
+const { challenges: ch } = getContent().home;
 ---
 
 <section class="section section-challenges" id="challenges" aria-labelledby="challenges-heading">
   <div class="shell">
     <div class="challenges-card reveal">
       <div class="challenges-header">
-        <p class="section-kicker">CONTROL COMES WITH RESPONSIBILITY</p>
-        <h2 id="challenges-heading">Running a model locally is easy. <em>Running it reliably is the real engineering problem.</em></h2>
+        <p class="section-kicker">{ch.kicker}</p>
+        <h2 id="challenges-heading">{ch.titlePrefix}<em>{ch.titleHighlight}</em></h2>
         <p class="challenges-intro">
-          Local-first architectures give you <strong>full control over models, data, and costs</strong>  but they also move <strong>engineering responsibility</strong> back to the product team across four key domains:
+          {ch.introPrefix}<strong>{ch.introHighlight}</strong>{ch.introSuffix}
         </p>
       </div>
 
       <div class="challenges-grid">
-
-        <article class="challenge-item">
-          <div class="challenge-item-header">
-            <span class="challenge-num">01</span>
-            <h3>Runtime lifecycle</h3>
-          </div>
-          <p>Model management, hardware compatibility, dynamic switching & zero-downtime updates.</p>
-        </article>
-
-        <article class="challenge-item">
-          <div class="challenge-item-header">
-            <span class="challenge-num">02</span>
-            <h3>Observability & telemetry</h3>
-          </div>
-          <p>Performance tracking, latency metrics, accuracy signals & memory profiling without privacy leakage.</p>
-        </article>
-
-        <article class="challenge-item">
-          <div class="challenge-item-header">
-            <span class="challenge-num">03</span>
-            <h3>Hardware adaptation</h3>
-          </div>
-          <p>RAM/VRAM constraints, resident memory optimization & thermal management on desktop and mobile.</p>
-        </article>
-
-        <article class="challenge-item">
-          <div class="challenge-item-header">
-            <span class="challenge-num">04</span>
-            <h3>Developer ergonomics</h3>
-          </div>
-          <p>Unified OpenAI-compatible APIs, reliable local IPC & intuitive user experiences.</p>
-        </article>
-
+        {ch.items.map((item) => (
+          <article class="challenge-item">
+            <div class="challenge-item-header">
+              <span class="challenge-num">{item.number}</span>
+              <h3>{item.title}</h3>
+            </div>
+            <p>{item.description}</p>
+          </article>
+        ))}
       </div>
     </div>
   </div>
+</section>
+
 </section>
 
 <style>

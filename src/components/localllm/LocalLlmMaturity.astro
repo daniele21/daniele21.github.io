@@ -1,0 +1,155 @@
+---
+/**
+ * LocalLlmMaturity.astro
+ * Engineering maturity & operational boundaries component.
+ */
+import { localLlmServerData } from '../../content/localLlmServer';
+
+const { maturity } = localLlmServerData;
+---
+
+<section class="section maturity-section" id="status">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div class="kicker">{maturity.eyebrow}</div>
+      <h2>{maturity.title}</h2>
+      <p class="lead">{maturity.sub}</p>
+    </div>
+
+    <div class="maturity-grid reveal">
+      <div class="maturity-col col-available">
+        <div class="col-header">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <h3>Available Today</h3>
+        </div>
+        <ul class="maturity-list">
+          {maturity.availableToday.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="maturity-col col-limits">
+        <div class="col-header">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <h3>Important Limits &amp; Boundaries</h3>
+        </div>
+        <ul class="maturity-list">
+          {maturity.importantLimits.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .maturity-section {
+    padding: clamp(60px, 7vw, 96px) 0;
+    background: var(--surface-muted);
+  }
+
+  .section-head {
+    max-width: 760px;
+    margin-bottom: var(--space-8);
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--space-3) 0;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .lead {
+    font-size: var(--text-body-lg);
+    line-height: 1.6;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  .maturity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .maturity-col {
+    padding: clamp(24px, 4vw, 36px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .col-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .col-available .col-header { color: var(--accent-teal); }
+  .col-limits .col-header { color: var(--accent-amber, #f59e0b); }
+
+  .col-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 750;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .maturity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .maturity-list li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+  }
+
+  .maturity-list li::before {
+    content: "•";
+    position: absolute;
+    left: 4px;
+    top: 0;
+    font-size: 1.2rem;
+    color: var(--accent-blue);
+  }
+
+  @media (max-width: 768px) {
+    .maturity-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

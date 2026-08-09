@@ -41,6 +41,12 @@ const { architecture } = closedRoomData;
         </div>
       ))}
     </div>
+
+    <div class="arch-crosslink reveal">
+      <a href={`${baseUrl}/local-llm-server`} class="infra-link">
+        Explore the local reasoning layer →
+      </a>
+    </div>
   </div>
 </section>
 
@@ -139,9 +145,33 @@ const { architecture } = closedRoomData;
     color: var(--ink-muted);
   }
 
+  .arch-crosslink {
+    margin-top: var(--space-6);
+    text-align: right;
+  }
+
+  .infra-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.94rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    text-decoration: none;
+    transition: color var(--duration-fast) ease, transform var(--duration-fast) ease;
+  }
+
+  .infra-link:hover {
+    color: var(--accent-teal);
+    transform: translateX(3px);
+  }
+
   @media (max-width: 980px) {
     .arch-grid {
       grid-template-columns: 1fr;
+    }
+    .arch-crosslink {
+      text-align: left;
     }
   }
 </style>

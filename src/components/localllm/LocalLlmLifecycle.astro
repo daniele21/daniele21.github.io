@@ -1,0 +1,135 @@
+---
+/**
+ * LocalLlmLifecycle.astro
+ * Model & runtime lifecycle steps component.
+ */
+import { localLlmServerData } from '../../content/localLlmServer';
+
+const { lifecycle } = localLlmServerData;
+---
+
+<section class="section" id="lifecycle">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div class="kicker">{lifecycle.eyebrow}</div>
+      <h2>{lifecycle.title}</h2>
+      <p class="lead">{lifecycle.sub}</p>
+    </div>
+
+    <div class="lifecycle-sequence reveal">
+      {lifecycle.steps.map((step, idx) => (
+        <div class="lifecycle-item">
+          <div class="lifecycle-header">
+            <span class="lifecycle-step-num">Step {idx + 1}</span>
+            <h3>{step.label}</h3>
+          </div>
+          <p>{step.detail}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: clamp(60px, 7vw, 96px) 0;
+  }
+
+  .section-head {
+    max-width: 760px;
+    margin-bottom: var(--space-8);
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--space-3) 0;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .lead {
+    font-size: var(--text-body-lg);
+    line-height: 1.6;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  .lifecycle-sequence {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .lifecycle-item {
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .lifecycle-item:hover {
+    transform: translateX(4px);
+    border-color: var(--accent-blue-light, var(--border-subtle));
+  }
+
+  .lifecycle-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: 280px;
+  }
+
+  .lifecycle-step-num {
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    background: var(--surface-teal, var(--surface-muted));
+    color: var(--accent-teal);
+    font-size: 0.75rem;
+    font-weight: 800;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .lifecycle-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 750;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .lifecycle-item p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--ink-muted);
+    flex: 1;
+  }
+
+  @media (max-width: 768px) {
+    .lifecycle-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .lifecycle-header {
+      min-width: 0;
+    }
+  }
+</style>

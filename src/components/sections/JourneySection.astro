@@ -2,21 +2,24 @@
 /**
  * JourneySection - "Building in Public" grid of 6 journey links.
  */
-import { journeyLinks } from '../../content/principles';
+import { journeyLinks, getContent } from '../../content';
+
+const { journey: j } = getContent().home;
 ---
 
 <section class="section section-journey" id="journey" aria-labelledby="journey-title">
   <div class="shell">
     <div class="section-heading reveal">
       <div>
-        <p class="section-kicker">KNOWLEDGE & PUBLIC RESEARCH</p>
-        <h2 id="journey-title">Building, documenting, and sharing <strong>in public</strong></h2>
+        <p class="section-kicker">{j.kicker}</p>
+        <h2 id="journey-title">{j.titlePrefix}<strong>{j.titleHighlight}</strong></h2>
       </div>
       <p>
-        Experiments become code, measurements, technical notes and public discussion:
-        <strong>Build → Measure → Document → Share</strong>.
+        {j.subtitlePrefix}
+        <strong>{j.subtitleHighlight}</strong>.
       </p>
     </div>
+
 
     <div class="journey-grid">
       {journeyLinks.map((item) => (

@@ -3,27 +3,30 @@
  * HeroSection - Primary top section matching target design reference.
  */
 import EcosystemMap from './EcosystemMap.astro';
+import { getContent } from '../../content';
+
+const { hero } = getContent().home;
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-title">
   <div class="shell hero-grid">
     <div class="hero-copy reveal">
-      <div class="eyebrow-pill">LOCAL-FIRST AI ARCHITECTURES</div>
+      <div class="eyebrow-pill">{hero.eyebrow}</div>
       <h1 id="hero-title">
-        Building infrastructure<br />
-        for <span class="blue-text">product-grade local AI</span>.
+        {hero.titlePrefix}<br />
+        for <span class="blue-text">{hero.titleHighlight}</span>{hero.titleSuffix}
       </h1>
       <p class="hero-lede">
         I explore how <strong>local-first architectures can give AI products more control</strong> over model lifecycle, costs, data, and runtime,  without giving up frontier models where they still make sense.
       </p>
       <p class="hero-lede-detail">
         <strong>Closed models should be an option, not a dependency.</strong>
-        Local-first means having another execution path when control matters.
+        {hero.ledeDetail.replace(/^Closed models should be an option, not a dependency\.\s*/, '')}
       </p>
 
       <div class="hero-actions" aria-label="Primary actions">
-        <a class="button button-primary" href="#why-local-first">Why local-first? <span aria-hidden="true">→</span></a>
-        <a class="button button-secondary" href="#infrastructure">Explore the stack <span aria-hidden="true">↗</span></a>
+        <a class="button button-primary" href={hero.primaryActionHref}>{hero.primaryActionLabel} <span aria-hidden="true">→</span></a>
+        <a class="button button-secondary" href={hero.secondaryActionHref}>{hero.secondaryActionLabel} <span aria-hidden="true">↗</span></a>
       </div>
     </div>
 
@@ -32,6 +35,7 @@ import EcosystemMap from './EcosystemMap.astro';
     </div>
   </div>
 </section>
+
 
 <style>
   .hero {

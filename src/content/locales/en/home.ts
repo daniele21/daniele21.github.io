@@ -1,0 +1,225 @@
+import type { HomeContent } from '../../../types/content';
+
+export const homeContent: HomeContent = {
+  hero: {
+    eyebrow: 'LOCAL-FIRST AI ARCHITECTURES',
+    titlePrefix: 'Building infrastructure\nfor ',
+    titleHighlight: 'product-grade local AI',
+    titleSuffix: '.',
+    lede: 'I explore how local-first architectures can give AI products more control over model lifecycle, costs, data, and runtime, without giving up frontier models where they still make sense.',
+    ledeDetail: 'Closed models should be an option, not a dependency. Local-first means having another execution path when control matters.',
+    primaryActionLabel: 'Why local-first?',
+    primaryActionHref: '#why-local-first',
+    secondaryActionLabel: 'Explore the stack',
+    secondaryActionHref: '#infrastructure',
+  },
+  ecosystemMap: {
+    caption:
+      'Applications such as ClosedRoom, RedactGuard, and Aura Finance are built on local LLM, speech recognition, and Android infrastructure running on private user-owned devices, with no cloud required.',
+    hardwareTitle: 'HARDWARE',
+    hardwareSub: 'Local & decentralized',
+    laptopTitle: 'Your Device',
+    laptopSub: 'Laptop / Desktop',
+    mobileTitle: 'Mobile Device',
+    mobileSub: 'Android',
+    noCloudTitle: 'No Cloud Required',
+    infraTitle: 'INFRASTRUCTURE',
+    infraSub: 'The foundation',
+    llmServerTitle: 'Local LLM Server',
+    llmServerSub: 'Inference',
+    asrServerTitle: 'Local ASR Server',
+    asrServerSub: 'Speech',
+    harnessTitle: 'Android LLM Harness',
+    harnessSub: 'On-device runtime',
+    appTitle: 'APPLICATIONS',
+    appSub: 'Built on the stack',
+    closedRoomTitle: 'ClosedRoom',
+    closedRoomSub: 'Private conversations',
+    redactGuardTitle: 'RedactGuard',
+    redactGuardSub: 'Sanitized documents',
+    auraFinanceTitle: 'Aura Finance',
+    auraFinanceSub: 'Local net finance',
+  },
+  visionMission: {
+    visionKicker: 'VISION',
+    visionTitlePrefix: 'AI products should be able to use powerful models ',
+    visionTitleHighlight:
+      'without surrendering control over critical workflows, sensitive data, and the ability to choose how intelligence is delivered.',
+    missionKicker: 'MISSION',
+    missionTextPrefix: 'Build and test ',
+    missionTextHighlight: 'reusable local AI and data-protection foundations',
+    missionTextSuffix:
+      ' that give products more control over model lifecycle, data, runtime, and cost, across desktop and mobile.',
+    principlesBadges: [
+      { titleHighlight: 'Local', textSuffix: ' where sufficient' },
+      { titleHighlight: 'Cloud', textSuffix: ' where valuable' },
+      { titleHighlight: 'Portable', textSuffix: ' by design' },
+    ],
+  },
+  whyLocalFirst: {
+    kicker: 'WHY LOCAL-FIRST',
+    titlePrefix: "The problem isn't the cloud. ",
+    titleHighlight: "It's depending on intelligence you don't control.",
+    subtitlePrefix: 'Closed APIs are powerful. The risk is making them your ',
+    subtitleHighlight: 'only execution path',
+    subtitleSuffix: '.',
+    dependencyCards: [
+      {
+        index: '01',
+        title: 'Model lifecycle',
+        painLabel: 'PAIN POINT',
+        painText: 'Provider deprecates model',
+        riskLabel: 'RISK',
+        riskText: 'Forced migration + revalidation',
+        solutionLabel: 'LOCAL-FIRST SOLUTION',
+        solutionText: 'Pin the model. Migrate on your timeline.',
+      },
+      {
+        index: '02',
+        title: 'Cost dependency',
+        painLabel: 'PAIN POINT',
+        painText: 'Per-token API pricing at scale',
+        riskLabel: 'RISK',
+        riskText: 'Unpredictable recurring costs',
+        solutionLabel: 'LOCAL-FIRST SOLUTION',
+        solutionText: 'Shift suitable workloads to fixed capacity.',
+      },
+      {
+        index: '03',
+        title: 'Data boundaries',
+        painLabel: 'PAIN POINT',
+        painText: 'Raw data sent to cloud APIs',
+        riskLabel: 'RISK',
+        riskText: 'Privacy risks & compliance friction',
+        solutionLabel: 'LOCAL-FIRST SOLUTION',
+        solutionText: 'Keep sensitive processing 100% on-device.',
+      },
+      {
+        index: '04',
+        title: 'Architectural agility',
+        painLabel: 'PAIN POINT',
+        painText: 'Vendor-specific API lock-in',
+        riskLabel: 'RISK',
+        riskText: 'Hard to switch models or runtimes',
+        solutionLabel: 'LOCAL-FIRST SOLUTION',
+        solutionText: 'Build modular abstractions from day one.',
+      },
+    ],
+    summaryBoxTitle: "Local-first isn't anti-cloud. It's operational control.",
+    summaryBoxBody:
+      'It means having an execution path where you control model versions, data privacy, latency budgets, and unit economics — choosing cloud APIs because they fit, not because you have no alternative.',
+  },
+  challenges: {
+    kicker: 'CONTROL COMES WITH RESPONSIBILITY',
+    titlePrefix: 'Running a model locally is easy. ',
+    titleHighlight: 'Running it reliably is the real engineering problem.',
+    introPrefix: 'Local-first architectures give you ',
+    introHighlight: 'full control over models, data, and costs',
+    introSuffix:
+      ' but they also move engineering responsibility back to the product team across four key domains:',
+    items: [
+      {
+        number: '01',
+        title: 'Runtime lifecycle',
+        description:
+          'Model management, hardware compatibility, dynamic switching & zero-downtime updates.',
+      },
+      {
+        number: '02',
+        title: 'Observability & telemetry',
+        description:
+          'Performance tracking, latency metrics, accuracy signals & memory profiling without privacy leakage.',
+      },
+      {
+        number: '03',
+        title: 'Hardware adaptation',
+        description:
+          'RAM/VRAM constraints, resident memory optimization & thermal management on desktop and mobile.',
+      },
+      {
+        number: '04',
+        title: 'Developer ergonomics',
+        description:
+          'Unified OpenAI-compatible APIs, reliable local IPC & intuitive user experiences.',
+      },
+    ],
+  },
+  possibilities: {
+    kicker: 'WHAT THIS ENABLES',
+    titlePrefix: 'What the stack makes ',
+    titleHighlight: 'easier to build next',
+    subtitlePrefix: 'Exploration areas unlocked by core ',
+    subtitleHighlight: 'local AI infrastructure',
+    subtitleSuffix: '.',
+  },
+  infrastructure: {
+    kicker: 'THE INFRASTRUCTURE STACK (THREE PILLARS)',
+    title: 'Three infrastructure pillars',
+    subtitle:
+      'Each project solves a different part of the local-AI product stack. Reusable infrastructure, not isolated experiments.',
+    architectureLabel: 'ARCHITECTURE RELATIONSHIP',
+    nodes: [
+      { label: 'Local LLM Server', accent: 'teal' },
+      { label: 'Local ASR Server', accent: 'blue' },
+      { label: 'Android LLM Harness', accent: 'violet' },
+    ],
+    protocolsText: 'APIs / Protocols (gRPC, WebSocket, Local IPC)',
+    outputAppsText:
+      'Reference Applications (ClosedRoom, RedactGuard, Aura Finance)',
+  },
+  applications: {
+    kicker: 'PROVING GROUNDS',
+    title: 'Reference applications that validate the stack',
+    subtitle:
+      'ClosedRoom, RedactGuard, and Aura Finance demonstrate how privacy-first AI protects conversations, sensitive documents, and personal financial data in practice.',
+    bottomNote:
+      'Reference applications validate the infrastructure and show what it can enable. They are the beginning, not the limit, of the ecosystem.',
+  },
+  credibility: {
+    kicker: 'PROFESSIONAL TRACK RECORD',
+    titlePrefix: 'Research backed by ',
+    titleHighlight: 'real-world AI delivery',
+    introText:
+      'Local-first research and engineering built on years spent evaluating, designing, and scaling AI systems in complex enterprise environments.',
+  },
+  journey: {
+    kicker: 'KNOWLEDGE & PUBLIC RESEARCH',
+    titlePrefix: 'Building, documenting, and sharing ',
+    titleHighlight: 'in public',
+    subtitlePrefix:
+      'Experiments become code, measurements, technical notes and public discussion: ',
+    subtitleHighlight: 'Build → Measure → Document → Share',
+  },
+  about: {
+    kicker: 'ABOUT DANIELE',
+    titlePrefix: 'I work where ',
+    titleHighlight1: 'AI infrastructure',
+    titleMiddle: ', ',
+    titleHighlight2: 'product strategy',
+    titleSuffix: ', and clear engineering intersect.',
+    paragraphs: [
+      'I am Daniele Moltisanti, an AI technical leader and builder based in Milan. My work combines technical architecture, product thinking, and the ability to transform complex AI research into understandable decisions and reliable, intuitive software.',
+      'Alongside my independent work, I lead and design AI initiatives in complex organisations, translating technical possibilities into systems that can be adopted, governed, and scaled.',
+      'I also write, teach, and speak about AI architecture, strategy, and the path from experimentation to reliable products.',
+    ],
+    links: {
+      linkedin: 'LinkedIn ↗',
+      github: 'GitHub ↗',
+      stai: 'stAI tuned ↗',
+      speakingLabel: 'Speaking & public work',
+      speakingSub: '(coming soon)',
+    },
+    photoAlt: 'Daniele Moltisanti',
+  },
+  collaboration: {
+    kicker: 'COLLABORATE',
+    titleLine1: 'Exploring whether part of your AI stack',
+    titleHighlight: 'should move local?',
+    description:
+      "I'm interested in real workloads: benchmarking a closed-vs-local task, testing models and devices, designing hybrid architectures, or exploring privacy-sensitive AI workflows.",
+    email: 'danielemoltisanti@gmail.com',
+    location: 'Milan, Italy',
+    primaryActionLabel: 'Discuss a workload',
+    secondaryActionLabel: 'Connect on LinkedIn ↗',
+  },
+};

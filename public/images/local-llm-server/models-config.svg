@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750">
+  <defs>
+    <linearGradient id="mc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="750" rx="16" fill="url(#mc-bg)" />
+  <rect width="1200" height="48" rx="16" fill="#1E293B" />
+  <rect y="32" width="1200" height="16" fill="#1E293B" />
+  <circle cx="24" cy="24" r="6" fill="#EF4444" />
+  <circle cx="44" cy="24" r="6" fill="#F59E0B" />
+  <circle cx="64" cy="24" r="6" fill="#10B981" />
+  <text x="100" y="29" fill="#94A3B8" font-family="sans-serif" font-size="14" font-weight="600">Local LLM Studio — Models &amp; Configuration</text>
+
+  <!-- Content Grid -->
+  <g transform="translate(40, 70)">
+    <text x="0" y="30" fill="#F8FAFC" font-family="sans-serif" font-size="22" font-weight="700">Configured Runtimes &amp; Artifact Discovery</text>
+    <text x="0" y="55" fill="#94A3B8" font-family="sans-serif" font-size="14">Inspect resident leases, engine backends, context windows, and local GGUF/MLX registries.</text>
+
+    <!-- Model Card 1 -->
+    <rect x="0" y="80" width="540" height="260" rx="12" fill="#1E293B" stroke="#2563EB" stroke-width="2" />
+    <rect x="20" y="100" width="90" height="26" rx="13" fill="#1E3A8A" />
+    <text x="35" y="117" fill="#60A5FA" font-family="sans-serif" font-size="12" font-weight="700">RESIDENT</text>
+    <text x="125" y="118" fill="#F8FAFC" font-family="sans-serif" font-size="18" font-weight="700">nemotron-nano-4b-q8</text>
+    <text x="20" y="155" fill="#CBD5E1" font-family="sans-serif" font-size="13">Backend: llama_cpp (GGUF In-Process)</text>
+    <text x="20" y="180" fill="#CBD5E1" font-family="sans-serif" font-size="13">Context Size: 8,192 tokens</text>
+    <text x="20" y="205" fill="#CBD5E1" font-family="sans-serif" font-size="13">Active Leases: 2 clients</text>
+    <text x="20" y="230" fill="#CBD5E1" font-family="sans-serif" font-size="13">Memory Usage: 4.8 GB Unified Memory</text>
+    <rect x="20" y="260" width="140" height="36" rx="8" fill="#2563EB" />
+    <text x="42" y="283" fill="#FFFFFF" font-family="sans-serif" font-size="13" font-weight="700">Default Route</text>
+    <rect x="170" y="260" width="120" height="36" rx="8" fill="#334155" />
+    <text x="194" y="283" fill="#CBD5E1" font-family="sans-serif" font-size="13" font-weight="600">Unload</text>
+
+    <!-- Model Card 2 -->
+    <rect x="570" y="80" width="540" height="260" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1" />
+    <rect x="590" y="100" width="90" height="26" rx="13" fill="#1F2937" />
+    <text x="605" y="117" fill="#9CA3AF" font-family="sans-serif" font-size="12" font-weight="700">STANDBY</text>
+    <text x="695" y="118" fill="#F8FAFC" font-family="sans-serif" font-size="18" font-weight="700">mlx-qwen2.5-7b-instruct</text>
+    <text x="590" y="155" fill="#CBD5E1" font-family="sans-serif" font-size="13">Backend: mlx (Apple Silicon Metal)</text>
+    <text x="590" y="180" fill="#CBD5E1" font-family="sans-serif" font-size="13">Context Size: 16,384 tokens</text>
+    <text x="590" y="205" fill="#CBD5E1" font-family="sans-serif" font-size="13">Active Leases: 0 clients</text>
+    <text x="590" y="230" fill="#CBD5E1" font-family="sans-serif" font-size="13">Disk Storage: 4.2 GB</text>
+    <rect x="590" y="260" width="140" height="36" rx="8" fill="#0D9488" />
+    <text x="625" y="283" fill="#FFFFFF" font-family="sans-serif" font-size="13" font-weight="700">Load Runtime</text>
+
+    <!-- Registries Panel -->
+    <rect x="0" y="370" width="1110" height="260" rx="12" fill="#0F172A" stroke="#334155" stroke-width="1" />
+    <text x="24" y="405" fill="#38BDF8" font-family="sans-serif" font-size="14" font-weight="700">ARTIFACT DISCOVERY &amp; MERGE PRECEDENCE</text>
+    <text x="24" y="440" fill="#F8FAFC" font-family="monospace" font-size="13">1. User Registry (~/.local-llm-server/models.json) — 3 custom GGUF model keys</text>
+    <text x="24" y="470" fill="#F8FAFC" font-family="monospace" font-size="13">2. Built-in Registry (bundled definitions) — 8 verified engine configs</text>
+    <text x="24" y="500" fill="#F8FAFC" font-family="monospace" font-size="13">3. LM Studio Discovery (lmstudio/models/) — Auto-detected 4 GGUF quantizations</text>
+    <text x="24" y="530" fill="#F8FAFC" font-family="monospace" font-size="13">4. HuggingFace Hub Cache (~/.cache/huggingface/) — Auto-detected 2 MLX repos</text>
+    <text x="24" y="580" fill="#10B981" font-family="sans-serif" font-size="13" font-weight="600">✓ All artifact SHA-256 hashes validated against completeness manifests.</text>
+  </g>
+</svg>

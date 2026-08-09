@@ -1,0 +1,169 @@
+---
+/**
+ * LocalLlmSurfaces.astro
+ * Local LLM Studio product proof section with zoomable screenshots.
+ */
+import { localLlmServerData } from '../../content/localLlmServer';
+
+interface Props {
+  baseUrl: string;
+}
+
+const { baseUrl } = Astro.props;
+const { surfaces } = localLlmServerData;
+---
+
+<section class="section surfaces-section" id="surfaces">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div class="kicker">{surfaces.eyebrow}</div>
+      <h2>{surfaces.title}</h2>
+      <p class="lead">{surfaces.sub}</p>
+    </div>
+
+    <div class="surfaces-grid reveal">
+      {surfaces.items.map((item) => (
+        <div class="surface-card">
+          <div class="surface-frame">
+            <img
+              data-zoomable
+              src={`${baseUrl}/${item.image.replace(/^\//, '')}`}
+              alt={`${item.title} interface preview`}
+              width="1200"
+              height="750"
+              loading="lazy"
+            />
+          </div>
+          <div class="surface-info">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="security-notice reveal">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+      <span>{surfaces.securityNotice}</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .surfaces-section {
+    padding: clamp(60px, 7vw, 96px) 0;
+    background: var(--surface-muted);
+  }
+
+  .section-head {
+    max-width: 760px;
+    margin-bottom: var(--space-8);
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--space-3) 0;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .lead {
+    font-size: var(--text-body-lg);
+    line-height: 1.6;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  .surfaces-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .surface-card {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    background: var(--surface-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .surface-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .surface-frame {
+    width: 100%;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-subtle);
+    background: #020617;
+  }
+
+  .surface-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: zoom-in;
+    transition: transform var(--duration-base) ease;
+  }
+
+  .surface-info {
+    padding: var(--space-5);
+  }
+
+  .surface-info h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 750;
+    color: var(--ink);
+    margin: 0 0 var(--space-2) 0;
+  }
+
+  .surface-info p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+  }
+
+  .security-notice {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    color: var(--ink-muted);
+    font-size: 0.86rem;
+    font-weight: 600;
+  }
+
+  .security-notice svg {
+    color: var(--accent-blue);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 840px) {
+    .surfaces-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

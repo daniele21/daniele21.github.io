@@ -4,8 +4,9 @@
  * Transparent at top, frosted on scroll via JS .is-scrolled class.
  * Features ultra-minimalist text + official app logo dropdown menus for Infrastructure and Applications.
  */
-import { navigation } from '../../content/site';
+import { navigation, getContent } from '../../content';
 
+const { header: hdr } = getContent().common;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 function getHref(href: string) {
@@ -21,14 +22,14 @@ function getHref(href: string) {
 
 <header class="site-header" data-header>
   <div class="shell header-inner">
-    <a class="brand" href={`${baseUrl}/#top`} aria-label="Daniele Moltisanti, home">
-      <img src={`${baseUrl}/images/sign_1.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-light" height="36" />
-      <img src={`${baseUrl}/images/sign_dark.png`} alt="Daniele Moltisanti signature" class="brand-signature brand-signature-dark" height="36" />
-      <span class="brand-name">Daniele Moltisanti</span>
+    <a class="brand" href={`${baseUrl}/#top`} aria-label={`${hdr.brandName}, home`}>
+      <img src={`${baseUrl}/images/sign_1.png`} alt={hdr.brandAltLight} class="brand-signature brand-signature-light" height="36" />
+      <img src={`${baseUrl}/images/sign_dark.png`} alt={hdr.brandAltDark} class="brand-signature brand-signature-dark" height="36" />
+      <span class="brand-name">{hdr.brandName}</span>
     </a>
 
     <div class="header-actions">
-      <button class="theme-toggle" type="button" aria-label="Toggle color theme" data-theme-toggle>
+      <button class="theme-toggle" type="button" aria-label={hdr.themeToggleAriaLabel} data-theme-toggle>
         <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="12" r="4"/>
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
@@ -39,7 +40,7 @@ function getHref(href: string) {
       </button>
 
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle>
-        <span class="sr-only">Open navigation</span>
+        <span class="sr-only">{hdr.menuToggleAriaLabel}</span>
         <span></span><span></span><span></span>
       </button>
     </div>

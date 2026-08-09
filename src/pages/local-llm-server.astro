@@ -1,0 +1,61 @@
+---
+/**
+ * local-llm-server.astro
+ * Dedicated infrastructure deep-dive page for Local LLM Server.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import LocalLlmHero from '../components/localllm/LocalLlmHero.astro';
+import LocalLlmMission from '../components/localllm/LocalLlmMission.astro';
+import LocalLlmProblems from '../components/localllm/LocalLlmProblems.astro';
+import LocalLlmRuntimeFlow from '../components/localllm/LocalLlmRuntimeFlow.astro';
+import LocalLlmLifecycle from '../components/localllm/LocalLlmLifecycle.astro';
+import LocalLlmSurfaces from '../components/localllm/LocalLlmSurfaces.astro';
+import LocalLlmBackends from '../components/localllm/LocalLlmBackends.astro';
+import LocalLlmArchitecture from '../components/localllm/LocalLlmArchitecture.astro';
+import LocalLlmCodePreview from '../components/localllm/LocalLlmCodePreview.astro';
+import LocalLlmMaturity from '../components/localllm/LocalLlmMaturity.astro';
+import LocalLlmCta from '../components/localllm/LocalLlmCta.astro';
+
+import { localLlmServerData } from '../content/localLlmServer';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Why Server', href: '#why' },
+  { label: 'Runtime Flow', href: '#runtime' },
+  { label: 'Lifecycle', href: '#lifecycle' },
+  { label: 'Studio Surfaces', href: '#surfaces' },
+  { label: 'Backends', href: '#backends' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'API Code', href: '#code' },
+  { label: 'Status', href: '#status' },
+];
+---
+
+<BaseLayout
+  title={localLlmServerData.meta.title}
+  description={localLlmServerData.meta.description}
+>
+  <ProductSubHeader
+    title="Local LLM Server"
+    badge="Active development"
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/local-llm-server' }}
+  />
+
+  <div id="top">
+    <LocalLlmHero baseUrl={baseUrl} />
+    <LocalLlmMission />
+    <LocalLlmProblems />
+    <LocalLlmRuntimeFlow />
+    <LocalLlmLifecycle />
+    <LocalLlmSurfaces baseUrl={baseUrl} />
+    <LocalLlmBackends />
+    <LocalLlmArchitecture baseUrl={baseUrl} />
+    <LocalLlmCodePreview />
+    <LocalLlmMaturity />
+    <LocalLlmCta baseUrl={baseUrl} />
+  </div>
+</BaseLayout>

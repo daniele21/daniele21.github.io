@@ -3,48 +3,45 @@
  * VisionMissionSection - Clean, high-impact section immediately after the hero.
  * Highlights the aspirational vision, core mission, and key guiding principles.
  */
+import { getContent } from '../../content';
+
+const { visionMission: vm } = getContent().home;
 ---
 
 <section class="section section-vision-mission" id="vision" aria-labelledby="vision-heading">
   <div class="shell">
     <div class="vision-mission-container reveal">
       <div class="vm-block">
-        <p class="section-kicker">VISION</p>
+        <p class="section-kicker">{vm.visionKicker}</p>
         <h2 id="vision-heading" class="vm-text">
-          AI products should be able to use powerful models
-          <strong>without surrendering control over critical workflows,
-          sensitive data, and the ability to choose how intelligence is delivered.</strong>
+          {vm.visionTitlePrefix}
+          <strong>{vm.visionTitleHighlight}</strong>
         </h2>
       </div>
 
       <div class="vm-divider" aria-hidden="true"></div>
 
       <div class="vm-block">
-        <p class="section-kicker">MISSION</p>
+        <p class="section-kicker">{vm.missionKicker}</p>
         <p class="vm-mission-text">
-          Build and test <strong>reusable local AI and data-protection foundations</strong>
-          that give products more control over model lifecycle, data, runtime,
-          and cost,  across desktop and mobile.
+          {vm.missionTextPrefix}<strong>{vm.missionTextHighlight}</strong>{vm.missionTextSuffix}
         </p>
       </div>
 
       <ul class="vm-principles-row" aria-label="Foundational principles">
-        <li>
-          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>
-          <span><strong>Local</strong> where sufficient</span>
-        </li>
-        <li>
-          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>
-          <span><strong>Cloud</strong> where valuable</span>
-        </li>
-        <li>
-          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg>
-          <span><strong>Portable</strong> by design</span>
-        </li>
+        {vm.principlesBadges.map((badge, idx) => (
+          <li>
+            {idx === 0 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>}
+            {idx === 1 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-5"/></svg>}
+            {idx === 2 && <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg>}
+            <span><strong>{badge.titleHighlight}</strong>{badge.textSuffix}</span>
+          </li>
+        ))}
       </ul>
     </div>
   </div>
 </section>
+
 
 <style>
   .section-vision-mission {

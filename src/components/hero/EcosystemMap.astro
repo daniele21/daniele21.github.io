@@ -3,13 +3,15 @@
  * EcosystemMap - Vector UI recreation of the reference ecosystem diagram.
  * All surfaces, connectors, icons and labels are native SVG elements.
  */
+import { getContent } from '../../content';
+
+const { ecosystemMap: eco } = getContent().home;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <figure class="ecosystem-map reveal" aria-labelledby="ecosystem-map-caption">
   <figcaption id="ecosystem-map-caption" class="sr-only">
-    Applications such as ClosedRoom, RedactGuard, and Aura Finance are built on local LLM,
-    speech recognition, and Android infrastructure running on private user-owned
-    devices, with no cloud required.
+    {eco.caption}
   </figcaption>
 
   <svg
@@ -187,12 +189,14 @@
         <line class="feature-separator" x1="349" y1="158" x2="349" y2="207" />
         <line class="feature-separator" x1="499" y1="158" x2="499" y2="207" />
 
-        <use class="feature-icon infra-icon" href="#icon-cube" x="218" y="166" width="31" height="31" />
-        <text class="feature-title" x="261" y="164">
-          <tspan x="261" dy="0">Local LLM</tspan>
-          <tspan x="261" dy="16">Server</tspan>
-        </text>
-        <text class="feature-copy" x="261" y="207">Inference</text>
+        <a href={`${baseUrl}/local-llm-server`} class="node-link" aria-label="Local LLM Server page">
+          <use class="feature-icon infra-icon" href="#icon-cube" x="218" y="166" width="31" height="31" />
+          <text class="feature-title" x="261" y="164">
+            <tspan x="261" dy="0">Local LLM</tspan>
+            <tspan x="261" dy="16">Server</tspan>
+          </text>
+          <text class="feature-copy" x="261" y="207">Inference</text>
+        </a>
 
         <use class="feature-icon infra-icon" href="#icon-wave" x="369" y="166" width="30" height="30" />
         <text class="feature-title" x="413" y="164">

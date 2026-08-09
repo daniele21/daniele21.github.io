@@ -4,7 +4,9 @@
  * Displays future exploration areas with a clean 2-color horizontal gradient progression
  * (Sapphire Blue -> Cyber Cyan) flowing across the section columns.
  */
-import { enablements } from '../../content/principles';
+import { enablements, getContent } from '../../content';
+
+const { possibilities: pos } = getContent().home;
 
 /** 4 steps along the 2-color spectrum across grid columns */
 const columnAccents = ['col-step-1', 'col-step-2', 'col-step-3', 'col-step-4'] as const;
@@ -18,16 +20,17 @@ const columnAccents = ['col-step-1', 'col-step-2', 'col-step-3', 'col-step-4'] a
       <div>
         <p class="section-kicker">
           <span class="kicker-dot"></span>
-          WHAT THIS ENABLES
+          {pos.kicker}
         </p>
         <h2 id="enables-title">
-          What the stack makes <span class="dual-gradient-text">easier to build next</span>
+          {pos.titlePrefix}<span class="dual-gradient-text">{pos.titleHighlight}</span>
         </h2>
       </div>
       <p class="section-subtitle">
-        Exploration areas unlocked by core <em>local AI infrastructure</em>.
+        {pos.subtitlePrefix}<em>{pos.subtitleHighlight}</em>{pos.subtitleSuffix}
       </p>
     </div>
+
 
     <div class="enablement-grid">
       {enablements.map((item, index) => {

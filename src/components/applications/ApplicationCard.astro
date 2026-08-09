@@ -3,12 +3,14 @@
  * ApplicationCard - Card for reference applications (ClosedRoom, Aura Finance).
  */
 import type { ReferenceApplication } from '../../types/content';
+import { getContent } from '../../content';
 
 interface Props {
   application: ReferenceApplication;
 }
 
 const { application } = Astro.props;
+const { applicationCard: appCard } = getContent().common;
 const targetUrl = application.pageUrl ? `${import.meta.env.BASE_URL}${application.pageUrl.replace(/^\//, '')}` : null;
 ---
 
@@ -50,13 +52,13 @@ const targetUrl = application.pageUrl ? `${import.meta.env.BASE_URL}${applicatio
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           <polyline points="9 12 11 14 15 10"/>
         </svg>
-        <span>PROVES</span>
+        <span>{appCard.provesBadgeLabel}</span>
       </div>
       <span class="proves-text">{application.provesLine.replace(/^PROVES\s*(?:→|->)\s*/i, '')}</span>
     </div>
   )}
   <details class="project-disclosure">
-    <summary>What it validates <span aria-hidden="true">+</span></summary>
+    <summary>{appCard.disclosureSummary} <span aria-hidden="true">+</span></summary>
     <div class="disclosure-body">
       <ul>
         {application.validates.map((item) => (
@@ -65,15 +67,16 @@ const targetUrl = application.pageUrl ? `${import.meta.env.BASE_URL}${applicatio
       </ul>
       <div class="project-links">
         {targetUrl && (
-          <a href={targetUrl} class="deep-dive-btn">Read Deep-Dive →</a>
+          <a href={targetUrl} class="deep-dive-btn">{appCard.deepDiveBtnLabel}</a>
         )}
         {application.repositoryUrl && (
-          <a href={application.repositoryUrl} target="_blank" rel="noreferrer" class="repo-link">View repository ↗</a>
+          <a href={application.repositoryUrl} target="_blank" rel="noreferrer" class="repo-link">{appCard.repoLinkLabel}</a>
         )}
       </div>
     </div>
   </details>
 </article>
+
 
 <script>
   document.querySelectorAll<HTMLElement>('.application-card.is-clickable').forEach((card) => {

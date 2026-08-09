@@ -3,12 +3,14 @@
  * PillarCard - Card component for an individual infrastructure pillar.
  */
 import type { Pillar } from '../../types/content';
+import { getContent } from '../../content';
 
 interface Props {
   pillar: Pillar;
 }
 
 const { pillar } = Astro.props;
+const { pillarCard } = getContent().common;
 
 const iconClassMap = {
   teal: 'project-icon-teal',
@@ -50,12 +52,12 @@ const iconClassMap = {
   </h3>
 
   <div class="pillar-problem-block">
-    <span class="pillar-block-label">PROBLEM</span>
+    <span class="pillar-block-label">{pillarCard.problemLabel}</span>
     <p set:html={pillar.problem}></p>
   </div>
 
   <div class="pillar-solution-block">
-    <span class="pillar-block-label">SOLUTION</span>
+    <span class="pillar-block-label">{pillarCard.solutionLabel}</span>
     <p set:html={pillar.role}></p>
   </div>
 
@@ -65,7 +67,7 @@ const iconClassMap = {
     ))}
   </div>
   <details class="project-disclosure">
-    <summary>Explore the pillar <span aria-hidden="true">+</span></summary>
+    <summary>{pillarCard.exploreSummary} <span aria-hidden="true">+</span></summary>
     <div class="disclosure-body">
       <p set:html={pillar.description}></p>
       <ul>
@@ -76,14 +78,15 @@ const iconClassMap = {
       <div class="project-links">
         {pillar.pageUrl && (
           <a href={import.meta.env.BASE_URL.replace(/\/$/, '') + pillar.pageUrl} class="pillar-page-btn">
-            Explore Harness Page →
+            {pillarCard.pageBtnLabel}
           </a>
         )}
-        <a href={pillar.repositoryUrl} target="_blank" rel="noreferrer">View repository ↗</a>
+        <a href={pillar.repositoryUrl} target="_blank" rel="noreferrer">{pillarCard.repoLinkLabel}</a>
       </div>
     </div>
   </details>
 </article>
+
 
 <style>
   .project-card {
