@@ -110,6 +110,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
       <circle class="dot-app" cx="665" cy="93" r="2.8" />
       <circle class="dot-infra" cx="674" cy="227" r="2.8" />
       <circle class="dot-hardware" cx="687" cy="379" r="2.8" />
+      <!-- Evidence Rail Line & Badge -->
+      <path d="M714 135V335" stroke="#207cce" stroke-dasharray="3 3" stroke-width="1.5" />
+      <a href={`${baseUrl}/#evidence`} class="evidence-rail-link">
+        <rect x="670" y="210" width="65" height="34" rx="4" fill="var(--glass-bg)" stroke="#207cce" stroke-width="1.2" />
+        <text x="702" y="224" text-anchor="middle" font-size="8.5" font-weight="800" fill="#207cce">EVIDENCE</text>
+        <text x="702" y="236" text-anchor="middle" font-size="7" font-weight="600" fill="var(--ink-muted)">rail</text>
+      </a>
     </g>
 
     <!-- HARDWARE (Bottom Layer) -->
@@ -273,6 +280,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
   <ol class="sr-only">
     <li>Applications: ClosedRoom, RedactGuard, and Aura Finance.</li>
     <li>Infrastructure: Local LLM Server, Local ASR Server, and Android LLM Harness.</li>
+    <li>Evidence & Observability Rail: Traffic Monitoring for macOS and Traffic Monitoring for Android.</li>
     <li>Hardware: laptop, desktop, and Android devices, with no cloud required.</li>
   </ol>
 </figure>

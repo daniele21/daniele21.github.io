@@ -1,0 +1,185 @@
+---
+import { trafficMonitoringAndroidData as android } from '../../../content';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+---
+
+<section class="arch-section" id="architecture">
+  <div class="shell">
+    <div class="section-header">
+      <span class="kicker">4-TIER LOCAL ARCHITECTURE</span>
+      <h2 class="section-title">{android.architecture.title}</h2>
+      <p class="section-subtitle">{android.architecture.subtitle}</p>
+    </div>
+
+    <!-- Tiers Grid -->
+    <div class="tiers-grid">
+      {android.architecture.tiers.map((tier) => (
+        <div class="tier-card">
+          <div class="tier-header">
+            <span class="tier-num">Tier 0{tier.tierNumber}</span>
+            <h3 class="tier-name">{tier.name}</h3>
+          </div>
+          <p class="tier-desc">{tier.description}</p>
+          <div class="tier-tags">
+            {tier.components.map((comp) => (
+              <span class="comp-tag">{comp}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Diagram -->
+    <div class="arch-media">
+      <button
+        type="button"
+        class="zoom-trigger-btn"
+        data-zoom-src={`${baseUrl}/${android.architecture.imagePath.replace(/^\//, '')}`}
+        data-zoom-caption="Traffic Monitoring Android - 4-Tier Architecture Diagram"
+        aria-label="Click to zoom Architecture Diagram"
+      >
+        <img
+          src={`${baseUrl}/${android.architecture.imagePath.replace(/^\//, '')}`}
+          alt="Traffic Monitoring Android Architecture Diagram"
+          class="arch-img"
+          loading="lazy"
+          width="900"
+          height="560"
+        />
+        <span class="zoom-badge">🔍 Zoom Diagram</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .arch-section {
+    padding: var(--space-20) 0;
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto var(--space-12);
+  }
+
+  .kicker {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent-blue-light, #0dc1f9);
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+
+  .section-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: var(--space-4);
+  }
+
+  .section-subtitle {
+    font-size: var(--text-base);
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+  }
+
+  .tier-card {
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tier-header {
+    margin-bottom: var(--space-3);
+  }
+
+  .tier-num {
+    font-size: var(--text-xs);
+    font-weight: 800;
+    color: var(--accent-blue-light, #0dc1f9);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .tier-name {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .tier-desc {
+    font-size: var(--text-xs);
+    color: var(--ink-muted);
+    line-height: 1.5;
+    margin-bottom: var(--space-4);
+  }
+
+  .tier-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .comp-tag {
+    font-size: 0.65rem;
+    font-weight: 650;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+    background: var(--surface-muted);
+    border: 1px solid var(--border-subtle);
+    color: var(--ink-muted);
+  }
+
+  .arch-media {
+    max-width: 860px;
+    margin: 0 auto;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-muted);
+    box-shadow: var(--shadow-md);
+  }
+
+  .zoom-trigger-btn {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: zoom-in;
+    position: relative;
+  }
+
+  .arch-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .zoom-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(8px);
+    pointer-events: none;
+  }
+</style>

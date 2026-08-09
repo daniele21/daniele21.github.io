@@ -11,7 +11,7 @@
   <circle cx="24" cy="24" r="6" fill="#EF4444" />
   <circle cx="44" cy="24" r="6" fill="#F59E0B" />
   <circle cx="64" cy="24" r="6" fill="#10B981" />
-  <text x="100" y="29" fill="#94A3B8" font-family="sans-serif" font-size="14" font-weight="600">Local LLM Server — Interactive OpenAPI / Swagger UI &amp; SDK Examples</text>
+  <text x="100" y="29" fill="#94A3B8" font-family="sans-serif" font-size="14" font-weight="600">Local LLM Server - Interactive OpenAPI / Swagger UI &amp; SDK Examples</text>
 
   <g transform="translate(40, 70)">
     <!-- Left Column: Interactive API Docs -->

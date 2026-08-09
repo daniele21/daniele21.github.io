@@ -50,6 +50,7 @@ The page is a strategic positioning asset, not a chronological résumé and not 
 | [`06-seo-analytics-accessibility.md`](06-seo-analytics-accessibility.md) | Search, measurement, performance, privacy and accessibility requirements. |
 | [`07-acceptance-criteria-and-roadmap.md`](07-acceptance-criteria-and-roadmap.md) | Definition of done, quality gates, phased delivery and future evolution. |
 | [`08-local-llm-server-integration-plan.md`](08-local-llm-server-integration-plan.md) | Dedicated Local LLM Server deep-dive strategy, content, implementation plan and acceptance criteria. |
+| [`09-traffic-monitoring-integration-plan.md`](09-traffic-monitoring-integration-plan.md) | Homepage Evidence & Observability integration plus dedicated macOS and Android Traffic Monitoring deep-dive plans. |
 
 ## Product principles
 

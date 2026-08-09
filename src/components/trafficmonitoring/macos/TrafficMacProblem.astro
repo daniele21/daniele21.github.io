@@ -1,0 +1,106 @@
+---
+import { trafficMonitoringData as mac } from '../../../content';
+---
+
+<section class="problem-section" id="why-it-exists">
+  <div class="shell">
+    <div class="section-header">
+      <span class="kicker">PRACTICAL PROBLEM</span>
+      <h2 class="section-title">{mac.problem.title}</h2>
+      <blockquote class="practical-quote">
+        "{mac.problem.practicalQuestion}"
+      </blockquote>
+    </div>
+
+    <div class="problem-grid">
+      {mac.problem.points.map((point) => (
+        <div class="problem-card">
+          <span class="point-num">{point.number}</span>
+          <h3 class="point-title">{point.title}</h3>
+          <p class="point-desc">{point.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .problem-section {
+    padding: var(--space-16) 0;
+    background: var(--surface-subtle);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto var(--space-12);
+  }
+
+  .kicker {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent-blue);
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+
+  .section-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: var(--space-4);
+  }
+
+  .practical-quote {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    font-style: italic;
+    color: var(--accent-blue);
+    padding: var(--space-4) var(--space-6);
+    border-left: 3px solid var(--accent-blue);
+    background: var(--surface-card);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin: 0 auto;
+    max-width: 640px;
+    text-align: left;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .problem-card {
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .point-num {
+    font-size: var(--text-xs);
+    font-weight: 800;
+    color: var(--accent-blue);
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+
+  .point-title {
+    font-size: var(--text-base);
+    font-weight: 750;
+    color: var(--ink);
+    margin-bottom: var(--space-2);
+    line-height: 1.4;
+  }
+
+  .point-desc {
+    font-size: var(--text-xs);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+</style>

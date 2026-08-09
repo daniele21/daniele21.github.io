@@ -36,6 +36,34 @@ export interface Pillar {
   accent: 'teal' | 'blue' | 'violet';
 }
 
+/** Evidence & Observability platform data */
+export interface EvidencePlatform {
+  id: 'traffic-monitoring-macos' | 'traffic-monitoring-android';
+  platform: 'macOS' | 'Android';
+  name: string;
+  headline: string;
+  description: string;
+  principles: string[];
+  currentCapabilities: string[];
+  currentStatus: ProjectStatus;
+  statusLabel: string;
+  limitations: string[];
+  logoPath: string;
+  heroImage: string;
+  pageUrl: string;
+  repositoryUrl: string;
+}
+
+/** Evidence & Observability homepage section copy */
+export interface EvidenceSectionContent {
+  kicker: string;
+  title: string;
+  subtitle: string;
+  principles: { title: string; description: string }[];
+  platforms: EvidencePlatform[];
+  bottomNote: string;
+}
+
 /** Reference application data */
 export interface ReferenceApplication {
   id: 'closedroom' | 'redact-guard' | 'aura-finance';
@@ -304,6 +332,7 @@ export interface HomeContent {
   challenges: ChallengesContent;
   possibilities: PossibilitiesSectionContent;
   infrastructure: InfrastructureSectionContent;
+  evidence: EvidenceSectionContent;
   applications: ApplicationsSectionContent;
   credibility: CredibilitySectionContent;
   journey: JourneySectionContent;

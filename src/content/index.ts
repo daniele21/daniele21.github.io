@@ -12,4 +12,7 @@ export { closedRoomData } from './locales/en/closedRoom';
 export { redactGuardData } from './locales/en/redactGuard';
 export { auraFinanceData } from './locales/en/auraFinance';
 export { localLlmServerData } from './locales/en/localLlmServer';
+export { evidenceData } from './locales/en/evidence';
+export { trafficMonitoringData } from './locales/en/trafficMonitoring';
+export { trafficMonitoringAndroidData } from './locales/en/trafficMonitoringAndroid';
 

@@ -1,0 +1,169 @@
+---
+import { trafficMonitoringAndroidData as android } from '../../../content';
+---
+
+<section class="evidence-model-section" id="evidence-model">
+  <div class="shell">
+    <div class="section-header">
+      <span class="kicker">EVIDENCE ENGINE</span>
+      <h2 class="section-title">{android.evidenceModel.title}</h2>
+      <p class="section-subtitle">{android.evidenceModel.subtitle}</p>
+    </div>
+
+    <!-- Coverage Formula -->
+    <div class="formula-card">
+      <span class="formula-title">EVIDENCE COVERAGE FORMULA</span>
+      <div class="formula-line">
+        <code>accountedBytes = attributedBytes + unattributedBytes</code>
+      </div>
+      <div class="formula-line">
+        <code>Evidence Coverage % = attributedBytes / accountedBytes</code>
+      </div>
+      <p class="explanation">ℹ️ {android.evidenceModel.coverageExplanation}</p>
+    </div>
+
+    <!-- Measurement Health States -->
+    <div class="health-grid">
+      {android.evidenceModel.healthStates.map((item) => (
+        <div class={`health-card health-${item.state.toLowerCase()}`}>
+          <div class="health-header">
+            <span class="health-indicator"></span>
+            <h3 class="health-state">{item.state}</h3>
+          </div>
+          <span class="health-rule">{item.rule}</span>
+          <p class="health-desc">{item.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .evidence-model-section {
+    padding: var(--space-20) 0;
+    background: var(--surface-subtle);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto var(--space-12);
+  }
+
+  .kicker {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent-blue-light, #0dc1f9);
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+
+  .section-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: var(--space-4);
+  }
+
+  .section-subtitle {
+    font-size: var(--text-base);
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+
+  .formula-card {
+    padding: var(--space-8);
+    border-radius: var(--radius-xl);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto var(--space-12);
+  }
+
+  .formula-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--accent-blue-light, #0dc1f9);
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .formula-line {
+    margin-bottom: var(--space-3);
+  }
+
+  .formula-line code {
+    font-family: var(--font-mono, monospace);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--surface-muted);
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    display: inline-block;
+  }
+
+  .explanation {
+    font-size: var(--text-xs);
+    color: var(--ink-muted);
+    margin-top: var(--space-4);
+    font-style: italic;
+  }
+
+  .health-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .health-card {
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .health-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .health-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .health-good .health-indicator { background: #22c55e; }
+  .health-limited .health-indicator { background: #f59e0b; }
+  .health-degraded .health-indicator { background: #ef4444; }
+
+  .health-state {
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .health-rule {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--accent-blue-light, #0dc1f9);
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+
+  .health-desc {
+    font-size: var(--text-xs);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+</style>

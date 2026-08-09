@@ -1,0 +1,129 @@
+---
+interface Props {
+  kicker: string;
+  headline: string;
+  body: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
+}
+
+const {
+  kicker,
+  headline,
+  body,
+  primaryCtaLabel,
+  primaryCtaHref,
+  secondaryCtaLabel,
+  secondaryCtaHref,
+} = Astro.props;
+---
+
+<section class="final-cta-section" id="final-cta">
+  <div class="shell">
+    <div class="cta-card">
+      <span class="cta-kicker">{kicker}</span>
+      <h2 class="cta-headline">{headline}</h2>
+      <p class="cta-body">{body}</p>
+      <div class="cta-actions">
+        <a
+          href={primaryCtaHref}
+          class="btn-primary"
+          target={primaryCtaHref.startsWith('http') ? '_blank' : '_self'}
+          rel={primaryCtaHref.startsWith('http') ? 'noreferrer' : ''}
+        >
+          {primaryCtaLabel}
+        </a>
+        <a href={secondaryCtaHref} class="btn-secondary">
+          {secondaryCtaLabel}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .final-cta-section {
+    padding: var(--space-20) 0;
+  }
+
+  .cta-card {
+    padding: var(--space-12) var(--space-8);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, rgba(2, 13, 44, 0.95), rgba(14, 35, 69, 0.9));
+    border: 1px solid rgba(32, 124, 206, 0.3);
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .cta-kicker {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent-blue-light, #0dc1f9);
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+
+  .cta-headline {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: var(--space-4);
+    line-height: 1.25;
+  }
+
+  .cta-body {
+    font-size: var(--text-base);
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 620px;
+    margin: 0 auto var(--space-8);
+    line-height: 1.6;
+  }
+
+  .cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    background: var(--accent-blue, #207cce);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: var(--text-sm);
+    text-decoration: none;
+    transition: transform var(--duration-fast) ease, background-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    background: #002996;
+    box-shadow: 0 8px 20px rgba(32, 124, 206, 0.4);
+  }
+
+  .btn-secondary {
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-weight: 650;
+    font-size: var(--text-sm);
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+    transition: transform var(--duration-fast) ease, background-color var(--duration-fast) ease;
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.2);
+  }
+</style>

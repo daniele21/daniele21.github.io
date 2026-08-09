@@ -30,6 +30,26 @@ export const navigation: NavItem[] = [
     ],
   },
   {
+    label: 'Evidence',
+    href: '#evidence',
+    children: [
+      {
+        label: 'Overview',
+        href: '#evidence',
+      },
+      {
+        label: 'Traffic Monitoring (macOS)',
+        href: 'traffic-monitoring',
+        logoPath: 'images/traffic-monitoring/shield.png',
+      },
+      {
+        label: 'Traffic Monitoring (Android)',
+        href: 'traffic-monitoring-android',
+        logoPath: 'images/traffic-monitoring-android/shield.png',
+      },
+    ],
+  },
+  {
     label: 'Applications',
     href: '#applications',
     children: [
@@ -50,7 +70,6 @@ export const navigation: NavItem[] = [
       },
     ],
   },
-  { label: 'Track record', href: '#credibility' },
   { label: 'Knowledge', href: '#journey' },
   { label: 'About', href: '#about' },
 ];

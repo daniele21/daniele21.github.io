@@ -1,0 +1,152 @@
+---
+import { trafficMonitoringData as mac } from '../../../content';
+---
+
+<section class="coverage-section" id="coverage">
+  <div class="shell">
+    <div class="section-header">
+      <span class="kicker">OBSERVATION INTEGRITY</span>
+      <h2 class="section-title">{mac.coverage.title}</h2>
+      <p class="section-subtitle">{mac.coverage.subtitle}</p>
+    </div>
+
+    <!-- Formula Box -->
+    <div class="formula-box">
+      <span class="formula-title">THE NETWORK EVIDENCE EQUATION</span>
+      <div class="formula-items">
+        {mac.coverage.formula.map((item) => (
+          <span class={item === '+' || item === '=' ? 'operator' : 'formula-token'}>
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- Evidence States Grid -->
+    <div class="states-grid">
+      {mac.coverage.states.map((state) => (
+        <div class="state-card">
+          <h3 class="state-label">{state.label}</h3>
+          <p class="state-desc">{state.description}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="coverage-disclaimer">ℹ️ {mac.coverage.disclaimer}</p>
+  </div>
+</section>
+
+<style>
+  .coverage-section {
+    padding: var(--space-20) 0;
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto var(--space-10);
+  }
+
+  .kicker {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent-blue);
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+
+  .section-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: var(--space-4);
+  }
+
+  .section-subtitle {
+    font-size: var(--text-base);
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+
+  .formula-box {
+    padding: var(--space-8);
+    border-radius: var(--radius-xl);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto var(--space-12);
+  }
+
+  .formula-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--accent-blue);
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .formula-items {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .formula-token {
+    font-family: var(--font-mono, monospace);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    background: var(--surface-muted);
+    border: 1px solid var(--border-subtle);
+    color: var(--ink);
+  }
+
+  .operator {
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: var(--accent-blue);
+  }
+
+  .states-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+  }
+
+  .state-card {
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .state-label {
+    font-size: var(--text-base);
+    font-weight: 750;
+    color: var(--ink);
+    margin-bottom: var(--space-2);
+  }
+
+  .state-desc {
+    font-size: var(--text-xs);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  .coverage-disclaimer {
+    text-align: center;
+    font-size: var(--text-xs);
+    color: var(--ink-muted);
+    max-width: 620px;
+    margin: 0 auto;
+    font-style: italic;
+  }
+</style>

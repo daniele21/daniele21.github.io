@@ -1,0 +1,44 @@
+---
+interface Props {
+  size?: number;
+  class?: string;
+  variant?: 'macos' | 'android';
+}
+
+const { size = 32, class: className = '', variant = 'macos' } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const shieldSrc = variant === 'android' 
+  ? `${baseUrl}/images/traffic-monitoring-android/shield.png` 
+  : `${baseUrl}/images/traffic-monitoring/shield.png`;
+---
+
+<div class={`traffic-brand-mark ${className}`}>
+  <img
+    src={shieldSrc}
+    alt="Traffic Monitoring shield"
+    width={size}
+    height={size}
+    class="shield-img"
+    loading="eager"
+    decoding="async"
+  />
+</div>
+
+<style>
+  .traffic-brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .shield-img {
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(32, 124, 206, 0.25));
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .traffic-brand-mark:hover .shield-img {
+    transform: scale(1.05);
+  }
+</style>

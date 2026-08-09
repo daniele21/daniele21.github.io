@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+
+import TrafficMacHero from '../components/trafficmonitoring/macos/TrafficMacHero.astro';
+import TrafficMacMission from '../components/trafficmonitoring/macos/TrafficMacMission.astro';
+import TrafficMacProblem from '../components/trafficmonitoring/macos/TrafficMacProblem.astro';
+import TrafficMacEvidence from '../components/trafficmonitoring/macos/TrafficMacEvidence.astro';
+import TrafficMacSurfaces from '../components/trafficmonitoring/macos/TrafficMacSurfaces.astro';
+import TrafficMacCoverage from '../components/trafficmonitoring/macos/TrafficMacCoverage.astro';
+import TrafficMacArchitecture from '../components/trafficmonitoring/macos/TrafficMacArchitecture.astro';
+import TrafficMacMaturity from '../components/trafficmonitoring/macos/TrafficMacMaturity.astro';
+import TrafficPrivacyBoundary from '../components/trafficmonitoring/shared/TrafficPrivacyBoundary.astro';
+import TrafficFinalCta from '../components/trafficmonitoring/shared/TrafficFinalCta.astro';
+
+import { trafficMonitoringData as mac } from '../content';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
+const subHeaderLinks = [
+  { label: 'Overview', href: '#hero' },
+  { label: 'Why', href: '#why-it-exists' },
+  { label: 'Evidence Tiers', href: '#evidence-tiers' },
+  { label: 'Surfaces', href: '#product-surfaces' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Status', href: '#status' },
+];
+
+const cta = {
+  label: 'GitHub ↗',
+  href: 'https://github.com/daniele21/traffic-monitoring',
+};
+---
+
+<BaseLayout
+  title="Traffic Monitoring for macOS - Local Network Observability"
+  description="A privacy-first macOS utility for network usage history, observation coverage, evidence export and progressively stronger application activity evidence."
+  canonical={`${import.meta.env.SITE || 'https://daniele21.github.io'}${baseUrl}/traffic-monitoring`}
+  ogTitle="Traffic Monitoring for macOS - Local Network Observability"
+  ogDescription="Measure what moves. Understand where it moves. Local network evidence for macOS."
+  ogImage={`${baseUrl}/images/traffic-monitoring/overview.png`}
+>
+  <ProductSubHeader
+    title="Traffic Monitoring for macOS"
+    badge="Active observability project"
+    logoPath="images/traffic-monitoring/shield.png"
+    links={subHeaderLinks}
+    cta={cta}
+  />
+
+  <div id="top">
+    <TrafficMacHero />
+    <TrafficMacMission />
+    <TrafficMacProblem />
+    <TrafficMacEvidence />
+    <TrafficMacSurfaces />
+    <TrafficMacCoverage />
+    <TrafficMacArchitecture />
+    <TrafficPrivacyBoundary
+      title="macOS Privacy & Trust Boundaries"
+      keptVisible={mac.privacy.keptVisible}
+      notClaimed={mac.privacy.notClaimed}
+    />
+    <TrafficMacMaturity />
+    <TrafficFinalCta
+      kicker={mac.finalCta.kicker}
+      headline={mac.finalCta.headline}
+      body={mac.finalCta.body}
+      primaryCtaLabel={mac.finalCta.primaryCtaLabel}
+      primaryCtaHref={mac.finalCta.primaryCtaHref}
+      secondaryCtaLabel={mac.finalCta.secondaryCtaLabel}
+      secondaryCtaHref={mac.finalCta.secondaryCtaHref}
+    />
+  </div>
+</BaseLayout>

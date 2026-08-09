@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+
+import TrafficAndroidHero from '../components/trafficmonitoring/android/TrafficAndroidHero.astro';
+import TrafficAndroidMission from '../components/trafficmonitoring/android/TrafficAndroidMission.astro';
+import TrafficAndroidDifference from '../components/trafficmonitoring/android/TrafficAndroidDifference.astro';
+import TrafficAndroidSurfaces from '../components/trafficmonitoring/android/TrafficAndroidSurfaces.astro';
+import TrafficAndroidEvidence from '../components/trafficmonitoring/android/TrafficAndroidEvidence.astro';
+import TrafficAndroidArchitecture from '../components/trafficmonitoring/android/TrafficAndroidArchitecture.astro';
+import TrafficAndroidRoadmap from '../components/trafficmonitoring/android/TrafficAndroidRoadmap.astro';
+import TrafficAndroidMaturity from '../components/trafficmonitoring/android/TrafficAndroidMaturity.astro';
+import TrafficPrivacyBoundary from '../components/trafficmonitoring/shared/TrafficPrivacyBoundary.astro';
+import TrafficFinalCta from '../components/trafficmonitoring/shared/TrafficFinalCta.astro';
+
+import { trafficMonitoringAndroidData as android } from '../content';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
+const subHeaderLinks = [
+  { label: 'Overview', href: '#hero' },
+  { label: 'Difference', href: '#why-different' },
+  { label: 'Evidence', href: '#evidence-model' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Roadmap', href: '#roadmap' },
+  { label: 'Status', href: '#status' },
+];
+
+const cta = {
+  label: 'GitHub ↗',
+  href: 'https://github.com/daniele21/traffic-monitoring-android',
+};
+---
+
+<BaseLayout
+  title="Traffic Monitoring for Android - Evidence-First Network Observability"
+  description="An Android observability project for network usage, deterministic attribution, Evidence Coverage, Measurement Health and explicit uncertainty."
+  canonical={`${import.meta.env.SITE || 'https://daniele21.github.io'}${baseUrl}/traffic-monitoring-android`}
+  ogTitle="Traffic Monitoring for Android - Evidence-First Network Observability"
+  ogDescription="Know your network usage - and the evidence behind it."
+  ogImage={`${baseUrl}/images/traffic-monitoring-android/overview.png`}
+>
+  <ProductSubHeader
+    title="Traffic Monitoring for Android"
+    badge="Field validation pending"
+    logoPath="images/traffic-monitoring-android/shield.png"
+    links={subHeaderLinks}
+    cta={cta}
+  />
+
+  <div id="top">
+    <TrafficAndroidHero />
+    <TrafficAndroidMission />
+    <TrafficAndroidDifference />
+    <TrafficAndroidSurfaces />
+    <TrafficAndroidEvidence />
+    <TrafficAndroidArchitecture />
+    <TrafficAndroidRoadmap />
+    <TrafficPrivacyBoundary
+      title="Android Privacy & Trust Boundaries"
+      keptVisible={android.privacy.keptVisible}
+      notClaimed={android.privacy.notClaimed}
+    />
+    <TrafficAndroidMaturity />
+    <TrafficFinalCta
+      kicker={android.finalCta.kicker}
+      headline={android.finalCta.headline}
+      body={android.finalCta.body}
+      primaryCtaLabel={android.finalCta.primaryCtaLabel}
+      primaryCtaHref={android.finalCta.primaryCtaHref}
+      secondaryCtaLabel={android.finalCta.secondaryCtaLabel}
+      secondaryCtaHref={android.finalCta.secondaryCtaHref}
+    />
+  </div>
+</BaseLayout>

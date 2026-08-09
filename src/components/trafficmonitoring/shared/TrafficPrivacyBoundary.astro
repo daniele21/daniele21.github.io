@@ -1,0 +1,160 @@
+---
+interface Props {
+  title: string;
+  keptVisible: string[];
+  notClaimed: string[];
+}
+
+const { title, keptVisible, notClaimed } = Astro.props;
+---
+
+<section class="privacy-boundary-section" id="privacy-boundary">
+  <div class="shell">
+    <div class="section-header">
+      <span class="kicker">PRIVACY & TRUST BOUNDARY</span>
+      <h2 class="section-title">{title}</h2>
+    </div>
+
+    <div class="boundary-grid">
+      <div class="boundary-card kept-visible">
+        <div class="card-header">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+          <h3>What Stays Protected & Local</h3>
+        </div>
+        <ul class="boundary-list">
+          {keptVisible.map((item) => (
+            <li>
+              <span class="check-icon">✓</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="boundary-card not-claimed">
+        <div class="card-header">
+          <svg class="icon warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <h3>What Is NOT Claimed Today</h3>
+        </div>
+        <ul class="boundary-list">
+          {notClaimed.map((item) => (
+            <li>
+              <span class="cross-icon">✕</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .privacy-boundary-section {
+    padding: var(--space-16) 0;
+    background: var(--surface-subtle);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto var(--space-10);
+  }
+
+  .kicker {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--accent-blue);
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+
+  .section-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .boundary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .boundary-card {
+    padding: var(--space-8);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+  }
+
+  .boundary-card.kept-visible {
+    border-top: 4px solid var(--semantic-success, #22c55e);
+  }
+
+  .boundary-card.not-claimed {
+    border-top: 4px solid var(--semantic-warning, #f59e0b);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .card-header h3 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    color: var(--semantic-success, #22c55e);
+    flex-shrink: 0;
+  }
+
+  .warning-icon {
+    color: var(--semantic-warning, #f59e0b);
+  }
+
+  .boundary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3.5);
+  }
+
+  .boundary-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  .check-icon {
+    color: var(--semantic-success, #22c55e);
+    font-weight: 800;
+  }
+
+  .cross-icon {
+    color: var(--semantic-warning, #f59e0b);
+    font-weight: 800;
+  }
+</style>

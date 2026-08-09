@@ -6,8 +6,8 @@ export const homeContent: HomeContent = {
     titlePrefix: 'Building infrastructure\nfor ',
     titleHighlight: 'product-grade local AI',
     titleSuffix: '.',
-    lede: 'I explore how local-first architectures can give AI products more control over model lifecycle, costs, data, and runtime, without giving up frontier models where they still make sense.',
-    ledeDetail: 'Closed models should be an option, not a dependency. Local-first means having another execution path when control matters.',
+    lede: 'I explore how local-first architectures can give AI products more control over model lifecycle, costs, data, and runtime - and how evidence can show where those boundaries actually hold.',
+    ledeDetail: 'Local-first is an execution choice. Evidence makes it an accountable product claim.',
     primaryActionLabel: 'Why local-first?',
     primaryActionHref: '#why-local-first',
     secondaryActionLabel: 'Explore the stack',
@@ -47,9 +47,9 @@ export const homeContent: HomeContent = {
       'without surrendering control over critical workflows, sensitive data, and the ability to choose how intelligence is delivered.',
     missionKicker: 'MISSION',
     missionTextPrefix: 'Build and test ',
-    missionTextHighlight: 'reusable local AI and data-protection foundations',
+    missionTextHighlight: 'reusable local-AI, data-protection and observability foundations',
     missionTextSuffix:
-      ' that give products more control over model lifecycle, data, runtime, and cost, across desktop and mobile.',
+      ' that give products more control over model lifecycle, data, runtime and cost - and make local-first behavior measurable across desktop and mobile.',
     principlesBadges: [
       { titleHighlight: 'Local', textSuffix: ' where sufficient' },
       { titleHighlight: 'Cloud', textSuffix: ' where valuable' },
@@ -107,7 +107,7 @@ export const homeContent: HomeContent = {
     ],
     summaryBoxTitle: "Local-first isn't anti-cloud. It's operational control.",
     summaryBoxBody:
-      'It means having an execution path where you control model versions, data privacy, latency budgets, and unit economics — choosing cloud APIs because they fit, not because you have no alternative.',
+      'It means having an execution path where you control model versions, data privacy, latency budgets, and unit economics - choosing cloud APIs because they fit, not because you have no alternative.',
   },
   challenges: {
     kicker: 'CONTROL COMES WITH RESPONSIBILITY',
@@ -129,12 +129,12 @@ export const homeContent: HomeContent = {
       },
       {
         number: '02',
-        title: 'Observability & telemetry',
+        title: 'Observability, telemetry & evidence',
         description:
-          'Performance tracking, latency metrics, accuracy signals & memory profiling without privacy leakage.',
+          'Runtime metrics show whether local inference works. Network evidence shows what was observed, how complete it was and where uncertainty remains.',
         icon: 'telemetry',
         accent: 'teal',
-        tags: ['Latency Metrics', 'Memory Profiling', 'Privacy-Safe'],
+        tags: ['Runtime Telemetry', 'Evidence Coverage', 'Explicit Unknowns'],
       },
       {
         number: '03',
@@ -185,7 +185,7 @@ export const homeContent: HomeContent = {
     subtitle:
       'ClosedRoom, RedactGuard, and Aura Finance demonstrate how privacy-first AI protects conversations, sensitive documents, and personal financial data in practice.',
     bottomNote:
-      'Reference applications validate the infrastructure and show what it can enable. They are the beginning, not the limit, of the ecosystem.',
+      'Reference applications validate usefulness and product constraints. Traffic Monitoring separately develops the evidence needed to describe what was observed without turning incomplete measurement into a privacy guarantee.',
   },
   credibility: {
     kicker: 'PROFESSIONAL TRACK RECORD',
@@ -199,7 +199,7 @@ export const homeContent: HomeContent = {
     titlePrefix: 'Building, documenting, and sharing ',
     titleHighlight: 'in public',
     subtitlePrefix:
-      'Experiments become code, measurements, technical notes and public discussion: ',
+      'Measurement includes not only runtime performance, but also coverage, uncertainty and reproducible network evidence. ',
     subtitleHighlight: 'Build → Measure → Document → Share',
   },
   about: {
