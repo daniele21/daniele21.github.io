@@ -32,11 +32,26 @@ const subheaderLinks = [
   { label: 'API Code', href: '#code' },
   { label: 'Status', href: '#status' },
 ];
+const harnessSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Android Local LLM Harness",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Android",
+  "description": harnessData.meta.description,
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": "https://daniele21.github.io/"
+  },
+  "codeRepository": "https://github.com/daniele21/android-local-llm-harness"
+};
 ---
 
 <BaseLayout
   title={harnessData.meta.title}
   description={harnessData.meta.description}
+  jsonLd={harnessSchema}
 >
   <HarnessHeader baseUrl={baseUrl} slot="header" />
 

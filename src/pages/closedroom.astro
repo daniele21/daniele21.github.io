@@ -30,11 +30,26 @@ const subheaderLinks = [
   { label: 'Architecture', href: '#architecture' },
   { label: 'Privacy Boundary', href: '#trust' },
 ];
+const closedRoomSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ClosedRoom",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "macOS",
+  "description": closedRoomData.meta.description,
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": "https://daniele21.github.io/"
+  },
+  "codeRepository": "https://github.com/daniele21/local-asr-server/tree/speaker_detection"
+};
 ---
 
 <BaseLayout
   title={closedRoomData.meta.title}
   description={closedRoomData.meta.description}
+  jsonLd={closedRoomSchema}
 >
   <ClosedRoomHeader baseUrl={baseUrl} slot="header" />
 

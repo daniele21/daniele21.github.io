@@ -29,11 +29,26 @@ const subheaderLinks = [
   { label: 'Payment Detection', href: '#payment' },
   { label: 'Architecture', href: '#architecture' },
 ];
+const auraFinanceSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Aura Finance",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Cross-platform",
+  "description": auraFinanceData.meta.description,
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": "https://daniele21.github.io/"
+  },
+  "codeRepository": "https://github.com/daniele21/personal-budget/tree/new-features"
+};
 ---
 
 <BaseLayout
   title={auraFinanceData.meta.title}
   description={auraFinanceData.meta.description}
+  jsonLd={auraFinanceSchema}
 >
   <AuraHeader baseUrl={baseUrl} slot="header" />
 

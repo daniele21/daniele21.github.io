@@ -32,11 +32,26 @@ const subheaderLinks = [
   { label: 'API Code', href: '#code' },
   { label: 'Status', href: '#status' },
 ];
+const localLlmSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Local LLM Server",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "macOS, Linux",
+  "description": localLlmServerData.meta.description,
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": "https://daniele21.github.io/"
+  },
+  "codeRepository": "https://github.com/daniele21/local-llm-server"
+};
 ---
 
 <BaseLayout
   title={localLlmServerData.meta.title}
   description={localLlmServerData.meta.description}
+  jsonLd={localLlmSchema}
 >
   <ProductSubHeader
     title="Local LLM Server"

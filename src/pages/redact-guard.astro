@@ -27,11 +27,26 @@ const subheaderLinks = [
   { label: 'Product', href: '#product' },
   { label: 'Architecture', href: '#architecture' },
 ];
+const redactGuardSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "RedactGuard",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "Cross-platform",
+  "description": redactGuardData.meta.description,
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": "https://daniele21.github.io/"
+  },
+  "codeRepository": "https://github.com/daniele21/redact-guard"
+};
 ---
 
 <BaseLayout
   title={redactGuardData.meta.title}
   description={redactGuardData.meta.description}
+  jsonLd={redactGuardSchema}
 >
   <RedactGuardHeader baseUrl={baseUrl} slot="header" />
 

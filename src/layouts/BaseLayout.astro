@@ -15,12 +15,29 @@ import '../styles/layout.css';
 interface Props {
   title?: string;
   description?: string;
+  canonical?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  jsonLd?: Record<string, any> | Array<Record<string, any>>;
 }
 
 const {
   title = siteMetadata.title,
   description = siteMetadata.description,
+  canonical,
+  ogTitle = title,
+  ogDescription = description,
+  ogImage = siteMetadata.ogImage,
+  jsonLd,
 } = Astro.props;
+
+/**
+ * Dynamically construct canonical URL for every page to avoid duplicate canonical issues.
+ */
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+const siteBase = siteMetadata.canonical.replace(/\/$/, '');
+const computedCanonical = canonical || `${siteBase}${currentPath || '/'}`;
 
 /**
  * Preview environments (dev/, pr-preview/) set ASTRO_BASE environment variable.
@@ -30,6 +47,40 @@ const isPreview = !!import.meta.env.ASTRO_BASE;
 const robotsContent = isPreview
   ? 'noindex,nofollow'
   : 'index,follow,max-image-preview:large';
+
+const defaultSchemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": siteMetadata.canonical,
+    "image": `${siteMetadata.canonical}images/profile-photo.jpg`,
+    "sameAs": [
+      "https://github.com/daniele21",
+      "https://www.linkedin.com/in/daniele-moltisanti/",
+      "https://staituned.com"
+    ],
+    "jobTitle": "AI & Software Product Engineer",
+    "knowsAbout": [
+      "Local AI", "On-device inference", "Privacy-first product design",
+      "Large language models", "Speech recognition", "Android AI", "Open-weight LLMs"
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": siteMetadata.title,
+    "url": siteMetadata.canonical,
+    "author": {
+      "@type": "Person",
+      "name": "Daniele Moltisanti"
+    }
+  }
+];
+
+const allSchemas = jsonLd
+  ? [...defaultSchemas, ...(Array.isArray(jsonLd) ? jsonLd : [jsonLd])]
+  : defaultSchemas;
 ---
 
 <!doctype html>
@@ -42,7 +93,7 @@ const robotsContent = isPreview
   <meta name="theme-color" content="#f7f9ff">
   <meta name="color-scheme" content="light dark">
   <meta name="robots" content={robotsContent}>
-  <link rel="canonical" href={siteMetadata.canonical}>
+  <link rel="canonical" href={computedCanonical}>
   <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.png`} type="image/png">
   <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}favicon.png`}>
   <link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`}>
@@ -65,31 +116,19 @@ const robotsContent = isPreview
 
   <!-- Open Graph & Social Cards -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content={siteMetadata.socialTitle}>
-  <meta property="og:description" content={siteMetadata.socialDescription}>
-  <meta property="og:url" content={siteMetadata.canonical}>
-  <meta property="og:image" content={siteMetadata.ogImage}>
+  <meta property="og:title" content={ogTitle}>
+  <meta property="og:description" content={ogDescription}>
+  <meta property="og:url" content={computedCanonical}>
+  <meta property="og:image" content={ogImage}>
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content={title}>
-  <meta name="twitter:description" content={siteMetadata.socialDescription}>
+  <meta name="twitter:title" content={ogTitle}>
+  <meta name="twitter:description" content={ogDescription}>
+  <meta name="twitter:image" content={ogImage}>
 
-  <!-- Structured Data -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Daniele Moltisanti",
-    "url": siteMetadata.canonical,
-    "image": `${siteMetadata.canonical}images/profile-photo.jpg`,
-    "sameAs": [
-      "https://github.com/daniele21",
-      "https://www.linkedin.com/in/daniele-moltisanti/",
-      "https://staituned.com"
-    ],
-    "knowsAbout": [
-      "Local AI", "On-device inference", "Privacy-first product design",
-      "Large language models", "Speech recognition", "Android AI"
-    ]
-  })} />
+  <!-- Structured Data (JSON-LD for SEO & GEO) -->
+  {allSchemas.map((schema) => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
