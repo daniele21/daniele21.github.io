@@ -12,8 +12,8 @@ export const siteMetadata: SiteMetadata = {
 };
 
 export const navigation: NavItem[] = [
-  { label: 'Local AI', href: 'local-ai' },
-  { label: 'Local AI Lab', href: '#local-ai-lab' },
+  { label: 'Field Guide', href: 'local-ai' },
+  { label: 'Lab', href: '#local-ai-lab' },
   {
     label: 'Projects',
     href: '#projects',
@@ -40,8 +40,8 @@ export const navigation: NavItem[] = [
       },
     ],
   },
+  { label: 'Evidence', href: '#evidence' },
   { label: 'Research', href: '#research' },
-  { label: 'About', href: '#about' },
 ];
 
 export const socialLinks = {
