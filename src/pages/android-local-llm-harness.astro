@@ -1,78 +1,49 @@
 ---
-/**
- * android-local-llm-harness.astro
- * Modular deep-dive page for Android Local LLM Harness.
- * Composes dedicated section components matching harness-landing-prototype (3).html 100%.
- */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HarnessHeader from '../components/harness/HarnessHeader.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
-import HarnessHero from '../components/harness/HarnessHero.astro';
-import HarnessMission from '../components/harness/HarnessMission.astro';
-import HarnessProblems from '../components/harness/HarnessProblems.astro';
-import HarnessConcept from '../components/harness/HarnessConcept.astro';
-import HarnessSurfaces from '../components/harness/HarnessSurfaces.astro';
-import HarnessArchitecture from '../components/harness/HarnessArchitecture.astro';
-import HarnessValues from '../components/harness/HarnessValues.astro';
-import HarnessRoadmap from '../components/harness/HarnessRoadmap.astro';
-import HarnessCodePreview from '../components/harness/HarnessCodePreview.astro';
-import HarnessMaturity from '../components/harness/HarnessMaturity.astro';
-import HarnessCta from '../components/harness/HarnessCta.astro';
-
+import HarnessShowcaseLanding from '../components/harness/HarnessShowcaseLanding.astro';
 import { harnessData } from '../content/harness';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Why Harness', href: '#why' },
-  { label: 'Concept', href: '#concept' },
-  { label: 'Surfaces', href: '#product' },
+  { label: 'Evidence', href: '#evidence' },
+  { label: 'Workflow', href: '#workflow' },
   { label: 'Architecture', href: '#architecture' },
-  { label: 'API Code', href: '#code' },
-  { label: 'Status', href: '#status' },
+  { label: 'Why Harness', href: '#why' },
 ];
+
 const harnessSchema = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Android Local LLM Harness",
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Android",
-  "description": harnessData.meta.description,
-  "author": {
-    "@type": "Person",
-    "name": "Daniele Moltisanti",
-    "url": "https://daniele21.github.io/"
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Android Local LLM Harness',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Android',
+  description: harnessData.meta.description,
+  author: {
+    '@type': 'Person',
+    name: 'Daniele Moltisanti',
+    url: 'https://daniele21.github.io/',
   },
-  "codeRepository": "https://github.com/daniele21/android-local-llm-harness"
+  codeRepository: 'https://github.com/daniele21/android-local-llm-harness',
 };
 ---
 
 <BaseLayout
-  title={harnessData.meta.title}
-  description={harnessData.meta.description}
+  title="Android Local LLM Harness — On-device LLM evidence"
+  description="Android Local LLM Harness is a testbed for GGUF and llama.cpp inference on Android: run local models, inspect latency and diagnostics, and evaluate what is viable on-device."
   jsonLd={harnessSchema}
 >
   <HarnessHeader baseUrl={baseUrl} slot="header" />
 
   <ProductSubHeader
-    title="Android LLM Harness"
-    badge="Spec & Prototype"
+    title="Android Harness"
+    badge="Local AI Lab"
     links={subheaderLinks}
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness' }}
   />
 
-  <main id="top">
-    <HarnessHero baseUrl={baseUrl} />
-    <HarnessMission />
-    <HarnessProblems />
-    <HarnessConcept />
-    <HarnessSurfaces baseUrl={baseUrl} />
-    <HarnessArchitecture baseUrl={baseUrl} />
-    <HarnessValues />
-    <HarnessRoadmap />
-    <HarnessCodePreview />
-    <HarnessMaturity />
-    <HarnessCta baseUrl={baseUrl} />
-  </main>
+  <HarnessShowcaseLanding />
 </BaseLayout>
