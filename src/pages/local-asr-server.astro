@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Local ASR Server — Daniele Moltisanti"
+  description="Local speech recognition infrastructure for exploring private, offline-first voice workflows without a mandatory cloud dependency."
+>
+  <section class="project-page">
+    <div class="shell project-shell">
+      <a class="back" href="./#infrastructure">← Architecture & Infrastructure</a>
+      <p class="eyebrow">LOCAL AI INFRASTRUCTURE · SPEECH</p>
+      <h1>Local ASR Server</h1>
+      <p class="lede">
+        A local speech-recognition building block for exploring voice workflows that can stay on infrastructure you control.
+        The goal is to test where local ASR is useful, what constraints appear, and how it can plug into private AI applications.
+      </p>
+
+      <div class="wave-panel" aria-hidden="true">
+        <div class="waveform"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="questions">
+        <article><span>01</span><h2>Why local?</h2><p>Keep speech closer to where it is captured and reduce dependence on hosted transcription APIs.</p></article>
+        <article><span>02</span><h2>What is being tested?</h2><p>Runtime behavior, latency, hardware constraints and integration into local AI workflows.</p></article>
+        <article><span>03</span><h2>Where does it fit?</h2><p>As an infrastructure primitive for use cases such as private meeting intelligence and other speech-driven applications.</p></article>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .project-page { min-height: 82vh; padding: clamp(5rem, 10vh, 8rem) 0; }
+  .project-shell { max-width: 980px; }
+  .back { color: var(--ink-subtle); text-decoration: none; font-size: .82rem; font-weight: 700; }
+  .eyebrow { margin: 4rem 0 0; color: var(--accent-blue); font-size: .72rem; font-weight: 850; letter-spacing: .14em; }
+  h1 { margin: .8rem 0 0; font-family: var(--font-display); font-size: clamp(3.2rem, 7vw, 6.5rem); line-height: .98; letter-spacing: -.055em; }
+  .lede { max-width: 760px; margin: 1.3rem 0 0; color: var(--ink-muted); font-size: 1.08rem; line-height: 1.75; }
+  .wave-panel { margin-top: 3rem; min-height: 260px; display: grid; place-items: center; border: 1px solid var(--border-subtle); border-radius: 24px; background: radial-gradient(circle, color-mix(in srgb, var(--accent-blue) 14%, var(--surface-card)), var(--surface-muted)); }
+  .waveform { height: 110px; display: flex; align-items: center; gap: 10px; }
+  .waveform i { display: block; width: 8px; height: 28px; border-radius: 99px; background: var(--accent-blue); }
+  .waveform i:nth-child(2n) { height: 66px; }
+  .waveform i:nth-child(3n) { height: 100px; }
+  .waveform i:nth-child(5n) { height: 48px; }
+  .questions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
+  .questions article { padding: 1.3rem; border: 1px solid var(--border-subtle); border-radius: 18px; background: var(--surface-card); }
+  .questions span { color: var(--accent-blue); font-family: var(--font-mono); font-size: .72rem; font-weight: 800; }
+  .questions h2 { margin: .55rem 0 0; font-size: 1rem; font-family: var(--font-display); }
+  .questions p { margin: .55rem 0 0; color: var(--ink-subtle); line-height: 1.55; font-size: .82rem; }
+  @media (max-width: 760px) { .questions { grid-template-columns: 1fr; } .waveform { gap: 6px; transform: scale(.78); } }
+</style>
