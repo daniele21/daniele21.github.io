@@ -1,0 +1,93 @@
+---
+import StageRail from './StageRail.astro';
+import type { RoadmapData } from '../../content/locales/en/roadmap';
+
+interface Props {
+  data: RoadmapData['architecture'];
+}
+
+const { data } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+const glyphs = ['▱', '▯', '⌁', '⬡'];
+---
+
+<section class="journey-stage stage-right" id="infrastructure" data-observe="stage" aria-labelledby="architecture-title">
+  <StageRail number={2} side="right" />
+
+  <div class="stage-grid architecture-grid">
+    <div class="architecture-visual visual-card" data-reveal="visual">
+      <div class="visual-halo" aria-hidden="true"></div>
+      <img src={asset(data.image)} alt="Connected Local AI ecosystem across desktop, Android, local server and cloud" loading="lazy" />
+    </div>
+
+    <div class="stage-copy architecture-copy" data-reveal="copy">
+      <p class="stage-kicker">{data.kicker}</p>
+      <h2 id="architecture-title">Can we actually<br />run it locally?</h2>
+      <p class="stage-intro">{data.intro}</p>
+
+      <div class="stage-list architecture-list">
+        {data.items.map((item, index) => (
+          <div class="list-item" data-stagger={String(Math.min(index, 3))}>
+            <span class="list-icon" aria-hidden="true">{glyphs[index]}</span>
+            <p><strong>{item.title} —</strong><br /><span>{item.text}</span></p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .architecture-grid { min-height: 510px; }
+  .architecture-visual {
+    min-height: 470px;
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 52%, rgba(20,91,255,.08), transparent 40%),
+      #fff;
+  }
+  .architecture-visual::after {
+    content: '';
+    position: absolute;
+    inset: 18px;
+    border: 1px solid rgba(20,91,255,.05);
+    border-radius: 16px;
+    pointer-events: none;
+  }
+  .visual-halo {
+    position: absolute;
+    inset: 18% 15%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(20,91,255,.12), transparent 68%);
+    filter: blur(18px);
+    opacity: .65;
+  }
+  .architecture-visual img {
+    position: relative;
+    z-index: 2;
+    width: 96%;
+    height: 96%;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 18px 28px rgba(20,42,88,.08));
+    transition: transform 900ms var(--roadmap-ease);
+  }
+  .journey-stage.is-active .architecture-visual img { transform: scale(1.018); }
+  .architecture-copy { padding-right: 4px; }
+  .architecture-list { margin-top: 20px; }
+
+  @media (max-width: 980px) {
+    .architecture-visual { min-height: 420px; }
+  }
+  @media (max-width: 700px) {
+    .architecture-visual { min-height: 300px; }
+    .architecture-visual img { width: 100%; height: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .architecture-visual img { transition: none; transform: none !important; }
+  }
+</style>
