@@ -1,16 +1,13 @@
 ---
-/**
- * Main Index Page — Local AI personal brand landing.
- * The homepage follows one evidence-driven path:
- * Strategy → Architecture & Infrastructure → Applications → Observability & Measurement.
- */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import LocalAIJourneySection from '../components/sections/LocalAIJourneySection.astro';
+import LocalAIRoadmapMockup from '../components/sections/LocalAIRoadmapMockup.astro';
 ---
 
 <BaseLayout
-  title="Daniele Moltisanti — Local AI from strategy to systems"
-  description="Exploring where AI should run, building local AI infrastructure across desktop and mobile, testing it through real applications, and measuring how it performs in the real world."
+  title="Daniele Moltisanti — Local AI first ≠ Local AI only"
+  description="Decide where AI should run, build the infrastructure, test it in real products and measure what actually works across Local, Hybrid and Cloud."
 >
-  <LocalAIJourneySection />
+  <Fragment slot="header"></Fragment>
+  <LocalAIRoadmapMockup />
+  <Fragment slot="footer"></Fragment>
 </BaseLayout>
