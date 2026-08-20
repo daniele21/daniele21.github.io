@@ -1,19 +1,13 @@
 ---
 /**
- * StageRail — Numbered badge + vertical SVG rail line for each roadmap stage.
+ * StageRail — Numbered badge + vertical rail line for each roadmap stage.
  *
- * Implements the EXACT same multi-layer SVG rendering and progressive animation
- * system as FlowTransition:
- *   1. Track Guide (subtle ambient background track)
- *   2. Track Glow (ambient soft glow)
- *   3. Track Line (progressive drawing line animated on scroll via stroke-dashoffset)
- *   4. Track Pulse (continuous traveling gradient laser beam)
- *
- * Uses the exact same coordinate system (`viewBox="0 0 1000 100"`, x=40 for left, x=960 for right).
+ * Uses PURE CSS for the vertical line (no SVG, zero distortion).
+ * Positioned at 4% left or 4% right to match FlowTransition endpoints.
  *
  * @prop number  — Stage number displayed in the badge (1–4)
- * @prop side    — "left" (x=40) or "right" (x=960)
- * @prop isFinal — If true, adds a terminal footer cap at the bottom (Stage 4)
+ * @prop side    — "left" or "right" positioning
+ * @prop isFinal — If true, adds a terminal footer dot at the bottom
  */
 interface Props {
   number: number;
@@ -22,173 +16,110 @@ interface Props {
 }
 
 const { number, side, isFinal = false } = Astro.props;
-const xCoord = side === 'left' ? 40 : 960;
+const isFirst = number === 1;
 ---
 
-<div class={`stage-rail-container rail-${side} stage-rail-${number}`} aria-hidden="true">
-  <!-- Full-stage SVG vertical rail line -->
-  <svg class="stage-rail-svg" viewBox="0 0 1000 100" preserveAspectRatio="none" fill="none">
-    <defs>
-      <filter id={`glow-rail-${number}`} x="-20%" y="-80%" width="140%" height="260%">
-        <feGaussianBlur stdDeviation="5" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-
-      <!-- Gradient for vertical traveling laser pulse -->
-      <linearGradient id={`grad-rail-${number}`} x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#145bff" />
-        <stop offset="50%" stop-color="#60a5fa" />
-        <stop offset="100%" stop-color="#145bff" />
-      </linearGradient>
-    </defs>
-
-    <!-- 1. Subtle ambient guide track -->
-    <line
-      class="rail-track-guide"
-      x1={xCoord}
-      y1="24"
-      x2={xCoord}
-      y2="100"
-      stroke="rgba(20, 91, 255, 0.14)"
-      stroke-width="4"
-      stroke-linecap="round"
-    />
-
-    <!-- 2. Ambient glow behind line -->
-    <line
-      class="rail-track-glow"
-      x1={xCoord}
-      y1="24"
-      x2={xCoord}
-      y2="100"
-      stroke="rgba(20, 91, 255, 0.3)"
-      stroke-width="14"
-      stroke-linecap="round"
-    />
-
-    <!-- 3. Progressive drawing line (animates stroke-dashoffset on scroll) -->
-    <line
-      class="rail-track-line"
-      x1={xCoord}
-      y1="24"
-      x2={xCoord}
-      y2="100"
-      stroke="#145bff"
-      stroke-width="4"
-      stroke-linecap="round"
-      filter={`url(#glow-rail-${number})`}
-    />
-
-    <!-- 4. Animated laser beam traveling along the vertical rail -->
-    <line
-      class="rail-track-pulse"
-      x1={xCoord}
-      y1="24"
-      x2={xCoord}
-      y2="100"
-      stroke={`url(#grad-rail-${number})`}
-      stroke-width="5"
-      stroke-linecap="round"
-    />
-  </svg>
-
-  <!-- Numbered Stage Badge centered on the exact xCoord -->
-  <div class={`stage-badge-wrap badge-pos-${side}`}>
-    <span class="stage-badge">{number}</span>
+<div class={`stage-rail rail-${side}`} aria-hidden="true">
+  <!-- Pure CSS vertical line — cannot be distorted -->
+  <div class={`rail-line ${isFirst ? 'line-first' : ''} ${isFinal ? 'line-final' : ''}`}>
+    <div class="rail-glow"></div>
+    <div class="rail-pulse"></div>
   </div>
 
-  <!-- Terminal footer dot for Stage 4 -->
-  {isFinal && (
-    <div class={`rail-foot-wrap foot-pos-${side}`}>
-      <span class="rail-foot"></span>
-    </div>
-  )}
+  <!-- Numbered Stage Badge -->
+  <span class="stage-badge">{number}</span>
+
+  {isFinal && <span class="rail-foot"></span>}
 </div>
 
 <style>
-  .stage-rail-container {
+  .stage-rail {
     position: absolute;
-    inset: 0;
-    pointer-events: none;
+    top: 0;
+    bottom: 0;
     z-index: 7;
+    pointer-events: none;
   }
 
-  .stage-rail-svg {
+  /* Positioned at exactly 4% from edge — matches FlowTransition SVG x=40/960 */
+  .rail-left { left: 4%; }
+  .rail-right { right: 4%; }
+
+  /* ---- Pure CSS vertical line ---- */
+  .rail-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    transform: translateX(-50%);
+    background: #145bff;
+    border-radius: 2px;
+    overflow: hidden;
+    /* Progressive draw animation */
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Stage 1: line starts from badge center */
+  .line-first { top: 50px; }
+
+  /* Stage 4: line ends above foot */
+  .line-final { bottom: 8px; }
+
+  /* When visible: reveal line top-to-bottom */
+  :global(.journey-stage.is-visible) .rail-line {
+    clip-path: inset(0 0 0% 0);
+  }
+
+  /* Soft ambient glow behind the line */
+  .rail-glow {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    display: block;
+    width: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20, 91, 255, 0.2);
+    border-radius: 7px;
+    filter: blur(4px);
   }
 
-  /* Progressive vertical line drawing animation */
-  .rail-track-line {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-    transition: stroke-dashoffset 1.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  :global(.journey-stage.is-drawn) .rail-track-line,
-  :global(.journey-stage.is-visible) .rail-track-line {
-    stroke-dashoffset: 0;
-  }
-
-  .rail-track-glow {
+  /* Animated laser pulse traveling down */
+  .rail-pulse {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(96, 165, 250, 0.9) 50%,
+      transparent
+    );
+    border-radius: 2px;
+    animation: railPulse 3s ease-in-out infinite;
     opacity: 0;
-    transition: opacity 1.2s ease;
+    transition: opacity 0.5s ease 0.8s;
   }
 
-  :global(.journey-stage.is-drawn) .rail-track-glow,
-  :global(.journey-stage.is-visible) .rail-track-glow {
+  :global(.journey-stage.is-visible) .rail-pulse {
     opacity: 1;
   }
 
-  /* Moving laser pulse traveling vertically */
-  .rail-track-pulse {
-    stroke-dasharray: 140 1060;
-    animation: pulseTravelVertical 3.5s linear infinite;
-    opacity: 0;
-    transition: opacity 0.6s ease;
+  @keyframes railPulse {
+    0%   { top: -60px; }
+    100% { top: calc(100% + 60px); }
   }
 
-  :global(.journey-stage.is-drawn) .rail-track-pulse,
-  :global(.journey-stage.is-visible) .rail-track-pulse {
-    opacity: 0.9;
-  }
-
-  @keyframes pulseTravelVertical {
-    0% {
-      stroke-dashoffset: 1000;
-    }
-    100% {
-      stroke-dashoffset: 0;
-    }
-  }
-
-  /* Badge Wrapper anchored to 4% (x=40) or 96% (x=960) */
-  .stage-badge-wrap {
-    position: absolute;
-    top: 24px;
-    transform: translate(-50%, -50%);
-    z-index: 8;
-  }
-
-  .badge-pos-left {
-    left: 4%;
-  }
-
-  .badge-pos-right {
-    left: 96%;
-  }
-
-  /* Numbered Badge styling */
+  /* ---- Badge ---- */
   .stage-badge {
+    position: absolute;
+    top: 20px;
+    left: 50%;
     width: 54px;
     height: 54px;
+    transform: translateX(-50%) scale(0.5);
+    opacity: 0;
     display: grid;
     place-items: center;
     border-radius: 50%;
@@ -199,68 +130,50 @@ const xCoord = side === 'left' ? 40 : 960;
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 1.45rem;
     font-weight: 800;
-    transform: scale(0.6);
-    opacity: 0;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.6s ease,
+    z-index: 8;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s,
+                opacity 0.5s ease 0.2s,
                 box-shadow 0.3s ease;
   }
 
   :global(.journey-stage.is-visible) .stage-badge {
-    transform: scale(1);
+    transform: translateX(-50%) scale(1);
     opacity: 1;
   }
 
   :global(.journey-stage.is-active) .stage-badge {
-    transform: scale(1.08);
     box-shadow: 0 0 0 3px #9bbaff,
-                0 0 32px rgba(20, 91, 255, 0.65);
+                0 0 28px rgba(20, 91, 255, 0.6);
   }
 
-  /* Terminal footer dot for Stage 4 */
-  .rail-foot-wrap {
+  /* ---- Terminal footer dot (Stage 4) ---- */
+  .rail-foot {
     position: absolute;
     bottom: 0;
-    transform: translate(-50%, 0);
-  }
-
-  .foot-pos-left {
-    left: 4%;
-  }
-
-  .foot-pos-right {
-    left: 96%;
-  }
-
-  .rail-foot {
-    display: block;
+    left: 50%;
     width: 28px;
     height: 6px;
+    transform: translateX(-50%);
     border-radius: 50%;
     background: #d7e4ff;
     box-shadow: 0 4px 14px rgba(20, 91, 255, 0.35);
-    transform: scale(0);
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s;
-  }
-
-  :global(.journey-stage.is-visible) .rail-foot {
-    transform: scale(1);
   }
 
   /* ---- Responsive ---- */
   @media (max-width: 700px) {
-    .stage-rail-svg {
-      display: none;
-    }
-    .stage-badge-wrap {
-      top: 24px;
+    .stage-rail {
       left: 50% !important;
+      right: auto !important;
+      bottom: auto;
+      height: 60px;
     }
+    .rail-line { display: none; }
     .stage-badge {
+      top: 4px;
       width: 48px;
       height: 48px;
       font-size: 1.25rem;
-      transform: scale(1) !important;
+      transform: translateX(-50%) scale(1) !important;
       opacity: 1 !important;
     }
   }

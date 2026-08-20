@@ -1,14 +1,15 @@
 ---
 /**
- * FlowTransition — Animated SVG connector line + pill label between roadmap stages.
+ * FlowTransition — SVG S-curve connector between roadmap stages.
  *
- * Uses continuous cubic Bézier vector paths with SVG stroke-dashoffset animation
- * so the line draws itself smoothly in real time as the user scrolls.
+ * Uses `vector-effect: non-scaling-stroke` on every path to prevent
+ * preserveAspectRatio="none" from distorting the stroke width.
+ * Lines remain a crisp 4px regardless of viewport scaling.
  *
- * @prop direction — "ltr" (left-to-right) or "rtl" (right-to-left)
- * @prop icon      — Unicode icon displayed in the pill badge
- * @prop label     — Main label text (e.g. "DECIDE → BUILD")
- * @prop sublabel  — Descriptive subtext below the label
+ * @prop direction — "ltr" or "rtl"
+ * @prop icon      — Unicode icon for the pill
+ * @prop label     — Main label text
+ * @prop sublabel  — Descriptive subtext
  * @prop filterId  — Unique SVG filter ID
  */
 interface Props {
@@ -22,79 +23,62 @@ interface Props {
 const { direction, icon, label, sublabel, filterId } = Astro.props;
 
 /**
- * Perfectly smooth cubic Bézier S-curves.
- * Starts at 4% (x=40) and ends at 96% (x=960) out of 1000.
+ * S-curve path from x=40 (4%) to x=960 (96%) out of 1000.
+ * Uses cubic Bézier for perfectly smooth curves.
  */
 const pathD = direction === 'ltr'
-  ? 'M 40,0 L 40,24 C 40,58 70,58 100,58 L 900,58 C 930,58 960,58 960,92 L 960,120'
-  : 'M 960,0 L 960,24 C 960,58 930,58 900,58 L 100,58 C 70,58 40,58 40,92 L 40,120';
+  ? 'M 40,0 L 40,24 C 40,58 40,58 100,58 L 900,58 C 960,58 960,58 960,92 L 960,120'
+  : 'M 960,0 L 960,24 C 960,58 960,58 900,58 L 100,58 C 40,58 40,58 40,92 L 40,120';
 ---
 
-<div class={`flow-transition transition-${direction}`} aria-hidden="true" data-transition>
+<div class={`flow-transition transition-${direction}`} aria-hidden="true">
   <svg class="transition-svg" viewBox="0 0 1000 120" preserveAspectRatio="none" fill="none">
-    <defs>
-      <filter id={filterId} x="-20%" y="-80%" width="140%" height="260%">
-        <feGaussianBlur stdDeviation="5" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-
-      <linearGradient id={`grad-${filterId}`} x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#145bff" />
-        <stop offset="50%" stop-color="#60a5fa" />
-        <stop offset="100%" stop-color="#145bff" />
-      </linearGradient>
-    </defs>
-
-    <!-- Subtle ambient guide track -->
+    <!-- Subtle ambient guide track (always visible) -->
     <path
       class="track-guide"
       d={pathD}
-      fill="none"
-      stroke="rgba(20, 91, 255, 0.14)"
+      stroke="rgba(20, 91, 255, 0.12)"
       stroke-width="4"
       stroke-linecap="round"
       stroke-linejoin="round"
+      vector-effect="non-scaling-stroke"
     />
 
-    <!-- Ambient glow behind line -->
+    <!-- Ambient glow behind the line -->
     <path
       class="track-glow"
       d={pathD}
-      fill="none"
-      stroke="rgba(20, 91, 255, 0.3)"
-      stroke-width="14"
+      stroke="rgba(20, 91, 255, 0.18)"
+      stroke-width="12"
       stroke-linecap="round"
       stroke-linejoin="round"
+      vector-effect="non-scaling-stroke"
     />
 
-    <!-- Progressive drawing line (animates stroke-dashoffset on scroll) -->
+    <!-- Main progressive drawing line -->
     <path
       class="track-line"
       d={pathD}
-      fill="none"
       stroke="#145bff"
       stroke-width="4"
       stroke-linecap="round"
       stroke-linejoin="round"
-      filter={`url(#${filterId})`}
+      vector-effect="non-scaling-stroke"
     />
 
-    <!-- Animated laser beam traveling along the curve -->
+    <!-- Traveling laser pulse -->
     <path
       class={`track-pulse ${direction === 'ltr' ? 'pulse-ltr' : 'pulse-rtl'}`}
       d={pathD}
-      fill="none"
-      stroke={`url(#grad-${filterId})`}
-      stroke-width="5"
+      stroke="#60a5fa"
+      stroke-width="4"
       stroke-linecap="round"
       stroke-linejoin="round"
+      vector-effect="non-scaling-stroke"
     />
   </svg>
 
-  <!-- Transition pill label sitting directly on the horizontal segment -->
+  <!-- Transition pill label -->
   <div class="transition-pill">
     <span class="pill-icon">{icon}</span>
     <div class="pill-text">
@@ -108,10 +92,7 @@ const pathD = direction === 'ltr'
   .flow-transition {
     position: relative;
     height: 120px;
-    margin: 0;
-    padding: 0;
     z-index: 6;
-    overflow: visible;
   }
 
   .transition-svg {
@@ -123,37 +104,37 @@ const pathD = direction === 'ltr'
     display: block;
   }
 
-  /* Progressive drawing line */
+  /* Progressive line drawing (stroke-dashoffset) */
   .track-line {
-    stroke-dasharray: 1200;
-    stroke-dashoffset: 1200;
+    stroke-dasharray: 2400;
+    stroke-dashoffset: 2400;
     transition: stroke-dashoffset 1.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* When scrolled into view, draw the line */
   .flow-transition.is-drawn .track-line {
     stroke-dashoffset: 0;
   }
 
+  /* Glow fades in with the line */
   .track-glow {
     opacity: 0;
-    transition: opacity 1.2s ease;
+    transition: opacity 1s ease;
   }
 
   .flow-transition.is-drawn .track-glow {
     opacity: 1;
   }
 
-  /* Moving light pulse */
+  /* Traveling laser pulse along the curve */
   .track-pulse {
-    stroke-dasharray: 140 1060;
+    stroke-dasharray: 120 2280;
     animation: pulseTravel 3.5s linear infinite;
     opacity: 0;
-    transition: opacity 0.6s ease;
+    transition: opacity 0.5s ease 0.8s;
   }
 
   .flow-transition.is-drawn .track-pulse {
-    opacity: 0.9;
+    opacity: 0.85;
   }
 
   .pulse-rtl {
@@ -161,22 +142,18 @@ const pathD = direction === 'ltr'
   }
 
   @keyframes pulseTravel {
-    0% {
-      stroke-dashoffset: 1200;
-    }
-    100% {
-      stroke-dashoffset: 0;
-    }
+    0%   { stroke-dashoffset: 2400; }
+    100% { stroke-dashoffset: 0; }
   }
 
-  /* Transition Pill Label */
+  /* ---- Transition Pill ---- */
   .transition-pill {
     position: absolute;
     top: 58px;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.92);
     opacity: 0;
-    min-width: 340px;
+    min-width: 320px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -189,22 +166,13 @@ const pathD = direction === 'ltr'
                 0 0 28px rgba(20, 91, 255, 0.14);
     z-index: 8;
     backdrop-filter: blur(8px);
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.6s ease,
-                box-shadow 0.3s ease,
-                border-color 0.3s ease;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.4s,
+                opacity 0.5s ease 0.4s;
   }
 
   .flow-transition.is-drawn .transition-pill {
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
-  }
-
-  .transition-pill:hover {
-    transform: translate(-50%, -52%) scale(1.02);
-    border-color: #9bbaff;
-    box-shadow: 0 8px 24px rgba(11, 33, 76, 0.12),
-                0 0 36px rgba(20, 91, 255, 0.25);
   }
 
   .pill-text strong {
@@ -213,7 +181,6 @@ const pathD = direction === 'ltr'
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 0.9rem;
     line-height: 1.15;
-    letter-spacing: -0.01em;
   }
 
   .pill-text small {
@@ -234,17 +201,12 @@ const pathD = direction === 'ltr'
     border-radius: 50%;
     background: #f8fbff;
     flex-shrink: 0;
-    box-shadow: 0 2px 6px rgba(20, 91, 255, 0.1);
   }
 
   /* ---- Responsive ---- */
   @media (max-width: 700px) {
-    .flow-transition {
-      height: 90px;
-    }
-    .transition-svg {
-      display: none;
-    }
+    .flow-transition { height: 90px; }
+    .transition-svg { display: none; }
     .transition-pill {
       top: 45px;
       min-width: 0;
