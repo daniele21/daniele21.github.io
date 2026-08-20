@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Performance Lab — Daniele Moltisanti"
+  description="A measurement layer for understanding whether Local AI systems can run well on real hardware across latency, throughput and resource constraints."
+>
+  <section class="project-page">
+    <div class="shell project-shell">
+      <a class="back" href="./#evidence">← Observability & Measurement</a>
+      <p class="eyebrow">LOCAL AI OBSERVABILITY · PERFORMANCE</p>
+      <h1>Performance Lab</h1>
+      <p class="lede">
+        A measurement layer for moving beyond “it runs”. Performance Lab is where Local AI systems are evaluated against the constraints that matter on real hardware.
+      </p>
+
+      <div class="metric-hero">
+        <div><strong>Latency</strong><span>End-to-end response time</span></div>
+        <div><strong>Throughput</strong><span>Tokens and requests over time</span></div>
+        <div><strong>Memory</strong><span>Runtime footprint and pressure</span></div>
+        <div><strong>Thermal / Battery</strong><span>Device sustainability under load</span></div>
+      </div>
+
+      <div class="chart-panel" aria-hidden="true">
+        <div class="chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="questions">
+        <article><span>01</span><h2>Can it run?</h2><p>Establish whether a model and runtime fit the target device or local infrastructure at all.</p></article>
+        <article><span>02</span><h2>Can it run well?</h2><p>Measure the latency, throughput and resource trade-offs that determine whether the experience is practical.</p></article>
+        <article><span>03</span><h2>Should it run locally?</h2><p>Feed measured evidence back into the Local vs Hybrid vs Cloud decision.</p></article>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .project-page { min-height: 82vh; padding: clamp(5rem, 10vh, 8rem) 0; }
+  .project-shell { max-width: 1000px; }
+  .back { color: var(--ink-subtle); text-decoration: none; font-size: .82rem; font-weight: 700; }
+  .eyebrow { margin: 4rem 0 0; color: var(--accent-blue); font-size: .72rem; font-weight: 850; letter-spacing: .14em; }
+  h1 { margin: .8rem 0 0; font-family: var(--font-display); font-size: clamp(3.2rem, 7vw, 6.5rem); line-height: .98; letter-spacing: -.055em; }
+  .lede { max-width: 760px; margin: 1.3rem 0 0; color: var(--ink-muted); font-size: 1.08rem; line-height: 1.75; }
+  .metric-hero { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; margin-top: 3rem; }
+  .metric-hero div { padding: 1rem; border: 1px solid var(--border-subtle); border-radius: 16px; background: var(--surface-card); }
+  .metric-hero strong { display: block; font-family: var(--font-display); }
+  .metric-hero span { display: block; margin-top: .3rem; color: var(--ink-subtle); font-size: .72rem; line-height: 1.4; }
+  .chart-panel { margin-top: 1rem; padding: 1.4rem; border: 1px solid var(--border-subtle); border-radius: 22px; background: linear-gradient(180deg, var(--surface-muted), var(--surface-card)); }
+  .chart { height: 250px; display: flex; align-items: end; gap: 14px; }
+  .chart i { flex: 1; height: 35%; border-radius: 8px 8px 3px 3px; background: linear-gradient(180deg, var(--accent-blue-light), var(--accent-blue)); opacity: .82; }
+  .chart i:nth-child(2) { height: 56%; } .chart i:nth-child(3) { height: 44%; } .chart i:nth-child(4) { height: 71%; } .chart i:nth-child(5) { height: 61%; } .chart i:nth-child(6) { height: 82%; } .chart i:nth-child(7) { height: 68%; } .chart i:nth-child(8) { height: 91%; } .chart i:nth-child(9) { height: 77%; } .chart i:nth-child(10) { height: 96%; }
+  .questions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
+  .questions article { padding: 1.3rem; border: 1px solid var(--border-subtle); border-radius: 18px; background: var(--surface-card); }
+  .questions span { color: var(--accent-blue); font-family: var(--font-mono); font-size: .72rem; font-weight: 800; }
+  .questions h2 { margin: .55rem 0 0; font-size: 1rem; font-family: var(--font-display); }
+  .questions p { margin: .55rem 0 0; color: var(--ink-subtle); line-height: 1.55; font-size: .82rem; }
+  @media (max-width: 820px) { .metric-hero { grid-template-columns: repeat(2, 1fr); } .questions { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .metric-hero { grid-template-columns: 1fr; } .chart { height: 180px; gap: 8px; } }
+</style>
