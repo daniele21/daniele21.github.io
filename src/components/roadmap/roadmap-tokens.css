@@ -1,0 +1,64 @@
+.roadmap-page {
+  --roadmap-blue: #145bff;
+  --roadmap-blue-2: #0f46d8;
+  --roadmap-blue-soft: #edf4ff;
+  --roadmap-blue-glow: rgba(20, 91, 255, 0.22);
+  --roadmap-ink: #07142f;
+  --roadmap-muted: #52617e;
+  --roadmap-subtle: #7b89a4;
+  --roadmap-line: #dce5f3;
+  --roadmap-card: #ffffff;
+  --roadmap-canvas: #fbfcff;
+  --roadmap-header-h: 74px;
+  --roadmap-shell: 1180px;
+  --roadmap-rail-offset: 38px;
+  --roadmap-rail-width: 4px;
+  --roadmap-radius: 18px;
+  --roadmap-stage-min: calc(100svh - var(--roadmap-header-h));
+  --roadmap-transition-h: clamp(180px, 24svh, 280px);
+  --roadmap-ease: cubic-bezier(.2,.8,.2,1);
+  --roadmap-shadow: 0 14px 38px rgba(20, 42, 88, 0.08);
+  --roadmap-shadow-soft: 0 8px 28px rgba(20, 42, 88, 0.06);
+
+  min-height: 100%;
+  overflow-x: clip;
+  background:
+    radial-gradient(circle at 50% -12%, rgba(20, 91, 255, 0.07), transparent 28rem),
+    linear-gradient(180deg, #fff 0%, var(--roadmap-canvas) 100%);
+  color: var(--roadmap-ink);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.roadmap-page *,
+.roadmap-page *::before,
+.roadmap-page *::after { box-sizing: border-box; }
+
+.roadmap-page h1,
+.roadmap-page h2,
+.roadmap-page h3,
+.roadmap-page strong,
+.roadmap-page .roadmap-brand {
+  font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
+}
+
+.roadmap-shell {
+  width: min(calc(100% - 48px), var(--roadmap-shell));
+  margin-inline: auto;
+}
+
+@media (max-width: 980px) {
+  .roadmap-page {
+    --roadmap-shell: 820px;
+    --roadmap-rail-offset: 28px;
+    --roadmap-stage-min: auto;
+  }
+  .roadmap-shell { width: min(calc(100% - 32px), var(--roadmap-shell)); }
+}
+
+@media (max-width: 700px) {
+  .roadmap-page {
+    --roadmap-header-h: 64px;
+    --roadmap-transition-h: 150px;
+  }
+  .roadmap-shell { width: min(calc(100% - 22px), 640px); }
+}
