@@ -1,0 +1,34 @@
+---
+interface Props {
+  direction: 'ltr' | 'rtl';
+  label: string;
+  sublabel: string;
+  icon: string;
+  filterId: string;
+}
+
+const { direction, label, sublabel, icon, filterId } = Astro.props;
+const path = direction === 'ltr'
+  ? 'M55 0 V44 Q55 92 105 92 H895 Q945 92 945 136 V180'
+  : 'M945 0 V44 Q945 92 895 92 H105 Q55 92 55 136 V180';
+const iconGlyph = icon === 'target' ? '◎' : icon === 'cube' ? '⬡' : '▥';
+---
+
+<div class:list={['flow-transition', direction === 'ltr' ? 'transition-ltr' : 'transition-rtl']} data-observe="transition" aria-hidden="true">
+  <svg viewBox="0 0 1000 180" preserveAspectRatio="none">
+    <defs>
+      <filter id={filterId} x="-20%" y="-80%" width="140%" height="260%">
+        <feGaussianBlur stdDeviation="5" result="blur" />
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <path class="flow-glow" d={path} />
+    <path class="flow-path" d={path} pathLength="1" filter={`url(#${filterId})`} />
+  </svg>
+  <span class="flow-dot dot-left"></span>
+  <span class="flow-dot dot-right"></span>
+  <div class="transition-pill">
+    <span class="pill-icon">{iconGlyph}</span>
+    <div><strong>{label}</strong><small>{sublabel}</small></div>
+  </div>
+</div>
