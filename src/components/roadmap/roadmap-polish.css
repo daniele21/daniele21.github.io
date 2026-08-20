@@ -1,0 +1,55 @@
+@media (min-width: 981px) {
+  .stage-rail {
+    --roadmap-badge-top: clamp(42px, 7svh, 76px);
+    top: 0;
+    bottom: 0;
+  }
+
+  .rail-left { left: calc(5.5% - 32px); }
+  .rail-right { right: calc(5.5% - 32px); }
+
+  .stage-rail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: var(--roadmap-rail-width);
+    height: calc(var(--roadmap-badge-top) + 7px);
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--roadmap-blue), #2f79ff);
+    box-shadow: 0 0 14px rgba(20,91,255,.28);
+    opacity: .24;
+    transition: opacity 480ms ease, box-shadow 600ms var(--roadmap-ease);
+  }
+
+  .stage-badge { top: var(--roadmap-badge-top); }
+
+  .rail-line {
+    top: calc(var(--roadmap-badge-top) + 54px);
+    bottom: 0;
+  }
+
+  .journey-stage.is-active .stage-rail::before {
+    opacity: 1;
+    box-shadow: 0 0 18px rgba(20,91,255,.42);
+  }
+
+  .stage-final .rail-line { bottom: 22px; }
+
+  /* Each chapter owns the viewport. Adjacent stages only enter after scrolling. */
+  .journey-stage {
+    min-height: calc(100svh - var(--roadmap-header-h));
+    overflow: clip;
+  }
+
+  .flow-transition {
+    min-height: var(--roadmap-transition-h);
+  }
+}
+
+@media (max-width: 980px) and (min-width: 701px) {
+  .stage-rail { top: 20px; bottom: 20px; }
+  .rail-left { left: 14px; }
+  .rail-right { right: 14px; }
+}
