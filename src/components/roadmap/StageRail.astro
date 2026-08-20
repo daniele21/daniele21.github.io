@@ -1,0 +1,15 @@
+---
+interface Props {
+  number: number;
+  side: 'left' | 'right';
+  isFinal?: boolean;
+}
+
+const { number, side, isFinal = false } = Astro.props;
+---
+
+<div class:list={['stage-rail', side === 'left' ? 'rail-left' : 'rail-right']} aria-hidden="true">
+  <span class="stage-badge">{number}</span>
+  <span class="rail-line"></span>
+  {isFinal && <span class="rail-foot"></span>}
+</div>
