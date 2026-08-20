@@ -1,0 +1,272 @@
+---
+/**
+ * StrategyStage — Stage 1 of the roadmap: "Where should AI actually run?"
+ *
+ * Contains the strategy copy + three mini-panels:
+ * - Decision Framework (flowchart)
+ * - Local vs Hybrid vs Cloud comparison table
+ * - Trade-off guide (question checklist)
+ */
+import StageRail from './StageRail.astro';
+import {
+  strategyContent,
+  decisionFramework,
+  comparisonTable,
+  tradeoffGuide,
+} from '../../content/locales/en/roadmap';
+---
+
+<section class="journey-stage stage-left" id="strategy" aria-labelledby="strategy-title">
+  <StageRail number={1} side="left" />
+
+  <div class="stage-grid strategy-grid">
+    <!-- Left column: copy + benefits list -->
+    <div class="stage-copy strategy-copy">
+      <p class="stage-kicker">{strategyContent.kicker}</p>
+      <h2 id="strategy-title">
+        Where should AI<br />actually run?
+      </h2>
+      <p class="stage-intro">{strategyContent.intro}</p>
+
+      <div class="stage-list">
+        {strategyContent.items.map((item) => (
+          <div class="list-item">
+            <span class="list-icon" aria-hidden="true">{item.icon}</span>
+            <p><strong>{item.title} —</strong><br /><span>{item.text}</span></p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Right column: three mini-panels -->
+    <div class="strategy-panels" aria-label="Local, Hybrid and Cloud decision framework">
+
+      <!-- Decision Framework panel -->
+      <article class="mini-panel decision-panel">
+        <h3>{decisionFramework.title}</h3>
+        <div class="decision-flow" aria-hidden="true">
+          <span class="decision-box">Use case</span>
+          <span class="decision-arrow">↓</span>
+          <span class="decision-diamond">Sensitive?</span>
+          <div class="decision-branches">
+            <span><small>Yes</small><b>Local / Hybrid</b></span>
+            <span><small>No</small><b>Cloud / Hybrid</b></span>
+          </div>
+        </div>
+        <p>{decisionFramework.footer}</p>
+      </article>
+
+      <!-- Comparison Table panel -->
+      <article class="mini-panel compare-panel">
+        <h3>{comparisonTable.title}</h3>
+        <div class="comparison-table" role="table" aria-label="Local Hybrid Cloud comparison">
+          <div class="comparison-head">
+            <span></span>
+            {comparisonTable.columns.map((col) => <b>{col}</b>)}
+          </div>
+          {comparisonTable.rows.map((row) => (
+            <div>
+              <span>{row.label}</span>
+              {row.values.map((val, i) => (
+                <i class={row.classes[i]}>{val}</i>
+              ))}
+            </div>
+          ))}
+        </div>
+        <p>No single winner.<br />Choose by constraints.</p>
+      </article>
+
+      <!-- Trade-off Guide panel -->
+      <article class="mini-panel tradeoff-panel">
+        <h3>{tradeoffGuide.title}</h3>
+        <ul>
+          {tradeoffGuide.questions.map((q) => (
+            <li><span>{q.icon}</span>{q.text}</li>
+          ))}
+        </ul>
+        <p>Make trade-offs explicit.<br />Revisit as needs evolve.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---- Strategy grid layout ---- */
+  .strategy-grid {
+    grid-template-columns: 30% 70%;
+    min-height: 425px;
+    padding: 24px 56px 14px 84px;
+  }
+
+  /* ---- Three mini-panels row ---- */
+  .strategy-panels {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .mini-panel {
+    min-height: 310px;
+    padding: 18px 16px 15px;
+    border: 1px solid #d7e1f1;
+    border-radius: 12px;
+    background: var(--rm-card, rgba(255, 255, 255, 0.97));
+    box-shadow: 0 8px 26px rgba(18, 43, 88, 0.045);
+  }
+
+  .mini-panel h3 {
+    margin: 0;
+    text-align: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.83rem;
+  }
+
+  .mini-panel > p {
+    margin: 14px 0 0;
+    color: #5c6d89;
+    text-align: center;
+    font-size: 0.62rem;
+    line-height: 1.55;
+  }
+
+  /* ---- Decision Framework flowchart ---- */
+  .decision-flow {
+    margin-top: 19px;
+    display: grid;
+    justify-items: center;
+  }
+
+  .decision-box {
+    padding: 6px 18px;
+    border: 1px solid #bcd0ff;
+    border-radius: 5px;
+    font-size: 0.62rem;
+    font-weight: 750;
+  }
+
+  .decision-arrow {
+    color: var(--rm-blue, #145bff);
+    margin: 3px 0;
+  }
+
+  .decision-diamond {
+    width: 67px;
+    height: 67px;
+    display: grid;
+    place-items: center;
+    transform: rotate(45deg);
+    border: 1px solid #6e99ff;
+    background: #f8fbff;
+    color: var(--rm-blue, #145bff);
+    font-size: 0.57rem;
+    font-weight: 800;
+  }
+
+  .decision-branches {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .decision-branches span {
+    display: grid;
+    gap: 3px;
+    justify-items: center;
+  }
+
+  .decision-branches small {
+    color: #16a34a;
+    font-size: 0.55rem;
+  }
+
+  .decision-branches b {
+    padding: 7px;
+    width: 100%;
+    border: 1px solid #adc6ff;
+    border-radius: 5px;
+    color: var(--rm-blue, #145bff);
+    text-align: center;
+    font-size: 0.54rem;
+  }
+
+  /* ---- Comparison Table ---- */
+  .comparison-table {
+    margin-top: 20px;
+    display: grid;
+    gap: 8px;
+  }
+
+  .comparison-table > div {
+    display: grid;
+    grid-template-columns: 1.2fr repeat(3, 0.62fr);
+    gap: 3px;
+    align-items: center;
+    font-size: 0.59rem;
+  }
+
+  .comparison-table .comparison-head {
+    margin-bottom: 4px;
+    color: var(--rm-ink, #081333);
+    font-size: 0.54rem;
+  }
+
+  .comparison-table i {
+    text-align: center;
+    font-style: normal;
+    font-weight: 850;
+  }
+
+  .comparison-table :global(.good) { color: #16a34a; }
+  .comparison-table :global(.warn) { color: #f59e0b; }
+  .comparison-table :global(.bad)  { color: #ef4444; }
+
+  /* ---- Trade-off Guide ---- */
+  .tradeoff-panel ul {
+    list-style: none;
+    margin: 19px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 13px;
+  }
+
+  .tradeoff-panel li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 9px;
+    align-items: center;
+    color: #334460;
+    font-size: 0.61rem;
+    line-height: 1.35;
+  }
+
+  .tradeoff-panel li span {
+    color: var(--rm-blue, #145bff);
+    font-size: 0.8rem;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 980px) {
+    .strategy-grid {
+      grid-template-columns: 1fr;
+      padding-left: 82px;
+      padding-right: 82px;
+      gap: 24px;
+    }
+    .strategy-panels { grid-template-columns: repeat(3, 1fr); }
+    .stage-copy { max-width: 620px; }
+  }
+
+  @media (max-width: 700px) {
+    .strategy-grid {
+      padding: 62px 12px 18px;
+      gap: 20px;
+    }
+    .strategy-panels { grid-template-columns: 1fr; }
+    .mini-panel { min-height: auto; }
+    .decision-panel,
+    .compare-panel,
+    .tradeoff-panel { min-height: 260px; }
+  }
+</style>

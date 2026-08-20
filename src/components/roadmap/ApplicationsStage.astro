@@ -1,0 +1,192 @@
+---
+/**
+ * ApplicationsStage — Stage 3: "What happens in a real product?"
+ *
+ * Shows the applications that serve as real-world test beds for the
+ * Local AI stack: RedactGuard, Aura, ClosedRoom, and a "Your next" card.
+ */
+import StageRail from './StageRail.astro';
+import { applicationsContent } from '../../content/locales/en/roadmap';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+const page = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+---
+
+<section class="journey-stage stage-left" id="applications" aria-labelledby="applications-title">
+  <StageRail number={3} side="left" />
+
+  <div class="stage-grid applications-grid">
+    <!-- Left: copy + guiding questions -->
+    <div class="stage-copy applications-copy">
+      <p class="stage-kicker">{applicationsContent.kicker}</p>
+      <h2 id="applications-title">
+        What happens in<br />a real product?
+      </h2>
+      <p class="stage-intro">{applicationsContent.intro}</p>
+      <p class="stage-note">{applicationsContent.note}</p>
+
+      <div class="question-list">
+        {applicationsContent.questions.map((question) => (
+          <div><span>?</span><strong>{question}</strong></div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Right: application cards grid -->
+    <div class="application-cards">
+      {applicationsContent.cards.map((card) => (
+        <a class="app-card" href={page(card.href)}>
+          <div class={`app-icon ${card.colorClass}`}>
+            <img src={asset(card.logoPath)} alt="" loading="lazy" />
+          </div>
+          <h3>{card.name}</h3>
+          <p>{card.description}</p>
+          <span>{card.linkLabel}</span>
+        </a>
+      ))}
+
+      <!-- "Your next application" placeholder card -->
+      <article class="app-card next-card">
+        <div class="next-icon">＋</div>
+        <h3>{applicationsContent.nextCard.name}</h3>
+        <p>{applicationsContent.nextCard.description}</p>
+        <span>{applicationsContent.nextCard.linkLabel}</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---- Applications grid layout ---- */
+  .applications-grid {
+    grid-template-columns: 30% 70%;
+    min-height: 310px;
+    padding: 12px 56px 14px 84px;
+  }
+
+  /* ---- Question list ---- */
+  .question-list {
+    margin-top: 12px;
+    display: grid;
+    gap: 9px;
+  }
+
+  .question-list div {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 9px;
+    align-items: center;
+  }
+
+  .question-list span {
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #9cbbff;
+    border-radius: 50%;
+    color: var(--rm-blue, #145bff);
+    font-size: 0.62rem;
+    font-weight: 850;
+  }
+
+  .question-list strong {
+    color: #1f3150;
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+
+  /* ---- Application cards ---- */
+  .application-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .app-card {
+    min-height: 232px;
+    padding: 16px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dce5f3;
+    border-radius: 11px;
+    background: white;
+    color: var(--rm-ink, #081333);
+    text-decoration: none;
+    box-shadow: 0 7px 20px rgba(19, 45, 91, 0.04);
+  }
+
+  .app-icon {
+    height: 70px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 10px;
+  }
+
+  .app-icon img {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+  }
+
+  .app-card h3 {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.82rem;
+  }
+
+  .app-card p {
+    margin: 7px 0 13px;
+    color: #53647e;
+    font-size: 0.65rem;
+    line-height: 1.45;
+  }
+
+  .app-card > span {
+    margin-top: auto;
+    color: var(--rm-blue, #145bff);
+    font-size: 0.66rem;
+    font-weight: 800;
+  }
+
+  /* ---- "Your next" dashed placeholder card ---- */
+  .next-card {
+    border-style: dashed;
+    box-shadow: none;
+  }
+
+  .next-icon {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 12px;
+    display: grid;
+    place-items: center;
+    color: var(--rm-blue, #145bff);
+    font-size: 2rem;
+    border: 1px dashed #b8ccf6;
+    border-radius: 14px;
+    background: #fbfdff;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 980px) {
+    .applications-grid {
+      grid-template-columns: 1fr;
+      padding-left: 82px;
+      padding-right: 82px;
+      gap: 24px;
+    }
+    .application-cards { grid-template-columns: repeat(2, 1fr); }
+    .stage-copy { max-width: 620px; }
+  }
+
+  @media (max-width: 700px) {
+    .applications-grid {
+      padding: 62px 12px 18px;
+      gap: 20px;
+    }
+    .application-cards { grid-template-columns: 1fr; }
+    .app-card { min-height: 210px; }
+  }
+</style>

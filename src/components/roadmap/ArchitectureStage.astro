@@ -1,0 +1,104 @@
+---
+/**
+ * ArchitectureStage — Stage 2: "Can we actually run it locally?"
+ *
+ * Displays the ecosystem image (device interconnection visual) on the left
+ * and the architecture copy + capability list on the right.
+ */
+import StageRail from './StageRail.astro';
+import { architectureContent } from '../../content/locales/en/roadmap';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+---
+
+<section class="journey-stage stage-right" id="infrastructure" aria-labelledby="architecture-title">
+  <StageRail number={2} side="right" />
+
+  <div class="stage-grid architecture-grid">
+    <!-- Left: ecosystem visual -->
+    <div class="architecture-visual visual-card">
+      <img
+        src={asset(architectureContent.ecosystemImage)}
+        alt={architectureContent.ecosystemAlt}
+        loading="lazy"
+      />
+    </div>
+
+    <!-- Right: copy + capabilities -->
+    <div class="stage-copy architecture-copy">
+      <p class="stage-kicker">{architectureContent.kicker}</p>
+      <h2 id="architecture-title">
+        Can we actually<br />run it locally?
+      </h2>
+      <p class="stage-intro">{architectureContent.intro}</p>
+
+      <div class="stage-list architecture-list">
+        {architectureContent.items.map((item) => (
+          <div class="list-item">
+            <span class="list-icon" aria-hidden="true">{item.icon}</span>
+            <p><strong>{item.title} —</strong><br /><span>{item.text}</span></p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---- Architecture grid layout ---- */
+  .architecture-grid {
+    grid-template-columns: 61% 39%;
+    min-height: 355px;
+    padding: 18px 84px 18px 22px;
+  }
+
+  /* ---- Visual card (image container) ---- */
+  .visual-card {
+    min-width: 0;
+    border: 1px solid #dbe4f3;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #fff, #fbfdff);
+    box-shadow: 0 8px 28px rgba(18, 43, 88, 0.04);
+    overflow: hidden;
+  }
+
+  .architecture-visual {
+    height: 310px;
+    display: grid;
+    place-items: center;
+    padding: 2px 18px;
+  }
+
+  .architecture-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ---- Copy adjustments ---- */
+  .architecture-copy { padding-right: 6px; }
+  .architecture-list { gap: 9px; margin-top: 15px; }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 980px) {
+    .architecture-grid {
+      grid-template-columns: 1fr;
+      padding-left: 82px;
+      padding-right: 82px;
+      gap: 24px;
+    }
+    .architecture-visual { order: 2; }
+    .architecture-copy { order: 1; }
+    .stage-copy { max-width: 620px; }
+  }
+
+  @media (max-width: 700px) {
+    .architecture-grid {
+      padding: 62px 12px 18px;
+      gap: 20px;
+    }
+    .architecture-visual { height: 260px; }
+  }
+</style>

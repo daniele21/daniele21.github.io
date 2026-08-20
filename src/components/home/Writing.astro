@@ -1,0 +1,288 @@
+---
+import { writingData } from '../../content';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+function getHref(href: string) {
+  if (href.startsWith('http') || href.startsWith('mailto:')) return href;
+  if (href.startsWith('#')) return href;
+  return `${baseUrl}/${href.replace(/^\//, '')}`;
+}
+---
+
+<section class="section writing-section" id="writing" aria-labelledby="writing-title">
+  <div class="shell">
+    <div class="section-head">
+      <div>
+        <span class="kicker">WRITING & IDEAS</span>
+        <h2 id="writing-title">Essays, notes and field observations.</h2>
+      </div>
+      <p>
+        Architectural reflections, practical runbooks and analysis published across stAI tuned, research notes and LinkedIn.
+      </p>
+    </div>
+
+    <div class="writing-layout">
+      <!-- Articles List -->
+      <div class="writing-list" role="list">
+        {writingData.articles.map((item) => (
+          <a
+            class="writing-row"
+            href={getHref(item.href)}
+            target={item.external ? '_blank' : '_self'}
+            rel={item.external ? 'noreferrer' : undefined}
+            role="listitem"
+          >
+            <div class="writing-meta">
+              <span class="source-tag">{item.source}</span>
+            </div>
+            <h3 class="writing-item-title">{item.title}</h3>
+            <span class="writing-arrow" aria-hidden="true">
+              {item.external ? '↗' : '→'}
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <!-- Channels Bar -->
+      <div class="channels-strip">
+        <span class="channels-label">Publishing channels:</span>
+        <div class="channels-list">
+          {writingData.channels.map((channel) => (
+            <a
+              class="channel-pill"
+              href={channel.href}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="channel-mark">{channel.mark}</span>
+              <div class="channel-info">
+                <strong>{channel.name}</strong>
+                <small>{channel.purpose}</small>
+              </div>
+              <span class="channel-arrow" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .writing-section {
+    background: var(--surface-muted);
+    padding: clamp(56px, 7vw, 96px) 0;
+  }
+
+  .section-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 440px);
+    gap: 28px;
+    align-items: end;
+    margin-bottom: clamp(32px, 4vw, 44px);
+  }
+
+  .kicker {
+    display: inline-block;
+    color: #7557ff;
+    font-size: 0.72rem;
+    font-weight: 850;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  [data-theme="dark"] .kicker {
+    color: #a78bfa;
+  }
+
+  .section-head h2 {
+    margin: 8px 0 0;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 3.2rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+  }
+
+  .section-head > p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 1.02rem;
+    line-height: 1.55;
+  }
+
+  .writing-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* Articles List */
+  .writing-list {
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .writing-row {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr) 30px;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: background 0.18s ease, transform 0.18s ease;
+  }
+
+  .writing-row:hover {
+    background: var(--surface-card);
+    transform: translateX(4px);
+  }
+
+  .source-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    color: #7557ff;
+    font-size: 0.72rem;
+    font-weight: 750;
+  }
+
+  [data-theme="dark"] .source-tag {
+    color: #a78bfa;
+  }
+
+  .writing-item-title {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.45vw, 1.25rem);
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+  }
+
+  .writing-arrow {
+    color: var(--ink-subtle);
+    font-size: 1.15rem;
+    text-align: right;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .writing-row:hover .writing-arrow {
+    transform: translateX(3px);
+    color: #7557ff;
+  }
+
+  [data-theme="dark"] .writing-row:hover .writing-arrow {
+    color: #a78bfa;
+  }
+
+  /* Channels Strip */
+  .channels-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 12px;
+  }
+
+  .channels-label {
+    color: var(--ink-subtle);
+    font-size: 0.75rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .channels-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .channel-pill {
+    display: grid;
+    grid-template-columns: 36px 1fr 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    background: var(--surface-card);
+    text-decoration: none;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .channel-pill:hover {
+    transform: translateY(-2px);
+    border-color: rgba(117, 87, 255, 0.35);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .channel-mark {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(117, 87, 255, 0.1);
+    color: #7557ff;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 850;
+  }
+
+  [data-theme="dark"] .channel-mark {
+    background: rgba(167, 139, 250, 0.12);
+    color: #c4b5fd;
+  }
+
+  .channel-info strong {
+    display: block;
+    color: var(--ink);
+    font-size: 0.85rem;
+    line-height: 1.2;
+  }
+
+  .channel-info small {
+    display: block;
+    margin-top: 2px;
+    color: var(--ink-subtle);
+    font-size: 0.72rem;
+  }
+
+  .channel-arrow {
+    color: var(--ink-subtle);
+    font-size: 0.95rem;
+  }
+
+  .channel-pill:hover .channel-arrow {
+    color: #7557ff;
+  }
+
+  @media (max-width: 820px) {
+    .writing-row {
+      grid-template-columns: 1fr 24px;
+      gap: 8px;
+    }
+    .writing-meta {
+      grid-column: 1;
+      margin-bottom: 2px;
+    }
+    .writing-item-title {
+      grid-column: 1;
+    }
+    .writing-arrow {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      align-self: center;
+    }
+    .channels-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,94 @@
+---
+import { trackCredentials } from '../../content';
+---
+
+<section class="section track-section" aria-label="Professional track record">
+  <div class="shell">
+    <div class="track-bar">
+      {trackCredentials.map((item, idx) => (
+        <div class="track-item" class:list={{ 'is-first': idx === 0 }}>
+          <strong>{item.value}</strong>
+          <span>{item.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .track-section {
+    padding: clamp(24px, 4vw, 44px) 0;
+  }
+
+  .track-bar {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    padding: clamp(20px, 3vw, 28px) clamp(24px, 3.5vw, 36px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 22px;
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .track-item {
+    padding: 6px 14px;
+    border-left: 1px solid var(--border-subtle);
+  }
+
+  .track-item.is-first {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .track-item strong {
+    display: block;
+    color: #7557ff;
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  [data-theme="dark"] .track-item strong {
+    color: #a78bfa;
+  }
+
+  .track-item span {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink-subtle);
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 820px) {
+    .track-bar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px 16px;
+    }
+    .track-item:nth-child(3) {
+      border-left: 0;
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .track-bar {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 20px;
+    }
+    .track-item {
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+      padding: 12px 0 0;
+    }
+    .track-item.is-first {
+      border-top: 0;
+      padding-top: 0;
+    }
+  }
+</style>

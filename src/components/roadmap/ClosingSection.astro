@@ -1,0 +1,123 @@
+---
+/**
+ * ClosingSection — Final CTA section of the roadmap landing page.
+ *
+ * Two-column layout:
+ * - Left: "Evidence feeds the next decision" message with wave badge
+ * - Right: "Let's build something together" with primary/secondary CTAs
+ */
+import { closingContent } from '../../content/locales/en/roadmap';
+---
+
+<section class="closing-card" id="contact">
+  <!-- Left: evidence message -->
+  <div class="closing-left">
+    <span class="wave-badge" aria-hidden="true">⌁</span>
+    <div>
+      <h2>{closingContent.left.title}</h2>
+      <p>
+        Measure what happened. Learn from the constraints.<br />
+        Decide again whether the next workload belongs Local, Hybrid or Cloud.
+      </p>
+    </div>
+  </div>
+
+  <!-- Vertical divider -->
+  <div class="closing-divider"></div>
+
+  <!-- Right: collaboration CTA -->
+  <div class="closing-right">
+    <h2>{closingContent.right.title}</h2>
+    <p>{closingContent.right.text}</p>
+    <div class="closing-actions">
+      <a class="primary-button" href={closingContent.right.primaryCta.href}>
+        {closingContent.right.primaryCta.label}
+      </a>
+      <a class="secondary-button" href={closingContent.right.secondaryCta.href}>
+        {closingContent.right.secondaryCta.label}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .closing-card {
+    margin: 22px 12px 0;
+    padding: 22px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 30px;
+    align-items: center;
+    border: 1px solid #d9e3f1;
+    border-radius: 13px;
+    background: linear-gradient(145deg, #fff, #fbfdff);
+    box-shadow: 0 7px 22px rgba(19, 45, 91, 0.04);
+  }
+
+  .closing-left {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .wave-badge {
+    width: 65px;
+    height: 65px;
+    display: grid;
+    place-items: center;
+    color: var(--rm-blue, #145bff);
+    font-size: 2rem;
+    border-radius: 50%;
+    border: 1px solid #bcd0ff;
+    background: #f6f9ff;
+  }
+
+  .closing-card h2 {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.04rem;
+    letter-spacing: -0.025em;
+  }
+
+  .closing-card p {
+    margin: 6px 0 0;
+    color: #65738c;
+    font-size: 0.67rem;
+    line-height: 1.5;
+  }
+
+  .closing-divider {
+    width: 1px;
+    height: 72px;
+    background: #dbe4f2;
+  }
+
+  .closing-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 13px;
+  }
+
+  .closing-actions :global(.primary-button),
+  .closing-actions :global(.secondary-button) {
+    min-height: 38px;
+    padding: 0 18px;
+    font-size: 0.68rem;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 700px) {
+    .closing-card {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin: 15px 0 0;
+      padding: 20px;
+    }
+    .closing-divider { display: none; }
+    .closing-left { grid-template-columns: 55px 1fr; }
+    .wave-badge { width: 50px; height: 50px; }
+    .closing-actions { flex-direction: column; }
+    .closing-actions a { width: 100%; }
+  }
+</style>
