@@ -1,20 +1,20 @@
 import type { SiteMetadata, NavItem } from '../../../types/content';
 
 export const siteMetadata: SiteMetadata = {
-  title: 'Daniele Moltisanti - Product-Grade Local AI',
+  title: 'Daniele Moltisanti - Local AI from Strategy to Systems',
   description:
-    'Researching product-grade local AI: when open-weight models and local runtimes can reduce closed-model dependency, protect sensitive data, and give products more control over lifecycle, cost and runtime.',
+    'Exploring where AI should run, building local AI infrastructure across desktop and mobile, testing it through real applications, and measuring how it performs in the real world.',
   canonical: 'https://daniele21.github.io/',
-  socialTitle: 'Local-first AI: more control over models, data and runtime',
+  socialTitle: 'Local AI first ≠ Local AI only',
   socialDescription:
-    'Research, experiments and open-source infrastructure for moving suitable AI workloads from closed-only APIs to local-first architectures.',
+    'Strategy, infrastructure, real-world applications and measurement for deciding when Local, Hybrid or Cloud AI makes sense.',
   ogImage: 'https://daniele21.github.io/social-card.svg',
 };
 
 export const navigation: NavItem[] = [
-  { label: 'Why local-first', href: '#why-local-first' },
+  { label: 'Strategy', href: '#strategy' },
   {
-    label: 'Infrastructure',
+    label: 'Architecture',
     href: '#infrastructure',
     children: [
       {
@@ -27,15 +27,40 @@ export const navigation: NavItem[] = [
         href: 'android-local-llm-harness',
         logoPath: 'images/harness/logo.svg',
       },
+      {
+        label: 'Local ASR Server',
+        href: 'local-asr-server',
+      },
     ],
   },
   {
-    label: 'Evidence',
+    label: 'Applications',
+    href: '#applications',
+    children: [
+      {
+        label: 'RedactGuard',
+        href: 'redact-guard',
+        logoPath: 'images/redact-guard/logo.png',
+      },
+      {
+        label: 'Aura',
+        href: 'aura-finance',
+        logoPath: 'images/aura/logo.png',
+      },
+      {
+        label: 'ClosedRoom',
+        href: 'closedroom',
+        logoPath: 'images/closedroom/logo.png',
+      },
+    ],
+  },
+  {
+    label: 'Observability',
     href: '#evidence',
     children: [
       {
-        label: 'Overview',
-        href: '#evidence',
+        label: 'Performance Lab',
+        href: 'performance-lab',
       },
       {
         label: 'Traffic Monitoring (macOS)',
@@ -49,29 +74,7 @@ export const navigation: NavItem[] = [
       },
     ],
   },
-  {
-    label: 'Applications',
-    href: '#applications',
-    children: [
-      {
-        label: 'ClosedRoom',
-        href: 'closedroom',
-        logoPath: 'images/closedroom/logo.png',
-      },
-      {
-        label: 'RedactGuard',
-        href: 'redact-guard',
-        logoPath: 'images/redact-guard/logo.png',
-      },
-      {
-        label: 'Aura Finance',
-        href: 'aura-finance',
-        logoPath: 'images/aura/logo.png',
-      },
-    ],
-  },
-  { label: 'Knowledge', href: '#journey' },
-  { label: 'About', href: '#about' },
+  { label: 'Advisory', href: '#collaborate' },
 ];
 
 export const socialLinks = {
