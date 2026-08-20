@@ -1,0 +1,220 @@
+---
+import StageRail from './StageRail.astro';
+import type { RoadmapData } from '../../content/locales/en/roadmap';
+
+interface Props {
+  data: RoadmapData['strategy'];
+}
+
+const { data } = Astro.props;
+const glyphs = ['◇', '▣', '↗', '⌕'];
+---
+
+<section class="journey-stage stage-left" id="strategy" data-observe="stage" aria-labelledby="strategy-title">
+  <StageRail number={1} side="left" />
+
+  <div class="stage-grid strategy-grid">
+    <div class="stage-copy strategy-copy" data-reveal="copy">
+      <p class="stage-kicker">{data.kicker}</p>
+      <h2 id="strategy-title">Where should AI<br />actually run?</h2>
+      <p class="stage-intro">{data.intro}</p>
+
+      <div class="stage-list">
+        {data.items.map((item, index) => (
+          <div class="list-item" data-stagger={String(Math.min(index, 3))}>
+            <span class="list-icon" aria-hidden="true">{glyphs[index]}</span>
+            <p><strong>{item.title} —</strong><br /><span>{item.text}</span></p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="strategy-panels" data-reveal="visual">
+      <article class="mini-panel decision-panel">
+        <h3>{data.decisionFramework.title}</h3>
+        <div class="decision-flow" aria-hidden="true">
+          <span class="decision-box">{data.decisionFramework.root}</span>
+          <span class="decision-arrow">↓</span>
+          <span class="decision-diamond">{data.decisionFramework.question}</span>
+          <div class="decision-branches">
+            <span><small>{data.decisionFramework.yesLabel}</small><b>{data.decisionFramework.yesResult}</b></span>
+            <span><small>{data.decisionFramework.noLabel}</small><b>{data.decisionFramework.noResult}</b></span>
+          </div>
+        </div>
+        <p>{data.decisionFramework.caption}</p>
+      </article>
+
+      <article class="mini-panel compare-panel">
+        <h3>{data.comparison.title}</h3>
+        <div class="comparison-table" role="table" aria-label="Local Hybrid Cloud comparison">
+          <div class="comparison-head"><span></span>{data.comparison.columns.map((column) => <b>{column}</b>)}</div>
+          {data.comparison.rows.map((row) => (
+            <div>
+              <span>{row[0]}</span>
+              {row.slice(1).map((value, index) => (
+                <i class:list={[value === '×' || value === '$$$' ? 'bad' : value === '$$' ? 'warn' : value === '✓' || value === '$' ? 'good' : '']}>{value}</i>
+              ))}
+            </div>
+          ))}
+        </div>
+        <p>{data.comparison.caption}</p>
+      </article>
+
+      <article class="mini-panel tradeoff-panel">
+        <h3>{data.tradeoffs.title}</h3>
+        <ul>
+          {data.tradeoffs.questions.map((question, index) => <li><span>{['▤','♙','◷','⚙','△'][index]}</span>{question}</li>)}
+        </ul>
+        <p>{data.tradeoffs.caption}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .strategy-grid { min-height: 520px; }
+  .strategy-panels {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .mini-panel {
+    min-height: 360px;
+    border-radius: 16px;
+    padding: 18px 16px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .mini-panel h3 {
+    margin: 0;
+    text-align: center;
+    color: var(--roadmap-ink);
+    font-size: .84rem;
+    line-height: 1.25;
+    letter-spacing: -.02em;
+  }
+  .mini-panel > p {
+    margin: auto 0 0;
+    padding-top: 14px;
+    color: var(--roadmap-muted);
+    font-size: .69rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .decision-flow { display: grid; justify-items: center; margin-top: 20px; }
+  .decision-box {
+    padding: 8px 18px;
+    border: 1px solid #cbd7eb;
+    border-radius: 7px;
+    background: #fff;
+    color: var(--roadmap-ink);
+    font-size: .68rem;
+    font-weight: 750;
+  }
+  .decision-arrow { margin: 3px 0; color: var(--roadmap-blue); font-size: .85rem; }
+  .decision-diamond {
+    width: 72px;
+    height: 72px;
+    display: grid;
+    place-items: center;
+    transform: rotate(45deg);
+    border: 1.5px solid var(--roadmap-blue);
+    border-radius: 8px;
+    background: #f8fbff;
+    color: var(--roadmap-blue);
+    font-size: .62rem;
+    font-weight: 800;
+  }
+  .decision-diamond::first-line { transform: rotate(-45deg); }
+  .decision-flow .decision-diamond { color: transparent; position: relative; }
+  .decision-flow .decision-diamond::after {
+    content: attr(data-label);
+  }
+  .decision-diamond { color: var(--roadmap-blue); }
+  .decision-diamond { writing-mode: horizontal-tb; }
+  .decision-diamond { text-align: center; }
+  .decision-diamond { line-height: 1.1; }
+  .decision-diamond { transform: rotate(45deg); }
+  .decision-diamond { text-indent: 0; }
+  .decision-diamond { overflow: visible; }
+  .decision-diamond { padding: 0; }
+  .decision-diamond { font-size: 0; }
+  .decision-diamond::before {
+    content: 'Sensitive?';
+    transform: rotate(-45deg);
+    display: block;
+    color: var(--roadmap-blue);
+    font-size: .61rem;
+    font-weight: 800;
+  }
+  .decision-branches {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 17px;
+    position: relative;
+  }
+  .decision-branches::before {
+    content: '';
+    position: absolute;
+    left: 20%; right: 20%; top: -9px;
+    height: 1px;
+    background: #aebddb;
+  }
+  .decision-branches > span { display: grid; justify-items: center; gap: 5px; }
+  .decision-branches small { color: #56a76e; font-size: .59rem; }
+  .decision-branches b {
+    width: 100%;
+    padding: 8px 4px;
+    border: 1px solid rgba(20,91,255,.35);
+    border-radius: 7px;
+    color: var(--roadmap-blue);
+    background: #fff;
+    text-align: center;
+    font-size: .61rem;
+  }
+  .comparison-table { margin-top: 22px; display: grid; gap: 10px; }
+  .comparison-table > div {
+    display: grid;
+    grid-template-columns: 1.35fr repeat(3, .7fr);
+    align-items: center;
+    gap: 5px;
+    font-size: .61rem;
+  }
+  .comparison-table span { color: var(--roadmap-muted); }
+  .comparison-table b { color: var(--roadmap-ink); text-align: center; font-size: .59rem; }
+  .comparison-table i { font-style: normal; text-align: center; font-weight: 800; color: var(--roadmap-subtle); }
+  .comparison-table i.good { color: #16a34a; }
+  .comparison-table i.warn { color: #c98913; }
+  .comparison-table i.bad { color: #ef3333; }
+  .tradeoff-panel ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 15px; }
+  .tradeoff-panel li {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    align-items: center;
+    gap: 8px;
+    color: #33405d;
+    font-size: .66rem;
+    line-height: 1.35;
+  }
+  .tradeoff-panel li span {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    color: var(--roadmap-blue);
+    border: 1px solid rgba(20,91,255,.2);
+    border-radius: 8px;
+    font-size: .66rem;
+  }
+
+  @media (max-width: 980px) {
+    .strategy-panels { grid-template-columns: repeat(3,1fr); }
+    .mini-panel { min-height: 330px; }
+  }
+  @media (max-width: 700px) {
+    .strategy-panels { grid-template-columns: 1fr; }
+    .mini-panel { min-height: 300px; }
+  }
+</style>
