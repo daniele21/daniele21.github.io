@@ -1,0 +1,156 @@
+---
+import StageRail from './StageRail.astro';
+import type { RoadmapData } from '../../content/locales/en/roadmap';
+
+interface Props {
+  data: RoadmapData['observability'];
+}
+
+const { data } = Astro.props;
+const glyphs = ['▥', '▦', '♨', '◇'];
+---
+
+<section class="journey-stage stage-right stage-final" id="evidence" data-observe="stage" aria-labelledby="observability-title">
+  <StageRail number={4} side="right" isFinal />
+
+  <div class="stage-grid observability-grid">
+    <div class="metrics-grid" data-reveal="visual" aria-label="Performance and observability metrics">
+      <article class="metric-card">
+        <h3>{data.metrics.performance.title}</h3>
+        <svg class="spark-chart" viewBox="0 0 180 74" aria-hidden="true">
+          <polyline points="0,54 12,42 23,48 36,36 48,49 61,31 73,37 85,24 97,38 110,30 122,43 136,32 150,40 165,22 180,29" />
+        </svg>
+        <div class="metric-stats">
+          {data.metrics.performance.stats.map(([label, value], index) => <span>{label}<b class={index === 2 ? 'positive' : ''}>{value}</b></span>)}
+        </div>
+      </article>
+
+      <article class="metric-card">
+        <h3>{data.metrics.traffic.title}</h3>
+        <div class="bar-chart" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="metric-stats">
+          {data.metrics.traffic.stats.map(([label, value], index) => <span>{label}<b class={index === 2 ? 'negative' : ''}>{value}</b></span>)}
+        </div>
+      </article>
+
+      <article class="metric-card compact-card">
+        <h3>{data.metrics.keyMetrics.title}</h3>
+        <div class="key-metrics">
+          {data.metrics.keyMetrics.stats.map(([label, value], index) => (
+            <span><small>{label}</small><b>{value}</b><i class={index === 2 || index === 3 ? 'green' : ''}></i></span>
+          ))}
+        </div>
+      </article>
+
+      <article class="metric-card resource-card">
+        <h3>{data.metrics.resources.title}</h3>
+        <div class="resource-body">
+          <div class="donut" aria-hidden="true"><span></span></div>
+          <div class="resource-legend">
+            {data.metrics.resources.distribution.map(([label, value], index) => <span><i class={`dot-${index}`}></i>{label}<b>{value}</b></span>)}
+          </div>
+        </div>
+        <div class="resource-memory">
+          {data.metrics.resources.memory.map(([label, value]) => <span>{label}<b>{value}</b></span>)}
+        </div>
+      </article>
+    </div>
+
+    <div class="stage-copy observability-copy" data-reveal="copy">
+      <p class="stage-kicker">{data.kicker}</p>
+      <h2 id="observability-title">Does it actually<br />work well?</h2>
+      <p class="stage-intro">{data.intro}</p>
+      <div class="stage-list observability-list">
+        {data.items.map((item, index) => (
+          <div class="list-item" data-stagger={String(Math.min(index, 3))}>
+            <span class="list-icon" aria-hidden="true">{glyphs[index]}</span>
+            <p><strong>{item.title} —</strong><br /><span>{item.text}</span></p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .observability-grid { min-height: 465px; }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 12px;
+  }
+  .metric-card {
+    min-height: 300px;
+    border-radius: 16px;
+    padding: 15px;
+    overflow: hidden;
+  }
+  .metric-card h3 { margin: 0; color: var(--roadmap-ink); font-size: .76rem; letter-spacing: -.02em; }
+  .spark-chart { width: 100%; height: 94px; margin-top: 14px; overflow: visible; }
+  .spark-chart polyline { fill: none; stroke: var(--roadmap-blue); stroke-width: 2.3; vector-effect: non-scaling-stroke; }
+  .metric-stats { display: grid; gap: 11px; margin-top: 10px; }
+  .metric-stats span,
+  .resource-memory span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--roadmap-muted);
+    font-size: .62rem;
+  }
+  .metric-stats b,
+  .resource-memory b { color: var(--roadmap-ink); font-size: .68rem; }
+  .metric-stats .positive { color: #16a34a; }
+  .metric-stats .negative { color: #ef3333; }
+  .bar-chart {
+    height: 94px;
+    display: flex;
+    align-items: end;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 4px 4px 7px;
+    border-bottom: 1px solid #d7e1ef;
+  }
+  .bar-chart i { flex: 1; min-width: 8px; height: 42%; border-radius: 3px 3px 0 0; background: linear-gradient(180deg,#5a94ff,var(--roadmap-blue)); }
+  .bar-chart i:nth-child(2) { height: 58%; }
+  .bar-chart i:nth-child(3) { height: 66%; }
+  .bar-chart i:nth-child(4) { height: 74%; }
+  .bar-chart i:nth-child(5) { height: 82%; }
+  .bar-chart i:nth-child(6) { height: 94%; }
+  .key-metrics { display: grid; gap: 15px; margin-top: 20px; }
+  .key-metrics span { display: grid; grid-template-columns: 1fr auto 26px; gap: 7px; align-items: center; }
+  .key-metrics small { color: var(--roadmap-muted); font-size: .59rem; }
+  .key-metrics b { color: var(--roadmap-ink); font-size: .62rem; }
+  .key-metrics i {
+    display: block;
+    height: 11px;
+    border-bottom: 2px solid var(--roadmap-blue);
+    transform: skewY(-15deg);
+    opacity: .75;
+  }
+  .key-metrics i.green { border-color: #16a34a; }
+  .resource-body { display: grid; grid-template-columns: 82px 1fr; gap: 10px; align-items: center; margin-top: 22px; }
+  .donut {
+    width: 78px; height: 78px; border-radius: 50%;
+    background: conic-gradient(var(--roadmap-blue) 0 34%, #6d6bf3 34% 62%, #67c8b6 62% 88%, #d9e0ec 88% 100%);
+    position: relative;
+  }
+  .donut::after { content: ''; position: absolute; inset: 17px; border-radius: 50%; background: #fff; }
+  .resource-legend { display: grid; gap: 8px; }
+  .resource-legend span { display: grid; grid-template-columns: 8px 1fr auto; gap: 5px; align-items: center; color: var(--roadmap-muted); font-size: .58rem; }
+  .resource-legend i { width: 6px; height: 6px; border-radius: 50%; background: var(--roadmap-blue); }
+  .resource-legend i.dot-1 { background: #6d6bf3; }
+  .resource-legend i.dot-2 { background: #67c8b6; }
+  .resource-legend i.dot-3 { background: #d9e0ec; }
+  .resource-legend b { color: var(--roadmap-ink); font-size: .58rem; }
+  .resource-memory { display: grid; gap: 10px; margin-top: 22px; padding-top: 12px; border-top: 1px solid #e1e7f0; }
+  .observability-list { margin-top: 19px; }
+
+  @media (max-width: 980px) {
+    .metrics-grid { grid-template-columns: repeat(2,1fr); }
+  }
+  @media (max-width: 700px) {
+    .metrics-grid { grid-template-columns: 1fr; }
+    .metric-card { min-height: 245px; }
+  }
+</style>
