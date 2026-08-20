@@ -1,6 +1,6 @@
 @media (min-width: 981px) {
   .stage-rail {
-    --roadmap-badge-top: clamp(42px, 7svh, 76px);
+    --roadmap-badge-top: clamp(116px, 18svh, 176px);
     top: 0;
     bottom: 0;
   }
@@ -22,6 +22,8 @@
     opacity: .24;
     transition: opacity 480ms ease, box-shadow 600ms var(--roadmap-ease);
   }
+
+  #strategy .stage-rail::before { display: none; }
 
   .stage-badge { top: var(--roadmap-badge-top); }
 
