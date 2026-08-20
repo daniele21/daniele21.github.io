@@ -1,0 +1,131 @@
+---
+import StageRail from './StageRail.astro';
+import type { RoadmapData } from '../../content/locales/en/roadmap';
+
+interface Props {
+  data: RoadmapData['applications'];
+}
+
+const { data } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+const page = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+---
+
+<section class="journey-stage stage-left" id="applications" data-observe="stage" aria-labelledby="applications-title">
+  <StageRail number={3} side="left" />
+
+  <div class="stage-grid applications-grid">
+    <div class="stage-copy applications-copy" data-reveal="copy">
+      <p class="stage-kicker">{data.kicker}</p>
+      <h2 id="applications-title">What happens in<br />a real product?</h2>
+      <p class="stage-intro">{data.intro}</p>
+      <p class="stage-note">{data.note}</p>
+
+      <div class="question-list">
+        {data.questions.map((question, index) => (
+          <div data-stagger={String(Math.min(index + 1, 3))}><span>?</span><strong>{question}</strong></div>
+        ))}
+      </div>
+    </div>
+
+    <div class="application-cards" data-reveal="visual">
+      {data.cards.map((card, index) => card.href ? (
+        <a class="app-card" href={page(card.href)} data-stagger={String(Math.min(index, 3))}>
+          <div class:list={['app-icon', `tone-${card.tone}`]}>
+            {card.image && <img src={asset(card.image)} alt="" loading="lazy" />}
+          </div>
+          <h3>{card.name}</h3>
+          <p>{card.description}</p>
+          <span>{card.cta}</span>
+        </a>
+      ) : (
+        <article class="app-card next-card" data-stagger="3">
+          <div class="next-icon">＋</div>
+          <h3>{card.name}</h3>
+          <p>{card.description}</p>
+          <span>{card.cta}</span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .applications-grid { min-height: 455px; }
+  .question-list { display: grid; gap: 12px; margin-top: 22px; }
+  .question-list div {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 9px;
+    align-items: center;
+  }
+  .question-list span {
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--roadmap-blue);
+    border: 1px solid rgba(20,91,255,.28);
+    background: #fff;
+    font-size: .72rem;
+    font-weight: 850;
+  }
+  .question-list strong { color: var(--roadmap-ink); font-size: .73rem; line-height: 1.38; }
+
+  .application-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 13px;
+  }
+  .app-card {
+    min-height: 285px;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 16px;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 240ms var(--roadmap-ease), border-color 180ms ease, box-shadow 240ms ease;
+  }
+  a.app-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(20,91,255,.28);
+    box-shadow: 0 16px 34px rgba(20,42,88,.11);
+  }
+  .app-icon,
+  .next-icon {
+    width: 68px;
+    height: 68px;
+    margin-bottom: 18px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .app-icon img { width: 100%; height: 100%; object-fit: contain; }
+  .tone-red { background: #fff1f1; }
+  .tone-purple { background: #f5efff; }
+  .tone-blue { background: #eef5ff; }
+  .next-icon {
+    border: 1px dashed rgba(20,91,255,.32);
+    background: #fbfdff;
+    color: var(--roadmap-blue);
+    font-size: 2rem;
+    font-weight: 400;
+  }
+  .app-card h3 { margin: 0; color: var(--roadmap-ink); font-size: .87rem; letter-spacing: -.02em; }
+  .app-card p { margin: 8px 0 0; color: var(--roadmap-muted); font-size: .72rem; line-height: 1.52; }
+  .app-card > span { margin-top: auto; padding-top: 18px; color: var(--roadmap-blue); font-size: .69rem; font-weight: 800; }
+  .next-card { border-style: dashed; box-shadow: none; background: rgba(255,255,255,.72); }
+
+  @media (max-width: 980px) {
+    .application-cards { grid-template-columns: repeat(2,1fr); }
+    .app-card { min-height: 255px; }
+  }
+  @media (max-width: 700px) {
+    .application-cards { grid-template-columns: 1fr; }
+    .app-card { min-height: 220px; }
+  }
+</style>
