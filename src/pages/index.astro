@@ -1,31 +1,16 @@
 ---
 /**
- * Main Index Page - Landing Page for Daniele Moltisanti.
- * Assembles all 10 strategic sections into a single-page narrative layout.
+ * Main Index Page — Local AI personal brand landing.
+ * The homepage follows one evidence-driven path:
+ * Strategy → Architecture & Infrastructure → Applications → Observability & Measurement.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import HeroSection from '../components/hero/HeroSection.astro';
-import WhyLocalFirstSection from '../components/sections/WhyLocalFirstSection.astro';
-import ChallengesSection from '../components/sections/ChallengesSection.astro';
-import InfrastructureSection from '../components/infrastructure/InfrastructureSection.astro';
-import EvidenceObservabilitySection from '../components/evidence/EvidenceObservabilitySection.astro';
-import ApplicationsSection from '../components/applications/ApplicationsSection.astro';
-import CredibilitySection from '../components/sections/CredibilitySection.astro';
-import JourneySection from '../components/sections/JourneySection.astro';
-import AboutSection from '../components/sections/AboutSection.astro';
-import CollaborationSection from '../components/sections/CollaborationSection.astro';
+import LocalAIJourneySection from '../components/sections/LocalAIJourneySection.astro';
 ---
 
-<BaseLayout>
-  <HeroSection />
-  <WhyLocalFirstSection />
-  <ChallengesSection />
-  <InfrastructureSection />
-  <EvidenceObservabilitySection />
-  <ApplicationsSection />
-  <CredibilitySection />
-  <JourneySection />
-  <AboutSection />
-  <CollaborationSection />
+<BaseLayout
+  title="Daniele Moltisanti — Local AI from strategy to systems"
+  description="Exploring where AI should run, building local AI infrastructure across desktop and mobile, testing it through real applications, and measuring how it performs in the real world."
+>
+  <LocalAIJourneySection />
 </BaseLayout>
-
