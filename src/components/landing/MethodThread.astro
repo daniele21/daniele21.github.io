@@ -9,26 +9,26 @@ interface Props {
 
 const { fromStep, toStep, sublabel, direction = 'ltr' } = Astro.props;
 const pathD = direction === 'ltr'
-  ? 'M 2 0 V 28 Q 2 56 4.5 56 H 95.5 Q 98 56 98 84 V 112'
-  : 'M 98 0 V 28 Q 98 56 95.5 56 H 4.5 Q 2 56 2 84 V 112';
+  ? 'M 2 0 C 2 54 98 94 98 148'
+  : 'M 98 0 C 98 54 2 94 2 148';
 ---
 
 <div
   class={`method-thread-container dir-${direction}`}
   data-method-thread
-  data-path-geometry="orthogonal"
+  data-path-geometry="s-curve"
   role="region"
   aria-label={`Transition from ${fromStep} to ${toStep}`}
 >
   <div class="shell thread-shell">
-    <svg class="thread-curve desktop-curve" viewBox="0 0 100 112" preserveAspectRatio="none" fill="none" aria-hidden="true">
+    <svg class="thread-curve desktop-curve" viewBox="0 0 100 148" preserveAspectRatio="none" fill="none" aria-hidden="true">
       <path class="track-guide" d={pathD} vector-effect="non-scaling-stroke" />
       <path class="track-line" d={pathD} stroke-dasharray="1 1000" stroke-dashoffset="1" vector-effect="non-scaling-stroke" />
     </svg>
 
-    <svg class="thread-curve mobile-curve" viewBox="0 0 40 96" preserveAspectRatio="none" fill="none" aria-hidden="true">
-      <path class="track-guide" d="M 14 0 L 14 96" vector-effect="non-scaling-stroke" />
-      <path class="track-line" d="M 14 0 L 14 96" stroke-dasharray="1 1000" stroke-dashoffset="1" vector-effect="non-scaling-stroke" />
+    <svg class="thread-curve mobile-curve" viewBox="0 0 40 108" preserveAspectRatio="none" fill="none" aria-hidden="true">
+      <path class="track-guide" d="M 14 0 L 14 108" vector-effect="non-scaling-stroke" />
+      <path class="track-line" d="M 14 0 L 14 108" stroke-dasharray="1 1000" stroke-dashoffset="1" vector-effect="non-scaling-stroke" />
     </svg>
 
     <div class="thread-copy">
@@ -47,7 +47,7 @@ const pathD = direction === 'ltr'
     --thread-copy-opacity: 1;
     --thread-copy-y: 0px;
     position: relative;
-    height: 112px;
+    height: 148px;
     overflow: clip;
     background: var(--surface-canvas);
   }
@@ -55,7 +55,7 @@ const pathD = direction === 'ltr'
   @media (prefers-reduced-motion: no-preference) {
     :global(html[data-method-path-ready]) .method-thread-container {
       --thread-copy-opacity: 0;
-      --thread-copy-y: 12px;
+      --thread-copy-y: 10px;
     }
   }
 
@@ -79,7 +79,7 @@ const pathD = direction === 'ltr'
   .track-guide,
   .track-line {
     fill: none;
-    stroke-linecap: butt;
+    stroke-linecap: round;
     stroke-linejoin: round;
   }
 
@@ -97,7 +97,7 @@ const pathD = direction === 'ltr'
 
   .thread-copy {
     position: absolute;
-    top: 56px;
+    top: 74px;
     left: 50%;
     width: min(620px, 70%);
     display: grid;
@@ -155,7 +155,7 @@ const pathD = direction === 'ltr'
   }
 
   @media (max-width: 760px) {
-    .method-thread-container { height: 96px; }
+    .method-thread-container { height: 108px; }
     .desktop-curve { display: none; }
     .mobile-curve {
       display: block;
@@ -164,7 +164,7 @@ const pathD = direction === 'ltr'
     }
 
     .thread-copy {
-      top: 48px;
+      top: 54px;
       left: 48px;
       width: calc(100% - 60px);
       justify-items: start;
@@ -186,7 +186,6 @@ const pathD = direction === 'ltr'
       opacity: 1;
       transform: translate(-50%, -50%);
     }
-
   }
 
   @media (prefers-reduced-motion: reduce) and (max-width: 760px) {
