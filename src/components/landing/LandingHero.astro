@@ -17,7 +17,6 @@ const resolveHref = (href: string) => {
 
 <section class="hero-section" aria-labelledby="hero-title">
   <div class="shell hero-shell">
-    <!-- Identity Column (1/3) -->
     <aside class="hero-identity-card" aria-label="Author identity">
       <div class="portrait-frame">
         <img
@@ -36,7 +35,6 @@ const resolveHref = (href: string) => {
       </div>
     </aside>
 
-    <!-- Mission Column (2/3) -->
     <div class="hero-mission-card">
       <p class="hero-eyebrow">{hero.mission.eyebrow}</p>
       <p class="hero-lead">{hero.mission.lead}</p>
@@ -45,8 +43,10 @@ const resolveHref = (href: string) => {
         {hero.mission.title} <span class="hero-highlight">{hero.mission.titleHighlight}</span>
       </h1>
 
-      <p class="hero-challenge">{hero.mission.challenge}</p>
-      <p class="hero-explanation">{hero.mission.explanation}</p>
+      <p class="hero-explanation">
+        <strong>{hero.mission.challenge}</strong>
+        <span>{hero.mission.explanation}</span>
+      </p>
 
       <div class="hero-stance">
         <p class="stance-position"><strong>{hero.mission.position}</strong></p>
@@ -97,7 +97,6 @@ const resolveHref = (href: string) => {
     align-items: center;
   }
 
-  /* Identity Column */
   .hero-identity-card {
     order: 2;
     display: flex;
@@ -156,7 +155,6 @@ const resolveHref = (href: string) => {
     margin: 0;
   }
 
-  /* Mission Column */
   .hero-mission-card {
     order: 1;
     display: flex;
@@ -182,7 +180,7 @@ const resolveHref = (href: string) => {
   }
 
   .hero-heading {
-    margin: 0 0 var(--space-3);
+    margin: 0 0 var(--space-4);
     font-family: var(--font-display);
     max-width: 840px;
     font-size: clamp(3rem, 5.4vw, 5.35rem);
@@ -197,21 +195,26 @@ const resolveHref = (href: string) => {
     display: inline-block;
   }
 
-  .hero-challenge {
-    font-family: var(--font-display);
-    max-width: 720px;
-    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
-    font-weight: 700;
-    color: var(--ink);
-    margin: 0 0 var(--space-2);
-  }
-
   .hero-explanation {
     max-width: 700px;
-    font-size: var(--text-body);
-    color: var(--ink-muted);
-    line-height: 1.6;
     margin: 0 0 var(--space-4);
+    color: var(--ink-muted);
+    font-size: var(--text-body);
+    line-height: 1.62;
+  }
+
+  .hero-explanation strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+    font-weight: 750;
+    line-height: 1.35;
+  }
+
+  .hero-explanation span {
+    display: block;
   }
 
   .hero-stance {
@@ -241,7 +244,6 @@ const resolveHref = (href: string) => {
     gap: var(--space-3);
   }
 
-  /* Responsive */
   @media (max-width: 960px) {
     .hero-section { min-height: auto; }
 
