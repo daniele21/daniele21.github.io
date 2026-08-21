@@ -33,6 +33,12 @@ import FinalCta from '../components/landing/FinalCta.astro';
   <div class="method-journey" data-method-journey>
     <ContinuousJourneyPath />
 
+    <div class="journey-intro" aria-label="Method introduction">
+      <div class="shell journey-intro-shell">
+        <p>HOW I'M TESTING THAT IDEA <span aria-hidden="true">↓</span></p>
+      </div>
+    </div>
+
     <DecisionStage />
 
     <MethodThread
@@ -72,461 +78,52 @@ import FinalCta from '../components/landing/FinalCta.astro';
   <Fragment slot="footer"></Fragment>
 </BaseLayout>
 
-<script>
-  import { appendJourneyStop, interpolateJourneyLength } from '../scripts/journeyPathModel.mjs';
-
-  type JourneySegment = {
-    host: HTMLElement;
-    kind: 'stage' | 'thread';
-    scrollStart: number;
-    scrollEnd: number;
-    pathStart: number;
-    pathEnd: number;
-    alignmentTolerance: number;
-  };
-
-  type StageState = {
-    stage: HTMLElement;
-    nodeLength: number;
-  };
-
-  type JourneyStop = {
-    scrollPosition: number;
-    pathLength: number;
-  };
-
-  type MethodPathWindow = Window & {
-    __methodPathCleanup?: () => void;
-  };
-
-  function initMethodPath() {
-    const methodWindow = window as MethodPathWindow;
-    const shouldIsolateVisibleJourney = document.documentElement.dataset.methodPathReady === 'true';
-    methodWindow.__methodPathCleanup?.();
-
-    let journey = document.querySelector<HTMLElement>('[data-method-journey]');
-    if (journey && shouldIsolateVisibleJourney) {
-      const replacement = journey.cloneNode(true) as HTMLElement;
-      journey.replaceWith(replacement);
-      journey = replacement;
-    }
-
-    const svg = journey?.querySelector<SVGSVGElement>('[data-journey-svg]');
-    const guidePath = journey?.querySelector<SVGPathElement>('[data-journey-guide]');
-    const progressPath = journey?.querySelector<SVGPathElement>('[data-journey-progress]');
-    const stages = journey ? Array.from(journey.querySelectorAll<HTMLElement>('.method-stage')) : [];
-    const threads = journey ? Array.from(journey.querySelectorAll<HTMLElement>('[data-method-thread]')) : [];
-
-    if (!journey || !svg || !guidePath || !progressPath || !stages.length) return;
-    journey.dataset.methodPathOwner = 'physical-checkpoints-v6';
-    document.documentElement.dataset.methodPathReady = 'pending';
-
-    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const viewportBreakpoint = window.matchMedia('(max-width: 760px)');
-    const clamp = (value: number) => Math.min(1, Math.max(0, value));
-    const smoothstep = (start: number, end: number, value: number) => {
-      const progress = clamp((value - start) / (end - start));
-      return progress * progress * (3 - 2 * progress);
-    };
-
-    const format = (value: number) => value.toFixed(3);
-    const getViewportPlayhead = () => {
-      const visibleTop = Math.max(0, window.visualViewport?.offsetTop ?? 0);
-      const visibleHeight = Math.max(0, window.visualViewport?.height ?? window.innerHeight);
-      const visibleBottom = visibleTop + visibleHeight;
-      const headerBottom = Math.max(0, document.querySelector<HTMLElement>('#site-header')?.getBoundingClientRect().bottom ?? 0);
-      const usableTop = Math.max(visibleTop, headerBottom);
-      return usableTop + Math.max(0, visibleBottom - usableTop) * 0.5;
-    };
-    const getViewportSignature = () => [
-      window.innerWidth,
-      window.innerHeight,
-      viewportBreakpoint.matches ? 'mobile' : 'desktop',
-      (window.visualViewport?.width ?? window.innerWidth).toFixed(2),
-      (window.visualViewport?.height ?? window.innerHeight).toFixed(2),
-      (window.visualViewport?.scale ?? 1).toFixed(3),
-      (window.devicePixelRatio || 1).toFixed(3),
-    ].join(':');
-    let journeySegments: JourneySegment[] = [];
-    let stageStates: StageState[] = [];
-    let progressStops: JourneyStop[] = [];
-    let totalLength = 1;
-    let animationFrame = 0;
-    let geometryFrame = 0;
-    let resizeSettleTimer = 0;
-    let viewportSignature = '';
-    let resizeObserver: ResizeObserver | undefined;
-    let disposed = false;
-
-    const measure = () => {
-      const scrollTop = window.scrollY;
-      const journeyRect = journey.getBoundingClientRect();
-      const width = Math.max(1, journeyRect.width);
-      const height = Math.max(1, journeyRect.height);
-      const meter = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      const commands: string[] = [];
-      const rawSegments: JourneySegment[] = [];
-      const rawStageStates: StageState[] = [];
-      const rawProgressStops: JourneyStop[] = [];
-      let pathCursor = 0;
-
-      svg.setAttribute('viewBox', `0 0 ${format(width)} ${format(height)}`);
-      svg.append(meter);
-
-      const measurePath = (pathData: string) => {
-        meter.setAttribute('d', pathData);
-        return meter.getTotalLength();
-      };
-
-      const stageAnchors = stages.map((stage) => {
-        const rail = stage.querySelector<HTMLElement>('.stage-rail') ?? stage;
-        const node = stage.querySelector<HTMLElement>('.stage-node');
-        const railRect = rail.getBoundingClientRect();
-        const nodeRect = node?.getBoundingClientRect();
-        return {
-          stage,
-          rail,
-          x: railRect.left - journeyRect.left,
-          railTop: railRect.top - journeyRect.top,
-          railBottom: railRect.bottom - journeyRect.top,
-          nodeY: nodeRect ? nodeRect.top + nodeRect.height / 2 - journeyRect.top : railRect.top - journeyRect.top,
-        };
-      });
-
-      const threadAnchors = threads.map((thread) => {
-        const rect = thread.getBoundingClientRect();
-        return {
-          thread,
-          top: rect.top - journeyRect.top,
-          bottom: rect.bottom - journeyRect.top,
-          scrollTop: rect.top + scrollTop,
-          scrollBottom: rect.bottom + scrollTop,
-        };
-      });
-
-      const appendSegment = (
-        host: HTMLElement,
-        kind: JourneySegment['kind'],
-        scrollStart: number,
-        scrollEnd: number,
-        continuation: string,
-        alignmentTolerance = 1.5,
-      ) => {
-        const pathStart = pathCursor;
-        commands.push(continuation);
-        const pathEnd = measurePath(commands.join(' '));
-        rawSegments.push({
-          host,
-          kind,
-          scrollStart,
-          scrollEnd,
-          pathStart,
-          pathEnd,
-          alignmentTolerance,
-        });
-        pathCursor = pathEnd;
-        return rawSegments[rawSegments.length - 1];
-      };
-
-      const pushProgressStop = (scrollPosition: number, pathLength: number) => {
-        appendJourneyStop(rawProgressStops, scrollPosition, pathLength);
-      };
-
-      const journeyDocumentTop = journeyRect.top + scrollTop;
-      commands.push(`M ${format(stageAnchors[0].x)} ${format(stageAnchors[0].railTop)}`);
-
-      stageAnchors.forEach((anchor, index) => {
-        const previousThread = threadAnchors[index - 1];
-        const upcomingThread = threadAnchors[index];
-        const stagePathStartY = previousThread ? previousThread.bottom : anchor.railTop;
-        const stagePathEndY = upcomingThread ? upcomingThread.top : anchor.railBottom;
-        const stageScrollStart = journeyDocumentTop + stagePathStartY;
-        const stageScrollEnd = journeyDocumentTop + stagePathEndY;
-        const stageSegment = appendSegment(
-          anchor.stage,
-          'stage',
-          stageScrollStart,
-          stageScrollEnd,
-          `V ${format(stagePathEndY)}`,
-        );
-        pushProgressStop(stageScrollStart, stageSegment.pathStart);
-        pushProgressStop(stageScrollEnd, stageSegment.pathEnd);
-
-        rawStageStates.push({
-          stage: anchor.stage,
-          nodeLength: measurePath([
-            ...commands.slice(0, -1),
-            `V ${format(anchor.nodeY)}`,
-          ].join(' ')),
-        });
-
-        const thread = threadAnchors[index];
-        const nextAnchor = stageAnchors[index + 1];
-        if (!thread || !nextAnchor) return;
-
-        const distanceX = nextAnchor.x - anchor.x;
-        const isVertical = Math.abs(distanceX) < 1 || window.innerWidth <= 760;
-
-        if (isVertical) {
-          const threadSegment = appendSegment(
-            thread.thread,
-            'thread',
-            thread.scrollTop,
-            thread.scrollBottom,
-            `V ${format(thread.bottom)}`,
-          );
-          pushProgressStop(thread.scrollTop, threadSegment.pathStart);
-          pushProgressStop(thread.scrollBottom, threadSegment.pathEnd);
-        } else {
-          const direction = Math.sign(distanceX);
-          const middleY = (thread.top + thread.bottom) / 2;
-          const radiusY = Math.min(28, Math.max(20, (thread.bottom - thread.top) * 0.25));
-          const radiusX = Math.min(30, Math.max(22, Math.abs(distanceX) * 0.025));
-          const firstTurnX = anchor.x + direction * radiusX;
-          const secondTurnX = nextAnchor.x - direction * radiusX;
-          const threadPathStart = pathCursor;
-          commands.push(`V ${format(middleY - radiusY)}`);
-          commands.push(`Q ${format(anchor.x)} ${format(middleY)} ${format(firstTurnX)} ${format(middleY)}`);
-          const horizontalStartLength = measurePath(commands.join(' '));
-          commands.push(`H ${format(secondTurnX)}`);
-          const horizontalEndLength = measurePath(commands.join(' '));
-          commands.push(`Q ${format(nextAnchor.x)} ${format(middleY)} ${format(nextAnchor.x)} ${format(middleY + radiusY)}`);
-          commands.push(`V ${format(thread.bottom)}`);
-          const threadPathEnd = measurePath(commands.join(' '));
-          const threadSegment: JourneySegment = {
-            host: thread.thread,
-            kind: 'thread',
-            scrollStart: thread.scrollTop,
-            scrollEnd: thread.scrollBottom,
-            pathStart: threadPathStart,
-            pathEnd: threadPathEnd,
-            alignmentTolerance: radiusY + 2,
-          };
-          rawSegments.push(threadSegment);
-          pathCursor = threadPathEnd;
-
-          const threadScrollSpan = thread.scrollBottom - thread.scrollTop;
-          pushProgressStop(thread.scrollTop, threadPathStart);
-          pushProgressStop(thread.scrollTop + threadScrollSpan * 0.25, horizontalStartLength);
-          pushProgressStop(thread.scrollTop + threadScrollSpan * 0.75, horizontalEndLength);
-          pushProgressStop(thread.scrollBottom, threadPathEnd);
-        }
-      });
-
-      meter.remove();
-      const pathData = commands.join(' ');
-      guidePath.setAttribute('d', pathData);
-      progressPath.setAttribute('d', pathData);
-
-      const combinedLength = Math.max(1, progressPath.getTotalLength());
-      const finalStop = rawProgressStops[rawProgressStops.length - 1];
-      if (!finalStop || Math.abs(finalStop.pathLength - combinedLength) > 1) {
-        throw new RangeError('Journey checkpoints do not cover the complete SVG path.');
-      }
-      journeySegments = rawSegments;
-      stageStates = rawStageStates;
-      progressStops = rawProgressStops;
-      totalLength = combinedLength;
-
-      stageStates.forEach(({ stage, nodeLength }) => {
-        stage.dataset.pathNodeLength = format(nodeLength);
-      });
-
-      progressPath.setAttribute('stroke-dasharray', '1 1');
-      progressPath.dataset.totalLength = format(totalLength);
-      progressPath.dataset.mapping = 'piecewise-physical-v6';
-      journey.dataset.checkpointState = 'valid';
-      viewportSignature = getViewportSignature();
-      journey.dataset.viewportSignature = viewportSignature;
-    };
-
-    const render = () => {
-      if (disposed) return;
-      animationFrame = 0;
-      const reducedMotion = motionPreference.matches;
-      const playheadY = getViewportPlayhead();
-      const marker = window.scrollY + playheadY;
-      const drawnLength = reducedMotion ? totalLength : interpolateJourneyLength(progressStops, marker);
-      const normalizedProgress = clamp(drawnLength / totalLength);
-      const headPoint = progressPath.getPointAtLength(drawnLength);
-      const svgRect = svg.getBoundingClientRect();
-      const viewBox = svg.viewBox.baseVal;
-      const headViewportY = svgRect.top + headPoint.y * (svgRect.height / Math.max(1, viewBox.height));
-      const headDeltaY = headViewportY - playheadY;
-      const activeSegment = journeySegments.find((segment) => (
-        marker >= segment.scrollStart - 0.5 && marker <= segment.scrollEnd + 0.5
-      ));
-      progressPath.setAttribute('stroke-dashoffset', normalizedProgress === 1 ? '0' : (1 - normalizedProgress).toFixed(6));
-      progressPath.dataset.drawnLength = format(drawnLength);
-      progressPath.dataset.playheadY = format(playheadY);
-      progressPath.dataset.headX = format(headPoint.x);
-      progressPath.dataset.headY = format(headPoint.y);
-      progressPath.dataset.headViewportY = format(headViewportY);
-      progressPath.dataset.headDeltaY = format(headDeltaY);
-      progressPath.dataset.activeSegment = activeSegment?.kind ?? 'outside';
-      progressPath.dataset.alignmentTolerance = activeSegment ? format(activeSegment.alignmentTolerance) : '';
-      progressPath.dataset.alignmentState = reducedMotion
-        ? 'reduced-motion'
-        : activeSegment && Math.abs(headDeltaY) <= activeSegment.alignmentTolerance
-          ? 'aligned'
-          : activeSegment
-            ? 'misaligned'
-            : 'outside';
-      journey.style.setProperty('--journey-progress', normalizedProgress.toFixed(5));
-      journey.style.setProperty('--journey-playhead-y', `${format(playheadY)}px`);
-
-      journeySegments.forEach((segment) => {
-        const segmentProgress = clamp((drawnLength - segment.pathStart) / Math.max(1, segment.pathEnd - segment.pathStart));
-        const styleTarget = segment.kind === 'stage'
-          ? segment.host.querySelector<HTMLElement>('.stage-rail') ?? segment.host
-          : segment.host;
-        styleTarget.style.setProperty('--path-progress', segmentProgress.toFixed(4));
-
-        if (segment.kind === 'thread') {
-          const copyProgress = reducedMotion ? 1 : smoothstep(0.16, 0.66, segmentProgress);
-          segment.host.style.setProperty('--thread-copy-opacity', copyProgress.toFixed(4));
-          segment.host.style.setProperty('--thread-copy-y', `${((1 - copyProgress) * 12).toFixed(2)}px`);
-          segment.host.classList.toggle('is-visible', segmentProgress > 0.01);
-        }
-      });
-
-      stageStates.forEach(({ stage, nodeLength }) => {
-        const distancePastNode = drawnLength - nodeLength;
-        const nodeProgress = reducedMotion ? 1 : smoothstep(0, 34, distancePastNode);
-        const copyProgress = reducedMotion ? 1 : smoothstep(12, 132, distancePastNode);
-        const visualProgress = reducedMotion ? 1 : smoothstep(56, 230, distancePastNode);
-        const copyDirection = stage.classList.contains('stage-left') ? -1 : 1;
-
-        stage.style.setProperty('--node-opacity', nodeProgress.toFixed(4));
-        stage.style.setProperty('--node-scale', (0.72 + nodeProgress * 0.28).toFixed(4));
-        stage.style.setProperty('--copy-opacity', copyProgress.toFixed(4));
-        stage.style.setProperty('--copy-x', `${((1 - copyProgress) * copyDirection * 24).toFixed(2)}px`);
-        stage.style.setProperty('--copy-y', `${((1 - copyProgress) * 8).toFixed(2)}px`);
-        stage.style.setProperty('--visual-opacity', visualProgress.toFixed(4));
-        stage.style.setProperty('--visual-x', `${((1 - visualProgress) * copyDirection * -30).toFixed(2)}px`);
-        stage.style.setProperty('--visual-y', `${((1 - visualProgress) * 14).toFixed(2)}px`);
-        stage.style.setProperty('--visual-scale', (0.985 + visualProgress * 0.015).toFixed(4));
-        stage.classList.toggle('is-entered', nodeProgress > 0.04);
-      });
-
-      const activeStage = stageStates.reduce<HTMLElement | undefined>((active, state) => {
-        return drawnLength >= state.nodeLength ? state.stage : active;
-      }, undefined);
-
-      stages.forEach((stage) => stage.classList.toggle('is-active', stage === activeStage));
-    };
-
-    const requestRender = () => {
-      if (disposed) return;
-      if (getViewportSignature() !== viewportSignature) {
-        scheduleMeasurement();
-        return;
-      }
-      if (animationFrame) return;
-      animationFrame = window.requestAnimationFrame(render);
-    };
-
-    const activateStaticFallback = (error: unknown) => {
-      document.documentElement.dataset.methodPathReady = 'fallback';
-      journey.dataset.checkpointState = 'fallback';
-      journey.dataset.checkpointError = error instanceof Error ? error.name : 'UnknownError';
-      svg.style.display = 'none';
-
-      threads.forEach((thread) => {
-        thread.style.setProperty('--path-progress', '1');
-        thread.style.setProperty('--thread-copy-opacity', '1');
-        thread.style.setProperty('--thread-copy-y', '0px');
-        thread.classList.add('is-visible');
-      });
-
-      stages.forEach((stage) => {
-        const rail = stage.querySelector<HTMLElement>('.stage-rail') ?? stage;
-        rail.style.setProperty('--path-progress', '1');
-        stage.style.setProperty('--node-opacity', '1');
-        stage.style.setProperty('--node-scale', '1');
-        stage.style.setProperty('--copy-opacity', '1');
-        stage.style.setProperty('--copy-x', '0px');
-        stage.style.setProperty('--copy-y', '0px');
-        stage.style.setProperty('--visual-opacity', '1');
-        stage.style.setProperty('--visual-x', '0px');
-        stage.style.setProperty('--visual-y', '0px');
-        stage.style.setProperty('--visual-scale', '1');
-        stage.classList.add('is-entered');
-      });
-    };
-
-    const measureAndRender = () => {
-      if (disposed) return;
-      geometryFrame = 0;
-      if (animationFrame) window.cancelAnimationFrame(animationFrame);
-      animationFrame = 0;
-      try {
-        measure();
-        render();
-      } catch (error) {
-        activateStaticFallback(error);
-        methodWindow.__methodPathCleanup?.();
-      }
-    };
-
-    const settleMeasurement = () => {
-      resizeSettleTimer = 0;
-      if (geometryFrame) window.cancelAnimationFrame(geometryFrame);
-      geometryFrame = 0;
-      measureAndRender();
-    };
-
-    function scheduleMeasurement() {
-      if (disposed) return;
-      if (geometryFrame) window.cancelAnimationFrame(geometryFrame);
-      geometryFrame = window.requestAnimationFrame(measureAndRender);
-      if (resizeSettleTimer) window.clearTimeout(resizeSettleTimer);
-      resizeSettleTimer = window.setTimeout(settleMeasurement, 120);
-    };
-
-    const cleanup = () => {
-      if (disposed) return;
-      disposed = true;
-      if (animationFrame) window.cancelAnimationFrame(animationFrame);
-      if (geometryFrame) window.cancelAnimationFrame(geometryFrame);
-      if (resizeSettleTimer) window.clearTimeout(resizeSettleTimer);
-      window.removeEventListener('scroll', requestRender);
-      window.removeEventListener('resize', scheduleMeasurement);
-      window.removeEventListener('load', scheduleMeasurement);
-      window.visualViewport?.removeEventListener('resize', scheduleMeasurement);
-      motionPreference.removeEventListener('change', requestRender);
-      viewportBreakpoint.removeEventListener('change', scheduleMeasurement);
-      resizeObserver?.disconnect();
-      document.removeEventListener('astro:before-swap', cleanup);
-      if (methodWindow.__methodPathCleanup === cleanup) delete methodWindow.__methodPathCleanup;
-    };
-
-    methodWindow.__methodPathCleanup = cleanup;
-
-    try {
-      measure();
-      document.documentElement.dataset.methodPathReady = 'true';
-      render();
-    } catch (error) {
-      activateStaticFallback(error);
-      methodWindow.__methodPathCleanup?.();
-      return;
-    }
-    window.addEventListener('scroll', requestRender, { passive: true });
-    window.addEventListener('resize', scheduleMeasurement, { passive: true });
-    window.addEventListener('load', scheduleMeasurement, { once: true });
-    window.visualViewport?.addEventListener('resize', scheduleMeasurement, { passive: true });
-    motionPreference.addEventListener('change', requestRender);
-    viewportBreakpoint.addEventListener('change', scheduleMeasurement);
-    if ('ResizeObserver' in window) {
-      resizeObserver = new ResizeObserver(scheduleMeasurement);
-      resizeObserver.observe(journey);
-    }
-    document.addEventListener('astro:before-swap', cleanup, { once: true });
-    document.fonts?.ready.then(() => {
-      if (!disposed) scheduleMeasurement();
-    });
+<style>
+  .journey-intro {
+    position: relative;
+    z-index: 5;
+    padding: clamp(34px, 5vw, 58px) 0 clamp(14px, 2.4vw, 28px);
+    background: var(--surface-canvas);
   }
+
+  .journey-intro-shell {
+    display: flex;
+    justify-content: center;
+  }
+
+  .journey-intro p {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent-blue);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .journey-intro span {
+    display: inline-block;
+    font-size: 1.05em;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 760px) {
+    .journey-intro {
+      padding: 28px 0 12px;
+    }
+
+    .journey-intro-shell {
+      justify-content: flex-start;
+      padding-left: 52px;
+    }
+  }
+</style>
+
+<script>
+  import { initMethodPath } from '../scripts/methodJourney';
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initMethodPath, { once: true });
