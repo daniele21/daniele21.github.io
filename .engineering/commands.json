@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "name": "daniele-moltisanti-landing-engineering",
+  "commands": {
+    "dev": {
+      "command": "npm run dev",
+      "description": "Starts the local Astro development server with HMR."
+    },
+    "build": {
+      "command": "npm run build",
+      "description": "Compiles the production static bundle into dist/."
+    },
+    "preview": {
+      "command": "npm run preview",
+      "description": "Locally previews the built static site from dist/."
+    },
+    "check": {
+      "command": "npm run check",
+      "description": "Runs Astro diagnostics and TypeScript static type checks."
+    },
+    "test": {
+      "command": "npm run test",
+      "description": "Runs automated smoke and link/route integrity tests."
+    }
+  }
+}

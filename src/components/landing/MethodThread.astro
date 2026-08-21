@@ -1,0 +1,195 @@
+---
+/** MethodThread — continuous bridge between two alternating stage rails. */
+interface Props {
+  fromStep: string;
+  toStep: string;
+  sublabel: string;
+  direction?: 'ltr' | 'rtl';
+}
+
+const { fromStep, toStep, sublabel, direction = 'ltr' } = Astro.props;
+const pathD = direction === 'ltr'
+  ? 'M 2 0 V 28 Q 2 56 4.5 56 H 95.5 Q 98 56 98 84 V 112'
+  : 'M 98 0 V 28 Q 98 56 95.5 56 H 4.5 Q 2 56 2 84 V 112';
+---
+
+<div
+  class={`method-thread-container dir-${direction}`}
+  data-method-thread
+  data-path-geometry="orthogonal"
+  role="region"
+  aria-label={`Transition from ${fromStep} to ${toStep}`}
+>
+  <div class="shell thread-shell">
+    <svg class="thread-curve desktop-curve" viewBox="0 0 100 112" preserveAspectRatio="none" fill="none" aria-hidden="true">
+      <path class="track-guide" d={pathD} vector-effect="non-scaling-stroke" />
+      <path class="track-line" d={pathD} stroke-dasharray="1 1000" stroke-dashoffset="1" vector-effect="non-scaling-stroke" />
+    </svg>
+
+    <svg class="thread-curve mobile-curve" viewBox="0 0 40 96" preserveAspectRatio="none" fill="none" aria-hidden="true">
+      <path class="track-guide" d="M 14 0 L 14 96" vector-effect="non-scaling-stroke" />
+      <path class="track-line" d="M 14 0 L 14 96" stroke-dasharray="1 1000" stroke-dashoffset="1" vector-effect="non-scaling-stroke" />
+    </svg>
+
+    <div class="thread-copy">
+      <div class="thread-pill">
+        <span class="pill-signal" aria-hidden="true">◎</span>
+        <span class="pill-label">{fromStep} <span aria-hidden="true">→</span> {toStep}</span>
+      </div>
+      <p class="thread-sublabel">{sublabel}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .method-thread-container {
+    --path-progress: 0;
+    --thread-copy-opacity: 1;
+    --thread-copy-y: 0px;
+    position: relative;
+    height: 112px;
+    overflow: clip;
+    background: var(--surface-canvas);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html[data-method-path-ready]) .method-thread-container {
+      --thread-copy-opacity: 0;
+      --thread-copy-y: 12px;
+    }
+  }
+
+  .dir-rtl { background: var(--surface-subtle); }
+
+  .thread-shell {
+    position: relative;
+    height: 100%;
+  }
+
+  .thread-curve {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .mobile-curve { display: none; }
+
+  .track-guide,
+  .track-line {
+    fill: none;
+    stroke-linecap: butt;
+    stroke-linejoin: round;
+  }
+
+  .track-guide {
+    stroke: var(--method-path-guide);
+    stroke-width: var(--method-path-width);
+  }
+
+  .track-line {
+    stroke: var(--accent-blue);
+    stroke-width: var(--method-path-width);
+    filter: var(--method-path-glow);
+    will-change: stroke-dashoffset;
+  }
+
+  .thread-copy {
+    position: absolute;
+    top: 56px;
+    left: 50%;
+    width: min(620px, 70%);
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    transform: translate(-50%, calc(-50% + var(--thread-copy-y)));
+    opacity: var(--thread-copy-opacity);
+    text-align: center;
+    z-index: 5;
+    will-change: transform, opacity;
+  }
+
+  .thread-pill {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 30%, var(--surface-card));
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--surface-card) 94%, transparent);
+    box-shadow: 0 10px 28px rgba(8, 19, 51, 0.1);
+    backdrop-filter: blur(14px);
+  }
+
+  .pill-signal {
+    width: 25px;
+    height: 25px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue);
+  }
+
+  .pill-label {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.055em;
+    color: var(--accent-blue-dark);
+  }
+
+  .thread-sublabel {
+    margin: 0;
+    padding: 0 12px;
+    background: color-mix(in srgb, var(--surface-canvas) 88%, transparent);
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  .dir-rtl .thread-sublabel {
+    background: color-mix(in srgb, var(--surface-subtle) 88%, transparent);
+  }
+
+  @media (max-width: 760px) {
+    .method-thread-container { height: 96px; }
+    .desktop-curve { display: none; }
+    .mobile-curve {
+      display: block;
+      right: auto;
+      width: 40px;
+    }
+
+    .thread-copy {
+      top: 48px;
+      left: 48px;
+      width: calc(100% - 60px);
+      justify-items: start;
+      transform: translateY(calc(-50% + var(--thread-copy-y)));
+      text-align: left;
+    }
+
+    .thread-pill { padding: 7px 14px 7px 8px; }
+
+    .thread-sublabel {
+      padding: 0;
+      font-size: var(--text-caption);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .track-line { stroke-dashoffset: 0 !important; }
+    .thread-copy {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+
+  }
+
+  @media (prefers-reduced-motion: reduce) and (max-width: 760px) {
+    .thread-copy { transform: translateY(-50%); }
+  }
+</style>

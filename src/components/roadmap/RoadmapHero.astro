@@ -9,6 +9,7 @@ import { heroContent } from '../../content/locales/en/roadmap';
 ---
 
 <section class="mock-hero" aria-labelledby="hero-title">
+  {heroContent.eyebrow && <p class="hero-eyebrow">{heroContent.eyebrow}</p>}
   <h1 id="hero-title">
     {heroContent.title}<br />
     <span>{heroContent.titleHighlight}</span>
@@ -31,6 +32,15 @@ import { heroContent } from '../../content/locales/en/roadmap';
   .mock-hero {
     text-align: center;
     padding: 54px 0 34px;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rm-blue, #145bff);
+    margin: 0 auto 12px;
   }
 
   .mock-hero h1 {

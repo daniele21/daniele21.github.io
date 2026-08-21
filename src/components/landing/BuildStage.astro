@@ -1,0 +1,206 @@
+---
+/** Plane 02: the reusable infrastructure projects that make local execution usable. */
+import { landingData } from '../../content/locales/en/landing';
+import StageRail from './StageRail.astro';
+import StageHandoff from './StageHandoff.astro';
+
+const { buildStage } = landingData;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
+---
+
+<section class="stage-section method-stage stage-right" id="infrastructure" data-stage="02" aria-labelledby="build-title">
+  <div class="shell stage-shell">
+    <StageRail number={2} side="right" />
+
+    <div class="stage-layout">
+      <div class="stage-copy">
+        <p class="stage-kicker">{buildStage.kicker}</p>
+        <h2 id="build-title" class="stage-heading">{buildStage.title}</h2>
+        <p class="stage-intro">{buildStage.intro}</p>
+        <StageHandoff handoff={buildStage.handoff} number={2} nextLabel="TEST" />
+      </div>
+
+      <div class="stage-visual project-grid" aria-label="Local AI infrastructure projects">
+        {buildStage.projects.map((project) => (
+          <a class={`project-card project-${project.id}`} href={resolveHref(project.href)}>
+            <div class="project-media">
+              {project.imagePath ? (
+                <img src={asset(project.imagePath)} alt={project.imageAlt ?? ''} loading="lazy" decoding="async" />
+              ) : (
+                <div class="waveform" aria-hidden="true">
+                  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+              )}
+            </div>
+            <div class="project-copy">
+              <span>{project.eyebrow}</span>
+              <h3>{project.title}</h3>
+              <p>{project.summary}</p>
+              <strong>Open project <i aria-hidden="true">↗</i></strong>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stage-section {
+    padding: clamp(48px, 6vw, 72px) 0;
+    overflow: clip;
+    background: var(--surface-subtle);
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(12px, 1.6vw, 20px);
+  }
+
+  .project-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      transform var(--duration-base) var(--ease-out-expo),
+      border-color var(--duration-fast) ease,
+      box-shadow var(--duration-base) ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-strong);
+    box-shadow: 0 24px 54px rgba(8, 19, 51, 0.11);
+  }
+
+  .project-media {
+    height: clamp(140px, 13vw, 180px);
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-subtle);
+    background: #eef2f8;
+  }
+
+  .project-media img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 650ms var(--ease-out-expo);
+  }
+
+  .project-card:hover .project-media img { transform: scale(1.025); }
+
+  .project-local-asr-server .project-media {
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 24% 18%, rgba(20, 91, 255, 0.36), transparent 32%),
+      var(--ink-display);
+  }
+
+  .waveform {
+    height: 78px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .waveform span {
+    width: 5px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    background: #9dbbff;
+    box-shadow: 0 0 20px rgba(157, 187, 255, 0.26);
+  }
+
+  .waveform span:nth-child(2),
+  .waveform span:nth-child(8) { height: 44px; }
+  .waveform span:nth-child(3),
+  .waveform span:nth-child(7) { height: 68px; }
+  .waveform span:nth-child(4),
+  .waveform span:nth-child(6) { height: 52px; }
+  .waveform span:nth-child(5) { height: 78px; background: var(--accent-blue-light); }
+
+  .project-copy { padding: clamp(18px, 2vw, 24px); }
+
+  .project-copy > span {
+    color: var(--accent-blue);
+    font-size: var(--text-badge);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .project-copy h3 {
+    min-height: 2.35em;
+    margin: var(--space-2) 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .project-copy p {
+    min-height: 4.2em;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-badge);
+    line-height: 1.5;
+  }
+
+  .project-copy strong {
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+  }
+
+  .project-copy i {
+    font-style: normal;
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .project-card:hover .project-copy i { transform: translate(2px, -2px); }
+
+  @media (max-width: 1080px) {
+    .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .project-card:last-child { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+    .project-card:last-child .project-media { height: 100%; border: 0; border-right: 1px solid var(--border-subtle); }
+  }
+
+  @media (max-width: 680px) {
+    .project-grid {
+      width: calc(100% + 20px);
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(252px, 84%);
+      gap: var(--space-3);
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scroll-snap-type: inline mandatory;
+      scrollbar-width: none;
+      padding: 4px 20px 12px 0;
+    }
+
+    .project-grid::-webkit-scrollbar { display: none; }
+    .project-card { scroll-snap-align: start; }
+    .project-card:last-child { grid-column: auto; display: block; }
+    .project-card:last-child .project-media { height: 170px; border-right: 0; border-bottom: 1px solid var(--border-subtle); }
+    .project-media { height: 190px; }
+    .project-copy h3,
+    .project-copy p { min-height: 0; }
+  }
+</style>

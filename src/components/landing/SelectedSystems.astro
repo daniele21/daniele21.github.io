@@ -1,0 +1,199 @@
+---
+/**
+ * SelectedSystems.astro
+ * Highlights open-weight systems, runtime gateways, and infrastructure repositories.
+ */
+import { landingData } from '../../content/locales/en/landing';
+
+const { selectedSystems } = landingData;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const resolveHref = (href: string) => {
+  if (href.startsWith('http')) return href;
+  return `${baseUrl}/${href.replace(/^\//, '')}`;
+};
+---
+
+<section class="stage-section" id="systems" aria-labelledby="systems-title">
+  <div class="shell stage-shell">
+    <header class="stage-header">
+      <p class="stage-kicker">{selectedSystems.kicker}</p>
+      <h2 id="systems-title" class="stage-heading">{selectedSystems.title}</h2>
+      <p class="stage-intro">{selectedSystems.description}</p>
+    </header>
+
+    <div class="systems-grid">
+      {selectedSystems.systems.map((system) => (
+        <article class="system-card">
+          <div class="system-top">
+            <span class="system-badge">{system.badge}</span>
+            <span class="system-role">{system.role}</span>
+          </div>
+
+          <div class="system-body">
+            <h3 class="system-title">{system.title}</h3>
+            <p class="system-desc">{system.description}</p>
+
+            <div class="tech-tag-list" aria-label="Technologies used">
+              {system.technologies.map((tech) => (
+                <span class="tech-tag">{tech}</span>
+              ))}
+            </div>
+          </div>
+
+          <footer class="system-footer">
+            <a class="system-link" href={resolveHref(system.href)}>
+              Explore system deep dive →
+            </a>
+          </footer>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .stage-section {
+    padding: clamp(48px, 7vw, 84px) 0;
+    background: var(--surface-canvas);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .stage-header {
+    max-width: 820px;
+    margin-bottom: clamp(32px, 4vw, 48px);
+  }
+
+  .stage-heading {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    color: var(--ink-display);
+  }
+
+  .stage-intro {
+    font-size: var(--text-lead);
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .systems-grid {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border-medium);
+  }
+
+  .system-card {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.72fr) minmax(0, 1.5fr) minmax(180px, auto);
+    gap: clamp(20px, 4vw, 52px);
+    align-items: center;
+    padding: clamp(24px, 3vw, 34px) 0;
+    border-bottom: 1px solid var(--border-medium);
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .system-card:hover {
+    transform: translateX(6px);
+    border-color: var(--border-strong);
+  }
+
+  .system-top {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: var(--space-3);
+  }
+
+  .system-badge {
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
+    align-self: flex-start;
+  }
+
+  .system-role {
+    font-size: var(--text-caption);
+    font-weight: 650;
+    color: var(--ink-muted);
+  }
+
+  .system-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .system-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 800;
+    color: var(--ink-display);
+  }
+
+  .system-desc {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+
+  .tech-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: var(--space-3);
+  }
+
+  .tech-tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-badge);
+    color: var(--ink);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .system-footer {
+    justify-self: end;
+  }
+
+  .system-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target-min);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 750;
+    color: var(--accent-blue);
+    text-decoration: none;
+  }
+
+  .system-link:hover {
+    color: var(--accent-blue-hover);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 960px) {
+    .system-card {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+
+    .system-footer {
+      justify-self: start;
+    }
+  }
+</style>

@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "Personal Landing UX Contract",
+  "version": "1.0.0",
+  "targetExperienceLevel": "L1",
+  "baselineRepositoryLevel": "L0",
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "maxWidth": 1280,
+      "layout": "two-column alternating method flow with visual rail"
+    },
+    "tablet": {
+      "width": 768,
+      "layout": "stacked single column with condensed rail"
+    },
+    "mobile": {
+      "width": 390,
+      "minWidth": 320,
+      "layout": "linear vertical thread, full readability, zero horizontal overflow"
+    }
+  },
+  "typography": {
+    "minTextSizePx": 14,
+    "bodyTextSizePx": 16,
+    "leadTextSizePx": 18,
+    "kickerTextSizePx": 14,
+    "displayFont": "Plus Jakarta Sans, sans-serif",
+    "bodyFont": "Inter, sans-serif",
+    "monoFont": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+  },
+  "touchTargets": {
+    "minWidthPx": 44,
+    "minHeightPx": 44
+  },
+  "accessibility": {
+    "standard": "WCAG 2.2 AA",
+    "contrastRatioNormal": "4.5:1",
+    "contrastRatioLarge": "3:1",
+    "keyboardNavigable": true,
+    "visibleFocusRings": true,
+    "reducedMotionSupported": true,
+    "singleH1PerRoute": true,
+    "noDuplicateMainLandmarks": true
+  },
+  "criticalJourneys": [
+    {
+      "id": "J1",
+      "persona": "Technical Decision Maker (CTO, CAIO, Head of AI)",
+      "flow": "Hero (thesis & positioning) -> Decide (framework) -> Build (architecture) -> Measure (evidence) -> Discuss an AI architecture",
+      "targetComprehensionSec": 60
+    },
+    {
+      "id": "J2",
+      "persona": "Technical Peer / AI Engineer",
+      "flow": "Hero -> Applications (test beds) -> Observability (real run) -> Deep Dive Project Route / GitHub",
+      "targetComprehensionSec": 60
+    },
+    {
+      "id": "J3",
+      "persona": "Leadership / Talent / Collaborator",
+      "flow": "Hero -> Systems -> About / Track Record -> LinkedIn / Get in touch",
+      "targetComprehensionSec": 45
+    },
+    {
+      "id": "J4",
+      "persona": "Mobile Visitor (320px–430px)",
+      "flow": "Seamless vertical journey without lost narrative state, unreadable microtype, or broken SVG paths",
+      "targetComprehensionSec": 60
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "Daniele Moltisanti Brand Kit",
+  "version": "1.0.0",
+  "colors": {
+    "primary": {
+      "signalBlue": "#145bff",
+      "signalBlueHover": "#0d47df",
+      "cobalt": "#2563eb",
+      "cobaltLight": "#3b82f6",
+      "cobaltDark": "#1d4ed8"
+    },
+    "ink": {
+      "heading": "#081333",
+      "body": "#1f2d48",
+      "muted": "#52617e",
+      "subtle": "#64748b"
+    },
+    "surface": {
+      "canvas": "#ffffff",
+      "subtle": "#f8fafc",
+      "card": "#ffffff",
+      "cardHover": "#fbfdff",
+      "accentSubtle": "#f0f5ff"
+    },
+    "border": {
+      "subtle": "#e2e8f0",
+      "medium": "#d5deef",
+      "accent": "#bcd0ff"
+    },
+    "status": {
+      "success": "#16a34a",
+      "warning": "#d97706",
+      "danger": "#ef4444"
+    }
+  },
+  "typography": {
+    "fontDisplay": "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    "fontBody": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    "fontMono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+  },
+  "radii": {
+    "badge": "6px",
+    "button": "8px",
+    "card": "14px",
+    "panel": "16px",
+    "pill": "9999px"
+  },
+  "shadows": {
+    "card": "0 8px 24px rgba(18, 43, 88, 0.045)",
+    "elevated": "0 12px 32px rgba(18, 43, 88, 0.08)",
+    "glow": "0 0 24px rgba(20, 91, 255, 0.2)"
+  }
+}

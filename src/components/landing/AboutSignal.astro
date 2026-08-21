@@ -1,0 +1,144 @@
+---
+/**
+ * AboutSignal.astro
+ * Verifiable track record summary and engineering background.
+ */
+import { landingData } from '../../content/locales/en/landing';
+
+const { aboutSignal } = landingData;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section class="stage-section" id="about" aria-labelledby="about-title">
+  <div class="shell stage-shell">
+    <div class="about-grid">
+      <!-- Left Column: Bio & Core Signal -->
+      <div class="about-main">
+        <p class="stage-kicker">{aboutSignal.kicker}</p>
+        <h2 id="about-title" class="stage-heading">{aboutSignal.heading}</h2>
+        <p class="about-summary">{aboutSignal.summary}</p>
+
+        <div class="about-actions">
+          <a class="primary-button" href={aboutSignal.linkedinUrl} target="_blank" rel="noopener noreferrer">
+            Connect on LinkedIn <span aria-hidden="true">↗</span>
+          </a>
+          <a class="secondary-button" href={aboutSignal.githubUrl} target="_blank" rel="noopener noreferrer">
+            View GitHub Profile <span aria-hidden="true">↗</span>
+          </a>
+          <a class="secondary-button" href={`${baseUrl}/about`}>
+            Full Background & Track Record →
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: 4 Engineering Discipline Highlights -->
+      <div class="about-highlights">
+        <h3 class="highlights-title">Engineering Discipline & Focus</h3>
+        <div class="highlights-list">
+          {aboutSignal.highlights.map((item) => (
+            <div class="highlight-card">
+              <span class="hl-bullet" aria-hidden="true">▣</span>
+              <div class="hl-content">
+                <h4 class="hl-label">{item.label}</h4>
+                <p class="hl-detail">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stage-section {
+    padding: clamp(48px, 7vw, 84px) 0;
+    background: var(--surface-canvas);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 1.2fr) minmax(320px, 1fr);
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+  }
+
+  .stage-heading {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    color: var(--ink-display);
+  }
+
+  .about-summary {
+    font-size: var(--text-lead);
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 0 0 var(--space-4);
+  }
+
+  .about-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  /* Highlights Panel */
+  .about-highlights {
+    padding: clamp(20px, 3vw, 28px) 0;
+  }
+
+  .highlights-title {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--text-body);
+    font-weight: 750;
+    color: var(--ink-display);
+  }
+
+  .highlights-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border-medium);
+  }
+
+  .highlight-card {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: var(--space-2);
+    align-items: start;
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .hl-bullet {
+    color: var(--accent-blue);
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .hl-label {
+    margin: 0 0 2px;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 750;
+    color: var(--ink-display);
+  }
+
+  .hl-detail {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

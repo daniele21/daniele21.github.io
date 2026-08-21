@@ -15,10 +15,8 @@ import { closingContent } from '../../content/locales/en/roadmap';
     <span class="wave-badge" aria-hidden="true">⌁</span>
     <div>
       <h2>{closingContent.left.title}</h2>
-      <p>
-        Measure what happened. Learn from the constraints.<br />
-        Decide again whether the next workload belongs Local, Hybrid or Cloud.
-      </p>
+      <p>{closingContent.left.text}</p>
+      {closingContent.left.payoff && <p class="closing-payoff"><strong>{closingContent.left.payoff}</strong></p>}
     </div>
   </div>
 

@@ -1,0 +1,167 @@
+---
+/** Plane 03: three compact product cards used as real proving grounds. */
+import { landingData } from '../../content/locales/en/landing';
+import StageRail from './StageRail.astro';
+import StageHandoff from './StageHandoff.astro';
+
+const { testStage } = landingData;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
+---
+
+<section class="stage-section method-stage stage-left" id="applications" data-stage="03" aria-labelledby="test-title">
+  <div class="shell stage-shell">
+    <StageRail number={3} side="left" />
+
+    <div class="stage-layout">
+      <div class="stage-copy">
+        <p class="stage-kicker">{testStage.kicker}</p>
+        <h2 id="test-title" class="stage-heading">{testStage.title}</h2>
+        <p class="stage-intro">{testStage.intro}</p>
+        <StageHandoff handoff={testStage.handoff} number={3} nextLabel="MEASURE" />
+      </div>
+
+      <div class="stage-visual use-case-grid" aria-label="Applications used as proving grounds">
+        {testStage.applications.map((app, index) => (
+          <a class="use-case" href={resolveHref(app.href)}>
+            <div class="use-case-media">
+              <img src={asset(app.imagePath)} alt={`${app.name} product interface`} loading="lazy" decoding="async" />
+              <span>0{index + 1}</span>
+            </div>
+            <div class="use-case-copy">
+              <small>REAL USE CASE</small>
+              <h3>{app.name}</h3>
+              <p>{app.question}</p>
+              <strong>View project <i aria-hidden="true">↗</i></strong>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stage-section {
+    padding: clamp(48px, 6vw, 72px) 0;
+    overflow: clip;
+    background: var(--surface-canvas);
+  }
+
+  .use-case-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(12px, 1.5vw, 18px);
+  }
+
+  .use-case {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: 0 16px 40px rgba(8, 19, 51, 0.055);
+    color: inherit;
+    text-decoration: none;
+    transition: transform var(--duration-base) var(--ease-out-expo), border-color var(--duration-fast) ease, box-shadow var(--duration-base) ease;
+  }
+
+  .use-case:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+    box-shadow: 0 22px 48px rgba(8, 19, 51, 0.09);
+  }
+
+  .use-case-media {
+    position: relative;
+    height: clamp(150px, 14vw, 190px);
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--surface-subtle);
+  }
+
+  .use-case-media img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 650ms var(--ease-out-expo);
+  }
+
+  .use-case:hover .use-case-media img { transform: scale(1.025); }
+
+  .use-case-media > span {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    padding: 4px 7px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--accent-blue-dark);
+    font-size: var(--text-badge);
+    font-weight: 800;
+    backdrop-filter: blur(8px);
+  }
+
+  .use-case-copy { padding: clamp(18px, 2.2vw, 24px); }
+  .use-case-copy small {
+    color: var(--accent-blue);
+    font-size: var(--text-badge);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .use-case-copy h3 {
+    margin: 6px 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+
+  .use-case-copy p {
+    min-height: 3.2em;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-badge);
+    line-height: 1.5;
+  }
+
+  .use-case-copy strong {
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+  }
+
+  .use-case-copy i { font-style: normal; transition: transform var(--duration-fast) ease; }
+  .use-case:hover .use-case-copy i { transform: translate(2px, -2px); }
+
+  @media (max-width: 680px) {
+    .use-case-grid {
+      width: calc(100% + 20px);
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(252px, 84%);
+      gap: var(--space-3);
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scroll-snap-type: inline mandatory;
+      scrollbar-width: none;
+      padding: 4px 20px 12px 0;
+    }
+
+    .use-case-grid::-webkit-scrollbar { display: none; }
+    .use-case { scroll-snap-align: start; }
+    .use-case-media { height: 180px; }
+    .use-case-copy p { min-height: 0; }
+  }
+</style>

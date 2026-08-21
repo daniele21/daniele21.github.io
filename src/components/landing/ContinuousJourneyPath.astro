@@ -1,0 +1,59 @@
+---
+/**
+ * One visual path for the complete Decide -> Build -> Test -> Measure journey.
+ * Geometry and progress are assigned by the homepage controller after layout.
+ */
+---
+
+<div class="journey-path-layer" data-journey-path aria-hidden="true">
+  <svg class="journey-path-svg" data-journey-svg fill="none" preserveAspectRatio="none">
+    <path class="journey-path-guide" data-journey-guide />
+    <path
+      class="journey-path-progress"
+      data-journey-progress
+      pathLength="1"
+      stroke-dasharray="1 1"
+      stroke-dashoffset="1"
+    />
+  </svg>
+</div>
+
+<style>
+  .journey-path-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .journey-path-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+
+  .journey-path-guide,
+  .journey-path-progress {
+    fill: none;
+    stroke-width: var(--method-path-width);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .journey-path-guide {
+    stroke: var(--method-path-guide);
+  }
+
+  .journey-path-progress {
+    stroke: var(--accent-blue);
+    filter: var(--method-path-glow);
+    shape-rendering: geometricPrecision;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .journey-path-progress { stroke-dashoffset: 0 !important; }
+  }
+</style>

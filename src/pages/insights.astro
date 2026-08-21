@@ -1,0 +1,243 @@
+---
+/**
+ * insights.astro
+ * Research thinking, dated field notes, and architecture principles.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LandingHeader from '../components/landing/LandingHeader.astro';
+import { landingData } from '../content/locales/en/landing';
+import { principles, journeyLinks } from '../content/locales/en/principles';
+
+const { fieldNotes } = landingData;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout
+  title="Field Notes & Research Thinking — Daniele Moltisanti"
+  description="Empirical observations, architectural trade-offs, and practical lessons from building and evaluating local AI systems."
+>
+  <LandingHeader slot="header" />
+
+  <section class="insights-page">
+    <div class="shell">
+      <header class="page-header">
+        <p class="stage-kicker">RESEARCH & FIELD NOTES</p>
+        <h1 class="page-title">Articles & Field Notes</h1>
+        <p class="page-lead">
+          Empirical observations, architectural trade-offs, and practical lessons from building and evaluating local AI systems.
+        </p>
+      </header>
+
+      <!-- Field Notes Stream -->
+      <div class="notes-stream">
+        {fieldNotes.notes.map((note) => (
+          <article class="note-card">
+            <div class="note-header">
+              <time class="note-date">{note.date}</time>
+              <span class="note-tag">{note.readTime}</span>
+            </div>
+            <h2 class="note-heading">{note.title}</h2>
+            <p class="note-excerpt">{note.excerpt}</p>
+            <div class="note-action">
+              <a class="primary-button" href="https://staituned.com" target="_blank" rel="noopener noreferrer">
+                Read on stAI tuned <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <!-- Core Guiding Principles -->
+      <section class="principles-section">
+        <h2 class="section-heading">Core Architectural Principles</h2>
+        <div class="principles-grid">
+          {principles.map((p) => (
+            <article class="principle-card">
+              <h3 set:html={p.title} />
+              <p>{p.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- Publications & Outlets -->
+      <section class="outlets-section">
+        <h2 class="section-heading">Where to Follow</h2>
+        <div class="outlets-grid">
+          {journeyLinks.map((link) => (
+            <a class="outlet-card" href={link.url} target="_blank" rel="noopener noreferrer">
+              <h3>{link.title} <span aria-hidden="true">↗</span></h3>
+              <p>{link.description}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .insights-page {
+    padding: clamp(48px, 6vw, 80px) 0;
+  }
+
+  .page-header {
+    max-width: 800px;
+    margin-bottom: clamp(36px, 5vw, 56px);
+  }
+
+  .page-title {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--ink-display);
+  }
+
+  .page-lead {
+    font-size: var(--text-lead);
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Notes Stream */
+  .notes-stream {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: clamp(48px, 6vw, 72px);
+  }
+
+  .note-card {
+    padding: clamp(24px, 3vw, 36px);
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .note-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .note-date {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    color: var(--accent-blue-dark);
+  }
+
+  .note-tag {
+    font-size: var(--text-badge);
+    color: var(--ink-subtle);
+  }
+
+  .note-heading {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 800;
+    color: var(--ink-display);
+  }
+
+  .note-excerpt {
+    font-size: var(--text-body);
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 0 0 var(--space-4);
+  }
+
+  .note-action {
+    display: flex;
+  }
+
+  /* Principles */
+  .principles-section {
+    margin-bottom: clamp(48px, 6vw, 72px);
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-weight: 800;
+    color: var(--ink-display);
+    margin: 0 0 var(--space-4);
+  }
+
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .principle-card {
+    padding: var(--space-4);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+  }
+
+  .principle-card h3 {
+    margin: 0 0 var(--space-1);
+    font-family: var(--font-display);
+    font-size: var(--text-body);
+    color: var(--ink-display);
+  }
+
+  .principle-card p {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  /* Outlets */
+  .outlets-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .outlet-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-4);
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .outlet-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+  }
+
+  .outlet-card h3 {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-display);
+    font-size: var(--text-body);
+    font-weight: 800;
+    color: var(--accent-blue);
+  }
+
+  .outlet-card p {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 800px) {
+    .outlets-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

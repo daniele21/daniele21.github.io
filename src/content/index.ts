@@ -2,6 +2,7 @@
  * Central content entrypoint for all site copy, data, and i18n dictionaries.
  */
 export * from './i18n';
+export { landingData } from './locales/en/landing';
 export { siteMetadata, navigation, socialLinks } from './locales/en/site';
 export { pillars } from './locales/en/pillars';
 export { applications } from './locales/en/applications';
@@ -16,4 +17,10 @@ export { evidenceData } from './locales/en/evidence';
 export { trafficMonitoringData } from './locales/en/trafficMonitoring';
 export { trafficMonitoringAndroidData } from './locales/en/trafficMonitoringAndroid';
 export { roadmapData } from './locales/en/roadmap';
-
+export {
+  planLinks,
+  strategyPlan,
+  infrastructurePlan,
+  useCasesPlan,
+  performancePlan,
+} from './locales/en/planDetails';
