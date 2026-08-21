@@ -1,17 +1,20 @@
 ---
 /**
  * FinalCta.astro
- * Loop Closing (Decide Again) and Architecture Consultation Inquiry.
+ * Loop closing (Decide Again) and a low-pressure peer collaboration invitation.
  */
 import { landingData } from '../../content/locales/en/landing';
 
 const { finalCta } = landingData;
+const collaborationHeading = 'Working on a workload where the boundary is not obvious?';
+const collaborationBody =
+  'If you are deciding what should run Local, Hybrid or Cloud, I am always interested in comparing constraints, evidence and architecture choices.';
+const collaborationPrimaryLabel = 'Compare an architecture';
 ---
 
 <section class="final-section" id="contact" aria-labelledby="cta-title">
   <div class="shell final-shell">
     <div class="final-card">
-      <!-- Left Column: The Loop & Payoff -->
       <div class="loop-panel">
         <p class="stage-kicker">{finalCta.kicker}</p>
         <h2 id="cta-title" class="loop-title">{finalCta.title}</h2>
@@ -32,17 +35,15 @@ const { finalCta } = landingData;
         <p class="loop-payoff"><strong>{finalCta.payoff}</strong></p>
       </div>
 
-      <!-- Vertical Divider -->
       <div class="final-divider" aria-hidden="true"></div>
 
-      <!-- Right Column: Collaboration & Next Step -->
       <div class="consultation-panel">
-        <h3 class="consult-heading">{finalCta.consultation.heading}</h3>
-        <p class="consult-body">{finalCta.consultation.body}</p>
+        <h3 class="consult-heading">{collaborationHeading}</h3>
+        <p class="consult-body">{collaborationBody}</p>
 
         <div class="consult-actions">
           <a class="primary-button consult-primary-btn" href={finalCta.consultation.primaryCta.href}>
-            {finalCta.consultation.primaryCta.label} <span aria-hidden="true">→</span>
+            {collaborationPrimaryLabel} <span aria-hidden="true">→</span>
           </a>
           <a
             class="secondary-button"
@@ -90,7 +91,6 @@ const { finalCta } = landingData;
     padding: 0;
   }
 
-  /* Left Panel */
   .loop-panel {
     display: flex;
     flex-direction: column;
@@ -150,14 +150,12 @@ const { finalCta } = landingData;
     color: #bcd0ff;
   }
 
-  /* Divider */
   .final-divider {
     width: 1px;
     height: 80%;
     background: rgba(255, 255, 255, 0.18);
   }
 
-  /* Right Panel */
   .consultation-panel {
     display: flex;
     flex-direction: column;
