@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "daniele-moltisanti-landing-engineering",
   "commands": {
     "dev": {
@@ -21,7 +21,11 @@
     },
     "test": {
       "command": "npm run test",
-      "description": "Runs automated smoke and link/route integrity tests."
+      "description": "Builds the site, validates the scroll-linked journey contract, and runs product-experience smoke checks."
+    },
+    "smoke": {
+      "command": "npm run smoke",
+      "description": "Runs built-artifact route, semantic, link, responsive-navigation, design-contract and UX integrity checks against dist/."
     }
   }
 }
