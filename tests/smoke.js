@@ -70,7 +70,7 @@ if (stageCount !== 4) fail(`Landing has ${stageCount} method stages; expected 4`
 else pass('Four-stage Decide → Build → Test → Measure journey');
 
 for (const fragment of [
-  'HOW I&#39;M TESTING THAT IDEA',
+  "HOW I'M TESTING THAT IDEA",
   'id="strategy"',
   'id="infrastructure"',
   'id="evidence"',
