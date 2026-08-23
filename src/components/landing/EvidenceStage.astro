@@ -1,5 +1,5 @@
 ---
-/** Plane 04: compact, reference-inspired evidence surfaces with no unqualified numeric claims. */
+/** Plane 04: compact evidence surfaces without unqualified or fabricated numeric claims. */
 import { landingData } from '../../content/locales/en/landing';
 import StageRail from './StageRail.astro';
 import StageHandoff from './StageHandoff.astro';
@@ -25,16 +25,14 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
       <div class="stage-visual evidence-tools" aria-label="Performance and observability tools">
         <a class="evidence-card performance-card" href={resolveHref('/performance-lab')}>
           <header><span>01</span><h3>Performance Lab</h3></header>
-          <div class="line-chart" aria-label="Conceptual performance profile without numeric results">
-            <svg viewBox="0 0 240 108" role="img" aria-label="Conceptual line showing performance changing across a run">
-              <path class="grid" d="M0 18H240M0 54H240M0 90H240" />
-              <path class="line" d="M2 82 C24 70 36 76 52 52 S85 64 102 41 S136 56 154 31 S190 44 238 18" />
-            </svg>
+          <div class="measurement-grid" aria-label="Measurement dimensions used to evaluate a real workload">
+            <div><small>01</small><span><strong>Quality</strong><em>Task result</em></span></div>
+            <div><small>02</small><span><strong>Latency</strong><em>Response time</em></span></div>
+            <div><small>03</small><span><strong>Throughput</strong><em>Work over time</em></span></div>
+            <div><small>04</small><span><strong>Resources</strong><em>Memory · compute · thermal</em></span></div>
           </div>
-          <div class="metric-labels">
-            <span>Quality</span><span>Latency</span><span>Throughput</span><span>Resources</span>
-          </div>
-          <footer>Compare complete execution profiles <i aria-hidden="true">↗</i></footer>
+          <p class="measurement-note">Measure the complete execution profile on the real workload and hardware.</p>
+          <footer>Explore the measurement lab <i aria-hidden="true">↗</i></footer>
         </a>
 
         <a class="evidence-card boundary-card" href={resolveHref('/traffic-monitoring')}>
@@ -83,7 +81,7 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
     background: var(--surface-card);
-    box-shadow: 0 16px 40px rgba(8, 19, 51, 0.055);
+    box-shadow: var(--shadow-lg);
     color: inherit;
     text-decoration: none;
     transition: transform var(--duration-base) var(--ease-out-expo), border-color var(--duration-fast) ease, box-shadow var(--duration-base) ease;
@@ -137,37 +135,49 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
   .evidence-card footer i { font-style: normal; transition: transform var(--duration-fast) ease; }
   .evidence-card:hover footer i { transform: translate(2px, -2px); }
 
-  .line-chart {
-    margin: var(--space-5) 0 var(--space-3);
-    padding: var(--space-3);
-    border-radius: var(--radius-md);
-    background: linear-gradient(180deg, var(--surface-blue-subtle), var(--surface-card));
-  }
-
-  .line-chart svg { width: 100%; height: auto; display: block; overflow: visible; }
-  .line-chart .grid { fill: none; stroke: var(--border-medium); stroke-width: 1; }
-  .line-chart .line {
-    fill: none;
-    stroke: var(--accent-blue);
-    stroke-width: 4;
-    stroke-linecap: round;
-    filter: drop-shadow(0 5px 8px rgba(20, 91, 255, 0.2));
-  }
-
-  .metric-labels {
+  .measurement-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
-    margin-bottom: var(--space-3);
+    gap: 7px;
+    margin: var(--space-4) 0 var(--space-3);
   }
 
-  .metric-labels span {
-    padding: 5px 7px;
+  .measurement-grid > div {
+    min-height: 48px;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: var(--space-2);
+    align-items: center;
+    padding: 7px 9px;
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm);
-    background: var(--surface-subtle);
+    background: linear-gradient(90deg, var(--surface-blue-subtle), var(--surface-card));
+  }
+
+  .measurement-grid small {
+    color: var(--accent-blue);
+    font-size: var(--text-badge);
+    font-weight: 800;
+  }
+
+  .measurement-grid span { display: grid; gap: 1px; }
+  .measurement-grid strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+  }
+
+  .measurement-grid em {
     color: var(--ink-muted);
     font-size: var(--text-badge);
-    text-align: center;
+    font-style: normal;
+    line-height: 1.35;
+  }
+
+  .measurement-note {
+    margin: 0 0 var(--space-3);
+    color: var(--ink-muted);
+    font-size: var(--text-badge);
+    line-height: 1.5;
   }
 
   .boundary-media {
@@ -201,8 +211,8 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #27945b;
-    box-shadow: 0 0 0 4px rgba(39, 148, 91, 0.1);
+    background: var(--status-good-text);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--status-good-text) 10%, transparent);
   }
 
   .feedback-loop { display: grid; gap: 0; padding: var(--space-4) 0; }
