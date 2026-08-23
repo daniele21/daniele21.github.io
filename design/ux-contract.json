@@ -1,9 +1,17 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "name": "Personal Landing UX Contract",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "targetExperienceLevel": "L1",
   "baselineRepositoryLevel": "L0",
+  "designSourceOfTruth": {
+    "type": "code-first",
+    "primary": "src/styles/tokens.css",
+    "brandContract": "design/brand-kit.json",
+    "experienceContract": "design/ux-contract.json",
+    "rule": "Production code is canonical for implemented visual tokens; this contract owns UX semantics and must not duplicate styling values unnecessarily."
+  },
+  "primaryOutcome": "A visitor should understand that Local AI is a workload-dependent architectural choice, see how that choice is tested through a coherent Decide -> Build -> Test -> Measure loop, and know where to inspect deeper evidence or continue the conversation.",
   "viewports": {
     "desktop": {
       "width": 1440,
@@ -33,6 +41,33 @@
     "minWidthPx": 44,
     "minHeightPx": 44
   },
+  "informationHierarchy": {
+    "hero": [
+      "Local AI first ≠ Local AI only",
+      "Run AI where it makes sense",
+      "short workload-boundary explanation",
+      "evidence-based stance",
+      "primary exploration action"
+    ],
+    "methodStage": [
+      "stage identity",
+      "decision question",
+      "short explanation",
+      "supporting visual or artifact",
+      "handoff to next stage"
+    ],
+    "disclosure": "Homepage presents the method and representative proof surfaces; detailed architecture, projects and diagnostics live on dedicated routes."
+  },
+  "motionSemantics": {
+    "journeyPath": [
+      "continuity",
+      "spatial relationship",
+      "progress",
+      "hierarchy"
+    ],
+    "interactionRule": "Scroll-linked motion must track the visible viewport without perceptible lag and must not alter natural page scrolling.",
+    "reducedMotion": "The journey remains understandable with movement removed; content and path state fall back to static visibility."
+  },
   "accessibility": {
     "standard": "WCAG 2.2 AA",
     "contrastRatioNormal": "4.5:1",
@@ -47,26 +82,42 @@
     {
       "id": "J1",
       "persona": "Technical Decision Maker (CTO, CAIO, Head of AI)",
-      "flow": "Hero (thesis & positioning) -> Decide (framework) -> Build (architecture) -> Measure (evidence) -> Discuss an AI architecture",
+      "flow": "Hero (thesis & positioning) -> Decide (placement criteria) -> Build (execution layer) -> Test (real product workflow) -> Measure (evidence) -> Decide Again / discuss the boundary",
       "targetComprehensionSec": 60
     },
     {
       "id": "J2",
       "persona": "Technical Peer / AI Engineer",
-      "flow": "Hero -> Applications (test beds) -> Observability (real run) -> Deep Dive Project Route / GitHub",
+      "flow": "Hero -> Build (systems) -> Test (applications) -> Measure (observability) -> Deep Dive Project Route / GitHub",
       "targetComprehensionSec": 60
     },
     {
       "id": "J3",
       "persona": "Leadership / Talent / Collaborator",
-      "flow": "Hero -> Systems -> About / Track Record -> LinkedIn / Get in touch",
+      "flow": "Hero -> Method -> About / Track Record -> LinkedIn / Get in touch",
       "targetComprehensionSec": 45
     },
     {
       "id": "J4",
       "persona": "Mobile Visitor (320px–430px)",
-      "flow": "Seamless vertical journey without lost narrative state, unreadable microtype, or broken SVG paths",
+      "flow": "Hero -> accessible compact navigation -> seamless vertical method journey without lost narrative state, unreadable microtype, horizontal page overflow, or broken SVG paths",
       "targetComprehensionSec": 60
     }
-  ]
+  ],
+  "validation": {
+    "automated": [
+      "Astro/type diagnostics",
+      "static route and asset integrity",
+      "single main and H1 structure",
+      "journey path source contract",
+      "reduced-motion fallback contract"
+    ],
+    "manualRequiredBeforeL1Claim": [
+      "keyboard and focus-order pass",
+      "320px, 390px, 768px and 1440px layout pass",
+      "scroll-linked journey alignment pass",
+      "reduced-motion browser pass",
+      "representative contrast and text-zoom check"
+    ]
+  }
 }
