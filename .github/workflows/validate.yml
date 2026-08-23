@@ -3,6 +3,7 @@ name: Validate product experience
 on:
   push:
     branches:
+      - master
       - feature/landing-page-journey-v2
   pull_request:
 
