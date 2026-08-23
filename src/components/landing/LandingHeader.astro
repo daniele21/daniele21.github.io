@@ -1,7 +1,7 @@
 ---
 /**
  * LandingHeader.astro
- * Quiet, accessible sticky header with brand mark, section navigation, and CTA.
+ * Quiet, accessible sticky header with brand mark, adaptive navigation, and CTA.
  */
 import { landingData } from '../../content/locales/en/landing';
 
@@ -32,6 +32,22 @@ const resolveHref = (href: string) => {
         ))}
       </ul>
 
+      <details class="mobile-nav">
+        <summary>
+          <span>Explore</span>
+          <span class="mobile-nav-chevron" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="mobile-nav-panel">
+          <ul>
+            {header.links.map((link) => (
+              <li>
+                <a href={resolveHref(link.href)}>{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </details>
+
       <a
         class="header-cta primary-button"
         href={resolveHref(header.cta.href)}
@@ -44,6 +60,14 @@ const resolveHref = (href: string) => {
     </nav>
   </div>
 </header>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('.mobile-nav').forEach((menu) => {
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => menu.removeAttribute('open'));
+    });
+  });
+</script>
 
 <style>
   .landing-header {
@@ -66,7 +90,6 @@ const resolveHref = (href: string) => {
     gap: var(--space-4);
   }
 
-  /* Brand Mark */
   .brand {
     display: inline-flex;
     align-items: center;
@@ -102,8 +125,8 @@ const resolveHref = (href: string) => {
     color: var(--ink-display);
   }
 
-  /* Navigation */
   .nav {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--space-6);
@@ -130,8 +153,73 @@ const resolveHref = (href: string) => {
     transition: color var(--duration-fast) ease;
   }
 
-  .nav-link:hover {
-    color: var(--accent-blue);
+  .nav-link:hover { color: var(--accent-blue); }
+
+  .mobile-nav { display: none; }
+
+  .mobile-nav summary {
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-sm);
+    background: var(--surface-card);
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .mobile-nav summary::-webkit-details-marker { display: none; }
+
+  .mobile-nav-chevron {
+    display: inline-block;
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .mobile-nav[open] .mobile-nav-chevron { transform: rotate(180deg); }
+
+  .mobile-nav-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: min(280px, calc(100vw - 32px));
+    padding: var(--space-2);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .mobile-nav-panel ul {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mobile-nav-panel a {
+    min-height: var(--touch-target-min);
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    font-size: var(--text-caption);
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .mobile-nav-panel a:hover,
+  .mobile-nav-panel a:focus-visible {
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
   }
 
   .header-cta {
@@ -144,17 +232,26 @@ const resolveHref = (href: string) => {
     line-height: 1;
   }
 
-  /* Responsive */
   @media (max-width: 860px) {
-    .nav-list {
-      display: none;
-    }
+    .nav { gap: var(--space-2); }
+    .nav-list { display: none; }
+    .mobile-nav { display: block; }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 560px) {
+    .brand-name { display: none; }
+  }
+
+  @media (max-width: 420px) {
     .header-cta {
-      padding: 6px 12px;
+      padding: 6px 10px;
       font-size: var(--text-caption);
     }
+
+    .mobile-nav summary { padding-inline: 8px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-nav-chevron { transition: none; }
   }
 </style>
