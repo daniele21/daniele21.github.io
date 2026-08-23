@@ -1,54 +1,90 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "name": "Daniele Moltisanti Brand Kit",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "sourceOfTruth": {
+    "type": "code-first",
+    "tokens": "src/styles/tokens.css",
+    "rule": "Exact implemented color, typography, spacing, radius, shadow and motion values are owned by tokens.css. This file documents their semantic intent and must follow that source rather than competing with it."
+  },
   "colors": {
     "primary": {
       "signalBlue": "#145bff",
       "signalBlueHover": "#0d47df",
-      "cobalt": "#2563eb",
-      "cobaltLight": "#3b82f6",
-      "cobaltDark": "#1d4ed8"
+      "signalBlueLight": "#3b82f6",
+      "signalBlueDark": "#1d4ed8"
     },
     "ink": {
       "heading": "#081333",
       "body": "#1f2d48",
-      "muted": "#52617e",
-      "subtle": "#64748b"
+      "muted": "#4a5b78",
+      "subtle": "#64748b",
+      "inverse": "#ffffff"
     },
     "surface": {
       "canvas": "#ffffff",
       "subtle": "#f8fafc",
+      "muted": "#f1f5f9",
       "card": "#ffffff",
       "cardHover": "#fbfdff",
-      "accentSubtle": "#f0f5ff"
+      "accentSubtle": "#f0f5ff",
+      "inverse": "#081333"
     },
     "border": {
       "subtle": "#e2e8f0",
       "medium": "#d5deef",
-      "accent": "#bcd0ff"
+      "strong": "#bcd0ff",
+      "focus": "#145bff"
     },
     "status": {
-      "success": "#16a34a",
-      "warning": "#d97706",
-      "danger": "#ef4444"
+      "successText": "#15803d",
+      "warningText": "#b45309",
+      "dangerText": "#b91c1c"
     }
   },
   "typography": {
-    "fontDisplay": "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    "fontBody": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    "fontMono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    "fontDisplay": "Plus Jakarta Sans",
+    "fontBody": "Inter",
+    "fontMono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+    "minimumMeaningfulTextPx": 14
   },
   "radii": {
-    "badge": "6px",
-    "button": "8px",
-    "card": "14px",
-    "panel": "16px",
+    "small": "8px",
+    "medium": "12px",
+    "largeCard": "16px",
+    "largePanel": "24px",
     "pill": "9999px"
   },
   "shadows": {
-    "card": "0 8px 24px rgba(18, 43, 88, 0.045)",
-    "elevated": "0 12px 32px rgba(18, 43, 88, 0.08)",
-    "glow": "0 0 24px rgba(20, 91, 255, 0.2)"
+    "small": "0 2px 8px rgba(8, 19, 51, 0.04)",
+    "medium": "0 8px 24px rgba(8, 19, 51, 0.05)",
+    "large": "0 16px 40px rgba(8, 19, 51, 0.08)",
+    "glow": "0 0 28px rgba(20, 91, 255, 0.2)"
+  },
+  "motion": {
+    "character": "calm, precise, continuous, evidence-led rather than decorative",
+    "purposes": [
+      "feedback",
+      "continuity",
+      "spatial relationship",
+      "progress",
+      "hierarchy"
+    ],
+    "fast": "150ms",
+    "base": "280ms",
+    "slow": "500ms",
+    "easeOut": "cubic-bezier(0.16, 1, 0.3, 1)",
+    "easeInOut": "cubic-bezier(0.4, 0, 0.2, 1)",
+    "scrollLinked": "Directly track the visible viewport; never delay page input or use scroll-jacking.",
+    "reducedMotion": "Remove non-essential translation/scale and expose the journey/content as stable static state; preserve meaning without requiring motion."
+  },
+  "imagery": {
+    "role": "Explain systems, products and evidence; avoid decorative visuals that can be mistaken for measured results.",
+    "productScreens": "Use real product or system captures where available.",
+    "dataVisuals": "Only use chart-like encodings for actual measured data; use explanatory structures for methodology or metric categories."
+  },
+  "microcopy": {
+    "voice": "concise, technical, concrete, non-promotional",
+    "principle": "Describe the workload, trade-off, evidence or next decision; avoid generic AI claims and consultant-style promises."
   }
 }
