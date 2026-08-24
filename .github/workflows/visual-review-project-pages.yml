@@ -26,6 +26,14 @@ jobs:
       - name: Install project dependencies for rendered QA
         run: npm install --no-audit --no-fund
 
+      - name: Export npm-generated lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: regenerated-package-lock
+          path: package-lock.json
+          if-no-files-found: error
+          retention-days: 1
+
       - name: Install Playwright for visual QA
         run: |
           npm install --no-save playwright@1.55.0
