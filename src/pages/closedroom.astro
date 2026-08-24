@@ -1,12 +1,13 @@
 ---
 /**
  * closedroom.astro
- * Modular deep-dive page for ClosedRoom project.
- * Composes dedicated section components from src/components/closedroom/
+ * Product / use-case deep-dive using the shared project-page journey.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClosedRoomHeader from '../components/closedroom/ClosedRoomHeader.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
 import ClosedRoomHero from '../components/closedroom/ClosedRoomHero.astro';
 import ClosedRoomProblem from '../components/closedroom/ClosedRoomProblem.astro';
 import ClosedRoomSolution from '../components/closedroom/ClosedRoomSolution.astro';
@@ -23,13 +24,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Why ClosedRoom', href: '#why' },
-  { label: 'Solution', href: '#solution' },
-  { label: 'Product Proof', href: '#product' },
-  { label: 'End-to-End Flow', href: '#flow' },
-  { label: 'Architecture', href: '#architecture' },
-  { label: 'Privacy Boundary', href: '#trust' },
+  { label: 'Decide', href: '#decide' },
+  { label: 'Build', href: '#build' },
+  { label: 'Test', href: '#test' },
+  { label: 'Measure', href: '#measure' },
+  { label: 'Decide again', href: '#decide-again' },
 ];
+
 const closedRoomSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -60,15 +61,72 @@ const closedRoomSchema = {
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/local-asr-server/tree/speaker_detection' }}
   />
 
-  <div id="top">
+  <div id="top" data-project-page data-project-archetype="product">
     <ClosedRoomHero baseUrl={baseUrl} />
-    <ClosedRoomProblem />
-    <ClosedRoomSolution />
-    <ClosedRoomValues />
-    <ClosedRoomProduct baseUrl={baseUrl} />
-    <ClosedRoomFlow baseUrl={baseUrl} />
-    <ClosedRoomArchitecture baseUrl={baseUrl} />
-    <ClosedRoomTrust />
+
+    <ProjectPhase
+      id="decide"
+      step="01"
+      label="DECIDE"
+      title="Why should meeting intelligence start from a local trust boundary?"
+      description="The project starts from two product problems at once: meetings lose operational context after the call, and many assistants make cloud processing the default before the user has chosen that boundary."
+    >
+      <ClosedRoomProblem />
+      <ClosedRoomValues />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="build"
+      step="02"
+      label="BUILD"
+      title="Separate capture, enrichment and analysis into explicit layers."
+      description="ClosedRoom preserves the meeting first, then coordinates transcription, diarization, visual evidence, structured analysis and project memory behind a local application boundary."
+      tone="subtle"
+    >
+      <ClosedRoomSolution />
+      <ClosedRoomArchitecture baseUrl={baseUrl} />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="test"
+      step="03"
+      label="TEST"
+      title="Prove the architecture inside an end-to-end meeting workflow."
+      description="The real test is not whether transcription runs. It is whether a captured meeting becomes reviewable actions, decisions, risks and cross-meeting project memory without hiding the processing flow."
+    >
+      <ClosedRoomProduct baseUrl={baseUrl} />
+      <ClosedRoomFlow baseUrl={baseUrl} />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="measure"
+      step="04"
+      label="MEASURE"
+      title="Make the trust boundary observable before making stronger claims."
+      description="ClosedRoom's strongest current evidence is architectural and product-level: the default path keeps audio, transcripts, prompts, analysis outputs and project state on the Mac, while external providers remain explicit opt-in choices."
+      tone="subtle"
+    >
+      <ClosedRoomTrust />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="decide-again"
+      step="05"
+      label="DECIDE AGAIN"
+      title="Keep local as the default, not the ideology."
+      description="The current product decision follows directly from the tested boundary: local processing owns the default workflow; cloud providers remain available only when the user deliberately chooses the trade-off."
+    >
+      <ProjectDecisionBand
+        title="Local by default. Cloud only when chosen."
+        body="Audio, transcripts, diarization artifacts, visual observations, local prompts, analysis results and project state remain on the Mac in the default path. Speechmatics and Gemini sit outside that trust boundary and are used only when explicitly selected."
+        signals={[
+          'Default meeting artifacts stay on the Mac',
+          'Cloud providers remain explicit opt-in paths',
+          'Optional enrichment can fail without invalidating a usable transcript',
+        ]}
+      />
+    </ProjectPhase>
+
     <ClosedRoomCta />
   </div>
 </BaseLayout>
