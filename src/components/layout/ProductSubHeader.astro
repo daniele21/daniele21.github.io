@@ -1,8 +1,8 @@
 ---
 /**
  * ProductSubHeader.astro
- * Sticky sub-navigation bar for product deep-dive pages.
- * Sits directly below SiteHeader with index scrolling, active scroll-spy, and mobile pill bar.
+ * Shared sticky navigation for project deep-dives.
+ * Keeps one predictable phase model across desktop and mobile with scroll-spy state.
  */
 export interface SubHeaderLink {
   label: string;
@@ -33,8 +33,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
             src={`${baseUrl}/${logoPath.replace(/^\//, '')}`}
             alt=""
             class="subheader-logo-img"
-            width="20"
-            height="20"
+            width="22"
+            height="22"
           />
         )}
         <span class="subheader-title">{title}</span>
@@ -42,7 +42,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
       {badge && <span class="subheader-badge">{badge}</span>}
     </div>
 
-    <nav class="subheader-nav" aria-label="Page section navigation">
+    <nav class="subheader-nav" aria-label="Project page sections">
       <ul class="subheader-links">
         {links.map((link, index) => (
           <li>
@@ -50,6 +50,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
               href={link.href}
               class={`subheader-link ${index === 0 ? 'is-active' : ''}`}
               data-sublink
+              aria-current={index === 0 ? 'location' : undefined}
             >
               {link.label}
             </a>
@@ -63,7 +64,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
         href={cta.href}
         class="subheader-cta"
         target={cta.href.startsWith('http') ? '_blank' : '_self'}
-        rel={cta.href.startsWith('http') ? 'noreferrer' : ''}
+        rel={cta.href.startsWith('http') ? 'noreferrer' : undefined}
       >
         {cta.label}
       </a>
@@ -76,7 +77,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     position: sticky;
     top: 0;
     z-index: 40;
-    height: 48px;
+    min-height: 48px;
     background: var(--glass-bg);
     border-bottom: 1px solid var(--glass-border);
     backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
@@ -85,7 +86,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   }
 
   .subheader-inner {
-    height: 100%;
+    min-height: 48px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -100,9 +101,10 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   }
 
   .subheader-title-link {
+    min-height: var(--touch-target-min);
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-2);
     text-decoration: none;
     color: var(--ink);
   }
@@ -111,41 +113,41 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     width: 22px;
     height: 22px;
     object-fit: cover;
-    border-radius: 6px;
-    background: #090d16;
-    border: 1px solid rgba(13, 148, 136, 0.3);
+    border-radius: var(--radius-sm);
+    background: var(--surface-inverse);
+    border: 1px solid var(--border-medium);
     flex-shrink: 0;
   }
 
   .subheader-title {
     font-family: var(--font-display);
-    font-size: var(--text-small);
+    font-size: var(--text-caption);
     font-weight: 700;
     letter-spacing: -0.01em;
   }
 
   .subheader-badge {
-    padding: 2px 8px;
+    padding: 4px 8px;
     border-radius: var(--radius-full);
-    background: var(--surface-blue);
-    color: var(--accent-blue);
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
     border: 1px solid var(--border-subtle);
-    font-size: 0.72rem;
+    font-size: var(--text-caption);
     font-weight: 700;
     white-space: nowrap;
   }
 
   .subheader-nav {
+    min-width: 0;
     display: flex;
     align-items: center;
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    overscroll-behavior-inline: contain;
   }
 
-  .subheader-nav::-webkit-scrollbar {
-    display: none;
-  }
+  .subheader-nav::-webkit-scrollbar { display: none; }
 
   .subheader-links {
     display: flex;
@@ -158,10 +160,12 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   }
 
   .subheader-link {
-    display: inline-block;
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
     padding: 5px 12px;
     border-radius: var(--radius-full);
-    font-size: 0.8125rem;
+    font-size: var(--text-caption);
     font-weight: 600;
     color: var(--ink-muted);
     text-decoration: none;
@@ -169,17 +173,18 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   }
 
   .subheader-link:hover {
-    color: var(--accent-blue);
+    color: var(--accent-blue-dark);
     background: var(--surface-muted);
   }
 
   .subheader-link.is-active {
-    color: var(--accent-blue);
-    background: var(--surface-blue);
+    color: var(--accent-blue-dark);
+    background: var(--surface-blue-subtle);
     font-weight: 700;
   }
 
   .subheader-cta {
+    min-height: var(--touch-target-min);
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -188,95 +193,107 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     border: 1px solid var(--border-subtle);
     background: var(--surface-card);
     color: var(--ink);
-    font-size: 0.8125rem;
+    font-size: var(--text-caption);
     font-weight: 700;
     text-decoration: none;
     white-space: nowrap;
     flex-shrink: 0;
-    transition: all var(--duration-fast) ease;
+    transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease, transform var(--duration-fast) ease;
   }
 
   .subheader-cta:hover {
     border-color: var(--accent-blue);
-    color: var(--accent-blue);
+    color: var(--accent-blue-dark);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
   }
 
   @media (max-width: 768px) {
-    .subheader-inner {
-      gap: var(--space-2);
-    }
-    .subheader-brand {
-      display: none; /* Keep subheader lightweight on narrow screens */
-    }
+    .subheader-inner { gap: var(--space-2); }
+    .subheader-brand { display: none; }
     .subheader-nav {
       width: 100%;
       justify-content: flex-start;
     }
     .subheader-cta {
-      padding: 4px 10px;
-      font-size: 0.75rem;
+      padding-inline: 10px;
+      font-size: var(--text-caption);
     }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .subheader-link,
+    .subheader-cta { transition: none; }
   }
 </style>
 
 <script>
-  /**
-   * Client-side ScrollSpy & Smooth Scroll for ProductSubHeader
-   */
   function initProductSubHeader() {
-    const subheaderLinks = document.querySelectorAll<HTMLAnchorElement>('[data-sublink]');
-    if (!subheaderLinks.length) return;
+    const root = document.querySelector<HTMLElement>('[data-product-subheader]');
+    if (!root) return;
 
-    // Collect target sections
-    const sections: HTMLElement[] = [];
-    subheaderLinks.forEach((link) => {
-      const href = link.getAttribute('href');
-      if (href && href.startsWith('#')) {
+    const links = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-sublink]'));
+    if (!links.length) return;
+
+    const phaseLinks = links
+      .map((link) => {
+        const href = link.getAttribute('href') ?? '';
+        if (!href.startsWith('#') || href === '#top') return null;
         const target = document.querySelector<HTMLElement>(href);
-        if (target) sections.push(target);
-      }
-    });
+        return target ? { link, href, target } : null;
+      })
+      .filter((item): item is NonNullable<typeof item> => item !== null);
 
-    if (!sections.length) return;
+    const overviewLink = links.find((link) => link.getAttribute('href') === '#top');
+    const setActive = (activeLink: HTMLAnchorElement | undefined) => {
+      links.forEach((link) => {
+        const active = link === activeLink;
+        link.classList.toggle('is-active', active);
+        if (active) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
 
-    // Adjust scroll padding for sections dynamically
-    document.querySelectorAll<HTMLElement>('.section, .hero').forEach((sec) => {
-      sec.style.scrollMarginTop = '56px';
-    });
-
-    // IntersectionObserver for ScrollSpy
-    const observerOptions: IntersectionObserverInit = {
-      root: null,
-      rootMargin: '-20% 0px -60% 0px',
-      threshold: 0
+      activeLink?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'nearest',
+        inline: 'nearest',
+      });
     };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.getAttribute('id');
-          if (id) {
-            subheaderLinks.forEach((link) => {
-              const href = link.getAttribute('href');
-              if (href === `#${id}`) {
-                link.classList.add('is-active');
-              } else {
-                link.classList.remove('is-active');
-              }
-            });
-          }
-        }
-      });
-    }, observerOptions);
+    const updateFromScroll = () => {
+      if (!phaseLinks.length) {
+        setActive(overviewLink);
+        return;
+      }
 
-    sections.forEach((sec) => observer.observe(sec));
+      const marker = Math.max(root.getBoundingClientRect().bottom + 12, window.innerHeight * 0.28);
+      let active = overviewLink;
+
+      for (const item of phaseLinks) {
+        if (item.target.getBoundingClientRect().top <= marker) active = item.link;
+        else break;
+      }
+
+      setActive(active);
+    };
+
+    let frame = 0;
+    const requestUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        updateFromScroll();
+      });
+    };
+
+    links.forEach((link) => link.addEventListener('click', () => setActive(link)));
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate, { passive: true });
+    updateFromScroll();
   }
 
-  // Run on DOM ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initProductSubHeader);
+    document.addEventListener('DOMContentLoaded', initProductSubHeader, { once: true });
   } else {
     initProductSubHeader();
   }
