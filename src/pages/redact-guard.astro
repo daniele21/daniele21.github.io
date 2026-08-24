@@ -1,12 +1,14 @@
 ---
 /**
  * redact-guard.astro
- * Modular deep-dive page for RedactGuard project.
- * Composes dedicated section components from src/components/redactguard/
+ * Product / use-case deep-dive using the shared project-page journey.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RedactGuardHeader from '../components/redactguard/RedactGuardHeader.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
 import RedactGuardHero from '../components/redactguard/RedactGuardHero.astro';
 import RedactGuardProblem from '../components/redactguard/RedactGuardProblem.astro';
 import RedactGuardSolution from '../components/redactguard/RedactGuardSolution.astro';
@@ -21,12 +23,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Problem', href: '#problem' },
-  { label: 'Solution', href: '#solution' },
-  { label: 'Benefits', href: '#benefits' },
-  { label: 'Product', href: '#product' },
-  { label: 'Architecture', href: '#architecture' },
+  { label: 'Decide', href: '#decide' },
+  { label: 'Build', href: '#build' },
+  { label: 'Test', href: '#test' },
+  { label: 'Measure', href: '#measure' },
+  { label: 'Decide again', href: '#decide-again' },
 ];
+
 const redactGuardSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -57,13 +60,84 @@ const redactGuardSchema = {
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/redact-guard' }}
   />
 
-  <div id="top">
+  <div id="top" data-project-page data-project-archetype="product">
     <RedactGuardHero baseUrl={baseUrl} />
-    <RedactGuardProblem />
-    <RedactGuardSolution />
-    <RedactGuardBenefits />
-    <RedactGuardProduct baseUrl={baseUrl} />
-    <RedactGuardArchitecture baseUrl={baseUrl} />
+
+    <ProjectPhase
+      id="decide"
+      step="01"
+      label="DECIDE"
+      title="Can sensitive-data detection adapt without moving the original document to cloud AI?"
+      description="RedactGuard starts from a changing definition of PII: what is sensitive depends on the document, organization and workflow, while static detectors turn taxonomy changes into software maintenance."
+    >
+      <RedactGuardProblem />
+      <RedactGuardBenefits />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="build"
+      step="02"
+      label="BUILD"
+      title="Make the sensitive-data definition configurable and keep inference local."
+      description="Profiles and custom PII instructions drive a local GGUF detector behind a separate document-processing boundary, so many taxonomy changes can update the definition rather than require another hard-coded detector."
+      tone="subtle"
+    >
+      <RedactGuardSolution />
+      <RedactGuardArchitecture baseUrl={baseUrl} />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="test"
+      step="03"
+      label="TEST"
+      title="Keep every model finding visible and reversible before export."
+      description="The real product workflow is load → detect → review → redact → export. AI accelerates detection, but the user remains responsible for what is actually removed."
+    >
+      <RedactGuardProduct baseUrl={baseUrl} />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="measure"
+      step="04"
+      label="MEASURE"
+      title="Treat human review and model limitations as part of the evidence."
+      description="RedactGuard is an experimental privacy tool, not a compliance guarantee. The page therefore makes the implemented privacy boundary explicit while withholding unsupported claims about perfect PII recall or regulatory correctness."
+      tone="subtle"
+    >
+      <ProjectEvidenceNote
+        title="The workflow is implemented; detection remains fallible."
+        body="The current product supports local inference, configurable PII definitions, reviewable findings and minimized export. The underlying local model can still miss, misclassify or over-detect sensitive information, so human review remains mandatory."
+        evidenced={[
+          'Document analysis can run through local GGUF inference',
+          'Standard and custom PII definitions are configurable',
+          'Every finding remains reviewable before export',
+          'The minimized result moves only after explicit user choices',
+        ]}
+        missing={[
+          'Compliance guarantee',
+          'Published perfect-recall or perfect-precision claim across PII domains',
+        ]}
+      />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="decide-again"
+      step="05"
+      label="DECIDE AGAIN"
+      title="Use local AI as an adaptable detector, not as an autonomous privacy authority."
+      description="The current product decision is to keep detection configurable and local while preserving a human confirmation step before any document is considered safe to share."
+    >
+      <ProjectDecisionBand
+        title="Change the definition, not the trust model."
+        body="RedactGuard uses a local LLM to make sensitive-data detection easier to adapt, but it does not transfer the final privacy decision to the model. The user reviews what was found and decides what is removed before export."
+        signals={[
+          'Local inference keeps the original document inside the chosen boundary',
+          'PII definitions can evolve through profiles and instructions',
+          'Human review remains required because model detection is fallible',
+        ]}
+      />
+    </ProjectPhase>
+
     <RedactGuardCta />
   </div>
 </BaseLayout>
