@@ -1,12 +1,13 @@
 ---
 /**
  * android-local-llm-harness.astro
- * Modular deep-dive page for Android Local LLM Harness.
- * Composes dedicated section components matching harness-landing-prototype (3).html 100%.
+ * Experiment / measurement deep-dive using the shared project-page journey.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HarnessHeader from '../components/harness/HarnessHeader.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
 import HarnessHero from '../components/harness/HarnessHero.astro';
 import HarnessMission from '../components/harness/HarnessMission.astro';
 import HarnessProblems from '../components/harness/HarnessProblems.astro';
@@ -25,13 +26,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Why Harness', href: '#why' },
-  { label: 'Concept', href: '#concept' },
-  { label: 'Surfaces', href: '#product' },
-  { label: 'Architecture', href: '#architecture' },
-  { label: 'API Code', href: '#code' },
-  { label: 'Status', href: '#status' },
+  { label: 'Decide', href: '#decide' },
+  { label: 'Build', href: '#build' },
+  { label: 'Test', href: '#test' },
+  { label: 'Measure', href: '#measure' },
+  { label: 'Decide again', href: '#decide-again' },
 ];
+
 const harnessSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -62,17 +63,74 @@ const harnessSchema = {
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness' }}
   />
 
-  <div id="top">
+  <div id="top" data-project-page data-project-archetype="experiment">
     <HarnessHero baseUrl={baseUrl} />
-    <HarnessMission />
-    <HarnessProblems />
-    <HarnessConcept />
-    <HarnessSurfaces baseUrl={baseUrl} />
-    <HarnessArchitecture baseUrl={baseUrl} />
-    <HarnessValues />
-    <HarnessRoadmap />
-    <HarnessCodePreview />
-    <HarnessMaturity />
+
+    <ProjectPhase
+      id="decide"
+      step="01"
+      label="DECIDE"
+      title="Why does Android need a reusable local AI layer?"
+      description="Start from the structural friction: duplicated runtimes, memory ownership, IPC and observability. The project only earns complexity if those constraints justify a shared gateway."
+    >
+      <HarnessMission />
+      <HarnessProblems />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="build"
+      step="02"
+      label="BUILD"
+      title="Turn the gateway idea into explicit system boundaries."
+      description="Move from the concept to the concrete architecture and developer contract: model repository, runtime orchestration, replaceable backend boundaries and a deliberately small client API."
+      tone="subtle"
+    >
+      <HarnessConcept />
+      <HarnessArchitecture baseUrl={baseUrl} />
+      <HarnessCodePreview />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="test"
+      step="03"
+      label="TEST"
+      title="Make the infrastructure survive a real mobile workflow."
+      description="The connected console is the test bed: model management, prompting, cancellation, diagnostics and settings expose whether the runtime behaves like a product rather than a demo."
+    >
+      <HarnessSurfaces baseUrl={baseUrl} />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="measure"
+      step="04"
+      label="MEASURE"
+      title="Separate integrated capability from production evidence."
+      description="Treat maturity and missing physical-device validation as evidence boundaries. What is integrated today is shown separately from what still blocks stronger performance or production claims."
+      tone="subtle"
+    >
+      <HarnessMaturity />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="decide-again"
+      step="05"
+      label="DECIDE AGAIN"
+      title="Use the evidence to decide what moves next."
+      description="The current direction is not to jump straight to a multi-app gateway. First stabilize the data plane and client boundary; then move ownership behind Binder/AIDL when representative device evidence supports it."
+    >
+      <ProjectDecisionBand
+        title="Keep proving the data plane before moving runtime ownership cross-app."
+        body="Harness already integrates the embedded inference path, model lifecycle, console surfaces and diagnostics. The shared Binder/AIDL gateway remains the target architecture, while representative physical-device memory and thermal validation still block production claims."
+        signals={[
+          'Embedded console + runtime foundation integrated',
+          'Cross-app Binder/AIDL host remains future work',
+          'Physical-device memory and thermal evidence still required',
+        ]}
+      />
+      <HarnessValues />
+      <HarnessRoadmap />
+    </ProjectPhase>
+
     <HarnessCta baseUrl={baseUrl} />
   </div>
 </BaseLayout>
