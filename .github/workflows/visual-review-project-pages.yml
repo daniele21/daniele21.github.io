@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/landing-page
+  pull_request:
   workflow_dispatch:
 
 permissions:
