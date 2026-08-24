@@ -66,12 +66,13 @@ const { architecture } = harnessData;
 
   .architecture-simple {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: var(--space-2);
     align-items: stretch;
   }
 
   .arch-step {
+    min-width: 0;
     position: relative;
     padding: var(--space-4) var(--space-2);
     border: 1px solid var(--border-subtle);
@@ -81,6 +82,7 @@ const { architecture } = harnessData;
     text-align: center;
     font-size: var(--text-xs);
     font-weight: 700;
+    overflow-wrap: anywhere;
   }
 
   .arch-step:not(:last-child):after {
@@ -100,6 +102,7 @@ const { architecture } = harnessData;
     font-size: 0.65rem;
     font-weight: 500;
     margin-top: 5px;
+    overflow-wrap: anywhere;
   }
 
   .tech-panel {
@@ -131,11 +134,11 @@ const { architecture } = harnessData;
   }
 
   @media (max-width: 1020px) {
-    .architecture-simple { grid-template-columns: repeat(4, 1fr); }
+    .architecture-simple { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
 
   @media (max-width: 760px) {
-    .architecture-simple { grid-template-columns: repeat(2, 1fr); }
+    .architecture-simple { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .arch-step:after { display: none; }
   }
 </style>
