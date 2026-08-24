@@ -57,15 +57,12 @@ for (const route of expectedRoutes) {
   if (!fs.existsSync(filePath)) continue;
 
   const html = fs.readFileSync(filePath, 'utf-8');
-
-  // Check <main> landmarks
   const mainMatches = html.match(/<main\b/gi) || [];
   if (mainMatches.length !== 1) {
     console.error(`❌ Page ${route} has ${mainMatches.length} <main> tags (expected exactly 1).`);
     errors++;
   }
 
-  // Check <h1> tags
   const h1Matches = html.match(/<h1\b/gi) || [];
   if (h1Matches.length !== 1) {
     console.error(`❌ Page ${route} has ${h1Matches.length} <h1> tags (expected exactly 1).`);
@@ -185,7 +182,6 @@ for (const [sourcePath, fragment] of [
   ['src/styles/layout.css', '.method-journey'],
   ['src/styles/layout.css', ".method-journey .thread-curve"],
   ['src/styles/layout.css', "html[data-method-path-ready='true']"],
-  ['src/styles/layout.css', "html[data-method-path-ready='pending']"],
   ['src/styles/tokens.css', '--method-path-width: 4px'],
   ['src/styles/tokens.css', '--method-path-guide:'],
   ['src/styles/tokens.css', '--method-path-glow:'],
@@ -195,6 +191,12 @@ for (const [sourcePath, fragment] of [
     console.error(`❌ ${sourcePath} is missing the method-path contract fragment: ${fragment}`);
     errors++;
   }
+}
+
+const layoutSource = methodPathSources.find(([candidate]) => candidate === 'src/styles/layout.css')?.[1] ?? '';
+if (/data-method-path-ready=['"]pending['"][\s\S]{0,240}opacity:\s*0/.test(layoutSource)) {
+  console.error('❌ Pending method-path state must not hide homepage content before enhancement initializes.');
+  errors++;
 }
 
 const tokenSource = methodPathSources.find(([candidate]) => candidate === 'src/styles/tokens.css')?.[1] ?? '';
