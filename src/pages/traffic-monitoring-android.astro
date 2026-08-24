@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
 
 import TrafficAndroidHero from '../components/trafficmonitoring/android/TrafficAndroidHero.astro';
 import TrafficAndroidMission from '../components/trafficmonitoring/android/TrafficAndroidMission.astro';
@@ -18,12 +20,12 @@ import { trafficMonitoringAndroidData as android } from '../content';
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
 const subHeaderLinks = [
-  { label: 'Overview', href: '#hero' },
-  { label: 'Difference', href: '#why-different' },
-  { label: 'Evidence', href: '#evidence-model' },
-  { label: 'Architecture', href: '#architecture' },
-  { label: 'Roadmap', href: '#roadmap' },
-  { label: 'Status', href: '#status' },
+  { label: 'Overview', href: '#top' },
+  { label: 'Decide', href: '#decide' },
+  { label: 'Build', href: '#build' },
+  { label: 'Test', href: '#test' },
+  { label: 'Measure', href: '#measure' },
+  { label: 'Decide again', href: '#decide-again' },
 ];
 
 const cta = {
@@ -48,20 +50,77 @@ const cta = {
     cta={cta}
   />
 
-  <div id="top">
+  <div id="top" data-project-page data-project-archetype="experiment">
     <TrafficAndroidHero />
-    <TrafficAndroidMission />
-    <TrafficAndroidDifference />
-    <TrafficAndroidSurfaces />
-    <TrafficAndroidEvidence />
-    <TrafficAndroidArchitecture />
-    <TrafficAndroidRoadmap />
-    <TrafficPrivacyBoundary
-      title="Android Privacy & Trust Boundaries"
-      keptVisible={android.privacy.keptVisible}
-      notClaimed={android.privacy.notClaimed}
-    />
-    <TrafficAndroidMaturity />
+
+    <ProjectPhase
+      id="decide"
+      step="01"
+      label="DECIDE"
+      title="How much network behavior can Android support with trustworthy attribution?"
+      description="The project separates usage totals from provenance. When attribution context is ambiguous or continuity breaks, the evidence remains explicitly Unattributed instead of being forced into a confident story."
+    >
+      <TrafficAndroidMission />
+      <TrafficAndroidDifference />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="build"
+      step="02"
+      label="BUILD"
+      title="Build provenance into the data pipeline, not only into the UI copy."
+      description="Platform signals, raw evidence, deterministic attribution, derived product state and export are separated so the final interface can explain both the usage and how that conclusion was produced."
+      tone="subtle"
+    >
+      <TrafficAndroidArchitecture />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="test"
+      step="03"
+      label="TEST"
+      title="Expose uncertainty as a first-class product state."
+      description="Overview, Networks, Evidence and Monitor surfaces test whether usage, provenance and engineering diagnostics can remain understandable without collapsing them into one confidence level."
+    >
+      <TrafficAndroidSurfaces />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="measure"
+      step="04"
+      label="MEASURE"
+      title="Measure attribution coverage and measurement health separately."
+      description="Evidence Coverage explains how much accountable usage was attributed; Measurement Health captures continuity and integrity. Field-validation gaps remain explicit in the maturity model."
+      tone="subtle"
+    >
+      <TrafficAndroidEvidence />
+      <TrafficPrivacyBoundary
+        title="Android Privacy & Trust Boundaries"
+        keptVisible={android.privacy.keptVisible}
+        notClaimed={android.privacy.notClaimed}
+      />
+      <TrafficAndroidMaturity />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="decide-again"
+      step="05"
+      label="DECIDE AGAIN"
+      title="Do not turn emulator success into a field-reliability claim."
+      description="The next decision is constrained by physical-device evidence: core attribution and Evidence Coverage are implemented, while background behavior, long-duration runs and multi-OEM reliability still require field validation."
+    >
+      <ProjectDecisionBand
+        title="Preserve uncertainty until Android field evidence closes the gap."
+        body="Traffic Monitoring Android already implements deterministic attribution, 5-minute buckets, product surfaces and Evidence Coverage. PendingIntent background behavior, 48–72h physical-device runs and a multi-OEM matrix remain validation work, so the project does not claim universal background reliability or transform missing evidence into a PASS verdict."
+        signals={[
+          'Core evidence model and product UX are implemented',
+          'Physical-device background validation is still required',
+          'Missing evidence remains Unattributed or inconclusive, never silently promoted',
+        ]}
+      />
+      <TrafficAndroidRoadmap />
+    </ProjectPhase>
+
     <TrafficFinalCta
       kicker={android.finalCta.kicker}
       headline={android.finalCta.headline}
