@@ -160,9 +160,10 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   }
 
   .subheader-link {
-    min-height: var(--touch-target-min);
+    min-height: 48px;
     display: inline-flex;
     align-items: center;
+    box-sizing: border-box;
     padding: 5px 12px;
     border-radius: var(--radius-full);
     font-size: var(--text-caption);
