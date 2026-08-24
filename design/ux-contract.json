@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "name": "Personal Landing UX Contract",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "targetExperienceLevel": "L1",
   "baselineRepositoryLevel": "L0",
   "viewports": {
@@ -76,10 +76,16 @@
       "progressiveDisclosure": "essential -> context -> visual/workflow proof -> architecture/code/diagnostics",
       "sharedPhaseOrderAcrossViewports": true
     },
-    "pilotRoutes": [
+    "routes": [
       "/android-local-llm-harness",
       "/local-llm-server",
-      "/closedroom"
+      "/local-asr-server",
+      "/closedroom",
+      "/aura-finance",
+      "/redact-guard",
+      "/performance-lab",
+      "/traffic-monitoring",
+      "/traffic-monitoring-android"
     ]
   },
   "criticalJourneys": [
