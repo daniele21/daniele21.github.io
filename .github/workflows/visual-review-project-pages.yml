@@ -23,8 +23,8 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install project dependencies
-        run: npm ci
+      - name: Install project dependencies for rendered QA
+        run: npm install --no-audit --no-fund
 
       - name: Install Playwright for visual QA
         run: |
