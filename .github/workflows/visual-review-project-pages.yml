@@ -1,0 +1,59 @@
+name: Visual review project pages
+
+on:
+  push:
+    branches:
+      - feature/landing-page
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Install Playwright for visual QA
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Build Astro site
+        run: npm run build
+
+      - name: Start static preview
+        run: |
+          python3 -m http.server 4321 --directory dist > /tmp/project-pages-http.log 2>&1 &
+          echo $! > /tmp/project-pages-http.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4321/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/project-pages-http.log
+          exit 1
+
+      - name: Capture 9 routes across 4 viewports
+        run: node scripts/capture-project-pages.mjs
+
+      - name: Upload rendered review artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-page-visual-review
+          path: visual-review/
+          if-no-files-found: error
+          retention-days: 7
