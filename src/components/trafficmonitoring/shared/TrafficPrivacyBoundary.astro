@@ -87,11 +87,12 @@ const { title, keptVisible, notClaimed } = Astro.props;
 
   .boundary-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
     gap: var(--space-6);
   }
 
   .boundary-card {
+    min-width: 0;
     padding: var(--space-8);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border-subtle);
@@ -114,9 +115,11 @@ const { title, keptVisible, notClaimed } = Astro.props;
   }
 
   .card-header h3 {
+    min-width: 0;
     font-size: var(--text-lg);
     font-weight: 700;
     color: var(--ink);
+    overflow-wrap: anywhere;
   }
 
   .icon {
@@ -146,6 +149,11 @@ const { title, keptVisible, notClaimed } = Astro.props;
     font-size: var(--text-sm);
     color: var(--ink-muted);
     line-height: 1.5;
+  }
+
+  .boundary-list li > span:last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   .check-icon {
