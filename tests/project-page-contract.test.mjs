@@ -48,6 +48,19 @@ test('all project pages preserve one predictable phase order', () => {
   }
 });
 
+test('shared project subheader uses canonical tokens and accessible targets', () => {
+  const source = read('src/components/layout/ProductSubHeader.astro');
+
+  assert.doesNotMatch(source, /var\(--text-small\)/);
+  assert.doesNotMatch(source, /var\(--surface-blue\)/);
+  assert.match(source, /var\(--text-caption\)/);
+  assert.match(source, /var\(--surface-blue-subtle\)/);
+  assert.match(source, /min-height: var\(--touch-target-min\)/);
+  assert.match(source, /aria-current/);
+  assert.match(source, /href === '#top'/);
+  assert.match(source, /requestAnimationFrame/);
+});
+
 test('project-page contract documents semantic consistency over visual sameness', () => {
   const contract = read('design/project-page-contract.md');
   assert.match(contract, /consistent comprehension, not identical pages/i);
