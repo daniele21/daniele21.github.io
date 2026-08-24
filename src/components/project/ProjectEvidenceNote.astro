@@ -94,6 +94,6 @@ const { title, body, evidenced = [], missing = [] } = Astro.props;
   @media (max-width: 820px) {
     .evidence-note,
     .evidence-columns { grid-template-columns: 1fr; }
-    .evidence-note { width: min(100% - 28px, 1120px); }
+    .evidence-note { width: min(1120px, calc(100% - 28px)); }
   }
 </style>
