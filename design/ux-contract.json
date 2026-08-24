@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "name": "Personal Landing UX Contract",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "targetExperienceLevel": "L1",
   "baselineRepositoryLevel": "L0",
   "viewports": {
@@ -43,6 +43,45 @@
     "singleH1PerRoute": true,
     "noDuplicateMainLandmarks": true
   },
+  "projectPages": {
+    "contract": "design/project-page-contract.md",
+    "goal": "Consistent comprehension across technical project deep-dives without forcing identical page content or visual modules.",
+    "primaryJourney": [
+      "Overview",
+      "Decide",
+      "Build",
+      "Test",
+      "Measure",
+      "Decide again",
+      "Next step"
+    ],
+    "navigation": [
+      "Overview",
+      "Decide",
+      "Build",
+      "Test",
+      "Measure",
+      "Decide again"
+    ],
+    "archetypes": [
+      "infrastructure",
+      "product",
+      "experiment"
+    ],
+    "rules": {
+      "semanticConsistencyBeforeVisualSameness": true,
+      "projectSpecificModulesStayInsidePhases": true,
+      "verifiedEvidenceOnly": true,
+      "missingEvidenceMustBeExplicit": true,
+      "progressiveDisclosure": "essential -> context -> visual/workflow proof -> architecture/code/diagnostics",
+      "sharedPhaseOrderAcrossViewports": true
+    },
+    "pilotRoutes": [
+      "/android-local-llm-harness",
+      "/local-llm-server",
+      "/closedroom"
+    ]
+  },
   "criticalJourneys": [
     {
       "id": "J1",
@@ -67,6 +106,12 @@
       "persona": "Mobile Visitor (320px–430px)",
       "flow": "Seamless vertical journey without lost narrative state, unreadable microtype, or broken SVG paths",
       "targetComprehensionSec": 60
+    },
+    {
+      "id": "J5",
+      "persona": "Project Deep-Dive Reader",
+      "flow": "Overview -> Decide -> Build -> Test -> Measure -> Decide again -> GitHub / related next step",
+      "targetComprehensionSec": 120
     }
   ]
 }
