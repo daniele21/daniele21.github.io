@@ -164,17 +164,40 @@ try {
       const screenshotPath = path.join(outputDir, `${route}__${viewport.name}.png`);
       await page.screenshot({ path: screenshotPath, fullPage: true });
 
+      // The production UI intentionally uses global smooth scrolling. For this
+      // state assertion we temporarily force instant scrolling so the test
+      // measures the final section/scroll-spy relationship rather than a
+      // transient animation frame.
+      await page.evaluate(() => {
+        document.documentElement.dataset.visualReviewScrollBehavior = document.documentElement.style.scrollBehavior;
+        document.documentElement.style.scrollBehavior = 'auto';
+      });
+
       const phaseNavigation = [];
       for (const phaseId of phaseIds) {
         await page.evaluate((id) => {
           document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: 'auto' });
         }, phaseId);
-        await page.waitForTimeout(120);
+
+        await page.waitForFunction(
+          (id) => document
+            .querySelector('[data-product-subheader] [aria-current="location"]')
+            ?.getAttribute('href') === `#${id}`,
+          phaseId,
+          { timeout: 1500 },
+        ).catch(() => null);
+
         phaseNavigation.push({
           phaseId,
           activeHref: await page.locator('[data-product-subheader] [aria-current="location"]').getAttribute('href').catch(() => null),
         });
       }
+
+      await page.evaluate(() => {
+        const previous = document.documentElement.dataset.visualReviewScrollBehavior || '';
+        document.documentElement.style.scrollBehavior = previous;
+        delete document.documentElement.dataset.visualReviewScrollBehavior;
+      });
 
       report.push({
         route,
