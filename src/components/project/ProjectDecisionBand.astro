@@ -1,0 +1,105 @@
+---
+export interface Props {
+  eyebrow?: string;
+  title: string;
+  body: string;
+  signals?: string[];
+}
+
+const {
+  eyebrow = 'CURRENT DECISION',
+  title,
+  body,
+  signals = [],
+} = Astro.props;
+---
+
+<div class="decision-band">
+  <div class="decision-band-copy">
+    <p class="decision-band-eyebrow">{eyebrow}</p>
+    <p class="decision-band-title">{title}</p>
+    <p class="decision-band-body">{body}</p>
+  </div>
+
+  {signals.length > 0 && (
+    <ul class="decision-signals" aria-label="Decision signals">
+      {signals.map((signal) => <li>{signal}</li>)}
+    </ul>
+  )}
+</div>
+
+<style>
+  .decision-band {
+    width: min(1120px, calc(100% - 40px));
+    margin: 0 auto clamp(48px, 7vw, 84px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr);
+    gap: clamp(24px, 4vw, 56px);
+    padding: clamp(24px, 4vw, 40px);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-xl);
+    background: var(--surface-blue-subtle);
+  }
+
+  .decision-band-eyebrow {
+    margin: 0;
+    color: var(--accent-blue);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: .08em;
+  }
+
+  .decision-band-title {
+    margin: 10px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.2vw, 1.95rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -.03em;
+  }
+
+  .decision-band-body {
+    max-width: 720px;
+    margin: 12px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body);
+    line-height: 1.65;
+  }
+
+  .decision-signals {
+    display: grid;
+    align-content: center;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .decision-signals li {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    color: var(--ink);
+    font-size: var(--text-caption);
+    font-weight: 700;
+  }
+
+  .decision-signals li::before {
+    content: '→';
+    color: var(--accent-blue);
+    font-weight: 900;
+  }
+
+  @media (max-width: 760px) {
+    .decision-band {
+      width: min(100% - 28px, 1120px);
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
