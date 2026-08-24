@@ -245,7 +245,12 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
       .filter((item): item is NonNullable<typeof item> => item !== null);
 
     const overviewLink = links.find((link) => link.getAttribute('href') === '#top');
+    let currentActive = links.find((link) => link.classList.contains('is-active'));
+
     const setActive = (activeLink: HTMLAnchorElement | undefined) => {
+      if (activeLink === currentActive) return;
+      currentActive = activeLink;
+
       links.forEach((link) => {
         const active = link === activeLink;
         link.classList.toggle('is-active', active);
