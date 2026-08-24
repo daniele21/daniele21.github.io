@@ -58,9 +58,23 @@
   --text-caption: 0.875rem;  /* 14px - STRICT MINIMUM FOR MEANINGFUL TEXT */
   --text-badge: 0.875rem;    /* 14px - badges and compact metadata remain readable */
 
+  /* Compatibility aliases for existing project modules.
+     These resolve through the canonical scale above so older modules cannot
+     silently fall back to browser defaults or sub-14px typography. */
+  --text-xs: var(--text-caption);
+  --text-sm: var(--text-caption);
+  --text-base: var(--text-body);
+  --text-lg: var(--text-lead);
+  --text-xl: var(--text-h3);
+  --text-2xl: clamp(1.35rem, 2vw, 1.75rem);
+  --text-3xl: var(--text-h2);
+  --text-4xl: var(--text-h1);
+  --text-body-lg: var(--text-lead);
+
   /* Spacing Scale (4px base) */
   --space-1: 4px;
   --space-2: 8px;
+  --space-2.5: 10px;
   --space-3: 12px;
   --space-4: 16px;
   --space-5: 20px;
@@ -71,6 +85,12 @@
   --space-16: 64px;
   --space-20: 80px;
   --space-24: 96px;
+
+  /* Compatibility aliases for established project surfaces. */
+  --surface-blue: var(--surface-blue-subtle);
+  --semantic-warning: var(--accent-amber);
+  --semantic-success: var(--status-good-text);
+  --semantic-danger: var(--status-bad-text);
 
   /* Touch Target Constraint */
   --touch-target-min: 44px;
