@@ -1,10 +1,12 @@
 ---
 /**
  * local-llm-server.astro
- * Dedicated infrastructure deep-dive page for Local LLM Server.
+ * Infrastructure deep-dive using the shared project-page journey.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
 import LocalLlmHero from '../components/localllm/LocalLlmHero.astro';
 import LocalLlmMission from '../components/localllm/LocalLlmMission.astro';
 import LocalLlmProblems from '../components/localllm/LocalLlmProblems.astro';
@@ -23,15 +25,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Why Server', href: '#why' },
-  { label: 'Runtime Flow', href: '#runtime' },
-  { label: 'Lifecycle', href: '#lifecycle' },
-  { label: 'Studio Surfaces', href: '#surfaces' },
-  { label: 'Backends', href: '#backends' },
-  { label: 'Architecture', href: '#architecture' },
-  { label: 'API Code', href: '#code' },
-  { label: 'Status', href: '#status' },
+  { label: 'Decide', href: '#decide' },
+  { label: 'Build', href: '#build' },
+  { label: 'Test', href: '#test' },
+  { label: 'Measure', href: '#measure' },
+  { label: 'Decide again', href: '#decide-again' },
 ];
+
 const localLlmSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -61,17 +61,74 @@ const localLlmSchema = {
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/local-llm-server' }}
   />
 
-  <div id="top">
+  <div id="top" data-project-page data-project-archetype="infrastructure">
     <LocalLlmHero baseUrl={baseUrl} />
-    <LocalLlmMission />
-    <LocalLlmProblems />
-    <LocalLlmRuntimeFlow />
-    <LocalLlmLifecycle />
-    <LocalLlmSurfaces baseUrl={baseUrl} />
-    <LocalLlmBackends />
-    <LocalLlmArchitecture baseUrl={baseUrl} />
-    <LocalLlmCodePreview />
-    <LocalLlmMaturity />
+
+    <ProjectPhase
+      id="decide"
+      step="01"
+      label="DECIDE"
+      title="Why is running a model not enough for a product?"
+      description="The architectural question starts with backend coupling, lifecycle ownership, concurrency and observability. The project exists to make those runtime responsibilities explicit behind a stable local boundary."
+    >
+      <LocalLlmMission />
+      <LocalLlmProblems />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="build"
+      step="02"
+      label="BUILD"
+      title="Build a stable boundary around changing local runtimes."
+      description="The implementation progressively discloses the execution flow, deterministic lifecycle, backend choices, architecture and client contract after the reader understands the infrastructure problem."
+      tone="subtle"
+    >
+      <LocalLlmRuntimeFlow />
+      <LocalLlmLifecycle />
+      <LocalLlmBackends />
+      <LocalLlmArchitecture baseUrl={baseUrl} />
+      <LocalLlmCodePreview />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="test"
+      step="03"
+      label="TEST"
+      title="Expose the runtime through a product-facing test surface."
+      description="Local LLM Studio makes model state, prompts, configuration, telemetry and integration behavior inspectable instead of leaving the runtime as a headless process with opaque console output."
+    >
+      <LocalLlmSurfaces baseUrl={baseUrl} />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="measure"
+      step="04"
+      label="MEASURE"
+      title="Make capability and operational limits equally visible."
+      description="The page treats runtime telemetry, trust boundaries and maturity limits as evidence. It distinguishes what works today from what is not yet justified as a production claim."
+      tone="subtle"
+    >
+      <LocalLlmMaturity />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="decide-again"
+      step="05"
+      label="DECIDE AGAIN"
+      title="Keep the boundary local where the current evidence is strongest."
+      description="The next architectural decision follows from the limits already documented: use the server as a loopback-first local inference layer, while treating open or untrusted network deployment as a different problem that needs additional hardening."
+    >
+      <ProjectDecisionBand
+        title="Use the OpenAI-compatible boundary locally; do not imply trusted remote infrastructure."
+        body="Local LLM Server binds to 127.0.0.1 by default and already supports multi-model routing, streaming, lifecycle management and operational visibility. It does not include a built-in authentication layer for open or untrusted network deployments, and hardware-specific tuning remains part of responsible use."
+        signals={[
+          'Loopback-first trust boundary by default',
+          'No built-in authentication for untrusted network deployment',
+          'Hardware-specific context tuning remains necessary',
+        ]}
+      />
+    </ProjectPhase>
+
     <LocalLlmCta baseUrl={baseUrl} />
   </div>
 </BaseLayout>
