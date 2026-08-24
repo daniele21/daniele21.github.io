@@ -15,7 +15,7 @@ const { code } = harnessData;
         <h2>{code.title}</h2>
         <p class="code-sub">{code.sub}</p>
       </div>
-      <div class="reveal">
+      <div class="reveal code-panel">
         <pre aria-label="LocalLlmClient example"><code><span class="kw">val</span> prepared = client.<span class="fn">prepare</span>(applicationId, useCaseId)
 check(prepared.ready)
 
@@ -34,7 +34,7 @@ handle.<span class="fn">cancel</span>()</code></pre>
 <style>
   .code-wrap {
     display: grid;
-    grid-template-columns: 0.8fr 1.2fr;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
     gap: var(--space-8);
     align-items: center;
   }
@@ -54,17 +54,22 @@ handle.<span class="fn">cancel</span>()</code></pre>
     margin-top: var(--space-3);
   }
 
+  .code-panel { min-width: 0; }
+
   pre {
+    max-width: 100%;
     margin: 0;
     background: #0b1220;
     color: #e2e8f0;
     border-radius: var(--radius-xl);
-    padding: var(--space-6);
-    overflow: auto;
-    font-size: 0.82rem;
+    padding: clamp(16px, 4vw, 24px);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
     line-height: 1.7;
     border: 1px solid #1e293b;
     box-shadow: var(--shadow-md);
+    -webkit-overflow-scrolling: touch;
   }
 
   code .kw { color: #93c5fd; }
