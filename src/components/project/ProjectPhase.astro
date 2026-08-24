@@ -1,0 +1,110 @@
+---
+export interface Props {
+  id: 'decide' | 'build' | 'test' | 'measure' | 'decide-again';
+  step: string;
+  label: string;
+  title: string;
+  description: string;
+  tone?: 'canvas' | 'subtle';
+}
+
+const { id, step, label, title, description, tone = 'canvas' } = Astro.props;
+const labelId = `${id}-phase-label`;
+---
+
+<div
+  id={id}
+  class={`project-phase project-phase-${tone}`}
+  data-project-phase={id}
+  role="group"
+  aria-labelledby={labelId}
+>
+  <div class="shell project-phase-intro">
+    <div class="project-phase-index" aria-hidden="true">{step}</div>
+    <div class="project-phase-copy">
+      <p class="project-phase-kicker">{label}</p>
+      <p id={labelId} class="project-phase-title">{title}</p>
+      <p class="project-phase-description">{description}</p>
+    </div>
+  </div>
+  <div class="project-phase-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .project-phase {
+    scroll-margin-top: 64px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .project-phase-canvas { background: var(--surface-canvas); }
+  .project-phase-subtle { background: var(--surface-subtle); }
+
+  .project-phase-intro {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 760px);
+    gap: var(--space-5);
+    align-items: start;
+    padding-top: clamp(42px, 6vw, 72px);
+    padding-bottom: clamp(20px, 3vw, 32px);
+  }
+
+  .project-phase-index {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 800;
+  }
+
+  .project-phase-kicker {
+    margin: 0;
+    color: var(--accent-blue);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .project-phase-title {
+    margin: 8px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -.03em;
+  }
+
+  .project-phase-description {
+    max-width: 680px;
+    margin: 10px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body);
+    line-height: 1.65;
+  }
+
+  .project-phase-content {
+    position: relative;
+  }
+
+  @media (max-width: 680px) {
+    .project-phase-intro {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+      padding-top: 36px;
+    }
+
+    .project-phase-index {
+      width: 38px;
+      height: 38px;
+    }
+  }
+</style>
