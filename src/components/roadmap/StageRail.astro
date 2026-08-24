@@ -1,13 +1,13 @@
 ---
 /**
- * StageRail — Numbered badge + vertical rail line for each roadmap stage.
+ * StageRail -Numbered badge + vertical rail line for each roadmap stage.
  *
  * Uses PURE CSS for the vertical line (no SVG, zero distortion).
  * Positioned at 4% left or 4% right to match FlowTransition endpoints.
  *
- * @prop number  — Stage number displayed in the badge (1–4)
- * @prop side    — "left" or "right" positioning
- * @prop isFinal — If true, adds a terminal footer dot at the bottom
+ * @prop number  -Stage number displayed in the badge (1–4)
+ * @prop side    -"left" or "right" positioning
+ * @prop isFinal -If true, adds a terminal footer dot at the bottom
  */
 interface Props {
   number: number;
@@ -20,7 +20,7 @@ const isFirst = number === 1;
 ---
 
 <div class={`stage-rail rail-${side}`} aria-hidden="true">
-  <!-- Pure CSS vertical line — cannot be distorted -->
+  <!-- Pure CSS vertical line -cannot be distorted -->
   <div class={`rail-line ${isFirst ? 'line-first' : ''} ${isFinal ? 'line-final' : ''}`}>
     <div class="rail-glow"></div>
     <div class="rail-pulse"></div>
@@ -41,7 +41,7 @@ const isFirst = number === 1;
     pointer-events: none;
   }
 
-  /* Positioned at exactly 4% from edge — matches FlowTransition SVG x=40/960 */
+  /* Positioned at exactly 4% from edge -matches FlowTransition SVG x=40/960 */
   .rail-left { left: 4%; }
   .rail-right { right: 4%; }
 

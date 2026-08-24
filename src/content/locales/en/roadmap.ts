@@ -1,9 +1,9 @@
 /**
- * roadmap.ts — Content data for the Local AI Roadmap landing page.
+ * roadmap.ts -Content data for the Local AI Roadmap landing page.
  *
  * All copy, labels and structured data aligned with:
- * - 08 — Local AI Strategy, Positioning & Storytelling
- * - 09 — Local AI Landing Page — Narrative, UX & Copy
+ * - 08 -Local AI Strategy, Positioning & Storytelling
+ * - 09 -Local AI Landing Page -Narrative, UX & Copy
  */
 
 /* ------------------------------------------------------------------ */
@@ -25,12 +25,12 @@ export const heroContent = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Stage 1 — Strategy                                                 */
+/*  Stage 1 -Strategy                                                 */
 /* ------------------------------------------------------------------ */
 
 export const strategyContent = {
-  kicker: '01 — STRATEGY',
-  title: 'Where should AI\nactually run?',
+  kicker: '01 -STRATEGY',
+  title: 'Where should AI actually run?',
   intro:
     'Before choosing models or runtimes, start with the workload. What do we gain by keeping data and execution under our control, and what do we give up?',
   items: [
@@ -69,11 +69,11 @@ export const comparisonTable = {
   title: 'Local vs Hybrid vs Cloud',
   columns: ['Local', 'Hybrid', 'Cloud'] as const,
   rows: [
-    { label: 'Privacy',     values: ['✓', '✓', '–'],   classes: ['good', 'good', ''] },
-    { label: 'Control',     values: ['✓', '✓', '×'],   classes: ['good', 'good', 'bad'] },
-    { label: 'Cost',        values: ['$', '$$', '$$$'], classes: ['good', 'warn', 'bad'] },
-    { label: 'Latency',     values: ['✓', '✓', '×'],   classes: ['good', 'good', 'bad'] },
-    { label: 'Reliability', values: ['✓', '✓', '×'],   classes: ['good', 'good', 'bad'] },
+    { label: 'Privacy', values: ['✓', '✓', '–'], classes: ['good', 'good', ''] },
+    { label: 'Control', values: ['✓', '✓', '×'], classes: ['good', 'good', 'bad'] },
+    { label: 'Cost', values: ['$', '$$', '$$$'], classes: ['good', 'warn', 'bad'] },
+    { label: 'Latency', values: ['✓', '✓', '×'], classes: ['good', 'good', 'bad'] },
+    { label: 'Reliability', values: ['✓', '✓', '×'], classes: ['good', 'good', 'bad'] },
   ],
   footer: 'No single winner.\nChoose by constraints.',
 };
@@ -92,16 +92,16 @@ export const tradeoffGuide = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Stage 2 — Architecture & Infrastructure                            */
+/*  Stage 2 -Architecture & Infrastructure                            */
 /* ------------------------------------------------------------------ */
 
 export const architectureContent = {
-  kicker: '02 — ARCHITECTURE & INFRASTRUCTURE',
-  title: 'Can we actually\nrun it locally?',
+  kicker: '02 -ARCHITECTURE & INFRASTRUCTURE',
+  title: 'Can we actually run it locally?',
   intro:
     'This is where the strategy becomes engineering. I build the infrastructure needed to make local execution reusable, observable and manageable across very different environments.',
   proofLine: 'Different environments. Same question: what can realistically stay local?',
-  /** Path relative to public/ — resolved at component level */
+  /** Path relative to public/ -resolved at component level */
   ecosystemImage: 'images/ecosystem.png',
   ecosystemAlt: 'Connected Local AI stack across desktop, Android, local server and cloud',
   items: [
@@ -124,12 +124,12 @@ export const architectureContent = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Stage 3 — Applications                                             */
+/*  Stage 3 -Applications                                             */
 /* ------------------------------------------------------------------ */
 
 export const applicationsContent = {
-  kicker: '03 — APPLICATIONS',
-  title: 'What happens in\na real product?',
+  kicker: '03 -APPLICATIONS',
+  title: 'What happens in a real product?',
   intro:
     'A runtime or benchmark cannot expose every product constraint. Real workflows can. I use applications as proving grounds for the infrastructure and architecture I build.',
   note: 'Each application is a test bed.',
@@ -141,7 +141,7 @@ export const applicationsContent = {
   cards: [
     {
       name: 'RedactGuard',
-      description: 'Local LLM inference for sensitive documents — configurable PII detection, human review and controlled export.',
+      description: 'Local LLM inference for sensitive documents -configurable PII detection, human review and controlled export.',
       href: 'redact-guard',
       logoPath: 'images/redact-guard/logo.png',
       colorClass: 'red',
@@ -149,7 +149,7 @@ export const applicationsContent = {
     },
     {
       name: 'Aura Finance',
-      description: 'On-device transaction intelligence — merchant recognition, categorization and human review without sending personal data externally.',
+      description: 'On-device transaction intelligence -merchant recognition, categorization and human review without sending personal data externally.',
       href: 'aura-finance',
       logoPath: 'images/aura/logo.png',
       colorClass: 'purple',
@@ -157,7 +157,7 @@ export const applicationsContent = {
     },
     {
       name: 'ClosedRoom',
-      description: 'Local recording, ASR, speaker context, analysis and project memory — external providers opt-in, not default.',
+      description: 'Local recording, ASR, speaker context, analysis and project memory -external providers opt-in, not default.',
       href: 'closedroom',
       logoPath: 'images/closedroom/logo.png',
       colorClass: 'blue',
@@ -173,12 +173,12 @@ export const applicationsContent = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Stage 4 — Observability & Measurement                              */
+/*  Stage 4 -Observability & Measurement                              */
 /* ------------------------------------------------------------------ */
 
 export const observabilityContent = {
-  kicker: '04 — OBSERVABILITY & MEASUREMENT',
-  title: 'Does it actually\nwork well?',
+  kicker: '04 -OBSERVABILITY & MEASUREMENT',
+  title: 'Does it actually work well?',
   intro:
     "'It runs' is a very low bar. Local AI has to perform under real hardware and product constraints.",
   items: [

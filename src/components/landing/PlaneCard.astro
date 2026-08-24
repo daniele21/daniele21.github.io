@@ -1,0 +1,128 @@
+---
+/** Standard card frame shared by every homepage plane. */
+interface Props {
+  href?: string;
+  accent?: 'blue' | 'violet';
+  className?: string;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  accent = 'blue',
+  className = '',
+  ariaLabel,
+} = Astro.props;
+
+const Tag = href ? 'a' : 'article';
+const linkProps = href ? { href } : {};
+---
+
+<Tag
+  {...linkProps}
+  class:list={[
+    'plane-card',
+    `plane-card--${accent}`,
+    { 'plane-card--interactive': Boolean(href) },
+    className,
+  ]}
+  aria-label={ariaLabel}
+>
+  <header class="plane-card__header">
+    <slot name="header" />
+  </header>
+
+  <div class="plane-card__body">
+    <slot />
+  </div>
+
+  <footer class="plane-card__footer">
+    <slot name="footer" />
+  </footer>
+</Tag>
+
+<style>
+  .plane-card {
+    --plane-card-accent: var(--accent-blue);
+    --plane-card-accent-soft: rgba(20, 91, 255, 0.07);
+
+    position: relative;
+    min-width: 0;
+    height: clamp(336px, 42vh, 344px);
+    overflow: hidden;
+    container-type: inline-size;
+
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+
+    background:
+      radial-gradient(circle at 10% 8%, var(--plane-card-accent-soft), transparent 30%),
+      var(--surface-card);
+
+    color: inherit;
+    text-decoration: none;
+    box-shadow: 0 10px 28px rgba(8, 19, 51, 0.05);
+
+    transition:
+      transform var(--duration-base) var(--ease-out-expo),
+      border-color var(--duration-fast) ease,
+      box-shadow var(--duration-base) ease;
+  }
+
+  .plane-card--violet {
+    --plane-card-accent: #8057ff;
+    --plane-card-accent-soft: rgba(128, 87, 255, 0.08);
+  }
+
+  .plane-card--interactive:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--plane-card-accent) 30%, var(--border-medium));
+    box-shadow: 0 16px 34px rgba(8, 19, 51, 0.08);
+  }
+
+  .plane-card__header,
+  .plane-card__footer {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-inline: clamp(16px, 1.6vw, 20px);
+  }
+
+  .plane-card__header {
+    min-height: 46px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .plane-card__body {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: var(--space-3) clamp(16px, 1.6vw, 20px);
+  }
+
+  .plane-card__footer {
+    min-height: 70px;
+    border-top: 1px solid var(--border-subtle);
+    background: linear-gradient(90deg, var(--plane-card-accent-soft), transparent);
+  }
+
+  @media (max-width: 820px) {
+    .plane-card {
+      height: auto;
+      min-height: 212px;
+    }
+
+    .plane-card__body { overflow: visible; }
+    .plane-card__footer { min-height: 60px; flex-wrap: wrap; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .plane-card { transition: none; }
+    .plane-card--interactive:hover { transform: none; }
+  }
+</style>

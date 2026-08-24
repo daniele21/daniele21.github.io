@@ -30,25 +30,25 @@ Answer in the first screen:
 
 Use one dominant product/system visual when useful. Do not turn the hero into a feature inventory.
 
-### Decide — Why does this exist?
+### Decide -Why does this exist?
 
 Explain the problem, constraints and architectural question that justified the project. For Local AI work, make the Local / Hybrid / Cloud boundary explicit when it is materially relevant.
 
-### Build — What was built?
+### Build -What was built?
 
 Show the concrete system and only then progressively disclose architecture, runtime, backends, APIs and implementation detail. Technical depth is encouraged when it supports the project story; it should not dominate before the reader understands why the system exists.
 
-### Test — Where does it meet reality?
+### Test -Where does it meet reality?
 
 Show the real workflow, product surface, test bed or operational scenario. Prefer real screenshots and end-to-end flows over abstract feature lists.
 
-### Measure — What can be claimed today?
+### Measure -What can be claimed today?
 
 Use verified evidence only. Depending on the project, this may include benchmark results, latency, throughput, memory, thermal behavior, network boundaries, product proof, runtime diagnostics or explicit maturity/limitations.
 
 If measured results do not exist yet, say what is being measured or what still blocks a stronger claim. Never use decorative charts that can be mistaken for measured evidence.
 
-### Decide again — What changed after evidence?
+### Decide again -What changed after evidence?
 
 State the current architectural/product decision, trade-offs and remaining limits. This is not a motivational conclusion; it is the consequence of the previous phases.
 

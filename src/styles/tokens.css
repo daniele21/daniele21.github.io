@@ -53,10 +53,14 @@
   --text-h2: clamp(1.75rem, 2.6vw, 2.35rem);
   --text-h3: clamp(1.2rem, 1.6vw, 1.45rem);
   --text-lead: clamp(1.05rem, 1.35vw, 1.2rem);
-  --text-body: 1rem;       /* 16px */
-  --text-body-sm: 0.9375rem; /* 15px */
-  --text-caption: 0.875rem;  /* 14px - STRICT MINIMUM FOR MEANINGFUL TEXT */
-  --text-badge: 0.875rem;    /* 14px - badges and compact metadata remain readable */
+  --text-body: 1rem;
+  /* 16px */
+  --text-body-sm: 0.9375rem;
+  /* 15px */
+  --text-caption: 0.875rem;
+  /* 14px - STRICT MINIMUM FOR MEANINGFUL TEXT */
+  --text-badge: 0.875rem;
+  /* 14px - badges and compact metadata remain readable */
 
   /* Compatibility aliases for existing project modules.
      These resolve through the canonical scale above so older modules cannot
@@ -107,12 +111,11 @@
   --shadow-lg: 0 16px 40px rgba(8, 19, 51, 0.08);
   --shadow-glow: 0 0 28px rgba(20, 91, 255, 0.2);
 
-  /* Continuous method-path contract — shared by HTML rails and SVG handoffs. */
+  /* Continuous method-path contract -shared by HTML rails and SVG handoffs. */
   --method-path-width: 4px;
   --method-path-guide: color-mix(in srgb, var(--accent-blue) 24%, transparent);
   --method-path-glow:
-    drop-shadow(0 0 4px color-mix(in srgb, var(--accent-blue) 40%, transparent))
-    drop-shadow(0 0 10px color-mix(in srgb, var(--accent-blue) 18%, transparent));
+    drop-shadow(0 0 4px color-mix(in srgb, var(--accent-blue) 40%, transparent)) drop-shadow(0 0 10px color-mix(in srgb, var(--accent-blue) 18%, transparent));
 
   /* Motion Tokens */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -128,7 +131,10 @@
 
 /* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

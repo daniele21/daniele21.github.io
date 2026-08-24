@@ -38,9 +38,9 @@ Every public benchmark, performance claim, or operational metric must adhere to 
 
 | ID | Claim / Statement | Classification | Context & Limitation | Source Reference |
 |---|---|---|---|---|
-| **POS-01** | `Local AI first != Local AI only` | `verified` | Core strategic thesis. The outcome can be Local, Hybrid, or Cloud. | `08 — Local AI Strategy, Positioning & Storytelling.md` |
-| **POS-02** | `Find the boundary with evidence, not ideology.` | `verified` | Positioning motto and guiding empirical principle. | `08 — Local AI Strategy, Positioning & Storytelling.md` |
-| **POS-03** | "Some workloads benefit from staying local: sensitive data stays closer, dependencies shrink, and you gain more control. Others belong in the cloud." | `verified` | Workload-driven boundary framing; avoids anti-cloud bias. | `08 — Strategy & Positioning` |
+| **POS-01** | `Local AI first != Local AI only` | `verified` | Core strategic thesis. The outcome can be Local, Hybrid, or Cloud. | `08 -Local AI Strategy, Positioning & Storytelling.md` |
+| **POS-02** | `Find the boundary with evidence, not ideology.` | `verified` | Positioning motto and guiding empirical principle. | `08 -Local AI Strategy, Positioning & Storytelling.md` |
+| **POS-03** | "Some workloads benefit from staying local: sensitive data stays closer, dependencies shrink, and you gain more control. Others belong in the cloud." | `verified` | Workload-driven boundary framing; avoids anti-cloud bias. | `08 -Strategy & Positioning` |
 | **POS-04** | "Local AI is always cheaper and more secure." | `remove` | Prohibited overclaim. Trade-offs must be evaluated per workload. | Guardrails in doc `08`, §11 |
 
 ---

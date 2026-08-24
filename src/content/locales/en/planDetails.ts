@@ -82,9 +82,30 @@ export const strategyPlan: PlanDetailData = {
     title: 'A decision brief the engineering planes can execute.',
     intro: 'Strategy is useful only when it produces explicit inputs for architecture and later evaluation.',
     items: [
-      { index: 'A', title: 'Workload placement', meta: 'LOCAL · HYBRID · CLOUD', text: 'A provisional placement based on the constraints and value of control—not on ideology.' },
-      { index: 'B', title: 'Architecture requirements', meta: 'BOUNDARIES · FAILURE MODES', text: 'The trust boundary, runtime ownership, connectivity behavior, and operational constraints the system must support.' },
-      { index: 'C', title: 'Success thresholds', meta: 'QUALITY · LATENCY · RESOURCES', text: 'The measurable conditions that will determine whether the initial decision survives real products and hardware.' },
+      {
+        index: 'A',
+        title: 'Workload placement',
+        meta: 'LOCAL · HYBRID · CLOUD',
+        text: 'A provisional placement based on the constraints and value of control—not on ideology.',
+        image: 'images/strategy/decision-framework.svg',
+        imageAlt: 'Decision framework flow: Workload to constraints to Local, Hybrid, or Cloud',
+      },
+      {
+        index: 'B',
+        title: 'Architecture requirements',
+        meta: 'BOUNDARIES · FAILURE MODES',
+        text: 'The trust boundary, runtime ownership, connectivity behavior, and operational constraints the system must support.',
+        image: 'images/strategy/local-vs-hybrid-vs-cloud-native-final.svg',
+        imageAlt: 'Local vs Hybrid vs Cloud deployment boundary comparison',
+      },
+      {
+        index: 'C',
+        title: 'Success thresholds',
+        meta: 'QUALITY · LATENCY · RESOURCES',
+        text: 'The measurable conditions and trade-off spectrums that determine whether the initial decision survives real products and hardware.',
+        image: 'images/strategy/tradeoff-guide.svg',
+        imageAlt: 'Trade-off spectrums guide for privacy, control, elasticity, and capability',
+      },
     ],
   },
   handoff: {
@@ -165,7 +186,7 @@ export const useCasesPlan: PlanDetailData = {
     items: [
       { index: '01', title: 'Frame a bounded question', text: 'Define the user outcome and why controlled execution may create value for this specific workflow.' },
       { index: '02', title: 'Declare the trust boundary', text: 'Make explicit what stays local, what may leave, where human review is required, and which fallback is optional.' },
-      { index: '03', title: 'Integrate the real workflow', text: 'Exercise data ingestion, inference, review, correction, export, lifecycle, and failure states—not only the happy-path prompt.' },
+      { index: '03', title: 'Integrate the real workflow', text: 'Exercise data ingestion, inference, review, correction, export, lifecycle, and failure states-not only the happy-path prompt.' },
       { index: '04', title: 'Capture what the product reveals', text: 'Record usefulness, integration friction, quality gaps, resource pressure, and the questions the measurement plane must answer.' },
     ],
   },
@@ -200,7 +221,7 @@ export const performancePlan: PlanDetailData = {
     eyebrow: 'WHAT THIS PLANE RECEIVES',
     title: 'Measure the workload the product actually created.',
     paragraphs: [
-      'The use-case plane supplies realistic prompts, data shapes, interaction patterns, session lengths, concurrency, and acceptable quality thresholds. Performance must be evaluated against that identity—not against an unrelated generic benchmark.',
+      'The use-case plane supplies realistic prompts, data shapes, interaction patterns, session lengths, concurrency, and acceptable quality thresholds. Performance must be evaluated against that identity-not against an unrelated generic benchmark.',
       'The result is deliberately multidimensional. A configuration may be faster but use too much memory, fit the device but miss the quality threshold, or look local while making network calls that weaken the declared boundary.',
     ],
   },

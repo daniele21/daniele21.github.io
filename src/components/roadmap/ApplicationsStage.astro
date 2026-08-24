@@ -1,6 +1,6 @@
 ---
 /**
- * ApplicationsStage — Stage 3: "What happens in a real product?"
+ * ApplicationsStage -Stage 3: "What happens in a real product?"
  *
  * Shows the applications that serve as real-world test beds for the
  * Local AI stack: RedactGuard, Aura, ClosedRoom, and a "Your next" card.
@@ -20,9 +20,7 @@ const page = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     <!-- Left: copy + guiding questions -->
     <div class="stage-copy applications-copy">
       <p class="stage-kicker">{applicationsContent.kicker}</p>
-      <h2 id="applications-title">
-        What happens in<br />a real product?
-      </h2>
+      <h2 id="applications-title">{applicationsContent.title}</h2>
       <p class="stage-intro">{applicationsContent.intro}</p>
       <p class="stage-note">{applicationsContent.note}</p>
 

@@ -1,6 +1,6 @@
 ---
 /**
- * ObservabilityStage — Stage 4: "Does it actually work well?"
+ * ObservabilityStage -Stage 4: "Does it actually work well?"
  *
  * Contains four metric cards (Performance Lab, Traffic Monitoring,
  * Key Metrics, Resource Usage) and the observability copy with the
@@ -85,16 +85,14 @@ import {
     <!-- Right: observability copy + checklist -->
     <div class="stage-copy observability-copy">
       <p class="stage-kicker">{observabilityContent.kicker}</p>
-      <h2 id="observability-title">
-        Does it actually<br />work well?
-      </h2>
+      <h2 id="observability-title">{observabilityContent.title}</h2>
       <p class="stage-intro">{observabilityContent.intro}</p>
 
       <div class="stage-list observability-list">
         {observabilityContent.items.map((item) => (
           <div class="list-item">
             <span class="list-icon" aria-hidden="true">{item.icon}</span>
-            <p><strong>{item.title} —</strong><br /><span>{item.text}</span></p>
+            <p><strong>{item.title} -</strong><br /><span>{item.text}</span></p>
           </div>
         ))}
       </div>

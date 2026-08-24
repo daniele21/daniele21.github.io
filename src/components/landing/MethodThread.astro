@@ -1,5 +1,5 @@
 ---
-/** MethodThread — continuous bridge between two alternating stage rails. */
+/** MethodThread -continuous bridge between two alternating stage rails. */
 interface Props {
   fromStep: string;
   toStep: string;
@@ -99,10 +99,9 @@ const pathD = direction === 'ltr'
     position: absolute;
     top: 56px;
     left: 50%;
-    width: min(620px, 70%);
-    display: grid;
-    justify-items: center;
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     transform: translate(-50%, calc(-50% + var(--thread-copy-y)));
     opacity: var(--thread-copy-opacity);
     text-align: center;
@@ -121,6 +120,7 @@ const pathD = direction === 'ltr'
     background: color-mix(in srgb, var(--surface-card) 94%, transparent);
     box-shadow: 0 10px 28px rgba(8, 19, 51, 0.1);
     backdrop-filter: blur(14px);
+    white-space: nowrap;
   }
 
   .pill-signal {
@@ -142,12 +142,18 @@ const pathD = direction === 'ltr'
   }
 
   .thread-sublabel {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(620px, 90vw);
     margin: 0;
     padding: 0 12px;
     background: color-mix(in srgb, var(--surface-canvas) 88%, transparent);
     color: var(--ink-muted);
     font-size: var(--text-caption);
     line-height: 1.5;
+    white-space: normal;
   }
 
   .dir-rtl .thread-sublabel {
@@ -167,14 +173,23 @@ const pathD = direction === 'ltr'
       top: 48px;
       left: 48px;
       width: calc(100% - 60px);
-      justify-items: start;
+      align-items: flex-start;
+      gap: 6px;
       transform: translateY(calc(-50% + var(--thread-copy-y)));
       text-align: left;
     }
 
-    .thread-pill { padding: 7px 14px 7px 8px; }
+    .thread-pill {
+      padding: 7px 14px 7px 8px;
+      white-space: normal;
+    }
 
     .thread-sublabel {
+      position: static;
+      top: auto;
+      left: auto;
+      transform: none;
+      width: 100%;
       padding: 0;
       font-size: var(--text-caption);
     }
@@ -186,7 +201,6 @@ const pathD = direction === 'ltr'
       opacity: 1;
       transform: translate(-50%, -50%);
     }
-
   }
 
   @media (prefers-reduced-motion: reduce) and (max-width: 760px) {

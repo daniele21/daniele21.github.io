@@ -1,6 +1,6 @@
 ---
 /**
- * ArchitectureStage — Stage 2: "Can we actually run it locally?"
+ * ArchitectureStage -Stage 2: "Can we actually run it locally?"
  *
  * Displays the ecosystem image (device interconnection visual) on the left
  * and the architecture copy + capability list on the right.
@@ -28,16 +28,14 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     <!-- Right: copy + capabilities -->
     <div class="stage-copy architecture-copy">
       <p class="stage-kicker">{architectureContent.kicker}</p>
-      <h2 id="architecture-title">
-        Can we actually<br />run it locally?
-      </h2>
+      <h2 id="architecture-title">{architectureContent.title}</h2>
       <p class="stage-intro">{architectureContent.intro}</p>
 
       <div class="stage-list architecture-list">
         {architectureContent.items.map((item) => (
           <div class="list-item">
             <span class="list-icon" aria-hidden="true">{item.icon}</span>
-            <p><strong>{item.title} —</strong><br /><span>{item.text}</span></p>
+            <p><strong>{item.title} -</strong><br /><span>{item.text}</span></p>
           </div>
         ))}
       </div>

@@ -114,7 +114,7 @@ export const heroData: HeroData = {
   eyebrow: 'DANIELE MOLTISANTI · LOCAL AI',
   titlePrefix: 'I make local AI work ',
   titleHighlight: 'in real products.',
-  lede: 'On-device inference, runtimes and hybrid architectures — built and measured on real hardware.',
+  lede: 'On-device inference, runtimes and hybrid architectures -built and measured on real hardware.',
   primaryAction: {
     label: 'Explore my work',
     href: '#work',

@@ -1,8 +1,8 @@
-# 08 — Local AI Strategy, Positioning & Storytelling
+# 08 -Local AI Strategy, Positioning & Storytelling
 
 ## Mission, problem, positioning, proof-of-work and overarching narrative
 
-Versione di lavoro — 21 agosto 2026
+Versione di lavoro -21 agosto 2026
 
 # 1\. Executive summary
 
@@ -38,7 +38,7 @@ La missione non è “portare tutto in locale”. È capire fino a dove il local
 
 Mission statement:
 
-“Explore how far AI can move from the cloud to infrastructure and devices we control — and prove where Local, Hybrid or Cloud actually makes sense.”
+“Explore how far AI can move from the cloud to infrastructure and devices we control -and prove where Local, Hybrid or Cloud actually makes sense.”
 
 # 3\. Il problema
 
@@ -74,7 +74,7 @@ Una seconda domanda ancora più operativa è:
 
 Questa impostazione protegge da due estremi: cloud-by-default e local-at-all-costs.
 
-# 4\. Tesi strategica — Local AI first ≠ Local AI only
+# 4\. Tesi strategica -Local AI first ≠ Local AI only
 
 “Local AI first” significa partire chiedendo che cosa può e dovrebbe rimanere sotto il nostro controllo prima di introdurre dipendenze esterne. Non significa “Local AI always”.
 
@@ -102,11 +102,11 @@ Il workload locale raggiunge soglie accettabili di qualità e performance? Dove 
 
 L'output della decisione deve poter essere:
 
-LOCAL — il workload raggiunge la soglia definita dentro infrastruttura controllata.
+LOCAL -il workload raggiunge la soglia definita dentro infrastruttura controllata.
 
-HYBRID — il local copre una parte rilevante del workload, ma capability esterne migliorano materialmente i casi difficili.
+HYBRID -il local copre una parte rilevante del workload, ma capability esterne migliorano materialmente i casi difficili.
 
-CLOUD — la soluzione locale/open-weight non raggiunge ancora le soglie necessarie di qualità, scala, latenza o affidabilità.
+CLOUD -la soluzione locale/open-weight non raggiunge ancora le soglie necessarie di qualità, scala, latenza o affidabilità.
 
 # 5\. Posizionamento
 
@@ -142,7 +142,7 @@ Il portfolio deve essere letto come un evidence system, non come una collezione 
 
 **STRATEGY / DECISION → ARCHITECTURE & INFRASTRUCTURE → APPLICATIONS / USE CASES → OBSERVABILITY & MEASUREMENT → DECISION AGAIN.**
 
-## 6.1 Engineering baseline — repo-template-sw
+## 6.1 Engineering baseline -repo-template-sw
 
 Ruolo: standard trasversale di qualità ingegneristica.
 
@@ -150,7 +150,7 @@ Serve a rendere credibili gli altri progetti attraverso ownership esplicita, ris
 
 Cosa prova: il lavoro non è una sequenza di demo, ma software progettato con disciplina operativa.
 
-## 6.2 Local LLM Server — desktop / workstation / private server
+## 6.2 Local LLM Server -desktop / workstation / private server
 
 Ruolo: execution layer riusabile per AI locale.
 
@@ -158,7 +158,7 @@ Espone modelli GGUF e MLX tramite boundary OpenAI-compatible, con lifecycle espl
 
 Cosa prova: il valore del local non è semplicemente “caricare un modello”, ma costruire un runtime boundary riusabile, osservabile e app-ready.
 
-## 6.3 Android Local LLM Harness — mobile / on-device
+## 6.3 Android Local LLM Harness -mobile / on-device
 
 Ruolo: Local AI Gateway per Android e laboratorio di inferenza on-device.
 
@@ -166,13 +166,13 @@ Esplora model/runtime ownership, resource coordination, model repository, diagno
 
 Cosa prova: Local AI deve sopravvivere ai vincoli reali di uno smartphone e può evolvere da runtime embedded a capability riusabile a livello di device.
 
-## 6.4 Local ASR Server — speech come primitive locale
+## 6.4 Local ASR Server -speech come primitive locale
 
 Ruolo: infrastruttura speech privata e riusabile per trascrizione e workflow audio.
 
 Cosa prova: la tesi Local AI non riguarda solo LLM testuali; speech e audio possono diventare primitive locali integrabili in prodotti reali.
 
-## 6.5 RedactGuard — sensitive documents
+## 6.5 RedactGuard -sensitive documents
 
 Domanda di esperimento:
 
@@ -182,7 +182,7 @@ Usa un local LLM per rilevare PII standard o custom, permette revisione umana e 
 
 Cosa prova: un workload privacy-sensitive può usare il local per ridurre l'esposizione del documento originale e aumentare configurabilità e controllo. Non è una compliance guarantee.
 
-## 6.6 Aura Finance — local transaction intelligence
+## 6.6 Aura Finance -local transaction intelligence
 
 Domanda di esperimento:
 
@@ -200,7 +200,7 @@ Il confine architetturale è intenzionale:
 
 Cosa prova: un piccolo modello locale può svolgere un task semantico ricorrente e privacy-sensitive dentro un vero prodotto mobile senza dover inviare le transazioni personali a un modello esterno.
 
-## 6.7 ClosedRoom — local-first meeting intelligence
+## 6.7 ClosedRoom -local-first meeting intelligence
 
 Domanda di esperimento:
 
@@ -210,7 +210,7 @@ ClosedRoom registra, trascrive, identifica speaker, analizza e costruisce projec
 
 Cosa prova: un use case complesso e privacy-sensitive può essere composto da più primitive locali, con boundary espliciti e fallback opzionali.
 
-## 6.8 Performance Lab — model/configuration optimization layer
+## 6.8 Performance Lab -model/configuration optimization layer
 
 Obiettivo:
 
@@ -242,7 +242,7 @@ Principio chiave:
 
 Cosa prova: la scelta del modello e della configurazione può diventare una decisione workload-specific e device-specific supportata da misure, non da hype o benchmark generici.
 
-## 6.9 Traffic Monitoring — evidence & observability
+## 6.9 Traffic Monitoring -evidence & observability
 
 Ruolo: rendere osservabile il comportamento di rete e la qualità dell'evidenza senza trasformare l'osservabilità in packet inspection.
 
@@ -297,6 +297,56 @@ Observability & Measurement distingue “funziona” da “funziona abbastanza b
 **Evidence changes the next decision.**
 
 L'evidenza torna al livello Strategy e può portare a una scelta Local, Hybrid o Cloud.
+
+## 7.1 Contratto di progressive disclosure della landing
+
+Questo documento è la sorgente strategica della narrativa, non il testo da mostrare integralmente nella landing. La superficie pubblica deve esporre soltanto ciò che serve a capire il metodo e scegliere il prossimo approfondimento.
+
+Gerarchia dei contenuti:
+
+**Essential -landing**
+
+• la tesi: Local AI first ≠ Local AI only;
+
+• il metodo: Decide → Build → Test → Measure → Decide again;
+
+• una domanda e una frase di orientamento per ogni piano;
+
+• il ruolo di ciascun progetto espresso in una sola frase;
+
+• un'azione chiara verso la pagina di approfondimento.
+
+**Contextual -pagina del piano**
+
+• criteri decisionali, trade-off, relazione tra i progetti e ragionamento complessivo del layer;
+
+• spiegazione di perché il piano produce l'input per quello successivo.
+
+**Advanced -pagina progetto**
+
+• capability, feature, architettura, runtime, flussi, maturity e limiti;
+
+• ciò che il progetto abilita o rivela, con evidenza e contesto sufficienti.
+
+**Expert / diagnostics -evidence e documentazione tecnica**
+
+• identità completa di hardware, modello, runtime e configurazione;
+
+• metriche, metodologia, failure case, log, diagnostica e riproducibilità.
+
+Budget di ogni piano nella landing:
+
+• una domanda dominante;
+
+• una sola frase di supporto;
+
+• un ponte narrativo verso il piano successivo;
+
+• massimo tre prove o progetti, ciascuno con categoria, nome, ruolo e CTA;
+
+• nessuna lista di feature, metrica tecnica o claim ripetuto che sia già disponibile nel drill-down.
+
+La landing deve funzionare come mappa del ragionamento. Le pagine dei piani spiegano il metodo; le pagine progetto dimostrano la profondità.
 
 # 8\. Come emerge il posizionamento da strategic AI advisor
 
@@ -415,4 +465,3 @@ una persona esterna dovrebbe riuscire a descrivere il lavoro così:
 # 13\. Fonti interne
 
 Questo documento deriva dal precedente documento combinato “Local AI Mission, Positioning & Storyline”, dai documenti strategici della cartella e dalle pagine progetto/repository già revisionate. Mantiene la distinzione tra capability dimostrate e target ancora in sviluppo.
-

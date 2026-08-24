@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" role="img" aria-labelledby="title desc">
+  <title id="title">Decision framework</title>
+  <desc id="desc">A workload is filtered through privacy, offline, latency and control constraints before choosing Local, Hybrid or Cloud.</desc>
+  
+  <defs>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#081333" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .font { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .navy { fill: #0B1638; }
+      .muted { fill: #5E6B88; }
+      .blue { fill: #145BFF; }
+      .line { stroke: #D9E3F7; }
+      .border { stroke: #CAD8F2; }
+      .blue-stroke { stroke: #145BFF; }
+      .label { font-size: 14px; font-weight: 700; }
+      .small { font-size: 12px; font-weight: 600; }
+      .micro { font-size: 11px; font-weight: 650; }
+    </style>
+  </defs>
+
+
+  <!-- Workload -->
+  <rect x="118" y="14" width="124" height="42" rx="12" fill="#F8FAFF" stroke="#CAD8F2"/>
+  <text x="180" y="40" text-anchor="middle" class="font navy label">Workload</text>
+
+  <!-- arrow -->
+  <path d="M180 65 V80" fill="none" stroke="#145BFF" stroke-width="2.25" stroke-linecap="round"/>
+  <path d="M174 75 L180 81 L186 75" fill="none" stroke="#145BFF" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Constraints container -->
+  <rect x="76" y="88" width="208" height="92" rx="16" fill="#FBFCFF" stroke="#145BFF" stroke-width="1.5" filter="url(#softShadow)"/>
+  <text x="180" y="111" text-anchor="middle" class="font blue label">Constraints</text>
+
+  <!-- chips -->
+  <g class="font micro">
+    <rect x="92" y="123" width="76" height="22" rx="8" fill="#EEF4FF"/>
+    <text x="130" y="138" text-anchor="middle" class="navy">Privacy</text>
+
+    <rect x="192" y="123" width="76" height="22" rx="8" fill="#EEF4FF"/>
+    <text x="230" y="138" text-anchor="middle" class="navy">Offline</text>
+
+    <rect x="92" y="151" width="76" height="22" rx="8" fill="#EEF4FF"/>
+    <text x="130" y="166" text-anchor="middle" class="navy">Latency</text>
+
+    <rect x="192" y="151" width="76" height="22" rx="8" fill="#EEF4FF"/>
+    <text x="230" y="166" text-anchor="middle" class="navy">Control</text>
+  </g>
+
+  <!-- branch -->
+  <path d="M180 180 V194" fill="none" stroke="#145BFF" stroke-width="2" stroke-linecap="round"/>
+  <path d="M180 194 C180 201 164 202 128 202" fill="none" stroke="#145BFF" stroke-width="1.75" stroke-linecap="round"/>
+  <path d="M180 194 V202" fill="none" stroke="#145BFF" stroke-width="1.75" stroke-linecap="round"/>
+  <path d="M180 194 C180 201 196 202 232 202" fill="none" stroke="#145BFF" stroke-width="1.75" stroke-linecap="round"/>
+
+  <!-- Options -->
+  <g class="font label">
+    <rect x="65" y="206" width="92" height="38" rx="11" fill="#EEF4FF"/>
+    <text x="111" y="231" text-anchor="middle" class="blue">Local</text>
+
+    <rect x="134" y="206" width="92" height="38" rx="11" fill="#E8F0FF" stroke="#9DBBFF"/>
+    <text x="180" y="231" text-anchor="middle" class="blue">Hybrid</text>
+
+    <rect x="203" y="206" width="92" height="38" rx="11" fill="#EEF4FF"/>
+    <text x="249" y="231" text-anchor="middle" class="blue">Cloud</text>
+  </g>
+</svg>

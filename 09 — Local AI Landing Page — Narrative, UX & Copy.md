@@ -1,8 +1,8 @@
-# 09 — Local AI Landing Page — Narrative, UX & Copy
+# 09 -Local AI Landing Page -Narrative, UX & Copy
 
 ## How the Local AI strategy becomes a scroll-driven personal landing page
 
-Versione di lavoro — 21 agosto 2026
+Versione di lavoro -21 agosto 2026
 
 # 1\. Obiettivo della landing
 
@@ -74,7 +74,7 @@ Principi:
 
 • su mobile la priorità è leggibilità e continuità narrativa, non il vincolo rigido di una viewport per piano.
 
-# 4\. Hero — chi sono, la sfida e la posizione
+# 4\. Hero -chi sono, la sfida e la posizione
 
 Obiettivo: far capire in pochi secondi chi è Daniele, quale problema sta esplorando e quale principio guida il lavoro.
 
@@ -82,7 +82,7 @@ Layout consigliato: circa 1/3 persona, 2/3 missione.
 
 La parte personale deve dare volto e contesto, ma la scena principale resta a “Local AI first ≠ Local AI only”.
 
-## 4.1 Colonna identità — 1/3
+## 4.1 Colonna identità -1/3
 
 Foto professionale ma naturale, non corporate. Dimensione contenuta: serve a dare un volto alla tesi, non a diventare il focus principale.
 
@@ -96,7 +96,7 @@ AI engineer · builder.
 
 Il posizionamento da strategic AI advisor può comparire in modo secondario nella bio o nella parte finale, ma non deve competere con la missione nella hero.
 
-## 4.2 Colonna missione — 2/3
+## 4.2 Colonna missione -2/3
 
 Eyebrow:
 
@@ -150,7 +150,7 @@ Hero \= la domanda.
 
 Roadmap \= il modo in cui cerco la risposta.
 
-# 6\. Piano 1 — Strategy / DECIDE
+# 6\. Piano 1 -Strategy / DECIDE
 
 Domanda del piano:
 
@@ -162,7 +162,7 @@ spiegare perché Local AI va rivalutato e soprattutto quando. Il punto non è di
 
 Kicker:
 
-01 — STRATEGY
+01 -STRATEGY
 
 Titolo:
 
@@ -204,7 +204,7 @@ Razionale:
 
 questo è il layer strategico. Definisce il perché e i criteri. Solo se il local ha valore per quel workload ha senso passare all'ingegneria.
 
-## 6.1 Transizione — DECIDE → BUILD
+## 6.1 Transizione -DECIDE → BUILD
 
 Pill:
 
@@ -218,7 +218,7 @@ Animazione:
 
 la linea lascia il lato del piano 1, attraversa orizzontalmente la pagina con una curva morbida e arriva al lato opposto. La pill compare mentre il path viene disegnato.
 
-# 7\. Piano 2 — Architecture & Infrastructure / BUILD
+# 7\. Piano 2 -Architecture & Infrastructure / BUILD
 
 Domanda del piano:
 
@@ -230,7 +230,7 @@ mostrare il layer che abilita Local AI. La missione non può fermarsi alla scelt
 
 Kicker:
 
-02 — ARCHITECTURE & INFRASTRUCTURE
+02 -ARCHITECTURE & INFRASTRUCTURE
 
 Titolo:
 
@@ -256,11 +256,11 @@ Private ASR as another reusable primitive for local workflows.
 
 Progetti che sostengono il piano:
 
-• Local LLM Server — execution layer riusabile, OpenAI-compatible, con model lifecycle, routing, concurrency e telemetry;
+• Local LLM Server -execution layer riusabile, OpenAI-compatible, con model lifecycle, routing, concurrency e telemetry;
 
-• Android Local LLM Harness — laboratorio e target gateway per AI on-device, con model/runtime ownership, resource coordination, diagnostics e consumer boundary;
+• Android Local LLM Harness -laboratorio e target gateway per AI on-device, con model/runtime ownership, resource coordination, diagnostics e consumer boundary;
 
-• Local ASR Server — primitive locale per speech e transcription.
+• Local ASR Server -primitive locale per speech e transcription.
 
 Visual principale:
 
@@ -276,7 +276,7 @@ Messaggio da far passare:
 
 “Far partire un modello” non basta. Il layer di infra/arch deve rendere il device capace di gestire Local AI in modo esplicito e riusabile.
 
-## 7.1 Transizione — BUILD → TEST
+## 7.1 Transizione -BUILD → TEST
 
 Pill:
 
@@ -290,7 +290,7 @@ Animazione:
 
 la linea ritorna verso il lato opposto della pagina. Copy e visual entrano da lati coerenti con la direzione del percorso.
 
-# 8\. Piano 3 — Applications / TEST
+# 8\. Piano 3 -Applications / TEST
 
 Domanda del piano:
 
@@ -302,7 +302,7 @@ evitare che infrastruttura e architettura restino singoli bei progetti tecnici. 
 
 Kicker:
 
-03 — APPLICATIONS
+03 -APPLICATIONS
 
 Titolo:
 
@@ -378,7 +378,7 @@ Messaggio:
 
 Ma se il prodotto funziona, non abbiamo ancora dimostrato che la soluzione sia abbastanza buona.
 
-## 8.5 Transizione — TEST → MEASURE
+## 8.5 Transizione -TEST → MEASURE
 
 Pill:
 
@@ -392,7 +392,7 @@ Animazione:
 
 il path torna verso il lato del quarto piano; la transizione deve essere visivamente più “evidence-driven”, preparando l'ingresso dei dashboard/metriche.
 
-# 9\. Piano 4 — Observability & Measurement / MEASURE
+# 9\. Piano 4 -Observability & Measurement / MEASURE
 
 Domanda del piano:
 
@@ -404,7 +404,7 @@ trasformare “funziona” in evidenza. Un workload può completarsi correttamen
 
 Kicker:
 
-04 — OBSERVABILITY & MEASUREMENT
+04 -OBSERVABILITY & MEASUREMENT
 
 Titolo:
 
@@ -488,7 +488,7 @@ Traffic Monitoring completa Performance Lab: Performance Lab misura quanto bene 
 
 Evidence is what allows the next architecture decision.
 
-# 10\. Chiusura — LEARN / DECIDE AGAIN
+# 10\. Chiusura -LEARN / DECIDE AGAIN
 
 Dopo Measurement non serve una conclusione celebrativa. Serve chiudere il loop e riportare ciò che abbiamo imparato al livello Strategy.
 
@@ -516,7 +516,7 @@ Messaggio:
 
 il risultato può essere LOCAL, HYBRID o CLOUD. Il successo non è forzare un workload in locale; è arrivare a una decisione migliore e difendibile.
 
-# 11\. CTA finale — advisory come conseguenza
+# 11\. CTA finale -advisory come conseguenza
 
 Solo dopo la chiusura del loop entra il secondo obiettivo professionale.
 
@@ -560,13 +560,13 @@ Struttura desktop:
 
 Alternanza consigliata:
 
-Plane 1 — linea a sinistra; copy a sinistra; decision visual a destra.
+Plane 1 -linea a sinistra; copy a sinistra; decision visual a destra.
 
-Plane 2 — linea a destra; ecosystem visual a sinistra; copy a destra.
+Plane 2 -linea a destra; ecosystem visual a sinistra; copy a destra.
 
-Plane 3 — linea a sinistra; copy a sinistra; app test-bed cards a destra.
+Plane 3 -linea a sinistra; copy a sinistra; app test-bed cards a destra.
 
-Plane 4 — linea a destra; metrics/evidence visual a sinistra; copy a destra.
+Plane 4 -linea a destra; metrics/evidence visual a sinistra; copy a destra.
 
 # 13\. Animazioni e scroll
 
@@ -628,13 +628,13 @@ Evitare di duplicare lo stesso contenuto in testo e grafica.
 
 Visual per piano:
 
-Strategy — Local / Hybrid / Cloud decision framework.
+Strategy -Local / Hybrid / Cloud decision framework.
 
-Architecture — ecosystem.png.
+Architecture -ecosystem.png.
 
-Applications — question-led test-bed cards.
+Applications -question-led test-bed cards.
 
-Observability — Performance Lab \+ Traffic Monitoring \+ metric/evidence visuals.
+Observability -Performance Lab \+ Traffic Monitoring \+ metric/evidence visuals.
 
 # 15\. Regole di contenuto
 
@@ -708,5 +708,5 @@ La landing funziona se un visitatore qualificato capisce in meno di un minuto:
 
 # 18\. Relazione con il documento strategico
 
-Questo documento non ridefinisce missione e posizionamento. Traduce il documento “08 — Local AI Strategy, Positioning & Storytelling” in layout, copy, visual, transizioni e comportamento di scroll della landing page.
+Questo documento non ridefinisce missione e posizionamento. Traduce il documento “08 -Local AI Strategy, Positioning & Storytelling” in layout, copy, visual, transizioni e comportamento di scroll della landing page.
 

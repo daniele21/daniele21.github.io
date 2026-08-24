@@ -1,6 +1,6 @@
 ---
 /**
- * StageRail — the persistent segment of the Decide / Build / Test / Measure path.
+ * StageRail -the persistent segment of the Decide / Build / Test / Measure path.
  *
  * The rail lives inside a stage while MethodThread bridges the space between
  * stages. Both use the same 2% edge coordinate, so the path reads as one
@@ -29,8 +29,8 @@ const label = String(number).padStart(2, '0');
   .stage-rail {
     --path-progress: 0;
     position: absolute;
-    top: calc(-1 * clamp(48px, 6vw, 72px));
-    bottom: calc(-1 * clamp(48px, 6vw, 72px));
+    top: calc(-1 * var(--plane-rail-inset, clamp(48px, 6vw, 72px)));
+    bottom: calc(-1 * var(--plane-rail-inset, clamp(48px, 6vw, 72px)));
     z-index: 4;
     width: 0;
     pointer-events: none;
@@ -61,7 +61,7 @@ const label = String(number).padStart(2, '0');
 
   .stage-node {
     position: absolute;
-    top: clamp(48px, 6vw, 72px);
+    top: var(--plane-rail-inset, clamp(48px, 6vw, 72px));
     left: 0;
     width: 54px;
     height: 54px;

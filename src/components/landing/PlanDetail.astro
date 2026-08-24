@@ -497,6 +497,9 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
     background: var(--surface-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .work-media img {
@@ -506,6 +509,12 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     object-fit: cover;
     object-position: top;
     transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .work-media img[src$=".svg"] {
+    object-fit: contain;
+    padding: 10px;
+    background: #ffffff;
   }
 
   .work-item:hover .work-media img { transform: scale(1.025); }

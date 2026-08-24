@@ -1,5 +1,5 @@
 /**
- * roadmap-tokens.css — Design tokens & animation system for Roadmap landing page.
+ * roadmap-tokens.css -Design tokens & animation system for Roadmap landing page.
  */
 
 :root {
@@ -85,7 +85,7 @@
   position: relative;
 }
 
-/* ---- Stage Layout — Viewport Framing ("Un piano alla volta") ---- */
+/* ---- Stage Layout -Viewport Framing ("Un piano alla volta") ---- */
 .journey-stage {
   position: relative;
   scroll-margin-top: 84px;
@@ -185,9 +185,11 @@
   :root {
     --rm-rail-x: 24px;
   }
+
   .mock-shell {
     width: min(calc(100% - 32px), 820px);
   }
+
   .journey-stage {
     min-height: auto;
     padding: 32px 0;
@@ -198,9 +200,11 @@
   :root {
     --rm-rail-x: 16px;
   }
+
   .mock-shell {
     width: min(calc(100% - 22px), 640px);
   }
+
   .journey-stage {
     min-height: auto;
     padding: 24px 0;

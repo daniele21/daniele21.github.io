@@ -72,19 +72,82 @@ for (const route of expectedRoutes) {
 
 console.log('\n🔍 3. Verifying landing plane composition...');
 const landingHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf-8');
-const stageLayoutCount = (landingHtml.match(/class="stage-layout"/g) || []).length;
-if (stageLayoutCount !== 4) {
-  console.error(`❌ Landing has ${stageLayoutCount} alternating stage layouts (expected 4).`);
+const planeSectionCount = (landingHtml.match(/class="[^"]*\bplane-section\b[^"]*"/g) || []).length;
+if (planeSectionCount !== 4) {
+  console.error(`❌ Landing has ${planeSectionCount} shared plane sections (expected 4).`);
   errors++;
 }
 
-for (const [className, expected] of [
-  ['tool-card', 3],
-  ['project-card', 3],
-  ['use-case', 3],
-  ['evidence-card', 3],
+const planeTemplatePath = path.resolve('src/components/landing/PlaneTemplate.astro');
+const planeTemplateSource = fs.readFileSync(planeTemplatePath, 'utf-8');
+const planeCardPath = path.resolve('src/components/landing/PlaneCard.astro');
+const planeCardSource = fs.readFileSync(planeCardPath, 'utf-8');
+const planeCardGridPath = path.resolve('src/components/landing/PlaneCardGrid.astro');
+const planeCardGridSource = fs.readFileSync(planeCardGridPath, 'utf-8');
+const planeConsumers = [
+  'src/components/landing/DecisionStage.astro',
+  'src/components/landing/BuildStage.astro',
+  'src/components/landing/TestStage.astro',
+  'src/components/landing/EvidenceStage.astro',
+];
+
+for (const sourcePath of planeConsumers) {
+  const source = fs.readFileSync(path.resolve(sourcePath), 'utf-8');
+  if (!source.includes("import PlaneTemplate from './PlaneTemplate.astro'") || !source.includes('<PlaneTemplate')) {
+    console.error(`❌ ${sourcePath} does not use the shared centered plane template.`);
+    errors++;
+  }
+}
+
+for (const fragment of ['stage-copy plane-intro', 'stage-visual plane-visual', '<slot />']) {
+  if (!planeTemplateSource.includes(fragment)) {
+    console.error(`❌ PlaneTemplate is missing its shared layout contract fragment: ${fragment}`);
+    errors++;
+  }
+}
+
+for (const fragment of ['plane-card__header', 'plane-card__body', 'plane-card__footer']) {
+  if (!planeCardSource.includes(fragment)) {
+    console.error(`❌ PlaneCard is missing its shared card contract fragment: ${fragment}`);
+    errors++;
+  }
+}
+
+for (const fragment of ['plane-card-grid', 'repeat(3, minmax(0, 1fr))']) {
+  if (!planeCardGridSource.includes(fragment)) {
+    console.error(`❌ PlaneCardGrid is missing its shared grid contract fragment: ${fragment}`);
+    errors++;
+  }
+}
+
+for (const [sourcePath, fragment] of [
+  ['src/components/landing/DecisionStage.astro', '<PlaneCardGrid sequence>'],
+  ['src/components/landing/EvidenceStage.astro', '<PlaneCardGrid>'],
+  ['src/components/landing/BuildStage.astro', '<PlaneCardGrid>'],
+  ['src/components/landing/TestStage.astro', '<PlaneCardGrid>'],
+  ['src/components/landing/ProjectProofCard.astro', '<PlaneCard'],
 ]) {
-  const count = (landingHtml.match(new RegExp(`class="${className}(?: |")`, 'g')) || []).length;
+  const source = fs.readFileSync(path.resolve(sourcePath), 'utf-8');
+  if (!source.includes(fragment)) {
+    console.error(`❌ ${sourcePath} is missing shared primitive usage: ${fragment}`);
+    errors++;
+  }
+}
+
+const countClassToken = (html, className) =>
+  Array.from(html.matchAll(/class="([^"]*)"/g))
+    .filter(([, classes]) => classes.split(/\s+/).includes(className))
+    .length;
+
+for (const [className, expected] of [
+  ['plane-card-grid', 4],
+  ['plane-card', 12],
+  ['tool-card', 3],
+  ['project-proof-card--execution', 3],
+  ['project-proof-card--proof', 3],
+  ['project-proof-card--evidence', 3],
+]) {
+  const count = countClassToken(landingHtml, className);
   if (count !== expected) {
     console.error(`❌ Landing has ${count} ${className} modules (expected ${expected}).`);
     errors++;
@@ -242,6 +305,8 @@ const publicImages = [
   'images/redact-guard/logo.png',
   'images/aura/logo.png',
   'images/closedroom/logo.png',
+  'images/local-llm-server/logo.svg',
+  'images/harness/logo.svg',
   'images/local-llm-server/overview.png',
   'images/harness/architecture-hero.png',
   'images/harness/harness-overview.png',
@@ -250,6 +315,9 @@ const publicImages = [
   'images/closedroom/meeting-analysis.jpg',
   'images/traffic-monitoring/overview.png',
   'images/traffic-monitoring-android/overview.png',
+  'images/strategy/decision-framework.svg',
+  'images/strategy/local-vs-hybrid-vs-cloud-native-final.svg',
+  'images/strategy/tradeoff-guide.svg',
   'favicon.png',
 ];
 

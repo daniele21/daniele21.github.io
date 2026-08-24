@@ -1,6 +1,6 @@
 ---
 /**
- * RoadmapHeader — Sticky mockup header with hexagon brand cube and simple nav.
+ * RoadmapHeader -Sticky mockup header with hexagon brand cube and simple nav.
  *
  * This is the header specific to the roadmap landing page, independent from
  * the global SiteHeader. Features glassmorphism backdrop on scroll.
@@ -14,7 +14,24 @@ const page = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
 <header class="mock-header">
   <div class="mock-shell nav-shell">
     <a class="mock-brand" href={`${baseUrl}/`} aria-label="Daniele Moltisanti home">
-      <span class="brand-cube" aria-hidden="true"><i></i></span>
+      <img
+        src={`${baseUrl}/images/sign_1.png`}
+        alt="Daniele Moltisanti signature"
+        class="brand-signature brand-signature-light"
+        width="32"
+        height="32"
+        loading="eager"
+        decoding="async"
+      />
+      <img
+        src={`${baseUrl}/images/sign_dark.png`}
+        alt="Daniele Moltisanti signature"
+        class="brand-signature brand-signature-dark"
+        width="32"
+        height="32"
+        loading="eager"
+        decoding="async"
+      />
       <span>{headerNav.brandName}</span>
     </a>
 
@@ -51,7 +68,7 @@ const page = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     gap: 24px;
   }
 
-  /* ---- Brand (hexagon cube + name) ---- */
+  /* ---- Brand (signature + name) ---- */
   .mock-brand {
     display: inline-flex;
     align-items: center;
@@ -64,21 +81,37 @@ const page = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     letter-spacing: -0.03em;
   }
 
-  .brand-cube {
-    width: 29px;
-    height: 29px;
-    position: relative;
-    display: inline-block;
-    clip-path: polygon(50% 0, 94% 25%, 94% 75%, 50% 100%, 6% 75%, 6% 25%);
-    background: linear-gradient(145deg, #2f73ff, #0d47df);
-    box-shadow: 0 7px 18px rgba(20, 91, 255, 0.28);
+  .brand-signature {
+    height: 30px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+    transition: transform var(--duration-fast, 0.2s) ease;
   }
 
-  .brand-cube i {
-    position: absolute;
-    inset: 6px;
-    clip-path: inherit;
-    background: linear-gradient(145deg, #5d92ff, #145bff);
+  .mock-brand:hover .brand-signature {
+    transform: scale(1.06);
+  }
+
+  .brand-signature-light {
+    display: block;
+  }
+
+  .brand-signature-dark {
+    display: none;
+  }
+
+  :global([data-theme="dark"]) .brand-signature-light,
+  :global(.dark) .brand-signature-light,
+  [data-theme="dark"] .brand-signature-light {
+    display: none;
+  }
+
+  :global([data-theme="dark"]) .brand-signature-dark,
+  :global(.dark) .brand-signature-dark,
+  [data-theme="dark"] .brand-signature-dark {
+    display: block;
   }
 
   /* ---- Navigation links ---- */
@@ -116,7 +149,7 @@ const page = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
   @media (max-width: 700px) {
     .mock-header { height: 64px; }
     .mock-brand { font-size: 0.9rem; }
-    .brand-cube { width: 25px; height: 25px; }
+    .brand-signature { height: 26px; }
     .mock-nav .nav-cta { padding: 0.62rem 0.78rem; font-size: 0.67rem; }
   }
 </style>

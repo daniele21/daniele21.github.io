@@ -1,6 +1,6 @@
-# Daniele Moltisanti — Local AI portfolio
+# Daniele Moltisanti -Local AI portfolio
 
-Astro-based personal site for the public Local AI thesis documented in [`08 — Local AI Strategy, Positioning & Storytelling.md`](./08%20%E2%80%94%20Local%20AI%20Strategy,%20Positioning%20&%20Storytelling.md) and translated into the landing experience in [`09 — Local AI Landing Page — Narrative, UX & Copy.md`](./09%20%E2%80%94%20Local%20AI%20Landing%20Page%20%E2%80%94%20Narrative,%20UX%20&%20Copy.md).
+Astro-based personal site for the public Local AI thesis documented in [`08 -Local AI Strategy, Positioning & Storytelling.md`](./08%20%E2%80%94%20Local%20AI%20Strategy,%20Positioning%20&%20Storytelling.md) and translated into the landing experience in [`09 -Local AI Landing Page -Narrative, UX & Copy.md`](./09%20%E2%80%94%20Local%20AI%20Landing%20Page%20%E2%80%94%20Narrative,%20UX%20&%20Copy.md).
 
 ## Product direction
 
@@ -46,16 +46,16 @@ npm run verify
 
 ## Key source areas
 
-- `src/pages/index.astro` — production homepage and continuous method path;
-- `src/pages/*.astro` — project and supporting routes;
-- `src/components/landing/` — home narrative components;
-- `src/components/project/` — shared project-page semantic components;
-- `src/components/layout/ProductSubHeader.astro` — shared project phase navigation;
-- `src/styles/tokens.css` — canonical design tokens;
-- `design/` — UX, brand and visual-review contracts;
-- `scripts/capture-project-pages.mjs` — rendered project-page diagnostics;
-- `scripts/capture-home.mjs` — rendered homepage diagnostics;
-- `tests/` — source-level contract and static-output checks.
+- `src/pages/index.astro` -production homepage and continuous method path;
+- `src/pages/*.astro` -project and supporting routes;
+- `src/components/landing/` -home narrative components;
+- `src/components/project/` -shared project-page semantic components;
+- `src/components/layout/ProductSubHeader.astro` -shared project phase navigation;
+- `src/styles/tokens.css` -canonical design tokens;
+- `design/` -UX, brand and visual-review contracts;
+- `scripts/capture-project-pages.mjs` -rendered project-page diagnostics;
+- `scripts/capture-home.mjs` -rendered homepage diagnostics;
+- `tests/` -source-level contract and static-output checks.
 
 ## Experience validation
 

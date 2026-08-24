@@ -20,7 +20,7 @@ Intended perception: **Daniele runs applied-AI research, builds real systems and
 
 ## Invariants
 
-- Strategy and claims remain owned by `08 — Local AI Strategy, Positioning & Storytelling.md`; the landing may simplify, not contradict it.
+- Strategy and claims remain owned by `08 -Local AI Strategy, Positioning & Storytelling.md`; the landing may simplify, not contradict it.
 - The outcome may be Local, Hybrid or Cloud. Visual comparison must not imply a universal winner.
 - Every public metric resolves to one evidence record with date, device, model, quantization, runtime, workload, method, result, limitation and source.
 - The UI models visitor questions, not repository architecture. Technical depth is progressively disclosed through project/evidence pages.
@@ -69,8 +69,8 @@ See [`docs/current-state.md`](../current-state.md). The active roadmap and unuse
 
 | ID | Work | Owns/writes | Depends on | Parallel | State |
 | --- | --- | --- | --- | --- | --- |
-| LA-01 | Claim, asset and route evidence inventory | `docs/features/public-claims.md`, evidence/asset inventory | — | yes | READY |
-| LA-02 | Minimum repository and product-UI contracts | `AGENTS.md`, `.engineering/commands.json`, `design/*`, `docs/architecture.md` | — | yes | READY |
+| LA-01 | Claim, asset and route evidence inventory | `docs/features/public-claims.md`, evidence/asset inventory | -| yes | READY |
+| LA-02 | Minimum repository and product-UI contracts | `AGENTS.md`, `.engineering/commands.json`, `design/*`, `docs/architecture.md` | -| yes | READY |
 | LA-03 | Canonical landing schema, IA and copy | `src/types/landing.ts`, `src/content/locales/en/landing.ts` | LA-01, LA-02 | no | BLOCKED |
 | LA-04 | Semantic visual system and key references | `src/styles/tokens.css`, `src/styles/layout.css`, `design/reference/*` | LA-02 | yes | BLOCKED |
 | LA-05 | Header and hero vertical slice | `src/components/landing/LandingHeader.astro`, `LandingHero.astro` | LA-03, LA-04 | yes | BLOCKED |
@@ -85,28 +85,28 @@ See [`docs/current-state.md`](../current-state.md). The active roadmap and unuse
 
 ## Slice gates
 
-### LA-01 — Evidence before design
+### LA-01 -Evidence before design
 
 - Classify every metric, date, award, maturity and privacy statement as `verified`, `needs source`, `conceptual` or `remove`.
 - Confirm availability/privacy of portrait, screenshots, diagrams and real-device evidence; missing assets do not enter the route.
 - Acceptance: no number or “current” item can reach canonical landing content without source identity and limitation text.
 - Validation: asset existence/link audit plus manual claim review against project repositories or captured run artifacts.
 
-### LA-02 — Smallest justified template alignment
+### LA-02 -Smallest justified template alignment
 
 - Specialize the TypeScript and `product-ui` profiles: design source, WCAG target, viewports, journeys and npm command mappings.
 - Declare baseline L0 / experience L1; do not copy irrelevant build/package machinery.
 - Acceptance: a fresh contributor can locate ownership, commands, active work and experience constraints without reading the entire documentation set.
 - Validation: template verifiers adapted locally or equivalent deterministic schema/document checks.
 
-### LA-03/04 — Content and visual contracts
+### LA-03/04 -Content and visual contracts
 
 - Consolidate strategy, notes, projects and evidence into one typed landing owner; remove broken/aspirational destinations.
 - Define semantic colors, typography, spacing, focus and motion in one token source; eliminate roadmap-local microtype and raw color drift.
 - Produce only two bounded key references: 1440 px desktop and 390 px mobile, with accessibility annotations.
 - Acceptance: headline scan alone tells the full story; no meaningful text under 14 px; no generic bento/card mosaic.
 
-### LA-05..08 — Vertical experience slices
+### LA-05..08 -Vertical experience slices
 
 - Hero contains name/role, thesis, research question, visual anchor and one dominant action within the first viewport.
 - Local/Hybrid/Cloud comparison expresses contextual strengths and operational costs, not green/red ideology.
@@ -114,14 +114,14 @@ See [`docs/current-state.md`](../current-state.md). The active roadmap and unuse
 - Evidence shows real device/model/runtime/workload identity and links to methodology; field notes are dated and resolve to real content.
 - `/insights` and `/about` either ship as valid routes or are removed from navigation until they exist.
 
-### LA-09/10 — Integration quality
+### LA-09/10 -Integration quality
 
 - Integrate once in `index.astro`, remove nested `<main>`, then retire duplicate owners after parity review.
 - Preserve stage orientation on mobile with a simple vertical thread and `01/04` progress; no desktop dashboard shrink-down.
 - Provide semantic landmarks/headings, keyboard/focus behavior, accessible diagrams, reduced motion and 200% zoom support.
 - Acceptance: no horizontal overflow at 320 px; no essential hover/JS dependency; all CTAs communicate destination/outcome.
 
-### LA-11/12 — Evidence and release
+### LA-11/12 -Evidence and release
 
 - Add native `check`, `test`, `e2e`, `smoke`, `stop` and `clean`; production E2E leaves no server/browser residue.
 - Automate route/link, heading/landmark, accessibility and critical-journey checks; retain screenshots/traces only as bounded failure evidence.

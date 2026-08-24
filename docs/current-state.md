@@ -17,12 +17,12 @@ Read when: selecting repository-wide work or continuing an active implementation
 
 ## Shipped Workstreams
 
-- ✅ **[Landing success alignment](workstreams/landing-success-alignment.md)** — Reshaped homepage into an evidence-led applied-AI research landing page, established UX/brand contracts, unified token system, and added deterministic smoke testing.
+- ✅ **[Landing success alignment](workstreams/landing-success-alignment.md)** -Reshaped homepage into an evidence-led applied-AI research landing page, established UX/brand contracts, unified token system, and added deterministic smoke testing.
 
 ## Canonical Product Sources
 
-- `08 — Local AI Strategy, Positioning & Storytelling.md` — positioning and public-claim guardrails.
-- `09 — Local AI Landing Page — Narrative, UX & Copy.md` — narrative chain and intended landing behavior.
-- `docs/features/public-claims.md` — durable claims and evidence inventory.
-- `docs/architecture.md` — route map and component model.
-- `design/ux-contract.json` & `design/brand-kit.json` — design and experience specifications.
+- `08 -Local AI Strategy, Positioning & Storytelling.md` -positioning and public-claim guardrails.
+- `09 -Local AI Landing Page -Narrative, UX & Copy.md` -narrative chain and intended landing behavior.
+- `docs/features/public-claims.md` -durable claims and evidence inventory.
+- `docs/architecture.md` -route map and component model.
+- `design/ux-contract.json` & `design/brand-kit.json` -design and experience specifications.

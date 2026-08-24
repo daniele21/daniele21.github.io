@@ -1,6 +1,6 @@
 ---
 /**
- * StrategyStage — Stage 1 of the roadmap: "Where should AI actually run?"
+ * StrategyStage -Stage 1 of the roadmap: "Where should AI actually run?"
  *
  * Contains the strategy copy + three mini-panels:
  * - Decision Framework (flowchart)
@@ -23,16 +23,14 @@ import {
     <!-- Left column: copy + benefits list -->
     <div class="stage-copy strategy-copy">
       <p class="stage-kicker">{strategyContent.kicker}</p>
-      <h2 id="strategy-title">
-        Where should AI<br />actually run?
-      </h2>
+      <h2 id="strategy-title">{strategyContent.title}</h2>
       <p class="stage-intro">{strategyContent.intro}</p>
 
       <div class="stage-list">
         {strategyContent.items.map((item) => (
           <div class="list-item">
             <span class="list-icon" aria-hidden="true">{item.icon}</span>
-            <p><strong>{item.title} —</strong><br /><span>{item.text}</span></p>
+            <p><strong>{item.title} -</strong><br /><span>{item.text}</span></p>
           </div>
         ))}
       </div>

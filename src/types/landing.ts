@@ -15,12 +15,24 @@ export interface HeaderContent {
   cta: NavLink;
 }
 
+export interface HeroSocialLink {
+  platform: 'linkedin' | 'github' | 'x' | 'email';
+  label: string;
+  href: string;
+}
+
 export interface HeroIdentity {
   name: string;
   role: string;
+  affiliation?: string;
+  affiliationRole?: string;
+  education?: string;
+  location?: string;
   portraitPath: string;
   portraitAlt: string;
   bio: string;
+  focusBadges?: string[];
+  socials?: HeroSocialLink[];
 }
 
 export interface HeroMission {
@@ -91,12 +103,20 @@ export interface BuildArea {
   text: string;
 }
 
+export interface ProjectCardFeature {
+  label: string;
+}
+
 export interface BuildProject {
   id: string;
   title: string;
   eyebrow: string;
   summary: string;
   href: string;
+  logoPath?: string;
+  logoAlt?: string;
+  features: ProjectCardFeature[];
+  evidence: string;
   imagePath?: string;
   imageAlt?: string;
 }
@@ -120,6 +140,8 @@ export interface ApplicationCard {
   description: string;
   href: string;
   logoPath: string;
+  features: ProjectCardFeature[];
+  evidence: string;
   imagePath: string;
   colorClass: string;
   linkLabel: string;

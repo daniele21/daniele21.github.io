@@ -17,7 +17,24 @@ const resolveHref = (href: string) => {
 <header class="landing-header" id="site-header">
   <div class="shell header-shell">
     <a class="brand" href={`${baseUrl}/`} aria-label={`${header.brandName} homepage`}>
-      <span class="brand-cube" aria-hidden="true"><i></i></span>
+      <img
+        src={`${baseUrl}/images/sign_1.png`}
+        alt="Daniele Moltisanti signature"
+        class="brand-signature brand-signature-light"
+        width="34"
+        height="34"
+        loading="eager"
+        decoding="async"
+      />
+      <img
+        src={`${baseUrl}/images/sign_dark.png`}
+        alt="Daniele Moltisanti signature"
+        class="brand-signature brand-signature-dark"
+        width="34"
+        height="34"
+        loading="eager"
+        decoding="async"
+      />
       <span class="brand-name">{header.brandName}</span>
     </a>
 
@@ -75,22 +92,37 @@ const resolveHref = (href: string) => {
     min-height: var(--touch-target-min);
   }
 
-  .brand-cube {
-    width: 28px;
-    height: 28px;
-    position: relative;
-    display: inline-block;
-    clip-path: polygon(50% 0, 94% 25%, 94% 75%, 50% 100%, 6% 75%, 6% 25%);
-    background: linear-gradient(145deg, var(--accent-blue-light), var(--accent-blue-dark));
-    box-shadow: 0 4px 14px rgba(20, 91, 255, 0.28);
+  .brand-signature {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    display: block;
     flex-shrink: 0;
+    transition: transform var(--duration-fast) ease;
   }
 
-  .brand-cube i {
-    position: absolute;
-    inset: 5px;
-    clip-path: inherit;
-    background: linear-gradient(145deg, #74a4ff, var(--accent-blue));
+  .brand:hover .brand-signature {
+    transform: scale(1.06);
+  }
+
+  .brand-signature-light {
+    display: block;
+  }
+
+  .brand-signature-dark {
+    display: none;
+  }
+
+  :global([data-theme="dark"]) .brand-signature-light,
+  :global(.dark) .brand-signature-light,
+  [data-theme="dark"] .brand-signature-light {
+    display: none;
+  }
+
+  :global([data-theme="dark"]) .brand-signature-dark,
+  :global(.dark) .brand-signature-dark,
+  [data-theme="dark"] .brand-signature-dark {
+    display: block;
   }
 
   .brand-name {

@@ -15,7 +15,7 @@ export const landingData: LandingPageData = {
       { label: 'About', href: '/about' },
     ],
     cta: {
-      label: 'Follow research',
+      label: 'Follow my work',
       href: 'https://www.linkedin.com/in/daniele-moltisanti/',
       external: true,
     },
@@ -24,38 +24,53 @@ export const landingData: LandingPageData = {
   hero: {
     identity: {
       name: 'Daniele Moltisanti',
-      role: 'AI Systems Engineer · Applied Research',
+      role: 'AI Systems Engineer · Applied Researcher',
+      affiliation: 'Sky Italia',
+      education: 'Politecnico di Milano',
+      location: 'Milan, Italy',
       portraitPath: 'images/profile-photo.jpg',
-      portraitAlt: 'Daniele Moltisanti portrait',
-      bio: 'I build applied AI systems to understand where local execution creates real value.',
+      portraitAlt: 'Daniele Moltisanti - AI Systems Engineer',
+      bio: 'I build and test AI systems to see what can stay local, what still needs the cloud, and why.',
+      focusBadges: ['Local AI Runtimes', 'On-Device Inference', 'Private Systems'],
+      socials: [
+        {
+          platform: 'linkedin',
+          label: 'LinkedIn Profile',
+          href: 'https://www.linkedin.com/in/daniele-moltisanti/',
+        },
+        {
+          platform: 'github',
+          label: 'GitHub Repositories',
+          href: 'https://github.com/daniele21',
+        },
+      ],
     },
     mission: {
-      eyebrow: "WHAT I'M EXPLORING",
+      eyebrow: "WHAT I'M TESTING",
       lead: 'Run AI where it makes sense.',
       title: 'Local AI first ≠',
       titleHighlight: 'Local AI only',
-      challenge: 'How far can AI move from the cloud to systems we control?',
+      challenge: 'Does this really need the cloud?',
       explanation:
-        'Some workloads benefit from staying local: sensitive data stays closer, dependencies shrink, and you gain more control over how the system runs. Others still belong in the cloud.',
-      position: 'Find the boundary with evidence, not ideology.',
+        'I build and test real systems to see what can stay local and when the cloud is still the better choice.',
+      position: 'I let the workload and the evidence decide.',
       proofLine:
-        'I do that by deciding where AI should run, building the infrastructure that makes local execution possible, testing it inside real products, and measuring how well it actually performs.',
+        'I start with the problem, build what we need, test it in a real product and measure what happens.',
       primaryCta: {
-        label: 'Explore the method',
+        label: 'See the method',
         href: '#strategy',
       },
       secondaryCta: {
-        label: 'Read field notes',
+        label: 'Read my notes',
         href: 'insights',
       },
     },
   },
 
   decisionStage: {
-    kicker: '01 — STRATEGY & DECISION',
-    title: 'Where should AI\nactually run?',
-    intro:
-      'I start with the workload—not the model—to decide whether Local, Hybrid or Cloud best fits its privacy, control and operating constraints.',
+    kicker: '01 -DECIDE · STRATEGY',
+    title: 'Does this really need the cloud?',
+    intro: 'I start with the data: where it lives, who controls it and what happens when the connection drops.',
     drivers: [
       {
         icon: '◇',
@@ -129,17 +144,16 @@ export const landingData: LandingPageData = {
       footer: 'Make trade-offs explicit. Revisit as model capabilities evolve.',
     },
     handoff: {
-      output: 'A placement decision and clear constraints.',
+      output: 'We have a direction. Now we need to make it real.',
       leadsTo: 'If Local or Hybrid earns a role, those requirements become the brief for the execution layer.',
-      detailCta: { label: 'Explore the strategy plane', href: '/local-ai-strategy' },
+      detailCta: { label: 'See how I decide', href: '/local-ai-strategy' },
     },
   },
 
   buildStage: {
-    kicker: '02 — ARCHITECTURE & INFRASTRUCTURE',
-    title: 'How do we make\nLocal AI usable?',
-    intro:
-      'I turn that decision into reusable runtimes: model lifecycle, stable APIs and telemetry across servers, desktops and Android devices.',
+    kicker: '02 -BUILD · EXECUTION',
+    title: 'Can we make it work locally?',
+    intro: "A model running once isn't enough. The product needs something stable it can actually use.",
     proofLine: 'Different environments. Same question: what can realistically stay local?',
     ecosystemImage: 'images/ecosystem.png',
     ecosystemAlt: 'Connected Local AI architecture across desktop, Android, local server and cloud fallback',
@@ -165,8 +179,16 @@ export const landingData: LandingPageData = {
         id: 'local-llm-server',
         title: 'Local LLM Server',
         eyebrow: 'DESKTOP · SERVER',
-        summary: 'A reusable OpenAI-compatible gateway for local inference.',
+        summary: 'Gives apps one stable way to run local models on a desktop or server.',
         href: '/local-llm-server',
+        logoPath: 'images/local-llm-server/logo.svg',
+        logoAlt: 'Local LLM Server logo',
+        features: [
+          { label: 'OpenAI API' },
+          { label: 'Multi-model runtime' },
+          { label: 'Telemetry' },
+        ],
+        evidence: 'One local runtime that different apps can reuse.',
         imagePath: 'images/local-llm-server/overview.png',
         imageAlt: 'Local LLM Server overview interface',
       },
@@ -174,8 +196,16 @@ export const landingData: LandingPageData = {
         id: 'android-harness',
         title: 'Android Local LLM Harness',
         eyebrow: 'ON-DEVICE · ANDROID',
-        summary: 'A real-device lab for memory, thermal and runtime constraints.',
+        summary: 'Shows what a local model can actually handle on a real phone.',
         href: '/android-local-llm-harness',
+        logoPath: 'images/harness/logo.svg',
+        logoAlt: 'Android Local LLM Harness logo',
+        features: [
+          { label: 'GGUF runtime' },
+          { label: 'Thermal testing' },
+          { label: 'Telemetry' },
+        ],
+        evidence: 'A real phone exposes limits a desktop demo can hide.',
         imagePath: 'images/harness/harness-overview.png',
         imageAlt: 'Android Local LLM Harness overview',
       },
@@ -183,33 +213,44 @@ export const landingData: LandingPageData = {
         id: 'local-asr-server',
         title: 'Local ASR Server',
         eyebrow: 'SPEECH · AUDIO',
-        summary: 'A private speech-to-text primitive for local workflows.',
+        summary: 'Lets a product turn speech into text without sending audio to a cloud service.',
         href: '/local-asr-server',
+        features: [
+          { label: 'Whisper ASR' },
+          { label: 'Real-time stream' },
+          { label: 'Zero telemetry' },
+        ],
+        evidence: 'Speech-to-text that stays inside the local workflow.',
       },
     ],
     closingMessage:
       'Running a model is just the starting point. The architecture layer turns raw weights into dependable, app-ready runtime boundaries.',
     handoff: {
-      output: 'Execution layers that products can actually use.',
+      output: "It runs. Now let's put it inside a real product.",
       leadsTo: 'Infrastructure creates potential value. Real products reveal whether that potential survives real workflows.',
-      detailCta: { label: 'Explore architecture & infrastructure', href: '/local-ai-infrastructure' },
+      detailCta: { label: 'See what I built', href: '/local-ai-infrastructure' },
     },
   },
 
   testStage: {
-    kicker: '03 — APPLICATIONS AS PROVING GROUNDS',
-    title: 'What happens in\na real product?',
-    intro:
-      'I put the infrastructure inside real products to expose value, friction and failure modes that benchmarks miss.',
+    kicker: '03 -TEST · APPLICATIONS',
+    title: 'Does it hold up in a real product?',
+    intro: 'Real data and real workflows expose the problems a demo can hide.',
     note: 'Each application is an empirical test bed.',
     applications: [
       {
         name: 'RedactGuard',
-        question: 'Can sensitive document processing stay local?',
+        question: 'Can we work with sensitive documents without sending the original away?',
         description:
-          'Local LLM inference for sensitive documents — configurable PII detection, human-in-the-loop review, and controlled privacy-preserving export.',
+          'Local LLM inference for sensitive documents -configurable PII detection, human-in-the-loop review, and controlled privacy-preserving export.',
         href: 'redact-guard',
         logoPath: 'images/redact-guard/logo.png',
+        features: [
+          { label: 'PII redaction' },
+          { label: 'Human review' },
+          { label: 'Privacy boundary' },
+        ],
+        evidence: 'Shows where privacy adds control and where it adds work.',
         imagePath: 'images/redact-guard/redactguard-review.jpg',
         colorClass: 'red',
         linkLabel: 'View project →',
@@ -217,11 +258,17 @@ export const landingData: LandingPageData = {
       },
       {
         name: 'Aura Finance',
-        question: 'Can financial transactions be understood on-device?',
+        question: 'Can a phone understand transactions without sending them to a cloud model?',
         description:
-          'On-device transaction intelligence — semantic merchant recognition and categorization on mobile without transmitting personal financial ledgers.',
+          'On-device transaction intelligence -semantic merchant recognition and categorization on mobile without transmitting personal financial ledgers.',
         href: 'aura-finance',
         logoPath: 'images/aura/logo.png',
+        features: [
+          { label: 'On-device parsing' },
+          { label: 'Deterministic math' },
+          { label: 'Zero telemetry' },
+        ],
+        evidence: 'Shows what on-device understanding can handle in a daily workflow.',
         imagePath: 'images/aura-finance/aura-payment-detection.png',
         colorClass: 'purple',
         linkLabel: 'View project →',
@@ -229,11 +276,17 @@ export const landingData: LandingPageData = {
       },
       {
         name: 'ClosedRoom',
-        question: 'Can meeting intelligence stay inside the room?',
+        question: 'Can recording, transcription and analysis stay on the Mac?',
         description:
-          'Local recording, ASR, speaker context, and project memory on macOS — keeping external frontier models strictly opt-in.',
+          'Local recording, ASR, speaker context, and project memory on macOS -keeping external frontier models strictly opt-in.',
         href: 'closedroom',
         logoPath: 'images/closedroom/logo.png',
+        features: [
+          { label: 'Local audio ASR' },
+          { label: 'Speaker context' },
+          { label: 'Opt-in cloud' },
+        ],
+        evidence: 'Shows how far a full meeting workflow can stay local by default.',
         imagePath: 'images/closedroom/meeting-analysis.jpg',
         colorClass: 'blue',
         linkLabel: 'View project →',
@@ -247,17 +300,16 @@ export const landingData: LandingPageData = {
     },
     closingMessage: 'The value of this layer is turning architectural capability into verifiable product evidence.',
     handoff: {
-      output: 'Real value, friction and failure cases.',
+      output: "It works. Now let's see if it works well enough.",
       leadsTo: 'A useful demo is still not performance evidence. The next plane measures how the system behaves.',
-      detailCta: { label: 'Explore the use-case plane', href: '/local-ai-use-cases' },
+      detailCta: { label: 'See the product tests', href: '/local-ai-use-cases' },
     },
   },
 
   measureStage: {
-    kicker: '04 — OBSERVABILITY & MEASUREMENT',
-    title: 'How does it perform\nin the real world?',
-    intro:
-      'Then I measure quality, latency, throughput, resources and reliability on the actual workload and hardware.',
+    kicker: '04 -MEASURE · EVIDENCE',
+    title: 'Is it actually good enough?',
+    intro: "If it's slow, unreliable or too heavy for the device, local isn't the right answer.",
     criteria: [
       { icon: '▥', title: 'Is it fast enough?', text: 'Time to first token (TTFT), inter-token latency, and token throughput.' },
       { icon: '▧', title: 'Does it fit?', text: 'RAM/VRAM footprint, storage, CPU/GPU utilization, and memory pressure.' },
@@ -268,9 +320,9 @@ export const landingData: LandingPageData = {
     closingMessage:
       'Working ≠ performing well. Performing well ≠ production ready. Evidence is what allows the next architecture decision.',
     handoff: {
-      output: 'Evidence tied to the workload, device and method.',
+      output: 'What we learn changes the next decision.',
       leadsTo: 'The evidence returns to Strategy and can change the next decision to Local, Hybrid, or Cloud.',
-      detailCta: { label: 'Explore performance & observability', href: '/local-ai-performance' },
+      detailCta: { label: 'See what I measure', href: '/local-ai-performance' },
     },
   },
 
@@ -324,7 +376,7 @@ export const landingData: LandingPageData = {
         date: '2026-08',
         title: 'The Local AI First Principle: Why Defaulting to Cloud is a Risk',
         excerpt:
-          'Examining why unexamined cloud dependencies introduce privacy, reliability, and vendor risks—and how to establish workload boundaries.',
+          'Examining why unexamined cloud dependencies introduce privacy, reliability, and vendor risks-and how to establish workload boundaries.',
         readTime: '6 min read',
         href: 'insights',
       },

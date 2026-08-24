@@ -1,0 +1,176 @@
+---
+/**
+ * Shared homepage plane structure.
+ * Every plane follows one reading order: question -> context -> outcome -> proof.
+ */
+import type { MethodStageHandoff } from '../../types/landing';
+import StageRail from './StageRail.astro';
+import StageHandoff from './StageHandoff.astro';
+
+interface Props {
+  id: string;
+  number: 1 | 2 | 3 | 4;
+  side: 'left' | 'right';
+  kicker: string;
+  title: string;
+  intro: string;
+  handoff: MethodStageHandoff;
+  nextLabel: string;
+  visualLabel: string;
+  surface?: 'canvas' | 'subtle';
+  isFinal?: boolean;
+}
+
+const {
+  id,
+  number,
+  side,
+  kicker,
+  title,
+  intro,
+  handoff,
+  nextLabel,
+  visualLabel,
+  surface = 'canvas',
+  isFinal = false,
+} = Astro.props;
+
+const stage = String(number).padStart(2, '0');
+const titleId = `${id}-title`;
+---
+
+<section
+  class:list={[
+    'stage-section',
+    'method-stage',
+    'plane-section',
+    `stage-${side}`,
+    `plane-section--${surface}`,
+  ]}
+  id={id}
+  data-stage={stage}
+  aria-labelledby={titleId}
+>
+  <div class="shell stage-shell plane-shell">
+    <StageRail number={number} side={side} isFinal={isFinal} />
+
+    <div class="stage-layout plane-layout">
+      <header class="stage-copy plane-intro">
+        <p class="stage-kicker">{kicker}</p>
+        <h2 id={titleId} class="stage-heading">{title}</h2>
+        <p class="stage-intro">{intro}</p>
+
+        <div class="plane-handoff">
+          <StageHandoff handoff={handoff} number={number} nextLabel={nextLabel} compact />
+        </div>
+      </header>
+
+      <div class="stage-visual plane-visual" aria-label={visualLabel}>
+        <slot />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .plane-section {
+    --plane-rail-inset: clamp(26px, 3vh, 38px);
+
+    min-height: calc(100svh - var(--header-height));
+    display: grid;
+    align-items: center;
+    padding: var(--plane-rail-inset) 0;
+    overflow: clip;
+  }
+
+  .plane-section--canvas { background: var(--surface-canvas); }
+  .plane-section--subtle { background: var(--surface-subtle); }
+
+  .plane-layout,
+  .plane-section.stage-right .plane-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(18px, 2.4vh, 26px);
+    align-items: start;
+  }
+
+  /* The alternating rail reserves one side gutter. Counter half of that
+     gutter so the editorial axis stays centered in the viewport. */
+  .plane-section.stage-left .plane-layout {
+    transform: translateX(clamp(-44px, -3vw, -32px));
+  }
+
+  .plane-section.stage-right .plane-layout {
+    transform: translateX(clamp(32px, 3vw, 44px));
+  }
+
+  .plane-section .plane-intro,
+  .plane-section.stage-right .plane-intro {
+    width: min(100%, 880px);
+    max-width: 880px;
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .plane-intro .stage-kicker {
+    margin: 0 0 var(--space-2);
+    justify-content: center;
+  }
+
+  .plane-intro .stage-heading {
+    max-width: 840px;
+    margin: 0 auto var(--space-3);
+    font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+
+  .plane-intro .stage-intro {
+    max-width: 680px;
+    margin-inline: auto;
+    font-size: clamp(0.95rem, 1.08vw, 1.04rem);
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  .plane-handoff {
+    width: min(100%, 620px);
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .plane-section .plane-visual,
+  .plane-section.stage-right .plane-visual {
+    width: 100%;
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  @media (max-width: 760px) {
+    .plane-section {
+      --plane-rail-inset: 48px;
+
+      min-height: 0;
+      display: block;
+      padding-top: 48px;
+      padding-bottom: 64px;
+    }
+
+    .plane-section.stage-left .plane-layout,
+    .plane-section.stage-right .plane-layout {
+      gap: var(--space-8);
+      transform: translateX(-26px);
+    }
+
+    .plane-section .plane-intro,
+    .plane-section.stage-right .plane-intro {
+      justify-self: stretch;
+    }
+
+    .plane-intro .stage-heading {
+      font-size: clamp(1.85rem, 9vw, 2.35rem);
+    }
+  }
+</style>

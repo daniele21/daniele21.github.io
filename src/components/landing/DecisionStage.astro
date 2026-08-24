@@ -1,242 +1,125 @@
 ---
-/** Plane 01: a compact view of the decision tools; depth lives in the plane page. */
+/** Plane 01: the minimum decision path needed to understand the method. */
 import { landingData } from '../../content/locales/en/landing';
-import StageRail from './StageRail.astro';
-import StageHandoff from './StageHandoff.astro';
+import PlaneTemplate from './PlaneTemplate.astro';
+import PlaneCard from './PlaneCard.astro';
+import PlaneCardGrid from './PlaneCardGrid.astro';
 
 const { decisionStage } = landingData;
-const markFor = (status: string) => ({ good: '✓', warn: '≈', bad: '×', neutral: '·' })[status] ?? '·';
 ---
 
-<section class="stage-section method-stage stage-left" id="strategy" data-stage="01" aria-labelledby="decision-title">
-  <div class="shell stage-shell">
-    <StageRail number={1} side="left" />
-
-    <div class="stage-layout">
-      <div class="stage-copy">
-        <p class="stage-kicker">{decisionStage.kicker}</p>
-        <h2 id="decision-title" class="stage-heading">{decisionStage.title}</h2>
-        <p class="stage-intro">{decisionStage.intro}</p>
-        <StageHandoff handoff={decisionStage.handoff} number={1} nextLabel="BUILD" />
+<PlaneTemplate
+  id="strategy"
+  number={1}
+  side="left"
+  surface="canvas"
+  kicker={decisionStage.kicker}
+  title={decisionStage.title}
+  intro={decisionStage.intro}
+  handoff={decisionStage.handoff}
+  nextLabel="BUILD"
+  visualLabel="Three-step strategy decision path"
+>
+  <PlaneCardGrid sequence>
+    <PlaneCard className="tool-card">
+      <Fragment slot="header"><span class="tool-num">01</span><h3>Start with the data</h3></Fragment>
+      <div class="constraint-list" aria-label="Privacy, offline, latency and control constraints">
+        <span>Privacy</span><span>Offline</span><span>Latency</span><span>Control</span>
       </div>
+      <p slot="footer">What leaves the device, and does it really need to?</p>
+    </PlaneCard>
 
-      <div class="stage-visual decision-tools" aria-label="Strategy decision tools">
-        <article class="tool-card framework-card">
-          <header>
-            <span>01</span>
-            <h3>Decision framework</h3>
-          </header>
-          <div class="framework-flow" aria-label="Workload to execution boundary decision flow">
-            <strong>Workload</strong>
-            <i aria-hidden="true">↓</i>
-            <b>Constraints?</b>
-            <i aria-hidden="true">↓</i>
-            <div><span>Local</span><span>Hybrid</span><span>Cloud</span></div>
-          </div>
-          <p>Start from the use case. Decide the boundary last.</p>
-        </article>
-
-        <article class="tool-card comparison-card">
-          <header>
-            <span>02</span>
-            <h3>Local vs Hybrid vs Cloud</h3>
-          </header>
-          <div class="matrix-head" aria-hidden="true"><i></i><b>L</b><b>H</b><b>C</b></div>
-          <div class="matrix-body">
-            {decisionStage.comparison.rows.slice(0, 4).map((row) => (
-              <div>
-                <strong>{row.label}</strong>
-                {row.classes.map((status) => <span class={`mark-${status}`}>{markFor(status)}</span>)}
-              </div>
-            ))}
-          </div>
-          <p>No universal winner. Choose by constraints.</p>
-        </article>
-
-        <article class="tool-card guide-card">
-          <header>
-            <span>03</span>
-            <h3>Trade-off guide</h3>
-          </header>
-          <div class="guide-list">
-            {decisionStage.drivers.map((driver) => (
-              <div>
-                <span aria-hidden="true">{driver.icon}</span>
-                <strong>{driver.title}</strong>
-              </div>
-            ))}
-          </div>
-          <p>{decisionStage.keyMessage}</p>
-        </article>
+    <PlaneCard className="tool-card">
+      <Fragment slot="header"><span class="tool-num">02</span><h3>Check the trade-offs</h3></Fragment>
+      <div class="boundary-options" aria-label="Local, Hybrid and Cloud boundary options">
+        <span><strong>Local</strong><small>Control</small></span>
+        <span><strong>Hybrid</strong><small>Balance</small></span>
+        <span><strong>Cloud</strong><small>Scale</small></span>
       </div>
-    </div>
-  </div>
-</section>
+      <p slot="footer">Privacy, speed, cost and maintenance all change the answer.</p>
+    </PlaneCard>
+
+    <PlaneCard className="tool-card">
+      <Fragment slot="header"><span class="tool-num">03</span><h3>Pick a direction</h3></Fragment>
+      <div class="decision-loop" aria-label="Decide, build and test, then measure">
+        <span>Decide</span><i aria-hidden="true">→</i><span>Build & test</span><i aria-hidden="true">→</i><span>Measure</span>
+      </div>
+      <p slot="footer">Local, Hybrid or Cloud. Then we put that choice to the test.</p>
+    </PlaneCard>
+  </PlaneCardGrid>
+</PlaneTemplate>
 
 <style>
-  .stage-section {
-    padding: clamp(48px, 6vw, 72px) 0;
-    overflow: clip;
-    background: var(--surface-canvas);
-  }
-
-  .decision-tools {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(12px, 1.5vw, 18px);
-  }
-
-  .tool-card {
-    min-width: 0;
-    min-height: 350px;
-    display: flex;
-    flex-direction: column;
-    padding: clamp(18px, 2.2vw, 24px);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    background: var(--surface-card);
-    box-shadow: 0 16px 40px rgba(8, 19, 51, 0.055);
-  }
-
-  .tool-card > header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-2);
-    padding-bottom: var(--space-3);
-    border-bottom: 1px solid var(--border-subtle);
-  }
-
-  .tool-card > header span {
+  .tool-num {
     color: var(--accent-blue);
-    font-size: var(--text-badge);
-    font-weight: 800;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 850;
   }
 
-  .tool-card h3 {
+  h3 {
     margin: 0;
     color: var(--ink-display);
     font-family: var(--font-display);
-    font-size: var(--text-caption);
+    font-size: clamp(0.94rem, 1.1vw, 1.08rem);
     font-weight: 800;
-    text-align: right;
+    letter-spacing: -0.025em;
   }
 
-  .tool-card > p {
-    margin: auto 0 0;
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--border-subtle);
+  p {
+    margin: 0;
     color: var(--ink-muted);
-    font-size: var(--text-badge);
-    line-height: 1.5;
+    font-size: var(--text-caption);
+    font-weight: 700;
+    line-height: 1.45;
   }
 
-  .framework-flow {
+  .constraint-list,
+  .boundary-options,
+  .decision-loop {
+    height: 100%;
     display: grid;
-    place-items: center;
-    gap: 7px;
-    padding: var(--space-5) 0;
-    color: var(--ink-display);
-    font-size: var(--text-badge);
-  }
-
-  .framework-flow > strong,
-  .framework-flow > b {
-    padding: 8px 12px;
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-sm);
-    background: var(--surface-subtle);
-    font-family: var(--font-display);
-  }
-
-  .framework-flow > b {
-    border-color: color-mix(in srgb, var(--accent-blue) 40%, var(--border-medium));
-    color: var(--accent-blue-dark);
-    transform: rotate(1deg);
-  }
-
-  .framework-flow i { color: var(--accent-blue); font-style: normal; }
-  .framework-flow div { display: flex; gap: 5px; }
-  .framework-flow div span {
-    padding: 6px 7px;
-    border-radius: var(--radius-sm);
-    background: var(--surface-blue-subtle);
-    color: var(--accent-blue-dark);
-    font-weight: 750;
-  }
-
-  .matrix-head,
-  .matrix-body > div {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) repeat(3, 24px);
-    gap: 5px;
     align-items: center;
   }
 
-  .matrix-head {
-    padding: var(--space-4) 0 7px;
-    color: var(--ink-muted);
-    font-size: var(--text-badge);
+  .constraint-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .constraint-list span,
+  .boundary-options > span,
+  .decision-loop span {
+    min-height: 44px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--surface-subtle);
+    color: var(--ink-display);
+    font-size: var(--text-caption);
+    font-weight: 750;
     text-align: center;
   }
 
-  .matrix-body > div {
-    min-height: 38px;
-    border-top: 1px solid var(--border-subtle);
-  }
-
-  .matrix-body strong {
-    color: var(--ink);
-    font-size: var(--text-badge);
-    font-weight: 650;
-  }
-
-  .matrix-body span { font-weight: 800; text-align: center; }
-  .mark-good { color: #27945b; }
-  .mark-warn { color: #b67a16; }
-  .mark-bad { color: #c94b55; }
-  .mark-neutral { color: var(--ink-muted); }
-
-  .guide-list { padding: var(--space-3) 0; }
-  .guide-list > div {
-    min-height: 46px;
-    display: grid;
-    grid-template-columns: 28px 1fr;
+  .boundary-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-2);
-    align-items: center;
-    border-bottom: 1px solid var(--border-subtle);
   }
 
-  .guide-list > div > span { color: var(--accent-blue); text-align: center; }
-  .guide-list strong {
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: var(--text-badge);
+  .boundary-options > span { align-content: center; gap: 2px; }
+  .boundary-options strong { font-family: var(--font-display); font-size: var(--text-caption); }
+  .boundary-options small { color: var(--ink-muted); font-size: var(--text-badge); }
+
+  .decision-loop {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.2fr) auto minmax(0, 1fr);
+    gap: 7px;
   }
 
-  @media (max-width: 1040px) {
-    .decision-tools { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .tool-card:last-child { grid-column: 1 / -1; min-height: 250px; }
-    .guide-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 var(--space-4); }
-  }
+  .decision-loop i { color: var(--accent-blue); font-style: normal; font-weight: 850; }
 
-  @media (max-width: 680px) {
-    .decision-tools {
-      width: calc(100% + 20px);
-      grid-template-columns: none;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(252px, 84%);
-      gap: var(--space-3);
-      overflow-x: auto;
-      overscroll-behavior-inline: contain;
-      scroll-snap-type: inline mandatory;
-      scrollbar-width: none;
-      padding: 4px 20px 12px 0;
-    }
-
-    .decision-tools::-webkit-scrollbar { display: none; }
-    .tool-card,
-    .tool-card:last-child { min-height: 350px; grid-column: auto; scroll-snap-align: start; }
-    .guide-list { display: block; }
+  @container (max-width: 320px) {
+    .decision-loop { gap: 4px; }
+    .decision-loop span { font-size: var(--text-badge); }
   }
 </style>
