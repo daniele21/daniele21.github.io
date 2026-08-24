@@ -66,7 +66,6 @@ const resolveHref = (href: string) => {
     gap: var(--space-4);
   }
 
-  /* Brand Mark */
   .brand {
     display: inline-flex;
     align-items: center;
@@ -102,7 +101,6 @@ const resolveHref = (href: string) => {
     color: var(--ink-display);
   }
 
-  /* Navigation */
   .nav {
     display: flex;
     align-items: center;
@@ -130,9 +128,7 @@ const resolveHref = (href: string) => {
     transition: color var(--duration-fast) ease;
   }
 
-  .nav-link:hover {
-    color: var(--accent-blue);
-  }
+  .nav-link:hover { color: var(--accent-blue); }
 
   .header-cta {
     padding: 8px 16px;
@@ -140,15 +136,12 @@ const resolveHref = (href: string) => {
   }
 
   .ext-icon {
-    font-size: 0.9em;
+    font-size: 1em;
     line-height: 1;
   }
 
-  /* Responsive */
   @media (max-width: 860px) {
-    .nav-list {
-      display: none;
-    }
+    .nav-list { display: none; }
   }
 
   @media (max-width: 480px) {
