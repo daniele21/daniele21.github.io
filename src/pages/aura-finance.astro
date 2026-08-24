@@ -1,12 +1,14 @@
 ---
 /**
  * aura-finance.astro
- * Modular deep-dive page for Aura Finance project.
- * Composes dedicated section components from src/components/aurafinance/
+ * Product / use-case deep-dive using the shared project-page journey.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuraHeader from '../components/aurafinance/AuraHeader.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
 import AuraHero from '../components/aurafinance/AuraHero.astro';
 import AuraWhy from '../components/aurafinance/AuraWhy.astro';
 import AuraSolution from '../components/aurafinance/AuraSolution.astro';
@@ -22,13 +24,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Why Aura', href: '#why' },
-  { label: 'Solution', href: '#solution' },
-  { label: 'Benefits', href: '#benefits' },
-  { label: 'Product', href: '#product' },
-  { label: 'Payment Detection', href: '#payment' },
-  { label: 'Architecture', href: '#architecture' },
+  { label: 'Decide', href: '#decide' },
+  { label: 'Build', href: '#build' },
+  { label: 'Test', href: '#test' },
+  { label: 'Measure', href: '#measure' },
+  { label: 'Decide again', href: '#decide-again' },
 ];
+
 const auraFinanceSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -59,14 +61,85 @@ const auraFinanceSchema = {
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/personal-budget/tree/new-features' }}
   />
 
-  <div id="top">
+  <div id="top" data-project-page data-project-archetype="product">
     <AuraHero baseUrl={baseUrl} />
-    <AuraWhy />
-    <AuraSolution />
-    <AuraBenefits />
-    <AuraProduct baseUrl={baseUrl} />
-    <AuraPayment baseUrl={baseUrl} />
-    <AuraArchitecture baseUrl={baseUrl} />
+
+    <ProjectPhase
+      id="decide"
+      step="01"
+      label="DECIDE"
+      title="Can a budgeting product stay useful without making the cloud the owner of the ledger?"
+      description="Aura starts from the user's decisions — safe-to-spend, spending patterns and unresolved transactions — while keeping the canonical financial workspace on the device first."
+    >
+      <AuraWhy />
+      <AuraBenefits />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="build"
+      step="02"
+      label="BUILD"
+      title="Keep financial logic deterministic and platform-specific automation isolated."
+      description="The shared product owns the local ledger and finance rules; Android-specific payment detection stays behind a separate native capability, while optional cloud continuity is encrypted before data leaves the client."
+      tone="subtle"
+    >
+      <AuraSolution />
+      <AuraArchitecture baseUrl={baseUrl} />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="test"
+      step="03"
+      label="TEST"
+      title="Test the architecture against everyday money decisions."
+      description="The product surfaces show whether the system helps answer concrete questions, while Android payment detection remains a reviewable proposal instead of silently mutating the source-of-truth ledger."
+    >
+      <AuraProduct baseUrl={baseUrl} />
+      <AuraPayment baseUrl={baseUrl} />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="measure"
+      step="04"
+      label="MEASURE"
+      title="Be explicit about what the current product proves — and what it does not."
+      description="The current evidence is architectural and workflow-level rather than a comparative benchmark. The page therefore separates implemented ownership and review boundaries from claims that still need dedicated measurement."
+      tone="subtle"
+    >
+      <ProjectEvidenceNote
+        title="Current proof is about control, explainability and review boundaries."
+        body="Aura's documented implementation supports a local-first ledger, deterministic finance rules, review-before-recording Android payment candidates and optional client-side encrypted continuity. This page does not turn those properties into unsupported claims about detection accuracy or financial outcomes."
+        evidenced={[
+          'Local workspace is the source of truth',
+          'Safe-to-spend and reporting derive from deterministic recorded data',
+          'Detected Android payments require explicit review before recording',
+          'Optional cloud payloads are encrypted client-side before synchronization',
+        ]}
+        missing={[
+          'Comparative payment-detection accuracy benchmark',
+          'Measured user-outcome improvement versus alternative budgeting tools',
+        ]}
+      />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="decide-again"
+      step="05"
+      label="DECIDE AGAIN"
+      title="Automate capture, not financial ownership."
+      description="The current product decision is to preserve a local source of truth and human-reviewed automation. Cloud continuity stays optional; detected events remain candidates until the user decides they belong in the ledger."
+    >
+      <ProjectDecisionBand
+        title="Keep the ledger local-first and automation reversible."
+        body="Aura uses automation to reduce repetitive capture without transferring authority over the financial history. The canonical transaction is created only after review, and optional cloud continuity remains a client-encrypted extension rather than the primary data owner."
+        signals={[
+          'Local device remains the canonical financial workspace',
+          'Automation proposes; the user confirms',
+          'Cloud continuity remains optional and client-encrypted',
+        ]}
+      />
+    </ProjectPhase>
+
     <AuraCta />
   </div>
 </BaseLayout>
