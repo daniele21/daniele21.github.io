@@ -17,6 +17,7 @@ const routes = [
   'traffic-monitoring-android',
 ];
 
+const phaseIds = ['decide', 'build', 'test', 'measure', 'decide-again'];
 const viewports = [
   { name: 'desktop-1440', width: 1440, height: 1100 },
   { name: 'tablet-768', width: 768, height: 1024 },
@@ -51,11 +52,10 @@ try {
       const response = await page.goto(url, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts?.ready);
 
-      const diagnostics = await page.evaluate(() => {
+      const diagnostics = await page.evaluate((expectedPhaseIds) => {
         const root = document.documentElement;
         const body = document.body;
-        const phaseIds = ['decide', 'build', 'test', 'measure', 'decide-again'];
-        const missingPhases = phaseIds.filter((id) => !document.getElementById(id));
+        const missingPhases = expectedPhaseIds.filter((id) => !document.getElementById(id));
         const links = Array.from(document.querySelectorAll('[data-product-subheader] [data-sublink]'));
         const smallTargets = links
           .map((node) => {
@@ -68,6 +68,70 @@ try {
           })
           .filter((item) => item.width < 44 || item.height < 44);
 
+        const selectorFor = (element) => {
+          const tag = element.tagName.toLowerCase();
+          if (element.id) return `${tag}#${element.id}`;
+          const classes = Array.from(element.classList).slice(0, 3);
+          return classes.length ? `${tag}.${classes.join('.')}` : tag;
+        };
+
+        const overflowingElements = Array.from(body.querySelectorAll('*'))
+          .map((element) => {
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            if (
+              rect.width <= 1 ||
+              rect.height <= 1 ||
+              style.display === 'none' ||
+              style.visibility === 'hidden'
+            ) return null;
+
+            const overflowRight = Math.max(0, Math.ceil(rect.right - window.innerWidth));
+            const overflowLeft = Math.max(0, Math.ceil(-rect.left));
+            if (overflowRight <= 1 && overflowLeft <= 1) return null;
+
+            return {
+              selector: selectorFor(element),
+              text: (element.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120),
+              left: Math.round(rect.left),
+              right: Math.round(rect.right),
+              width: Math.round(rect.width),
+              overflowRight,
+              overflowLeft,
+            };
+          })
+          .filter(Boolean)
+          .sort((a, b) => Math.max(b.overflowRight, b.overflowLeft) - Math.max(a.overflowRight, a.overflowLeft))
+          .slice(0, 24);
+
+        const smallText = Array.from(body.querySelectorAll('*'))
+          .map((element) => {
+            const hasDirectText = Array.from(element.childNodes).some(
+              (node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim(),
+            );
+            if (!hasDirectText) return null;
+
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            if (
+              rect.width <= 1 ||
+              rect.height <= 1 ||
+              style.display === 'none' ||
+              style.visibility === 'hidden'
+            ) return null;
+
+            const fontSize = Number.parseFloat(style.fontSize);
+            if (!Number.isFinite(fontSize) || fontSize >= 14) return null;
+
+            return {
+              selector: selectorFor(element),
+              text: (element.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 100),
+              fontSize: Math.round(fontSize * 100) / 100,
+            };
+          })
+          .filter(Boolean)
+          .slice(0, 40);
+
         return {
           innerWidth: window.innerWidth,
           scrollWidth: Math.max(root.scrollWidth, body.scrollWidth),
@@ -77,17 +141,32 @@ try {
           missingPhases,
           subheaderLinkCount: links.length,
           smallTargets,
+          overflowingElements,
+          smallText,
         };
-      });
+      }, phaseIds);
 
       const screenshotPath = path.join(outputDir, `${route}__${viewport.name}.png`);
       await page.screenshot({ path: screenshotPath, fullPage: true });
+
+      const phaseNavigation = [];
+      for (const phaseId of phaseIds) {
+        await page.evaluate((id) => {
+          document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: 'auto' });
+        }, phaseId);
+        await page.waitForTimeout(120);
+        phaseNavigation.push({
+          phaseId,
+          activeHref: await page.locator('[data-product-subheader] [aria-current="location"]').getAttribute('href').catch(() => null),
+        });
+      }
 
       report.push({
         route,
         viewport,
         status: response?.status() ?? null,
         ...diagnostics,
+        phaseNavigation,
         consoleErrors,
         pageErrors,
         screenshot: path.basename(screenshotPath),
@@ -111,6 +190,7 @@ const failures = report.filter((item) =>
   item.mainCount !== 1 ||
   item.missingPhases.length > 0 ||
   item.smallTargets.length > 0 ||
+  item.phaseNavigation.some((state) => state.activeHref !== `#${state.phaseId}`) ||
   item.pageErrors.length > 0
 );
 
