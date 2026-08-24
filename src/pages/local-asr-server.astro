@@ -1,52 +1,215 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
+
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Decide', href: '#decide' },
+  { label: 'Build', href: '#build' },
+  { label: 'Test', href: '#test' },
+  { label: 'Measure', href: '#measure' },
+  { label: 'Decide again', href: '#decide-again' },
+];
 ---
 
 <BaseLayout
   title="Local ASR Server — Daniele Moltisanti"
   description="Local speech recognition infrastructure for exploring private, offline-first voice workflows without a mandatory cloud dependency."
 >
-  <section class="project-page">
-    <div class="shell project-shell">
-      <a class="back" href={`${baseUrl}/#infrastructure`}>← Architecture & Infrastructure</a>
-      <p class="eyebrow">LOCAL AI INFRASTRUCTURE · SPEECH</p>
-      <h1>Local ASR Server</h1>
-      <p class="lede">
-        A local speech-recognition building block for exploring voice workflows that can stay on infrastructure you control.
-        The goal is to test where local ASR is useful, what constraints appear, and how it can plug into private AI applications.
-      </p>
+  <ProductSubHeader
+    title="Local ASR Server"
+    badge="Speech infrastructure"
+    links={subheaderLinks}
+  />
 
-      <div class="wave-panel" aria-hidden="true">
-        <div class="waveform"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      </div>
+  <div id="top" data-project-page data-project-archetype="infrastructure">
+    <section class="project-hero">
+      <div class="shell project-shell">
+        <a class="back" href={`${baseUrl}/#infrastructure`}>← Architecture & Infrastructure</a>
+        <p class="eyebrow">LOCAL AI INFRASTRUCTURE · SPEECH</p>
+        <h1>Local ASR Server</h1>
+        <p class="lede">
+          A local speech-recognition building block for exploring voice workflows that can stay on infrastructure you control.
+          The goal is to test where local ASR is useful, what constraints appear, and how it can plug into private AI applications.
+        </p>
 
-      <div class="questions">
-        <article><span>01</span><h2>Why local?</h2><p>Keep speech closer to where it is captured and reduce dependence on hosted transcription APIs.</p></article>
-        <article><span>02</span><h2>What is being tested?</h2><p>Runtime behavior, latency, hardware constraints and integration into local AI workflows.</p></article>
-        <article><span>03</span><h2>Where does it fit?</h2><p>As an infrastructure primitive for use cases such as private meeting intelligence and other speech-driven applications.</p></article>
+        <div class="wave-panel" aria-hidden="true">
+          <div class="waveform"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <ProjectPhase
+      id="decide"
+      step="01"
+      label="DECIDE"
+      title="Why keep speech recognition closer to where audio is captured?"
+      description="The project exists to explore whether private voice workflows can reduce dependence on hosted transcription APIs while preserving a useful application boundary."
+    >
+      <div class="shell compact-grid">
+        <article>
+          <span>01</span>
+          <h2>Privacy boundary</h2>
+          <p>Keep speech closer to where it is captured instead of making a hosted transcription API mandatory.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h2>Control boundary</h2>
+          <p>Make the speech layer something a private AI workflow can integrate and reason about explicitly.</p>
+        </article>
+      </div>
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="build"
+      step="02"
+      label="BUILD"
+      title="Treat ASR as reusable infrastructure, not an isolated demo."
+      description="The intended role is a local speech-recognition primitive that can plug into other private AI applications rather than remaining a one-off transcription screen."
+      tone="subtle"
+    >
+      <div class="shell compact-grid three">
+        <article>
+          <span>01</span>
+          <h2>Local speech layer</h2>
+          <p>Own the recognition step inside infrastructure you control.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h2>Application boundary</h2>
+          <p>Keep the speech capability usable by higher-level private AI workflows.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h2>Constraint discovery</h2>
+          <p>Use the implementation to expose runtime and hardware trade-offs that a product must handle.</p>
+        </article>
+      </div>
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="test"
+      step="03"
+      label="TEST"
+      title="Put the speech primitive inside a real private workflow."
+      description="Private meeting intelligence is one concrete use case for testing whether local ASR remains useful once it becomes part of a broader product pipeline."
+    >
+      <div class="shell use-case-card">
+        <div>
+          <p class="card-kicker">RELATED USE CASE</p>
+          <h2>Meeting intelligence</h2>
+          <p>Local ASR can act as the speech layer for workflows that need transcripts before adding speaker context, analysis or project memory.</p>
+        </div>
+        <a href={`${baseUrl}/closedroom`}>Explore ClosedRoom <span aria-hidden="true">→</span></a>
+      </div>
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="measure"
+      step="04"
+      label="MEASURE"
+      title="Measure the constraints before making performance claims."
+      description="The questions already defined for this project are runtime behavior, latency, hardware constraints and integration into local AI workflows. Numeric benchmark results are not published on this page yet."
+      tone="subtle"
+    >
+      <ProjectEvidenceNote
+        title="This page defines the measurement target, not a benchmark result."
+        body="The project is being used to understand where local ASR is viable and what hardware/runtime constraints appear. Until representative measurements are published here, the page should not imply a latency or quality advantage over hosted alternatives."
+        evidenced={[
+          'Local ASR is positioned as an infrastructure primitive',
+          'Private/offline-first workflows are the target integration context',
+          'Latency, runtime behavior and hardware constraints are explicit evaluation targets',
+        ]}
+        missing={[
+          'Published latency benchmark on representative hardware',
+          'Published transcription-quality comparison against hosted alternatives',
+        ]}
+      />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="decide-again"
+      step="05"
+      label="DECIDE AGAIN"
+      title="Keep the local path as a hypothesis to validate, not a universal answer."
+      description="The current direction is to use local ASR where privacy and infrastructure control matter, while withholding stronger performance conclusions until the target-device evidence exists."
+    >
+      <ProjectDecisionBand
+        title="Local-first for the boundary; evidence-first for performance."
+        body="Local ASR is valuable as a controllable speech primitive for private workflows. The next decision depends on measured runtime, latency and hardware behavior rather than assuming local execution is automatically the best option."
+        signals={[
+          'Local execution remains the default experiment boundary',
+          'Private meeting workflows provide a concrete test bed',
+          'Performance conclusions wait for representative measurements',
+        ]}
+      />
+    </ProjectPhase>
+  </div>
 </BaseLayout>
 
 <style>
-  .project-page { min-height: 82vh; padding: clamp(5rem, 10vh, 8rem) 0; }
+  .project-hero { min-height: 76vh; padding: clamp(5rem, 10vh, 8rem) 0; }
   .project-shell { max-width: 980px; }
-  .back { color: var(--ink-subtle); text-decoration: none; font-size: .82rem; font-weight: 700; }
-  .eyebrow { margin: 4rem 0 0; color: var(--accent-blue); font-size: .72rem; font-weight: 850; letter-spacing: .14em; }
+  .back { color: var(--ink-subtle); text-decoration: none; font-size: var(--text-caption); font-weight: 700; }
+  .eyebrow { margin: 4rem 0 0; color: var(--accent-blue); font-size: var(--text-caption); font-weight: 850; letter-spacing: .12em; }
   h1 { margin: .8rem 0 0; font-family: var(--font-display); font-size: clamp(3.2rem, 7vw, 6.5rem); line-height: .98; letter-spacing: -.055em; }
-  .lede { max-width: 760px; margin: 1.3rem 0 0; color: var(--ink-muted); font-size: 1.08rem; line-height: 1.75; }
-  .wave-panel { margin-top: 3rem; min-height: 260px; display: grid; place-items: center; border: 1px solid var(--border-subtle); border-radius: 24px; background: radial-gradient(circle, color-mix(in srgb, var(--accent-blue) 14%, var(--surface-card)), var(--surface-muted)); }
+  .lede { max-width: 760px; margin: 1.3rem 0 0; color: var(--ink-muted); font-size: var(--text-lead); line-height: 1.7; }
+  .wave-panel { margin-top: 3rem; min-height: 260px; display: grid; place-items: center; border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); background: radial-gradient(circle, color-mix(in srgb, var(--accent-blue) 14%, var(--surface-card)), var(--surface-muted)); }
   .waveform { height: 110px; display: flex; align-items: center; gap: 10px; }
   .waveform i { display: block; width: 8px; height: 28px; border-radius: 99px; background: var(--accent-blue); }
   .waveform i:nth-child(2n) { height: 66px; }
   .waveform i:nth-child(3n) { height: 100px; }
   .waveform i:nth-child(5n) { height: 48px; }
-  .questions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
-  .questions article { padding: 1.3rem; border: 1px solid var(--border-subtle); border-radius: 18px; background: var(--surface-card); }
-  .questions span { color: var(--accent-blue); font-family: var(--font-mono); font-size: .72rem; font-weight: 800; }
-  .questions h2 { margin: .55rem 0 0; font-size: 1rem; font-family: var(--font-display); }
-  .questions p { margin: .55rem 0 0; color: var(--ink-subtle); line-height: 1.55; font-size: .82rem; }
-  @media (max-width: 760px) { .questions { grid-template-columns: 1fr; } .waveform { gap: 6px; transform: scale(.78); } }
+
+  .compact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+    padding-bottom: clamp(48px, 7vw, 80px);
+  }
+  .compact-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .compact-grid article,
+  .use-case-card {
+    padding: clamp(20px, 3vw, 28px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+  .compact-grid span,
+  .card-kicker { color: var(--accent-blue); font-family: var(--font-mono); font-size: var(--text-caption); font-weight: 800; }
+  .compact-grid h2,
+  .use-case-card h2 { margin: 8px 0 0; color: var(--ink-display); font-family: var(--font-display); font-size: var(--text-h3); }
+  .compact-grid p,
+  .use-case-card p { margin: 8px 0 0; color: var(--ink-muted); font-size: var(--text-body-sm); line-height: 1.6; }
+
+  .use-case-card {
+    margin-bottom: clamp(48px, 7vw, 80px);
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+  .use-case-card > div { max-width: 720px; }
+  .use-case-card a {
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-blue-dark);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 760px) {
+    .compact-grid,
+    .compact-grid.three { grid-template-columns: 1fr; }
+    .use-case-card { align-items: start; flex-direction: column; }
+    .waveform { gap: 6px; transform: scale(.78); }
+  }
 </style>
