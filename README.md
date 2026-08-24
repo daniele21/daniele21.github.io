@@ -1,51 +1,72 @@
-# Daniele Moltisanti - Personal landing page
+# Daniele Moltisanti — Local AI portfolio
 
-Greenfield static implementation of the personal positioning site documented in [`docs/personal-landing`](docs/personal-landing/README.md).
+Astro-based personal site for the public Local AI thesis documented in [`08 — Local AI Strategy, Positioning & Storytelling.md`](./08%20%E2%80%94%20Local%20AI%20Strategy,%20Positioning%20&%20Storytelling.md) and translated into the landing experience in [`09 — Local AI Landing Page — Narrative, UX & Copy.md`](./09%20%E2%80%94%20Local%20AI%20Landing%20Page%20%E2%80%94%20Narrative,%20UX%20&%20Copy.md).
 
 ## Product direction
 
-The page positions three reusable infrastructure pillars:
+The site is an evidence system rather than a repository gallery. Its main narrative is:
 
-- Local LLM Server
-- Local ASR Server
-- Android Local LLM Harness
+```text
+DECIDE → BUILD → TEST → MEASURE → DECIDE AGAIN
+```
 
-ClosedRoom and Aura Finance are presented as reference applications used to validate the stack against real privacy, packaging, performance and UX constraints.
+The central positioning is **Local AI first ≠ Local AI only**: determine where Local, Hybrid or Cloud makes sense using explicit constraints and evidence.
+
+Representative infrastructure includes Local LLM Server, Local ASR Server and Android Local LLM Harness. Product/use-case pages such as ClosedRoom, Aura Finance and RedactGuard show how those ideas survive real workflows. Performance Lab and Traffic Monitoring provide the measurement/evidence layer.
 
 ## Implementation
 
-The first version deliberately uses plain HTML, CSS and a small amount of JavaScript:
-
-- no runtime framework;
+- Astro 7 + TypeScript-oriented Astro components;
+- static output for GitHub Pages;
+- code-first design system with canonical tokens in `src/styles/tokens.css`;
+- UX contract in `design/ux-contract.json`;
+- brand/motion/imagery language in `design/brand-kit.json`;
+- shared project deep-dive model in `design/project-page-contract.md`;
 - no third-party analytics;
-- no external font or UI dependencies;
-- semantic HTML and keyboard-accessible interactions;
-- progressive disclosure through native `details` elements;
-- responsive navigation and layout;
-- reduced-motion support;
-- static deployment through GitHub Pages.
+- semantic HTML, keyboard focus, reduced-motion support and WCAG 2.2 AA target;
+- scroll-driven home method path without scroll-jacking;
+- automated structural, smoke and rendered visual validation.
 
-## Run locally
+## Development
 
 ```bash
-python3 -m http.server 8080
+npm ci
+npm run dev
 ```
 
-Then open `http://localhost:8080`.
+Useful gates:
 
-## Main files
+```bash
+npm run check
+npm run test
+npm run verify
+```
 
-- `index.html` - semantic page structure and content
-- `assets/site/site.css` - design system and responsive layout
-- `assets/site/site.js` - navigation and reveal behavior
-- `.github/workflows/pages.yml` - GitHub Pages deployment
+`npm run verify` builds the site, runs source-level UX/contract tests and validates the generated static artifact.
 
-## Verification
+## Key source areas
 
-Before merging:
+- `src/pages/index.astro` — production homepage and continuous method path;
+- `src/pages/*.astro` — project and supporting routes;
+- `src/components/landing/` — home narrative components;
+- `src/components/project/` — shared project-page semantic components;
+- `src/components/layout/ProductSubHeader.astro` — shared project phase navigation;
+- `src/styles/tokens.css` — canonical design tokens;
+- `design/` — UX, brand and visual-review contracts;
+- `scripts/capture-project-pages.mjs` — rendered project-page diagnostics;
+- `scripts/capture-home.mjs` — rendered homepage diagnostics;
+- `tests/` — source-level contract and static-output checks.
 
-- validate all external links;
-- review copy and project maturity labels;
-- test at 360 px, 768 px, 1024 px and 1440 px widths;
-- test keyboard navigation and reduced motion;
-- confirm the repository Pages source is configured for GitHub Actions.
+## Experience validation
+
+Before treating structural UX work as complete:
+
+- preserve the declared outcome/task/IA hierarchy before visual polish;
+- test 1440, 768, 390 and 320px representative layouts;
+- keep meaningful text at or above 14px;
+- preserve 44×44px interaction targets where applicable;
+- validate keyboard/focus and reduced-motion behavior;
+- confirm the home remains readable if the scroll-path enhancement cannot initialize;
+- confirm project pages preserve `Overview → Decide → Build → Test → Measure → Decide again`;
+- reject page-level horizontal overflow, browser/page errors and hidden active mobile navigation;
+- distinguish verified evidence from planned or still-unmeasured work.

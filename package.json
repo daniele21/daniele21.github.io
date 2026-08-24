@@ -11,7 +11,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node --test tests/journey-path-model.test.mjs tests/project-page-contract.test.mjs",
+    "test": "node --test tests/journey-path-model.test.mjs tests/home-experience-contract.test.mjs tests/project-page-contract.test.mjs",
     "smoke": "node tests/smoke.js",
     "verify": "npm run build && npm run test && npm run smoke",
     "astro": "astro"

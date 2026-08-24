@@ -16,7 +16,8 @@ const { code } = harnessData;
         <p class="code-sub">{code.sub}</p>
       </div>
       <div class="reveal code-panel">
-        <pre aria-label="LocalLlmClient example"><code><span class="kw">val</span> prepared = client.<span class="fn">prepare</span>(applicationId, useCaseId)
+        <p class="code-scroll-hint" aria-hidden="true">Scroll to inspect code →</p>
+        <pre tabindex="0" aria-label="LocalLlmClient example; scroll horizontally to inspect the complete code"><code><span class="kw">val</span> prepared = client.<span class="fn">prepare</span>(applicationId, useCaseId)
 check(prepared.ready)
 
 <span class="kw">val</span> sessionId = client.<span class="fn">createSession</span>(applicationId, useCaseId)
@@ -56,6 +57,13 @@ handle.<span class="fn">cancel</span>()</code></pre>
 
   .code-panel { min-width: 0; }
 
+  .code-scroll-hint {
+    display: none;
+    margin: 0 0 var(--space-2);
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+  }
+
   pre {
     max-width: 100%;
     margin: 0;
@@ -77,5 +85,9 @@ handle.<span class="fn">cancel</span>()</code></pre>
 
   @media (max-width: 1020px) {
     .code-wrap { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .code-scroll-hint { display: block; }
   }
 </style>

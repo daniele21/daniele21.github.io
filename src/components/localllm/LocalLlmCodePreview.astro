@@ -24,15 +24,14 @@ const { codePreview } = localLlmServerData;
         </div>
         <span class="lang-badge">OpenAI Python SDK</span>
       </div>
-      <pre class="code-block"><code>{codePreview.code}</code></pre>
+      <p class="code-scroll-hint" aria-hidden="true">Scroll to inspect code →</p>
+      <pre class="code-block" tabindex="0" aria-label="Python client example; scroll horizontally to inspect the complete code"><code>{codePreview.code}</code></pre>
     </div>
   </div>
 </section>
 
 <style>
-  .section {
-    padding: clamp(60px, 7vw, 96px) 0;
-  }
+  .section { padding: clamp(60px, 7vw, 96px) 0; }
 
   .section-head {
     max-width: 760px;
@@ -112,6 +111,15 @@ const { codePreview } = localLlmServerData;
     font-weight: 700;
   }
 
+  .code-scroll-hint {
+    display: none;
+    margin: 0;
+    padding: 10px 16px 0;
+    color: #94a3b8;
+    font-size: var(--text-caption);
+    font-family: var(--font-body);
+  }
+
   .code-block {
     margin: 0;
     padding: clamp(16px, 4vw, 24px);
@@ -121,6 +129,10 @@ const { codePreview } = localLlmServerData;
     line-height: 1.65;
     color: #e2e8f0;
     -webkit-overflow-scrolling: touch;
+  }
+
+  @media (max-width: 640px) {
+    .code-scroll-hint { display: block; }
   }
 
   @media (max-width: 520px) {

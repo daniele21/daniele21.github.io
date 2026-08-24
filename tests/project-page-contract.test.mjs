@@ -25,7 +25,11 @@ test('project-page UX contract declares the shared journey', () => {
   assert.deepEqual(contract.projectPages.primaryJourney, [...navigationLabels, 'Next step']);
   assert.equal(contract.projectPages.rules.verifiedEvidenceOnly, true);
   assert.equal(contract.projectPages.rules.missingEvidenceMustBeExplicit, true);
+  assert.equal(contract.projectPages.rules.meaningfulTextNeverBelow14Px, true);
+  assert.equal(contract.projectPages.rules.mobileActivePhaseMustRemainVisible, true);
   assert.equal(contract.projectPages.routes.length, projectPages.length);
+  assert.match(contract.adaptiveContent.tables, /stacked labeled rows/i);
+  assert.match(contract.adaptiveContent.code, /keyboard-focusable horizontal scroller/i);
 });
 
 test('all project pages preserve one predictable phase order', () => {
@@ -48,7 +52,7 @@ test('all project pages preserve one predictable phase order', () => {
   }
 });
 
-test('shared project subheader uses canonical tokens and accessible targets', () => {
+test('shared project subheader uses canonical tokens, accessible targets and adaptive phase visibility', () => {
   const source = read('src/components/layout/ProductSubHeader.astro');
 
   assert.doesNotMatch(source, /var\(--text-small\)/);
@@ -59,6 +63,26 @@ test('shared project subheader uses canonical tokens and accessible targets', ()
   assert.match(source, /aria-current/);
   assert.match(source, /href === '#top'/);
   assert.match(source, /requestAnimationFrame/);
+  assert.match(source, /mask-image:/);
+  assert.match(source, /mobileNavigation\.matches/);
+  assert.match(source, /nav\.scrollTo/);
+});
+
+test('technical content follows the narrow-screen adaptive contract', () => {
+  const table = read('src/components/localllm/LocalLlmBackends.astro');
+  assert.match(table, /data-label="Backend engine"/);
+  assert.match(table, /@media \(max-width: 640px\)/);
+  assert.match(table, /content: attr\(data-label\)/);
+
+  for (const path of [
+    'src/components/localllm/LocalLlmCodePreview.astro',
+    'src/components/harness/HarnessCodePreview.astro',
+  ]) {
+    const source = read(path);
+    assert.match(source, /tabindex="0"/);
+    assert.match(source, /Scroll to inspect code/);
+    assert.match(source, /overflow-x: auto/);
+  }
 });
 
 test('project-page contract documents semantic consistency over visual sameness', () => {
@@ -66,4 +90,14 @@ test('project-page contract documents semantic consistency over visual sameness'
   assert.match(contract, /consistent comprehension, not identical pages/i);
   assert.match(contract, /OVERVIEW[\s\S]*DECIDE[\s\S]*BUILD[\s\S]*TEST[\s\S]*MEASURE[\s\S]*DECIDE AGAIN/);
   assert.match(contract, /Never use decorative charts that can be mistaken for measured evidence/i);
+  assert.match(contract, /active phase is kept visible and centered/i);
+  assert.match(contract, /Minimum meaningful text size remains 14px/i);
+});
+
+test('ClosedRoom header SVG and controls satisfy baseline rendering/accessibility invariants', () => {
+  const source = read('src/components/closedroom/ClosedRoomHeader.astro');
+  assert.doesNotMatch(source, /M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z/);
+  assert.match(source, /M21 12\.79A9 9 0 1 1 11\.21 3A7 7 0 0 0 21 12\.79Z/);
+  assert.match(source, /width: var\(--touch-target-min\)/);
+  assert.match(source, /font-size: var\(--text-caption\)/);
 });

@@ -66,6 +66,14 @@ Overview · Decide · Build · Test · Measure · Decide again
 
 Project-specific subtopics remain inside the relevant phase rather than competing as top-level navigation items.
 
+On narrow screens, the canonical phase navigation remains horizontally scrollable but must behave as an intentional mobile control rather than clipped desktop navigation:
+
+- the active phase is kept visible and centered when practical;
+- subtle edge fades communicate that additional phases exist off-screen;
+- the sticky project CTA is removed when it competes with phase navigation;
+- normal page content still exposes the final source/demo/next-step CTA;
+- every navigation target remains at least 44px high and keyboard-addressable.
+
 ## Archetypes
 
 The shared journey is mandatory for full deep-dives, but internal modules vary by project type.
@@ -129,6 +137,30 @@ essential conclusion
 
 Do not show every advanced implementation detail at the same visual level as the primary project outcome.
 
+## Adaptive technical content
+
+Responsive behavior preserves **content priority**, not desktop geometry.
+
+### Tables
+
+Comparison tables should become stacked labeled rows/cards below roughly 640px when the comparison can remain understandable without simultaneous columns. Horizontal scrolling is a fallback for genuinely matrix-like information, not the default response to narrow screens.
+
+### Code
+
+Code keeps semantic line structure. On narrow screens it may use a horizontal scroller, but that region must be independently keyboard-focusable, must never create page-level overflow and should expose a small affordance such as “Scroll to inspect code” when overflow is expected.
+
+### Architecture diagrams
+
+Diagrams fit inside the content container and may provide explicit zoom for detail. Embedded micro-labels are supporting evidence only; the page must also explain the important architecture conclusion in readable text.
+
+### Dense metrics and diagnostics
+
+Keep summary and decision-relevant metrics above raw diagnostics. Never shrink meaningful labels, statuses, captions or explanatory text below 14px simply to preserve desktop density.
+
+## Motion and product previews
+
+Motion is subordinate to comprehension. Project-specific carousels, screenshots and previews should be user-controlled when repeated movement would otherwise continue automatically. Autoplay is acceptable only when it has a product reason and an explicit pause/stop control. Reduced-motion preferences must remove non-essential repeated movement.
+
 ## Accessibility and adaptive behavior
 
 - WCAG 2.2 AA target.
@@ -139,16 +171,21 @@ Do not show every advanced implementation detail at the same visual level as the
 - Desktop, tablet and mobile preserve the same phase order.
 - Responsive behavior must preserve content priority rather than merely hide navigation/content.
 - Motion is optional and subordinate to comprehension; reduced-motion preferences must remain respected.
+- Invalid SVG, runtime console errors and broken visual assets are experience defects, not cosmetic warnings.
 
 ## Validation
 
 A project-page migration is complete only when:
-- all six semantic phases are represented;
+- all six semantic navigation states are represented (`Overview` plus five project phases);
 - top-level project navigation uses the shared phase model;
 - no measured claim is invented;
 - project-specific depth stays inside the correct phase;
 - one H1 and valid landmarks remain intact;
+- meaningful rendered text remains at least 14px;
+- active mobile phase navigation remains visibly discoverable;
+- no page-level horizontal overflow exists at representative widths;
+- browser/page errors are absent in representative rendered checks;
 - build/check/test gates still pass;
-- representative desktop/tablet/mobile rendering is reviewed for important pages.
+- representative 1440 / 768 / 390 / 320 rendering is reviewed for important pages.
 
 Short-form project pages may intentionally omit deep modules, but should still preserve the same question order where enough evidence exists.

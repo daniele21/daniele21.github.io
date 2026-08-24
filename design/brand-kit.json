@@ -1,7 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "name": "Daniele Moltisanti Brand Kit",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "sourceOfTruth": {
+    "mode": "code-first",
+    "canonicalTokens": "src/styles/tokens.css",
+    "experienceContract": "design/ux-contract.json",
+    "rule": "Production components and canonical tokens own visual truth. Mockups and screenshots are reference evidence only."
+  },
   "colors": {
     "primary": {
       "signalBlue": "#145bff",
@@ -37,7 +43,12 @@
   "typography": {
     "fontDisplay": "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     "fontBody": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    "fontMono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    "fontMono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+    "meaningfulTextFloor": "14px"
+  },
+  "spacing": {
+    "baseUnit": "4px",
+    "semanticRule": "Use proximity before adding cards or borders. Preserve larger section spacing for narrative phases and tighter spacing inside one decision group."
   },
   "radii": {
     "badge": "6px",
@@ -50,5 +61,43 @@
     "card": "0 8px 24px rgba(18, 43, 88, 0.045)",
     "elevated": "0 12px 32px rgba(18, 43, 88, 0.08)",
     "glow": "0 0 24px rgba(20, 91, 255, 0.2)"
+  },
+  "motion": {
+    "language": "restrained technical continuity",
+    "purposes": [
+      "feedback",
+      "spatial continuity",
+      "narrative progress",
+      "state transition"
+    ],
+    "durations": {
+      "fast": "150ms",
+      "base": "280ms",
+      "slow": "500ms"
+    },
+    "easing": {
+      "outExpo": "cubic-bezier(0.16, 1, 0.3, 1)",
+      "inOutSmooth": "cubic-bezier(0.4, 0, 0.2, 1)"
+    },
+    "rules": [
+      "No scroll-jacking.",
+      "Scroll-coupled motion must preserve direct user control and reverse naturally when scrolling backwards.",
+      "Repeated UI interactions use fast or base motion; slow motion is reserved for large narrative transitions.",
+      "Autoplaying decorative or product-preview carousels are avoided unless explicit pause/stop control is provided.",
+      "Reduced motion removes scroll-coupled transforms and preserves all content and hierarchy."
+    ]
+  },
+  "imagery": {
+    "priority": [
+      "real product screenshots",
+      "real architecture or system diagrams",
+      "measured data visualization",
+      "restrained explanatory graphics"
+    ],
+    "rule": "Graphics explain or prove. Decorative imagery must never be required to understand the product or be mistaken for measured evidence."
+  },
+  "iconography": {
+    "style": "simple outline or minimal system icons",
+    "rule": "Icons support labels and state; they do not replace essential text unless the control has an accessible name."
   }
 }

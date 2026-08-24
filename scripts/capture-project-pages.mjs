@@ -187,10 +187,23 @@ try {
           { timeout: 1500 },
         ).catch(() => null);
 
-        phaseNavigation.push({
-          phaseId,
-          activeHref: await page.locator('[data-product-subheader] [aria-current="location"]').getAttribute('href').catch(() => null),
-        });
+        await page.waitForTimeout(80);
+        phaseNavigation.push(await page.evaluate((id) => {
+          const nav = document.querySelector('[data-product-subheader] .subheader-nav');
+          const active = document.querySelector(`[data-product-subheader] [href="#${id}"]`);
+          const navRect = nav?.getBoundingClientRect();
+          const activeRect = active?.getBoundingClientRect();
+          const activeVisible = Boolean(navRect && activeRect &&
+            activeRect.left >= navRect.left - 1 &&
+            activeRect.right <= navRect.right + 1);
+          return {
+            phaseId: id,
+            activeHref: document
+              .querySelector('[data-product-subheader] [aria-current="location"]')
+              ?.getAttribute('href') || null,
+            activeVisible,
+          };
+        }, phaseId));
       }
 
       await page.evaluate(() => {
@@ -228,7 +241,9 @@ const failures = report.filter((item) =>
   item.mainCount !== 1 ||
   item.missingPhases.length > 0 ||
   item.smallTargets.length > 0 ||
-  item.phaseNavigation.some((state) => state.activeHref !== `#${state.phaseId}`) ||
+  item.smallText.length > 0 ||
+  item.phaseNavigation.some((state) => state.activeHref !== `#${state.phaseId}` || !state.activeVisible) ||
+  item.consoleErrors.length > 0 ||
   item.pageErrors.length > 0
 );
 

@@ -1,9 +1,33 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "name": "Personal Landing UX Contract",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "targetExperienceLevel": "L1",
   "baselineRepositoryLevel": "L0",
+  "designSourceOfTruth": {
+    "mode": "code-first",
+    "canonicalFiles": [
+      "design/ux-contract.json",
+      "design/brand-kit.json",
+      "design/project-page-contract.md",
+      "src/styles/tokens.css"
+    ],
+    "rule": "Production components and canonical design files are the source of truth. Screenshots and mockups are review evidence, never a parallel design system."
+  },
+  "experiencePriorities": {
+    "audienceOrder": [
+      "Technical Decision Maker",
+      "Technical Peer / AI Engineer",
+      "Leadership / Talent / Collaborator"
+    ],
+    "outcomeOrder": [
+      "Understand the Local AI thesis and evidence-led method",
+      "Enter concrete project proof",
+      "Understand identity and track record",
+      "Reach advisory or collaboration CTA"
+    ],
+    "conflictRule": "When hierarchy conflicts arise, preserve thesis comprehension and evidence access before identity, promotion or advisory conversion."
+  },
   "viewports": {
     "desktop": {
       "width": 1440,
@@ -17,7 +41,7 @@
     "mobile": {
       "width": 390,
       "minWidth": 320,
-      "layout": "linear vertical thread, full readability, zero horizontal overflow"
+      "layout": "linear vertical thread, full readability, zero horizontal page overflow"
     }
   },
   "typography": {
@@ -41,7 +65,51 @@
     "visibleFocusRings": true,
     "reducedMotionSupported": true,
     "singleH1PerRoute": true,
-    "noDuplicateMainLandmarks": true
+    "noDuplicateMainLandmarks": true,
+    "autoMovingContentRequiresUserControl": true
+  },
+  "home": {
+    "primaryJourney": [
+      "Hero / thesis",
+      "Decide",
+      "Build",
+      "Test",
+      "Measure",
+      "Decide again",
+      "Project proof or next step"
+    ],
+    "actionHierarchy": {
+      "primary": "Explore the work",
+      "secondary": "Read my thinking",
+      "lateConversion": "Discuss an AI architecture"
+    },
+    "progressiveDisclosure": "thesis -> decision framework -> enabling infrastructure -> real product proof -> measured evidence -> identity/field notes -> advisory",
+    "methodPath": {
+      "purpose": "Narrative progress and spatial continuity between Decide, Build, Test and Measure.",
+      "states": [
+        "unvisited",
+        "approaching",
+        "active",
+        "completed"
+      ],
+      "scrollDirection": "reversible",
+      "noScrollJacking": true,
+      "desktop": "alternating left/right path with curved handoffs aligned to the current reading plane",
+      "mobile": "single vertical thread; readability has priority over preserving desktop curves",
+      "reducedMotion": "show a static guide and all content without scroll-coupled transforms",
+      "javascriptFailure": "show all content and local stage rails; the path may disappear but comprehension must remain intact",
+      "resize": "recalculate geometry after layout settles without losing narrative state"
+    }
+  },
+  "adaptiveContent": {
+    "projectNavigation": {
+      "desktop": "all canonical phases visible when space allows",
+      "mobile": "horizontal phase rail with active phase auto-centered, edge fade affordance and no competing sticky project CTA"
+    },
+    "tables": "Prefer stacked labeled rows/cards below 640px when a comparison remains understandable without columns. Horizontal scrolling is a fallback, not the default.",
+    "code": "Preserve code formatting in a keyboard-focusable horizontal scroller with an explicit mobile affordance; never create page-level overflow.",
+    "architectureDiagrams": "Fit to container by default and allow explicit zoom for detail. Never rely on tiny embedded labels as the only explanation.",
+    "denseMetrics": "summary first, then detailed diagnostics or tables; do not shrink meaningful text below 14px to preserve density."
   },
   "projectPages": {
     "contract": "design/project-page-contract.md",
@@ -74,7 +142,9 @@
       "verifiedEvidenceOnly": true,
       "missingEvidenceMustBeExplicit": true,
       "progressiveDisclosure": "essential -> context -> visual/workflow proof -> architecture/code/diagnostics",
-      "sharedPhaseOrderAcrossViewports": true
+      "sharedPhaseOrderAcrossViewports": true,
+      "meaningfulTextNeverBelow14Px": true,
+      "mobileActivePhaseMustRemainVisible": true
     },
     "routes": [
       "/android-local-llm-harness",
@@ -110,7 +180,7 @@
     {
       "id": "J4",
       "persona": "Mobile Visitor (320px–430px)",
-      "flow": "Seamless vertical journey without lost narrative state, unreadable microtype, or broken SVG paths",
+      "flow": "Seamless vertical journey without lost narrative state, unreadable microtype, broken SVG paths or hidden essential actions",
       "targetComprehensionSec": 60
     },
     {

@@ -1,4 +1,4 @@
-name: Visual review project pages
+name: Visual review product experience
 
 on:
   push:
@@ -36,25 +36,30 @@ jobs:
 
       - name: Start static preview
         run: |
-          python3 -m http.server 4321 --directory dist > /tmp/project-pages-http.log 2>&1 &
-          echo $! > /tmp/project-pages-http.pid
+          python3 -m http.server 4321 --directory dist > /tmp/product-experience-http.log 2>&1 &
+          echo $! > /tmp/product-experience-http.pid
           for attempt in {1..30}; do
             if curl --fail --silent http://127.0.0.1:4321/ >/dev/null; then
               exit 0
             fi
             sleep 1
           done
-          cat /tmp/project-pages-http.log
+          cat /tmp/product-experience-http.log
           exit 1
 
-      - name: Capture 9 routes across 4 viewports
+      - name: Capture home across 4 viewports plus reduced motion
+        run: node scripts/capture-home.mjs
+
+      - name: Capture 9 project routes across 4 viewports
         run: node scripts/capture-project-pages.mjs
 
       - name: Upload rendered review artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: project-page-visual-review
-          path: visual-review/
+          name: product-experience-visual-review
+          path: |
+            visual-review-home/
+            visual-review/
           if-no-files-found: error
           retention-days: 7

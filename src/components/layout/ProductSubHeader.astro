@@ -145,6 +145,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     scrollbar-width: none;
     -ms-overflow-style: none;
     overscroll-behavior-inline: contain;
+    scroll-padding-inline: 18px;
   }
 
   .subheader-nav::-webkit-scrollbar { display: none; }
@@ -210,21 +211,33 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   }
 
   @media (max-width: 768px) {
-    .subheader-inner { gap: var(--space-2); }
-    .subheader-brand { display: none; }
+    .subheader-inner {
+      width: 100%;
+      gap: 0;
+    }
+
+    .subheader-brand,
+    .subheader-cta {
+      display: none;
+    }
+
     .subheader-nav {
       width: 100%;
       justify-content: flex-start;
+      scroll-behavior: smooth;
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
     }
-    .subheader-cta {
-      padding-inline: 10px;
-      font-size: var(--text-caption);
+
+    .subheader-links {
+      padding-inline: 18px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .subheader-link,
     .subheader-cta { transition: none; }
+    .subheader-nav { scroll-behavior: auto; }
   }
 </style>
 
@@ -248,6 +261,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
     const overviewLink = links.find((link) => link.getAttribute('href') === '#top');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mobileNavigation = window.matchMedia('(max-width: 768px)');
     let currentActive = links.find((link) => link.classList.contains('is-active'));
 
     const keepActiveLinkVisible = (activeLink: HTMLAnchorElement | undefined) => {
@@ -255,16 +269,21 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
       const navRect = nav.getBoundingClientRect();
       const linkRect = activeLink.getBoundingClientRect();
-      let delta = 0;
+      const behavior = reduceMotion.matches ? 'auto' : 'smooth';
 
+      if (mobileNavigation.matches) {
+        const currentRelativeLeft = linkRect.left - navRect.left + nav.scrollLeft;
+        const desired = currentRelativeLeft - (nav.clientWidth - linkRect.width) / 2;
+        const maxScroll = Math.max(0, nav.scrollWidth - nav.clientWidth);
+        const target = Math.min(maxScroll, Math.max(0, desired));
+        if (Math.abs(nav.scrollLeft - target) > 2) nav.scrollTo({ left: target, behavior });
+        return;
+      }
+
+      let delta = 0;
       if (linkRect.left < navRect.left) delta = linkRect.left - navRect.left;
       else if (linkRect.right > navRect.right) delta = linkRect.right - navRect.right;
-
-      if (Math.abs(delta) <= 1) return;
-      nav.scrollBy({
-        left: delta,
-        behavior: reduceMotion.matches ? 'auto' : 'smooth',
-      });
+      if (Math.abs(delta) > 1) nav.scrollBy({ left: delta, behavior });
     };
 
     const setActive = (activeLink: HTMLAnchorElement | undefined) => {
@@ -281,9 +300,6 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
         else link.removeAttribute('aria-current');
       });
 
-      // Keep the active phase visible inside the horizontal nav only. Calling
-      // scrollIntoView() here can also move the document vertically and fight
-      // the user's section scroll, which made the scroll-spy unstable.
       keepActiveLinkVisible(activeLink);
     };
 
@@ -313,9 +329,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
       });
     };
 
-    links.forEach((link) => link.addEventListener('click', () => setActive(link)));
+    links.forEach((link) => link.addEventListener('click', () => {
+      setActive(link);
+      window.requestAnimationFrame(() => keepActiveLinkVisible(link));
+    }));
     window.addEventListener('scroll', requestUpdate, { passive: true });
     window.addEventListener('resize', requestUpdate, { passive: true });
+    mobileNavigation.addEventListener('change', requestUpdate);
     updateFromScroll();
   }
 

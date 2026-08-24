@@ -24,7 +24,7 @@
   font-size: var(--text-caption);
   z-index: 9999;
   text-decoration: none;
-  transition: top 0.2s ease;
+  transition: top var(--duration-fast) ease;
 }
 
 .skip-link:focus {
@@ -123,6 +123,54 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/*
+ * Project-page readability floor.
+ * Older project-specific components still contain compact hard-coded values.
+ * The shared project contract owns the semantic floor, so project routes lift
+ * only known compact labels/captions instead of flattening the entire type
+ * hierarchy. This keeps leads/headings intact while preventing 10–13px text.
+ */
+main [data-project-page][data-project-archetype] :is(
+  .eyebrow-pill,
+  .hero-eyebrow,
+  .hero-badge,
+  .pill-item,
+  .window-title,
+  .eyebrow,
+  .kicker,
+  .step-badge,
+  .lifecycle-step-num,
+  .format-badge,
+  .tag,
+  .btn-title,
+  .btn-sub,
+  .view-caption,
+  .screen-tag,
+  .surface-badge,
+  .flow-title,
+  .formula-title,
+  .status-badge,
+  .comp-tag,
+  .badge,
+  .status-pill,
+  .device-title,
+  .rel-badge,
+  .track-tag,
+  .flow-num,
+  .step-indicator,
+  .shot-label,
+  .shot-caption,
+  .visual-note
+) {
+  font-size: var(--text-caption);
+}
+
+main [data-project-page][data-project-archetype] small,
+main [data-project-page][data-project-archetype] .step-body p,
+main [data-project-page][data-project-archetype] .flow-step > span {
+  font-size: var(--text-caption);
+}
+
 /* Alternating landing method path. The stage rails and inter-stage curves share
    the same shell edge, so Decide -> Build -> Test -> Measure reads as one line. */
 .method-journey {
@@ -214,6 +262,9 @@ html[data-method-path-ready='true'] .method-journey .thread-curve {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* Progressive enhancement only after the SVG path is measured. If JS never
+     initializes, content remains visible instead of getting stuck in a hidden
+     `pending` state. */
   html[data-method-path-ready='true'] .method-stage .stage-copy {
     opacity: var(--copy-opacity, 0);
     transform: translate3d(var(--copy-x, 0px), var(--copy-y, 0px), 0);
@@ -225,11 +276,6 @@ html[data-method-path-ready='true'] .method-journey .thread-curve {
     transform: translate3d(var(--visual-x, 0px), var(--visual-y, 0px), 0) scale(var(--visual-scale, 1));
     transform-origin: center;
     will-change: transform, opacity;
-  }
-
-  html[data-method-path-ready='pending'] .method-stage .stage-copy,
-  html[data-method-path-ready='pending'] .method-stage .stage-visual {
-    opacity: 0;
   }
 }
 
