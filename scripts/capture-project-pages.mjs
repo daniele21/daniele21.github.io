@@ -25,6 +25,20 @@ const viewports = [
   { name: 'mobile-320', width: 320, height: 700 },
 ];
 
+const warmRenderedPage = async (page) => {
+  const metrics = await page.evaluate(() => ({
+    height: document.documentElement.scrollHeight,
+    viewport: window.innerHeight,
+  }));
+  const step = Math.max(360, Math.floor(metrics.viewport * 0.8));
+  for (let y = 0; y < metrics.height; y += step) {
+    await page.evaluate((scrollY) => window.scrollTo({ top: scrollY, behavior: 'auto' }), y);
+    await page.waitForTimeout(22);
+  }
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'auto' }));
+  await page.waitForTimeout(160);
+};
+
 await fs.rm(outputDir, { recursive: true, force: true });
 await fs.mkdir(outputDir, { recursive: true });
 
@@ -51,6 +65,7 @@ try {
       const url = `${baseUrl}/${route}/`;
       const response = await page.goto(url, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts?.ready);
+      await warmRenderedPage(page);
 
       const diagnostics = await page.evaluate((expectedPhaseIds) => {
         const root = document.documentElement;
