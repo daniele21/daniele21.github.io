@@ -26,8 +26,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Astro site
-        run: npm run build
-
-      - name: Run UX and smoke tests
-        run: npm run test
+      - name: Verify project experience
+        run: npm run verify
