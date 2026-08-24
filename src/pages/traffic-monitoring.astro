@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
 
 import TrafficMacHero from '../components/trafficmonitoring/macos/TrafficMacHero.astro';
 import TrafficMacMission from '../components/trafficmonitoring/macos/TrafficMacMission.astro';
@@ -18,12 +20,12 @@ import { trafficMonitoringData as mac } from '../content';
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
 const subHeaderLinks = [
-  { label: 'Overview', href: '#hero' },
-  { label: 'Why', href: '#why-it-exists' },
-  { label: 'Evidence Tiers', href: '#evidence-tiers' },
-  { label: 'Surfaces', href: '#product-surfaces' },
-  { label: 'Architecture', href: '#architecture' },
-  { label: 'Status', href: '#status' },
+  { label: 'Overview', href: '#top' },
+  { label: 'Decide', href: '#decide' },
+  { label: 'Build', href: '#build' },
+  { label: 'Test', href: '#test' },
+  { label: 'Measure', href: '#measure' },
+  { label: 'Decide again', href: '#decide-again' },
 ];
 
 const cta = {
@@ -48,20 +50,77 @@ const cta = {
     cta={cta}
   />
 
-  <div id="top">
+  <div id="top" data-project-page data-project-archetype="experiment">
     <TrafficMacHero />
-    <TrafficMacMission />
-    <TrafficMacProblem />
-    <TrafficMacEvidence />
-    <TrafficMacSurfaces />
-    <TrafficMacCoverage />
-    <TrafficMacArchitecture />
-    <TrafficPrivacyBoundary
-      title="macOS Privacy & Trust Boundaries"
-      keptVisible={mac.privacy.keptVisible}
-      notClaimed={mac.privacy.notClaimed}
-    />
-    <TrafficMacMaturity />
+
+    <ProjectPhase
+      id="decide"
+      step="01"
+      label="DECIDE"
+      title="What network behavior can be observed locally without overstating the evidence?"
+      description="The project starts from useful questions — usage by network, observation coverage and application activity — while treating unknown or unsupported conclusions as valid outcomes rather than gaps to hide."
+    >
+      <TrafficMacMission />
+      <TrafficMacProblem />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="build"
+      step="02"
+      label="BUILD"
+      title="Separate authoritative counters, previews and experimental flow evidence."
+      description="The architecture keeps platform sources, tracking, persistence, analytics and UI boundaries explicit so stronger evidence can be added without silently changing what earlier tiers are allowed to claim."
+      tone="subtle"
+    >
+      <TrafficMacArchitecture />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="test"
+      step="03"
+      label="TEST"
+      title="Make coverage and uncertainty visible in the product itself."
+      description="The real workflow is not just a byte counter. Product surfaces expose usage, networks, trends, application previews and technical diagnostics while showing when observation is partial or degraded."
+    >
+      <TrafficMacSurfaces />
+      <TrafficMacCoverage />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="measure"
+      step="04"
+      label="MEASURE"
+      title="Tie every conclusion to the strength of its evidence source."
+      description="Traffic Monitoring explicitly distinguishes authoritative physical-interface evidence, best-effort application previews and an experimental signed provider path. Privacy boundaries and maturity status are part of the evidence, not footnotes."
+      tone="subtle"
+    >
+      <TrafficMacEvidence />
+      <TrafficPrivacyBoundary
+        title="macOS Privacy & Trust Boundaries"
+        keptVisible={mac.privacy.keptVisible}
+        notClaimed={mac.privacy.notClaimed}
+      />
+      <TrafficMacMaturity />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="decide-again"
+      step="05"
+      label="DECIDE AGAIN"
+      title="Keep strong claims narrow until stronger evidence is release-validated."
+      description="The current decision is to treat physical-interface usage and historical export as authoritative, application activity as best-effort preview, and per-app locality as unresolved until controlled signed real-Mac evidence exists."
+    >
+      <ProjectDecisionBand
+        title="Authoritative where measured. Explicitly uncertain everywhere else."
+        body="Core network usage and coverage are implemented from physical-interface evidence. Application activity remains a non-privileged best-effort preview, while per-app locality and byte accounting are not release-validated. The product keeps those evidence tiers separate instead of collapsing them into one confidence level."
+        signals={[
+          'Physical-interface usage and historical evidence are implemented',
+          'Application activity remains Beta / best-effort',
+          'Per-app locality waits for controlled signed real-Mac validation',
+        ]}
+      />
+    </ProjectPhase>
+
     <TrafficFinalCta
       kicker={mac.finalCta.kicker}
       headline={mac.finalCta.headline}
