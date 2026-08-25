@@ -1,0 +1,334 @@
+---
+/**
+ * EvidenceMatrix.astro
+ * Shows what "good enough" means via the 5 evaluation criteria
+ * and provides direct proof access to Performance Lab & Traffic Monitoring.
+ */
+import { landingData } from '../../content/locales/en/landing';
+
+const { measureStage } = landingData;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
+---
+
+<div class="evidence-matrix-container" aria-label="Measurement criteria and evidence systems">
+  <!-- Top Evaluation Matrix Strip -->
+  <div class="criteria-strip">
+    <div class="criteria-header">
+      <span class="criteria-kicker">EVALUATION DIMENSIONS</span>
+      <span class="criteria-benchmark">Target: Workload-Specific Viability</span>
+    </div>
+
+    <div class="criteria-grid">
+      {measureStage.criteria.map((c) => (
+        <div class="criterion-item">
+          <span class="criterion-icon" aria-hidden="true">{c.icon}</span>
+          <div class="criterion-text">
+            <strong class="criterion-title">{c.title}</strong>
+            <span class="criterion-desc">{c.text}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Two Proof Systems -->
+  <div class="evidence-systems-grid">
+    <!-- Performance Lab -->
+    <a href={resolveHref('/performance-lab')} class="evidence-system-card">
+      <div class="system-header">
+        <span class="system-tag">OPTIMIZATION & BENCHMARKS</span>
+        <span class="system-arrow" aria-hidden="true">↗</span>
+      </div>
+
+      <div class="system-main">
+        <div class="system-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 20V10"></path>
+            <path d="M12 20V4"></path>
+            <path d="M6 20v-6"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="system-title">Performance Lab</h3>
+          <p class="system-question">Which model + configuration is good enough for this workload on this device?</p>
+        </div>
+      </div>
+
+      <div class="system-note-block">
+        <span class="note-kicker">EVALUATION MATRIX</span>
+        <p class="note-content">Model × Runtime × Configuration × Device → Quality × Performance × Resources.</p>
+      </div>
+
+      <div class="system-footer">
+        <strong class="system-cta">See the measurements <span aria-hidden="true">→</span></strong>
+      </div>
+    </a>
+
+    <!-- Traffic Monitoring -->
+    <a href={resolveHref('/traffic-monitoring')} class="evidence-system-card">
+      <div class="system-header">
+        <span class="system-tag">BOUNDARY OBSERVABILITY</span>
+        <span class="system-arrow" aria-hidden="true">↗</span>
+      </div>
+
+      <div class="system-main">
+        <div class="system-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="system-title">Traffic Monitoring</h3>
+          <p class="system-question">Did the system stay inside the boundary we expected?</p>
+        </div>
+      </div>
+
+      <div class="system-note-block">
+        <span class="note-kicker">OBSERVABILITY PRINCIPLE</span>
+        <p class="note-content">Evidence over claims: verifies network egress on macOS & Android without inspecting payloads.</p>
+      </div>
+
+      <div class="system-footer">
+        <strong class="system-cta">See the evidence <span aria-hidden="true">→</span></strong>
+      </div>
+    </a>
+  </div>
+</div>
+
+<style>
+  .evidence-matrix-container {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 2vw, 20px);
+    width: 100%;
+  }
+
+  /* Criteria Strip */
+  .criteria-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: clamp(14px, 1.8vw, 18px);
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+  }
+
+  .criteria-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .criteria-kicker {
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--accent-blue-dark);
+  }
+
+  .criteria-benchmark {
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+
+  .criteria-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .criterion-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 6px 8px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+  }
+
+  .criterion-icon {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .criterion-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .criterion-title {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 750;
+    color: var(--ink-display);
+    line-height: 1.2;
+  }
+
+  .criterion-desc {
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.35;
+    margin-top: 1px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Two Systems Grid */
+  .evidence-systems-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 1.8vw, 18px);
+  }
+
+  .evidence-system-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: clamp(16px, 2.2vw, 22px);
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  }
+
+  .evidence-system-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-blue);
+    box-shadow: 0 8px 24px rgba(20, 91, 255, 0.09);
+  }
+
+  .system-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .system-tag {
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+  }
+
+  .system-arrow {
+    color: var(--ink-muted);
+    font-size: 1rem;
+    transition: transform var(--duration-fast) ease, color var(--duration-fast) ease;
+  }
+
+  .evidence-system-card:hover .system-arrow {
+    transform: translate(2px, -2px);
+    color: var(--accent-blue);
+  }
+
+  .system-main {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .system-icon-box {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-sm);
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
+    flex-shrink: 0;
+  }
+
+  .system-icon-box svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .system-title {
+    margin: 0 0 3px;
+    font-family: var(--font-display);
+    font-size: 1.12rem;
+    font-weight: 800;
+    color: var(--ink-display);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .system-question {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .system-note-block {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 12px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    margin-top: auto;
+  }
+
+  .note-kicker {
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+  }
+
+  .note-content {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.45;
+  }
+
+  .system-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+  }
+
+  .system-cta {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 750;
+  }
+
+  @media (max-width: 768px) {
+    .criteria-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .evidence-systems-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

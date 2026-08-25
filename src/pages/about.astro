@@ -35,7 +35,7 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
         <div class="profile-content">
           <p class="stage-kicker">ABOUT & BACKGROUND</p>
           <h1 class="page-title">Daniele Moltisanti</h1>
-          <p class="profile-role">AI Systems Engineer · Applied Research</p>
+          <p class="profile-role">{landingData.hero.identity.role} · {landingData.hero.identity.specialization}</p>
           <p class="profile-lead">{credibilityIntro.quote}</p>
         </div>
       </div>
@@ -79,7 +79,7 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
             Discuss an AI architecture →
           </a>
           <a class="secondary-button" href={aboutSignal.linkedinUrl} target="_blank" rel="noopener noreferrer">
-            LinkedIn Profile <span aria-hidden="true">↗</span>
+            LinkedIn <span aria-hidden="true">↗</span>
           </a>
           <a class="secondary-button" href={aboutSignal.githubUrl} target="_blank" rel="noopener noreferrer">
             GitHub Profile <span aria-hidden="true">↗</span>

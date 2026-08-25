@@ -24,6 +24,7 @@ export interface HeroSocialLink {
 export interface HeroIdentity {
   name: string;
   role: string;
+  specialization?: string;
   affiliation?: string;
   affiliationRole?: string;
   education?: string;
@@ -220,12 +221,21 @@ export interface AboutSignalContent {
   githubUrl: string;
 }
 
-export interface FinalCtaContent {
+export interface LoopClosureContent {
   kicker: string;
   title: string;
   body: string;
   loopSequence: string;
   payoff: string;
+  outcomes: { label: string; note: string }[];
+}
+
+export interface FinalCtaContent {
+  kicker?: string;
+  title?: string;
+  body?: string;
+  loopSequence?: string;
+  payoff?: string;
   consultation: {
     heading: string;
     body: string;
@@ -241,6 +251,7 @@ export interface LandingPageData {
   buildStage: BuildStageContent;
   testStage: TestStageContent;
   measureStage: MeasureStageContent;
+  loopClosure: LoopClosureContent;
   selectedSystems: {
     kicker: string;
     title: string;

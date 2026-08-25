@@ -1,5 +1,5 @@
 ---
-/** Plane 03: three compact product cards used as real proving grounds. */
+/** Plane 03: Applications / TEST - What happens in a real product? */
 import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
 import PlaneCardGrid from './PlaneCardGrid.astro';
@@ -20,20 +20,20 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
   intro={testStage.intro}
   handoff={testStage.handoff}
   nextLabel="MEASURE"
-  visualLabel="Applications used as proving grounds"
+  visualLabel="Applications used as empirical proving grounds"
 >
   <PlaneCardGrid>
     {testStage.applications.map((app) => (
       <ProjectProofCard
         variant="proof"
-        eyebrow={app.name === 'RedactGuard' ? 'SENSITIVE DOCUMENTS' : app.name === 'Aura Finance' ? 'PERSONAL FINANCE' : 'MEETINGS'}
+        eyebrow={app.name === 'RedactGuard' ? 'SENSITIVE DOCUMENTS' : app.name === 'Aura Finance' ? 'PERSONAL FINANCE' : 'MEETINGS & MEMORY'}
         title={app.name}
         description={app.question}
         href={resolveHref(app.href)}
         logoPath={app.logoPath}
         logoAlt={`${app.name} logo`}
-        features={app.features}
-        evidenceLabel="REVEALS"
+        whatItTests={app.whatItTests}
+        evidenceLabel="WHAT IT TESTS"
         evidence={app.evidence}
         ctaLabel="See the test"
       />

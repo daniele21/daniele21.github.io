@@ -1,49 +1,10 @@
 ---
-/** Plane 04: evidence summaries; detailed metrics live in the linked pages. */
+/** Plane 04: Observability & Measurement / MEASURE - Is it actually good enough? */
 import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
-import PlaneCardGrid from './PlaneCardGrid.astro';
-import ProjectProofCard from './ProjectProofCard.astro';
+import EvidenceMatrix from './EvidenceMatrix.astro';
 
 const { measureStage } = landingData;
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
-
-const evidenceLinks = [
-  {
-    eyebrow: 'MODEL FIT',
-    title: 'Performance Lab',
-    description: 'Which model is fast and accurate enough on this device?',
-    href: '/performance-lab',
-    symbol: 'performance' as const,
-    features: [{ label: 'Quality' }, { label: 'Latency' }, { label: 'Resources' }],
-    evidenceLabel: 'MEASURES',
-    evidence: 'Compares each setup on the workload it actually needs to handle.',
-    ctaLabel: 'See the measurements',
-  },
-  {
-    eyebrow: 'MACOS BOUNDARY',
-    title: 'Traffic Monitoring · macOS',
-    description: 'Did the app stay inside the boundary we expected?',
-    href: '/traffic-monitoring',
-    symbol: 'boundary' as const,
-    features: [{ label: 'Network' }, { label: 'Uncertainty' }, { label: 'No payloads' }],
-    evidenceLabel: 'OBSERVES',
-    evidence: 'Shows what we observed and where we are still unsure.',
-    ctaLabel: 'See the evidence',
-  },
-  {
-    eyebrow: 'ANDROID BOUNDARY',
-    title: 'Traffic Monitoring · Android',
-    description: 'What can we prove on a real phone? Where are we still unsure?',
-    href: '/traffic-monitoring-android',
-    symbol: 'boundary' as const,
-    features: [{ label: 'Network' }, { label: 'Coverage' }, { label: 'Unknowns' }],
-    evidenceLabel: 'CHECKS',
-    evidence: 'Keeps missing evidence visible instead of guessing.',
-    ctaLabel: 'See the evidence',
-  },
-];
 ---
 
 <PlaneTemplate
@@ -56,24 +17,8 @@ const evidenceLinks = [
   intro={measureStage.intro}
   handoff={measureStage.handoff}
   nextLabel="DECIDE AGAIN"
-  visualLabel="Performance and observability evidence"
+  visualLabel="Performance and observability evidence matrix"
   isFinal
 >
-  <PlaneCardGrid>
-    {evidenceLinks.map((item) => (
-      <ProjectProofCard
-        plane="04"
-        variant="evidence"
-        eyebrow={item.eyebrow}
-        title={item.title}
-        description={item.description}
-        href={resolveHref(item.href)}
-        symbol={item.symbol}
-        features={item.features}
-        evidenceLabel={item.evidenceLabel}
-        evidence={item.evidence}
-        ctaLabel={item.ctaLabel}
-      />
-    ))}
-  </PlaneCardGrid>
+  <EvidenceMatrix />
 </PlaneTemplate>

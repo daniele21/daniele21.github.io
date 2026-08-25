@@ -1,0 +1,213 @@
+---
+/**
+ * LoopClosure.astro
+ * Closes the research methodology loop immediately following Plane 04 (MEASURE).
+ * Expresses: Evidence changes the next decision -> LOCAL / HYBRID / CLOUD.
+ */
+import { landingData } from '../../content/locales/en/landing';
+
+const { loopClosure } = landingData;
+---
+
+<section class="loop-closure-section" id="loop-closure" aria-labelledby="loop-title">
+  <div class="shell loop-shell">
+    <div class="loop-closure-card">
+      <div class="loop-closure-content">
+        <p class="stage-kicker">{loopClosure.kicker}</p>
+        <h2 id="loop-title" class="loop-heading">{loopClosure.title}</h2>
+        <p class="loop-body">{loopClosure.body}</p>
+
+        <!-- Dynamic Loop Flow -->
+        <div class="loop-track" aria-label="Research loop progression">
+          <span class="track-step">01 DECIDE</span>
+          <span class="track-arrow" aria-hidden="true">→</span>
+          <span class="track-step">02 BUILD</span>
+          <span class="track-arrow" aria-hidden="true">→</span>
+          <span class="track-step">03 TEST</span>
+          <span class="track-arrow" aria-hidden="true">→</span>
+          <span class="track-step">04 MEASURE</span>
+          <span class="track-arrow" aria-hidden="true">→</span>
+          <span class="track-step track-step--final">DECIDE AGAIN</span>
+        </div>
+
+        <p class="loop-payoff"><strong>{loopClosure.payoff}</strong></p>
+      </div>
+
+      <!-- Decision Outcomes Result Matrix -->
+      <div class="loop-outcomes-grid" aria-label="Possible architectural destinations">
+        {loopClosure.outcomes.map((outcome) => (
+          <div class={`outcome-tile outcome-tile--${outcome.label.toLowerCase()}`}>
+            <span class="outcome-label">{outcome.label}</span>
+            <p class="outcome-note">{outcome.note}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .loop-closure-section {
+    position: relative;
+    padding: clamp(56px, 7vw, 96px) 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 10%, rgba(20, 91, 255, 0.08), transparent 70%),
+      var(--surface-canvas);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    overflow: clip;
+  }
+
+  .loop-closure-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 920px;
+    margin-inline: auto;
+  }
+
+  .loop-closure-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: clamp(28px, 4vw, 40px);
+  }
+
+  .loop-closure-section .stage-kicker {
+    margin-bottom: var(--space-2);
+  }
+
+  .loop-heading {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-display);
+    font-size: clamp(1.85rem, 3.2vw, 2.65rem);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+    font-weight: 800;
+    color: var(--ink-display);
+  }
+
+  .loop-body {
+    max-width: 680px;
+    font-size: var(--text-lead);
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 0 0 var(--space-5);
+  }
+
+  .loop-track {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding: 10px 20px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    box-shadow: 0 4px 16px rgba(18, 43, 88, 0.03);
+    margin-bottom: var(--space-4);
+  }
+
+  .track-step {
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 800;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+  }
+
+  .track-step--final {
+    color: var(--accent-blue-dark);
+    font-weight: 850;
+    background: var(--surface-blue-subtle);
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+  }
+
+  .track-arrow {
+    color: var(--accent-blue);
+    font-weight: 800;
+    font-size: var(--text-badge);
+  }
+
+  .loop-payoff {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    color: var(--accent-blue-dark);
+    font-weight: 750;
+    letter-spacing: 0.02em;
+  }
+
+  /* Outcomes Grid */
+  .loop-outcomes-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(14px, 2vw, 22px);
+    text-align: left;
+  }
+
+  .outcome-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: clamp(18px, 2.2vw, 24px);
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .outcome-tile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+
+  .outcome-tile--local::before {
+    background: var(--accent-blue);
+  }
+
+  .outcome-tile--hybrid::before {
+    background: #8b5cf6;
+  }
+
+  .outcome-tile--cloud::before {
+    background: #0284c7;
+  }
+
+  .outcome-label {
+    font-family: var(--font-display);
+    font-size: var(--text-body);
+    font-weight: 850;
+    letter-spacing: 0.05em;
+    color: var(--ink-display);
+  }
+
+  .outcome-note {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .loop-outcomes-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .loop-track {
+      font-size: var(--text-badge);
+      padding: 8px 14px;
+      gap: 6px 8px;
+    }
+  }
+</style>

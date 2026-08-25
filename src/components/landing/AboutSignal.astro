@@ -1,7 +1,7 @@
 ---
 /**
  * AboutSignal.astro
- * Verifiable track record summary and engineering background.
+ * Compact credibility signal and background preview on the homepage.
  */
 import { landingData } from '../../content/locales/en/landing';
 
@@ -9,37 +9,37 @@ const { aboutSignal } = landingData;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<section class="stage-section" id="about" aria-labelledby="about-title">
+<section class="stage-section about-signal-section" id="about" aria-labelledby="about-title">
   <div class="shell stage-shell">
     <div class="about-grid">
-      <!-- Left Column: Bio & Core Signal -->
+      <!-- Left Column: Bio & Summary -->
       <div class="about-main">
         <p class="stage-kicker">{aboutSignal.kicker}</p>
         <h2 id="about-title" class="stage-heading">{aboutSignal.heading}</h2>
         <p class="about-summary">{aboutSignal.summary}</p>
 
         <div class="about-actions">
-          <a class="primary-button" href={aboutSignal.linkedinUrl} target="_blank" rel="noopener noreferrer">
-            Connect on LinkedIn <span aria-hidden="true">↗</span>
+          <a class="primary-button" href={`${baseUrl}/about`}>
+            About me & track record <span aria-hidden="true">→</span>
+          </a>
+          <a class="secondary-button" href={aboutSignal.linkedinUrl} target="_blank" rel="noopener noreferrer">
+            LinkedIn <span aria-hidden="true">↗</span>
           </a>
           <a class="secondary-button" href={aboutSignal.githubUrl} target="_blank" rel="noopener noreferrer">
-            View GitHub Profile <span aria-hidden="true">↗</span>
-          </a>
-          <a class="secondary-button" href={`${baseUrl}/about`}>
-            Full Background & Track Record →
+            GitHub <span aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
 
-      <!-- Right Column: 4 Engineering Discipline Highlights -->
+      <!-- Right Column: 2 Core Discipline Highlights -->
       <div class="about-highlights">
-        <h3 class="highlights-title">Engineering Discipline & Focus</h3>
+        <span class="highlights-kicker">ENGINEERING DISCIPLINE</span>
         <div class="highlights-list">
           {aboutSignal.highlights.map((item) => (
             <div class="highlight-card">
               <span class="hl-bullet" aria-hidden="true">▣</span>
               <div class="hl-content">
-                <h4 class="hl-label">{item.label}</h4>
+                <h3 class="hl-label">{item.label}</h3>
                 <p class="hl-detail">{item.detail}</p>
               </div>
             </div>
@@ -51,34 +51,39 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 </section>
 
 <style>
-  .stage-section {
-    padding: clamp(48px, 7vw, 84px) 0;
+  .about-signal-section {
+    padding: clamp(56px, 7vw, 92px) 0;
     background: var(--surface-canvas);
     border-bottom: 1px solid var(--border-subtle);
   }
 
   .about-grid {
     display: grid;
-    grid-template-columns: minmax(320px, 1.2fr) minmax(320px, 1fr);
-    gap: clamp(24px, 4vw, 48px);
+    grid-template-columns: minmax(320px, 1.25fr) minmax(300px, 1fr);
+    gap: clamp(28px, 4.5vw, 56px);
     align-items: center;
+  }
+
+  .about-main .stage-kicker {
+    margin-bottom: var(--space-2);
   }
 
   .stage-heading {
     margin: 0 0 var(--space-3);
     font-family: var(--font-display);
-    font-size: var(--text-h2);
-    line-height: 1.2;
+    font-size: clamp(1.75rem, 2.5vw, 2.35rem);
+    line-height: 1.15;
     letter-spacing: -0.03em;
     font-weight: 800;
     color: var(--ink-display);
+    text-wrap: balance;
   }
 
   .about-summary {
     font-size: var(--text-lead);
     color: var(--ink-muted);
     line-height: 1.6;
-    margin: 0 0 var(--space-4);
+    margin: 0 0 var(--space-5);
   }
 
   .about-actions {
@@ -89,43 +94,55 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   /* Highlights Panel */
   .about-highlights {
-    padding: clamp(20px, 3vw, 28px) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: clamp(20px, 2.6vw, 28px);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
   }
 
-  .highlights-title {
-    margin: 0 0 var(--space-3);
+  .highlights-kicker {
     font-family: var(--font-display);
-    font-size: var(--text-body);
-    font-weight: 750;
-    color: var(--ink-display);
+    font-size: var(--text-badge);
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--accent-blue-dark);
   }
 
   .highlights-list {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--border-medium);
+    gap: var(--space-3);
   }
 
   .highlight-card {
-    display: grid;
-    grid-template-columns: 28px 1fr;
-    gap: var(--space-2);
-    align-items: start;
-    padding: var(--space-4) 0;
-    border-bottom: 1px solid var(--border-medium);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .highlight-card:first-child {
+    border-top: none;
+    padding-top: 0;
   }
 
   .hl-bullet {
     color: var(--accent-blue);
     font-size: 1rem;
     line-height: 1.3;
+    flex-shrink: 0;
   }
 
   .hl-label {
     margin: 0 0 2px;
     font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 750;
+    font-size: 0.92rem;
+    font-weight: 800;
     color: var(--ink-display);
   }
 
@@ -133,12 +150,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin: 0;
     font-size: var(--text-caption);
     color: var(--ink-muted);
-    line-height: 1.5;
+    line-height: 1.45;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 860px) {
     .about-grid {
       grid-template-columns: 1fr;
+      gap: var(--space-6);
     }
   }
 </style>

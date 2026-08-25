@@ -1,0 +1,335 @@
+---
+/**
+ * EcosystemDiagram.astro
+ * Shows the unified execution layer across desktop, Android, local speech and cloud fallback.
+ * Renders interactive proof nodes linking directly to the infrastructure artifacts.
+ */
+import { landingData } from '../../content/locales/en/landing';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
+---
+
+<div class="ecosystem-diagram" aria-label="Local AI Execution Layer Architecture">
+  <!-- Top: Application Layer -->
+  <div class="ecosystem-top">
+    <div class="app-consumer-node">
+      <span class="node-kicker">CONSUMER LAYER</span>
+      <strong class="node-title">Applications & Products</strong>
+      <span class="node-sub">Desktop App · Mobile Client · Workflow Automation</span>
+    </div>
+  </div>
+
+  <!-- Gateway Boundary Line -->
+  <div class="ecosystem-boundary" aria-hidden="true">
+    <div class="boundary-line"></div>
+    <span class="boundary-label">STABLE RUNTIME & API BOUNDARY (OpenAI-compatible)</span>
+    <div class="boundary-line"></div>
+  </div>
+
+  <!-- Main Execution Grid: 3 Core Nodes + Fallback -->
+  <div class="ecosystem-nodes-grid">
+    <!-- Node 1: Local LLM Server -->
+    <a href={resolveHref('/local-llm-server')} class="system-node node--desktop">
+      <div class="node-badge">DESKTOP / SERVER</div>
+      <div class="node-identity">
+        <div class="node-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <div class="node-texts">
+          <h4 class="system-name">Local LLM Server <span class="arrow-indicator">↗</span></h4>
+          <p class="system-role">Multi-model runtime · GGUF & MLX</p>
+        </div>
+      </div>
+      <div class="node-capabilities">
+        <span>Concurrency</span>
+        <span>Telemetry</span>
+        <span>Streaming</span>
+      </div>
+    </a>
+
+    <!-- Node 2: Local ASR Server -->
+    <a href={resolveHref('/local-asr-server')} class="system-node node--speech">
+      <div class="node-badge">SPEECH PRIMITIVE</div>
+      <div class="node-identity">
+        <div class="node-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+        </div>
+        <div class="node-texts">
+          <h4 class="system-name">Local ASR Server <span class="arrow-indicator">↗</span></h4>
+          <p class="system-role">Private speech-to-text (Whisper)</p>
+        </div>
+      </div>
+      <div class="node-capabilities">
+        <span>Real-time</span>
+        <span>Zero Network</span>
+        <span>Streaming</span>
+      </div>
+    </a>
+
+    <!-- Node 3: Android Local LLM Harness -->
+    <a href={resolveHref('/android-local-llm-harness')} class="system-node node--mobile">
+      <div class="node-badge">ON-DEVICE / MOBILE</div>
+      <div class="node-identity">
+        <div class="node-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+          </svg>
+        </div>
+        <div class="node-texts">
+          <h4 class="system-name">Android Harness <span class="arrow-indicator">↗</span></h4>
+          <p class="system-role">On-device inference & thermals</p>
+        </div>
+      </div>
+      <div class="node-capabilities">
+        <span>GGUF / NPU</span>
+        <span>Memory Bounds</span>
+        <span>AIDL Service</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Bottom: Fallback / External Layer -->
+  <div class="ecosystem-fallback" aria-label="Optional Cloud Boundary">
+    <div class="fallback-pill">
+      <span class="fallback-dot"></span>
+      <span>Optional Cloud Fallback (Strictly Opt-in for Frontier Reasoning)</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ecosystem-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 1.8vw, 20px);
+    padding: clamp(20px, 2.6vw, 30px);
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    width: 100%;
+  }
+
+  /* Consumer Layer */
+  .ecosystem-top {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .app-consumer-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-sm);
+  }
+
+  .node-kicker {
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--ink-subtle);
+  }
+
+  .node-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--ink-display);
+    font-weight: 800;
+  }
+
+  .node-sub {
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+  }
+
+  /* Boundary Indicator */
+  .ecosystem-boundary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .boundary-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border-strong);
+    border-top: 1px dashed var(--accent-blue);
+    opacity: 0.5;
+  }
+
+  .boundary-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-badge);
+    font-weight: 750;
+    color: var(--accent-blue-dark);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  /* Execution Nodes Grid */
+  .ecosystem-nodes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(10px, 1.4vw, 16px);
+  }
+
+  .system-node {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px;
+    background: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+    box-shadow: 0 2px 8px rgba(8, 19, 51, 0.03);
+  }
+
+  .system-node:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-blue);
+    box-shadow: 0 8px 20px rgba(20, 91, 255, 0.1);
+  }
+
+  .node-badge {
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 850;
+    letter-spacing: 0.06em;
+    color: var(--accent-blue);
+  }
+
+  .node-identity {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .node-icon-box {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
+    flex-shrink: 0;
+  }
+
+  .node-icon-box svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .node-texts {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .system-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--ink-display);
+    line-height: 1.25;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .arrow-indicator {
+    font-size: var(--text-badge);
+    color: var(--accent-blue);
+    opacity: 0;
+    transition: opacity var(--duration-fast) ease, transform var(--duration-fast) ease;
+  }
+
+  .system-node:hover .arrow-indicator {
+    opacity: 1;
+    transform: translate(1px, -1px);
+  }
+
+  .system-role {
+    margin: 2px 0 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.35;
+  }
+
+  .node-capabilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .node-capabilities span {
+    font-size: var(--text-badge);
+    font-weight: 650;
+    color: var(--ink);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* Fallback Pill */
+  .ecosystem-fallback {
+    display: flex;
+    justify-content: center;
+  }
+
+  .fallback-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: var(--surface-subtle);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-full);
+    font-size: var(--text-caption);
+    font-weight: 650;
+    color: var(--ink-muted);
+  }
+
+  .fallback-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #94a3b8;
+  }
+
+  @media (max-width: 760px) {
+    .ecosystem-nodes-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .boundary-label {
+      font-size: var(--text-badge);
+    }
+  }
+</style>

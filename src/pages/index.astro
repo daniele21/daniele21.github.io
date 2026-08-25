@@ -13,6 +13,7 @@ import MethodThread from '../components/landing/MethodThread.astro';
 import BuildStage from '../components/landing/BuildStage.astro';
 import TestStage from '../components/landing/TestStage.astro';
 import EvidenceStage from '../components/landing/EvidenceStage.astro';
+import LoopClosure from '../components/landing/LoopClosure.astro';
 import FieldNotes from '../components/landing/FieldNotes.astro';
 import AboutSignal from '../components/landing/AboutSignal.astro';
 import FinalCta from '../components/landing/FinalCta.astro';
@@ -38,7 +39,7 @@ import FinalCta from '../components/landing/FinalCta.astro';
     <MethodThread
       fromStep="01 DECIDE"
       toStep="02 BUILD"
-      sublabel="A justified Local or Hybrid boundary becomes an engineering brief."
+      sublabel="If Local or Hybrid earns a role, now we need to make it real with dependable infrastructure."
       direction="ltr"
     />
 
@@ -56,12 +57,14 @@ import FinalCta from '../components/landing/FinalCta.astro';
     <MethodThread
       fromStep="03 TEST"
       toStep="04 MEASURE"
-      sublabel="A useful workflow must still meet real performance constraints."
+      sublabel="A useful workflow must still meet real performance and resource constraints."
       direction="ltr"
     />
 
     <EvidenceStage />
   </div>
+
+  <LoopClosure />
 
   <FieldNotes />
 

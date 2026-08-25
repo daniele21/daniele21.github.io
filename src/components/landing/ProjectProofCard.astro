@@ -1,9 +1,14 @@
 ---
-/** Minimal-premium project card shared by the Build, Test and Measure planes. */
+/**
+ * ProjectProofCard.astro
+ * Semantic proof card with tailored anatomies for Proof (Applications), Evidence, and Execution.
+ * Strictly adheres to 14px minimum meaningful font size.
+ */
 import type { ProjectCardFeature } from '../../types/landing';
 import PlaneCard from './PlaneCard.astro';
 
 interface Props {
+  plane?: string;
   variant?: 'execution' | 'proof' | 'evidence';
   eyebrow: string;
   title: string;
@@ -12,14 +17,15 @@ interface Props {
   logoPath?: string;
   logoAlt?: string;
   symbol?: 'audio' | 'performance' | 'boundary' | 'feedback';
-  features: ProjectCardFeature[];
+  features?: ProjectCardFeature[];
   evidenceLabel: string;
   evidence: string;
   ctaLabel: string;
+  whatItTests?: string;
 }
 
 const {
-  variant = 'execution',
+  variant = 'proof',
   eyebrow,
   title,
   description,
@@ -27,27 +33,14 @@ const {
   logoPath,
   logoAlt = '',
   symbol,
-  features = [],
   evidenceLabel,
   evidence,
   ctaLabel,
+  whatItTests,
 } = Astro.props;
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
-const logoTreatment = (() => {
-  if (!logoPath) return 'symbol';
-  if (logoPath.includes('local-llm-server')) return 'vector-dark';
-  if (logoPath.includes('harness')) return 'vector-mark';
-  if (logoPath.endsWith('.svg')) return 'vector';
-  if (logoPath.includes('closedroom')) return 'soft-raster';
-  return 'raster';
-})();
-const featureIcons = variant === 'proof'
-  ? ['lock', 'person', 'shield']
-  : variant === 'evidence'
-    ? ['chart', 'boundary', 'feedback']
-    : ['api', 'cube', 'chart'];
 ---
 
 <PlaneCard
@@ -64,10 +57,7 @@ const featureIcons = variant === 'proof'
   </Fragment>
 
   <div class="project-proof-card__identity">
-    <div
-      class:list={['project-proof-card__logo', `project-proof-card__logo--${logoTreatment}`]}
-      aria-hidden={!logoPath ? 'true' : undefined}
-    >
+    <div class="project-proof-card__logo" aria-hidden={!logoPath ? 'true' : undefined}>
       {logoPath ? (
         <img src={asset(logoPath)} alt={logoAlt} loading="lazy" />
       ) : (
@@ -80,35 +70,26 @@ const featureIcons = variant === 'proof'
       )}
     </div>
 
-    <div>
-      <h3>{title}</h3>
-      <p>{description}</p>
+    <div class="project-proof-card__titles">
+      <h3 class="project-proof-card__title">{title}</h3>
+      <p class="project-proof-card__question">{description}</p>
     </div>
   </div>
 
-  <div class="project-proof-card__features">
-    {features.slice(0, 3).map((feature, index) => (
-      <div class="project-proof-card__feature">
-        <span class="project-proof-card__feature-icon" aria-hidden="true">
-          {featureIcons[index] === 'lock' && <svg viewBox="0 0 24 24"><path d="M7.5 10V7.5a4.5 4.5 0 0 1 9 0V10M5.5 10h13v10h-13z" /><path d="M12 14v2.5" /></svg>}
-          {featureIcons[index] === 'person' && <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.5" /><path d="M4.5 20c.5-4.5 3-6.5 7.5-6.5s7 2 7.5 6.5" /></svg>}
-          {(featureIcons[index] === 'shield' || featureIcons[index] === 'boundary') && <svg viewBox="0 0 24 24"><path d="M12 2.8 19 6v5.2c0 4.6-2.7 7.8-7 10-4.3-2.2-7-5.4-7-10V6z" /><path d="m9.5 12 1.7 1.7 3.6-4" /></svg>}
-          {featureIcons[index] === 'api' && <svg viewBox="0 0 24 24"><path d="M7 3.5h10l4 4v9l-4 4H7l-4-4v-9z" /><path d="M7 12h1m3 0h2m3 0h1" /></svg>}
-          {featureIcons[index] === 'cube' && <svg viewBox="0 0 24 24"><path d="m12 2.8 8 4.5v9.2L12 21l-8-4.5V7.3z" /><path d="m4.4 7.5 7.6 4.3 7.6-4.3M12 11.8V21" /></svg>}
-          {featureIcons[index] === 'chart' && <svg viewBox="0 0 24 24"><path d="M4 3v17h17" /><path d="m7 15 4-4 3 2 5-6" /></svg>}
-          {featureIcons[index] === 'feedback' && <svg viewBox="0 0 24 24"><path d="M5 9a8 8 0 0 1 13-3l2 2" /><path d="M20 4v4h-4M19 15a8 8 0 0 1-13 3l-2-2" /><path d="M4 20v-4h4" /></svg>}
-        </span>
-        <span>{feature.label}</span>
-      </div>
-    ))}
+  <!-- Central Semantic Block -->
+  <div class="project-proof-card__body-block">
+    <span class="project-proof-card__badge-label">
+      {whatItTests ? 'WHAT IT TESTS' : evidenceLabel}
+    </span>
+    <p class="project-proof-card__body-text">
+      {whatItTests || evidence}
+    </p>
   </div>
 
   <Fragment slot="footer">
-    <div class="project-proof-card__evidence">
-      <small>{evidenceLabel}</small>
-      <p>{evidence}</p>
+    <div class="project-proof-card__footer-inner">
+      <strong class="project-proof-card__cta">{ctaLabel}<span aria-hidden="true"> →</span></strong>
     </div>
-    <strong class="project-proof-card__cta">{ctaLabel}<span aria-hidden="true">↗</span></strong>
   </Fragment>
 </PlaneCard>
 
@@ -117,191 +98,130 @@ const featureIcons = variant === 'proof'
     min-width: 0;
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 8px;
     color: var(--plane-card-accent);
     font-size: var(--text-badge);
-    font-weight: 800;
-    letter-spacing: 0.07em;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .project-proof-card__arrow {
     color: var(--ink-muted);
-    font-size: 1.08rem;
+    font-size: 1rem;
     transition: transform var(--duration-fast) ease;
   }
 
   :global(.project-proof-card:hover) .project-proof-card__arrow,
-  :global(.project-proof-card:focus-visible) .project-proof-card__arrow { transform: translate(2px, -2px); }
+  :global(.project-proof-card:focus-visible) .project-proof-card__arrow {
+    transform: translate(2px, -2px);
+    color: var(--plane-card-accent);
+  }
 
   .project-proof-card__identity {
-    display: grid;
-    grid-template-columns: 74px minmax(0, 1fr);
-    gap: var(--space-4);
-    align-items: start;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
     padding-bottom: var(--space-3);
   }
 
   .project-proof-card__logo {
-    position: relative;
-    isolation: isolate;
-    width: 74px;
-    height: 74px;
+    width: 48px;
+    height: 48px;
     display: grid;
     place-items: center;
-    border: 1px solid color-mix(in srgb, var(--plane-card-accent) 12%, var(--border-subtle));
-    border-radius: var(--radius-md);
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), color-mix(in srgb, var(--plane-card-accent) 7%, white));
-    box-shadow: 0 12px 24px color-mix(in srgb, var(--plane-card-accent) 14%, transparent);
-    transition: box-shadow var(--duration-base) ease, transform var(--duration-base) var(--ease-out-expo);
-  }
-
-  .project-proof-card__logo::before {
-    position: absolute;
-    z-index: 0;
-    inset: 18%;
-    content: '';
-    border-radius: 50%;
-    background: var(--plane-card-accent);
-    filter: blur(15px);
-    opacity: 0.12;
-    transition: opacity var(--duration-base) ease, transform var(--duration-base) var(--ease-out-expo);
-  }
-
-  :global(.project-proof-card:hover) .project-proof-card__logo {
-    transform: translateY(-2px);
-    box-shadow: 0 17px 29px color-mix(in srgb, var(--plane-card-accent) 20%, transparent);
-  }
-
-  :global(.project-proof-card:hover) .project-proof-card__logo::before {
-    opacity: 0.2;
-    transform: scale(1.08);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-sm);
+    background: var(--surface-subtle);
+    flex-shrink: 0;
   }
 
   .project-proof-card__logo img {
-    position: relative;
-    z-index: 1;
-    width: 54px;
-    height: 54px;
+    width: 32px;
+    height: 32px;
     display: block;
     object-fit: contain;
   }
 
-  .project-proof-card__logo--raster img {
-    padding: 4px;
-    border-radius: 12px;
-    mix-blend-mode: multiply;
-  }
-
-  .project-proof-card__logo--soft-raster img {
-    padding: 4px;
-    border: 1px solid rgba(10, 29, 75, 0.055);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.88);
-    box-shadow: 0 4px 12px rgba(8, 19, 51, 0.08);
-  }
-
-  .project-proof-card__logo--soft-raster img {
-    width: 58px;
-    height: 58px;
-    padding: 2px;
-    filter: saturate(1.12) contrast(1.04);
-  }
-
-  .project-proof-card__logo--vector img,
-  .project-proof-card__logo--vector-dark img { width: 47px; height: 47px; }
-
-  .project-proof-card__logo--vector-mark img { width: 54px; height: 54px; }
-
   .project-proof-card__symbol {
-    position: relative;
-    z-index: 1;
-    width: 42px;
-    height: 42px;
+    width: 28px;
+    height: 28px;
     fill: none;
     stroke: var(--plane-card-accent);
-    stroke-width: 1.8;
+    stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
-  .project-proof-card__identity h3 {
-    margin: 0 0 7px;
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: clamp(1.08rem, 1.35vw, 1.3rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.12;
+  .project-proof-card__titles {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
   }
 
-  .project-proof-card__identity p {
+  .project-proof-card__title {
+    margin: 0 0 3px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .project-proof-card__question {
+    margin: 0;
+    color: var(--ink);
+    font-size: var(--text-caption);
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: pretty;
+  }
+
+  /* Central semantic block */
+  .project-proof-card__body-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--space-3);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    margin-top: auto;
+  }
+
+  .project-proof-card__badge-label {
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--plane-card-accent);
+    text-transform: uppercase;
+  }
+
+  .project-proof-card__body-text {
     margin: 0;
     color: var(--ink-muted);
     font-size: var(--text-caption);
     line-height: 1.45;
-    text-wrap: pretty;
   }
 
-  :global(.project-proof-card--execution) .project-proof-card__identity h3 {
-    min-height: 2.24em;
-  }
-
-  :global(.project-proof-card--execution) .project-proof-card__identity p {
-    min-height: 4.35em;
-  }
-
-  .project-proof-card__features {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--border-subtle);
-  }
-
-  .project-proof-card__feature {
-    min-width: 0;
+  /* Footer */
+  .project-proof-card__footer-inner {
+    width: 100%;
     display: flex;
-    align-items: flex-start;
-    gap: 7px;
-    padding-inline: 9px;
-    color: var(--ink);
-    font-size: clamp(0.62rem, 0.72vw, var(--text-badge));
-    font-weight: 650;
-    line-height: 1.3;
+    justify-content: flex-end;
   }
-
-  .project-proof-card__feature:first-child { padding-left: 0; }
-  .project-proof-card__feature:last-child { padding-right: 0; }
-  .project-proof-card__feature + .project-proof-card__feature { border-left: 1px solid var(--border-subtle); }
-
-  .project-proof-card__feature-icon { width: 22px; height: 22px; flex: 0 0 22px; color: var(--plane-card-accent); }
-  .project-proof-card__feature-icon svg { width: 100%; height: 100%; display: block; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
-
-  .project-proof-card__evidence { min-width: 0; }
-  .project-proof-card__evidence small { display: block; margin-bottom: 3px; color: var(--plane-card-accent); font-size: var(--text-badge); font-weight: 800; letter-spacing: 0.06em; }
-  .project-proof-card__evidence p { max-width: 31ch; margin: 0; color: var(--ink-muted); font-size: var(--text-badge); line-height: 1.35; text-wrap: pretty; }
 
   .project-proof-card__cta {
-    min-height: var(--touch-target-min);
+    min-height: 38px;
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 4px;
     color: var(--plane-card-accent);
     font-family: var(--font-display);
     font-size: var(--text-caption);
+    font-weight: 750;
     white-space: nowrap;
-  }
-
-  @container (max-width: 350px) {
-    .project-proof-card__identity { grid-template-columns: 64px minmax(0, 1fr); gap: var(--space-3); }
-    .project-proof-card__logo { width: 64px; height: 64px; }
-    .project-proof-card__logo img { width: 40px; height: 40px; }
-    .project-proof-card__feature { flex-direction: column; align-items: center; gap: 4px; padding-inline: 6px; text-align: center; }
-    :global(.project-proof-card .plane-card__footer) { align-items: flex-start; flex-direction: column; gap: 2px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .project-proof-card__arrow,
-    .project-proof-card__logo,
-    .project-proof-card__logo::before { transition: none; }
   }
 </style>

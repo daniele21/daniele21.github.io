@@ -1,7 +1,9 @@
 ---
 /**
  * Shared homepage plane structure.
- * Every plane follows one reading order: question -> context -> outcome -> proof.
+ * True alternating desktop composition:
+ * - stage-left: copy on left, visual on right
+ * - stage-right: visual on left, copy on right
  */
 import type { MethodStageHandoff } from '../../types/landing';
 import StageRail from './StageRail.astro';
@@ -74,103 +76,145 @@ const titleId = `${id}-title`;
 
 <style>
   .plane-section {
-    --plane-rail-inset: clamp(26px, 3vh, 38px);
+    --plane-rail-inset: clamp(32px, 4vh, 52px);
 
     min-height: calc(100svh - var(--header-height));
     display: grid;
     align-items: center;
     padding: var(--plane-rail-inset) 0;
     overflow: clip;
+    position: relative;
   }
 
   .plane-section--canvas { background: var(--surface-canvas); }
   .plane-section--subtle { background: var(--surface-subtle); }
 
-  .plane-layout,
-  .plane-section.stage-right .plane-layout {
+  .plane-shell {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Two-column alternating desktop grid */
+  .plane-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(18px, 2.4vh, 26px);
-    align-items: start;
+    grid-template-columns: minmax(320px, 0.95fr) minmax(380px, 1.25fr);
+    gap: clamp(32px, 4.5vw, 64px);
+    align-items: center;
+    width: 100%;
   }
 
-  /* The alternating rail reserves one side gutter. Counter half of that
-     gutter so the editorial axis stays centered in the viewport. */
+  /* Left-aligned plane: copy left, visual right */
   .plane-section.stage-left .plane-layout {
-    transform: translateX(clamp(-44px, -3vw, -32px));
+    grid-template-columns: minmax(320px, 0.95fr) minmax(380px, 1.25fr);
+    padding-left: clamp(28px, 4vw, 56px);
   }
 
-  .plane-section.stage-right .plane-layout {
-    transform: translateX(clamp(32px, 3vw, 44px));
-  }
-
-  .plane-section .plane-intro,
-  .plane-section.stage-right .plane-intro {
-    width: min(100%, 880px);
-    max-width: 880px;
+  .plane-section.stage-left .plane-intro {
     grid-column: 1;
     grid-row: 1;
-    justify-self: center;
-    text-align: center;
+    text-align: left;
+  }
+
+  .plane-section.stage-left .plane-visual {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  /* Right-aligned plane: visual left, copy right */
+  .plane-section.stage-right .plane-layout {
+    grid-template-columns: minmax(380px, 1.25fr) minmax(320px, 0.95fr);
+    padding-right: clamp(28px, 4vw, 56px);
+  }
+
+  .plane-section.stage-right .plane-intro {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: left;
+  }
+
+  .plane-section.stage-right .plane-visual {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* Typography & Copy */
+  .plane-intro {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 
   .plane-intro .stage-kicker {
     margin: 0 0 var(--space-2);
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .plane-intro .stage-heading {
-    max-width: 840px;
-    margin: 0 auto var(--space-3);
-    font-size: clamp(1.8rem, 2.5vw, 2.5rem);
-    line-height: 1.08;
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-display);
+    font-size: clamp(1.85rem, 2.6vw, 2.65rem);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+    font-weight: 800;
+    color: var(--ink-display);
     text-wrap: balance;
   }
 
   .plane-intro .stage-intro {
-    max-width: 680px;
-    margin-inline: auto;
-    font-size: clamp(0.95rem, 1.08vw, 1.04rem);
-    line-height: 1.5;
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+    color: var(--ink-muted);
+    line-height: 1.55;
     text-wrap: pretty;
+    margin: 0 0 var(--space-4);
   }
 
   .plane-handoff {
-    width: min(100%, 620px);
-    margin-inline: auto;
-    text-align: center;
-  }
-
-  .plane-section .plane-visual,
-  .plane-section.stage-right .plane-visual {
     width: 100%;
-    grid-column: 1;
-    grid-row: 2;
+    margin-top: auto;
   }
 
-  @media (max-width: 760px) {
-    .plane-section {
-      --plane-rail-inset: 48px;
+  .plane-visual {
+    width: 100%;
+    min-width: 0;
+  }
 
-      min-height: 0;
-      display: block;
-      padding-top: 48px;
-      padding-bottom: 64px;
+  /* Responsive below 980px */
+  @media (max-width: 980px) {
+    .plane-section {
+      min-height: auto;
+      padding: clamp(48px, 6vw, 72px) 0;
     }
 
     .plane-section.stage-left .plane-layout,
     .plane-section.stage-right .plane-layout {
-      gap: var(--space-8);
-      transform: translateX(-26px);
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      padding-left: clamp(44px, 6vw, 64px);
+      padding-right: 0;
     }
 
-    .plane-section .plane-intro,
+    .plane-section.stage-left .plane-intro,
     .plane-section.stage-right .plane-intro {
-      justify-self: stretch;
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .plane-section.stage-left .plane-visual,
+    .plane-section.stage-right .plane-visual {
+      grid-column: 1;
+      grid-row: 2;
     }
 
     .plane-intro .stage-heading {
-      font-size: clamp(1.85rem, 9vw, 2.35rem);
+      font-size: clamp(1.75rem, 6vw, 2.25rem);
+    }
+  }
+
+  @media (max-width: 540px) {
+    .plane-section.stage-left .plane-layout,
+    .plane-section.stage-right .plane-layout {
+      padding-left: 36px;
+      gap: var(--space-5);
     }
   }
 </style>

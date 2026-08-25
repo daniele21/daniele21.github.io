@@ -1,9 +1,8 @@
 ---
-/** Plane 01: the minimum decision path needed to understand the method. */
+/** Plane 01: Strategy / DECIDE - Where should this workload run? */
 import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
-import PlaneCard from './PlaneCard.astro';
-import PlaneCardGrid from './PlaneCardGrid.astro';
+import DecisionDiagram from './DecisionDiagram.astro';
 
 const { decisionStage } = landingData;
 ---
@@ -18,108 +17,7 @@ const { decisionStage } = landingData;
   intro={decisionStage.intro}
   handoff={decisionStage.handoff}
   nextLabel="BUILD"
-  visualLabel="Three-step strategy decision path"
+  visualLabel="Workload decision framework diagram"
 >
-  <PlaneCardGrid sequence>
-    <PlaneCard className="tool-card">
-      <Fragment slot="header"><span class="tool-num">01</span><h3>Start with the data</h3></Fragment>
-      <div class="constraint-list" aria-label="Privacy, offline, latency and control constraints">
-        <span>Privacy</span><span>Offline</span><span>Latency</span><span>Control</span>
-      </div>
-      <p slot="footer">What leaves the device, and does it really need to?</p>
-    </PlaneCard>
-
-    <PlaneCard className="tool-card">
-      <Fragment slot="header"><span class="tool-num">02</span><h3>Check the trade-offs</h3></Fragment>
-      <div class="boundary-options" aria-label="Local, Hybrid and Cloud boundary options">
-        <span><strong>Local</strong><small>Control</small></span>
-        <span><strong>Hybrid</strong><small>Balance</small></span>
-        <span><strong>Cloud</strong><small>Scale</small></span>
-      </div>
-      <p slot="footer">Privacy, speed, cost and maintenance all change the answer.</p>
-    </PlaneCard>
-
-    <PlaneCard className="tool-card">
-      <Fragment slot="header"><span class="tool-num">03</span><h3>Pick a direction</h3></Fragment>
-      <div class="decision-loop" aria-label="Decide, build and test, then measure">
-        <span>Decide</span><i aria-hidden="true">→</i><span>Build & test</span><i aria-hidden="true">→</i><span>Measure</span>
-      </div>
-      <p slot="footer">Local, Hybrid or Cloud. Then we put that choice to the test.</p>
-    </PlaneCard>
-  </PlaneCardGrid>
+  <DecisionDiagram />
 </PlaneTemplate>
-
-<style>
-  .tool-num {
-    color: var(--accent-blue);
-    font-family: var(--font-mono);
-    font-size: var(--text-caption);
-    font-weight: 850;
-  }
-
-  h3 {
-    margin: 0;
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: clamp(0.94rem, 1.1vw, 1.08rem);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-  }
-
-  p {
-    margin: 0;
-    color: var(--ink-muted);
-    font-size: var(--text-caption);
-    font-weight: 700;
-    line-height: 1.45;
-  }
-
-  .constraint-list,
-  .boundary-options,
-  .decision-loop {
-    height: 100%;
-    display: grid;
-    align-items: center;
-  }
-
-  .constraint-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-2);
-  }
-
-  .constraint-list span,
-  .boundary-options > span,
-  .decision-loop span {
-    min-height: 44px;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-sm);
-    background: var(--surface-subtle);
-    color: var(--ink-display);
-    font-size: var(--text-caption);
-    font-weight: 750;
-    text-align: center;
-  }
-
-  .boundary-options {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-2);
-  }
-
-  .boundary-options > span { align-content: center; gap: 2px; }
-  .boundary-options strong { font-family: var(--font-display); font-size: var(--text-caption); }
-  .boundary-options small { color: var(--ink-muted); font-size: var(--text-badge); }
-
-  .decision-loop {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.2fr) auto minmax(0, 1fr);
-    gap: 7px;
-  }
-
-  .decision-loop i { color: var(--accent-blue); font-style: normal; font-weight: 850; }
-
-  @container (max-width: 320px) {
-    .decision-loop { gap: 4px; }
-    .decision-loop span { font-size: var(--text-badge); }
-  }
-</style>

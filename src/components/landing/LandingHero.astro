@@ -18,7 +18,7 @@ const resolveHref = (href: string) => {
 
 <section class="hero-section" aria-labelledby="hero-title">
   <div class="shell hero-shell">
-    <!-- LEFT COLUMN: Identity Anchor (~35%) -->
+    <!-- LEFT COLUMN: Identity Anchor (~32%) -->
     <aside class="hero-identity-card" aria-label="Author identity & background">
       <div class="identity-header">
         <div class="portrait-container">
@@ -26,58 +26,22 @@ const resolveHref = (href: string) => {
             <img
               src={asset(hero.identity.portraitPath)}
               alt={hero.identity.portraitAlt}
-              width="130"
-              height="145"
+              width="100"
+              height="115"
               loading="eager"
               decoding="async"
             />
           </div>
-          <div class="status-indicator" title="Active Research & Engineering">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span class="status-text">{hero.identity.location || 'Milan, Italy'}</span>
-          </div>
         </div>
 
         <div class="identity-lead-info">
-          <p class="identity-greeting">Hi, I'm</p>
           <h2 class="identity-name">{hero.identity.name}</h2>
           <p class="identity-role">{hero.identity.role}</p>
         </div>
       </div>
 
-      <!-- Professional Affiliations & Credentials -->
-      <div class="identity-credentials">
-        {hero.identity.affiliation && (
-          <div class="credential-item">
-            <svg class="cred-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-            </svg>
-            <span class="cred-label"><strong>{hero.identity.affiliation}</strong></span>
-          </div>
-        )}
-        {hero.identity.education && (
-          <div class="credential-item">
-            <svg class="cred-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-            </svg>
-            <span class="cred-label">{hero.identity.education}</span>
-          </div>
-        )}
-      </div>
-
       <!-- Bio statement -->
       <p class="identity-bio">{hero.identity.bio}</p>
-
-      <!-- Focus Badges -->
-      {hero.identity.focusBadges && hero.identity.focusBadges.length > 0 && (
-        <div class="identity-badges" aria-label="Research focus areas">
-          {hero.identity.focusBadges.map((badge) => (
-            <span class="focus-pill">{badge}</span>
-          ))}
-        </div>
-      )}
 
       <!-- Social & Professional Action Links -->
       <div class="identity-social-actions">
@@ -90,30 +54,28 @@ const resolveHref = (href: string) => {
             aria-label={social.label}
           >
             {social.platform === 'linkedin' && (
-              <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.2a1.66 1.66 0 0 0-1.67 1.66 1.66 1.66 0 0 0 1.67 1.66 1.66 1.66 0 0 0 1.67-1.66A1.66 1.66 0 0 0 7.83 6.2z"/>
+              <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.2a1.66 1.66 0 0 0-1.67 1.66 1.66 1.66 0 0 0 1.67-1.66A1.66 1.66 0 0 0 7.83 6.2z"/>
               </svg>
             )}
             {social.platform === 'github' && (
-              <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
               </svg>
             )}
-            <span class="social-text">{social.platform === 'linkedin' ? 'LinkedIn Profile' : social.platform === 'github' ? 'GitHub' : social.label}</span>
+            <span class="social-text">{social.label}</span>
             <span class="external-arrow" aria-hidden="true">↗</span>
           </a>
         ))}
       </div>
     </aside>
 
-    <!-- RIGHT COLUMN: Research Mission (~65%) -->
+    <!-- RIGHT COLUMN: Research Mission (~68%) -->
     <div class="hero-mission-card">
       <div class="hero-eyebrow-container">
         <span class="pulse-beacon" aria-hidden="true"></span>
         <p class="hero-eyebrow">{hero.mission.eyebrow}</p>
       </div>
-
-      <p class="hero-lead">{hero.mission.lead}</p>
 
       <h1 id="hero-title" class="hero-heading">
         <span class="hero-title-nowrap">{hero.mission.title} <span class="hero-highlight">{hero.mission.titleHighlight}</span></span>
@@ -125,15 +87,8 @@ const resolveHref = (href: string) => {
       <!-- Stance / Hypothesis Box -->
       <div class="hero-stance-card">
         <div class="stance-header">
-          <span class="stance-badge">
-            <svg class="stance-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            <span>Core Principle</span>
-          </span>
           <p class="stance-position"><strong>{hero.mission.position}</strong></p>
         </div>
-        <p class="stance-proof">{hero.mission.proofLine}</p>
         
         <div class="stance-loop-indicator" aria-label="Research loop progression: Decide, Build, Test, Measure">
           <span class="loop-step is-active"><span class="step-num">01</span> Decide</span>
@@ -191,8 +146,8 @@ const resolveHref = (href: string) => {
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(280px, 350px) minmax(0, 1fr);
-    gap: clamp(28px, 3.5vw, 52px);
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(28px, 4vw, 56px);
     align-items: center;
   }
 
@@ -202,52 +157,35 @@ const resolveHref = (href: string) => {
   .hero-identity-card {
     display: flex;
     flex-direction: column;
-    padding: clamp(22px, 2.2vw, 30px);
-    background: linear-gradient(165deg, #091538 0%, #060e26 100%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: var(--radius-xl);
-    box-shadow:
-      0 24px 64px rgba(6, 14, 38, 0.28),
-      0 4px 16px rgba(20, 91, 255, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    padding: clamp(20px, 2vw, 26px);
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 24px rgba(8, 19, 51, 0.04);
     position: relative;
     overflow: hidden;
-  }
-
-  .hero-identity-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(147, 197, 253, 0.6), transparent);
   }
 
   .identity-header {
     display: flex;
     gap: var(--space-3);
     align-items: center;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
   }
 
   .portrait-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
     flex-shrink: 0;
   }
 
   .portrait-frame {
-    width: 96px;
-    height: 108px;
-    border-radius: 16px;
+    width: 68px;
+    height: 76px;
+    border-radius: 12px;
     overflow: hidden;
-    border: 2px solid rgba(255, 255, 255, 0.22);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-    background: rgba(255, 255, 255, 0.06);
-    position: relative;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 4px 12px rgba(8, 19, 51, 0.08);
+    background: var(--surface-subtle);
   }
 
   .portrait-frame img {
@@ -255,42 +193,6 @@ const resolveHref = (href: string) => {
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform var(--duration-base) var(--ease-out-expo);
-  }
-
-  .hero-identity-card:hover .portrait-frame img {
-    transform: scale(1.03);
-  }
-
-  .status-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 8px;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: var(--radius-full);
-  }
-
-  .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #10b981;
-    box-shadow: 0 0 8px #10b981;
-    animation: statusPulse 2s infinite ease-in-out;
-  }
-
-  @keyframes statusPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.85); }
-  }
-
-  .status-text {
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
-    letter-spacing: 0.02em;
   }
 
   .identity-lead-info {
@@ -299,87 +201,30 @@ const resolveHref = (href: string) => {
     min-width: 0;
   }
 
-  .identity-greeting {
-    font-size: var(--text-caption);
-    color: rgba(255, 255, 255, 0.65);
-    margin: 0 0 2px;
-    font-weight: 500;
-  }
-
   .identity-name {
     font-family: var(--font-display);
-    font-size: clamp(1.25rem, 1.6vw, 1.55rem);
-    color: #ffffff;
+    font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+    color: var(--ink-display);
     font-weight: 800;
-    margin: 0 0 4px;
-    letter-spacing: -0.03em;
-    line-height: 1.15;
+    margin: 0 0 2px;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
   }
 
   .identity-role {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     font-weight: 650;
-    color: #93c5fd;
+    color: var(--accent-blue-dark);
     line-height: 1.35;
     margin: 0;
   }
 
-  /* Credentials */
-  .identity-credentials {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: var(--space-3) 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    margin-bottom: var(--space-4);
-  }
-
-  .credential-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.82rem;
-    color: rgba(255, 255, 255, 0.82);
-  }
-
-  .cred-icon {
-    color: #60a5fa;
-    flex-shrink: 0;
-  }
-
-  .cred-label strong {
-    color: #ffffff;
-    font-weight: 650;
-  }
-
   /* Bio */
   .identity-bio {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.78);
-    line-height: 1.52;
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    line-height: 1.55;
     margin: 0 0 var(--space-4);
-  }
-
-  /* Badges */
-  .identity-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: var(--space-5);
-  }
-
-  .focus-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 9px;
-    background: rgba(20, 91, 255, 0.16);
-    border: 1px solid rgba(147, 197, 253, 0.22);
-    border-radius: var(--radius-full);
-    font-size: 0.76rem;
-    font-weight: 600;
-    color: #bfdbfe;
-    letter-spacing: 0.01em;
   }
 
   /* Social Actions */
@@ -393,49 +238,48 @@ const resolveHref = (href: string) => {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    padding: 9px 14px;
+    gap: 6px;
+    padding: 7px 12px;
     border-radius: var(--radius-sm);
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     font-weight: 650;
     text-decoration: none;
     transition: all var(--duration-fast) ease;
     cursor: pointer;
-    min-height: 40px;
+    min-height: 38px;
   }
 
   .social-linkedin {
-    flex: 1.3;
-    background: #0a66c2;
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 12px rgba(10, 102, 194, 0.35);
+    flex: 1;
+    background: var(--surface-subtle);
+    color: var(--ink-display);
+    border: 1px solid var(--border-medium);
   }
 
   .social-linkedin:hover {
-    background: #0077b5;
+    background: var(--surface-card);
+    border-color: var(--border-strong);
+    color: var(--accent-blue-dark);
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(10, 102, 194, 0.5);
-    color: #ffffff;
   }
 
   .social-github {
     flex: 1;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: var(--surface-subtle);
+    color: var(--ink-display);
+    border: 1px solid var(--border-medium);
   }
 
   .social-github:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: var(--surface-card);
+    border-color: var(--border-strong);
+    color: var(--accent-blue-dark);
     transform: translateY(-1px);
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.3);
   }
 
   .external-arrow {
     font-size: 0.75rem;
-    opacity: 0.8;
+    opacity: 0.7;
     transition: transform var(--duration-fast) ease;
   }
 
@@ -524,15 +368,15 @@ const resolveHref = (href: string) => {
 
   .hero-challenge {
     font-family: var(--font-display);
-    font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+    font-size: clamp(1.15rem, 1.45vw, 1.35rem);
     font-weight: 700;
-    color: var(--ink);
+    color: var(--ink-display);
     margin: 0 0 var(--space-2);
     line-height: 1.35;
   }
 
   .hero-explanation {
-    font-size: var(--text-body);
+    font-size: var(--text-lead);
     color: var(--ink-muted);
     line-height: 1.6;
     margin: 0 0 var(--space-4);
@@ -552,54 +396,25 @@ const resolveHref = (href: string) => {
   }
 
   .stance-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-2);
-    margin-bottom: var(--space-2);
-  }
-
-  .stance-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    background: #dbeafe;
-    border-radius: var(--radius-full);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--accent-blue-dark);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .stance-icon {
-    color: var(--accent-blue);
+    margin-bottom: var(--space-3);
   }
 
   .stance-position {
     font-family: var(--font-display);
-    font-size: 1.02rem;
+    font-size: 1.08rem;
     color: var(--ink-display);
     margin: 0;
-  }
-
-  .stance-proof {
-    font-size: 0.9rem;
-    color: var(--ink-muted);
-    line-height: 1.55;
-    margin: 0 0 var(--space-3);
   }
 
   .stance-loop-indicator {
     display: inline-flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 6px 8px;
+    gap: 6px 10px;
     padding-top: var(--space-2);
     border-top: 1px dashed var(--border-medium);
-    font-size: 0.8rem;
-    font-weight: 650;
+    font-size: var(--text-caption);
+    font-weight: 700;
     color: var(--ink-subtle);
   }
 
@@ -611,19 +426,19 @@ const resolveHref = (href: string) => {
   }
 
   .loop-step.is-active {
-    color: var(--accent-blue);
-    font-weight: 750;
+    color: var(--accent-blue-dark);
+    font-weight: 800;
   }
 
   .step-num {
-    font-size: 0.7rem;
-    opacity: 0.7;
+    font-size: var(--text-badge);
+    opacity: 0.75;
     font-family: var(--font-mono);
   }
 
   .loop-arrow {
     color: var(--border-strong);
-    font-size: 0.85rem;
+    font-size: var(--text-badge);
   }
 
   /* CTAs */
@@ -692,25 +507,17 @@ const resolveHref = (href: string) => {
     }
 
     .portrait-frame {
-      width: 84px;
-      height: 94px;
-      border-radius: 14px;
+      width: 60px;
+      height: 68px;
+      border-radius: 10px;
     }
 
     .identity-name {
-      font-size: 1.25rem;
-    }
-
-    .identity-role {
-      font-size: 0.8rem;
+      font-size: 1.15rem;
     }
 
     .identity-social-actions {
-      flex-direction: column;
-    }
-
-    .stance-loop-indicator {
-      font-size: 0.75rem;
+      flex-direction: row;
     }
 
     .hero-actions {

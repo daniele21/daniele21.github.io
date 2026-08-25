@@ -1,13 +1,10 @@
 ---
-/** Plane 02: the reusable infrastructure projects that make local execution usable. */
+/** Plane 02: Architecture & Infrastructure / BUILD - Can we actually run it locally? */
 import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
-import PlaneCardGrid from './PlaneCardGrid.astro';
-import ProjectProofCard from './ProjectProofCard.astro';
+import EcosystemDiagram from './EcosystemDiagram.astro';
 
 const { buildStage } = landingData;
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
 ---
 
 <PlaneTemplate
@@ -20,24 +17,7 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
   intro={buildStage.intro}
   handoff={buildStage.handoff}
   nextLabel="TEST"
-  visualLabel="Local AI infrastructure projects"
+  visualLabel="Local AI Execution Layer Ecosystem Diagram"
 >
-  <PlaneCardGrid>
-    {buildStage.projects.map((project) => (
-      <ProjectProofCard
-        variant="execution"
-        eyebrow={project.eyebrow}
-        title={project.title}
-        description={project.summary}
-        href={resolveHref(project.href)}
-        logoPath={project.logoPath}
-        logoAlt={project.logoAlt}
-        symbol={project.id === 'local-asr-server' ? 'audio' : undefined}
-        features={project.features}
-        evidenceLabel="ENABLES"
-        evidence={project.evidence}
-        ctaLabel="See how it works"
-      />
-    ))}
-  </PlaneCardGrid>
+  <EcosystemDiagram />
 </PlaneTemplate>

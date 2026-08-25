@@ -4,12 +4,11 @@ import type { MethodStageHandoff } from '../../types/landing';
 interface Props {
   handoff: MethodStageHandoff;
   number: number;
-  nextLabel: string;
+  nextLabel?: string;
   compact?: boolean;
 }
 
-const { handoff, number, nextLabel, compact = false } = Astro.props;
-const currentLabel = ['DECIDE', 'BUILD', 'TEST', 'MEASURE'][number - 1] ?? 'OUTPUT';
+const { handoff, number, compact = false } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 const resolveHref = (href: string) => {
   if (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('#')) return href;
@@ -17,94 +16,94 @@ const resolveHref = (href: string) => {
 };
 ---
 
-<footer class:list={['stage-handoff', { 'stage-handoff--compact': compact }]} aria-label={`Output of plane ${number}`}>
-  <p class="handoff-label">{currentLabel} → {nextLabel}</p>
-  <strong>{handoff.output}</strong>
-  <a href={resolveHref(handoff.detailCta.href)}>
+<footer class:list={['stage-handoff', { 'stage-handoff--compact': compact }]} aria-label={`Outcome of stage ${number}`}>
+  <div class="handoff-content">
+    <span class="handoff-tag">OUTCOME</span>
+    <strong class="handoff-output">{handoff.output}</strong>
+  </div>
+
+  <a class="handoff-link" href={resolveHref(handoff.detailCta.href)}>
     {handoff.detailCta.label}
-    <span aria-hidden="true">↗</span>
+    <span aria-hidden="true">→</span>
   </a>
 </footer>
 
 <style>
   .stage-handoff {
-    margin-top: clamp(24px, 3vw, 34px);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--border-medium);
+    margin-top: clamp(20px, 2.5vw, 28px);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    flex-wrap: wrap;
   }
 
   .stage-handoff--compact {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: var(--space-4);
-    align-items: center;
-    margin-top: var(--space-4);
-    padding-top: var(--space-3);
     text-align: left;
   }
 
-  .stage-handoff--compact .handoff-label {
-    margin: 0;
-    white-space: nowrap;
-  }
-
-  .stage-handoff--compact strong {
+  .handoff-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
     min-width: 0;
-    font-weight: 750;
   }
 
-  .stage-handoff--compact a {
-    margin-top: 0;
-    white-space: nowrap;
-  }
-
-  .handoff-label {
-    margin: 0 0 5px;
-    color: var(--accent-blue);
+  .handoff-tag {
     font-family: var(--font-display);
     font-size: var(--text-badge);
-    font-weight: 800;
-    letter-spacing: 0.09em;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--accent-blue-dark);
   }
 
-  strong {
-    display: block;
+  .handoff-output {
     color: var(--ink-display);
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    line-height: 1.5;
+    font-weight: 750;
+    line-height: 1.4;
   }
 
-  a {
-    min-height: var(--touch-target-min);
+  .handoff-link {
+    min-height: 38px;
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    margin-top: var(--space-3);
     color: var(--accent-blue-dark);
     font-family: var(--font-display);
     font-size: var(--text-caption);
     font-weight: 750;
     text-decoration: none;
+    white-space: nowrap;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    transition: all var(--duration-fast) ease;
   }
 
-  a span {
+  .handoff-link span {
     transition: transform var(--duration-fast) ease;
   }
 
-  a:hover { color: var(--accent-blue); }
-  a:hover span { transform: translate(2px, -2px); }
+  .handoff-link:hover {
+    color: var(--accent-blue);
+    border-color: var(--border-strong);
+    background: var(--surface-card);
+  }
+
+  .handoff-link:hover span {
+    transform: translateX(2px);
+  }
 
   @media (max-width: 760px) {
-    .stage-handoff--compact {
-      grid-template-columns: 1fr;
-      gap: 4px;
-      text-align: center;
-    }
-
-    .stage-handoff--compact a {
-      justify-self: center;
-      margin-top: var(--space-2);
+    .stage-handoff {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
     }
   }
 </style>
