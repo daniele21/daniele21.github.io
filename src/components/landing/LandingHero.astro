@@ -1,14 +1,13 @@
 ---
 /**
  * LandingHero.astro
- * Hero Section: Identity Anchor (Left) + Strategic Research Mission (Right).
- * Designed for immediate clarity: Who Daniele is + What the research seeks to solve.
+ * Premium single-column hero: compact identity strip + full-width mission.
+ * Keeps the personal context visible without competing with the core Local AI thesis.
  */
 import { landingData } from '../../content/locales/en/landing';
 
 const { hero } = landingData;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
 const resolveHref = (href: string) => {
   if (href.startsWith('http') || href.startsWith('mailto:')) return href;
   if (href.startsWith('#')) return href;
@@ -18,101 +17,57 @@ const resolveHref = (href: string) => {
 
 <section class="hero-section" aria-labelledby="hero-title">
   <div class="shell hero-shell">
-    <!-- LEFT COLUMN: Identity Anchor (~32%) -->
-    <aside class="hero-identity-card" aria-label="Author identity & background">
-      <div class="identity-header">
-        <div class="portrait-container">
-          <div class="portrait-frame">
-            <img
-              src={asset(hero.identity.portraitPath)}
-              alt={hero.identity.portraitAlt}
-              width="100"
-              height="115"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
-        </div>
-
-        <div class="identity-lead-info">
-          <h2 class="identity-name">{hero.identity.name}</h2>
-          <p class="identity-role">{hero.identity.role}</p>
-        </div>
+    <div class="identity-strip" aria-label="Professional identity">
+      <div class="identity-main">
+        <span class="identity-name">{hero.identity.name}</span>
+        <span class="identity-role">{hero.identity.role} · {hero.identity.specialization}</span>
       </div>
 
-      <!-- Bio statement -->
-      <p class="identity-bio">{hero.identity.bio}</p>
-
-      <!-- Social & Professional Action Links -->
-      <div class="identity-social-actions">
-        {hero.identity.socials?.map((social) => (
-          <a
-            href={social.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={`social-button social-${social.platform}`}
-            aria-label={social.label}
-          >
-            {social.platform === 'linkedin' && (
-              <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.2a1.66 1.66 0 0 0-1.67 1.66 1.66 1.66 0 0 0 1.67-1.66A1.66 1.66 0 0 0 7.83 6.2z"/>
-              </svg>
-            )}
-            {social.platform === 'github' && (
-              <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
-              </svg>
-            )}
-            <span class="social-text">{social.label}</span>
-            <span class="external-arrow" aria-hidden="true">↗</span>
-          </a>
-        ))}
+      <div class="identity-meta">
+        <span class="identity-location">{hero.identity.location}</span>
+        <a class="identity-about" href={resolveHref('/about')}>
+          About
+          <span aria-hidden="true">→</span>
+        </a>
       </div>
-    </aside>
+    </div>
 
-    <!-- RIGHT COLUMN: Research Mission (~68%) -->
-    <div class="hero-mission-card">
-      <div class="hero-eyebrow-container">
-        <span class="pulse-beacon" aria-hidden="true"></span>
+    <div class="hero-main">
+      <div class="hero-eyebrow-row">
+        <span class="hero-signal" aria-hidden="true"></span>
         <p class="hero-eyebrow">{hero.mission.eyebrow}</p>
       </div>
 
       <h1 id="hero-title" class="hero-heading">
-        <span class="hero-title-nowrap">{hero.mission.title} <span class="hero-highlight">{hero.mission.titleHighlight}</span></span>
+        <span>{hero.mission.title}</span>
+        <span class="hero-highlight">{hero.mission.titleHighlight}</span>
       </h1>
 
       <p class="hero-challenge">{hero.mission.challenge}</p>
       <p class="hero-explanation">{hero.mission.explanation}</p>
 
-      <!-- Stance / Hypothesis Box -->
-      <div class="hero-stance-card">
-        <div class="stance-header">
-          <p class="stance-position"><strong>{hero.mission.position}</strong></p>
-        </div>
-        
-        <div class="stance-loop-indicator" aria-label="Research loop progression: Decide, Build, Test, Measure">
-          <span class="loop-step is-active"><span class="step-num">01</span> Decide</span>
-          <span class="loop-arrow" aria-hidden="true">→</span>
-          <span class="loop-step"><span class="step-num">02</span> Build</span>
-          <span class="loop-arrow" aria-hidden="true">→</span>
-          <span class="loop-step"><span class="step-num">03</span> Test</span>
-          <span class="loop-arrow" aria-hidden="true">→</span>
-          <span class="loop-step"><span class="step-num">04</span> Measure</span>
-        </div>
+      <div class="hero-position">
+        <span class="position-line" aria-hidden="true"></span>
+        <p>{hero.mission.position}</p>
       </div>
 
-      <!-- Action CTAs -->
       <div class="hero-actions">
         <a class="primary-button hero-primary-cta" href={resolveHref(hero.mission.primaryCta.href)}>
           <span>{hero.mission.primaryCta.label}</span>
-          <span class="cta-arrow" aria-hidden="true">↓</span>
-        </a>
-        <a class="secondary-button hero-secondary-cta" href={resolveHref(hero.mission.secondaryCta.href)}>
-          <span>{hero.mission.secondaryCta.label}</span>
-          <span class="cta-arrow" aria-hidden="true">→</span>
+          <span aria-hidden="true">↓</span>
         </a>
       </div>
     </div>
+
+    <nav class="method-strip" aria-label="Research method">
+      <span class="method-step is-active"><span class="step-index">01</span> DECIDE</span>
+      <span class="method-arrow" aria-hidden="true">→</span>
+      <span class="method-step"><span class="step-index">02</span> BUILD</span>
+      <span class="method-arrow" aria-hidden="true">→</span>
+      <span class="method-step"><span class="step-index">03</span> TEST</span>
+      <span class="method-arrow" aria-hidden="true">→</span>
+      <span class="method-step"><span class="step-index">04</span> MEASURE</span>
+    </nav>
   </div>
 </section>
 
@@ -122,12 +77,12 @@ const resolveHref = (href: string) => {
     min-height: calc(100svh - var(--header-height));
     display: grid;
     align-items: center;
-    padding: clamp(48px, 6vw, 84px) 0;
     overflow: clip;
+    padding: clamp(34px, 4.5vw, 62px) 0 clamp(44px, 6vw, 76px);
     background:
-      radial-gradient(ellipse 65% 55% at 75% 20%, rgba(20, 91, 255, 0.08), transparent 70%),
-      radial-gradient(ellipse 50% 50% at 15% 85%, rgba(124, 58, 237, 0.05), transparent 60%),
-      linear-gradient(155deg, #ffffff 0%, #f7f9fd 100%);
+      radial-gradient(ellipse 62% 48% at 76% 18%, rgba(20, 91, 255, 0.075), transparent 72%),
+      radial-gradient(ellipse 48% 48% at 12% 88%, rgba(124, 58, 237, 0.04), transparent 64%),
+      linear-gradient(155deg, #ffffff 0%, #f8fafe 100%);
   }
 
   .hero-section::before {
@@ -136,397 +91,345 @@ const resolveHref = (href: string) => {
     inset: 0;
     pointer-events: none;
     background-image:
-      linear-gradient(to right, rgba(20, 91, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(20, 91, 255, 0.035) 1px, transparent 1px);
-    background-size: 64px 64px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 85%);
+      linear-gradient(to right, rgba(20, 91, 255, 0.027) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(20, 91, 255, 0.027) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse 78% 66% at 52% 42%, black 16%, transparent 88%);
   }
 
   .hero-shell {
     position: relative;
     z-index: 1;
-    display: grid;
-    grid-template-columns: minmax(240px, 290px) minmax(0, 1fr);
-    gap: clamp(24px, 3.5vw, 44px);
-    align-items: center;
-  }
-
-  /* ==========================================================================
-     IDENTITY CARD (LEFT COLUMN)
-     ========================================================================== */
-  .hero-identity-card {
     display: flex;
     flex-direction: column;
-    padding: clamp(20px, 2vw, 26px);
-    background: var(--surface-card);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 8px 24px rgba(8, 19, 51, 0.04);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .identity-header {
-    display: flex;
-    gap: var(--space-3);
-    align-items: center;
-    margin-bottom: var(--space-3);
-  }
-
-  .portrait-container {
-    display: flex;
-    flex-shrink: 0;
-  }
-
-  .portrait-frame {
-    width: 68px;
-    height: 76px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--border-subtle);
-    box-shadow: 0 4px 12px rgba(8, 19, 51, 0.08);
-    background: var(--surface-subtle);
-  }
-
-  .portrait-frame img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
   }
 
-  .identity-lead-info {
+  .identity-strip {
+    min-height: 66px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    padding: 0 0 clamp(18px, 2vw, 24px);
+    border-bottom: 1px solid color-mix(in srgb, var(--border-medium) 78%, transparent);
+  }
+
+  .identity-main,
+  .identity-meta {
+    display: flex;
+    align-items: center;
     min-width: 0;
+  }
+
+  .identity-main {
+    gap: clamp(12px, 2vw, 22px);
+    flex-wrap: wrap;
+  }
+
+  .identity-meta {
+    gap: clamp(16px, 2.4vw, 28px);
+    flex-shrink: 0;
   }
 
   .identity-name {
     font-family: var(--font-display);
-    font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+    font-size: clamp(0.84rem, 0.92vw, 0.98rem);
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--ink-display);
-    font-weight: 800;
-    margin: 0 0 2px;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
+  }
+
+  .identity-role,
+  .identity-location {
+    font-size: 0.84rem;
+    color: var(--ink-muted);
+    line-height: 1.4;
   }
 
   .identity-role {
-    font-size: 0.82rem;
-    font-weight: 650;
-    color: var(--accent-blue-dark);
-    line-height: 1.35;
-    margin: 0;
+    font-weight: 620;
   }
 
-  /* Bio */
-  .identity-bio {
-    font-size: 0.88rem;
-    color: var(--ink-muted);
-    line-height: 1.55;
-    margin: 0 0 var(--space-4);
-  }
-
-  /* Social Actions */
-  .identity-social-actions {
-    display: flex;
-    gap: var(--space-2);
-    margin-top: auto;
-  }
-
-  .social-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 7px 12px;
-    border-radius: var(--radius-sm);
-    font-size: 0.82rem;
-    font-weight: 650;
-    text-decoration: none;
-    transition: all var(--duration-fast) ease;
-    cursor: pointer;
-    min-height: 38px;
-  }
-
-  .social-linkedin {
-    flex: 1;
-    background: var(--surface-subtle);
-    color: var(--ink-display);
-    border: 1px solid var(--border-medium);
-  }
-
-  .social-linkedin:hover {
-    background: var(--surface-card);
-    border-color: var(--border-strong);
-    color: var(--accent-blue-dark);
-    transform: translateY(-1px);
-  }
-
-  .social-github {
-    flex: 1;
-    background: var(--surface-subtle);
-    color: var(--ink-display);
-    border: 1px solid var(--border-medium);
-  }
-
-  .social-github:hover {
-    background: var(--surface-card);
-    border-color: var(--border-strong);
-    color: var(--accent-blue-dark);
-    transform: translateY(-1px);
-  }
-
-  .external-arrow {
+  .identity-location {
+    font-family: var(--font-display);
     font-size: var(--text-badge);
-    opacity: 0.7;
-    transition: transform var(--duration-fast) ease;
-  }
-
-  .social-button:hover .external-arrow {
-    transform: translate(1px, -1px);
-    opacity: 1;
-  }
-
-  /* ==========================================================================
-     MISSION CARD (RIGHT COLUMN)
-     ========================================================================== */
-  .hero-mission-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0;
-    container-type: inline-size;
-  }
-
-  .hero-eyebrow-container {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: var(--space-2);
-  }
-
-  .pulse-beacon {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent-blue);
-    box-shadow: 0 0 0 0 rgba(20, 91, 255, 0.7);
-    animation: pulseGlow 2s infinite cubic-bezier(0.66, 0, 0, 1);
-  }
-
-  @keyframes pulseGlow {
-    0% {
-      box-shadow: 0 0 0 0 rgba(20, 91, 255, 0.7);
-    }
-    70% {
-      box-shadow: 0 0 0 8px rgba(20, 91, 255, 0);
-    }
-    100% {
-      box-shadow: 0 0 0 0 rgba(20, 91, 255, 0);
-    }
-  }
-
-  .hero-eyebrow {
-    font-size: var(--text-caption);
-    font-weight: 800;
-    letter-spacing: 0.12em;
+    font-weight: 700;
+    letter-spacing: 0.055em;
     text-transform: uppercase;
-    color: var(--accent-blue);
-    margin: 0;
   }
 
-  .hero-lead {
-    font-size: var(--text-lead);
-    font-weight: 700;
-    color: var(--ink-display);
-    margin: 0 0 var(--space-1);
-  }
-
-  .hero-heading {
-    margin: 0 0 var(--space-3);
-    font-family: var(--font-display);
-    font-size: clamp(1.2rem, 5.1cqw, 2.75rem);
-    line-height: 1.15;
-    letter-spacing: -0.04em;
-    font-weight: 800;
-    color: var(--ink-display);
-    white-space: nowrap !important;
-    overflow: visible;
-  }
-
-  .hero-title-nowrap {
-    display: inline-block;
-    white-space: nowrap !important;
-  }
-
-  .hero-highlight {
-    color: var(--accent-blue);
-    display: inline !important;
-    white-space: nowrap !important;
-  }
-
-  .hero-challenge {
-    font-family: var(--font-display);
-    font-size: clamp(1.15rem, 1.45vw, 1.35rem);
-    font-weight: 700;
-    color: var(--ink-display);
-    margin: 0 0 var(--space-2);
-    line-height: 1.35;
-  }
-
-  .hero-explanation {
-    font-size: var(--text-lead);
-    color: var(--ink-muted);
-    line-height: 1.6;
-    margin: 0 0 var(--space-4);
-    max-width: 680px;
-  }
-
-  /* Stance Box */
-  .hero-stance-card {
-    background: linear-gradient(135deg, rgba(240, 245, 255, 0.85) 0%, rgba(255, 255, 255, 0.95) 100%);
-    border: 1px solid var(--border-strong);
-    border-left: 4px solid var(--accent-blue);
-    border-radius: var(--radius-md);
-    padding: var(--space-4) var(--space-5);
-    margin-bottom: var(--space-6);
-    box-shadow: 0 4px 18px rgba(20, 91, 255, 0.05);
-    max-width: 720px;
-  }
-
-  .stance-header {
-    margin-bottom: var(--space-3);
-  }
-
-  .stance-position {
-    font-family: var(--font-display);
-    font-size: 1.08rem;
-    color: var(--ink-display);
-    margin: 0;
-  }
-
-  .stance-loop-indicator {
+  .identity-about {
+    min-height: 42px;
     display: inline-flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 6px 10px;
-    padding-top: var(--space-2);
-    border-top: 1px dashed var(--border-medium);
-    font-size: var(--text-caption);
-    font-weight: 700;
-    color: var(--ink-subtle);
-  }
-
-  .loop-step {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--ink);
-  }
-
-  .loop-step.is-active {
+    gap: 7px;
+    padding: 7px 11px;
+    border-radius: var(--radius-sm);
     color: var(--accent-blue-dark);
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: 0.84rem;
+    font-weight: 760;
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) ease,
+      background var(--duration-fast) ease,
+      transform var(--duration-fast) ease;
   }
 
-  .step-num {
-    font-size: var(--text-badge);
-    opacity: 0.75;
-    font-family: var(--font-mono);
-  }
-
-  .loop-arrow {
-    color: var(--border-strong);
-    font-size: var(--text-badge);
-  }
-
-  /* CTAs */
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    align-items: center;
-  }
-
-  .hero-primary-cta {
-    padding: 12px 26px;
-    font-size: 0.95rem;
-  }
-
-  .hero-secondary-cta {
-    padding: 12px 24px;
-    font-size: 0.95rem;
-  }
-
-  .cta-arrow {
-    transition: transform var(--duration-fast) ease;
-  }
-
-  .hero-primary-cta:hover .cta-arrow {
-    transform: translateY(2px);
-  }
-
-  .hero-secondary-cta:hover .cta-arrow {
+  .identity-about:hover {
+    color: var(--accent-blue);
+    background: color-mix(in srgb, var(--surface-card) 76%, transparent);
     transform: translateX(2px);
   }
 
-  /* ==========================================================================
-     RESPONSIVE
-     ========================================================================== */
-  @media (max-width: 960px) {
+  .hero-main {
+    max-width: 1040px;
+    padding: clamp(48px, 7vw, 90px) 0 clamp(34px, 4.5vw, 56px);
+  }
+
+  .hero-eyebrow-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: clamp(12px, 1.5vw, 18px);
+  }
+
+  .hero-signal {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-blue) 10%, transparent);
+  }
+
+  .hero-eyebrow {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 820;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-blue-dark);
+  }
+
+  .hero-heading {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.2em;
+    margin: 0 0 clamp(18px, 2.2vw, 28px);
+    max-width: 1100px;
+    font-family: var(--font-display);
+    font-size: clamp(3.35rem, 8.2vw, 7.4rem);
+    line-height: 0.94;
+    letter-spacing: -0.067em;
+    font-weight: 860;
+    color: var(--ink-display);
+    text-wrap: balance;
+  }
+
+  .hero-highlight {
+    position: relative;
+    color: var(--accent-blue);
+  }
+
+  .hero-highlight::after {
+    content: '';
+    position: absolute;
+    left: 0.03em;
+    right: 0;
+    bottom: -0.065em;
+    height: 0.04em;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent-blue), color-mix(in srgb, var(--accent-blue) 38%, transparent));
+  }
+
+  .hero-challenge {
+    max-width: 790px;
+    margin: 0 0 10px;
+    font-family: var(--font-display);
+    font-size: clamp(1.32rem, 2.15vw, 2rem);
+    line-height: 1.24;
+    font-weight: 760;
+    letter-spacing: -0.025em;
+    color: var(--ink-display);
+  }
+
+  .hero-explanation {
+    max-width: 760px;
+    margin: 0;
+    font-size: clamp(1rem, 1.35vw, 1.16rem);
+    line-height: 1.62;
+    color: var(--ink-muted);
+  }
+
+  .hero-position {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: clamp(18px, 2vw, 26px);
+  }
+
+  .position-line {
+    width: 34px;
+    height: 1px;
+    flex: 0 0 auto;
+    background: var(--accent-blue);
+  }
+
+  .hero-position p {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    margin-top: clamp(24px, 3vw, 34px);
+  }
+
+  .hero-primary-cta {
+    min-height: 48px;
+    padding-inline: 18px;
+    gap: 10px;
+  }
+
+  .method-strip {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(8px, 1.3vw, 16px);
+    padding-top: clamp(18px, 2vw, 24px);
+    border-top: 1px solid color-mix(in srgb, var(--border-medium) 78%, transparent);
+  }
+
+  .method-step,
+  .method-arrow {
+    font-family: var(--font-display);
+  }
+
+  .method-step {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 34px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    font-weight: 760;
+    letter-spacing: 0.045em;
+  }
+
+  .method-step.is-active {
+    color: var(--accent-blue-dark);
+  }
+
+  .step-index {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border-medium);
+    border-radius: 50%;
+    color: var(--ink-display);
+    font-size: var(--text-badge);
+    font-weight: 820;
+    background: color-mix(in srgb, var(--surface-card) 86%, transparent);
+  }
+
+  .method-step.is-active .step-index {
+    border-color: color-mix(in srgb, var(--accent-blue) 38%, var(--border-medium));
+    color: var(--accent-blue-dark);
+    background: var(--surface-blue-subtle);
+  }
+
+  .method-arrow {
+    color: var(--ink-subtle);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 820px) {
     .hero-section {
       min-height: auto;
-      padding: 40px 0 56px;
+      padding-top: 24px;
     }
 
-    .hero-shell {
-      grid-template-columns: 1fr;
-      gap: var(--space-8);
+    .identity-strip {
+      align-items: flex-start;
     }
 
-    .hero-identity-card {
-      order: 1;
-      max-width: 580px;
+    .identity-main {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
     }
 
-    .hero-mission-card {
-      order: 2;
+    .identity-meta {
+      gap: 8px;
+    }
+
+    .identity-location {
+      display: none;
+    }
+
+    .hero-main {
+      padding-top: clamp(42px, 8vw, 64px);
+    }
+
+    .hero-heading {
+      font-size: clamp(3rem, 13vw, 5.4rem);
+      line-height: 0.96;
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 560px) {
     .hero-section {
-      padding: 28px 0 44px;
+      padding-bottom: 36px;
     }
 
-    .identity-header {
-      flex-direction: row;
-      align-items: flex-start;
-      gap: var(--space-3);
+    .identity-strip {
+      gap: 12px;
     }
 
-    .portrait-frame {
-      width: 60px;
-      height: 68px;
-      border-radius: 10px;
+    .identity-role {
+      max-width: 240px;
     }
 
-    .identity-name {
-      font-size: 1.15rem;
+    .identity-about {
+      padding-inline: 6px;
     }
 
-    .identity-social-actions {
-      flex-direction: row;
+    .hero-main {
+      padding-bottom: 30px;
     }
 
-    .hero-actions {
-      flex-direction: column;
-      width: 100%;
+    .hero-heading {
+      font-size: clamp(2.7rem, 14vw, 4.15rem);
+      letter-spacing: -0.058em;
     }
 
-    .hero-actions a {
-      width: 100%;
+    .hero-challenge {
+      font-size: 1.22rem;
+    }
+
+    .method-strip {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 12px;
+    }
+
+    .method-arrow {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .identity-about,
+    .hero-primary-cta {
+      transition: none;
     }
   }
 </style>
