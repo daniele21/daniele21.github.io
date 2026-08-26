@@ -1,0 +1,148 @@
+---
+/**
+ * AboutCompetencies.astro
+ * Structured technical competencies grid across edge inference, GenAI platforms, strategy, and systems engineering.
+ */
+import type { CompetencyCategory } from '../../types/about';
+
+interface Props {
+  kicker: string;
+  title: string;
+  subtitle: string;
+  categories: CompetencyCategory[];
+}
+
+const { kicker, title, subtitle, categories } = Astro.props;
+---
+
+<section class="about-section competencies-section" aria-labelledby="competencies-title">
+  <div class="section-header">
+    <p class="stage-kicker">{kicker}</p>
+    <h2 id="competencies-title" class="section-title">{title}</h2>
+    <p class="section-subtitle">{subtitle}</p>
+  </div>
+
+  <div class="competencies-grid">
+    {categories.map((cat) => (
+      <article class="competency-card" id={`cat-${cat.id}`}>
+        <div class="cat-kicker">{cat.kicker}</div>
+        <h3 class="cat-title">{cat.title}</h3>
+        <p class="cat-desc">{cat.description}</p>
+        
+        <ul class="skills-list" aria-label={`${cat.title} skills`}>
+          {cat.skills.map((skill) => (
+            <li class="skill-item">
+              <span class="skill-check" aria-hidden="true">✓</span>
+              <span>{skill}</span>
+            </li>
+          ))}
+        </ul>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .competencies-section {
+    margin-bottom: clamp(48px, 6vw, 72px);
+  }
+
+  .section-header {
+    max-width: 760px;
+    margin-bottom: clamp(24px, 3.5vw, 36px);
+  }
+
+  .section-title {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-weight: 800;
+    color: var(--ink-display);
+    letter-spacing: -0.03em;
+  }
+
+  .section-subtitle {
+    margin: 0;
+    font-size: var(--text-lead);
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+
+  .competencies-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .competency-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 3vw, 28px);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .competency-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+  }
+
+  .cat-kicker {
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    color: var(--accent-blue-dark);
+    margin-bottom: var(--space-1);
+  }
+
+  .cat-title {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 800;
+    color: var(--ink-display);
+  }
+
+  .cat-desc {
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-body-sm);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  .skills-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .skill-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-caption);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .skill-check {
+    color: var(--accent-teal);
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .competencies-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

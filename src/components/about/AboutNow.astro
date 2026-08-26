@@ -1,0 +1,193 @@
+---
+/**
+ * AboutNow.astro
+ * Real-time "Now" section with compact, high-density layout.
+ */
+import type { NowFocusItem } from '../../types/about';
+
+interface Props {
+  kicker: string;
+  title: string;
+  subtitle: string;
+  lastUpdated: string;
+  items: NowFocusItem[];
+}
+
+const { kicker, title, subtitle, lastUpdated, items } = Astro.props;
+---
+
+<section class="about-section now-section" aria-labelledby="now-title">
+  <div class="now-container">
+    <div class="now-header">
+      <div class="header-left">
+        <div class="now-live-pill">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span>{kicker}</span>
+        </div>
+        <h2 id="now-title" class="now-title">{title}</h2>
+        <p class="now-subtitle">{subtitle}</p>
+      </div>
+      <div class="header-right">
+        <span class="updated-badge">Updated {lastUpdated}</span>
+      </div>
+    </div>
+
+    <div class="now-grid">
+      {items.map((item) => (
+        <article class="now-item-card">
+          <div class="item-top">
+            <span class="item-tag">{item.tag}</span>
+            <span class="item-status">{item.status}</span>
+          </div>
+          <h3 class="item-title">{item.title}</h3>
+          <p class="item-desc">{item.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .now-section {
+    margin-bottom: clamp(32px, 4vw, 44px);
+  }
+
+  .now-container {
+    background: linear-gradient(135deg, var(--surface-card) 0%, var(--surface-teal-subtle) 100%);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    padding: clamp(18px, 2.5vw, 24px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .now-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .now-live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--accent-teal);
+    background: #ffffff;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
+    margin-bottom: 4px;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-teal);
+    box-shadow: 0 0 5px var(--accent-teal);
+  }
+
+  .now-title {
+    margin: 0 0 2px;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 800;
+    color: var(--ink-display);
+    letter-spacing: -0.02em;
+  }
+
+  .now-subtitle {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.45;
+  }
+
+  .updated-badge {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ink-muted);
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .now-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .now-item-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: border-color var(--duration-fast) ease;
+  }
+
+  .now-item-card:hover {
+    border-color: var(--border-strong);
+  }
+
+  .item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .item-tag {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 750;
+    color: var(--accent-teal);
+    background: var(--surface-teal-subtle);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .item-status {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink-subtle);
+  }
+
+  .item-title {
+    margin: 0 0 4px;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: var(--ink-display);
+    line-height: 1.35;
+  }
+
+  .item-desc {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.45;
+    flex-grow: 1;
+  }
+
+  @media (max-width: 720px) {
+    .now-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

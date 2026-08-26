@@ -1,281 +1,163 @@
 ---
 /**
  * about.astro
- * Verifiable professional background, track record, and engineering discipline.
+ * Daniele Moltisanti - World-Class Editorial Profile, Personal Story, Systems Bench, & Track Record.
+ * Reconciled against LinkedIn profile, enterprise AI leadership, stAI tuned, and open-weight Local AI research.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LandingHeader from '../components/landing/LandingHeader.astro';
-import { landingData } from '../content/locales/en/landing';
-import { credibilityProofs, credibilityIntro } from '../content/locales/en/credibility';
+import AboutHero from '../components/about/AboutHero.astro';
+import AboutNow from '../components/about/AboutNow.astro';
+import AboutStory from '../components/about/AboutStory.astro';
+import AboutPhilosophy from '../components/about/AboutPhilosophy.astro';
+import AboutToolkit from '../components/about/AboutToolkit.astro';
+import AboutDivulgation from '../components/about/AboutDivulgation.astro';
+import AboutExperience from '../components/about/AboutExperience.astro';
+import AboutRecognition from '../components/about/AboutRecognition.astro';
+import AboutCta from '../components/about/AboutCta.astro';
+import { aboutData } from '../content/locales/en/about';
 
-const { aboutSignal } = landingData;
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+const {
+  metaTitle,
+  metaDescription,
+  profile,
+  now,
+  story,
+  manifesto,
+  toolkit,
+  experience,
+  divulgation,
+  recognition,
+  cta,
+} = aboutData;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.headline,
+  worksFor: {
+    '@type': 'Organization',
+    name: profile.affiliation,
+  },
+  alumniOf: {
+    '@type': 'EducationalOrganization',
+    name: 'Politecnico di Milano',
+  },
+  url: 'https://daniele21.github.io/about',
+  sameAs: [
+    profile.socialLinks.linkedin,
+    profile.socialLinks.github,
+    profile.socialLinks.staituned,
+  ],
+  knowsAbout: [
+    'Local AI',
+    'Enterprise AI Architecture',
+    'On-Device Inference',
+    'Model Context Protocol',
+    'Apple Silicon MLX',
+    'Quantization',
+    'Generative AI Systems',
+    'AI Strategy & Governance',
+  ],
+};
 ---
 
 <BaseLayout
-  title="About Daniele Moltisanti -Applied AI Systems & Research"
-  description="Daniele Moltisanti is an AI and software product engineer focused on private compute, on-device intelligence, and verifiable system architecture."
+  title={metaTitle}
+  description={metaDescription}
+  jsonLd={jsonLd}
 >
   <LandingHeader slot="header" />
 
-  <section class="about-page">
-    <div class="shell">
-      <!-- Top Profile Intro -->
-      <div class="profile-hero">
-        <div class="portrait-wrap">
-          <img
-            src={asset(landingData.hero.identity.portraitPath)}
-            alt="Daniele Moltisanti portrait"
-            width="140"
-            height="140"
-            loading="eager"
-          />
-        </div>
-        <div class="profile-content">
-          <p class="stage-kicker">ABOUT & BACKGROUND</p>
-          <h1 class="page-title">Daniele Moltisanti</h1>
-          <p class="profile-role">{landingData.hero.identity.role} · {landingData.hero.identity.specialization}</p>
-          <p class="profile-lead">{credibilityIntro.quote}</p>
-        </div>
-      </div>
+  <div class="about-page">
+    <div class="about-shell">
+      <!-- 1. Magazine-Grade Editorial Hero -->
+      <AboutHero profile={profile} />
 
-      <!-- Verified Proof Points -->
-      <section class="proof-section">
-        <h2 class="section-heading">Verified Track Record & Experience</h2>
-        <div class="proof-grid">
-          {credibilityProofs.map((proof) => (
-            <article class="proof-card">
-              <div class="proof-top">
-                <span class="proof-tag">{proof.tag}</span>
-                {proof.metric && <span class="proof-metric">{proof.metric}</span>}
-              </div>
-              <h3 class="proof-title">{proof.title}</h3>
-              <p class="proof-subtitle">{proof.subtitle}</p>
-              <p class="proof-desc">{proof.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      <!-- 2. Real-Time "Now" Focus -->
+      <AboutNow
+        kicker={now.kicker}
+        title={now.title}
+        subtitle={now.subtitle}
+        lastUpdated={now.lastUpdated}
+        items={now.items}
+      />
 
-      <!-- Engineering Principles -->
-      <section class="discipline-section">
-        <h2 class="section-heading">Engineering Discipline</h2>
-        <div class="discipline-grid">
-          {aboutSignal.highlights.map((h) => (
-            <div class="discipline-card">
-              <h3>{h.label}</h3>
-              <p>{h.detail}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <!-- 3. Narrative Story Chapters -->
+      <AboutStory
+        kicker={story.kicker}
+        title={story.title}
+        subtitle={story.subtitle}
+        chapters={story.chapters}
+      />
 
-      <!-- Contact & Profiles -->
-      <section class="profiles-section">
-        <h2 class="section-heading">Get in Touch</h2>
-        <div class="profiles-actions">
-          <a class="primary-button" href="mailto:danielemoltisanti@gmail.com?subject=AI%20Architecture%20conversation">
-            Discuss an AI architecture →
-          </a>
-          <a class="secondary-button" href={aboutSignal.linkedinUrl} target="_blank" rel="noopener noreferrer">
-            LinkedIn <span aria-hidden="true">↗</span>
-          </a>
-          <a class="secondary-button" href={aboutSignal.githubUrl} target="_blank" rel="noopener noreferrer">
-            GitHub Profile <span aria-hidden="true">↗</span>
-          </a>
-        </div>
-      </section>
+      <!-- 4. Architectural Manifesto & Operating Principles -->
+      <AboutPhilosophy
+        kicker={manifesto.kicker}
+        title={manifesto.title}
+        subtitle={manifesto.subtitle}
+        principles={manifesto.principles}
+      />
+
+      <!-- 5. Systems & Hardware Bench Toolkit -->
+      <AboutToolkit
+        kicker={toolkit.kicker}
+        title={toolkit.title}
+        subtitle={toolkit.subtitle}
+        categories={toolkit.categories}
+      />
+
+      <!-- 6. Knowledge Sharing, stAI tuned & Mentorship -->
+      <AboutDivulgation
+        kicker={divulgation.kicker}
+        title={divulgation.title}
+        subtitle={divulgation.subtitle}
+        staiTunedSummary={divulgation.staiTunedSummary}
+        staiTunedMetrics={divulgation.staiTunedMetrics}
+        featuredArticles={divulgation.featuredArticles}
+        mentorshipSummary={divulgation.mentorshipSummary}
+      />
+
+      <!-- 7. Career & Leadership Timeline -->
+      <AboutExperience
+        kicker={experience.kicker}
+        title={experience.title}
+        subtitle={experience.subtitle}
+        roles={experience.roles}
+      />
+
+      <!-- 8. Honors & Academic Foundations -->
+      <AboutRecognition
+        kicker={recognition.kicker}
+        title={recognition.title}
+        subtitle={recognition.subtitle}
+        awards={recognition.awards}
+        education={recognition.education}
+      />
+
+      <!-- 9. Collaboration & Advisory Callout -->
+      <AboutCta
+        kicker={cta.kicker}
+        title={cta.title}
+        description={cta.description}
+        primaryActionLabel={cta.primaryActionLabel}
+        primaryActionHref={cta.primaryActionHref}
+        secondaryActionLabel={cta.secondaryActionLabel}
+        secondaryActionHref={cta.secondaryActionHref}
+      />
     </div>
-  </section>
+  </div>
 </BaseLayout>
 
 <style>
   .about-page {
-    padding: clamp(48px, 6vw, 80px) 0;
+    padding: clamp(28px, 4vw, 48px) 0 clamp(48px, 6vw, 72px);
+    background: var(--surface-canvas);
   }
 
-  .profile-hero {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: clamp(24px, 4vw, 40px);
-    align-items: center;
-    padding: clamp(24px, 3vw, 36px);
-    background: var(--surface-card);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: clamp(48px, 6vw, 72px);
-  }
-
-  .portrait-wrap {
-    width: 140px;
-    height: 140px;
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    border: 3px solid var(--border-strong);
-    box-shadow: 0 4px 16px rgba(20, 91, 255, 0.15);
-  }
-
-  .portrait-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .page-title {
-    margin: 0 0 4px;
-    font-family: var(--font-display);
-    font-size: var(--text-display);
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    color: var(--ink-display);
-  }
-
-  .profile-role {
-    font-family: var(--font-display);
-    font-size: var(--text-body);
-    font-weight: 750;
-    color: var(--accent-blue);
-    margin: 0 0 var(--space-2);
-  }
-
-  .profile-lead {
-    font-size: var(--text-lead);
-    color: var(--ink-muted);
-    line-height: 1.6;
-    margin: 0;
-  }
-
-  /* Proof Grid */
-  .proof-section,
-  .discipline-section,
-  .profiles-section {
-    margin-bottom: clamp(48px, 6vw, 72px);
-  }
-
-  .section-heading {
-    font-family: var(--font-display);
-    font-size: var(--text-h2);
-    font-weight: 800;
-    color: var(--ink-display);
-    margin: 0 0 var(--space-4);
-  }
-
-  .proof-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-4);
-  }
-
-  .proof-card {
-    padding: var(--space-4);
-    background: var(--surface-card);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .proof-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-2);
-  }
-
-  .proof-tag {
-    font-family: var(--font-display);
-    font-size: var(--text-badge);
-    font-weight: 750;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--accent-blue-dark);
-    background: var(--surface-blue-subtle);
-    padding: 2px 8px;
-    border-radius: var(--radius-sm);
-  }
-
-  .proof-metric {
-    font-family: var(--font-display);
-    font-size: var(--text-body);
-    font-weight: 800;
-    color: var(--accent-blue);
-  }
-
-  .proof-title {
-    margin: 0 0 2px;
-    font-family: var(--font-display);
-    font-size: var(--text-h3);
-    font-weight: 800;
-    color: var(--ink-display);
-  }
-
-  .proof-subtitle {
-    margin: 0 0 var(--space-2);
-    font-size: var(--text-caption);
-    font-weight: 650;
-    color: var(--ink-muted);
-  }
-
-  .proof-desc {
-    margin: 0;
-    font-size: var(--text-caption);
-    color: var(--ink-muted);
-    line-height: 1.55;
-  }
-
-  /* Discipline Grid */
-  .discipline-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: var(--space-3);
-  }
-
-  .discipline-card {
-    padding: var(--space-4);
-    background: var(--surface-subtle);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-md);
-  }
-
-  .discipline-card h3 {
-    margin: 0 0 var(--space-1);
-    font-family: var(--font-display);
-    font-size: var(--text-body);
-    color: var(--ink-display);
-  }
-
-  .discipline-card p {
-    margin: 0;
-    font-size: var(--text-caption);
-    color: var(--ink-muted);
-    line-height: 1.5;
-  }
-
-  /* Profiles Actions */
-  .profiles-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-
-  @media (max-width: 768px) {
-    .profile-hero {
-      grid-template-columns: 1fr;
-      text-align: center;
-      justify-items: center;
-    }
-
-    .proof-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .profiles-actions {
-      flex-direction: column;
-    }
-
-    .profiles-actions a {
-      width: 100%;
-    }
+  .about-shell {
+    width: min(calc(100% - clamp(24px, 4vw, 48px)), 960px);
+    margin-inline: auto;
   }
 </style>

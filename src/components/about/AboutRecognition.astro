@@ -1,0 +1,213 @@
+---
+/**
+ * AboutRecognition.astro
+ * Honors, industry recognition (Nova 111), and academic engineering foundations.
+ */
+import type { RecognitionItem, EducationItem } from '../../types/about';
+
+interface Props {
+  kicker: string;
+  title: string;
+  subtitle: string;
+  awards: RecognitionItem[];
+  education: EducationItem[];
+}
+
+const { kicker, title, subtitle, awards, education } = Astro.props;
+---
+
+<section class="about-section recognition-section" aria-labelledby="recognition-title">
+  <div class="section-header">
+    <p class="stage-kicker">{kicker}</p>
+    <h2 id="recognition-title" class="section-title">{title}</h2>
+    <p class="section-subtitle">{subtitle}</p>
+  </div>
+
+  <div class="recognition-grid">
+    <!-- Awards Column -->
+    <div class="column-block">
+      <h3 class="block-heading">Honors & Awards</h3>
+      <div class="cards-list">
+        {awards.map((award) => (
+          <article class="rec-card">
+            <div class="rec-top">
+              <span class="rec-year">{award.year}</span>
+              <span class="rec-badge">{award.badge}</span>
+            </div>
+            <h4 class="rec-title">{award.title}</h4>
+            <p class="rec-org">{award.organization}</p>
+            <p class="rec-desc">{award.description}</p>
+            {award.url && (
+              <div class="rec-link-wrap">
+                <a class="rec-link" href={award.url} target="_blank" rel="noopener noreferrer">
+                  Learn more <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <!-- Education Column -->
+    <div class="column-block">
+      <h3 class="block-heading">Academic Engineering Foundations</h3>
+      <div class="cards-list">
+        {education.map((edu) => (
+          <article class="rec-card">
+            <div class="rec-top">
+              <span class="rec-year">{edu.period}</span>
+              {edu.badge && <span class="rec-badge">{edu.badge}</span>}
+            </div>
+            <h4 class="rec-title">{edu.degree}</h4>
+            <p class="rec-org">{edu.institution} · {edu.location}</p>
+            <p class="rec-desc">{edu.details}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .recognition-section {
+    margin-bottom: clamp(32px, 4vw, 44px);
+  }
+
+  .section-header {
+    max-width: 760px;
+    margin-bottom: clamp(20px, 3vw, 28px);
+  }
+
+  .section-title {
+    margin: 0 0 4px;
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-weight: 800;
+    color: var(--ink-display);
+    letter-spacing: -0.025em;
+  }
+
+  .section-subtitle {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.45;
+  }
+
+  .recognition-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .column-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .block-heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    color: var(--ink-display);
+  }
+
+  .cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .rec-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: border-color var(--duration-fast) ease;
+  }
+
+  .rec-card:hover {
+    border-color: var(--border-strong);
+  }
+
+  .rec-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+  }
+
+  .rec-year {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--ink-subtle);
+  }
+
+  .rec-badge {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 750;
+    color: var(--accent-blue-dark);
+    background: var(--surface-blue-subtle);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  .rec-title {
+    margin: 0 0 2px;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: var(--ink-display);
+    line-height: 1.35;
+  }
+
+  .rec-org {
+    margin: 0 0 var(--space-2);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    color: var(--accent-blue);
+  }
+
+  .rec-desc {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+    line-height: 1.45;
+    flex-grow: 1;
+  }
+
+  .rec-link-wrap {
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .rec-link {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 750;
+    color: var(--accent-blue);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .rec-link:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 720px) {
+    .recognition-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

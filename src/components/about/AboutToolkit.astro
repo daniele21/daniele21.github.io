@@ -1,0 +1,188 @@
+---
+/**
+ * AboutToolkit.astro
+ * Systems & Hardware Bench - Compact layout for testbeds, runtimes, languages, and protocols.
+ */
+import type { ToolkitCategory } from '../../types/about';
+
+interface Props {
+  kicker: string;
+  title: string;
+  subtitle: string;
+  categories: ToolkitCategory[];
+}
+
+const { kicker, title, subtitle, categories } = Astro.props;
+---
+
+<section class="about-section toolkit-section" aria-labelledby="toolkit-title">
+  <div class="section-header">
+    <p class="stage-kicker">{kicker}</p>
+    <h2 id="toolkit-title" class="section-title">{title}</h2>
+    <p class="section-subtitle">{subtitle}</p>
+  </div>
+
+  <div class="toolkit-grid">
+    {categories.map((cat) => (
+      <article class="toolkit-category-card">
+        <div class="cat-header">
+          <span class="cat-icon" aria-hidden="true">{cat.icon}</span>
+          <div class="cat-titles">
+            <span class="cat-kicker">{cat.kicker}</span>
+            <h3 class="cat-name">{cat.title}</h3>
+          </div>
+        </div>
+
+        <div class="cat-items-list">
+          {cat.items.map((item) => (
+            <div class="toolkit-item">
+              <div class="item-header">
+                <span class="item-name">{item.name}</span>
+                {item.badge && <span class="item-badge">{item.badge}</span>}
+              </div>
+              <p class="item-desc">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .toolkit-section {
+    margin-bottom: clamp(32px, 4vw, 44px);
+  }
+
+  .section-header {
+    max-width: 760px;
+    margin-bottom: clamp(20px, 3vw, 28px);
+  }
+
+  .section-title {
+    margin: 0 0 4px;
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-weight: 800;
+    color: var(--ink-display);
+    letter-spacing: -0.025em;
+  }
+
+  .section-subtitle {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.45;
+  }
+
+  .toolkit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .toolkit-category-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    padding: clamp(18px, 2.5vw, 24px);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: border-color var(--duration-fast) ease;
+  }
+
+  .toolkit-category-card:hover {
+    border-color: var(--border-strong);
+  }
+
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .cat-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .cat-titles {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cat-kicker {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--accent-blue-dark);
+  }
+
+  .cat-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--ink-display);
+  }
+
+  .cat-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .toolkit-item {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+    transition: border-color var(--duration-fast) ease;
+  }
+
+  .toolkit-item:hover {
+    border-color: var(--border-strong);
+  }
+
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+  }
+
+  .item-name {
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 750;
+    color: var(--ink-display);
+  }
+
+  .item-badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 650;
+    color: var(--accent-blue-dark);
+    background: var(--surface-blue-subtle);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  .item-desc {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 800px) {
+    .toolkit-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
