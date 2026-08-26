@@ -1,0 +1,485 @@
+---
+/**
+ * DecisionTable.astro
+ * Unified Comparison Surface (Stripe / Apple style)
+ * Clean horizontal alignment, single container, zero box-in-a-box clutter,
+ * and high-contrast value badges with crisp SVG vector icons.
+ */
+
+interface CriterionRow {
+  dimension: string;
+  sub: string;
+  local: { text: string; state: 'win' | 'neutral' | 'constraint' };
+  hybrid: { text: string; state: 'win' | 'neutral' | 'constraint' };
+  cloud: { text: string; state: 'win' | 'neutral' | 'constraint' };
+}
+
+const criteria: CriterionRow[] = [
+  {
+    dimension: 'Data Privacy',
+    sub: 'Data egress & telemetry',
+    local: { text: 'Full Boundary', state: 'win' },
+    hybrid: { text: 'Partitioned', state: 'neutral' },
+    cloud: { text: 'External VPC', state: 'constraint' },
+  },
+  {
+    dimension: 'Offline & Latency',
+    sub: 'Network dependence & RTT',
+    local: { text: 'Zero Network (0ms)', state: 'win' },
+    hybrid: { text: 'Edge Fallback', state: 'neutral' },
+    cloud: { text: 'Network Bound', state: 'constraint' },
+  },
+  {
+    dimension: 'Runtime Control',
+    sub: 'Model weights & lifecycle',
+    local: { text: 'Full Ownership', state: 'win' },
+    hybrid: { text: 'Shared Policy', state: 'neutral' },
+    cloud: { text: 'Provider API', state: 'constraint' },
+  },
+  {
+    dimension: 'Frontier Reasoning',
+    sub: 'Access to 400B+ models',
+    local: { text: 'Hardware Bound', state: 'constraint' },
+    hybrid: { text: 'Dynamic Route', state: 'win' },
+    cloud: { text: 'Frontier Scale', state: 'win' },
+  },
+  {
+    dimension: 'Elastic Scale',
+    sub: 'Burst capacity on demand',
+    local: { text: 'Fixed Hardware', state: 'constraint' },
+    hybrid: { text: 'Tiered Offload', state: 'win' },
+    cloud: { text: 'Unlimited Burst', state: 'win' },
+  },
+];
+
+const summary = {
+  local: 'Full privacy & on-device control',
+  hybrid: 'Tiered triage & split routing',
+  cloud: 'Frontier reasoning & elastic scale',
+};
+---
+
+<div class="matrix-card" aria-label="Workload architecture decision matrix">
+  <div class="matrix-scroll-wrap">
+    <table class="matrix-table">
+      <!-- Table Header -->
+      <thead>
+        <tr class="header-row">
+          <th scope="col" class="th-criterion">
+            <span class="criterion-kicker">DECISION CRITERIA</span>
+          </th>
+          <th scope="col" class="th-column col-local">
+            <div class="col-pill col-pill--local">
+              <span class="pill-dot"></span>
+              <strong>LOCAL</strong>
+              <span class="hero-tag">Focus</span>
+            </div>
+          </th>
+          <th scope="col" class="th-column col-hybrid">
+            <div class="col-pill col-pill--hybrid">
+              <span class="pill-dot"></span>
+              <strong>HYBRID</strong>
+            </div>
+          </th>
+          <th scope="col" class="th-column col-cloud">
+            <div class="col-pill col-pill--cloud">
+              <span class="pill-dot"></span>
+              <strong>CLOUD</strong>
+            </div>
+          </th>
+        </tr>
+      </thead>
+
+      <!-- Table Body Rows -->
+      <tbody>
+        {criteria.map((row) => (
+          <tr class="data-row">
+            <th scope="row" class="cell-dimension">
+              <div class="dimension-wrap">
+                <span class="dim-title">{row.dimension}</span>
+                <span class="dim-sub">{row.sub}</span>
+              </div>
+            </th>
+
+            <!-- Local Column -->
+            <td class="cell-val col-local">
+              <div class={`value-chip chip--${row.local.state} chip--local`}>
+                {row.local.state === 'win' && (
+                  <svg class="chip-icon icon--win" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="7.2" fill="currentColor" fill-opacity="0.14" />
+                    <path d="M5 8.2L7 10.2L11 5.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                )}
+                {row.local.state === 'constraint' && (
+                  <svg class="chip-icon icon--constraint" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="7.2" fill="currentColor" fill-opacity="0.08" />
+                    <path d="M5.5 8H10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                  </svg>
+                )}
+                <span class="chip-text">{row.local.text}</span>
+              </div>
+            </td>
+
+            <!-- Hybrid Column -->
+            <td class="cell-val col-hybrid">
+              <div class={`value-chip chip--${row.hybrid.state} chip--hybrid`}>
+                {row.hybrid.state === 'win' && (
+                  <svg class="chip-icon icon--win" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="7.2" fill="currentColor" fill-opacity="0.14" />
+                    <path d="M5 8.2L7 10.2L11 5.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                )}
+                {row.hybrid.state === 'neutral' && (
+                  <svg class="chip-icon icon--neutral" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="7.2" fill="currentColor" fill-opacity="0.08" />
+                    <path d="M5.5 8H10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+                  </svg>
+                )}
+                <span class="chip-text">{row.hybrid.text}</span>
+              </div>
+            </td>
+
+            <!-- Cloud Column -->
+            <td class="cell-val col-cloud">
+              <div class={`value-chip chip--${row.cloud.state} chip--cloud`}>
+                {row.cloud.state === 'win' && (
+                  <svg class="chip-icon icon--win" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="7.2" fill="currentColor" fill-opacity="0.14" />
+                    <path d="M5 8.2L7 10.2L11 5.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                )}
+                {row.cloud.state === 'constraint' && (
+                  <svg class="chip-icon icon--constraint" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="7.2" fill="currentColor" fill-opacity="0.08" />
+                    <path d="M5.5 8H10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                  </svg>
+                )}
+                <span class="chip-text">{row.cloud.text}</span>
+              </div>
+            </td>
+          </tr>
+        ))}
+
+        <!-- Summary / Best For Row -->
+        <tr class="summary-row">
+          <th scope="row" class="cell-dimension summary-dim">
+            <span class="summary-kicker">BEST FOR</span>
+          </th>
+          <td class="summary-cell col-local">
+            <div class="summary-verdict verdict--local">
+              {summary.local}
+            </div>
+          </td>
+          <td class="summary-cell col-hybrid">
+            <div class="summary-verdict verdict--hybrid">
+              {summary.hybrid}
+            </div>
+          </td>
+          <td class="summary-cell col-cloud">
+            <div class="summary-verdict verdict--cloud">
+              {summary.cloud}
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .matrix-card {
+    width: 100%;
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 20px rgba(8, 19, 51, 0.04), 0 1px 3px rgba(8, 19, 51, 0.02);
+    overflow: hidden;
+  }
+
+  .matrix-scroll-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  /* Table Headers */
+  .header-row th {
+    padding: 14px 16px;
+    background: var(--surface-subtle);
+    border-bottom: 1px solid var(--border-medium);
+    vertical-align: middle;
+  }
+
+  .th-criterion {
+    width: 28%;
+  }
+
+  .criterion-kicker {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--ink-subtle);
+    text-transform: uppercase;
+  }
+
+  .th-column {
+    width: 24%;
+  }
+
+  /* Header Pills */
+  .col-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
+  .pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .hero-tag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 1px 5px;
+    border-radius: var(--radius-sm);
+    background: rgba(20, 91, 255, 0.15);
+    color: var(--accent-blue-dark);
+    margin-left: 2px;
+  }
+
+  .col-pill--local {
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
+    border: 1px solid rgba(20, 91, 255, 0.25);
+  }
+
+  .col-pill--hybrid {
+    background: #f5f3ff;
+    color: #6d28d9;
+    border: 1px solid rgba(139, 92, 246, 0.25);
+  }
+
+  .col-pill--cloud {
+    background: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid rgba(2, 132, 199, 0.25);
+  }
+
+  /* Data Rows */
+  .data-row {
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background var(--duration-fast) ease;
+  }
+
+  .data-row:hover {
+    background: rgba(248, 250, 252, 0.85);
+  }
+
+  .cell-dimension {
+    padding: 13px 16px;
+    vertical-align: middle;
+  }
+
+  .dimension-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .dim-title {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 750;
+    color: var(--ink-display);
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+
+  .dim-sub {
+    font-size: 0.72rem;
+    color: var(--ink-subtle);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .cell-val {
+    padding: 11px 16px;
+    vertical-align: middle;
+  }
+
+  /* Value Chips */
+  .value-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    line-height: 1.25;
+    white-space: nowrap;
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .chip-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  .chip-text {
+    font-weight: 650;
+  }
+
+  /* Win State (Value Highlight) */
+  .chip--win.chip--local {
+    background: rgba(20, 91, 255, 0.08);
+    color: var(--accent-blue-dark);
+    border: 1px solid rgba(20, 91, 255, 0.2);
+  }
+
+  .chip--win.chip--local .icon--win {
+    color: var(--accent-blue);
+  }
+
+  .chip--win.chip--hybrid {
+    background: rgba(124, 58, 237, 0.08);
+    color: #6d28d9;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+  }
+
+  .chip--win.chip--hybrid .icon--win {
+    color: #7c3aed;
+  }
+
+  .chip--win.chip--cloud {
+    background: rgba(2, 132, 199, 0.08);
+    color: #0369a1;
+    border: 1px solid rgba(2, 132, 199, 0.2);
+  }
+
+  .chip--win.chip--cloud .icon--win {
+    color: #0284c7;
+  }
+
+  /* Neutral State */
+  .chip--neutral {
+    background: var(--surface-subtle);
+    color: var(--ink);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .chip--neutral .icon--neutral {
+    color: var(--ink-muted);
+  }
+
+  /* Constraint State */
+  .chip--constraint {
+    background: transparent;
+    color: var(--ink-subtle);
+    border: 1px dashed var(--border-subtle);
+  }
+
+  .chip--constraint .icon--constraint {
+    color: var(--ink-subtle);
+    opacity: 0.7;
+  }
+
+  .chip--constraint .chip-text {
+    font-weight: 500;
+  }
+
+  /* Local Column Subtle Light Tint */
+  .col-local {
+    background: rgba(240, 245, 255, 0.25);
+  }
+
+  /* Summary Row / Verdict */
+  .summary-row {
+    border-top: 2px solid var(--border-medium);
+    background: #fbfdff;
+  }
+
+  .summary-dim {
+    padding: 14px 16px;
+    vertical-align: middle;
+  }
+
+  .summary-kicker {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--ink-subtle);
+    text-transform: uppercase;
+  }
+
+  .summary-cell {
+    padding: 10px 14px;
+    vertical-align: middle;
+  }
+
+  .summary-verdict {
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 750;
+    line-height: 1.3;
+  }
+
+  .verdict--local {
+    background: rgba(20, 91, 255, 0.08);
+    color: var(--accent-blue-dark);
+    border: 1px solid rgba(20, 91, 255, 0.18);
+  }
+
+  .verdict--hybrid {
+    background: rgba(124, 58, 237, 0.08);
+    color: #6d28d9;
+    border: 1px solid rgba(124, 58, 237, 0.18);
+  }
+
+  .verdict--cloud {
+    background: rgba(2, 132, 199, 0.08);
+    color: #0369a1;
+    border: 1px solid rgba(2, 132, 199, 0.18);
+  }
+
+  @media (max-width: 640px) {
+    .header-row th,
+    .cell-dimension,
+    .cell-val,
+    .summary-cell {
+      padding: 9px 10px;
+    }
+
+    .value-chip {
+      padding: 4px 7px;
+      font-size: 0.8rem;
+    }
+
+    .summary-verdict {
+      font-size: 0.8rem;
+      padding: 6px 8px;
+    }
+  }
+</style>

@@ -3,12 +3,13 @@
 interface Props {
   sequence?: boolean;
   className?: string;
+  layout?: 'grid' | 'rows';
 }
 
-const { sequence = false, className = '' } = Astro.props;
+const { sequence = false, className = '', layout = 'grid' } = Astro.props;
 ---
 
-<div class:list={['plane-card-grid', { 'plane-card-grid--sequence': sequence }, className]}>
+<div class:list={['plane-card-grid', { 'plane-card-grid--sequence': sequence, 'plane-card-grid--rows': layout === 'rows' }, className]}>
   <slot />
 </div>
 
@@ -21,8 +22,13 @@ const { sequence = false, className = '' } = Astro.props;
     gap: clamp(12px, 1.5vw, 18px);
   }
 
+  .plane-card-grid--rows {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(10px, 1.2vw, 14px);
+  }
+
   @media (max-width: 1160px) {
-    .plane-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .plane-card-grid:not(.plane-card-grid--rows) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
   @media (max-width: 960px) {

@@ -83,6 +83,13 @@ const linkProps = href ? { href } : {};
     box-shadow: 0 16px 34px rgba(8, 19, 51, 0.08);
   }
 
+  .plane-card--interactive:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--plane-card-accent) 42%, transparent);
+    outline-offset: 3px;
+    border-color: color-mix(in srgb, var(--plane-card-accent) 46%, var(--border-medium));
+    box-shadow: 0 16px 34px rgba(8, 19, 51, 0.1);
+  }
+
   .plane-card__header,
   .plane-card__footer {
     min-width: 0;

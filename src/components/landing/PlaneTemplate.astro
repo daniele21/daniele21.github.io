@@ -7,7 +7,6 @@
  */
 import type { MethodStageHandoff } from '../../types/landing';
 import StageRail from './StageRail.astro';
-import StageHandoff from './StageHandoff.astro';
 
 interface Props {
   id: string;
@@ -16,8 +15,8 @@ interface Props {
   kicker: string;
   title: string;
   intro: string;
-  handoff: MethodStageHandoff;
-  nextLabel: string;
+  handoff?: MethodStageHandoff;
+  nextLabel?: string;
   visualLabel: string;
   surface?: 'canvas' | 'subtle';
   isFinal?: boolean;
@@ -61,10 +60,6 @@ const titleId = `${id}-title`;
         <p class="stage-kicker">{kicker}</p>
         <h2 id={titleId} class="stage-heading">{title}</h2>
         <p class="stage-intro">{intro}</p>
-
-        <div class="plane-handoff">
-          <StageHandoff handoff={handoff} number={number} nextLabel={nextLabel} compact />
-        </div>
       </header>
 
       <div class="stage-visual plane-visual" aria-label={visualLabel}>
@@ -91,22 +86,22 @@ const titleId = `${id}-title`;
 
   .plane-shell {
     position: relative;
-    width: 100%;
   }
 
-  /* Two-column alternating desktop grid */
+  /* Two-column alternating desktop grid (40% copy / 60% visual) */
   .plane-layout {
     display: grid;
-    grid-template-columns: minmax(320px, 0.95fr) minmax(380px, 1.25fr);
-    gap: clamp(32px, 4.5vw, 64px);
+    grid-template-columns: minmax(280px, 2fr) minmax(400px, 3fr);
+    gap: clamp(24px, 3vw, 44px);
     align-items: center;
     width: 100%;
   }
 
-  /* Left-aligned plane: copy left, visual right */
+  /* Left-aligned plane: copy left (40%), visual right (60%) */
   .plane-section.stage-left .plane-layout {
-    grid-template-columns: minmax(320px, 0.95fr) minmax(380px, 1.25fr);
-    padding-left: clamp(28px, 4vw, 56px);
+    grid-template-columns: minmax(280px, 2fr) minmax(400px, 3fr);
+    padding-left: clamp(32px, 4vw, 54px);
+    padding-right: 0;
   }
 
   .plane-section.stage-left .plane-intro {
@@ -120,10 +115,11 @@ const titleId = `${id}-title`;
     grid-row: 1;
   }
 
-  /* Right-aligned plane: visual left, copy right */
+  /* Right-aligned plane: visual left (60%), copy right (40%) */
   .plane-section.stage-right .plane-layout {
-    grid-template-columns: minmax(380px, 1.25fr) minmax(320px, 0.95fr);
-    padding-right: clamp(28px, 4vw, 56px);
+    grid-template-columns: minmax(400px, 3fr) minmax(280px, 2fr);
+    padding-right: clamp(32px, 4vw, 54px);
+    padding-left: 0;
   }
 
   .plane-section.stage-right .plane-intro {
@@ -165,12 +161,7 @@ const titleId = `${id}-title`;
     color: var(--ink-muted);
     line-height: 1.55;
     text-wrap: pretty;
-    margin: 0 0 var(--space-4);
-  }
-
-  .plane-handoff {
-    width: 100%;
-    margin-top: auto;
+    margin: 0;
   }
 
   .plane-visual {

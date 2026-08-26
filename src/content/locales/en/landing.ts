@@ -10,7 +10,6 @@ export const landingData: LandingPageData = {
     links: [
       { label: 'Method', href: '/#strategy' },
       { label: 'Projects', href: '/#infrastructure' },
-      { label: 'Notes', href: '/insights' },
       { label: 'About', href: '/about' },
     ],
     cta: {
@@ -61,37 +60,37 @@ export const landingData: LandingPageData = {
         href: '#strategy',
       },
       secondaryCta: {
-        label: 'Read my thinking',
-        href: '/insights',
+        label: 'About my work',
+        href: '/about',
       },
     },
   },
 
   decisionStage: {
-    kicker: '01 -DECIDE · STRATEGY',
-    title: 'Where should this workload run?',
+    kicker: '01 - DECIDE',
+    title: 'When does Local AI actually make sense?',
     intro:
-      'Before choosing models or runtimes, start with the workload. What do we gain by keeping data and execution under our control, and what do we give up?',
+      'I start from the workload, not the model. Privacy, control, latency and capability tell us whether Local, Hybrid or Cloud is the better fit.',
     drivers: [
       {
         icon: '🔒',
-        title: 'Privacy & Boundary',
-        text: 'Does sensitive data really need to leave the controlled environment?',
+        title: 'Sensitive Data',
+        text: 'Does private data need to stay within controlled boundaries?',
+      },
+      {
+        icon: '⚡',
+        title: 'Offline / Latency',
+        text: 'Must execution continue without network dependence or cloud latency?',
       },
       {
         icon: '⚙️',
         title: 'Control & Ownership',
-        text: 'Do we need ownership over model weights, lifecycle, prompt privacy and execution?',
+        text: 'Do we need direct ownership of model weights, lifecycle, and prompts?',
       },
       {
-        icon: '🛡️',
-        title: 'Vendor Dependency',
-        text: 'How exposed is the system to provider pricing, API breaks, rate limits and outages?',
-      },
-      {
-        icon: '⚡',
-        title: 'Operational Fit',
-        text: 'What do latency, connectivity, offline capabilities and hardware bounds require?',
+        icon: '🌐',
+        title: 'Capability & Scale',
+        text: 'Does the workload require frontier reasoning or elastic compute?',
       },
     ],
     keyMessage: 'Local is one option. Hybrid and Cloud remain part of the decision.',
@@ -102,36 +101,41 @@ export const landingData: LandingPageData = {
       footer: 'Decide based on privacy boundaries, control, and verifiable constraints.',
     },
     comparison: {
-      title: 'Local vs Hybrid vs Cloud',
+      title: 'Workload Trade-off Matrix',
       columns: ['Local', 'Hybrid', 'Cloud'] as const,
       rows: [
         {
-          label: 'Data boundary',
-          values: ['On-prem / Device', 'Partitioned', 'Third-party VPC'],
-          classes: ['good', 'good', 'warn'],
+          label: 'Data Privacy',
+          values: ['Full boundary', 'Partitioned', 'External VPC'],
+          scores: [3, 2, 1],
         },
         {
-          label: 'Runtime ownership',
-          values: ['Complete', 'Shared', 'Provider managed'],
-          classes: ['good', 'good', 'neutral'],
+          label: 'Offline & Latency',
+          values: ['Zero network', 'Fallback', 'Network-bound'],
+          scores: [3, 2, 1],
         },
         {
-          label: 'Offline capability',
-          values: ['Native', 'Partial', 'None'],
-          classes: ['good', 'warn', 'bad'],
+          label: 'Runtime Control',
+          values: ['Full ownership', 'Shared', 'Provider API'],
+          scores: [3, 2, 1],
         },
         {
-          label: 'Frontier reasoning',
-          values: ['Hardware bounded', 'Dynamic routing', 'Full scale'],
-          classes: ['warn', 'good', 'good'],
+          label: 'Frontier Models',
+          values: ['Hardware bound', 'Dynamic route', 'Frontier scale'],
+          scores: [1, 3, 3],
         },
         {
-          label: 'Operational cost',
-          values: ['Capex / Fixed', 'Balanced', 'Opex / Per-token'],
-          classes: ['neutral', 'good', 'neutral'],
+          label: 'Elastic Scale',
+          values: ['Fixed compute', 'Tiered', 'Unlimited'],
+          scores: [1, 2, 3],
+        },
+        {
+          label: 'Operations',
+          values: ['Self-managed', 'Shared', 'Provider-managed'],
+          scores: [1, 2, 3],
         },
       ],
-      footer: 'No universal winner. The right architecture matches the specific workload constraints.',
+      footer: 'Find the boundary with evidence, not ideology.',
     },
     tradeoffs: {
       title: 'Trade-off Guide',
@@ -145,35 +149,35 @@ export const landingData: LandingPageData = {
       footer: 'Make trade-offs explicit. Revisit as model capabilities evolve.',
     },
     handoff: {
-      output: 'We have a direction. Now we need to make it real.',
-      leadsTo: 'If Local or Hybrid earns a role, now we need to make it real with dependable infrastructure.',
-      detailCta: { label: 'See how I decide', href: '/local-ai-strategy' },
+      output: 'LOCAL / HYBRID / CLOUD decided',
+      leadsTo: 'Runtime layer running',
+      detailCta: { label: 'Explore the execution layer', href: '#infrastructure' },
     },
   },
 
   buildStage: {
-    kicker: '02 -BUILD · EXECUTION',
-    title: 'Can we actually run it locally?',
+    kicker: '02 - BUILD',
+    title: 'Make local execution usable.',
     intro:
-      'This is where strategy becomes engineering. I build the infrastructure needed to make local execution reusable, observable and manageable.',
-    proofLine: 'Different environments. Same question: what can realistically stay local?',
+      'If Local or Hybrid earns a role, I build the runtime layer products need to actually use it - across desktop, mobile and speech.',
+    proofLine: 'One execution layer. Different environments. Same question: what can realistically stay local?',
     ecosystemImage: 'images/ecosystem.png',
     ecosystemAlt: 'Connected Local AI architecture across desktop, Android, local server and cloud fallback',
     areas: [
       {
         icon: '▱',
-        title: 'Local infrastructure',
-        text: 'OpenAI-compatible inference servers, multi-model lifecycle, streaming, and telemetry on macOS, Linux, and private servers.',
+        title: 'Desktop / Mac',
+        text: 'Inference gateway with multi-model lifecycle, GGUF/MLX runtimes, and OpenAI-compatible API.',
       },
       {
         icon: '▯',
-        title: 'On-device execution',
-        text: 'Real LLM inference under memory, thermal, battery, and mobile lifecycle constraints on Android devices.',
+        title: 'Android Device',
+        text: 'On-device inference lab profiling memory pressure, thermals, and cross-app AIDL boundaries.',
       },
       {
         icon: '⌁',
-        title: 'Local speech & audio',
-        text: 'Private ASR (Whisper) as a reusable local primitive for real-time transcription and voice workflows.',
+        title: 'Speech Primitive',
+        text: 'Private Whisper ASR for real-time transcription without sending audio to cloud services.',
       },
     ],
     projects: [
@@ -228,21 +232,22 @@ export const landingData: LandingPageData = {
     closingMessage:
       'Running a model is just the starting point. The architecture layer turns raw weights into dependable, app-ready runtime boundaries.',
     handoff: {
-      output: "It runs. Now let's put it inside a real product.",
-      leadsTo: 'Reusable infrastructure must survive a real product workflow.',
-      detailCta: { label: 'See what I built', href: '/local-ai-infrastructure' },
+      output: 'Runtime layer running',
+      leadsTo: 'Products working',
+      detailCta: { label: 'See the product tests', href: '#applications' },
     },
   },
 
   testStage: {
-    kicker: '03 -TEST · APPLICATIONS',
-    title: 'What happens in a real product?',
+    kicker: '03 - TEST',
+    title: 'Put it inside a real product.',
     intro:
-      'A runtime demo or synthetic benchmark cannot expose every product constraint. I use real applications as proving grounds for the infrastructure.',
+      'Infrastructure only matters if it survives a real workflow. I use my products as proving grounds for privacy, usability and integration constraints.',
     note: 'Each application is an empirical proving ground.',
     applications: [
       {
         name: 'RedactGuard',
+        tag: 'WEB & DESKTOP · PII REDACTION',
         question: 'Can sensitive document processing stay local?',
         description:
           'Local LLM inference on structured documents with zero cloud transmission.',
@@ -255,13 +260,14 @@ export const landingData: LandingPageData = {
         ],
         evidence: 'Shows where privacy adds control and where it adds operational work.',
         imagePath: 'images/redact-guard/redactguard-review.jpg',
-        colorClass: 'red',
+        colorClass: 'blue',
         linkLabel: 'See the test →',
         whatItTests: 'Local inference + configurable PII + human review inside a controlled boundary.',
       },
       {
         name: 'Aura Finance',
-        question: 'Can personal transactions be categorized without leaving the device?',
+        tag: 'MOBILE · ON-DEVICE PARSING',
+        question: 'Can personal transactions be categorized on-device?',
         description:
           'On-device semantic extraction coupled with deterministic financial math.',
         href: '/aura-finance',
@@ -273,12 +279,13 @@ export const landingData: LandingPageData = {
         ],
         evidence: 'Shows what on-device understanding can handle in a daily mobile workflow.',
         imagePath: 'images/aura-finance/aura-payment-detection.png',
-        colorClass: 'purple',
+        colorClass: 'green',
         linkLabel: 'See the test →',
         whatItTests: 'Small local model handling recurring semantic tasks without cloud exposure.',
       },
       {
         name: 'ClosedRoom',
+        tag: 'MACOS · MEETING INTELLIGENCE',
         question: 'Can meeting intelligence stay inside the room?',
         description:
           'Multi-primitive orchestration (Audio + ASR + LLM) within a local trust boundary.',
@@ -291,7 +298,7 @@ export const landingData: LandingPageData = {
         ],
         evidence: 'Shows how far a full meeting workflow can stay local by default.',
         imagePath: 'images/closedroom/meeting-analysis.jpg',
-        colorClass: 'blue',
+        colorClass: 'purple',
         linkLabel: 'See the test →',
         whatItTests: 'Multi-primitive orchestration on macOS with external models strictly opt-in.',
       },
@@ -303,30 +310,79 @@ export const landingData: LandingPageData = {
     },
     closingMessage: 'The value of this layer is turning architectural capability into verifiable product evidence.',
     handoff: {
-      output: "It works. Now let's see if it works well enough.",
-      leadsTo: 'A useful workflow must still meet real performance and resource constraints.',
-      detailCta: { label: 'See the product tests', href: '/local-ai-use-cases' },
+      output: 'Products working',
+      leadsTo: 'Evidence measured',
+      detailCta: { label: 'See what I measure', href: '#evidence' },
     },
   },
 
   measureStage: {
-    kicker: '04 -MEASURE · EVIDENCE',
+    kicker: '04 - MEASURE',
     title: 'Is it actually good enough?',
     intro:
-      "'It runs' is a very low bar. We need to measure quality, latency, resources and observed behavior to know if local execution is actually viable.",
-    criteria: [
-      { icon: '⚡', title: 'Task Quality & Latency', text: 'TTFT, throughput, token generation latency and format adherence.' },
-      { icon: '💾', title: 'Memory & Footprint', text: 'RAM / VRAM allocation, storage budget and memory pressure.' },
-      { icon: '♨️', title: 'Hardware & Thermals', text: 'Thermal throttling, power draw and sustained mobile behavior.' },
-      { icon: '🛡️', title: 'Reliability & Errors', text: 'Request completion rate, retry budgets and failure recovery.' },
-      { icon: '📡', title: 'Boundary Observability', text: 'Network egress verification and declared vs observed traffic.' },
+      "Running locally isn't the goal. I measure whether it performs well enough - and use the evidence to change the architecture.",
+    systems: [
+      {
+        id: 'performance-lab',
+        title: 'Performance Lab',
+        tag: 'OPTIMIZATION & BENCHMARKS',
+        question: 'Which configuration is good enough for this workload on this device?',
+        metrics: [
+          { label: 'TTFT', value: '820', unit: 'ms', note: 'Time to first token' },
+          { label: 'Decode', value: '18.6', unit: 'tok/s', note: 'Generation speed' },
+          { label: 'Prefill', value: '72.4', unit: 'tok/s', note: 'Prompt processing' },
+          { label: 'Peak RAM', value: '3.4', unit: 'GB', note: 'Memory footprint' },
+        ],
+        benchmarkProfiles: [
+          {
+            id: 'samsung-a56', device: 'Samsung Galaxy A56', platform: 'Android', deviceKind: 'mobile',
+            model: 'Qwen 3.5 2B', quantization: 'Q4_K_M', context: '4K context',
+            metrics: [
+              { label: 'TTFT', value: '820', unit: 'ms', note: 'Time to first token' },
+              { label: 'Decode', value: '18.6', unit: 'tok/s', note: 'Generation speed' },
+              { label: 'Prefill', value: '72.4', unit: 'tok/s', note: 'Prompt processing' },
+              { label: 'Peak RAM', value: '3.4', unit: 'GB', note: 'Memory footprint' },
+            ],
+          },
+          {
+            id: 'mac-pro-m3', device: 'Mac Pro M3', platform: 'macOS', deviceKind: 'desktop',
+            model: 'Qwen 3.5 2B', quantization: 'Q4_K_M', context: '4K context',
+            metrics: [
+              { label: 'TTFT', value: '240', unit: 'ms', note: 'Time to first token' },
+              { label: 'Decode', value: '54.8', unit: 'tok/s', note: 'Generation speed' },
+              { label: 'Prefill', value: '214', unit: 'tok/s', note: 'Prompt processing' },
+              { label: 'Peak RAM', value: '3.1', unit: 'GB', note: 'Memory footprint' },
+            ],
+          },
+        ],
+        statusNote: 'Illustrative benchmark values for the current UI. Replace after the validated device runs.',
+        statusType: 'planned',
+        href: '/performance-lab',
+        ctaLabel: 'Open benchmark lab',
+      },
+      {
+        id: 'traffic-monitoring',
+        title: 'Traffic Monitoring',
+        tag: 'PROCESS-LEVEL OBSERVABILITY',
+        question: 'Did local AI processes stay on-device without reaching the internet?',
+        metrics: [
+          { label: 'Processes observed', value: '3', note: 'LLM · ASR · app' },
+          { label: 'Local traffic', value: '100%', note: 'Loopback + LAN' },
+          { label: 'Internet egress', value: '0 B', note: 'No outbound payload' },
+          { label: 'External endpoints', value: '0', note: 'None contacted' },
+        ],
+        statusNote: 'Process-level capture confirms that AI traffic remained on local interfaces during the observed run.',
+        statusType: 'verified',
+        href: '/traffic-monitoring',
+        ctaLabel: 'See network evidence',
+      },
     ],
     closingMessage:
       'Working ≠ performing well. Performing well ≠ production ready. Evidence is what allows the next architecture decision.',
     handoff: {
-      output: 'Evidence changes the next decision.',
-      leadsTo: 'What we learn from real hardware, real products and measured behavior feeds back into the next architecture choice.',
-      detailCta: { label: 'See what I measure', href: '/local-ai-performance' },
+      output: 'Evidence changes the next decision',
+      leadsTo: 'DECIDE AGAIN',
+      detailCta: { label: 'Open full benchmark lab', href: '/performance-lab' },
     },
   },
 

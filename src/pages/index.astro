@@ -14,7 +14,6 @@ import BuildStage from '../components/landing/BuildStage.astro';
 import TestStage from '../components/landing/TestStage.astro';
 import EvidenceStage from '../components/landing/EvidenceStage.astro';
 import LoopClosure from '../components/landing/LoopClosure.astro';
-import FieldNotes from '../components/landing/FieldNotes.astro';
 import AboutSignal from '../components/landing/AboutSignal.astro';
 import FinalCta from '../components/landing/FinalCta.astro';
 ---
@@ -39,7 +38,7 @@ import FinalCta from '../components/landing/FinalCta.astro';
     <MethodThread
       fromStep="01 DECIDE"
       toStep="02 BUILD"
-      sublabel="If Local or Hybrid earns a role, now we need to make it real with dependable infrastructure."
+      sublabel="LOCAL / HYBRID / CLOUD decided →"
       direction="ltr"
     />
 
@@ -48,7 +47,7 @@ import FinalCta from '../components/landing/FinalCta.astro';
     <MethodThread
       fromStep="02 BUILD"
       toStep="03 TEST"
-      sublabel="Reusable infrastructure must survive a real product workflow."
+      sublabel="Runtime layer running →"
       direction="rtl"
     />
 
@@ -57,7 +56,7 @@ import FinalCta from '../components/landing/FinalCta.astro';
     <MethodThread
       fromStep="03 TEST"
       toStep="04 MEASURE"
-      sublabel="A useful workflow must still meet real performance and resource constraints."
+      sublabel="Products working →"
       direction="ltr"
     />
 
@@ -65,8 +64,6 @@ import FinalCta from '../components/landing/FinalCta.astro';
   </div>
 
   <LoopClosure />
-
-  <FieldNotes />
 
   <AboutSignal />
 

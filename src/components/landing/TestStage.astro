@@ -22,20 +22,21 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
   nextLabel="MEASURE"
   visualLabel="Applications used as empirical proving grounds"
 >
-  <PlaneCardGrid>
+  <PlaneCardGrid layout="rows">
     {testStage.applications.map((app) => (
       <ProjectProofCard
-        variant="proof"
-        eyebrow={app.name === 'RedactGuard' ? 'SENSITIVE DOCUMENTS' : app.name === 'Aura Finance' ? 'PERSONAL FINANCE' : 'MEETINGS & MEMORY'}
+        variant="compact"
+        tag={app.tag}
         title={app.name}
         description={app.question}
         href={resolveHref(app.href)}
         logoPath={app.logoPath}
         logoAlt={`${app.name} logo`}
-        whatItTests={app.whatItTests}
-        evidenceLabel="WHAT IT TESTS"
-        evidence={app.evidence}
-        ctaLabel="See the test"
+        imagePath={app.imagePath}
+        imageAlt={`${app.name} product interface`}
+        tone={app.colorClass as 'blue' | 'green' | 'purple' | 'red'}
+        features={app.features}
+        ctaLabel={`Explore ${app.name}`}
       />
     ))}
   </PlaneCardGrid>

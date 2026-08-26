@@ -1,13 +1,11 @@
-/* Global Layout & Utilities */
-
 .shell {
-  width: min(calc(100% - 48px), var(--shell-max-width));
+  width: min(calc(100% - clamp(32px, 5vw, 64px)), var(--shell-max-width));
   margin-inline: auto;
 }
 
 @media (max-width: 640px) {
   .shell {
-    width: min(calc(100% - 32px), var(--shell-max-width));
+    width: min(calc(100% - 28px), var(--shell-max-width));
   }
 }
 
@@ -190,77 +188,6 @@ html[data-method-path-ready='true'] .method-journey .thread-curve {
   scroll-margin-top: calc(var(--header-height) + 24px);
 }
 
-.method-stage .stage-shell {
-  position: relative;
-}
-
-.method-stage.stage-left .stage-shell {
-  padding-left: clamp(64px, 6vw, 88px);
-}
-
-.method-stage.stage-right .stage-shell {
-  padding-right: clamp(64px, 6vw, 88px);
-}
-
-.method-stage.stage-right .stage-header {
-  margin-left: auto;
-  text-align: right;
-}
-
-/* Every plane uses the same editorial ratio. Odd planes explain on the left;
-   even planes reverse the composition so the visual path keeps moving. */
-.method-stage .stage-layout {
-  display: grid;
-  grid-template-columns: minmax(230px, 1fr) minmax(0, 2fr);
-  gap: clamp(32px, 5vw, 72px);
-  align-items: center;
-}
-
-.method-stage.stage-right .stage-layout {
-  grid-template-columns: minmax(0, 2fr) minmax(230px, 1fr);
-}
-
-.method-stage.stage-right .stage-copy {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.method-stage.stage-right .stage-visual {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.method-stage .stage-copy,
-.method-stage .stage-visual {
-  min-width: 0;
-}
-
-.method-stage .stage-copy {
-  max-width: 390px;
-}
-
-.method-stage.stage-right .stage-copy {
-  justify-self: end;
-}
-
-.method-stage .stage-heading {
-  margin: 0 0 var(--space-3);
-  color: var(--ink-display);
-  font-family: var(--font-display);
-  font-size: clamp(1.75rem, 2.35vw, 2.35rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.04;
-  white-space: pre-line;
-}
-
-.method-stage .stage-intro {
-  margin: 0;
-  color: var(--ink-muted);
-  font-size: clamp(0.95rem, 1.1vw, 1.04rem);
-  line-height: 1.58;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   /* Progressive enhancement only after the SVG path is measured. If JS never
      initializes, content remains visible instead of getting stuck in a hidden
@@ -277,33 +204,4 @@ html[data-method-path-ready='true'] .method-journey .thread-curve {
     transform-origin: center;
     will-change: transform, opacity;
   }
-}
-
-@media (max-width: 760px) {
-  .method-stage.stage-left .stage-shell,
-  .method-stage.stage-right .stage-shell {
-    padding-left: 52px;
-    padding-right: 0;
-  }
-
-  .method-stage.stage-right .stage-header {
-    margin-left: 0;
-    text-align: left;
-  }
-
-  .method-stage .stage-layout,
-  .method-stage.stage-right .stage-layout {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-6);
-  }
-
-  .method-stage.stage-right .stage-copy,
-  .method-stage.stage-right .stage-visual {
-    grid-column: 1;
-  }
-
-  .method-stage.stage-right .stage-copy { grid-row: 1; }
-  .method-stage.stage-right .stage-visual { grid-row: 2; }
-  .method-stage .stage-copy { max-width: 34rem; }
-  .method-stage.stage-right .stage-copy { justify-self: start; }
 }

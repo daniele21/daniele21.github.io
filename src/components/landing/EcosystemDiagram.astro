@@ -1,335 +1,1290 @@
 ---
 /**
- * EcosystemDiagram.astro
- * Shows the unified execution layer across desktop, Android, local speech and cloud fallback.
- * Renders interactive proof nodes linking directly to the infrastructure artifacts.
+ * Native, responsive view of the Local AI execution layer.
+ * The visual uses the landing's canonical tokens so it stays crisp and
+ * consistent across themes, breakpoints and interaction states.
  */
-import { landingData } from '../../content/locales/en/landing';
-
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
+
+const inputs = [
+  { id: 'text', label: 'Text' },
+  { id: 'voice', label: 'Voice' },
+  { id: 'mobile', label: 'Mobile' },
+];
+
+const systems = [
+  {
+    id: 'llm',
+    tag: 'DESKTOP · SERVER',
+    title: 'Local LLM Server',
+    role: 'Multi-model runtime',
+    href: '/local-llm-server',
+    logoPath: 'images/local-llm-server/logo.png',
+  },
+  {
+    id: 'asr',
+    tag: 'SPEECH · AUDIO',
+    title: 'Local ASR Server',
+    role: 'Private speech-to-text',
+    href: '/local-asr-server',
+    logoPath: null,
+  },
+  {
+    id: 'android',
+    tag: 'ON-DEVICE',
+    title: 'Android Harness',
+    role: 'Mobile inference lab',
+    href: '/android-local-llm-harness',
+    logoPath: 'images/harness/logo.svg',
+  },
+];
 ---
 
 <div class="ecosystem-diagram" aria-label="Local AI Execution Layer Architecture">
-  <!-- Top: Application Layer -->
-  <div class="ecosystem-top">
-    <div class="app-consumer-node">
-      <span class="node-kicker">CONSUMER LAYER</span>
-      <strong class="node-title">Applications & Products</strong>
-      <span class="node-sub">Desktop App · Mobile Client · Workflow Automation</span>
+  <header class="diagram-header">
+    <div class="diagram-heading">
+      <span class="signal-dot" aria-hidden="true"></span>
+      <span>LOCAL AI EXECUTION LAYER</span>
     </div>
-  </div>
+    <span class="diagram-status">APP-READY RUNTIME</span>
+  </header>
 
-  <!-- Gateway Boundary Line -->
-  <div class="ecosystem-boundary" aria-hidden="true">
-    <div class="boundary-line"></div>
-    <span class="boundary-label">STABLE RUNTIME & API BOUNDARY (OpenAI-compatible)</span>
-    <div class="boundary-line"></div>
-  </div>
+  <div class="diagram-body">
+    <ul class="input-grid" aria-label="Application inputs">
+      {inputs.map((input) => (
+        <li class={`input-node input-node--${input.id}`}>
+          <span class="input-icon" aria-hidden="true">
+            {input.id === 'text' && (
+              <svg viewBox="0 0 48 48">
+                <path d="M12 5h17l8 8v29H12z"></path>
+                <path d="M29 5v9h9M18 22h13M18 28h10M18 34h7"></path>
+                <path class="input-icon__accent" d="m31 30 10 4-4.5 2-2 4.5z"></path>
+              </svg>
+            )}
+            {input.id === 'voice' && (
+              <svg viewBox="0 0 48 48">
+                <path d="M4 26v-4M9 31V17M14 35V13M19 30V18M24 27v-6"></path>
+                <rect x="31" y="12" width="9" height="18" rx="4.5"></rect>
+                <path d="M27.5 25.5v1a8 8 0 0 0 16 0v-1M35.5 34.5V42M31 42h9"></path>
+              </svg>
+            )}
+            {input.id === 'mobile' && (
+              <svg viewBox="0 0 48 48">
+                <rect x="13" y="4" width="22" height="40" rx="5"></rect>
+                <path d="M20 8h8M21 39h6"></path>
+                <circle class="input-icon__pulse input-icon__pulse--outer" cx="24" cy="24" r="8"></circle>
+                <circle class="input-icon__pulse input-icon__pulse--inner" cx="24" cy="24" r="3"></circle>
+              </svg>
+            )}
+          </span>
+          <span class="input-label">{input.label}</span>
+        </li>
+      ))}
+    </ul>
 
-  <!-- Main Execution Grid: 3 Core Nodes + Fallback -->
-  <div class="ecosystem-nodes-grid">
-    <!-- Node 1: Local LLM Server -->
-    <a href={resolveHref('/local-llm-server')} class="system-node node--desktop">
-      <div class="node-badge">DESKTOP / SERVER</div>
-      <div class="node-identity">
-        <div class="node-icon-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
-        </div>
-        <div class="node-texts">
-          <h4 class="system-name">Local LLM Server <span class="arrow-indicator">↗</span></h4>
-          <p class="system-role">Multi-model runtime · GGUF & MLX</p>
-        </div>
-      </div>
-      <div class="node-capabilities">
-        <span>Concurrency</span>
-        <span>Telemetry</span>
-        <span>Streaming</span>
-      </div>
-    </a>
+    <div class="flow-connector" aria-hidden="true"><span></span></div>
 
-    <!-- Node 2: Local ASR Server -->
-    <a href={resolveHref('/local-asr-server')} class="system-node node--speech">
-      <div class="node-badge">SPEECH PRIMITIVE</div>
-      <div class="node-identity">
-        <div class="node-icon-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-            <line x1="12" y1="19" x2="12" y2="23"></line>
-            <line x1="8" y1="23" x2="16" y2="23"></line>
-          </svg>
-        </div>
-        <div class="node-texts">
-          <h4 class="system-name">Local ASR Server <span class="arrow-indicator">↗</span></h4>
-          <p class="system-role">Private speech-to-text (Whisper)</p>
-        </div>
-      </div>
-      <div class="node-capabilities">
-        <span>Real-time</span>
-        <span>Zero Network</span>
-        <span>Streaming</span>
-      </div>
-    </a>
-
-    <!-- Node 3: Android Local LLM Harness -->
-    <a href={resolveHref('/android-local-llm-harness')} class="system-node node--mobile">
-      <div class="node-badge">ON-DEVICE / MOBILE</div>
-      <div class="node-identity">
-        <div class="node-icon-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-            <line x1="12" y1="18" x2="12.01" y2="18"></line>
-          </svg>
-        </div>
-        <div class="node-texts">
-          <h4 class="system-name">Android Harness <span class="arrow-indicator">↗</span></h4>
-          <p class="system-role">On-device inference & thermals</p>
-        </div>
-      </div>
-      <div class="node-capabilities">
-        <span>GGUF / NPU</span>
-        <span>Memory Bounds</span>
-        <span>AIDL Service</span>
-      </div>
-    </a>
-  </div>
-
-  <!-- Bottom: Fallback / External Layer -->
-  <div class="ecosystem-fallback" aria-label="Optional Cloud Boundary">
-    <div class="fallback-pill">
-      <span class="fallback-dot"></span>
-      <span>Optional Cloud Fallback (Strictly Opt-in for Frontier Reasoning)</span>
+    <div class="interface-band">
+      <span class="interface-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2.5 20 6v5.5c0 5-2.7 8.2-8 10-5.3-1.8-8-5-8-10V6z"></path>
+          <path d="m8.5 12 2.2 2.2 4.8-5"></path>
+        </svg>
+      </span>
+      <span class="interface-copy">
+        <strong>Local AI Interface</strong>
+        <span>One stable boundary for applications</span>
+      </span>
+      <span class="boundary-label">OPENAI-COMPATIBLE</span>
     </div>
+
+    <div class="flow-connector" aria-hidden="true"><span></span></div>
+
+    <div class="system-map">
+      <section class="local-runtime" aria-labelledby="local-runtime-title">
+        <header class="runtime-header">
+          <span>
+            <span class="runtime-kicker">WHAT I BUILD</span>
+            <strong id="local-runtime-title">Local execution layer</strong>
+          </span>
+          <span class="runtime-status"><span aria-hidden="true"></span> 3 SYSTEMS</span>
+        </header>
+
+        <div class="project-grid">
+          {systems.map((system) => (
+            <a
+              href={resolveHref(system.href)}
+              class={`project-card project-card--${system.id}`}
+              aria-label={`Explore ${system.title}`}
+            >
+              <div class="project-card__topline">
+                <div class="project-icon-box">
+                  {system.logoPath ? (
+                    <img
+                      src={resolveHref(system.logoPath)}
+                      alt={`${system.title} logo`}
+                      class="project-logo-img"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span class="project-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M4 13v-2M8 17V7M12 20V4M16 17V7M20 13v-2" stroke-width="2.2" stroke-linecap="round"></path>
+                      </svg>
+                    </span>
+                  )}
+                </div>
+                <span class="project-action" aria-hidden="true">↗</span>
+              </div>
+              <span class="project-tag">{system.tag}</span>
+              <strong class="project-title">{system.title}</strong>
+              <span class="project-role">{system.role}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <aside class="cloud-branch" aria-label="Optional cloud capabilities">
+        <span class="cloud-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 18h10a4 4 0 0 0 .6-8A6 6 0 0 0 6.2 8.8 4.6 4.6 0 0 0 7 18Z"></path>
+          </svg>
+        </span>
+        <span class="cloud-kicker">OPTIONAL</span>
+        <strong>Cloud</strong>
+        <ul>
+          <li>Scale</li>
+          <li>Frontier models</li>
+          <li>Specialist services</li>
+        </ul>
+      </aside>
+    </div>
+
+    <div class="flow-connector flow-connector--output" aria-hidden="true"><span></span></div>
+
+    <ul class="target-grid" aria-label="Local execution targets">
+      <li class="target-node target-node--desktop">
+        <span class="endpoint-visual" aria-hidden="true">
+          <svg viewBox="50 0 160 96">
+            <defs>
+              <linearGradient id="desktop-screen" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#0a1736"></stop>
+                <stop offset="1" stop-color="#102b59"></stop>
+              </linearGradient>
+            </defs>
+            <rect class="endpoint-shell" x="58" y="10" width="108" height="62" rx="8"></rect>
+            <rect fill="url(#desktop-screen)" x="64" y="16" width="96" height="48" rx="4"></rect>
+            <path class="endpoint-ui-line" d="M72 23h22M72 29h14M72 53h22"></path>
+            <path class="endpoint-network" d="m103 40 10-9 15 4 8 12-14 8-14-5zM113 31l9 24M128 35l-20 15M103 40l33 7"></path>
+            <circle class="endpoint-network-node" cx="103" cy="40" r="2.4"></circle>
+            <circle class="endpoint-network-node" cx="113" cy="31" r="2.4"></circle>
+            <circle class="endpoint-network-node" cx="128" cy="35" r="2.4"></circle>
+            <circle class="endpoint-network-node" cx="136" cy="47" r="2.4"></circle>
+            <circle class="endpoint-network-node" cx="122" cy="55" r="2.4"></circle>
+            <circle class="endpoint-network-node" cx="108" cy="50" r="2.4"></circle>
+            <path class="endpoint-stand" d="M104 72h16v7M120 79h18M96 79h24"></path>
+            <g class="endpoint-server">
+              <rect x="174" y="45" width="26" height="32" rx="5"></rect>
+              <path d="M181 52h12M181 58h12"></path>
+              <circle cx="187" cy="69" r="2"></circle>
+            </g>
+          </svg>
+        </span>
+        <span class="target-label">macOS / Desktop</span>
+      </li>
+      <li class="target-node target-node--mobile">
+        <span class="endpoint-visual" aria-hidden="true">
+          <svg viewBox="85 0 70 96">
+            <defs>
+              <linearGradient id="mobile-screen" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#081c32"></stop>
+                <stop offset="1" stop-color="#0b3b47"></stop>
+              </linearGradient>
+            </defs>
+            <rect class="endpoint-shell" x="94" y="5" width="52" height="78" rx="11"></rect>
+            <rect fill="url(#mobile-screen)" x="100" y="12" width="40" height="62" rx="6"></rect>
+            <path class="endpoint-speaker" d="M114 9h12"></path>
+            <rect class="endpoint-chip" x="108" y="31" width="24" height="24" rx="5"></rect>
+            <path class="endpoint-chip-pins" d="M113 27v4M120 27v4M127 27v4M113 55v4M120 55v4M127 55v4M104 36h4M104 43h4M104 50h4M132 36h4M132 43h4M132 50h4"></path>
+            <path class="endpoint-network" d="m113 43 7-6 7 6-7 7z"></path>
+            <circle class="endpoint-network-node" cx="113" cy="43" r="2"></circle>
+            <circle class="endpoint-network-node" cx="120" cy="37" r="2"></circle>
+            <circle class="endpoint-network-node" cx="127" cy="43" r="2"></circle>
+            <circle class="endpoint-network-node" cx="120" cy="50" r="2"></circle>
+            <circle class="endpoint-home" cx="120" cy="78" r="1.8"></circle>
+          </svg>
+        </span>
+        <span class="target-label">Android / On-device</span>
+      </li>
+    </ul>
   </div>
 </div>
 
 <style>
   .ecosystem-diagram {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(14px, 1.8vw, 20px);
-    padding: clamp(20px, 2.6vw, 30px);
-    background: var(--surface-card);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card);
+    --blueprint-hairline: rgba(188, 208, 255, 0.16);
+    --blueprint-muted: #aab8d2;
+    --blueprint-blue: #7fa5ff;
+
+    position: relative;
+    isolation: isolate;
     width: 100%;
+    overflow: visible;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    animation: blueprint-arrive var(--duration-slow) var(--ease-out-expo) both;
   }
 
-  /* Consumer Layer */
-  .ecosystem-top {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+  .ecosystem-diagram::before {
+    content: none;
   }
 
-  .app-consumer-node {
+  .diagram-header {
+    min-height: 44px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    text-align: center;
-    width: 100%;
-    padding: 10px 16px;
-    background: var(--surface-subtle);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-sm);
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: 0 0 10px;
+    background: transparent;
+    border-bottom: 0;
   }
 
-  .node-kicker {
+  .diagram-heading,
+  .diagram-status,
+  .boundary-label,
+  .runtime-kicker,
+  .runtime-status,
+  .project-tag,
+  .cloud-kicker {
     font-family: var(--font-display);
     font-size: var(--text-badge);
     font-weight: 850;
-    letter-spacing: 0.08em;
-    color: var(--ink-subtle);
+    letter-spacing: 0.075em;
+    line-height: 1.2;
   }
 
-  .node-title {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    color: var(--ink-display);
-    font-weight: 800;
-  }
-
-  .node-sub {
-    font-size: var(--text-caption);
-    color: var(--ink-muted);
-  }
-
-  /* Boundary Indicator */
-  .ecosystem-boundary {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-  }
-
-  .boundary-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border-strong);
-    border-top: 1px dashed var(--accent-blue);
-    opacity: 0.5;
-  }
-
-  .boundary-label {
-    font-family: var(--font-mono);
-    font-size: var(--text-badge);
-    font-weight: 750;
-    color: var(--accent-blue-dark);
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-  }
-
-  /* Execution Nodes Grid */
-  .ecosystem-nodes-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(10px, 1.4vw, 16px);
-  }
-
-  .system-node {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 12px 14px;
-    background: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
-    box-shadow: 0 2px 8px rgba(8, 19, 51, 0.03);
-  }
-
-  .system-node:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent-blue);
-    box-shadow: 0 8px 20px rgba(20, 91, 255, 0.1);
-  }
-
-  .node-badge {
-    font-family: var(--font-display);
-    font-size: var(--text-badge);
-    font-weight: 850;
-    letter-spacing: 0.06em;
-    color: var(--accent-blue);
-  }
-
-  .node-identity {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .node-icon-box {
-    width: 32px;
-    height: 32px;
-    display: grid;
-    place-items: center;
-    border-radius: 8px;
-    background: var(--surface-blue-subtle);
-    color: var(--accent-blue-dark);
-    flex-shrink: 0;
-  }
-
-  .node-icon-box svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .node-texts {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  .system-name {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: var(--ink-display);
-    line-height: 1.25;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .arrow-indicator {
-    font-size: var(--text-badge);
-    color: var(--accent-blue);
-    opacity: 0;
-    transition: opacity var(--duration-fast) ease, transform var(--duration-fast) ease;
-  }
-
-  .system-node:hover .arrow-indicator {
-    opacity: 1;
-    transform: translate(1px, -1px);
-  }
-
-  .system-role {
-    margin: 2px 0 0;
-    font-size: var(--text-caption);
-    color: var(--ink-muted);
-    line-height: 1.35;
-  }
-
-  .node-capabilities {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-top: auto;
-    padding-top: 6px;
-    border-top: 1px solid var(--border-subtle);
-  }
-
-  .node-capabilities span {
-    font-size: var(--text-badge);
-    font-weight: 650;
-    color: var(--ink);
-    background: var(--surface-card);
-    border: 1px solid var(--border-subtle);
-    padding: 2px 6px;
-    border-radius: 4px;
-  }
-
-  /* Fallback Pill */
-  .ecosystem-fallback {
-    display: flex;
-    justify-content: center;
-  }
-
-  .fallback-pill {
+  .diagram-heading {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 14px;
-    background: var(--surface-subtle);
-    border: 1px dashed var(--border-strong);
-    border-radius: var(--radius-full);
-    font-size: var(--text-caption);
-    font-weight: 650;
-    color: var(--ink-muted);
+    color: var(--ink-display);
+    font-size: 0.78rem;
   }
 
-  .fallback-dot {
+  .signal-dot {
     width: 6px;
     height: 6px;
+    flex: 0 0 auto;
     border-radius: 50%;
-    background: #94a3b8;
+    background: var(--status-good-text);
+    box-shadow:
+      0 0 0 3px var(--status-good-bg),
+      0 0 12px rgba(21, 128, 61, 0.24);
+  }
+
+  .diagram-status {
+    color: var(--accent-blue-dark);
+    font-size: 0.74rem;
+  }
+
+  .diagram-body {
+    position: relative;
+    padding: 14px clamp(12px, 1.8vw, 18px) 16px;
+  }
+
+  .input-grid,
+  .target-grid,
+  .cloud-branch ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .input-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(14px, 4vw, 40px);
+    background: transparent;
+  }
+
+  .input-node {
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 4px 8px;
+    color: var(--ink-display);
+  }
+
+  .input-icon,
+  .interface-icon,
+  .project-icon,
+  .cloud-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+  }
+
+  .input-icon {
+    width: 38px;
+    height: 38px;
+    color: var(--accent-blue-dark);
+    filter: drop-shadow(0 5px 8px rgba(20, 91, 255, 0.18));
+  }
+
+  .input-icon svg {
+    width: 34px;
+    height: 34px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.05;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    overflow: visible;
+  }
+
+  .input-icon__accent {
+    fill: rgba(20, 91, 255, 0.15);
+  }
+
+  .input-icon__pulse--outer {
+    fill: rgba(56, 189, 248, 0.09);
+    stroke: rgba(56, 189, 248, 0.48);
+    stroke-width: 1.4;
+  }
+
+  .input-icon__pulse--inner {
+    fill: #38bdf8;
+    stroke: none;
+  }
+
+  .input-label {
+    color: var(--ink-subtle);
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    line-height: 1.2;
+  }
+
+  .input-node--mobile .input-icon {
+    filter: drop-shadow(0 5px 8px rgba(20, 91, 255, 0.18)) drop-shadow(0 0 8px rgba(56, 189, 248, 0.2));
+  }
+
+  .flow-connector {
+    height: 16px;
+    display: grid;
+    place-items: center;
+  }
+
+  .flow-connector span {
+    width: 1px;
+    height: 12px;
+    position: relative;
+    display: block;
+    background: linear-gradient(var(--border-focus), rgba(20, 91, 255, 0.42));
+  }
+
+  .flow-connector span::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    box-shadow: 0 0 8px rgba(20, 91, 255, 0.7);
+    transform: translateX(-50%);
+    animation: signal-flow 2.4s var(--ease-in-out-smooth) infinite;
+  }
+
+  .flow-connector span::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -1px;
+    width: 5px;
+    height: 5px;
+    border-right: 1.5px solid var(--border-focus);
+    border-bottom: 1.5px solid var(--border-focus);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .interface-band {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 8px 6px;
+    background: transparent;
+    border-block: 1px solid rgba(88, 116, 176, 0.18);
+    border-inline: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .interface-band::after {
+    content: none;
+  }
+
+  .interface-icon {
+    width: 28px;
+    height: 28px;
+    color: rgba(29, 78, 216, 0.82);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .interface-icon svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.65;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .interface-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .interface-copy strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 750;
+    letter-spacing: -0.015em;
+  }
+
+  .interface-copy span {
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+    line-height: 1.25;
+  }
+
+  .boundary-label {
+    padding: 0;
+    color: rgba(29, 78, 216, 0.68);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    font-size: 0.62rem;
+    font-weight: 750;
+    letter-spacing: 0.085em;
+    white-space: nowrap;
+  }
+
+  .system-map {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    align-items: stretch;
+  }
+
+  .local-runtime {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--ink-inverse);
+    background:
+      radial-gradient(circle at 12% 112%, rgba(14, 165, 233, 0.1), transparent 38%),
+      radial-gradient(circle at 52% 118%, rgba(245, 158, 11, 0.055), transparent 34%),
+      radial-gradient(circle at 92% 110%, rgba(16, 185, 129, 0.08), transparent 38%),
+      radial-gradient(circle at 84% -10%, rgba(37, 99, 235, 0.24), transparent 42%),
+      linear-gradient(138deg, #07132d 0%, #081936 48%, #0a2049 100%);
+    border: 1px solid rgba(96, 165, 250, 0.4);
+    border-radius: 16px;
+    box-shadow:
+      0 22px 46px rgba(8, 19, 51, 0.22),
+      0 8px 18px rgba(37, 99, 235, 0.07),
+      0 0 0 1px rgba(20, 91, 255, 0.07),
+      inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  }
+
+  .local-runtime::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(188, 208, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(188, 208, 255, 0.025) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: linear-gradient(to bottom, black, transparent);
+  }
+
+  .local-runtime::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.045) 0%,
+      transparent 22%,
+      transparent 68%,
+      rgba(59, 130, 246, 0.045) 100%
+    );
+  }
+
+  .runtime-header,
+  .project-grid {
+    position: relative;
+    z-index: 1;
+  }
+
+  .runtime-header {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 13px 18px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.018), rgba(59, 130, 246, 0.035));
+    border-bottom: 1px solid var(--blueprint-hairline);
+  }
+
+  .runtime-header > span:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .runtime-kicker {
+    color: rgba(127, 165, 255, 0.86);
+    font-size: 0.64rem;
+  }
+
+  .runtime-header strong {
+    color: var(--ink-inverse);
+    font-family: var(--font-display);
+    font-size: 1.04rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .runtime-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(134, 239, 172, 0.78);
+    font-size: 0.66rem;
+    white-space: nowrap;
+  }
+
+  .runtime-status span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 6px rgba(134, 239, 172, 0.3);
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    padding: 0;
+  }
+
+  .project-card {
+    --project-accent-rgb: 59, 130, 246;
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-width: 0;
+    min-height: 178px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 18px 22px;
+    color: var(--ink-inverse);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 46%);
+    border: 0;
+    border-radius: 0;
+    text-decoration: none;
+    transition:
+      transform var(--duration-base) var(--ease-out-expo),
+      opacity var(--duration-base) ease,
+      filter var(--duration-base) ease,
+      background-color var(--duration-base) ease,
+      box-shadow var(--duration-base) ease;
+  }
+
+  .project-card::before,
+  .project-card::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .project-card::before {
+    inset: 0;
+    opacity: 0;
+    background:
+      radial-gradient(circle at 18% 18%, rgba(var(--project-accent-rgb), 0.22), transparent 48%),
+      linear-gradient(135deg, rgba(var(--project-accent-rgb), 0.08), transparent 62%);
+    transform: scale(0.94);
+    transition:
+      opacity var(--duration-base) ease,
+      transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  .project-card::after {
+    right: 18px;
+    bottom: 0;
+    left: 18px;
+    height: 2px;
+    opacity: 0;
+    background: linear-gradient(90deg, transparent, rgba(var(--project-accent-rgb), 0.96), transparent);
+    box-shadow: 0 0 16px rgba(var(--project-accent-rgb), 0.55);
+    transform: scaleX(0.35);
+    transition:
+      opacity var(--duration-fast) ease,
+      transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  .project-card + .project-card {
+    border-left: 1px solid rgba(188, 208, 255, 0.13);
+  }
+
+  .project-card:hover,
+  .project-card:focus-visible {
+    z-index: 2;
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow:
+      inset 0 0 0 1px rgba(var(--project-accent-rgb), 0.4),
+      inset 0 -1px 0 rgba(var(--project-accent-rgb), 0.86),
+      0 18px 32px rgba(0, 0, 0, 0.22),
+      0 0 30px rgba(var(--project-accent-rgb), 0.12);
+  }
+
+  .project-card:hover::before,
+  .project-card:focus-visible::before,
+  .project-card:hover::after,
+  .project-card:focus-visible::after {
+    opacity: 1;
+    transform: none;
+  }
+
+  .project-grid:hover .project-card:not(:hover),
+  .project-grid:has(.project-card:focus-visible) .project-card:not(:focus-visible) {
+    opacity: 0.56;
+    filter: saturate(0.65) brightness(0.8);
+  }
+
+  .project-card:focus-visible {
+    outline: none;
+    box-shadow:
+      inset 0 0 0 2px rgba(var(--project-accent-rgb), 0.82),
+      inset 0 -2px 0 rgba(var(--project-accent-rgb), 0.92),
+      0 18px 32px rgba(0, 0, 0, 0.22),
+      0 0 34px rgba(var(--project-accent-rgb), 0.16);
+  }
+
+  .project-card__topline {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: 28px;
+    padding-bottom: 0;
+  }
+
+  .project-icon-box {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  }
+
+  .project-logo-img {
+    width: 31px;
+    height: 31px;
+    border-radius: 7px;
+    object-fit: contain;
+  }
+
+  .project-icon {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+  }
+
+  .project-icon svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .project-action {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    color: rgba(200, 215, 245, 0.58);
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 800;
+    line-height: 1;
+    transition:
+      color var(--duration-fast) ease,
+      background-color var(--duration-fast) ease,
+      border-color var(--duration-fast) ease,
+      transform var(--duration-fast) ease;
+  }
+
+  /* Distinct Color Theme 1: Local LLM Server (Sky / Azure Blue) */
+  .project-card--llm .project-icon-box {
+    background: linear-gradient(145deg, rgba(56, 189, 248, 0.16), rgba(14, 165, 233, 0.065));
+    border: 1px solid rgba(56, 189, 248, 0.24);
+    color: #38bdf8;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 8px 20px rgba(14, 165, 233, 0.07);
+  }
+  .project-card--llm {
+    --project-accent-rgb: 56, 189, 248;
+  }
+  .project-card--llm .project-tag {
+    color: #38bdf8;
+  }
+  .project-card--llm:hover,
+  .project-card--llm:focus-visible {
+    background:
+      radial-gradient(circle at 18% 12%, rgba(14, 165, 233, 0.18), transparent 52%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 58%);
+  }
+  .project-card--llm:hover .project-icon-box,
+  .project-card--llm:focus-visible .project-icon-box {
+    transform: translateY(-2px) scale(1.07);
+    box-shadow: 0 0 22px rgba(56, 189, 248, 0.42);
+  }
+  .project-card--llm:hover .project-action,
+  .project-card--llm:focus-visible .project-action {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.15);
+    box-shadow:
+      inset 0 0 0 1px rgba(56, 189, 248, 0.3),
+      0 0 15px rgba(56, 189, 248, 0.2);
+    transform: translate(2px, -2px) scale(1.06);
+  }
+
+  /* Distinct Color Theme 2: Local ASR Server (Warm Audio Amber / Gold) */
+  .project-card--asr .project-icon-box {
+    background: linear-gradient(145deg, rgba(251, 191, 36, 0.16), rgba(245, 158, 11, 0.065));
+    border: 1px solid rgba(251, 191, 36, 0.24);
+    color: #fbbf24;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 8px 20px rgba(245, 158, 11, 0.06);
+  }
+  .project-card--asr {
+    --project-accent-rgb: 251, 191, 36;
+  }
+  .project-card--asr .project-tag {
+    color: #fbbf24;
+  }
+  .project-card--asr:hover,
+  .project-card--asr:focus-visible {
+    background:
+      radial-gradient(circle at 18% 12%, rgba(245, 158, 11, 0.17), transparent 52%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 58%);
+  }
+  .project-card--asr:hover .project-icon-box,
+  .project-card--asr:focus-visible .project-icon-box {
+    transform: translateY(-2px) scale(1.07);
+    box-shadow: 0 0 22px rgba(251, 191, 36, 0.38);
+  }
+  .project-card--asr:hover .project-action,
+  .project-card--asr:focus-visible .project-action {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.14);
+    box-shadow:
+      inset 0 0 0 1px rgba(251, 191, 36, 0.28),
+      0 0 15px rgba(251, 191, 36, 0.18);
+    transform: translate(2px, -2px) scale(1.06);
+  }
+
+  /* Distinct Color Theme 3: Android Harness (Emerald Android Green) */
+  .project-card--android .project-icon-box {
+    background: linear-gradient(145deg, rgba(52, 211, 153, 0.16), rgba(16, 185, 129, 0.065));
+    border: 1px solid rgba(52, 211, 153, 0.24);
+    color: #34d399;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 8px 20px rgba(16, 185, 129, 0.06);
+  }
+  .project-card--android {
+    --project-accent-rgb: 52, 211, 153;
+  }
+  .project-card--android .project-tag {
+    color: #34d399;
+  }
+  .project-card--android:hover,
+  .project-card--android:focus-visible {
+    background:
+      radial-gradient(circle at 18% 12%, rgba(16, 185, 129, 0.17), transparent 52%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 58%);
+  }
+  .project-card--android:hover .project-icon-box,
+  .project-card--android:focus-visible .project-icon-box {
+    transform: translateY(-2px) scale(1.07);
+    box-shadow: 0 0 22px rgba(52, 211, 153, 0.38);
+  }
+  .project-card--android:hover .project-action,
+  .project-card--android:focus-visible .project-action {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.14);
+    box-shadow:
+      inset 0 0 0 1px rgba(52, 211, 153, 0.28),
+      0 0 15px rgba(52, 211, 153, 0.18);
+    transform: translate(2px, -2px) scale(1.06);
+  }
+
+  .project-tag {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+  }
+
+  .project-title {
+    color: var(--ink-inverse);
+    font-family: var(--font-display);
+    font-size: clamp(0.94rem, 1.35vw, 1.04rem);
+    font-weight: 760;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    text-wrap: balance;
+    transition:
+      color var(--duration-fast) ease,
+      text-shadow var(--duration-fast) ease;
+  }
+
+  .project-role {
+    margin-top: 5px;
+    color: rgba(170, 184, 210, 0.82);
+    font-size: 0.73rem;
+    line-height: 1.25;
+    transition: color var(--duration-fast) ease;
+  }
+
+  .project-card:hover .project-title,
+  .project-card:focus-visible .project-title {
+    color: #ffffff;
+    text-shadow: 0 0 18px rgba(var(--project-accent-rgb), 0.14);
+  }
+
+  .project-card:hover .project-role,
+  .project-card:focus-visible .project-role {
+    color: rgba(224, 232, 248, 0.9);
+  }
+
+  .cloud-branch {
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    min-height: 38px;
+    width: fit-content;
+    max-width: 100%;
+    padding: 6px 12px;
+    color: var(--accent-violet);
+    background: rgba(250, 248, 255, 0.68);
+    border: 1px solid rgba(124, 58, 237, 0.16);
+    border-radius: 10px;
+    box-shadow: 0 8px 18px rgba(124, 58, 237, 0.06);
+  }
+
+  .cloud-branch::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    height: 6px;
+    border-left: 1px dashed rgba(124, 58, 237, 0.4);
+  }
+
+  .cloud-icon {
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border-radius: 5px;
+  }
+
+  .cloud-icon svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .cloud-kicker {
+    margin-left: 6px;
+    font-size: 0.7rem;
+    color: var(--accent-violet);
+  }
+
+  .cloud-branch > strong {
+    margin-left: 4px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.84rem;
+    font-weight: 800;
+  }
+
+  .cloud-branch ul {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 2px 10px;
+    margin-left: 10px;
+  }
+
+  .cloud-branch li {
+    position: relative;
+    padding-left: 8px;
+    color: var(--ink-subtle);
+    font-size: 0.76rem;
+    line-height: 1.25;
+  }
+
+  .cloud-branch li::before {
+    content: '';
+    position: absolute;
+    top: 0.5em;
+    left: 0;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--accent-violet);
+  }
+
+  .flow-connector--output {
+    height: 16px;
+  }
+
+  .target-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(20px, 5vw, 52px);
+    background: transparent;
+  }
+
+  .target-node {
+    position: relative;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 12px;
+  }
+
+  .endpoint-visual {
+    width: min(100%, 150px);
+    height: 88px;
+    display: grid;
+    place-items: center;
+  }
+
+  .target-node--mobile .endpoint-visual {
+    width: 66px;
+  }
+
+  .target-label {
+    max-width: 78px;
+    color: var(--ink-subtle);
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  .endpoint-visual svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .endpoint-shell {
+    fill: #ffffff;
+    stroke: rgba(29, 78, 216, 0.8);
+    stroke-width: 1.8;
+  }
+
+  .target-node--mobile .endpoint-shell {
+    stroke: rgba(13, 148, 136, 0.82);
+  }
+
+  .endpoint-ui-line,
+  .endpoint-stand,
+  .endpoint-speaker {
+    fill: none;
+    stroke: #7fa5ff;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .endpoint-network {
+    fill: none;
+    stroke: #67e8f9;
+    stroke-width: 1.35;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .target-node--mobile .endpoint-network {
+    stroke: #6ee7b7;
+  }
+
+  .endpoint-network-node {
+    fill: #d8fbff;
+    stroke: #38bdf8;
+    stroke-width: 1.2;
+  }
+
+  .target-node--mobile .endpoint-network-node {
+    fill: #d8fff3;
+    stroke: #34d399;
+  }
+
+  .endpoint-server rect {
+    fill: #0e2348;
+    stroke: rgba(59, 130, 246, 0.78);
+    stroke-width: 1.5;
+  }
+
+  .endpoint-server path {
+    fill: none;
+    stroke: #7fa5ff;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+  }
+
+  .endpoint-server circle {
+    fill: #38bdf8;
+  }
+
+  .endpoint-chip {
+    fill: rgba(5, 150, 105, 0.14);
+    stroke: #34d399;
+    stroke-width: 1.5;
+  }
+
+  .endpoint-chip-pins {
+    fill: none;
+    stroke: #34d399;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+  }
+
+  .endpoint-home {
+    fill: #34d399;
+  }
+
+  @keyframes blueprint-arrive {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes signal-flow {
+    0%,
+    20% {
+      opacity: 0;
+      transform: translate(-50%, 0);
+    }
+    45% {
+      opacity: 1;
+    }
+    80%,
+    100% {
+      opacity: 0;
+      transform: translate(-50%, 17px);
+    }
   }
 
   @media (max-width: 760px) {
-    .ecosystem-nodes-grid {
-      grid-template-columns: 1fr;
+    .interface-band {
+      grid-template-columns: auto minmax(0, 1fr);
     }
 
     .boundary-label {
-      font-size: var(--text-badge);
+      grid-column: 2;
+      justify-self: start;
+      margin-top: 2px;
+    }
+
+    .cloud-branch {
+      justify-self: stretch;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .ecosystem-diagram::before {
+      background-size: 24px 24px;
+    }
+
+    .diagram-header {
+      min-height: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    .diagram-status {
+      padding-left: 17px;
+    }
+
+    .diagram-body {
+      padding: 14px 12px;
+    }
+
+    .input-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4px;
+    }
+
+    .input-node {
+      min-height: 54px;
+      gap: 6px;
+      padding-inline: 2px;
+    }
+
+    .input-icon {
+      width: 34px;
+      height: 34px;
+    }
+
+    .input-icon svg {
+      width: 31px;
+      height: 31px;
+    }
+
+    .input-label {
+      font-size: 0.64rem;
+    }
+
+    .interface-band {
+      padding: 8px 4px;
+    }
+
+    .boundary-label {
+      grid-column: 2;
+      justify-self: start;
+      text-align: left;
+      white-space: normal;
+    }
+
+    .runtime-header {
+      align-items: flex-start;
+      padding: 14px;
+    }
+
+    .project-grid {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(127, 165, 255, 0.5) transparent;
+    }
+
+    .project-card {
+      flex: 0 0 min(78vw, 240px);
+      min-height: 176px;
+      scroll-snap-align: start;
+    }
+
+    .cloud-branch {
+      justify-content: flex-start;
+      padding: 8px 10px;
+    }
+
+    .cloud-branch ul {
+      flex-basis: 100%;
+      margin: 5px 0 0 35px;
+    }
+
+    .target-grid {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .target-grid li {
+      min-height: 90px;
+    }
+
+    .target-label {
+      max-width: 96px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .project-card::before,
+    .project-card::after,
+    .project-icon-box,
+    .project-action {
+      transition: none;
+    }
+
+    .project-card:hover,
+    .project-card:focus-visible,
+    .project-card:hover .project-icon-box,
+    .project-card:focus-visible .project-icon-box,
+    .project-card:hover .project-action,
+    .project-card:focus-visible .project-action {
+      transform: none;
     }
   }
 </style>

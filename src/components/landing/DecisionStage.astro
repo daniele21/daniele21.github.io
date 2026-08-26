@@ -1,8 +1,8 @@
 ---
-/** Plane 01: Strategy / DECIDE - Where should this workload run? */
+/** Plane 01: Strategy / DECIDE - When does Local AI actually make sense? */
 import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
-import DecisionDiagram from './DecisionDiagram.astro';
+import DecisionTable from './DecisionTable.astro';
 
 const { decisionStage } = landingData;
 ---
@@ -17,7 +17,7 @@ const { decisionStage } = landingData;
   intro={decisionStage.intro}
   handoff={decisionStage.handoff}
   nextLabel="BUILD"
-  visualLabel="Workload decision framework diagram"
+  visualLabel="Workload decision trade-off matrix"
 >
-  <DecisionDiagram />
+  <DecisionTable />
 </PlaneTemplate>

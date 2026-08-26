@@ -69,7 +69,7 @@ export interface MethodStageHandoff {
 export interface ComparisonRow {
   label: string;
   values: [string, string, string];
-  classes: [string, string, string];
+  scores: [1 | 2 | 3, 1 | 2 | 3, 1 | 2 | 3];
 }
 
 export interface DecisionStageContent {
@@ -137,6 +137,7 @@ export interface BuildStageContent {
 
 export interface ApplicationCard {
   name: string;
+  tag?: string;
   question: string;
   description: string;
   href: string;
@@ -184,11 +185,34 @@ export interface EvidenceRunRecord {
   sourceHref: string;
 }
 
+export interface MeasureSystemCard {
+  id: string;
+  title: string;
+  tag: string;
+  question: string;
+  metrics: { label: string; value: string; unit?: string; note?: string }[];
+  benchmarkProfiles?: {
+    id: string;
+    device: string;
+    platform: string;
+    deviceKind: 'mobile' | 'desktop';
+    model: string;
+    quantization: string;
+    context: string;
+    metrics: { label: string; value: string; unit?: string; note?: string }[];
+  }[];
+  statusNote: string;
+  statusType: 'planned' | 'verified' | 'authoritative';
+  href: string;
+  ctaLabel: string;
+}
+
 export interface MeasureStageContent {
   kicker: string;
   title: string;
   intro: string;
-  criteria: { icon: string; title: string; text: string }[];
+  criteria?: { icon: string; title: string; text: string }[];
+  systems: MeasureSystemCard[];
   closingMessage: string;
   handoff: MethodStageHandoff;
 }

@@ -17,10 +17,3 @@ export { evidenceData } from './locales/en/evidence';
 export { trafficMonitoringData } from './locales/en/trafficMonitoring';
 export { trafficMonitoringAndroidData } from './locales/en/trafficMonitoringAndroid';
 export { roadmapData } from './locales/en/roadmap';
-export {
-  planLinks,
-  strategyPlan,
-  infrastructurePlan,
-  useCasesPlan,
-  performancePlan,
-} from './locales/en/planDetails';
