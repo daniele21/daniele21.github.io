@@ -2,7 +2,7 @@
 /**
  * ProductSubHeader.astro
  * Shared sticky navigation for project deep-dives.
- * Keeps one predictable phase model across desktop and mobile with scroll-spy state.
+ * Keeps project identity visible while allowing archetype-specific section navigation.
  */
 export interface SubHeaderLink {
   label: string;
@@ -87,9 +87,9 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
   .subheader-inner {
     min-height: 48px;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
     gap: var(--space-4);
   }
 
@@ -97,11 +97,12 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    flex-shrink: 0;
+    min-width: 0;
   }
 
   .subheader-title-link {
     min-height: var(--touch-target-min);
+    min-width: 0;
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
@@ -120,6 +121,9 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   }
 
   .subheader-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-family: var(--font-display);
     font-size: var(--text-caption);
     font-weight: 700;
@@ -141,6 +145,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     min-width: 0;
     display: flex;
     align-items: center;
+    justify-content: center;
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -189,6 +194,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     min-height: var(--touch-target-min);
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
     padding: 5px 14px;
     border-radius: var(--radius-full);
@@ -211,26 +217,74 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   }
 
   @media (max-width: 768px) {
-    .subheader-inner {
-      width: 100%;
-      gap: 0;
+    .product-subheader {
+      min-height: 92px;
     }
 
-    .subheader-brand,
-    .subheader-cta {
+    .subheader-inner {
+      width: 100%;
+      min-height: 92px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-rows: 44px 48px;
+      column-gap: var(--space-2);
+      row-gap: 0;
+      padding-inline: 14px;
+    }
+
+    .subheader-brand {
+      grid-column: 1;
+      grid-row: 1;
+      min-width: 0;
+    }
+
+    .subheader-title-link {
+      width: 100%;
+      min-height: 44px;
+    }
+
+    .subheader-logo-img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .subheader-badge {
       display: none;
     }
 
+    .subheader-cta {
+      grid-column: 2;
+      grid-row: 1;
+      min-height: 36px;
+      padding-inline: 11px;
+    }
+
     .subheader-nav {
-      width: 100%;
+      grid-column: 1 / -1;
+      grid-row: 2;
+      width: calc(100% + 28px);
+      margin-inline: -14px;
       justify-content: flex-start;
       scroll-behavior: smooth;
       -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
       mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+      border-top: 1px solid color-mix(in srgb, var(--glass-border) 68%, transparent);
     }
 
     .subheader-links {
       padding-inline: 18px;
+    }
+
+    .subheader-link {
+      min-height: 48px;
+      padding-inline: 11px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .subheader-cta {
+      max-width: 92px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -250,7 +304,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     const links = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-sublink]'));
     if (!links.length) return;
 
-    const phaseLinks = links
+    const sectionLinks = links
       .map((link) => {
         const href = link.getAttribute('href') ?? '';
         if (!href.startsWith('#') || href === '#top') return null;
@@ -304,7 +358,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     };
 
     const updateFromScroll = () => {
-      if (!phaseLinks.length) {
+      if (!sectionLinks.length) {
         setActive(overviewLink);
         return;
       }
@@ -312,7 +366,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
       const marker = Math.max(root.getBoundingClientRect().bottom + 12, window.innerHeight * 0.28);
       let active = overviewLink;
 
-      for (const item of phaseLinks) {
+      for (const item of sectionLinks) {
         if (item.target.getBoundingClientRect().top <= marker) active = item.link;
         else break;
       }
