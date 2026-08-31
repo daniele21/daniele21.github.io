@@ -17,7 +17,7 @@ const projectPages = [
   { path: 'src/pages/local-asr-server.astro', archetype: 'infrastructure', migrated: false },
   { path: 'src/pages/closedroom.astro', archetype: 'product', migrated: false },
   { path: 'src/pages/aura-finance.astro', archetype: 'product', migrated: false },
-  { path: 'src/pages/redact-guard.astro', archetype: 'product', migrated: false },
+  { path: 'src/pages/redact-guard.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/performance-lab.astro', archetype: 'experiment', migrated: false },
   { path: 'src/pages/traffic-monitoring.astro', archetype: 'experiment', migrated: false },
   { path: 'src/pages/traffic-monitoring-android.astro', archetype: 'experiment', migrated: false },
@@ -105,6 +105,7 @@ test('shared project subheader uses canonical tokens, accessible targets and ada
   assert.match(source, /mask-image:/);
   assert.match(source, /mobileNavigation\.matches/);
   assert.match(source, /nav\.scrollTo/);
+  assert.doesNotMatch(source, /\.subheader-brand,\s*\.subheader-cta\s*\{\s*display: none/);
 });
 
 test('technical content follows the narrow-screen adaptive contract', () => {
