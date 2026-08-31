@@ -4,7 +4,6 @@
  * Product / use-case deep-dive using the shared project-page journey.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import AuraHeader from '../components/aurafinance/AuraHeader.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import ProjectPhase from '../components/project/ProjectPhase.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
@@ -52,13 +51,13 @@ const auraFinanceSchema = {
   description={auraFinanceData.meta.description}
   jsonLd={auraFinanceSchema}
 >
-  <AuraHeader baseUrl={baseUrl} slot="header" />
-
   <ProductSubHeader
     title="Aura Finance"
     badge="Active App"
+    logoPath="images/aura/logo.png"
     links={subheaderLinks}
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/personal-budget/tree/new-features' }}
+    underSiteHeader={true}
   />
 
   <div id="top" data-project-page data-project-archetype="product">
