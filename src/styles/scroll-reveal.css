@@ -1,0 +1,57 @@
+/**
+ * scroll-reveal.css
+ * CSS transition definitions for the scroll-reveal system.
+ * Elements start hidden and transition to visible when `.revealed` is added.
+ *
+ * Animation types:
+ *   - fade-up: translates up 28px + fades in
+ *   - fade-in: fades in only
+ *   - slide-left: slides in from -40px left
+ *   - slide-right: slides in from +40px right
+ *   - scale-in: scales from 0.92 + fades in
+ */
+
+/* ── Base hidden state for all reveal types ── */
+[data-reveal] {
+  opacity: 0;
+  transition:
+    opacity var(--reveal-duration, 700ms) var(--ease-out-expo),
+    transform var(--reveal-duration, 700ms) var(--ease-out-expo);
+  will-change: opacity, transform;
+}
+
+/* ── Type-specific hidden transforms ── */
+[data-reveal='fade-up'] {
+  transform: translateY(28px);
+}
+
+[data-reveal='fade-in'] {
+  transform: none;
+}
+
+[data-reveal='slide-left'] {
+  transform: translateX(-40px);
+}
+
+[data-reveal='slide-right'] {
+  transform: translateX(40px);
+}
+
+[data-reveal='scale-in'] {
+  transform: scale(0.92);
+}
+
+/* ── Revealed state — all types converge to identity ── */
+[data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+/* ── Reduced motion: instant reveal, no transform ── */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

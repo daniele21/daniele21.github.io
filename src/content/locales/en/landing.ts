@@ -51,7 +51,7 @@ export const landingData: LandingPageData = {
       titleHighlight: 'Local AI only',
       challenge: 'Does this workload really need the cloud?',
       explanation:
-        'I build and test real AI systems to find where Local, Hybrid or Cloud actually makes sense.',
+        'I build and test real AI systems to find where <strong>Local</strong>, <strong>Hybrid</strong> or <strong>Cloud</strong> actually makes sense.',
       position: 'Find the boundary with evidence, not ideology.',
       proofLine:
         'DECIDE → BUILD → TEST → MEASURE → DECIDE AGAIN',

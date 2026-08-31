@@ -2,11 +2,13 @@
 /**
  * about.astro
  * Daniele Moltisanti - World-Class Editorial Profile, Personal Story, Systems Bench, & Track Record.
- * Reconciled against LinkedIn profile, enterprise AI leadership, stAI tuned, and open-weight Local AI research.
+ * Redesigned with dramatic hero, scroll-reveal animations, sticky navigation,
+ * alternating background sections, and premium visual rhythm.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LandingHeader from '../components/landing/LandingHeader.astro';
 import AboutHero from '../components/about/AboutHero.astro';
+import AboutNav from '../components/about/AboutNav.astro';
 import AboutNow from '../components/about/AboutNow.astro';
 import AboutStory from '../components/about/AboutStory.astro';
 import AboutPhilosophy from '../components/about/AboutPhilosophy.astro';
@@ -16,6 +18,9 @@ import AboutExperience from '../components/about/AboutExperience.astro';
 import AboutRecognition from '../components/about/AboutRecognition.astro';
 import AboutCta from '../components/about/AboutCta.astro';
 import { aboutData } from '../content/locales/en/about';
+
+/* Import scroll-reveal CSS for animation transitions */
+import '../styles/scroll-reveal.css';
 
 const {
   metaTitle,
@@ -72,8 +77,11 @@ const jsonLd = {
 
   <div class="about-page">
     <div class="about-shell">
-      <!-- 1. Magazine-Grade Editorial Hero -->
+      <!-- 1. Dramatic Dark Hero -->
       <AboutHero profile={profile} />
+
+      <!-- Sticky Section Navigation (glassmorphism) -->
+      <AboutNav />
 
       <!-- 2. Real-Time "Now" Focus -->
       <AboutNow
@@ -84,7 +92,7 @@ const jsonLd = {
         items={now.items}
       />
 
-      <!-- 3. Narrative Story Chapters -->
+      <!-- 3. Narrative Story (Vertical Timeline) -->
       <AboutStory
         kicker={story.kicker}
         title={story.title}
@@ -92,7 +100,7 @@ const jsonLd = {
         chapters={story.chapters}
       />
 
-      <!-- 4. Architectural Manifesto & Operating Principles -->
+      <!-- 4. Architectural Manifesto (Subtle Background Band) -->
       <AboutPhilosophy
         kicker={manifesto.kicker}
         title={manifesto.title}
@@ -108,7 +116,7 @@ const jsonLd = {
         categories={toolkit.categories}
       />
 
-      <!-- 6. Knowledge Sharing, stAI tuned & Mentorship -->
+      <!-- 6. Knowledge Sharing (Dark Showcase + Articles) -->
       <AboutDivulgation
         kicker={divulgation.kicker}
         title={divulgation.title}
@@ -127,7 +135,7 @@ const jsonLd = {
         roles={experience.roles}
       />
 
-      <!-- 8. Honors & Academic Foundations -->
+      <!-- 8. Honors & Academic (Subtle Background Band) -->
       <AboutRecognition
         kicker={recognition.kicker}
         title={recognition.title}
@@ -136,7 +144,7 @@ const jsonLd = {
         education={recognition.education}
       />
 
-      <!-- 9. Collaboration & Advisory Callout -->
+      <!-- 9. Dark CTA (mirrors hero for visual symmetry) -->
       <AboutCta
         kicker={cta.kicker}
         title={cta.title}
@@ -148,6 +156,9 @@ const jsonLd = {
       />
     </div>
   </div>
+
+  <!-- Scroll reveal animations script -->
+  <script src="../scripts/scroll-reveal.mjs"></script>
 </BaseLayout>
 
 <style>

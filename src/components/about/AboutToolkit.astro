@@ -1,7 +1,8 @@
 ---
 /**
  * AboutToolkit.astro
- * Systems & Hardware Bench - Compact layout for testbeds, runtimes, languages, and protocols.
+ * Systems & Hardware Bench with progressive disclosure.
+ * Shows category header + item names. Descriptions behind expand toggle.
  */
 import type { ToolkitCategory } from '../../types/about';
 
@@ -13,176 +14,196 @@ interface Props {
 }
 
 const { kicker, title, subtitle, categories } = Astro.props;
+
+const categoryColors: Record<string, string> = {
+  'COMPUTE & DEVICES': '--accent-blue',
+  'EXECUTION LAYERS': '--accent-teal',
+  'SOFTWARE FOUNDATIONS': '--accent-violet',
+  'INTEGRATION & TELEMETRY': '--accent-indigo',
+};
+
+const badgeColors: Record<string, { bg: string; color: string }> = {
+  'Primary Lab': { bg: 'var(--surface-blue-subtle)', color: 'var(--accent-blue-dark)' },
+  'Mobile Lab': { bg: 'var(--surface-teal-subtle)', color: 'var(--accent-teal)' },
+  'Server': { bg: '#f3f0ff', color: 'var(--accent-violet)' },
+  'Core': { bg: 'var(--surface-blue-subtle)', color: 'var(--accent-blue-dark)' },
+  'Speech': { bg: '#f3f0ff', color: 'var(--accent-violet)' },
+  'Mobile': { bg: 'var(--surface-teal-subtle)', color: 'var(--accent-teal)' },
+  'Backend': { bg: 'var(--surface-blue-subtle)', color: 'var(--accent-blue-dark)' },
+  'Systems': { bg: '#f3f0ff', color: 'var(--accent-violet)' },
+  'Frontend': { bg: 'var(--surface-teal-subtle)', color: 'var(--accent-teal)' },
+  'Agents': { bg: '#eef2ff', color: 'var(--accent-indigo)' },
+  'Security': { bg: '#fef3c7', color: 'var(--accent-amber)' },
+  'APIs': { bg: 'var(--surface-blue-subtle)', color: 'var(--accent-blue-dark)' },
+  'DevOps': { bg: 'var(--surface-teal-subtle)', color: 'var(--accent-teal)' },
+};
 ---
 
-<section class="about-section toolkit-section" aria-labelledby="toolkit-title">
+<section class="about-section toolkit-section" id="toolkit" aria-labelledby="toolkit-title" data-reveal="fade-up">
   <div class="section-header">
     <p class="stage-kicker">{kicker}</p>
     <h2 id="toolkit-title" class="section-title">{title}</h2>
     <p class="section-subtitle">{subtitle}</p>
   </div>
 
-  <div class="toolkit-grid">
-    {categories.map((cat) => (
-      <article class="toolkit-category-card">
-        <div class="cat-header">
-          <span class="cat-icon" aria-hidden="true">{cat.icon}</span>
-          <div class="cat-titles">
-            <span class="cat-kicker">{cat.kicker}</span>
-            <h3 class="cat-name">{cat.title}</h3>
-          </div>
-        </div>
-
-        <div class="cat-items-list">
-          {cat.items.map((item) => (
-            <div class="toolkit-item">
-              <div class="item-header">
-                <span class="item-name">{item.name}</span>
-                {item.badge && <span class="item-badge">{item.badge}</span>}
-              </div>
-              <p class="item-desc">{item.description}</p>
+  <div class="toolkit-grid" data-reveal-stagger="140">
+    {categories.map((cat) => {
+      const accentVar = categoryColors[cat.kicker] || '--accent-blue';
+      return (
+        <article
+          class="toolkit-category-card"
+          data-reveal="fade-up"
+          style={`--cat-accent: var(${accentVar})`}
+        >
+          <div class="cat-header">
+            <div class="cat-icon-wrap">
+              <span class="cat-icon" aria-hidden="true">{cat.icon}</span>
             </div>
-          ))}
-        </div>
-      </article>
-    ))}
+            <div class="cat-titles">
+              <span class="cat-kicker">{cat.kicker}</span>
+              <h3 class="cat-name">{cat.title}</h3>
+            </div>
+          </div>
+
+          {/* Compact: show item names as tags */}
+          <div class="item-tags-row">
+            {cat.items.map((item) => {
+              const badgeStyle = item.badge && badgeColors[item.badge]
+                ? `background: ${badgeColors[item.badge].bg}; color: ${badgeColors[item.badge].color}`
+                : '';
+              return (
+                <span class="item-tag-compact" style={badgeStyle}>{item.name}</span>
+              );
+            })}
+          </div>
+
+          {/* Progressive disclosure: full item details */}
+          <details class="toolkit-details">
+            <summary class="toolkit-toggle">
+              <span class="toggle-label">Show details</span>
+              <span class="toggle-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="toolkit-expanded">
+              {cat.items.map((item) => {
+                const badgeStyle = item.badge && badgeColors[item.badge]
+                  ? `background: ${badgeColors[item.badge].bg}; color: ${badgeColors[item.badge].color}`
+                  : '';
+                return (
+                  <div class="toolkit-item">
+                    <div class="item-header">
+                      <span class="item-name">{item.name}</span>
+                      {item.badge && <span class="item-badge" style={badgeStyle}>{item.badge}</span>}
+                    </div>
+                    <p class="item-desc">{item.description}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </details>
+        </article>
+      );
+    })}
   </div>
 </section>
 
 <style>
-  .toolkit-section {
-    margin-bottom: clamp(32px, 4vw, 44px);
-  }
+  .toolkit-section { margin-bottom: clamp(40px, 5vw, 56px); }
+  .section-header { max-width: 760px; margin-bottom: clamp(24px, 3vw, 36px); }
+  .section-title { margin: 0 0 6px; font-family: var(--font-display); font-size: var(--text-h2); font-weight: 800; color: var(--ink-display); letter-spacing: -0.025em; }
+  .section-subtitle { margin: 0; font-size: var(--text-caption); color: var(--ink-muted); line-height: 1.5; }
 
-  .section-header {
-    max-width: 760px;
-    margin-bottom: clamp(20px, 3vw, 28px);
-  }
-
-  .section-title {
-    margin: 0 0 4px;
-    font-family: var(--font-display);
-    font-size: var(--text-h2);
-    font-weight: 800;
-    color: var(--ink-display);
-    letter-spacing: -0.025em;
-  }
-
-  .section-subtitle {
-    margin: 0;
-    font-size: var(--text-caption);
-    color: var(--ink-muted);
-    line-height: 1.45;
-  }
-
-  .toolkit-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-4);
-  }
+  .toolkit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
 
   .toolkit-category-card {
     background: var(--surface-card);
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
-    padding: clamp(18px, 2.5vw, 24px);
+    padding: clamp(20px, 3vw, 28px);
     box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
-    transition: border-color var(--duration-fast) ease;
+    display: flex; flex-direction: column;
+    transition: all var(--duration-base) var(--ease-out-expo);
+    border-left: 3px solid var(--cat-accent, var(--accent-blue));
   }
 
-  .toolkit-category-card:hover {
-    border-color: var(--border-strong);
-  }
+  .toolkit-category-card:hover { border-color: var(--cat-accent, var(--border-strong)); border-left-color: var(--cat-accent, var(--accent-blue)); box-shadow: var(--shadow-md), 0 0 24px color-mix(in srgb, var(--cat-accent) 12%, transparent); transform: translateY(-3px); }
 
   .cat-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    margin-bottom: var(--space-3);
-    padding-bottom: var(--space-2);
+    display: flex; align-items: center; gap: var(--space-3);
+    margin-bottom: var(--space-3); padding-bottom: var(--space-3);
     border-bottom: 1px solid var(--border-subtle);
   }
 
-  .cat-icon {
-    font-size: 1.25rem;
-    line-height: 1;
+  .cat-icon-wrap {
+    width: 44px; height: 44px; border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--surface-blue-subtle) 0%, var(--surface-teal-subtle) 100%);
+    border: 1px solid var(--border-subtle);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
 
-  .cat-titles {
-    display: flex;
-    flex-direction: column;
+  .cat-icon { font-size: 1.3rem; line-height: 1; }
+  .cat-titles { display: flex; flex-direction: column; }
+  .cat-kicker { font-family: var(--font-display); font-size: var(--text-caption); font-weight: 800; letter-spacing: 0.06em; color: var(--accent-blue-dark); }
+  .cat-name { margin: 0; font-family: var(--font-display); font-size: var(--text-lead); font-weight: 800; color: var(--ink-display); }
+
+  /* ── Compact tag row (always visible) ── */
+  .item-tags-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: var(--space-3);
   }
 
-  .cat-kicker {
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    color: var(--accent-blue-dark);
+  .item-tag-compact {
+    font-family: var(--font-display); font-size: var(--text-caption); font-weight: 650;
+    padding: 3px 10px; border-radius: 6px;
+    color: var(--accent-blue-dark); background: var(--surface-blue-subtle);
   }
 
-  .cat-name {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--ink-display);
+  /* ── Progressive Disclosure ── */
+  .toolkit-details { margin-top: 0; }
+
+  .toolkit-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    cursor: pointer;
+    font-family: var(--font-display); font-size: var(--text-caption); font-weight: 700;
+    color: var(--accent-blue); padding: 4px 0;
+    list-style: none; user-select: none;
+    transition: color var(--duration-fast) ease;
   }
 
-  .cat-items-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+  .toolkit-toggle::-webkit-details-marker { display: none; }
+  .toolkit-toggle:hover { color: var(--accent-blue-hover); }
+
+  .toggle-icon::after { content: '▸'; display: inline-block; transition: transform var(--duration-fast) ease; }
+  details[open] .toggle-icon::after { transform: rotate(90deg); }
+  details[open] .toggle-label { display: none; }
+  details[open] .toggle-icon::before { content: 'Collapse'; font-family: var(--font-display); }
+
+  /* Hide compact tags when expanded to avoid duplication */
+  .toolkit-category-card:has(details[open]) .item-tags-row { display: none; }
+
+  .toolkit-expanded {
+    padding-top: var(--space-3);
+    display: flex; flex-direction: column; gap: var(--space-2);
+    animation: expand-in var(--duration-base) var(--ease-out-expo);
+  }
+
+  @keyframes expand-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .toolkit-item {
-    background: var(--surface-subtle);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-sm);
-    padding: var(--space-2) var(--space-3);
-    transition: border-color var(--duration-fast) ease;
+    background: var(--surface-subtle); border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm); padding: var(--space-3);
+    transition: all var(--duration-fast) ease;
   }
 
-  .toolkit-item:hover {
-    border-color: var(--border-strong);
-  }
+  .toolkit-item:hover { border-color: var(--border-strong); background: var(--surface-card); }
 
-  .item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2px;
-  }
+  .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; flex-wrap: wrap; gap: 4px; }
+  .item-name { font-family: var(--font-display); font-size: var(--text-caption); font-weight: 750; color: var(--ink-display); }
+  .item-badge { font-family: var(--font-mono); font-size: var(--text-caption); font-weight: 650; padding: 2px 7px; border-radius: 4px; color: var(--accent-blue-dark); background: var(--surface-blue-subtle); }
+  .item-desc { margin: 0; font-size: var(--text-caption); color: var(--ink-muted); line-height: 1.45; }
 
-  .item-name {
-    font-family: var(--font-display);
-    font-size: 0.8125rem;
-    font-weight: 750;
-    color: var(--ink-display);
-  }
-
-  .item-badge {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 650;
-    color: var(--accent-blue-dark);
-    background: var(--surface-blue-subtle);
-    padding: 1px 5px;
-    border-radius: 3px;
-  }
-
-  .item-desc {
-    margin: 0;
-    font-size: 0.8125rem;
-    color: var(--ink-muted);
-    line-height: 1.4;
-  }
-
-  @media (max-width: 800px) {
-    .toolkit-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+  @media (max-width: 800px) { .toolkit-grid { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .toolkit-expanded { animation: none; } }
 </style>

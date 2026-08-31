@@ -1,7 +1,8 @@
 ---
 /**
  * AboutNow.astro
- * Real-time "Now" section with compact, high-density layout.
+ * Compact "Now" section with progressive disclosure.
+ * Shows title + tag + status. Description behind toggle.
  */
 import type { NowFocusItem } from '../../types/about';
 
@@ -14,9 +15,16 @@ interface Props {
 }
 
 const { kicker, title, subtitle, lastUpdated, items } = Astro.props;
+
+const statusProgress: Record<string, number> = {
+  'Active Benchmarking': 65,
+  'Prototype Stage': 40,
+  'Architectural Design': 25,
+  'Publishing Soon': 85,
+};
 ---
 
-<section class="about-section now-section" aria-labelledby="now-title">
+<section class="about-section now-section" id="now" aria-labelledby="now-title" data-reveal="fade-up">
   <div class="now-container">
     <div class="now-header">
       <div class="header-left">
@@ -25,22 +33,31 @@ const { kicker, title, subtitle, lastUpdated, items } = Astro.props;
           <span>{kicker}</span>
         </div>
         <h2 id="now-title" class="now-title">{title}</h2>
-        <p class="now-subtitle">{subtitle}</p>
       </div>
-      <div class="header-right">
-        <span class="updated-badge">Updated {lastUpdated}</span>
-      </div>
+      <span class="updated-badge">Updated {lastUpdated}</span>
     </div>
 
-    <div class="now-grid">
+    <div class="now-grid" data-reveal-stagger="100">
       {items.map((item) => (
-        <article class="now-item-card">
+        <article class="now-item-card" data-reveal="fade-up">
+          {/* Always visible: tag, title, status, progress */}
           <div class="item-top">
             <span class="item-tag">{item.tag}</span>
             <span class="item-status">{item.status}</span>
           </div>
           <h3 class="item-title">{item.title}</h3>
-          <p class="item-desc">{item.description}</p>
+          <div class="progress-track" aria-label={`Progress: ${item.status}`}>
+            <div class="progress-fill" style={`width: ${statusProgress[item.status] || 50}%`}></div>
+          </div>
+
+          {/* Progressive disclosure: full description */}
+          <details class="now-details">
+            <summary class="now-toggle">
+              <span class="toggle-label">Details</span>
+              <span class="toggle-icon" aria-hidden="true"></span>
+            </summary>
+            <p class="item-desc">{item.description}</p>
+          </details>
         </article>
       ))}
     </div>
@@ -48,146 +65,91 @@ const { kicker, title, subtitle, lastUpdated, items } = Astro.props;
 </section>
 
 <style>
-  .now-section {
-    margin-bottom: clamp(32px, 4vw, 44px);
-  }
+  .now-section { margin-bottom: clamp(40px, 5vw, 56px); }
 
   .now-container {
     background: linear-gradient(135deg, var(--surface-card) 0%, var(--surface-teal-subtle) 100%);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    padding: clamp(18px, 2.5vw, 24px);
-    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-medium); border-radius: var(--radius-lg);
+    padding: clamp(20px, 3vw, 28px); box-shadow: var(--shadow-md);
   }
 
   .now-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: var(--space-3);
-    margin-bottom: var(--space-4);
-    flex-wrap: wrap;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: var(--space-3); margin-bottom: var(--space-4); flex-wrap: wrap;
   }
 
   .now-live-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    color: var(--accent-teal);
-    background: #ffffff;
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
-    border: 1px solid var(--border-subtle);
-    margin-bottom: 4px;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-display); font-size: var(--text-caption); font-weight: 800;
+    letter-spacing: 0.06em; color: var(--accent-teal);
+    background: #ffffff; padding: 3px 10px; border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle); margin-bottom: 4px;
   }
 
   .live-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent-teal);
-    box-shadow: 0 0 5px var(--accent-teal);
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent-teal); box-shadow: 0 0 6px var(--accent-teal);
+    animation: now-pulse 2s ease-in-out infinite;
   }
 
-  .now-title {
-    margin: 0 0 2px;
-    font-family: var(--font-display);
-    font-size: var(--text-h3);
-    font-weight: 800;
-    color: var(--ink-display);
-    letter-spacing: -0.02em;
+  @keyframes now-pulse {
+    0%, 100% { box-shadow: 0 0 4px var(--accent-teal); transform: scale(1); }
+    50% { box-shadow: 0 0 14px var(--accent-teal), 0 0 24px rgba(13, 148, 136, 0.25); transform: scale(1.15); }
   }
 
-  .now-subtitle {
-    margin: 0;
-    font-size: var(--text-caption);
-    color: var(--ink-muted);
-    line-height: 1.45;
-  }
+  .now-title { margin: 0; font-family: var(--font-display); font-size: var(--text-h3); font-weight: 800; color: var(--ink-display); letter-spacing: -0.02em; }
+  .updated-badge { font-family: var(--font-display); font-size: var(--text-caption); font-weight: 700; color: var(--ink-muted); background: var(--surface-card); border: 1px solid var(--border-medium); padding: 4px 12px; border-radius: var(--radius-full); white-space: nowrap; }
 
-  .updated-badge {
-    font-family: var(--font-display);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--ink-muted);
-    background: var(--surface-card);
-    border: 1px solid var(--border-medium);
-    padding: 3px 10px;
-    border-radius: var(--radius-full);
-    white-space: nowrap;
-  }
-
-  .now-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-3);
-  }
+  .now-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
 
   .now-item-card {
-    background: var(--surface-card);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-md);
-    padding: var(--space-3);
+    background: var(--surface-card); border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md); padding: var(--space-3);
     box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
-    transition: border-color var(--duration-fast) ease;
+    display: flex; flex-direction: column;
+    transition: all var(--duration-base) var(--ease-out-expo);
   }
 
-  .now-item-card:hover {
-    border-color: var(--border-strong);
+  .now-item-card:hover { border-color: var(--accent-teal); transform: translateY(-3px); box-shadow: var(--shadow-md), 0 0 20px rgba(13, 148, 136, 0.08); }
+
+  .item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px; }
+  .item-tag { font-family: var(--font-display); font-size: var(--text-caption); font-weight: 750; color: var(--accent-teal); background: var(--surface-teal-subtle); padding: 2px 8px; border-radius: 4px; }
+  .item-status { font-family: var(--font-mono); font-size: var(--text-caption); font-weight: 600; color: var(--ink-subtle); }
+  .item-title { margin: 0 0 var(--space-2); font-family: var(--font-display); font-size: 0.9375rem; font-weight: 800; color: var(--ink-display); line-height: 1.35; }
+
+  .progress-track { width: 100%; height: 4px; background: var(--surface-subtle); border-radius: var(--radius-full); overflow: hidden; margin-bottom: var(--space-2); }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue-light)); border-radius: var(--radius-full); transition: width 1.2s var(--ease-out-expo); }
+
+  /* ── Progressive Disclosure ── */
+  .now-details { margin-top: 0; }
+
+  .now-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    cursor: pointer;
+    font-family: var(--font-display); font-size: var(--text-caption); font-weight: 700;
+    color: var(--accent-teal); padding: 2px 0;
+    list-style: none; user-select: none;
   }
 
-  .item-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 4px;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
+  .now-toggle::-webkit-details-marker { display: none; }
+  .now-toggle:hover { color: var(--accent-blue); }
 
-  .item-tag {
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 750;
-    color: var(--accent-teal);
-    background: var(--surface-teal-subtle);
-    padding: 1px 6px;
-    border-radius: 4px;
-  }
-
-  .item-status {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--ink-subtle);
-  }
-
-  .item-title {
-    margin: 0 0 4px;
-    font-family: var(--font-display);
-    font-size: 0.9375rem;
-    font-weight: 800;
-    color: var(--ink-display);
-    line-height: 1.35;
-  }
+  .toggle-icon::after { content: '▸'; display: inline-block; transition: transform var(--duration-fast) ease; }
+  details[open] .toggle-icon::after { transform: rotate(90deg); }
+  details[open] .toggle-label { display: none; }
+  details[open] .toggle-icon::before { content: 'Less'; font-family: var(--font-display); }
 
   .item-desc {
-    margin: 0;
-    font-size: var(--text-caption);
-    color: var(--ink-muted);
-    line-height: 1.45;
-    flex-grow: 1;
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-caption); color: var(--ink-muted); line-height: 1.5;
+    animation: expand-in var(--duration-base) var(--ease-out-expo);
   }
 
-  @media (max-width: 720px) {
-    .now-grid {
-      grid-template-columns: 1fr;
-    }
+  @keyframes expand-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
+
+  @media (max-width: 720px) { .now-grid { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } .item-desc { animation: none; } }
 </style>

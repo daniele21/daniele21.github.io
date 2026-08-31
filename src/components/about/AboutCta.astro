@@ -1,7 +1,9 @@
 ---
 /**
  * AboutCta.astro
- * Compact Advisory & collaboration callout for the /about page.
+ * Full-width dark-gradient CTA section creating visual symmetry
+ * with the hero. Features dramatic typography and a pulsing
+ * primary action button.
  */
 interface Props {
   kicker: string;
@@ -24,26 +26,36 @@ const {
 } = Astro.props;
 ---
 
-<section class="about-section about-cta-section" id="contact" aria-labelledby="cta-title">
-  <div class="cta-editorial-box">
-    <div class="cta-narrative">
-      <span class="stage-kicker">{kicker}</span>
-      <h2 id="cta-title" class="cta-title">{title}</h2>
-      <p class="cta-desc">{description}</p>
+<section class="about-section about-cta-section" id="contact" aria-labelledby="cta-title" data-reveal="fade-up">
+  <div class="cta-canvas">
+    <!-- Ambient background -->
+    <div class="cta-ambient" aria-hidden="true">
+      <div class="cta-orb cta-orb--blue"></div>
+      <div class="cta-orb cta-orb--teal"></div>
     </div>
 
-    <div class="cta-button-group">
-      <a class="primary-button" href={primaryActionHref}>
-        {primaryActionLabel}
-      </a>
-      <a
-        class="secondary-button"
-        href={secondaryActionHref}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {secondaryActionLabel}
-      </a>
+    <!-- Gradient top accent -->
+    <div class="cta-content">
+      <div class="cta-narrative">
+        <span class="cta-kicker">{kicker}</span>
+        <h2 id="cta-title" class="cta-title">{title}</h2>
+        <p class="cta-desc">{description}</p>
+      </div>
+
+      <div class="cta-button-group">
+        <a class="cta-primary-btn" href={primaryActionHref}>
+          <span class="btn-glow" aria-hidden="true"></span>
+          {primaryActionLabel}
+        </a>
+        <a
+          class="cta-secondary-btn"
+          href={secondaryActionHref}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {secondaryActionLabel}
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -53,71 +65,185 @@ const {
     margin-bottom: clamp(24px, 4vw, 36px);
   }
 
-  .cta-editorial-box {
-    background: linear-gradient(135deg, var(--surface-card) 0%, var(--surface-blue-subtle) 100%);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-lg);
-    padding: clamp(20px, 3vw, 32px);
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--space-4);
-    flex-wrap: wrap;
+  .cta-canvas {
+    background: var(--surface-inverse);
+    border-radius: var(--radius-xl);
+    padding: clamp(32px, 4vw, 56px) clamp(24px, 3vw, 40px);
     position: relative;
     overflow: hidden;
+    box-shadow:
+      0 8px 32px rgba(8, 19, 51, 0.12),
+      0 0 0 1px rgba(20, 91, 255, 0.08);
   }
 
-  .cta-editorial-box::before {
+  /* Gradient top accent */
+  .cta-canvas::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-teal) 100%);
+    background: linear-gradient(90deg, var(--accent-teal) 0%, var(--accent-blue) 50%, var(--accent-violet) 100%);
+  }
+
+  /* Ambient orbs */
+  .cta-ambient {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .cta-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.1;
+  }
+
+  .cta-orb--blue {
+    width: 300px;
+    height: 300px;
+    top: -100px;
+    right: -60px;
+    background: var(--accent-blue);
+  }
+
+  .cta-orb--teal {
+    width: 200px;
+    height: 200px;
+    bottom: -80px;
+    left: -40px;
+    background: var(--accent-teal);
+  }
+
+  .cta-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
   }
 
   .cta-narrative {
-    max-width: 600px;
+    max-width: 560px;
   }
 
-  .stage-kicker {
-    margin: 0 0 2px;
+  .cta-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-teal);
+    margin-bottom: var(--space-2);
   }
 
   .cta-title {
-    margin: 0 0 var(--space-1);
+    margin: 0 0 var(--space-2);
     font-family: var(--font-display);
     font-size: var(--text-h3);
-    font-weight: 800;
-    color: var(--ink-display);
+    font-weight: 850;
+    color: #ffffff;
     letter-spacing: -0.025em;
+    line-height: 1.2;
   }
 
   .cta-desc {
     margin: 0;
     font-size: var(--text-caption);
-    color: var(--ink-muted);
-    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
   }
 
   .cta-button-group {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
-    min-width: 220px;
+    gap: var(--space-3);
+    min-width: 240px;
   }
 
-  .cta-button-group a {
-    width: 100%;
-    text-align: center;
-    padding: 8px 16px;
+  .cta-primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: var(--touch-target-min);
+    padding: 12px 24px;
+    background: var(--accent-blue);
+    color: #ffffff;
+    font-family: var(--font-display);
     font-size: var(--text-caption);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 20px rgba(20, 91, 255, 0.35);
+    transition: all var(--duration-fast) ease;
+    cursor: pointer;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Subtle pulsing glow behind primary button */
+  .btn-glow {
+    position: absolute;
+    inset: -2px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-blue);
+    opacity: 0;
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 0.15; transform: scale(1.04); }
+  }
+
+  .cta-primary-btn:hover {
+    background: var(--accent-blue-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(20, 91, 255, 0.45);
+  }
+
+  .cta-secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: var(--touch-target-min);
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.85);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 650;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all var(--duration-fast) ease;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+  }
+
+  .cta-secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    transform: translateY(-1px);
   }
 
   @media (max-width: 800px) {
-    .cta-editorial-box {
+    .cta-content {
       flex-direction: column;
       align-items: flex-start;
     }
@@ -128,8 +254,8 @@ const {
       flex-wrap: wrap;
     }
 
-    .cta-button-group a {
-      width: auto;
+    .cta-primary-btn,
+    .cta-secondary-btn {
       flex: 1 1 180px;
     }
   }
@@ -139,8 +265,15 @@ const {
       flex-direction: column;
     }
 
-    .cta-button-group a {
+    .cta-primary-btn,
+    .cta-secondary-btn {
       width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-glow {
+      animation: none;
     }
   }
 </style>

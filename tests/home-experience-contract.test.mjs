@@ -45,6 +45,20 @@ test('homepage preserves the declared narrative order', () => {
   }
 });
 
+test('homepage identity stays in the shared header without duplicating the hero', () => {
+  const hero = read('src/components/landing/LandingHero.astro');
+  const header = read('src/components/landing/LandingHeader.astro');
+  const heroShellRule = hero.match(/\.hero-shell\s*\{([^}]*)\}/)?.[1] ?? '';
+
+  assert.match(hero, /class="shell hero-shell"/);
+  assert.doesNotMatch(heroShellRule, /width:\s*100%/);
+  assert.doesNotMatch(hero, /identity-strip|identity-avatar/);
+  assert.match(header, /class="brand-avatar"/);
+  assert.match(header, /src=\{resolveHref\(hero\.identity\.portraitPath\)\}/);
+  assert.match(header, /class="brand-role"/);
+  assert.match(header, /class="header-location"/);
+});
+
 test('brand contract keeps motion purposeful and user-controlled', () => {
   const brand = JSON.parse(read('design/brand-kit.json'));
   assert.equal(brand.sourceOfTruth.mode, 'code-first');

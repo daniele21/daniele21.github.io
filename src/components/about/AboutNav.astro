@@ -1,0 +1,210 @@
+---
+/**
+ * AboutNav.astro
+ * Sticky section navigation bar that appears after scrolling past the hero.
+ * Uses glassmorphism styling consistent with the site header.
+ * IntersectionObserver highlights the active section in real-time.
+ */
+
+/**
+ * Navigation items mapping section IDs to display labels.
+ * Order matches the page flow for intuitive navigation.
+ */
+const navItems = [
+  { id: 'now', label: 'Now' },
+  { id: 'story', label: 'Story' },
+  { id: 'philosophy', label: 'Philosophy' },
+  { id: 'toolkit', label: 'Toolkit' },
+  { id: 'writing', label: 'Writing' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'recognition', label: 'Recognition' },
+  { id: 'contact', label: 'Contact' },
+];
+---
+
+<nav class="about-nav" aria-label="About page sections" id="about-nav">
+  <div class="about-nav-inner">
+    {navItems.map((item) => (
+      <a
+        class="nav-link"
+        href={`#${item.id}`}
+        data-section={item.id}
+      >
+        <span class="nav-dot" aria-hidden="true"></span>
+        <span class="nav-label">{item.label}</span>
+      </a>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .about-nav {
+    position: sticky;
+    top: calc(var(--header-height, 74px) + 8px);
+    z-index: 90;
+    margin-bottom: clamp(24px, 3vw, 36px);
+    /* Hidden by default, shown by JS after scrolling past hero */
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+    transition:
+      opacity var(--duration-base) var(--ease-out-expo),
+      transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  .about-nav.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .about-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    padding: 6px 12px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-md);
+    width: fit-content;
+    margin-inline: auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .about-nav-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 650;
+    color: var(--ink-muted);
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    transition: all var(--duration-fast) ease;
+    min-height: 36px;
+  }
+
+  .nav-link:hover {
+    color: var(--ink-display);
+    background: var(--surface-subtle);
+  }
+
+  .nav-link.is-active {
+    color: var(--accent-blue);
+    background: var(--surface-blue-subtle);
+    font-weight: 750;
+  }
+
+  .nav-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--border-medium);
+    transition: all var(--duration-fast) ease;
+    flex-shrink: 0;
+  }
+
+  .nav-link.is-active .nav-dot {
+    background: var(--accent-blue);
+    box-shadow: 0 0 6px rgba(20, 91, 255, 0.3);
+  }
+
+  /* Hide on small screens — too many items */
+  @media (max-width: 640px) {
+    .about-nav {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * AboutNav scroll behavior:
+   * 1. Show/hide nav based on hero visibility
+   * 2. Highlight active section based on scroll position
+   */
+  function initAboutNav() {
+    const nav = document.getElementById('about-nav');
+    const hero = document.querySelector('.about-hero');
+    if (!nav || !hero) return;
+
+    /* Section IDs to observe */
+    const sectionIds = ['now', 'story', 'philosophy', 'toolkit', 'writing', 'experience', 'recognition', 'contact'];
+    const navLinks = nav.querySelectorAll('.nav-link');
+
+    /* Show/hide nav based on hero visibility */
+    const heroObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            nav.classList.remove('is-visible');
+          } else {
+            nav.classList.add('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    heroObserver.observe(hero);
+
+    /* Highlight active section */
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            navLinks.forEach((link) => {
+              link.classList.toggle('is-active', link.getAttribute('data-section') === id);
+            });
+          }
+        });
+      },
+      {
+        rootMargin: '-20% 0px -70% 0px',
+        threshold: 0,
+      }
+    );
+
+    sectionIds.forEach((id) => {
+      const section = document.getElementById(id);
+      if (section) sectionObserver.observe(section);
+    });
+
+    /* Smooth scroll on click */
+    navLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = (link as HTMLAnchorElement).getAttribute('href')?.replace('#', '');
+        if (!targetId) return;
+        const target = document.getElementById(targetId);
+        if (target) {
+          const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height') || '74', 10);
+          const navHeight = nav.offsetHeight;
+          const offset = headerHeight + navHeight + 16;
+          const top = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
+  }
+
+  /* Initialize */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAboutNav);
+  } else {
+    initAboutNav();
+  }
+</script>

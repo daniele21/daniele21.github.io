@@ -1,8 +1,8 @@
 ---
 /**
  * LandingHero.astro
- * Premium single-column hero: compact identity strip + full-width mission.
- * Keeps the personal context visible without competing with the core Local AI thesis.
+ * Premium single-column hero focused on the core Local AI thesis.
+ * Professional identity lives in the persistent landing header.
  */
 import { landingData } from '../../content/locales/en/landing';
 
@@ -17,21 +17,6 @@ const resolveHref = (href: string) => {
 
 <section class="hero-section" aria-labelledby="hero-title">
   <div class="shell hero-shell">
-    <div class="identity-strip" aria-label="Professional identity">
-      <div class="identity-main">
-        <span class="identity-name">{hero.identity.name}</span>
-        <span class="identity-role">{hero.identity.role} · {hero.identity.specialization}</span>
-      </div>
-
-      <div class="identity-meta">
-        <span class="identity-location">{hero.identity.location}</span>
-        <a class="identity-about" href={resolveHref('/about')}>
-          About
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
-    </div>
-
     <div class="hero-main">
       <div class="hero-eyebrow-row">
         <span class="hero-signal" aria-hidden="true"></span>
@@ -44,10 +29,9 @@ const resolveHref = (href: string) => {
       </h1>
 
       <p class="hero-challenge">{hero.mission.challenge}</p>
-      <p class="hero-explanation">{hero.mission.explanation}</p>
+      <p class="hero-explanation" set:html={hero.mission.explanation} />
 
       <div class="hero-position">
-        <span class="position-line" aria-hidden="true"></span>
         <p>{hero.mission.position}</p>
       </div>
 
@@ -102,86 +86,6 @@ const resolveHref = (href: string) => {
     z-index: 1;
     display: flex;
     flex-direction: column;
-    width: 100%;
-  }
-
-  .identity-strip {
-    min-height: 66px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-5);
-    padding: 0 0 clamp(18px, 2vw, 24px);
-    border-bottom: 1px solid color-mix(in srgb, var(--border-medium) 78%, transparent);
-  }
-
-  .identity-main,
-  .identity-meta {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-  }
-
-  .identity-main {
-    gap: clamp(12px, 2vw, 22px);
-    flex-wrap: wrap;
-  }
-
-  .identity-meta {
-    gap: clamp(16px, 2.4vw, 28px);
-    flex-shrink: 0;
-  }
-
-  .identity-name {
-    font-family: var(--font-display);
-    font-size: clamp(0.84rem, 0.92vw, 0.98rem);
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-display);
-  }
-
-  .identity-role,
-  .identity-location {
-    font-size: 0.84rem;
-    color: var(--ink-muted);
-    line-height: 1.4;
-  }
-
-  .identity-role {
-    font-weight: 620;
-  }
-
-  .identity-location {
-    font-family: var(--font-display);
-    font-size: var(--text-badge);
-    font-weight: 700;
-    letter-spacing: 0.055em;
-    text-transform: uppercase;
-  }
-
-  .identity-about {
-    min-height: 42px;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 7px 11px;
-    border-radius: var(--radius-sm);
-    color: var(--accent-blue-dark);
-    font-family: var(--font-display);
-    font-size: 0.84rem;
-    font-weight: 760;
-    text-decoration: none;
-    transition:
-      color var(--duration-fast) ease,
-      background var(--duration-fast) ease,
-      transform var(--duration-fast) ease;
-  }
-
-  .identity-about:hover {
-    color: var(--accent-blue);
-    background: color-mix(in srgb, var(--surface-card) 76%, transparent);
-    transform: translateX(2px);
   }
 
   .hero-main {
@@ -190,8 +94,9 @@ const resolveHref = (href: string) => {
   }
 
   .hero-eyebrow-row {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    width: fit-content;
     gap: 9px;
     margin-bottom: clamp(12px, 1.5vw, 18px);
   }
@@ -215,26 +120,24 @@ const resolveHref = (href: string) => {
   }
 
   .hero-heading {
+    position: relative;
     display: flex;
-    flex-wrap: wrap;
-    column-gap: 0.2em;
+    align-items: baseline;
+    flex-wrap: nowrap;
+    gap: 0.28em;
     margin: 0 0 clamp(18px, 2.2vw, 28px);
-    max-width: 1100px;
+    width: fit-content;
+    max-width: 100%;
     font-family: var(--font-display);
-    font-size: clamp(3.35rem, 8.2vw, 7.4rem);
-    line-height: 0.94;
-    letter-spacing: -0.067em;
+    font-size: clamp(1.85rem, 4.35vw, 4.35rem);
+    line-height: 1.1;
+    letter-spacing: -0.055em;
     font-weight: 860;
     color: var(--ink-display);
-    text-wrap: balance;
+    white-space: nowrap;
   }
 
-  .hero-highlight {
-    position: relative;
-    color: var(--accent-blue);
-  }
-
-  .hero-highlight::after {
+  .hero-heading::after {
     content: '';
     position: absolute;
     left: 0.03em;
@@ -242,7 +145,17 @@ const resolveHref = (href: string) => {
     bottom: -0.065em;
     height: 0.04em;
     border-radius: 99px;
-    background: linear-gradient(90deg, var(--accent-blue), color-mix(in srgb, var(--accent-blue) 38%, transparent));
+    background: linear-gradient(
+      90deg,
+      var(--ink-display) 0%,
+      var(--accent-blue-dark) 42%,
+      var(--accent-blue) 75%,
+      color-mix(in srgb, var(--accent-blue) 38%, transparent) 100%
+    );
+  }
+
+  .hero-highlight {
+    color: var(--accent-blue);
   }
 
   .hero-challenge {
@@ -264,18 +177,13 @@ const resolveHref = (href: string) => {
     color: var(--ink-muted);
   }
 
-  .hero-position {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: clamp(18px, 2vw, 26px);
+  .hero-explanation :global(strong) {
+    color: var(--ink-display);
+    font-weight: 740;
   }
 
-  .position-line {
-    width: 34px;
-    height: 1px;
-    flex: 0 0 auto;
-    background: var(--accent-blue);
+  .hero-position {
+    margin-top: clamp(18px, 2vw, 26px);
   }
 
   .hero-position p {
@@ -357,31 +265,13 @@ const resolveHref = (href: string) => {
       padding-top: 24px;
     }
 
-    .identity-strip {
-      align-items: flex-start;
-    }
-
-    .identity-main {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 3px;
-    }
-
-    .identity-meta {
-      gap: 8px;
-    }
-
-    .identity-location {
-      display: none;
-    }
-
     .hero-main {
       padding-top: clamp(42px, 8vw, 64px);
     }
 
     .hero-heading {
-      font-size: clamp(3rem, 13vw, 5.4rem);
-      line-height: 0.96;
+      font-size: clamp(1.65rem, 5vw, 2.8rem);
+      line-height: 1.12;
     }
   }
 
@@ -390,25 +280,16 @@ const resolveHref = (href: string) => {
       padding-bottom: 36px;
     }
 
-    .identity-strip {
-      gap: 12px;
-    }
-
-    .identity-role {
-      max-width: 240px;
-    }
-
-    .identity-about {
-      padding-inline: 6px;
-    }
-
     .hero-main {
       padding-bottom: 30px;
     }
 
     .hero-heading {
-      font-size: clamp(2.7rem, 14vw, 4.15rem);
-      letter-spacing: -0.058em;
+      flex-wrap: wrap;
+      white-space: normal;
+      font-size: clamp(1.85rem, 8vw, 2.4rem);
+      letter-spacing: -0.045em;
+      line-height: 1.15;
     }
 
     .hero-challenge {
@@ -427,7 +308,6 @@ const resolveHref = (href: string) => {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .identity-about,
     .hero-primary-cta {
       transition: none;
     }
