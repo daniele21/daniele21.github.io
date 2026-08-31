@@ -1,14 +1,16 @@
 ---
 /**
  * aura-finance.astro
- * Product / use-case deep-dive using the shared project-page journey.
+ * Product / proving-ground page using the shared archetype-based project UX.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
-import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectHero from '../components/project/ProjectHero.astro';
+import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
-import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
-import AuraHero from '../components/aurafinance/AuraHero.astro';
+import ProjectRelations from '../components/project/ProjectRelations.astro';
+
 import AuraWhy from '../components/aurafinance/AuraWhy.astro';
 import AuraSolution from '../components/aurafinance/AuraSolution.astro';
 import AuraBenefits from '../components/aurafinance/AuraBenefits.astro';
@@ -20,14 +22,14 @@ import AuraCta from '../components/aurafinance/AuraCta.astro';
 import { auraFinanceData } from '../content/auraFinance';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const { hero } = auraFinanceData;
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Decide', href: '#decide' },
-  { label: 'Build', href: '#build' },
-  { label: 'Test', href: '#test' },
-  { label: 'Measure', href: '#measure' },
-  { label: 'Decide again', href: '#decide-again' },
+  { label: 'Workflow', href: '#workflow' },
+  { label: 'Product', href: '#product' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Evidence', href: '#evidence' },
 ];
 
 const auraFinanceSchema = {
@@ -53,92 +55,197 @@ const auraFinanceSchema = {
 >
   <ProductSubHeader
     title="Aura Finance"
-    badge="Active App"
-    logoPath="images/aura/logo.png"
+    badge="Active app"
     links={subheaderLinks}
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/personal-budget/tree/new-features' }}
-    underSiteHeader={true}
   />
 
   <div id="top" data-project-page data-project-archetype="product">
-    <AuraHero baseUrl={baseUrl} />
-
-    <ProjectPhase
-      id="decide"
-      step="01"
-      label="DECIDE"
-      title="Can a budgeting product stay useful without making the cloud the owner of the ledger?"
-      description="Aura starts from the user's decisions -safe-to-spend, spending patterns and unresolved transactions -while keeping the canonical financial workspace on the device first."
+    <ProjectHero
+      eyebrow="PRODUCT · LOCAL-FIRST FINANCE"
+      title="Aura Finance"
+      lede="Understand what you can safely spend, where your money goes and what still needs attention, while keeping the canonical financial workspace on the device first."
+      status="Active app"
+      meta={['Local-first ledger', 'Deterministic finance rules', 'Human-reviewed automation']}
+      actions={[
+        { label: 'See the workflow ↓', href: '#workflow' },
+        { label: 'GitHub ↗', href: 'https://github.com/daniele21/personal-budget/tree/new-features', variant: 'secondary' },
+      ]}
+      visualLabel="Aura Finance actual and net home views"
     >
-      <AuraWhy />
-      <AuraBenefits />
-    </ProjectPhase>
+      <div class="aura-hero-visual">
+        <figure>
+          <img
+            data-zoomable
+            src={`${baseUrl}/${hero.phoneActual}`}
+            alt="Aura Finance Actual home view"
+            width="540"
+            height="1080"
+            loading="eager"
+          />
+          <figcaption>Actual · complete month</figcaption>
+        </figure>
+        <figure>
+          <img
+            data-zoomable
+            src={`${baseUrl}/${hero.phoneNet}`}
+            alt="Aura Finance Net home view"
+            width="540"
+            height="1080"
+            loading="eager"
+          />
+          <figcaption>Net · repeatable pattern</figcaption>
+        </figure>
+        <div class="aura-hero-note">
+          <strong>{hero.noteTitle}</strong>
+          <span>{hero.noteSub}</span>
+        </div>
+      </div>
+    </ProjectHero>
 
-    <ProjectPhase
-      id="build"
-      step="02"
-      label="BUILD"
-      title="Keep financial logic deterministic and platform-specific automation isolated."
-      description="The shared product owns the local ledger and finance rules; Android-specific payment detection stays behind a separate native capability, while optional cloud continuity is encrypted before data leaves the client."
-      tone="subtle"
-    >
+    <ProjectProof
+      statement="A useful financial workspace can keep the local ledger authoritative while automation remains reviewable and cloud continuity stays optional."
+      detail="Aura separates deterministic financial decisions from platform-specific capture so convenience does not silently take ownership of the user's history."
+    />
+
+    <AuraWhy />
+    <AuraBenefits />
+
+    <div id="workflow" class="project-anchor">
       <AuraSolution />
-      <AuraArchitecture baseUrl={baseUrl} />
-    </ProjectPhase>
-
-    <ProjectPhase
-      id="test"
-      step="03"
-      label="TEST"
-      title="Test the architecture against everyday money decisions."
-      description="The product surfaces show whether the system helps answer concrete questions, while Android payment detection remains a reviewable proposal instead of silently mutating the source-of-truth ledger."
-    >
-      <AuraProduct baseUrl={baseUrl} />
       <AuraPayment baseUrl={baseUrl} />
-    </ProjectPhase>
+    </div>
 
-    <ProjectPhase
-      id="measure"
-      step="04"
-      label="MEASURE"
-      title="Be explicit about what the current product proves -and what it does not."
-      description="The current evidence is architectural and workflow-level rather than a comparative benchmark. The page therefore separates implemented ownership and review boundaries from claims that still need dedicated measurement."
+    <div id="product" class="project-anchor">
+      <AuraProduct baseUrl={baseUrl} />
+    </div>
+
+    <div id="architecture" class="project-anchor">
+      <AuraArchitecture baseUrl={baseUrl} />
+    </div>
+
+    <ProjectSection
+      id="evidence"
+      eyebrow="EVIDENCE & LIMITS"
+      title="The current proof is about ownership, reviewability and explicit boundaries."
+      description="Aura demonstrates a local-first financial workspace and reversible automation. It does not turn those properties into unsupported claims about detection accuracy or financial outcomes."
       tone="subtle"
+      width="wide"
     >
       <ProjectEvidenceNote
-        title="Current proof is about control, explainability and review boundaries."
-        body="Aura's documented implementation supports a local-first ledger, deterministic finance rules, review-before-recording Android payment candidates and optional client-side encrypted continuity. This page does not turn those properties into unsupported claims about detection accuracy or financial outcomes."
+        title="Implemented product boundaries are not outcome guarantees."
+        body="The current implementation supports a local source-of-truth ledger, deterministic finance rules, explicit review of Android payment candidates and optional client-side encrypted cloud continuity."
         evidenced={[
-          'Local workspace is the source of truth',
+          'Local workspace remains the canonical source of truth',
           'Safe-to-spend and reporting derive from deterministic recorded data',
           'Detected Android payments require explicit review before recording',
           'Optional cloud payloads are encrypted client-side before synchronization',
         ]}
         missing={[
           'Comparative payment-detection accuracy benchmark',
-          'Measured user-outcome improvement versus alternative budgeting tools',
+          'Measured financial-outcome improvement versus alternative budgeting tools',
         ]}
       />
-    </ProjectPhase>
+    </ProjectSection>
 
-    <ProjectPhase
-      id="decide-again"
-      step="05"
-      label="DECIDE AGAIN"
-      title="Automate capture, not financial ownership."
-      description="The current product decision is to preserve a local source of truth and human-reviewed automation. Cloud continuity stays optional; detected events remain candidates until the user decides they belong in the ledger."
-    >
-      <ProjectDecisionBand
-        title="Keep the ledger local-first and automation reversible."
-        body="Aura uses automation to reduce repetitive capture without transferring authority over the financial history. The canonical transaction is created only after review, and optional cloud continuity remains a client-encrypted extension rather than the primary data owner."
-        signals={[
-          'Local device remains the canonical financial workspace',
-          'Automation proposes; the user confirms',
-          'Cloud continuity remains optional and client-encrypted',
-        ]}
-      />
-    </ProjectPhase>
+    <ProjectRelations
+      title="Related Android system work"
+      items={[
+        {
+          stage: 'BUILD · INFRASTRUCTURE',
+          title: 'Android Local LLM Harness',
+          href: '/android-local-llm-harness',
+          note: 'Reusable on-device AI runtime work',
+        },
+        {
+          stage: 'PRODUCT · LOCAL-FIRST',
+          title: 'Aura Finance',
+          current: true,
+          note: 'Local ownership and reviewable automation',
+        },
+        {
+          stage: 'MEASURE · OBSERVABILITY',
+          title: 'Traffic Monitoring Android',
+          href: '/traffic-monitoring-android',
+          note: 'Android network-boundary observability',
+        },
+      ]}
+    />
 
     <AuraCta />
   </div>
 </BaseLayout>
+
+<style>
+  .aura-hero-visual {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 320px)) minmax(220px, 1fr);
+    justify-content: center;
+    align-items: center;
+    gap: clamp(18px, 3vw, 38px);
+    padding: clamp(26px, 4vw, 52px);
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(18px, 2.5vw, 28px);
+    background: var(--surface-subtle);
+    overflow: hidden;
+  }
+
+  .aura-hero-visual figure {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .aura-hero-visual img {
+    display: block;
+    width: 100%;
+    max-height: 620px;
+    object-fit: contain;
+    border-radius: clamp(16px, 2vw, 24px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .aura-hero-visual figcaption {
+    margin-top: 10px;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    text-align: center;
+  }
+
+  .aura-hero-note {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--ink-muted);
+  }
+
+  .aura-hero-note strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.2vw, 2rem);
+    letter-spacing: -0.035em;
+  }
+
+  .project-anchor {
+    scroll-margin-top: calc(var(--header-height) + 64px);
+  }
+
+  @media (max-width: 820px) {
+    .aura-hero-visual {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .aura-hero-note {
+      grid-column: 1 / -1;
+      text-align: center;
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .aura-hero-visual {
+      gap: 12px;
+      padding: 18px 12px;
+    }
+  }
+</style>
