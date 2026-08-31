@@ -4,7 +4,6 @@
  * Product / use-case deep-dive using the shared project-page journey.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ClosedRoomHeader from '../components/closedroom/ClosedRoomHeader.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import ProjectPhase from '../components/project/ProjectPhase.astro';
 import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
@@ -52,13 +51,13 @@ const closedRoomSchema = {
   description={closedRoomData.meta.description}
   jsonLd={closedRoomSchema}
 >
-  <ClosedRoomHeader baseUrl={baseUrl} slot="header" />
-
   <ProductSubHeader
     title="ClosedRoom"
     badge="Mac App"
+    logoPath="images/closedroom/logo.png"
     links={subheaderLinks}
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/local-asr-server/tree/speaker_detection' }}
+    underSiteHeader={true}
   />
 
   <div id="top" data-project-page data-project-archetype="product">
