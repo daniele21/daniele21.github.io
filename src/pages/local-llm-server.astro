@@ -1,14 +1,17 @@
 ---
 /**
  * local-llm-server.astro
- * Infrastructure deep-dive using the shared project-page journey.
+ * Infrastructure pilot for the archetype-based project page UX.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
-import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectHero from '../components/project/ProjectHero.astro';
+import ProjectSection from '../components/project/ProjectSection.astro';
+import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
 import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
-import LocalLlmHero from '../components/localllm/LocalLlmHero.astro';
-import LocalLlmMission from '../components/localllm/LocalLlmMission.astro';
+import ProjectRelations from '../components/project/ProjectRelations.astro';
+
 import LocalLlmProblems from '../components/localllm/LocalLlmProblems.astro';
 import LocalLlmRuntimeFlow from '../components/localllm/LocalLlmRuntimeFlow.astro';
 import LocalLlmLifecycle from '../components/localllm/LocalLlmLifecycle.astro';
@@ -16,20 +19,19 @@ import LocalLlmSurfaces from '../components/localllm/LocalLlmSurfaces.astro';
 import LocalLlmBackends from '../components/localllm/LocalLlmBackends.astro';
 import LocalLlmArchitecture from '../components/localllm/LocalLlmArchitecture.astro';
 import LocalLlmCodePreview from '../components/localllm/LocalLlmCodePreview.astro';
-import LocalLlmMaturity from '../components/localllm/LocalLlmMaturity.astro';
 import LocalLlmCta from '../components/localllm/LocalLlmCta.astro';
 
 import { localLlmServerData } from '../content/localLlmServer';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const { hero, mission, maturity } = localLlmServerData;
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Decide', href: '#decide' },
-  { label: 'Build', href: '#build' },
-  { label: 'Test', href: '#test' },
-  { label: 'Measure', href: '#measure' },
-  { label: 'Decide again', href: '#decide-again' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Runtime', href: '#runtime-boundary' },
+  { label: 'Evidence', href: '#evidence' },
+  { label: 'Status', href: '#status' },
 ];
 
 const localLlmSchema = {
@@ -61,62 +63,94 @@ const localLlmSchema = {
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/local-llm-server' }}
   />
 
-  <div id="top" data-project-page data-project-archetype="infrastructure">
-    <LocalLlmHero baseUrl={baseUrl} />
-
-    <ProjectPhase
-      id="decide"
-      step="01"
-      label="DECIDE"
-      title="Why is running a model not enough for a product?"
-      description="The architectural question starts with backend coupling, lifecycle ownership, concurrency and observability. The project exists to make those runtime responsibilities explicit behind a stable local boundary."
+  <main id="top" data-project-page data-project-archetype="infrastructure">
+    <ProjectHero
+      eyebrow="INFRASTRUCTURE · LOCAL AI"
+      title="Local LLM Server"
+      lede="One stable local inference boundary for applications, while models, runtimes, routing and lifecycle can evolve underneath."
+      status="Active development · v0.8.x"
+      logoPath="images/local-llm-server/logo.svg"
+      meta={['macOS & Linux', 'OpenAI-compatible', 'GGUF + MLX', 'Multi-model runtime']}
+      actions={[
+        { label: 'Explore architecture ↓', href: '#architecture' },
+        { label: 'GitHub ↗', href: 'https://github.com/daniele21/local-llm-server', variant: 'secondary' },
+      ]}
+      visualLabel="Local LLM Studio interface"
     >
-      <LocalLlmMission />
-      <LocalLlmProblems />
-    </ProjectPhase>
+      <div class="hero-product-frame">
+        <div class="hero-window-bar" aria-hidden="true">
+          <span></span><span></span><span></span>
+          <p>Local LLM Studio · Chat Studio</p>
+        </div>
+        <img
+          data-zoomable
+          src={`${baseUrl}/${hero.imageHero.replace(/^\//, '')}`}
+          alt="Local LLM Studio Chat Studio showing a local inference session"
+          width="1200"
+          height="750"
+          loading="eager"
+        />
+      </div>
+    </ProjectHero>
 
-    <ProjectPhase
-      id="build"
-      step="02"
-      label="BUILD"
-      title="Build a stable boundary around changing local runtimes."
-      description="The implementation progressively discloses the execution flow, deterministic lifecycle, backend choices, architecture and client contract after the reader understands the infrastructure problem."
-      tone="subtle"
+    <ProjectProof
+      statement="Applications can depend on one local API while model backends, routing and lifecycle change underneath."
+      detail="The project is not just a model runner: it makes local inference reusable and inspectable as product infrastructure."
+    />
+
+    <ProjectSection
+      id="why"
+      eyebrow="WHY IT EXISTS"
+      title="Running a model is not the same as owning a reliable runtime."
+      description="The infrastructure problem starts after the weights load: applications still need a stable contract, lifecycle ownership, concurrency rules and operational visibility."
+      tone="canvas"
     >
+      <div class="principle-strip" aria-label="Local LLM Server design principles">
+        {mission.principles.map((principle) => (
+          <article>
+            <strong>{principle.title}</strong>
+            <p>{principle.subtitle}</p>
+          </article>
+        ))}
+      </div>
+    </ProjectSection>
+
+    <LocalLlmProblems />
+
+    <div id="architecture" class="project-anchor">
       <LocalLlmRuntimeFlow />
+      <LocalLlmArchitecture baseUrl={baseUrl} />
+    </div>
+
+    <div id="runtime-boundary" class="project-anchor runtime-cluster">
       <LocalLlmLifecycle />
       <LocalLlmBackends />
-      <LocalLlmArchitecture baseUrl={baseUrl} />
       <LocalLlmCodePreview />
-    </ProjectPhase>
-
-    <ProjectPhase
-      id="test"
-      step="03"
-      label="TEST"
-      title="Expose the runtime through a product-facing test surface."
-      description="Local LLM Studio makes model state, prompts, configuration, telemetry and integration behavior inspectable instead of leaving the runtime as a headless process with opaque console output."
-    >
       <LocalLlmSurfaces baseUrl={baseUrl} />
-    </ProjectPhase>
+    </div>
 
-    <ProjectPhase
-      id="measure"
-      step="04"
-      label="MEASURE"
-      title="Make capability and operational limits equally visible."
-      description="The page treats runtime telemetry, trust boundaries and maturity limits as evidence. It distinguishes what works today from what is not yet justified as a production claim."
+    <ProjectSection
+      id="evidence"
+      eyebrow="EVIDENCE"
+      title="Show implemented capability and operational limits side by side."
+      description="A strong infrastructure claim includes the boundary of the claim. Local LLM Server documents what is integrated today without turning active development into an implied production guarantee."
       tone="subtle"
+      width="wide"
     >
-      <LocalLlmMaturity />
-    </ProjectPhase>
+      <ProjectEvidenceNote
+        title="The local runtime boundary is implemented; open-network production readiness is not claimed."
+        body="The current server supports local model discovery, multi-model routing, OpenAI-compatible streaming, explicit lifecycle handling and an inspectable Studio surface. Its default trust boundary remains loopback-first, and untrusted remote deployment requires controls the project does not currently provide."
+        evidenced={maturity.availableToday}
+        missing={maturity.importantLimits}
+      />
+    </ProjectSection>
 
-    <ProjectPhase
-      id="decide-again"
-      step="05"
-      label="DECIDE AGAIN"
-      title="Keep the boundary local where the current evidence is strongest."
-      description="The next architectural decision follows from the limits already documented: use the server as a loopback-first local inference layer, while treating open or untrusted network deployment as a different problem that needs additional hardening."
+    <ProjectSection
+      id="status"
+      eyebrow="STATUS & NEXT DECISION"
+      title="Keep the boundary local where the evidence is strongest."
+      description="The next step is to deepen representative hardware validation and operational hardening without pretending that a loopback-first developer runtime is already trusted remote infrastructure."
+      tone="canvas"
     >
       <ProjectDecisionBand
         title="Use the OpenAI-compatible boundary locally; do not imply trusted remote infrastructure."
@@ -127,8 +161,120 @@ const localLlmSchema = {
           'Hardware-specific context tuning remains necessary',
         ]}
       />
-    </ProjectPhase>
+    </ProjectSection>
+
+    <ProjectRelations
+      items={[
+        {
+          stage: 'BUILD · INFRASTRUCTURE',
+          title: 'Local LLM Server',
+          current: true,
+          note: 'Stable local inference boundary',
+        },
+        {
+          stage: 'TEST · PRODUCT',
+          title: 'RedactGuard',
+          href: '/redact-guard',
+          note: 'Privacy-first proving ground',
+        },
+        {
+          stage: 'MEASURE · EVIDENCE',
+          title: 'Performance Lab',
+          href: '/performance-lab',
+          note: 'Hardware and runtime viability',
+        },
+      ]}
+    />
 
     <LocalLlmCta baseUrl={baseUrl} />
-  </div>
+  </main>
 </BaseLayout>
+
+<style>
+  .hero-product-frame {
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(18px, 2.5vw, 28px);
+    background: var(--surface-card);
+    box-shadow: 0 28px 72px rgba(8, 19, 51, 0.14);
+  }
+
+  .hero-window-bar {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--surface-muted);
+  }
+
+  .hero-window-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--border-strong);
+  }
+
+  .hero-window-bar span:first-child { background: #ff5f56; }
+  .hero-window-bar span:nth-child(2) { background: #ffbd2e; }
+  .hero-window-bar span:nth-child(3) { background: #27c93f; }
+
+  .hero-window-bar p {
+    margin: 0 0 0 8px;
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+  }
+
+  .hero-product-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .principle-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .principle-strip article {
+    padding: clamp(20px, 2.5vw, 28px);
+    border-top: 2px solid var(--accent-blue);
+    background: var(--surface-card);
+  }
+
+  .principle-strip strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+  }
+
+  .principle-strip p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.55;
+  }
+
+  .project-anchor {
+    scroll-margin-top: 68px;
+  }
+
+  .runtime-cluster {
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  @media (max-width: 760px) {
+    .principle-strip {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-window-bar p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+</style>
