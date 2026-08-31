@@ -1,13 +1,16 @@
 ---
 /**
  * android-local-llm-harness.astro
- * Experiment / measurement deep-dive using the shared project-page journey.
+ * Infrastructure deep-dive using the shared archetype-based project UX.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
-import ProjectPhase from '../components/project/ProjectPhase.astro';
-import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
-import HarnessHero from '../components/harness/HarnessHero.astro';
+import ProjectHero from '../components/project/ProjectHero.astro';
+import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectSection from '../components/project/ProjectSection.astro';
+import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
+import ProjectRelations from '../components/project/ProjectRelations.astro';
+
 import HarnessMission from '../components/harness/HarnessMission.astro';
 import HarnessProblems from '../components/harness/HarnessProblems.astro';
 import HarnessConcept from '../components/harness/HarnessConcept.astro';
@@ -22,14 +25,14 @@ import HarnessCta from '../components/harness/HarnessCta.astro';
 import { harnessData } from '../content/harness';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const { hero } = harnessData;
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Decide', href: '#decide' },
-  { label: 'Build', href: '#build' },
-  { label: 'Test', href: '#test' },
-  { label: 'Measure', href: '#measure' },
-  { label: 'Decide again', href: '#decide-again' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Runtime', href: '#runtime' },
+  { label: 'Evidence', href: '#evidence' },
+  { label: 'Status', href: '#status' },
 ];
 
 const harnessSchema = {
@@ -55,81 +58,165 @@ const harnessSchema = {
 >
   <ProductSubHeader
     title="Android LLM Harness"
-    badge="Spec & Prototype"
-    logoPath="images/harness/logo.svg"
+    badge="Spec & prototype"
+    logoPath="images/harness/logo.png"
     links={subheaderLinks}
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness' }}
-    underSiteHeader={true}
   />
 
-  <div id="top" data-project-page data-project-archetype="experiment">
-    <HarnessHero baseUrl={baseUrl} />
-
-    <ProjectPhase
-      id="decide"
-      step="01"
-      label="DECIDE"
-      title="Why does Android need a reusable local AI layer?"
-      description="Start from the structural friction: duplicated runtimes, memory ownership, IPC and observability. The project only earns complexity if those constraints justify a shared gateway."
+  <div id="top" data-project-page data-project-archetype="infrastructure">
+    <ProjectHero
+      eyebrow="INFRASTRUCTURE · ANDROID LOCAL AI"
+      title="Android LLM Harness"
+      lede="A reusable Android foundation for GGUF models, on-device inference, runtime lifecycle and diagnostics, designed to evolve toward a shared local AI gateway."
+      status="Spec & prototype · active validation"
+      logoPath="images/harness/logo.png"
+      meta={['Android API 26+', 'GGUF + llama.cpp', 'Kotlin + JNI/C++', 'MIT']}
+      actions={[
+        { label: 'Explore architecture ↓', href: '#architecture' },
+        { label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness', variant: 'secondary' },
+      ]}
+      visualLabel="Android Local LLM Harness architecture"
     >
-      <HarnessMission />
-      <HarnessProblems />
-    </ProjectPhase>
+      <div class="harness-hero-visual">
+        <img
+          data-zoomable
+          src={`${baseUrl}/${hero.imageHero}`}
+          alt="Android Local LLM Harness architecture showing the app, gateway and local inference engine"
+          width="1400"
+          height="900"
+          loading="eager"
+        />
+        <div class="harness-hero-caption">
+          <span>{hero.imageNoteLeft}</span>
+          <span>{hero.imageNoteRight}</span>
+        </div>
+      </div>
+    </ProjectHero>
 
-    <ProjectPhase
-      id="build"
-      step="02"
-      label="BUILD"
-      title="Turn the gateway idea into explicit system boundaries."
-      description="Move from the concept to the concrete architecture and developer contract: model repository, runtime orchestration, replaceable backend boundaries and a deliberately small client API."
-      tone="subtle"
-    >
+    <ProjectProof
+      statement="On-device AI becomes reusable infrastructure only when model identity, lifecycle, memory ownership, client boundaries and diagnostics are explicit."
+      detail="Harness is proving those foundations in one connected Android console before moving runtime ownership into the final cross-application Binder/AIDL gateway."
+    />
+
+    <HarnessMission />
+    <HarnessProblems />
+
+    <div id="architecture" class="project-anchor">
       <HarnessConcept />
       <HarnessArchitecture baseUrl={baseUrl} />
+    </div>
+
+    <div id="runtime" class="project-anchor">
       <HarnessCodePreview />
-    </ProjectPhase>
-
-    <ProjectPhase
-      id="test"
-      step="03"
-      label="TEST"
-      title="Make the infrastructure survive a real mobile workflow."
-      description="The connected console is the test bed: model management, prompting, cancellation, diagnostics and settings expose whether the runtime behaves like a product rather than a demo."
-    >
       <HarnessSurfaces baseUrl={baseUrl} />
-    </ProjectPhase>
+      <HarnessValues />
+    </div>
 
-    <ProjectPhase
-      id="measure"
-      step="04"
-      label="MEASURE"
-      title="Separate integrated capability from production evidence."
-      description="Treat maturity and missing physical-device validation as evidence boundaries. What is integrated today is shown separately from what still blocks stronger performance or production claims."
+    <ProjectSection
+      id="evidence"
+      eyebrow="EVIDENCE & LIMITS"
+      title="The runtime foundation is integrated; the shared gateway is still the target architecture."
+      description="The page separates what exists in the connected console today from the physical-device and cross-application evidence still required before stronger platform claims are justified."
       tone="subtle"
+      width="wide"
     >
       <HarnessMaturity />
-    </ProjectPhase>
-
-    <ProjectPhase
-      id="decide-again"
-      step="05"
-      label="DECIDE AGAIN"
-      title="Use the evidence to decide what moves next."
-      description="The current direction is not to jump straight to a multi-app gateway. First stabilize the data plane and client boundary; then move ownership behind Binder/AIDL when representative device evidence supports it."
-    >
-      <ProjectDecisionBand
-        title="Keep proving the data plane before moving runtime ownership cross-app."
-        body="Harness already integrates the embedded inference path, model lifecycle, console surfaces and diagnostics. The shared Binder/AIDL gateway remains the target architecture, while representative physical-device memory and thermal validation still block production claims."
-        signals={[
-          'Embedded console + runtime foundation integrated',
-          'Cross-app Binder/AIDL host remains future work',
-          'Physical-device memory and thermal evidence still required',
+      <ProjectEvidenceNote
+        title="Integrated capability is not yet production-readiness evidence."
+        body="Harness currently integrates embedded GGUF inference, streaming, cancellation, model lifecycle and diagnostic surfaces. Representative device evidence and the shared Binder/AIDL host remain necessary before describing it as a production Android inference platform."
+        evidenced={[
+          'Embedded GGUF inference path is integrated',
+          'Streaming, cancellation and model lifecycle are implemented',
+          'Runtime health, resources and benchmark surfaces are connected',
+          'Client and backend boundaries are explicit in the current architecture',
+        ]}
+        missing={[
+          'Representative physical-device memory and thermal validation',
+          'Production packaging and reliability evidence',
+          'Cross-application Binder/AIDL host',
         ]}
       />
-      <HarnessValues />
+    </ProjectSection>
+
+    <ProjectSection
+      id="status"
+      eyebrow="STATUS & NEXT"
+      title="Prove the data plane, stabilize the contract, then move ownership."
+      description="The roadmap deliberately validates the difficult runtime and model-management foundations before adding cross-application IPC and shared resource ownership."
+      tone="canvas"
+      width="wide"
+    >
       <HarnessRoadmap />
-    </ProjectPhase>
+    </ProjectSection>
+
+    <ProjectRelations
+      title="How the Android local-AI layer is evaluated"
+      items={[
+        {
+          stage: 'BUILD · INFRASTRUCTURE',
+          title: 'Android LLM Harness',
+          current: true,
+          note: 'Runtime, models and diagnostics on-device',
+        },
+        {
+          stage: 'MEASURE · PERFORMANCE',
+          title: 'Performance Lab',
+          href: '/performance-lab',
+          note: 'Latency, throughput and resource-fit evidence',
+        },
+        {
+          stage: 'MEASURE · NETWORK',
+          title: 'Traffic Monitoring Android',
+          href: '/traffic-monitoring-android',
+          note: 'Network-boundary observability on Android',
+        },
+      ]}
+    />
 
     <HarnessCta baseUrl={baseUrl} />
   </div>
 </BaseLayout>
+
+<style>
+  .harness-hero-visual {
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(18px, 2.5vw, 28px);
+    background: var(--surface-subtle);
+    box-shadow: var(--shadow-md);
+  }
+
+  .harness-hero-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 720px;
+    object-fit: contain;
+  }
+
+  .harness-hero-caption {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+  }
+
+  .project-anchor {
+    scroll-margin-top: calc(var(--header-height) + 64px);
+  }
+
+  @media (max-width: 640px) {
+    .harness-hero-caption {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 2px;
+    }
+  }
+</style>
