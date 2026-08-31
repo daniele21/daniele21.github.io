@@ -12,6 +12,18 @@ The homepage owns the `Decide -> Build -> Test -> Measure -> Decide Again` metho
 
 Intended perception: **each project is a focused proof artifact inside one coherent Local AI system, not an isolated repository and not a repeated methodology slide deck.**
 
+## Current checkpoint
+
+The first vertical slice is implemented on `dev`:
+
+- shared `ProjectHero`, `ProjectSection`, `ProjectProof` and `ProjectRelations` primitives exist;
+- `ProductSubHeader` now preserves compact project identity/context on mobile;
+- Local LLM Server is the Infrastructure pilot;
+- RedactGuard is the Product / proving-ground pilot;
+- Performance Lab is the Measurement / experiment pilot;
+- `design/project-page-contract.md`, `design/ux-contract.json`, `tests/project-page-contract.test.mjs` and `docs/current-state.md` understand the mixed migration state;
+- broad migration remains blocked until the three-pilot UX review is complete.
+
 ## Non-goals
 
 - Rewriting every project from scratch.
@@ -28,7 +40,7 @@ Intended perception: **each project is a focused proof artifact inside one coher
 - Every page distinguishes implemented capability, observed evidence, limitation and future work.
 - One dominant visual should explain the main idea of each major section wherever a real visual is available.
 - Real product UI, architecture diagrams, code and measured evidence take precedence over decorative cards.
-- Shared project components must remain semantic, accessible and reusable across archetypes.
+- Shared project components remain semantic, accessible and reusable across archetypes.
 - Target WCAG 2.2 AA; headings form a valid document outline, meaningful text is at least 14 px and interactive targets are at least 44 x 44 CSS px.
 - Primary content works without client JavaScript; sticky navigation and scroll-spy are enhancements only.
 - Mobile keeps project identity and current context visible instead of collapsing into anonymous phase tabs.
@@ -53,7 +65,7 @@ Projects:
 
 - Local LLM Server
 - Local ASR Server
-- Android Local LLM Harness
+- Android Local LLM Harness candidate; final classification remains reviewable because it also behaves as an experiment surface
 
 Canonical IA:
 
@@ -109,18 +121,17 @@ Primary visual emphasis: method, measured evidence and the resulting Local / Hyb
 
 ## Shared project design system
 
-Create or evolve these canonical component roles:
+Canonical component roles:
 
 - `ProjectHero`: compact project identity, status, value proposition, primary CTA and dominant visual.
 - `ProductSubHeader`: archetype-specific sticky navigation; preserve project identity and action on mobile.
 - `ProjectSection`: semantic `<section>` with eyebrow, `<h2>`, short explanation and visual/content slot.
 - `ProjectProof`: one concise statement connecting the artifact to the hypothesis it proves.
 - `ProjectEvidenceNote`: standard `proven today` versus `not claimed yet` evidence boundary.
-- `ProjectStatus`: explicit current maturity and next validation step.
 - `ProjectRelations`: contextual map to upstream/downstream projects in the Local AI system.
-- `ProjectCTA`: repository, demo or next relevant project action.
+- project-specific CTA, visual, architecture, code and diagnostic modules.
 
-`ProjectPhase` is transitional. It remains until all dependent routes have migrated, then should be retired.
+`ProjectPhase` is transitional. It remains only on routes not yet migrated and should be retired after all dependent routes have moved to the archetype contract.
 
 ## Hero contract
 
@@ -158,79 +169,75 @@ The evidence block is a property of the project, not a mandatory `MEASURE` phase
 
 Every migrated route should help the reader understand where the project fits. Prefer a compact contextual chain over a generic `Back to projects` link.
 
-Examples:
+Current pilot chain:
 
-- Infrastructure -> Local LLM Server -> Product -> RedactGuard -> Measurement -> Performance Lab
-- Infrastructure -> Android Harness -> Measurement -> Traffic Monitoring Android
+`Local LLM Server -> RedactGuard -> Performance Lab`
 
-Only real relationships should be shown.
+The relationship is contextual, not a claim that every Performance Lab run must use RedactGuard. Future pages should encode only relationships that are real and useful to the reader.
 
 ## Work graph
 
 | ID | Work | Owns/writes | Depends on | Parallel | State |
 | --- | --- | --- | --- | --- | --- |
 | PP-01 | Inventory and archetype mapping | this workstream, route matrix | - | yes | DONE |
-| PP-02 | Shared semantic project foundation | `src/components/project/{ProjectHero,ProjectSection,ProjectProof,ProjectRelations}.astro`, `ProductSubHeader.astro` | PP-01 | no | IN PROGRESS |
-| PP-03 | Infrastructure pilot | `src/pages/local-llm-server.astro`, Local LLM components/content as needed | PP-02 | no | BLOCKED |
-| PP-04 | Product pilot | `src/pages/redact-guard.astro`, RedactGuard components/content as needed | PP-02 | yes after PP-03 foundation review | BLOCKED |
-| PP-05 | Measurement pilot | `src/pages/performance-lab.astro`, measurement components as needed | PP-02 | yes after PP-03 foundation review | BLOCKED |
-| PP-06 | Three-pilot UX review | desktop/mobile/accessibility/comprehension evidence | PP-03, PP-04, PP-05 | no | BLOCKED |
+| PP-02 | Shared semantic project foundation | `src/components/project/{ProjectHero,ProjectSection,ProjectProof,ProjectRelations}.astro`, `ProductSubHeader.astro` | PP-01 | no | DONE |
+| PP-03 | Infrastructure pilot | `src/pages/local-llm-server.astro`, Local LLM components/content as needed | PP-02 | no | DONE |
+| PP-04 | Product pilot | `src/pages/redact-guard.astro`, RedactGuard components/content as needed | PP-02 | yes | DONE |
+| PP-05 | Measurement pilot | `src/pages/performance-lab.astro`, measurement components as needed | PP-02 | yes | DONE |
+| PP-06 | Three-pilot UX review | desktop/mobile/accessibility/comprehension evidence | PP-03, PP-04, PP-05 | no | IN PROGRESS |
 | PP-07 | Infrastructure migration | Local ASR Server, Android Harness | PP-06 | yes | BLOCKED |
 | PP-08 | Product migration | ClosedRoom, Aura Finance | PP-06 | yes | BLOCKED |
 | PP-09 | Measurement migration | Traffic Monitoring macOS + Android | PP-06 | yes | BLOCKED |
 | PP-10 | Cross-project relation pass | relation data and page integrations | PP-07, PP-08, PP-09 | no | BLOCKED |
 | PP-11 | Legacy cleanup | retire `ProjectPhase`, obsolete phase nav/copy and dead CSS | PP-10 | no | BLOCKED |
-| PP-12 | Durable docs and release validation | architecture/current-state/tests | PP-11 | no | BLOCKED |
+| PP-12 | Durable docs and release validation | architecture/current-state/tests | PP-11 | no | IN PROGRESS |
 
 ## Pilot 1 - Local LLM Server
 
-Target navigation:
+Navigation:
 
 `Overview · Architecture · Runtime · Evidence · Status`
 
-Target composition:
+Implemented composition:
 
-- Hero: `Local LLM Server` + concise capability + GitHub + full-width real product visual.
-- Proof statement: applications can depend on one local API while models, backends and lifecycle change underneath.
-- Why: backend coupling, lifecycle ownership, runtime coordination and opaque operation.
-- Architecture: runtime flow and architecture are the dominant section.
-- Runtime: lifecycle, backend matrix and OpenAI-compatible code boundary.
-- Product surface: Local LLM Studio shows the runtime as an inspectable system.
-- Evidence: implemented capabilities vs unsupported deployment/production claims.
-- Status: explicit current maturity and next validation boundary.
-- Connected system: link this infrastructure to representative proving grounds and measurement.
+- full-width shared hero with real Local LLM Studio visual;
+- concise `What this proves` statement;
+- infrastructure problem / principles;
+- runtime flow and architecture before lower-level implementation detail;
+- lifecycle, backend matrix, code boundary and Studio surface;
+- explicit implemented-versus-limit evidence boundary;
+- current decision and connected-system navigation.
 
 ## Pilot 2 - RedactGuard
 
-Target navigation:
+Navigation:
 
 `Overview · Workflow · Product · Architecture · Evidence`
 
-Target composition:
+Implemented composition:
 
-- Hero: product outcome and real UI.
-- Problem: configurable sensitive-data detection without moving the original document to cloud AI.
-- Workflow: `load -> detect locally -> review -> redact -> export` as the dominant mental model.
-- Product: reviewability and user control before architecture details.
-- Under the hood: local inference and configurable PII boundary.
-- Evidence: implemented local workflow vs no compliance/perfect-recall claim.
-- Connected infrastructure: Local LLM Server and relevant measurement layer.
+- shared product hero with real review UI;
+- `What this proves` statement focused on privacy boundary and human review;
+- problem before workflow;
+- workflow `define -> detect locally -> review -> export` before architecture;
+- real product screens before under-the-hood architecture;
+- local/configurable/reviewable evidence boundary versus no compliance or perfect-recall claim;
+- connected Local LLM Server / Performance Lab context.
 
 ## Pilot 3 - Performance Lab
 
-Target navigation:
+Navigation:
 
 `Overview · Method · Evidence · Findings · Status`
 
-Target composition:
+Implemented composition:
 
-- Hero: `Is local execution actually good enough?`
-- Core questions: `Can it run? -> Can it run well? -> Should it run locally?`
-- Method: workload, model, quantization, runtime and device context.
-- Evidence: latency, throughput, memory and thermal/battery only when representative runs exist.
-- Interpretation: translate numbers into workload suitability.
-- Limits: no decorative metrics or implied benchmark dataset.
-- Architectural consequence: evidence can confirm Local, move to Hybrid or retain Cloud.
+- shared experiment hero with `Can it run? -> Can it run well? -> Should it run locally?` as the dominant visual;
+- method records workload, model, runtime, device and configuration;
+- evidence surface names TTFT, decode, memory and thermal/battery without inventing values;
+- explicit empty evidence boundary until representative benchmark runs exist;
+- findings section translates raw measurements into workload suitability;
+- status states that measurement is allowed to reject Local AI.
 
 ## UX gates before broad migration
 
@@ -247,11 +254,11 @@ The three pilots must pass:
 
 ## Migration order
 
-1. Shared foundation.
-2. Local LLM Server.
-3. RedactGuard.
-4. Performance Lab.
-5. Review the three archetypes together.
+1. ~~Shared foundation.~~
+2. ~~Local LLM Server.~~
+3. ~~RedactGuard.~~
+4. ~~Performance Lab.~~
+5. **Review the three archetypes together.**
 6. Migrate remaining routes by archetype.
 7. Add/normalize connected-system navigation.
 8. Remove legacy phase infrastructure only after parity and route validation.
@@ -261,9 +268,9 @@ The three pilots must pass:
 - **Three archetypes drift into three design systems:** share hero, section, evidence, navigation, spacing and typography primitives; vary composition, not foundations.
 - **Technical depth disappears:** keep existing deep components, but move them later in the journey and group them by visitor question.
 - **Marketing copy outruns evidence:** reuse verified project content and evidence boundaries; omit unsupported numbers or claims.
-- **Pilot refactor breaks old routes:** additive shared components first; retire `ProjectPhase` only after every route migrates.
-- **Mobile sticky navigation becomes crowded:** cap primary navigation at five archetype-specific items and keep compact project identity visible.
-- **Connected-system UI invents dependencies:** encode only real architectural/product relationships.
+- **Pilot refactor breaks old routes:** mixed-state contract keeps legacy routes valid while migrated routes explicitly stop using `ProjectPhase`.
+- **Mobile sticky navigation becomes crowded:** primary navigation is capped at five archetype-specific items; compact project identity remains visible on its own row.
+- **Connected-system UI invents dependencies:** encode only real architectural/product relationships and phrase contextual links carefully.
 
 ## Completion
 
