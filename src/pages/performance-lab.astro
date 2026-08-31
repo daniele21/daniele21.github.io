@@ -1,23 +1,63 @@
 ---
+/**
+ * performance-lab.astro
+ * Measurement / experiment pilot for the archetype-based project page UX.
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
-import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectHero from '../components/project/ProjectHero.astro';
+import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
 import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
+import ProjectRelations from '../components/project/ProjectRelations.astro';
 
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Decide', href: '#decide' },
-  { label: 'Build', href: '#build' },
-  { label: 'Test', href: '#test' },
-  { label: 'Measure', href: '#measure' },
-  { label: 'Decide again', href: '#decide-again' },
+  { label: 'Method', href: '#method' },
+  { label: 'Evidence', href: '#evidence' },
+  { label: 'Findings', href: '#findings' },
+  { label: 'Status', href: '#status' },
+];
+
+const methodDimensions = [
+  {
+    label: 'Workload',
+    title: 'Start from the real task',
+    description: 'The benchmark only matters if it represents the interaction, context size and sustained behavior the product actually needs.',
+  },
+  {
+    label: 'Model',
+    title: 'Record the exact candidate',
+    description: 'Model family, parameter scale and quantization remain part of the evidence rather than disappearing behind one score.',
+  },
+  {
+    label: 'Runtime',
+    title: 'Keep the execution layer explicit',
+    description: 'Runtime and backend choices can materially change latency, throughput and resource behavior.',
+  },
+  {
+    label: 'Device',
+    title: 'Measure where the decision lives',
+    description: 'Representative hardware is mandatory when memory, thermals or battery determine whether local execution is viable.',
+  },
+  {
+    label: 'Configuration',
+    title: 'Make the run reproducible',
+    description: 'Context, concurrency and other relevant settings travel with the result so comparisons remain interpretable.',
+  },
+];
+
+const evidenceDimensions = [
+  { metric: 'TTFT', label: 'Responsiveness', question: 'How long until useful generation begins?' },
+  { metric: 'Decode', label: 'Generation speed', question: 'Can output arrive fast enough for the target experience?' },
+  { metric: 'Memory', label: 'Resource fit', question: 'Does the workload fit without destabilizing the device?' },
+  { metric: 'Thermal / Battery', label: 'Sustainability', question: 'Can the performance survive sustained use?' },
 ];
 ---
 
 <BaseLayout
-  title="Performance Lab -Daniele Moltisanti"
+  title="Performance Lab - Daniele Moltisanti"
   description="A measurement layer for understanding whether Local AI systems can run well on real hardware across latency, throughput and resource constraints."
 >
   <ProductSubHeader
@@ -27,152 +67,365 @@ const subheaderLinks = [
   />
 
   <div id="top" data-project-page data-project-archetype="experiment">
-    <section class="project-hero">
-      <div class="shell project-shell">
-        <a class="back" href={`${baseUrl}/#evidence`}>← Observability & Measurement</a>
-        <p class="eyebrow">LOCAL AI OBSERVABILITY · PERFORMANCE</p>
-        <h1>Performance Lab</h1>
-        <p class="lede">
-          A measurement layer for moving beyond “it runs”. Performance Lab is where Local AI systems are evaluated against the constraints that matter on real hardware.
-        </p>
-
-        <div class="metric-hero" aria-label="Measurement dimensions">
-          <div><strong>Latency</strong><span>End-to-end response time</span></div>
-          <div><strong>Throughput</strong><span>Tokens and requests over time</span></div>
-          <div><strong>Memory</strong><span>Runtime footprint and pressure</span></div>
-          <div><strong>Thermal / Battery</strong><span>Device sustainability under load</span></div>
-        </div>
-      </div>
-    </section>
-
-    <ProjectPhase
-      id="decide"
-      step="01"
-      label="DECIDE"
-      title="A local model is only useful if the target workload survives the target hardware."
-      description="Performance Lab exists to turn 'can this run locally?' into a decision question rather than a demo milestone."
+    <ProjectHero
+      eyebrow="MEASUREMENT · LOCAL AI"
+      title="Performance Lab"
+      lede="Is local execution actually good enough for the workload and hardware that matter? Performance Lab turns that question into a reproducible measurement decision."
+      status="Framework defined · representative runs pending"
+      meta={['Latency', 'Throughput', 'Memory', 'Thermal / battery']}
+      actions={[
+        { label: 'See the method ↓', href: '#method' },
+      ]}
+      visualLabel="Performance Lab decision model"
     >
-      <div class="shell question-grid">
-        <article><span>01</span><h2>Can it run?</h2><p>Establish whether a model and runtime fit the target device or local infrastructure at all.</p></article>
-        <article><span>02</span><h2>Can it run well?</h2><p>Measure the latency, throughput and resource trade-offs that determine whether the experience is practical.</p></article>
-        <article><span>03</span><h2>Should it run locally?</h2><p>Feed measured evidence back into the Local vs Hybrid vs Cloud decision.</p></article>
+      <div class="question-sequence" aria-label="Performance Lab core decision questions">
+        <article>
+          <span>01</span>
+          <p>Can it run?</p>
+          <small>Fit the model and runtime on the target hardware.</small>
+        </article>
+        <div class="sequence-arrow" aria-hidden="true">→</div>
+        <article>
+          <span>02</span>
+          <p>Can it run well?</p>
+          <small>Measure responsiveness, throughput and resource pressure.</small>
+        </article>
+        <div class="sequence-arrow" aria-hidden="true">→</div>
+        <article>
+          <span>03</span>
+          <p>Should it run locally?</p>
+          <small>Translate the measurements into an architecture decision.</small>
+        </article>
       </div>
-    </ProjectPhase>
+    </ProjectHero>
 
-    <ProjectPhase
-      id="build"
-      step="02"
-      label="BUILD"
-      title="Define the measurement surface before collecting numbers."
-      description="The core dimensions stay explicit so a benchmark can answer a product question instead of producing isolated scores with no architectural consequence."
+    <ProjectProof
+      statement="A benchmark is useful only when it can change where the workload should run."
+      detail="The intended output is not a leaderboard: it is evidence for keeping a workload Local, splitting it into Hybrid, or retaining Cloud when the constraints demand it."
+    />
+
+    <ProjectSection
+      id="method"
+      eyebrow="METHOD"
+      title="Preserve the run context before collecting the number."
+      description="Performance only becomes decision evidence when the workload, model, runtime, device and configuration are explicit enough to reproduce and interpret the result."
+      tone="canvas"
+      width="wide"
+    >
+      <div class="method-list">
+        {methodDimensions.map((item, index) => (
+          <article>
+            <div class="method-index">{String(index + 1).padStart(2, '0')}</div>
+            <div>
+              <span>{item.label}</span>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </ProjectSection>
+
+    <ProjectSection
+      id="evidence"
+      eyebrow="EVIDENCE SURFACE"
+      title="Measure the constraints that change product viability."
+      description="Latency, generation speed, memory and sustained device behavior are the core dimensions. This page deliberately does not display invented benchmark values while representative runs are still missing."
       tone="subtle"
+      width="wide"
     >
-      <div class="shell measurement-grid">
-        <article><strong>Latency</strong><p>How long until a useful response arrives?</p></article>
-        <article><strong>Throughput</strong><p>How much work can the runtime sustain over time?</p></article>
-        <article><strong>Memory</strong><p>What footprint and pressure does the workload create?</p></article>
-        <article><strong>Thermal / Battery</strong><p>Does performance remain sustainable on the target device?</p></article>
+      <div class="evidence-dimensions">
+        {evidenceDimensions.map((item) => (
+          <article>
+            <strong>{item.metric}</strong>
+            <span>{item.label}</span>
+            <p>{item.question}</p>
+          </article>
+        ))}
       </div>
-    </ProjectPhase>
 
-    <ProjectPhase
-      id="test"
-      step="03"
-      label="TEST"
-      title="Run the workload on representative hardware, not just a convenient machine."
-      description="The experiment should preserve the actual model, runtime, configuration and device context needed to understand why a result is useful or misleading."
-    >
-      <div class="shell sequence-card">
-        <div><span>01</span><strong>Workload</strong><p>Choose the real use case and task shape.</p></div>
-        <div><span>02</span><strong>Configuration</strong><p>Record model, quantization, context and runtime choices.</p></div>
-        <div><span>03</span><strong>Device</strong><p>Measure on the hardware the decision actually concerns.</p></div>
-        <div><span>04</span><strong>Run</strong><p>Collect the same dimensions consistently across candidates.</p></div>
-      </div>
-    </ProjectPhase>
-
-    <ProjectPhase
-      id="measure"
-      step="04"
-      label="MEASURE"
-      title="Publish measured evidence only when the run context is explicit."
-      description="This page currently defines the measurement layer and decision model. It does not publish a numeric benchmark dataset yet, so the previous decorative bar chart has been removed rather than implying results that are not present."
-      tone="subtle"
-    >
       <ProjectEvidenceNote
-        title="The measurement framework is defined; representative benchmark results still need to be attached."
-        body="Performance Lab is intended to compare Local AI systems across latency, throughput, memory and device sustainability. Until real runs are published with model, runtime, configuration and hardware context, this page deliberately avoids numeric or chart-based performance claims."
+        title="The measurement framework exists; the representative benchmark dataset does not yet."
+        body="Performance Lab defines the decision questions, run context and core dimensions required to compare Local AI systems. Until real runs are published with model, runtime, configuration and hardware context, numeric or chart-based performance claims remain intentionally absent."
         evidenced={[
           'Decision questions are explicit: fit, practicality and deployment boundary',
           'Latency, throughput, memory and thermal/battery are defined as core dimensions',
-          'Results are meant to feed back into Local vs Hybrid vs Cloud decisions',
+          'Run context is expected to include workload, model, runtime, configuration and hardware',
+          'Results are designed to feed back into Local vs Hybrid vs Cloud decisions',
         ]}
         missing={[
           'Published representative benchmark runs',
-          'Model/runtime/device comparison table with reproducible configuration',
+          'Reproducible model/runtime/device comparison table',
+          'Validated workload-specific thresholds for good-enough performance',
         ]}
       />
-    </ProjectPhase>
+    </ProjectSection>
 
-    <ProjectPhase
-      id="decide-again"
-      step="05"
-      label="DECIDE AGAIN"
-      title="Use performance evidence to change the architecture when necessary."
-      description="The final output of the lab is not a leaderboard. It is a deployment decision that can confirm Local, move a workload to Hybrid, or keep it in Cloud when the measured constraints demand it."
+    <ProjectSection
+      id="findings"
+      eyebrow="INTERPRETATION"
+      title="The finding is workload suitability, not the raw score."
+      description="A tokens-per-second value has no architectural meaning by itself. The result becomes useful only after it is interpreted against the experience, device and operational constraints of the real workload."
+      tone="canvas"
+    >
+      <div class="interpretation-band">
+        <div>
+          <span>MEASURE</span>
+          <strong>Observed run</strong>
+          <p>Latency · throughput · memory · sustained device behavior</p>
+        </div>
+        <div class="interpretation-arrow" aria-hidden="true">→</div>
+        <div>
+          <span>INTERPRET</span>
+          <strong>Good enough for this workload?</strong>
+          <p>Use the product requirement as the threshold, not a generic leaderboard.</p>
+        </div>
+        <div class="interpretation-arrow" aria-hidden="true">→</div>
+        <div>
+          <span>DECIDE</span>
+          <strong>Local · Hybrid · Cloud</strong>
+          <p>Change the execution boundary when the measured trade-off requires it.</p>
+        </div>
+      </div>
+    </ProjectSection>
+
+    <ProjectSection
+      id="status"
+      eyebrow="STATUS & ARCHITECTURAL CONSEQUENCE"
+      title="No benchmark claim until the representative runs exist."
+      description="The next useful increment is evidence, not more presentation: attach real runs with enough context that another reader can understand what changed and why it matters."
+      tone="subtle"
     >
       <ProjectDecisionBand
-        title="Measurement is useful only when it can change the boundary."
-        body="Performance Lab exists to prevent 'local-first' from becoming ideology. A workload should stay local only when representative measurements show that quality, responsiveness and resource use remain acceptable for the actual product context."
+        title="Measurement is allowed to reject Local AI."
+        body="Performance Lab exists to prevent local-first from becoming ideology. A workload should stay local only when representative evidence shows that quality, responsiveness and resource use remain acceptable for the actual product context."
         signals={[
-          'Keep Local when the workload fits the target hardware',
+          'Keep Local when the workload fits the target hardware and experience',
           'Use Hybrid when only part of the workflow is practical locally',
           'Keep Cloud when measured constraints make local execution the wrong trade-off',
         ]}
       />
-    </ProjectPhase>
+    </ProjectSection>
+
+    <ProjectRelations
+      items={[
+        {
+          stage: 'BUILD · INFRASTRUCTURE',
+          title: 'Local LLM Server',
+          href: '/local-llm-server',
+          note: 'A runtime candidate to measure',
+        },
+        {
+          stage: 'MEASURE · EVIDENCE',
+          title: 'Performance Lab',
+          current: true,
+          note: 'Translate runtime behavior into viability evidence',
+        },
+        {
+          stage: 'DECIDE AGAIN · OUTCOME',
+          title: 'Local · Hybrid · Cloud',
+          note: 'The architecture can change after measurement',
+        },
+      ]}
+    />
   </div>
 </BaseLayout>
 
 <style>
-  .project-hero { min-height: 72vh; padding: clamp(5rem, 10vh, 8rem) 0; }
-  .project-shell { max-width: 1000px; }
-  .back { color: var(--ink-subtle); text-decoration: none; font-size: var(--text-caption); font-weight: 700; }
-  .eyebrow { margin: 4rem 0 0; color: var(--accent-blue); font-size: var(--text-caption); font-weight: 850; letter-spacing: .12em; }
-  h1 { margin: .8rem 0 0; font-family: var(--font-display); font-size: clamp(3.2rem, 7vw, 6.5rem); line-height: .98; letter-spacing: -.055em; }
-  .lede { max-width: 760px; margin: 1.3rem 0 0; color: var(--ink-muted); font-size: var(--text-lead); line-height: 1.7; }
-
-  .metric-hero,
-  .measurement-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); margin-top: 3rem; }
-  .metric-hero div,
-  .measurement-grid article,
-  .question-grid article,
-  .sequence-card > div { padding: var(--space-4); border: 1px solid var(--border-medium); border-radius: var(--radius-lg); background: var(--surface-card); }
-  .metric-hero strong,
-  .measurement-grid strong,
-  .sequence-card strong { display: block; color: var(--ink-display); font-family: var(--font-display); }
-  .metric-hero span { display: block; margin-top: 6px; color: var(--ink-subtle); font-size: var(--text-caption); line-height: 1.45; }
-
-  .question-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); padding-bottom: clamp(48px, 7vw, 80px); }
-  .question-grid span,
-  .sequence-card span { color: var(--accent-blue); font-family: var(--font-mono); font-size: var(--text-caption); font-weight: 800; }
-  .question-grid h2 { margin: 8px 0 0; font-family: var(--font-display); font-size: var(--text-h3); }
-  .question-grid p,
-  .measurement-grid p,
-  .sequence-card p { margin: 8px 0 0; color: var(--ink-muted); font-size: var(--text-body-sm); line-height: 1.55; }
-
-  .measurement-grid { margin-top: 0; padding-bottom: clamp(48px, 7vw, 80px); }
-  .sequence-card { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); padding-bottom: clamp(48px, 7vw, 80px); }
-
-  @media (max-width: 900px) {
-    .metric-hero,
-    .measurement-grid,
-    .sequence-card { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .question-sequence {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: clamp(12px, 2vw, 24px);
+    align-items: stretch;
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(18px, 2.5vw, 28px);
+    background: var(--surface-card);
+    box-shadow: 0 26px 64px rgba(8, 19, 51, 0.1);
   }
 
-  @media (max-width: 680px) {
-    .question-grid,
-    .metric-hero,
-    .measurement-grid,
-    .sequence-card { grid-template-columns: 1fr; }
+  .question-sequence article {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(18px, 2.5vw, 26px);
+    border-radius: var(--radius-lg);
+    background: var(--surface-subtle);
+  }
+
+  .question-sequence article:last-of-type {
+    background: var(--surface-blue-subtle);
+  }
+
+  .question-sequence span,
+  .method-index,
+  .interpretation-band span {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 800;
+  }
+
+  .question-sequence p {
+    margin: 18px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2vw, 1.7rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .question-sequence small {
+    margin-top: 8px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  .sequence-arrow,
+  .interpretation-arrow {
+    align-self: center;
+    color: var(--ink-subtle);
+    font-size: 1.35rem;
+  }
+
+  .method-list {
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--border-medium);
+  }
+
+  .method-list article {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: clamp(18px, 3vw, 36px);
+    padding: clamp(22px, 3vw, 32px) 0;
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .method-list article > div:last-child {
+    max-width: 760px;
+  }
+
+  .method-list span {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .method-list h3 {
+    margin: 5px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    letter-spacing: -0.025em;
+  }
+
+  .method-list p {
+    margin: 7px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.58;
+  }
+
+  .evidence-dimensions {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+
+  .evidence-dimensions article {
+    padding: clamp(18px, 2vw, 24px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+
+  .evidence-dimensions strong {
+    display: block;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2vw, 1.65rem);
+  }
+
+  .evidence-dimensions span {
+    display: block;
+    margin-top: 4px;
+    color: var(--accent-blue-dark);
+    font-size: var(--text-caption);
+    font-weight: 760;
+  }
+
+  .evidence-dimensions p {
+    margin: 14px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  .interpretation-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: clamp(12px, 2vw, 22px);
+    align-items: stretch;
+  }
+
+  .interpretation-band > div:not(.interpretation-arrow) {
+    padding: clamp(20px, 2.5vw, 28px);
+    border-top: 2px solid var(--accent-blue);
+    background: var(--surface-card);
+  }
+
+  .interpretation-band strong {
+    display: block;
+    margin-top: 10px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+  }
+
+  .interpretation-band p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  @media (max-width: 900px) {
+    .evidence-dimensions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    .question-sequence,
+    .interpretation-band {
+      grid-template-columns: 1fr;
+    }
+
+    .sequence-arrow,
+    .interpretation-arrow {
+      justify-self: center;
+      transform: rotate(90deg);
+    }
+
+    .question-sequence article {
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .evidence-dimensions {
+      grid-template-columns: 1fr;
+    }
+
+    .method-list article {
+      grid-template-columns: 42px minmax(0, 1fr);
+    }
   }
 </style>
