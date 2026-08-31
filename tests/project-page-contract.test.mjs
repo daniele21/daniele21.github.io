@@ -3,45 +3,68 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const read = (path) => fs.readFileSync(path, 'utf8');
-const phases = ['decide', 'build', 'test', 'measure', 'decide-again'];
-const navigationLabels = ['Overview', 'Decide', 'Build', 'Test', 'Measure', 'Decide again'];
+const legacyPhases = ['decide', 'build', 'test', 'measure', 'decide-again'];
+
+const archetypeNavigation = {
+  infrastructure: ['Overview', 'Architecture', 'Runtime', 'Evidence', 'Status'],
+  product: ['Overview', 'Workflow', 'Product', 'Architecture', 'Evidence'],
+  experiment: ['Overview', 'Method', 'Evidence', 'Findings', 'Status'],
+};
 
 const projectPages = [
-  { path: 'src/pages/android-local-llm-harness.astro', archetype: 'experiment' },
-  { path: 'src/pages/local-llm-server.astro', archetype: 'infrastructure' },
-  { path: 'src/pages/local-asr-server.astro', archetype: 'infrastructure' },
-  { path: 'src/pages/closedroom.astro', archetype: 'product' },
-  { path: 'src/pages/aura-finance.astro', archetype: 'product' },
-  { path: 'src/pages/redact-guard.astro', archetype: 'product' },
-  { path: 'src/pages/performance-lab.astro', archetype: 'experiment' },
-  { path: 'src/pages/traffic-monitoring.astro', archetype: 'experiment' },
-  { path: 'src/pages/traffic-monitoring-android.astro', archetype: 'experiment' },
+  { path: 'src/pages/android-local-llm-harness.astro', archetype: 'experiment', migrated: false },
+  { path: 'src/pages/local-llm-server.astro', archetype: 'infrastructure', migrated: true },
+  { path: 'src/pages/local-asr-server.astro', archetype: 'infrastructure', migrated: false },
+  { path: 'src/pages/closedroom.astro', archetype: 'product', migrated: false },
+  { path: 'src/pages/aura-finance.astro', archetype: 'product', migrated: false },
+  { path: 'src/pages/redact-guard.astro', archetype: 'product', migrated: false },
+  { path: 'src/pages/performance-lab.astro', archetype: 'experiment', migrated: false },
+  { path: 'src/pages/traffic-monitoring.astro', archetype: 'experiment', migrated: false },
+  { path: 'src/pages/traffic-monitoring-android.astro', archetype: 'experiment', migrated: false },
 ];
 
-test('project-page UX contract declares the shared journey', () => {
+test('project-page UX contract declares archetype-specific IA and evidence rules', () => {
   const contract = JSON.parse(read('design/ux-contract.json'));
   assert.equal(contract.projectPages.contract, 'design/project-page-contract.md');
-  assert.deepEqual(contract.projectPages.navigation, navigationLabels);
-  assert.deepEqual(contract.projectPages.primaryJourney, [...navigationLabels, 'Next step']);
+  assert.deepEqual(contract.projectPages.navigation, archetypeNavigation);
+  assert.equal(contract.projectPages.rules.homepageOwnsMethodJourney, true);
+  assert.equal(contract.projectPages.rules.archetypeIAOverSharedPhaseIA, true);
   assert.equal(contract.projectPages.rules.verifiedEvidenceOnly, true);
   assert.equal(contract.projectPages.rules.missingEvidenceMustBeExplicit, true);
+  assert.equal(contract.projectPages.rules.dominantVisualForPrimaryMentalModel, true);
   assert.equal(contract.projectPages.rules.meaningfulTextNeverBelow14Px, true);
-  assert.equal(contract.projectPages.rules.mobileActivePhaseMustRemainVisible, true);
+  assert.equal(contract.projectPages.rules.mobileProjectContextMustRemainVisible, true);
+  assert.equal(contract.projectPages.rules.maxPrimaryNavigationItems, 5);
+  assert.equal(contract.projectPages.migration.allowMixedStateDuringWorkstream, true);
   assert.equal(contract.projectPages.routes.length, projectPages.length);
   assert.match(contract.adaptiveContent.tables, /stacked labeled rows/i);
   assert.match(contract.adaptiveContent.code, /keyboard-focusable horizontal scroller/i);
 });
 
-test('all project pages preserve one predictable phase order', () => {
+test('migrated project pages use archetype IA while legacy routes remain explicitly transitional', () => {
   for (const projectPage of projectPages) {
     const source = read(projectPage.path);
     assert.match(source, /data-project-page/);
     assert.ok(source.includes(`data-project-archetype="${projectPage.archetype}"`));
+
+    if (projectPage.migrated) {
+      assert.match(source, /ProjectHero/);
+      assert.match(source, /ProjectProof/);
+      assert.match(source, /ProjectEvidenceNote/);
+      assert.match(source, /ProjectRelations/);
+      assert.doesNotMatch(source, /ProjectPhase/);
+
+      for (const label of archetypeNavigation[projectPage.archetype]) {
+        assert.ok(source.includes(`label: '${label}'`), `${projectPage.path} is missing ${label} navigation`);
+      }
+      continue;
+    }
+
     assert.match(source, /ProjectPhase/);
     assert.match(source, /ProjectDecisionBand/);
 
     let previousPhaseIndex = -1;
-    for (const phase of phases) {
+    for (const phase of legacyPhases) {
       assert.ok(source.includes(`href: '#${phase}'`));
       const phaseIndex = source.indexOf(`id="${phase}"`, previousPhaseIndex + 1);
       assert.ok(phaseIndex > previousPhaseIndex);
@@ -52,7 +75,23 @@ test('all project pages preserve one predictable phase order', () => {
   }
 });
 
-test('shared project subheader uses canonical tokens, accessible targets and adaptive phase visibility', () => {
+test('shared project primitives preserve semantic structure and proof hierarchy', () => {
+  const hero = read('src/components/project/ProjectHero.astro');
+  const section = read('src/components/project/ProjectSection.astro');
+  const proof = read('src/components/project/ProjectProof.astro');
+  const relations = read('src/components/project/ProjectRelations.astro');
+
+  assert.match(hero, /<section class="project-hero"/);
+  assert.match(hero, /<h1 id="project-hero-title">/);
+  assert.match(hero, /min-height: var\(--touch-target-min\)/);
+  assert.match(section, /<section/);
+  assert.match(section, /<h2 id=\{titleId\}>/);
+  assert.match(proof, /WHAT THIS PROVES/);
+  assert.match(relations, /CONNECTED SYSTEM/);
+  assert.match(relations, /aria-current/);
+});
+
+test('shared project subheader uses canonical tokens, accessible targets and adaptive section visibility', () => {
   const source = read('src/components/layout/ProductSubHeader.astro');
 
   assert.doesNotMatch(source, /var\(--text-small\)/);
@@ -85,13 +124,16 @@ test('technical content follows the narrow-screen adaptive contract', () => {
   }
 });
 
-test('project-page contract documents semantic consistency over visual sameness', () => {
+test('project-page contract documents archetype consistency over methodology repetition', () => {
   const contract = read('design/project-page-contract.md');
   assert.match(contract, /consistent comprehension, not identical pages/i);
-  assert.match(contract, /OVERVIEW[\s\S]*DECIDE[\s\S]*BUILD[\s\S]*TEST[\s\S]*MEASURE[\s\S]*DECIDE AGAIN/);
+  assert.match(contract, /homepage owns the shared `Decide -> Build -> Test -> Measure -> Decide Again` method/i);
+  assert.match(contract, /Overview · Architecture · Runtime · Evidence · Status/);
+  assert.match(contract, /Overview · Workflow · Product · Architecture · Evidence/);
+  assert.match(contract, /Overview · Method · Evidence · Findings · Status/);
   assert.match(contract, /Never use decorative charts that can be mistaken for measured evidence/i);
-  assert.match(contract, /active phase is kept visible and centered/i);
   assert.match(contract, /Minimum meaningful text size remains 14px/i);
+  assert.match(contract, /ProjectPhase.*migration-only/is);
 });
 
 test('ClosedRoom header SVG and controls satisfy baseline rendering/accessibility invariants', () => {
