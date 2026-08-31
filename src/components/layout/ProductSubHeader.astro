@@ -19,8 +19,8 @@ export interface Props {
     href: string;
   };
   /**
-   * Migrated project pages use the canonical sticky SiteHeader above this bar.
-   * Legacy routes with dedicated non-sticky headers can leave this false until migration.
+   * Project routes use the canonical sticky SiteHeader above this bar by default.
+   * Keep this configurable only for transitional/embedded usages.
    */
   underSiteHeader?: boolean;
 }
@@ -31,7 +31,7 @@ const {
   logoPath,
   links,
   cta,
-  underSiteHeader = false,
+  underSiteHeader = true,
 } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 ---
