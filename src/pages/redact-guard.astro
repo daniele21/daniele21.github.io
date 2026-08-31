@@ -1,18 +1,19 @@
 ---
 /**
  * redact-guard.astro
- * Product / use-case deep-dive using the shared project-page journey.
+ * Product / proving-ground pilot for the archetype-based project page UX.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RedactGuardHeader from '../components/redactguard/RedactGuardHeader.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
-import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectHero from '../components/project/ProjectHero.astro';
+import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
-import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
-import RedactGuardHero from '../components/redactguard/RedactGuardHero.astro';
+import ProjectRelations from '../components/project/ProjectRelations.astro';
+
 import RedactGuardProblem from '../components/redactguard/RedactGuardProblem.astro';
 import RedactGuardSolution from '../components/redactguard/RedactGuardSolution.astro';
-import RedactGuardBenefits from '../components/redactguard/RedactGuardBenefits.astro';
 import RedactGuardProduct from '../components/redactguard/RedactGuardProduct.astro';
 import RedactGuardArchitecture from '../components/redactguard/RedactGuardArchitecture.astro';
 import RedactGuardCta from '../components/redactguard/RedactGuardCta.astro';
@@ -20,14 +21,14 @@ import RedactGuardCta from '../components/redactguard/RedactGuardCta.astro';
 import { redactGuardData } from '../content/redactGuard';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const { hero } = redactGuardData;
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
-  { label: 'Decide', href: '#decide' },
-  { label: 'Build', href: '#build' },
-  { label: 'Test', href: '#test' },
-  { label: 'Measure', href: '#measure' },
-  { label: 'Decide again', href: '#decide-again' },
+  { label: 'Workflow', href: '#workflow' },
+  { label: 'Product', href: '#product' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Evidence', href: '#evidence' },
 ];
 
 const redactGuardSchema = {
@@ -61,56 +62,64 @@ const redactGuardSchema = {
   />
 
   <div id="top" data-project-page data-project-archetype="product">
-    <RedactGuardHero baseUrl={baseUrl} />
-
-    <ProjectPhase
-      id="decide"
-      step="01"
-      label="DECIDE"
-      title="Can sensitive-data detection adapt without moving the original document to cloud AI?"
-      description="RedactGuard starts from a changing definition of PII: what is sensitive depends on the document, organization and workflow, while static detectors turn taxonomy changes into software maintenance."
+    <ProjectHero
+      eyebrow="PRODUCT · PRIVACY-FIRST LOCAL AI"
+      title="RedactGuard"
+      lede="Detect sensitive information locally, review every finding, and move only the minimized document into the next workflow."
+      status="v1.0 · Experimental privacy tool"
+      meta={['Local processing', 'Custom PII', 'Human review']}
+      actions={[
+        { label: 'See the workflow ↓', href: '#workflow' },
+        { label: 'GitHub ↗', href: 'https://github.com/daniele21/redact-guard', variant: 'secondary' },
+      ]}
+      visualLabel="RedactGuard review interface"
     >
-      <RedactGuardProblem />
-      <RedactGuardBenefits />
-    </ProjectPhase>
+      <div class="product-hero-frame">
+        <img
+          data-zoomable
+          src={`${baseUrl}/${hero.imageHero.replace(/^\//, '')}`}
+          alt="RedactGuard review screen showing detected sensitive data before redaction"
+          width="1440"
+          height="900"
+          loading="eager"
+        />
+        <div class="product-hero-caption">
+          <span>{hero.imageCaptionLeft}</span>
+          <span>{hero.imageCaptionRight}</span>
+        </div>
+      </div>
+    </ProjectHero>
 
-    <ProjectPhase
-      id="build"
-      step="02"
-      label="BUILD"
-      title="Make the sensitive-data definition configurable and keep inference local."
-      description="Profiles and custom PII instructions drive a local GGUF detector behind a separate document-processing boundary, so many taxonomy changes can update the definition rather than require another hard-coded detector."
-      tone="subtle"
-    >
+    <ProjectProof
+      statement="Sensitive-document workflows can use adaptable AI detection without making a cloud model the default privacy boundary."
+      detail="The model proposes findings locally; the user reviews what is actually removed before any minimized result is exported."
+    />
+
+    <RedactGuardProblem />
+
+    <div id="workflow" class="project-anchor">
       <RedactGuardSolution />
-      <RedactGuardArchitecture baseUrl={baseUrl} />
-    </ProjectPhase>
+    </div>
 
-    <ProjectPhase
-      id="test"
-      step="03"
-      label="TEST"
-      title="Keep every model finding visible and reversible before export."
-      description="The real product workflow is load → detect → review → redact → export. AI accelerates detection, but the user remains responsible for what is actually removed."
-    >
-      <RedactGuardProduct baseUrl={baseUrl} />
-    </ProjectPhase>
+    <RedactGuardProduct baseUrl={baseUrl} />
 
-    <ProjectPhase
-      id="measure"
-      step="04"
-      label="MEASURE"
-      title="Treat human review and model limitations as part of the evidence."
-      description="RedactGuard is an experimental privacy tool, not a compliance guarantee. The page therefore makes the implemented privacy boundary explicit while withholding unsupported claims about perfect PII recall or regulatory correctness."
+    <RedactGuardArchitecture baseUrl={baseUrl} />
+
+    <ProjectSection
+      id="evidence"
+      eyebrow="EVIDENCE & LIMITS"
+      title="The workflow is implemented. Detection is still fallible."
+      description="RedactGuard treats reviewability as part of the product boundary: local inference can accelerate detection, but it does not turn the model into an autonomous privacy or compliance authority."
       tone="subtle"
+      width="wide"
     >
       <ProjectEvidenceNote
-        title="The workflow is implemented; detection remains fallible."
-        body="The current product supports local inference, configurable PII definitions, reviewable findings and minimized export. The underlying local model can still miss, misclassify or over-detect sensitive information, so human review remains mandatory."
+        title="Local, configurable and reviewable does not mean perfect."
+        body="The current product supports local GGUF inference, configurable standard and custom PII definitions, reviewable findings and explicit export. The model can still miss, misclassify or over-detect sensitive information, so human review remains mandatory."
         evidenced={[
           'Document analysis can run through local GGUF inference',
           'Standard and custom PII definitions are configurable',
-          'Every finding remains reviewable before export',
+          'Every finding remains visible and reviewable before export',
           'The minimized result moves only after explicit user choices',
         ]}
         missing={[
@@ -118,26 +127,74 @@ const redactGuardSchema = {
           'Published perfect-recall or perfect-precision claim across PII domains',
         ]}
       />
-    </ProjectPhase>
+    </ProjectSection>
 
-    <ProjectPhase
-      id="decide-again"
-      step="05"
-      label="DECIDE AGAIN"
-      title="Use local AI as an adaptable detector, not as an autonomous privacy authority."
-      description="The current product decision is to keep detection configurable and local while preserving a human confirmation step before any document is considered safe to share."
-    >
-      <ProjectDecisionBand
-        title="Change the definition, not the trust model."
-        body="RedactGuard uses a local LLM to make sensitive-data detection easier to adapt, but it does not transfer the final privacy decision to the model. The user reviews what was found and decides what is removed before export."
-        signals={[
-          'Local inference keeps the original document inside the chosen boundary',
-          'PII definitions can evolve through profiles and instructions',
-          'Human review remains required because model detection is fallible',
-        ]}
-      />
-    </ProjectPhase>
+    <ProjectRelations
+      items={[
+        {
+          stage: 'BUILD · INFRASTRUCTURE',
+          title: 'Local LLM Server',
+          href: '/local-llm-server',
+          note: 'Reusable local inference boundary',
+        },
+        {
+          stage: 'TEST · PRODUCT',
+          title: 'RedactGuard',
+          current: true,
+          note: 'Privacy-first proving ground',
+        },
+        {
+          stage: 'MEASURE · EVIDENCE',
+          title: 'Performance Lab',
+          href: '/performance-lab',
+          note: 'Runtime viability on real hardware',
+        },
+      ]}
+    />
 
     <RedactGuardCta />
   </div>
 </BaseLayout>
+
+<style>
+  .product-hero-frame {
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(18px, 2.5vw, 28px);
+    background: var(--surface-card);
+    box-shadow: 0 28px 72px rgba(8, 19, 51, 0.14);
+  }
+
+  .product-hero-frame img {
+    display: block;
+    width: 100%;
+    max-height: 760px;
+    object-fit: contain;
+    background: var(--surface-subtle);
+  }
+
+  .product-hero-caption {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: 10px 16px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    font-weight: 650;
+  }
+
+  .project-anchor {
+    scroll-margin-top: 104px;
+  }
+
+  @media (max-width: 640px) {
+    .product-hero-caption {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 2px;
+    }
+  }
+</style>
