@@ -139,8 +139,8 @@ function getHref(href: string) {
   }
 
   .brand-signature-dark { display: none; }
-  [data-theme="dark"] .brand-signature-light { display: none; }
-  [data-theme="dark"] .brand-signature-dark { display: block; }
+  :global(html[data-theme='dark']) .brand-signature-light { display: none; }
+  :global(html[data-theme='dark']) .brand-signature-dark { display: block; }
 
   .site-nav {
     min-width: 0;
@@ -235,8 +235,8 @@ function getHref(href: string) {
 
   .sun-icon { display: block; }
   .moon-icon { display: none; }
-  [data-theme="dark"] .sun-icon { display: none; }
-  [data-theme="dark"] .moon-icon { display: block; }
+  :global(html[data-theme='dark']) .sun-icon { display: none; }
+  :global(html[data-theme='dark']) .moon-icon { display: block; }
 
   .nav-dropdown {
     position: relative;
