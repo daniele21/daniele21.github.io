@@ -1,0 +1,252 @@
+---
+export interface ProjectHeroAction {
+  label: string;
+  href: string;
+  variant?: 'primary' | 'secondary';
+}
+
+export interface Props {
+  eyebrow: string;
+  title: string;
+  lede: string;
+  status?: string;
+  logoPath?: string;
+  meta?: string[];
+  actions?: ProjectHeroAction[];
+  visualLabel?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  lede,
+  status,
+  logoPath,
+  meta = [],
+  actions = [],
+  visualLabel = 'Project visual',
+} = Astro.props;
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const resolveHref = (href: string) => {
+  if (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('#')) return href;
+  return `${baseUrl}/${href.replace(/^\//, '')}`;
+};
+---
+
+<section class="project-hero" aria-labelledby="project-hero-title">
+  <div class="shell project-hero-shell">
+    <div class="project-hero-copy">
+      <div class="project-hero-meta-row">
+        {logoPath && (
+          <img
+            src={`${baseUrl}/${logoPath.replace(/^\//, '')}`}
+            alt=""
+            width="34"
+            height="34"
+            class="project-hero-logo"
+          />
+        )}
+        <span class="project-hero-eyebrow">{eyebrow}</span>
+        {status && <span class="project-hero-status">{status}</span>}
+      </div>
+
+      <h1 id="project-hero-title">{title}</h1>
+      <p class="project-hero-lede">{lede}</p>
+
+      {meta.length > 0 && (
+        <div class="project-hero-meta" aria-label="Project metadata">
+          {meta.map((item) => <span>{item}</span>)}
+        </div>
+      )}
+
+      {actions.length > 0 && (
+        <div class="project-hero-actions">
+          {actions.map((action, index) => (
+            <a
+              href={resolveHref(action.href)}
+              class:list={[
+                'project-hero-action',
+                action.variant === 'secondary' || index > 0 ? 'is-secondary' : 'is-primary',
+              ]}
+              target={action.href.startsWith('http') ? '_blank' : undefined}
+              rel={action.href.startsWith('http') ? 'noreferrer' : undefined}
+            >
+              {action.label}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <div class="project-hero-visual" aria-label={visualLabel}>
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .project-hero {
+    padding: clamp(54px, 7vw, 92px) 0 clamp(58px, 7vw, 96px);
+    background:
+      radial-gradient(ellipse 58% 42% at 78% 12%, rgba(20, 91, 255, 0.065), transparent 70%),
+      var(--surface-canvas);
+  }
+
+  .project-hero-shell {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(36px, 5vw, 60px);
+  }
+
+  .project-hero-copy {
+    max-width: 920px;
+  }
+
+  .project-hero-meta-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: var(--space-3);
+  }
+
+  .project-hero-logo {
+    width: 34px;
+    height: 34px;
+    object-fit: cover;
+    border-radius: 9px;
+    border: 1px solid var(--border-medium);
+    background: var(--surface-inverse);
+  }
+
+  .project-hero-eyebrow {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 820;
+    letter-spacing: 0.105em;
+    text-transform: uppercase;
+  }
+
+  .project-hero-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 3px 9px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
+    font-size: var(--text-caption);
+    font-weight: 720;
+  }
+
+  h1 {
+    max-width: 1050px;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(3.2rem, 7.8vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: -0.062em;
+    font-weight: 850;
+    color: var(--ink-display);
+    text-wrap: balance;
+  }
+
+  .project-hero-lede {
+    max-width: 760px;
+    margin: clamp(18px, 2.5vw, 28px) 0 0;
+    color: var(--ink-muted);
+    font-size: clamp(1.08rem, 1.65vw, 1.35rem);
+    line-height: 1.58;
+    text-wrap: pretty;
+  }
+
+  .project-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-top: var(--space-4);
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+  }
+
+  .project-hero-meta span:not(:last-child)::after {
+    content: '·';
+    margin-left: 18px;
+    color: var(--border-strong);
+  }
+
+  .project-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: clamp(24px, 3vw, 34px);
+  }
+
+  .project-hero-action {
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-display);
+    font-size: var(--text-body-sm);
+    font-weight: 760;
+    text-decoration: none;
+    transition:
+      transform var(--duration-fast) ease,
+      border-color var(--duration-fast) ease,
+      background var(--duration-fast) ease,
+      color var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
+  }
+
+  .project-hero-action:hover {
+    transform: translateY(-1px);
+  }
+
+  .project-hero-action.is-primary {
+    border: 1px solid var(--accent-blue);
+    background: var(--accent-blue);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(20, 91, 255, 0.22);
+  }
+
+  .project-hero-action.is-secondary {
+    border: 1px solid var(--border-medium);
+    background: var(--surface-card);
+    color: var(--ink-display);
+  }
+
+  .project-hero-action.is-secondary:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue-dark);
+  }
+
+  .project-hero-visual {
+    width: 100%;
+    min-width: 0;
+  }
+
+  @media (max-width: 640px) {
+    .project-hero {
+      padding-top: 42px;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 15vw, 4.2rem);
+    }
+
+    .project-hero-meta span::after {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-hero-action { transition: none; }
+  }
+</style>
