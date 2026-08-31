@@ -12,11 +12,11 @@ const archetypeNavigation = {
 };
 
 const projectPages = [
-  { path: 'src/pages/android-local-llm-harness.astro', archetype: 'experiment', migrated: false },
+  { path: 'src/pages/android-local-llm-harness.astro', archetype: 'infrastructure', migrated: true },
   { path: 'src/pages/local-llm-server.astro', archetype: 'infrastructure', migrated: true },
   { path: 'src/pages/local-asr-server.astro', archetype: 'infrastructure', migrated: false },
-  { path: 'src/pages/closedroom.astro', archetype: 'product', migrated: false },
-  { path: 'src/pages/aura-finance.astro', archetype: 'product', migrated: false },
+  { path: 'src/pages/closedroom.astro', archetype: 'product', migrated: true },
+  { path: 'src/pages/aura-finance.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/redact-guard.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/performance-lab.astro', archetype: 'experiment', migrated: true },
   { path: 'src/pages/traffic-monitoring.astro', archetype: 'experiment', migrated: false },
@@ -108,6 +108,20 @@ test('shared project subheader uses canonical tokens, accessible targets and ada
   assert.doesNotMatch(source, /\.subheader-brand,\s*\.subheader-cta\s*\{\s*display: none/);
 });
 
+test('global theme toggle has both behavior and semantic dark-mode tokens', () => {
+  const script = read('src/scripts/site.ts');
+  const tokens = read('src/styles/tokens.css');
+  const header = read('src/components/layout/SiteHeader.astro');
+
+  assert.match(header, /data-theme-toggle/);
+  assert.match(script, /document\.documentElement\.setAttribute\('data-theme', activeTheme\)/);
+  assert.match(script, /localStorage\.setItem\('theme', activeTheme\)/);
+  assert.match(tokens, /html\[data-theme='dark'\]/);
+  assert.match(tokens, /--surface-canvas:\s*#07101f/);
+  assert.match(tokens, /--ink-display:\s*#f4f7fb/);
+  assert.match(tokens, /color-scheme:\s*dark/);
+});
+
 test('technical content follows the narrow-screen adaptive contract', () => {
   const table = read('src/components/localllm/LocalLlmBackends.astro');
   assert.match(table, /data-label="Backend engine"/);
@@ -137,10 +151,16 @@ test('project-page contract documents archetype consistency over methodology rep
   assert.match(contract, /ProjectPhase.*migration-only/is);
 });
 
-test('ClosedRoom header SVG and controls satisfy baseline rendering/accessibility invariants', () => {
-  const source = read('src/components/closedroom/ClosedRoomHeader.astro');
-  assert.doesNotMatch(source, /M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z/);
-  assert.match(source, /M21 12\.79A9 9 0 1 1 11\.21 3A7 7 0 0 0 21 12\.79Z/);
-  assert.match(source, /width: var\(--touch-target-min\)/);
-  assert.match(source, /font-size: var\(--text-caption\)/);
+test('migrated product and infrastructure routes use the canonical global header shell', () => {
+  for (const path of [
+    'src/pages/android-local-llm-harness.astro',
+    'src/pages/closedroom.astro',
+    'src/pages/aura-finance.astro',
+    'src/pages/redact-guard.astro',
+    'src/pages/local-llm-server.astro',
+  ]) {
+    const source = read(path);
+    assert.doesNotMatch(source, /slot="header"/);
+    assert.match(source, /ProductSubHeader/);
+  }
 });
