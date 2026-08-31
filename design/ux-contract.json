@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "name": "Personal Landing UX Contract",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "targetExperienceLevel": "L1",
   "baselineRepositoryLevel": "L0",
   "designSourceOfTruth": {
@@ -32,16 +32,16 @@
     "desktop": {
       "width": 1440,
       "maxWidth": 1280,
-      "layout": "two-column alternating method flow with visual rail"
+      "layout": "wide editorial canvas with evidence-led visual hierarchy"
     },
     "tablet": {
       "width": 768,
-      "layout": "stacked single column with condensed rail"
+      "layout": "stacked single column with preserved project context"
     },
     "mobile": {
       "width": 390,
       "minWidth": 320,
-      "layout": "linear vertical thread, full readability, zero horizontal page overflow"
+      "layout": "linear vertical experience, full readability, zero horizontal page overflow"
     }
   },
   "typography": {
@@ -103,8 +103,8 @@
   },
   "adaptiveContent": {
     "projectNavigation": {
-      "desktop": "all canonical phases visible when space allows",
-      "mobile": "horizontal phase rail with active phase auto-centered, edge fade affordance and no competing sticky project CTA"
+      "desktop": "archetype-specific navigation with no more than five primary items, project identity/status and one useful repository/demo action",
+      "mobile": "preserve compact project identity and horizontally scroll archetype-specific section navigation when necessary; active section remains visible and edge fades communicate overflow"
     },
     "tables": "Prefer stacked labeled rows/cards below 640px when a comparison remains understandable without columns. Horizontal scrolling is a fallback, not the default.",
     "code": "Preserve code formatting in a keyboard-focusable horizontal scroller with an explicit mobile affordance; never create page-level overflow.",
@@ -113,38 +113,65 @@
   },
   "projectPages": {
     "contract": "design/project-page-contract.md",
-    "goal": "Consistent comprehension across technical project deep-dives without forcing identical page content or visual modules.",
+    "goal": "Consistent comprehension across technical project deep-dives while letting each archetype follow the visitor's natural mental model.",
     "primaryJourney": [
       "Overview",
-      "Decide",
-      "Build",
-      "Test",
-      "Measure",
-      "Decide again",
-      "Next step"
+      "Primary project mental model",
+      "Technical depth",
+      "Evidence boundary",
+      "Status or architectural consequence",
+      "Connected system / next step"
     ],
-    "navigation": [
-      "Overview",
-      "Decide",
-      "Build",
-      "Test",
-      "Measure",
-      "Decide again"
-    ],
+    "navigation": {
+      "infrastructure": [
+        "Overview",
+        "Architecture",
+        "Runtime",
+        "Evidence",
+        "Status"
+      ],
+      "product": [
+        "Overview",
+        "Workflow",
+        "Product",
+        "Architecture",
+        "Evidence"
+      ],
+      "experiment": [
+        "Overview",
+        "Method",
+        "Evidence",
+        "Findings",
+        "Status"
+      ]
+    },
     "archetypes": [
       "infrastructure",
       "product",
       "experiment"
     ],
     "rules": {
+      "homepageOwnsMethodJourney": true,
       "semanticConsistencyBeforeVisualSameness": true,
-      "projectSpecificModulesStayInsidePhases": true,
+      "archetypeIAOverSharedPhaseIA": true,
       "verifiedEvidenceOnly": true,
       "missingEvidenceMustBeExplicit": true,
-      "progressiveDisclosure": "essential -> context -> visual/workflow proof -> architecture/code/diagnostics",
-      "sharedPhaseOrderAcrossViewports": true,
+      "dominantVisualForPrimaryMentalModel": true,
+      "progressiveDisclosure": "essential -> dominant visual/workflow -> context -> architecture/code/diagnostics -> evidence -> consequence",
       "meaningfulTextNeverBelow14Px": true,
-      "mobileActivePhaseMustRemainVisible": true
+      "mobileProjectContextMustRemainVisible": true,
+      "maxPrimaryNavigationItems": 5
+    },
+    "migration": {
+      "legacyComponent": "ProjectPhase",
+      "targetComponents": [
+        "ProjectHero",
+        "ProjectSection",
+        "ProjectProof",
+        "ProjectEvidenceNote",
+        "ProjectRelations"
+      ],
+      "allowMixedStateDuringWorkstream": true
     },
     "routes": [
       "/android-local-llm-harness",
@@ -186,7 +213,7 @@
     {
       "id": "J5",
       "persona": "Project Deep-Dive Reader",
-      "flow": "Overview -> Decide -> Build -> Test -> Measure -> Decide again -> GitHub / related next step",
+      "flow": "Overview -> project-specific architecture/workflow/method -> technical depth -> evidence -> status/consequence -> related project or GitHub",
       "targetComprehensionSec": 120
     }
   ]
