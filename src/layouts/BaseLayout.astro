@@ -1,7 +1,12 @@
 ---
 /**
  * BaseLayout - Root layout for all pages.
- * Manages document metadata, global styles, structured data, and shared header/footer.
+ * Manages document metadata, global styles, structured data, and the canonical
+ * site-wide header/footer.
+ *
+ * SiteHeader is intentionally not overridable: homepage and project pages must
+ * share the same primary navigation and CTA hierarchy. Page-specific context
+ * belongs below it (for example ProductSubHeader on project routes).
  */
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
@@ -132,9 +137,7 @@ const allSchemas = jsonLd
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <slot name="header">
-    <SiteHeader />
-  </slot>
+  <SiteHeader />
   <main id="main">
     <slot />
   </main>
