@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" role="img" aria-labelledby="title desc">
+  <title id="title">Trade-off guide</title>
+  <desc id="desc">Four local-to-cloud trade-off spectrums for privacy, control, elasticity and capability.</desc>
+  
+  <defs>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#081333" flood-opacity="0.06"/>
+    </filter>
+    <style>
+      .font { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .navy { fill: #0B1638; }
+      .muted { fill: #5E6B88; }
+      .blue { fill: #145BFF; }
+      .line { stroke: #D9E3F7; }
+      .border { stroke: #CAD8F2; }
+      .blue-stroke { stroke: #145BFF; }
+      .label { font-size: 14px; font-weight: 700; }
+      .small { font-size: 12px; font-weight: 600; }
+      .micro { font-size: 11px; font-weight: 650; }
+    </style>
+  </defs>
+
+
+  <!-- helper function equivalent done by explicit markup -->
+  <g class="font">
+    <!-- Privacy -->
+    <text x="20" y="34" class="navy label">Privacy</text>
+    <line x1="120" y1="30" x2="330" y2="30" stroke="#D7E2F5" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="120" cy="30" r="5" fill="#FFFFFF" stroke="#B8C7E4" stroke-width="1.5"/>
+    <circle cx="330" cy="30" r="5" fill="#FFFFFF" stroke="#B8C7E4" stroke-width="1.5"/>
+    <rect x="147" y="22" width="16" height="16" rx="2.5" fill="#FFFFFF" stroke="#145BFF" stroke-width="2" transform="rotate(45 155 30)"/>
+
+    <!-- Control -->
+    <text x="20" y="86" class="navy label">Control</text>
+    <line x1="120" y1="82" x2="330" y2="82" stroke="#D7E2F5" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="120" cy="82" r="5" fill="#FFFFFF" stroke="#B8C7E4" stroke-width="1.5"/>
+    <circle cx="330" cy="82" r="5" fill="#FFFFFF" stroke="#B8C7E4" stroke-width="1.5"/>
+    <rect x="165" y="74" width="16" height="16" rx="2.5" fill="#FFFFFF" stroke="#145BFF" stroke-width="2" transform="rotate(45 173 82)"/>
+
+    <!-- Elasticity -->
+    <text x="20" y="138" class="navy label">Elasticity</text>
+    <line x1="120" y1="134" x2="330" y2="134" stroke="#D7E2F5" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="120" cy="134" r="5" fill="#FFFFFF" stroke="#B8C7E4" stroke-width="1.5"/>
+    <circle cx="330" cy="134" r="5" fill="#FFFFFF" stroke="#B8C7E4" stroke-width="1.5"/>
+    <rect x="263" y="126" width="16" height="16" rx="2.5" fill="#FFFFFF" stroke="#145BFF" stroke-width="2" transform="rotate(45 271 134)"/>
+
+    <!-- Capability -->
+    <text x="20" y="190" class="navy label">Capability</text>
+    <line x1="120" y1="186" x2="330" y2="186" stroke="#D7E2F5" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="120" cy="186" r="5" fill="#FFFFFF" stroke="#B8C7E4" stroke-width="1.5"/>
+    <circle cx="330" cy="186" r="5" fill="#FFFFFF" stroke="#B8C7E4" stroke-width="1.5"/>
+    <rect x="301" y="178" width="16" height="16" rx="2.5" fill="#FFFFFF" stroke="#145BFF" stroke-width="2" transform="rotate(45 309 186)"/>
+  </g>
+
+  <!-- axis labels -->
+  <text x="120" y="225" class="font muted small">Local</text>
+  <text x="330" y="225" text-anchor="end" class="font muted small">Cloud</text>
+  <line x1="120" y1="236" x2="330" y2="236" stroke="#E3EAF7" stroke-width="1"/>
+
+  <!-- concise message -->
+  <text x="120" y="254" class="font muted micro">Every boundary is a trade-off.</text>
+</svg>

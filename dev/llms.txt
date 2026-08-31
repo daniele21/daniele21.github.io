@@ -1,0 +1,48 @@
+# Daniele Moltisanti - Product-Grade Local AI
+
+> Researching, architecting, and building product-grade local AI software: open-weight models, on-device runtimes, speech recognition, and zero-trust privacy-first application architectures.
+
+## Core Thesis
+- Closed models (OpenAI, Anthropic) should be an option, not a single point of failure or hard dependency.
+- On-device and edge inference reduce cloud API dependency, protect sensitive data, eliminate latency spikes, and give product teams direct control over model lifecycles and costs.
+- Hybrid local/cloud architectures combine local-first privacy with optional cloud intelligence where scale requires it.
+
+## Key Projects & Infrastructure
+
+### 1. Local LLM Server
+- URL: https://daniele21.github.io/local-llm-server
+- Repository: https://github.com/daniele21/local-llm-server
+- Description: High-throughput local inference engine and studio interface designed for managing open-weight models (Llama, Gemma, Qwen) with customizable backends (Ollama, llama.cpp, vLLM).
+
+### 2. Android Local LLM Harness
+- URL: https://daniele21.github.io/android-local-llm-harness
+- Repository: https://github.com/daniele21/android-local-llm-harness
+- Description: Modular benchmarking and execution harness for evaluated LLM runtimes on Android ARM hardware, optimizing NPU/GPU acceleration and thermal performance.
+
+### 3. ClosedRoom
+- URL: https://daniele21.github.io/closedroom
+- Repository: https://github.com/daniele21/local-asr-server/tree/speaker_detection
+- Description: macOS local meeting intelligence workspace using Whisper ASR and speaker diarization for zero-cloud audio transcription and analysis.
+
+### 4. RedactGuard
+- URL: https://daniele21.github.io/redact-guard
+- Repository: https://github.com/daniele21/redact-guard
+- Description: Zero-trust local PII detection and masking pipeline, anonymizing sensitive customer data before it reaches AI model interfaces.
+
+### 5. Aura Finance
+- URL: https://daniele21.github.io/aura-finance
+- Repository: https://github.com/daniele21/personal-budget/tree/new-features
+- Description: Privacy-first local intelligence engine for automated financial reconciliation and spending analytics.
+
+## Technical Knowledge & Focus Areas
+- Local AI & On-device Inference
+- Open-Weight Large Language Models (LLMs)
+- Speech Recognition (ASR) & Speaker Diarization
+- Privacy-First Product Design & PII Masking
+- Cross-Platform & Mobile AI Runtimes (Android NPU, Apple Metal)
+
+## Author Profiles & Social Links
+- Official Website: https://daniele21.github.io/
+- GitHub: https://github.com/daniele21
+- LinkedIn: https://www.linkedin.com/in/daniele-moltisanti/
+- Blog / Writing: https://staituned.com
