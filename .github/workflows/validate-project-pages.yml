@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/landing-page
+      - dev
       - master
   pull_request:
 

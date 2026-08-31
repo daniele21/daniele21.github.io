@@ -1,0 +1,101 @@
+name: CI & Multi-Environment Deploy
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+  workflow_dispatch:
+
+# Prevent race conditions during git push to gh-pages branch
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  validate-and-deploy:
+    runs-on: ubuntu-latest
+    name: ${{ github.ref == 'refs/heads/master' && 'Deploy to Production' || 'Deploy to Test (Staging)' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit & contract tests
+        run: npm run test
+
+      # -------------------------------------------------------------
+      # PRODUCTION DEPLOYMENT (push to master)
+      # Site URL: https://daniele21.github.io/
+      # -------------------------------------------------------------
+      - name: Build Astro for Production
+        if: github.ref == 'refs/heads/master'
+        run: npm run build
+
+      - name: Run smoke verification for Production
+        if: github.ref == 'refs/heads/master'
+        run: npm run smoke
+
+      - name: Deploy Production to GitHub Pages
+        if: github.ref == 'refs/heads/master'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: ./dist
+          clean-exclude: |
+            dev/**
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary - Production Deployment
+        if: github.ref == 'refs/heads/master'
+        run: |
+          echo "### 🚀 Production Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: Production" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: \`master\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Live URL**: [https://daniele21.github.io/](https://daniele21.github.io/)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Preserved subpaths**: \`/dev/\` (Test site preserved)" >> $GITHUB_STEP_SUMMARY
+
+      # -------------------------------------------------------------
+      # TEST / STAGING DEPLOYMENT (push to dev)
+      # Site URL: https://daniele21.github.io/dev/
+      # -------------------------------------------------------------
+      - name: Build Astro for Test / Dev Preview
+        if: github.ref == 'refs/heads/dev'
+        env:
+          ASTRO_BASE: /dev/
+        run: npm run build
+
+      - name: Run smoke verification for Test
+        if: github.ref == 'refs/heads/dev'
+        run: npm run smoke
+
+      - name: Deploy Test Preview to GitHub Pages
+        if: github.ref == 'refs/heads/dev'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: ./dist
+          target-folder: dev
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary - Test Deployment
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          echo "### 🧪 Test (Staging) Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: Test / Staging" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: \`dev\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Live Test URL**: [https://daniele21.github.io/dev/](https://daniele21.github.io/dev/)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Robots tag**: \`noindex,nofollow\` (Search indexing disabled for dev)" >> $GITHUB_STEP_SUMMARY

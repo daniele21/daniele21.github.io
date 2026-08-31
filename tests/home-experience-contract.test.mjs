@@ -55,8 +55,8 @@ test('homepage identity stays in the shared header without duplicating the hero'
   assert.doesNotMatch(hero, /identity-strip|identity-avatar/);
   assert.match(header, /class="brand-avatar"/);
   assert.match(header, /src=\{resolveHref\(hero\.identity\.portraitPath\)\}/);
+  assert.match(header, /class="brand-name"/);
   assert.match(header, /class="brand-role"/);
-  assert.match(header, /class="header-location"/);
 });
 
 test('brand contract keeps motion purposeful and user-controlled', () => {

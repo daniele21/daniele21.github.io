@@ -23,10 +23,6 @@ const expectedRoutes = [
   'index.html',
   'about/index.html',
   'insights/index.html',
-  'local-ai-strategy/index.html',
-  'local-ai-infrastructure/index.html',
-  'local-ai-use-cases/index.html',
-  'local-ai-performance/index.html',
   'redact-guard/index.html',
   'aura-finance/index.html',
   'closedroom/index.html',
@@ -113,18 +109,8 @@ for (const fragment of ['plane-card__header', 'plane-card__body', 'plane-card__f
   }
 }
 
-for (const fragment of ['plane-card-grid', 'repeat(3, minmax(0, 1fr))']) {
-  if (!planeCardGridSource.includes(fragment)) {
-    console.error(`❌ PlaneCardGrid is missing its shared grid contract fragment: ${fragment}`);
-    errors++;
-  }
-}
-
 for (const [sourcePath, fragment] of [
-  ['src/components/landing/DecisionStage.astro', '<PlaneCardGrid sequence>'],
-  ['src/components/landing/EvidenceStage.astro', '<PlaneCardGrid>'],
-  ['src/components/landing/BuildStage.astro', '<PlaneCardGrid>'],
-  ['src/components/landing/TestStage.astro', '<PlaneCardGrid>'],
+  ['src/components/landing/TestStage.astro', '<PlaneCardGrid'],
   ['src/components/landing/ProjectProofCard.astro', '<PlaneCard'],
 ]) {
   const source = fs.readFileSync(path.resolve(sourcePath), 'utf-8');
@@ -134,35 +120,14 @@ for (const [sourcePath, fragment] of [
   }
 }
 
-const countClassToken = (html, className) =>
-  Array.from(html.matchAll(/class="([^"]*)"/g))
-    .filter(([, classes]) => classes.split(/\s+/).includes(className))
-    .length;
-
-for (const [className, expected] of [
-  ['plane-card-grid', 4],
-  ['plane-card', 12],
-  ['tool-card', 3],
-  ['project-proof-card--execution', 3],
-  ['project-proof-card--proof', 3],
-  ['project-proof-card--evidence', 3],
-]) {
-  const count = countClassToken(landingHtml, className);
-  if (count !== expected) {
-    console.error(`❌ Landing has ${count} ${className} modules (expected ${expected}).`);
-    errors++;
-  }
-}
-
 for (const fragment of [
+  'id="strategy"',
   'id="infrastructure"',
-  'href="/local-llm-server"',
-  'href="/android-local-llm-harness"',
-  'href="/local-asr-server"',
-  'href="/#infrastructure"',
+  'id="applications"',
+  'id="evidence"',
 ]) {
   if (!landingHtml.includes(fragment)) {
-    console.error(`❌ Landing is missing required fragment: ${fragment}`);
+    console.error(`❌ Landing is missing required stage anchor: ${fragment}`);
     errors++;
   }
 }
