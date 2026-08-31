@@ -1,26 +1,13 @@
 ---
 /**
  * about.astro
- * Daniele Moltisanti - World-Class Editorial Profile, Personal Story, Systems Bench, & Track Record.
- * Redesigned with dramatic hero, scroll-reveal animations, sticky navigation,
- * alternating background sections, and premium visual rhythm.
+ * Premium editorial profile page.
+ * Prioritises positioning, current work, personal journey and selected proof
+ * over dashboard-style UI and exhaustive skill inventories.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LandingHeader from '../components/landing/LandingHeader.astro';
-import AboutHero from '../components/about/AboutHero.astro';
-import AboutNav from '../components/about/AboutNav.astro';
-import AboutNow from '../components/about/AboutNow.astro';
-import AboutStory from '../components/about/AboutStory.astro';
-import AboutPhilosophy from '../components/about/AboutPhilosophy.astro';
-import AboutToolkit from '../components/about/AboutToolkit.astro';
-import AboutDivulgation from '../components/about/AboutDivulgation.astro';
-import AboutExperience from '../components/about/AboutExperience.astro';
-import AboutRecognition from '../components/about/AboutRecognition.astro';
-import AboutCta from '../components/about/AboutCta.astro';
 import { aboutData } from '../content/locales/en/about';
-
-/* Import scroll-reveal CSS for animation transitions */
-import '../styles/scroll-reveal.css';
 
 const {
   metaTitle,
@@ -29,12 +16,24 @@ const {
   now,
   story,
   manifesto,
-  toolkit,
   experience,
   divulgation,
   recognition,
   cta,
 } = aboutData;
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+
+const selectedPrincipleTitles = [
+  'Local AI First ≠ Local AI Only',
+  'Architectural Data Boundaries',
+  'Empirical Verification Over Leaderboards',
+];
+const selectedPrinciples = manifesto.principles.filter((principle) =>
+  selectedPrincipleTitles.includes(principle.title)
+);
+const selectedRoles = experience.roles.slice(0, 3);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -59,116 +58,937 @@ const jsonLd = {
     'Local AI',
     'Enterprise AI Architecture',
     'On-Device Inference',
-    'Model Context Protocol',
-    'Apple Silicon MLX',
-    'Quantization',
     'Generative AI Systems',
     'AI Strategy & Governance',
   ],
 };
 ---
 
-<BaseLayout
-  title={metaTitle}
-  description={metaDescription}
-  jsonLd={jsonLd}
->
+<BaseLayout title={metaTitle} description={metaDescription} jsonLd={jsonLd}>
   <LandingHeader slot="header" />
 
-  <div class="about-page">
+  <main class="about-page">
     <div class="about-shell">
-      <!-- 1. Dramatic Dark Hero -->
-      <AboutHero profile={profile} />
+      <!-- HERO -->
+      <section class="about-hero" aria-labelledby="about-title">
+        <div class="hero-copy">
+          <p class="section-kicker">ABOUT</p>
+          <h1 id="about-title">{profile.name}</h1>
+          <p class="hero-role">{profile.headline}</p>
+          <p class="hero-lead">
+            I work between AI strategy and systems engineering: turning AI into production systems at enterprise scale while independently testing how far open-weight models can move onto devices we control.
+          </p>
 
-      <!-- Sticky Section Navigation (glassmorphism) -->
-      <AboutNav />
+          <div class="hero-meta">
+            <span>{profile.location}</span>
+            <span aria-hidden="true">·</span>
+            <span>{profile.affiliation}</span>
+          </div>
 
-      <!-- 2. Real-Time "Now" Focus -->
-      <AboutNow
-        kicker={now.kicker}
-        title={now.title}
-        subtitle={now.subtitle}
-        lastUpdated={now.lastUpdated}
-        items={now.items}
-      />
+          <div class="hero-actions">
+            <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+            <a href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+            <a class="hero-contact" href={`mailto:${profile.socialLinks.email}?subject=AI%20Architecture%20conversation`}>
+              Get in touch →
+            </a>
+          </div>
+        </div>
 
-      <!-- 3. Narrative Story (Vertical Timeline) -->
-      <AboutStory
-        kicker={story.kicker}
-        title={story.title}
-        subtitle={story.subtitle}
-        chapters={story.chapters}
-      />
+        <div class="hero-portrait-wrap">
+          <img
+            src={asset(profile.portraitPath)}
+            alt={profile.portraitAlt}
+            width="300"
+            height="360"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </section>
 
-      <!-- 4. Architectural Manifesto (Subtle Background Band) -->
-      <AboutPhilosophy
-        kicker={manifesto.kicker}
-        title={manifesto.title}
-        subtitle={manifesto.subtitle}
-        principles={manifesto.principles}
-      />
+      <section class="proof-strip" aria-label="Selected profile proof">
+        {profile.stats.map((stat) => (
+          <div class="proof-signal">
+            <strong>{stat.metric}</strong>
+            <span>{stat.label}</span>
+          </div>
+        ))}
+      </section>
 
-      <!-- 5. Systems & Hardware Bench Toolkit -->
-      <AboutToolkit
-        kicker={toolkit.kicker}
-        title={toolkit.title}
-        subtitle={toolkit.subtitle}
-        categories={toolkit.categories}
-      />
+      <!-- NOW -->
+      <section class="about-section now-section" id="now" aria-labelledby="now-title">
+        <header class="section-heading-row">
+          <div>
+            <p class="section-kicker">NOW · {now.lastUpdated.toUpperCase()}</p>
+            <h2 id="now-title">What I’m working on now</h2>
+          </div>
+          <p class="section-intro">Active investigations, builds and writing — without artificial progress scores.</p>
+        </header>
 
-      <!-- 6. Knowledge Sharing (Dark Showcase + Articles) -->
-      <AboutDivulgation
-        kicker={divulgation.kicker}
-        title={divulgation.title}
-        subtitle={divulgation.subtitle}
-        staiTunedSummary={divulgation.staiTunedSummary}
-        staiTunedMetrics={divulgation.staiTunedMetrics}
-        featuredArticles={divulgation.featuredArticles}
-        mentorshipSummary={divulgation.mentorshipSummary}
-      />
+        <div class="now-list">
+          {now.items.map((item) => (
+            <article class="now-row">
+              <div class="now-marker" aria-hidden="true"></div>
+              <div class="now-copy">
+                <span class="now-tag">{item.tag}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+              <span class="now-status">{item.status}</span>
+            </article>
+          ))}
+        </div>
+      </section>
 
-      <!-- 7. Career & Leadership Timeline -->
-      <AboutExperience
-        kicker={experience.kicker}
-        title={experience.title}
-        subtitle={experience.subtitle}
-        roles={experience.roles}
-      />
+      <!-- JOURNEY -->
+      <section class="about-section journey-section" id="journey" aria-labelledby="journey-title">
+        <header class="section-heading-row">
+          <div>
+            <p class="section-kicker">THE JOURNEY</p>
+            <h2 id="journey-title">From research to scale — and back to the device</h2>
+          </div>
+          <p class="section-intro">The sequence matters more than a list of job titles.</p>
+        </header>
 
-      <!-- 8. Honors & Academic (Subtle Background Band) -->
-      <AboutRecognition
-        kicker={recognition.kicker}
-        title={recognition.title}
-        subtitle={recognition.subtitle}
-        awards={recognition.awards}
-        education={recognition.education}
-      />
+        <div class="journey-list">
+          {story.chapters.map((chapter) => (
+            <article class="journey-row">
+              <div class="journey-index">{chapter.number}</div>
+              <div class="journey-period">{chapter.timeframe}</div>
+              <div class="journey-copy">
+                <span>{chapter.kicker}</span>
+                <h3>{chapter.title}</h3>
+                <p>{chapter.keyTakeaway || chapter.paragraphs[0]}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
 
-      <!-- 9. Dark CTA (mirrors hero for visual symmetry) -->
-      <AboutCta
-        kicker={cta.kicker}
-        title={cta.title}
-        description={cta.description}
-        primaryActionLabel={cta.primaryActionLabel}
-        primaryActionHref={cta.primaryActionHref}
-        secondaryActionLabel={cta.secondaryActionLabel}
-        secondaryActionHref={cta.secondaryActionHref}
-      />
+      <!-- PRINCIPLES -->
+      <section class="about-section principles-section" id="principles" aria-labelledby="principles-title">
+        <header class="section-heading-row">
+          <div>
+            <p class="section-kicker">HOW I WORK</p>
+            <h2 id="principles-title">Three principles I keep coming back to</h2>
+          </div>
+        </header>
+
+        <div class="principles-grid">
+          {selectedPrinciples.map((principle) => (
+            <article class="principle">
+              <span class="principle-number">{principle.number}</span>
+              <span class="principle-kicker">{principle.kicker}</span>
+              <h3>{principle.title}</h3>
+              <p>{principle.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- WRITING -->
+      <section class="about-section writing-section" id="writing" aria-labelledby="writing-title">
+        <div class="writing-intro">
+          <p class="section-kicker">WRITING & KNOWLEDGE SHARING</p>
+          <h2 id="writing-title">I build systems — and explain what I learn.</h2>
+          <p>{divulgation.staiTunedSummary}</p>
+
+          <div class="writing-metrics">
+            {divulgation.staiTunedMetrics.map((metric) => (
+              <div>
+                <strong>{metric.value}</strong>
+                <span>{metric.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <a class="text-link" href={profile.socialLinks.staituned} target="_blank" rel="noopener noreferrer">
+            Explore stAI tuned ↗
+          </a>
+        </div>
+
+        <div class="article-list" aria-label="Featured writing topics">
+          {divulgation.featuredArticles.map((article, index) => (
+            <article class="article-row">
+              <span class="article-index">0{index + 1}</span>
+              <div>
+                <span class="article-topic">{article.topic}</span>
+                <h3>{article.title}</h3>
+                <p>{article.summary}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- SELECTED PROOF -->
+      <section class="about-section proof-section" id="proof" aria-labelledby="proof-title">
+        <header class="section-heading-row">
+          <div>
+            <p class="section-kicker">SELECTED PROOF</p>
+            <h2 id="proof-title">Work, recognition and engineering foundations</h2>
+          </div>
+          <p class="section-intro">Enough context to understand the track record without turning this page into a CV.</p>
+        </header>
+
+        <div class="proof-layout">
+          <div class="experience-list">
+            {selectedRoles.map((role) => (
+              <article class="experience-row">
+                <div class="experience-company">
+                  <strong>{role.company}</strong>
+                  <span>{role.period}</span>
+                </div>
+                <div class="experience-copy">
+                  <h3>{role.role}</h3>
+                  <p>{role.description}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <aside class="recognition-panel" aria-label="Recognition and education">
+            <p class="mini-label">RECOGNITION</p>
+            {recognition.awards.map((award) => (
+              <div class="recognition-row">
+                <span>{award.year}</span>
+                <strong>{award.title}</strong>
+                <small>{award.organization}</small>
+              </div>
+            ))}
+
+            <div class="recognition-divider"></div>
+            <p class="mini-label">EDUCATION</p>
+            {recognition.education.map((item) => (
+              <div class="recognition-row">
+                <span>{item.period}</span>
+                <strong>{item.degree}</strong>
+                <small>{item.institution}</small>
+              </div>
+            ))}
+          </aside>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="contact-section" id="contact" aria-labelledby="contact-title">
+        <div>
+          <p class="section-kicker">{cta.kicker}</p>
+          <h2 id="contact-title">{cta.title}</h2>
+          <p>{cta.description}</p>
+        </div>
+        <div class="contact-actions">
+          <a class="primary-button" href={cta.primaryActionHref}>{cta.primaryActionLabel}</a>
+          <a class="secondary-button" href={cta.secondaryActionHref} target="_blank" rel="noopener noreferrer">
+            {cta.secondaryActionLabel}
+          </a>
+        </div>
+      </section>
     </div>
-  </div>
-
-  <!-- Scroll reveal animations script -->
-  <script src="../scripts/scroll-reveal.mjs"></script>
+  </main>
 </BaseLayout>
 
 <style>
   .about-page {
-    padding: clamp(28px, 4vw, 48px) 0 clamp(48px, 6vw, 72px);
     background: var(--surface-canvas);
+    padding: clamp(34px, 4.5vw, 58px) 0 clamp(64px, 8vw, 104px);
   }
 
   .about-shell {
-    width: min(calc(100% - clamp(24px, 4vw, 48px)), 960px);
+    width: min(calc(100% - clamp(28px, 5vw, 64px)), 1120px);
     margin-inline: auto;
+  }
+
+  .section-kicker,
+  .mini-label {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.115em;
+    text-transform: uppercase;
+    color: var(--accent-blue-dark);
+  }
+
+  .about-hero {
+    min-height: min(700px, calc(100svh - var(--header-height) - 60px));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(230px, 300px);
+    gap: clamp(48px, 7vw, 96px);
+    align-items: center;
+    padding: clamp(48px, 6vw, 80px) 0 clamp(52px, 7vw, 88px);
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .hero-copy {
+    max-width: 760px;
+  }
+
+  .hero-copy h1 {
+    margin: 12px 0 12px;
+    font-family: var(--font-display);
+    font-size: clamp(3.7rem, 8.3vw, 7.4rem);
+    line-height: 0.94;
+    letter-spacing: -0.067em;
+    font-weight: 860;
+    color: var(--ink-display);
+  }
+
+  .hero-role {
+    margin: 0 0 clamp(24px, 3vw, 36px);
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.2vw, 2rem);
+    line-height: 1.25;
+    font-weight: 720;
+    color: var(--accent-blue-dark);
+  }
+
+  .hero-lead {
+    max-width: 720px;
+    margin: 0;
+    font-size: clamp(1.08rem, 1.55vw, 1.3rem);
+    line-height: 1.65;
+    color: var(--ink-muted);
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 24px;
+    font-size: var(--text-caption);
+    color: var(--ink-subtle);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
+    margin-top: 28px;
+  }
+
+  .hero-actions a {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 720;
+    text-decoration: none;
+    transition: color var(--duration-fast) ease, transform var(--duration-fast) ease;
+  }
+
+  .hero-actions a:hover {
+    color: var(--accent-blue);
+    transform: translateY(-1px);
+  }
+
+  .hero-actions .hero-contact {
+    color: var(--accent-blue-dark);
+  }
+
+  .hero-portrait-wrap {
+    align-self: center;
+    justify-self: end;
+    width: min(100%, 300px);
+    aspect-ratio: 5 / 6;
+    overflow: hidden;
+    border-radius: clamp(22px, 3vw, 34px);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-medium);
+    box-shadow: 0 22px 55px rgba(8, 19, 51, 0.1);
+  }
+
+  .hero-portrait-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .proof-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .proof-signal {
+    min-height: 116px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding: 24px clamp(16px, 2.5vw, 30px);
+    border-right: 1px solid var(--border-medium);
+  }
+
+  .proof-signal:first-child { padding-left: 0; }
+  .proof-signal:last-child { border-right: 0; }
+
+  .proof-signal strong {
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 2.6vw, 2.15rem);
+    font-weight: 840;
+    letter-spacing: -0.035em;
+    color: var(--ink-display);
+  }
+
+  .proof-signal span {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+
+  .about-section {
+    padding: clamp(72px, 9vw, 124px) 0;
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .section-heading-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(250px, 390px);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: end;
+    margin-bottom: clamp(34px, 5vw, 56px);
+  }
+
+  .section-heading-row h2,
+  .writing-intro h2,
+  .contact-section h2 {
+    margin: 9px 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 4.7vw, 4.35rem);
+    line-height: 1.02;
+    letter-spacing: -0.052em;
+    font-weight: 830;
+    color: var(--ink-display);
+    text-wrap: balance;
+  }
+
+  .section-intro {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+
+  .now-list {
+    border-top: 1px solid var(--border-medium);
+  }
+
+  .now-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: start;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .now-marker {
+    width: 7px;
+    height: 7px;
+    margin-top: 10px;
+    border-radius: 50%;
+    background: var(--accent-teal);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-teal) 9%, transparent);
+  }
+
+  .now-copy {
+    min-width: 0;
+  }
+
+  .now-tag,
+  .principle-kicker,
+  .article-topic {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 760;
+    color: var(--accent-blue-dark);
+  }
+
+  .now-copy h3,
+  .journey-copy h3,
+  .principle h3,
+  .article-row h3,
+  .experience-copy h3 {
+    margin: 5px 0 6px;
+    font-family: var(--font-display);
+    color: var(--ink-display);
+    font-weight: 790;
+    letter-spacing: -0.025em;
+  }
+
+  .now-copy h3 { font-size: clamp(1.12rem, 1.65vw, 1.36rem); }
+
+  .now-copy p {
+    max-width: 760px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.94rem;
+    line-height: 1.55;
+  }
+
+  .now-status {
+    margin-top: 2px;
+    padding: 5px 10px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 680;
+    white-space: nowrap;
+  }
+
+  .journey-list {
+    position: relative;
+  }
+
+  .journey-list::before {
+    content: '';
+    position: absolute;
+    left: 21px;
+    top: 26px;
+    bottom: 26px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent-blue), color-mix(in srgb, var(--accent-blue) 18%, var(--border-medium)));
+  }
+
+  .journey-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 44px 190px minmax(0, 1fr);
+    gap: clamp(18px, 3vw, 38px);
+    padding: 26px 0;
+  }
+
+  .journey-index {
+    position: relative;
+    z-index: 1;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 34%, var(--border-medium));
+    border-radius: 50%;
+    background: var(--surface-canvas);
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 800;
+  }
+
+  .journey-period {
+    padding-top: 9px;
+    color: var(--ink-subtle);
+    font-family: var(--font-display);
+    font-size: 0.86rem;
+    font-weight: 660;
+    line-height: 1.45;
+  }
+
+  .journey-copy {
+    max-width: 700px;
+  }
+
+  .journey-copy > span {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 780;
+    letter-spacing: 0.06em;
+  }
+
+  .journey-copy h3 {
+    font-size: clamp(1.3rem, 2vw, 1.7rem);
+  }
+
+  .journey-copy p {
+    margin: 0;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    font-size: 0.96rem;
+  }
+
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--border-medium);
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .principle {
+    position: relative;
+    padding: clamp(28px, 4vw, 44px);
+    border-right: 1px solid var(--border-medium);
+  }
+
+  .principle:first-child { padding-left: 0; }
+  .principle:last-child { border-right: 0; }
+
+  .principle-number {
+    display: block;
+    margin-bottom: 32px;
+    color: var(--ink-subtle);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 800;
+  }
+
+  .principle h3 {
+    font-size: clamp(1.28rem, 2vw, 1.68rem);
+    line-height: 1.15;
+  }
+
+  .principle p {
+    margin: 14px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    line-height: 1.62;
+  }
+
+  .writing-section {
+    display: grid;
+    grid-template-columns: minmax(300px, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(42px, 7vw, 88px);
+    align-items: start;
+  }
+
+  .writing-intro {
+    position: sticky;
+    top: calc(var(--header-height) + 40px);
+  }
+
+  .writing-intro h2 {
+    font-size: clamp(2.2rem, 4vw, 3.65rem);
+  }
+
+  .writing-intro > p:not(.section-kicker) {
+    margin: 20px 0 0;
+    color: var(--ink-muted);
+    line-height: 1.65;
+  }
+
+  .writing-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 28px;
+    padding: 22px 0;
+    border-top: 1px solid var(--border-medium);
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .writing-metrics div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .writing-metrics strong {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    color: var(--ink-display);
+  }
+
+  .writing-metrics span {
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+  }
+
+  .text-link {
+    display: inline-flex;
+    margin-top: 22px;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-weight: 740;
+    text-decoration: none;
+  }
+
+  .text-link:hover { color: var(--accent-blue); }
+
+  .article-list {
+    border-top: 1px solid var(--border-medium);
+  }
+
+  .article-row {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 18px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .article-index {
+    padding-top: 4px;
+    color: var(--ink-subtle);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 760;
+  }
+
+  .article-row h3 {
+    font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+    line-height: 1.25;
+  }
+
+  .article-row p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.91rem;
+    line-height: 1.55;
+  }
+
+  .proof-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(270px, 0.75fr);
+    gap: clamp(44px, 7vw, 88px);
+  }
+
+  .experience-list {
+    border-top: 1px solid var(--border-medium);
+  }
+
+  .experience-row {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 28px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .experience-company {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .experience-company strong {
+    font-family: var(--font-display);
+    font-size: 0.96rem;
+    color: var(--ink-display);
+  }
+
+  .experience-company span {
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+  }
+
+  .experience-copy h3 {
+    margin-top: 0;
+    font-size: 1.05rem;
+  }
+
+  .experience-copy p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    line-height: 1.58;
+  }
+
+  .recognition-panel {
+    padding: 28px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-subtle);
+  }
+
+  .recognition-row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .recognition-row:last-child { border-bottom: 0; }
+
+  .recognition-row span,
+  .recognition-row small {
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+  }
+
+  .recognition-row strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.94rem;
+    line-height: 1.35;
+  }
+
+  .recognition-divider {
+    height: 1px;
+    margin: 26px 0;
+    background: var(--border-strong);
+  }
+
+  .contact-section {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 40px;
+    align-items: end;
+    margin-top: clamp(72px, 9vw, 124px);
+    padding: clamp(40px, 6vw, 68px);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(circle at 85% 15%, rgba(20, 91, 255, 0.14), transparent 38%),
+      var(--surface-inverse);
+  }
+
+  .contact-section .section-kicker {
+    color: var(--accent-blue-light);
+  }
+
+  .contact-section h2 {
+    max-width: 730px;
+    color: #ffffff;
+    font-size: clamp(2.25rem, 4.4vw, 4rem);
+  }
+
+  .contact-section p:not(.section-kicker) {
+    max-width: 680px;
+    margin: 18px 0 0;
+    color: rgba(255, 255, 255, 0.68);
+    line-height: 1.6;
+  }
+
+  .contact-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 220px;
+  }
+
+  @media (max-width: 920px) {
+    .about-hero {
+      min-height: auto;
+      grid-template-columns: 1fr 220px;
+      gap: 36px;
+    }
+
+    .proof-strip {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .proof-signal:nth-child(2) { border-right: 0; }
+    .proof-signal:nth-child(-n + 2) { border-bottom: 1px solid var(--border-medium); }
+    .proof-signal:nth-child(3) { padding-left: 0; }
+
+    .section-heading-row,
+    .writing-section,
+    .proof-layout,
+    .contact-section {
+      grid-template-columns: 1fr;
+    }
+
+    .writing-intro { position: static; }
+    .principles-grid { grid-template-columns: 1fr; }
+
+    .principle,
+    .principle:first-child {
+      padding: 28px 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--border-medium);
+    }
+
+    .principle:last-child { border-bottom: 0; }
+    .principle-number { margin-bottom: 18px; }
+
+    .contact-actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .about-shell {
+      width: min(calc(100% - 28px), 1120px);
+    }
+
+    .about-hero {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 30px;
+      padding-top: 30px;
+    }
+
+    .hero-portrait-wrap {
+      justify-self: start;
+      width: 132px;
+      border-radius: 20px;
+      box-shadow: 0 12px 32px rgba(8, 19, 51, 0.09);
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(3.25rem, 17vw, 5.5rem);
+    }
+
+    .proof-strip { grid-template-columns: 1fr 1fr; }
+    .proof-signal { min-height: 94px; padding: 18px 14px; }
+    .proof-signal:first-child,
+    .proof-signal:nth-child(3) { padding-left: 0; }
+
+    .about-section { padding: 70px 0; }
+
+    .section-heading-row {
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .section-heading-row h2,
+    .writing-intro h2 {
+      font-size: clamp(2.1rem, 11vw, 3.4rem);
+    }
+
+    .now-row {
+      grid-template-columns: 12px minmax(0, 1fr);
+    }
+
+    .now-status {
+      grid-column: 2;
+      justify-self: start;
+      margin-top: 6px;
+    }
+
+    .journey-row {
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .journey-period {
+      grid-column: 2;
+      padding-top: 4px;
+    }
+
+    .journey-copy {
+      grid-column: 2;
+    }
+
+    .writing-metrics {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .experience-row {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .contact-section {
+      padding: 32px 24px;
+      border-radius: var(--radius-lg);
+    }
+
+    .contact-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-actions a { transition: none; }
   }
 </style>
