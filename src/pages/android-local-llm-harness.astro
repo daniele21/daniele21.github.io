@@ -4,7 +4,6 @@
  * Experiment / measurement deep-dive using the shared project-page journey.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import HarnessHeader from '../components/harness/HarnessHeader.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import ProjectPhase from '../components/project/ProjectPhase.astro';
 import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
@@ -54,13 +53,13 @@ const harnessSchema = {
   description={harnessData.meta.description}
   jsonLd={harnessSchema}
 >
-  <HarnessHeader baseUrl={baseUrl} slot="header" />
-
   <ProductSubHeader
     title="Android LLM Harness"
     badge="Spec & Prototype"
+    logoPath="images/harness/logo.svg"
     links={subheaderLinks}
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness' }}
+    underSiteHeader={true}
   />
 
   <div id="top" data-project-page data-project-archetype="experiment">
