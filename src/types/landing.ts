@@ -254,6 +254,11 @@ export interface LoopClosureContent {
   outcomes: { label: string; note: string }[];
 }
 
+export interface AdvisoryArea {
+  title: string;
+  body: string;
+}
+
 export interface FinalCtaContent {
   kicker?: string;
   title?: string;
@@ -261,8 +266,11 @@ export interface FinalCtaContent {
   loopSequence?: string;
   payoff?: string;
   consultation: {
+    kicker?: string;
     heading: string;
     body: string;
+    areas: AdvisoryArea[];
+    fitNote?: string;
     primaryCta: NavLink;
     secondaryCta: NavLink;
   };
