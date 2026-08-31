@@ -1,0 +1,109 @@
+---
+export interface Props {
+  id: string;
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  tone?: 'canvas' | 'subtle';
+  width?: 'default' | 'wide';
+}
+
+const {
+  id,
+  eyebrow,
+  title,
+  description,
+  tone = 'canvas',
+  width = 'default',
+} = Astro.props;
+
+const titleId = `${id}-title`;
+---
+
+<section
+  id={id}
+  class:list={['project-section', `project-section--${tone}`, `project-section--${width}`]}
+  aria-labelledby={titleId}
+>
+  <div class="shell project-section-shell">
+    <header class="project-section-header">
+      {eyebrow && <p class="project-section-eyebrow">{eyebrow}</p>}
+      <h2 id={titleId}>{title}</h2>
+      {description && <p class="project-section-description">{description}</p>}
+    </header>
+
+    <div class="project-section-content">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .project-section {
+    scroll-margin-top: 68px;
+    border-top: 1px solid var(--border-subtle);
+    padding: clamp(58px, 7vw, 92px) 0;
+  }
+
+  .project-section--canvas { background: var(--surface-canvas); }
+  .project-section--subtle { background: var(--surface-subtle); }
+
+  .project-section-shell {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 4vw, 48px);
+  }
+
+  .project-section-header {
+    max-width: 760px;
+  }
+
+  .project-section--wide .project-section-header {
+    max-width: 920px;
+  }
+
+  .project-section-eyebrow {
+    margin: 0 0 var(--space-2);
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 820;
+    letter-spacing: 0.095em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    max-width: 900px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(2.15rem, 4vw, 3.8rem);
+    font-weight: 830;
+    letter-spacing: -0.047em;
+    line-height: 1.03;
+    text-wrap: balance;
+  }
+
+  .project-section-description {
+    max-width: 720px;
+    margin: var(--space-3) 0 0;
+    color: var(--ink-muted);
+    font-size: clamp(1rem, 1.25vw, 1.12rem);
+    line-height: 1.62;
+    text-wrap: pretty;
+  }
+
+  .project-section-content {
+    min-width: 0;
+  }
+
+  @media (max-width: 640px) {
+    .project-section {
+      padding: 50px 0 58px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 10vw, 2.8rem);
+    }
+  }
+</style>
