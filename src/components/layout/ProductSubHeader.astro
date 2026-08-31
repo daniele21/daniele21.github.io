@@ -1,8 +1,8 @@
 ---
 /**
  * ProductSubHeader.astro
- * Shared sticky navigation for project deep-dives.
- * Keeps project identity visible while allowing archetype-specific section navigation.
+ * Shared secondary navigation for project deep-dives.
+ * The global header owns site navigation; this bar owns project context and sections only.
  */
 export interface SubHeaderLink {
   label: string;
@@ -18,23 +18,38 @@ export interface Props {
     label: string;
     href: string;
   };
+  /**
+   * Migrated project pages use the canonical sticky SiteHeader above this bar.
+   * Legacy routes with dedicated non-sticky headers can leave this false until migration.
+   */
+  underSiteHeader?: boolean;
 }
 
-const { title, badge, logoPath, links, cta } = Astro.props;
+const {
+  title,
+  badge,
+  logoPath,
+  links,
+  cta,
+  underSiteHeader = false,
+} = Astro.props;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 ---
 
-<div class="product-subheader" data-product-subheader>
+<div
+  class={`product-subheader ${underSiteHeader ? 'under-site-header' : ''}`}
+  data-product-subheader
+>
   <div class="shell subheader-inner">
     <div class="subheader-brand">
-      <a href="#top" class="subheader-title-link">
+      <a href="#top" class="subheader-title-link" aria-label={`${title}, back to project overview`}>
         {logoPath && (
           <img
             src={`${baseUrl}/${logoPath.replace(/^\//, '')}`}
             alt=""
             class="subheader-logo-img"
-            width="22"
-            height="22"
+            width="20"
+            height="20"
           />
         )}
         <span class="subheader-title">{title}</span>
@@ -42,7 +57,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
       {badge && <span class="subheader-badge">{badge}</span>}
     </div>
 
-    <nav class="subheader-nav" aria-label="Project page sections">
+    <nav class="subheader-nav" aria-label={`${title} sections`}>
       <ul class="subheader-links">
         {links.map((link, index) => (
           <li>
@@ -78,26 +93,29 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     top: 0;
     z-index: 40;
     min-height: 48px;
-    background: var(--glass-bg);
-    border-bottom: 1px solid var(--glass-border);
-    backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
-    transition: background-color var(--duration-base) ease, border-color var(--duration-base) ease;
+    background: color-mix(in srgb, var(--surface-card) 88%, transparent);
+    border-bottom: 1px solid var(--border-subtle);
+    backdrop-filter: blur(16px) saturate(1.35);
+    -webkit-backdrop-filter: blur(16px) saturate(1.35);
+  }
+
+  .product-subheader.under-site-header {
+    top: var(--header-height);
   }
 
   .subheader-inner {
     min-height: 48px;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(150px, auto) minmax(0, 1fr) auto;
     align-items: center;
-    gap: var(--space-4);
+    gap: clamp(14px, 2vw, 28px);
   }
 
   .subheader-brand {
+    min-width: 0;
     display: flex;
     align-items: center;
-    gap: var(--space-2);
-    min-width: 0;
+    gap: 8px;
   }
 
   .subheader-title-link {
@@ -105,19 +123,22 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     min-width: 0;
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
-    text-decoration: none;
+    gap: 8px;
     color: var(--ink);
+    text-decoration: none;
+  }
+
+  .subheader-title-link:hover .subheader-title,
+  .subheader-title-link:focus-visible .subheader-title {
+    color: var(--accent-blue-dark);
   }
 
   .subheader-logo-img {
-    width: 22px;
-    height: 22px;
-    object-fit: cover;
-    border-radius: var(--radius-sm);
-    background: var(--surface-inverse);
-    border: 1px solid var(--border-medium);
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
+    object-fit: contain;
+    border-radius: 5px;
   }
 
   .subheader-title {
@@ -126,18 +147,20 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     white-space: nowrap;
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-weight: 750;
+    letter-spacing: -0.012em;
+    transition: color var(--duration-fast) ease;
   }
 
   .subheader-badge {
-    padding: 4px 8px;
-    border-radius: var(--radius-full);
-    background: var(--surface-blue-subtle);
-    color: var(--accent-blue-dark);
+    padding: 3px 7px;
     border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-muted);
+    color: var(--ink-subtle);
     font-size: var(--text-caption);
-    font-weight: 700;
+    font-weight: 650;
+    line-height: 1.2;
     white-space: nowrap;
   }
 
@@ -157,8 +180,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
   .subheader-links {
     display: flex;
-    align-items: center;
-    gap: var(--space-1);
+    align-items: stretch;
+    gap: 2px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -166,28 +189,45 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   }
 
   .subheader-link {
+    position: relative;
     min-height: 48px;
     display: inline-flex;
     align-items: center;
     box-sizing: border-box;
-    padding: 5px 12px;
-    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    color: var(--ink-muted);
     font-size: var(--text-caption);
     font-weight: 600;
-    color: var(--ink-muted);
     text-decoration: none;
-    transition: color var(--duration-fast) ease, background-color var(--duration-fast) ease;
+    transition: color var(--duration-fast) ease;
   }
 
-  .subheader-link:hover {
+  .subheader-link::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: -1px;
+    height: 2px;
+    border-radius: 2px 2px 0 0;
+    background: var(--accent-blue);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .subheader-link:hover,
+  .subheader-link:focus-visible,
+  .subheader-link.is-active {
     color: var(--accent-blue-dark);
-    background: var(--surface-muted);
   }
 
   .subheader-link.is-active {
-    color: var(--accent-blue-dark);
-    background: var(--surface-blue-subtle);
     font-weight: 700;
+  }
+
+  .subheader-link.is-active::after {
+    transform: scaleX(1);
   }
 
   .subheader-cta {
@@ -195,38 +235,53 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    padding: 5px 14px;
-    border-radius: var(--radius-full);
+    padding: 4px 12px;
     border: 1px solid var(--border-subtle);
-    background: var(--surface-card);
+    border-radius: var(--radius-full);
+    background: transparent;
     color: var(--ink);
     font-size: var(--text-caption);
     font-weight: 700;
     text-decoration: none;
     white-space: nowrap;
-    flex-shrink: 0;
-    transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease, transform var(--duration-fast) ease;
+    transition: color var(--duration-fast) ease,
+                border-color var(--duration-fast) ease,
+                background-color var(--duration-fast) ease;
   }
 
-  .subheader-cta:hover {
-    border-color: var(--accent-blue);
+  .subheader-cta:hover,
+  .subheader-cta:focus-visible {
     color: var(--accent-blue-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+    border-color: var(--accent-blue-light);
+    background: var(--surface-blue-subtle);
+  }
+
+  @media (max-width: 900px) {
+    .subheader-inner {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+    }
+
+    .subheader-badge {
+      display: none;
+    }
+
+    .subheader-link {
+      padding-inline: 10px;
+    }
   }
 
   @media (max-width: 768px) {
     .product-subheader {
-      min-height: 92px;
+      min-height: 88px;
     }
 
     .subheader-inner {
       width: 100%;
-      min-height: 92px;
+      min-height: 88px;
       grid-template-columns: minmax(0, 1fr) auto;
-      grid-template-rows: 44px 48px;
-      column-gap: var(--space-2);
+      grid-template-rows: 40px 48px;
+      column-gap: 8px;
       row-gap: 0;
       padding-inline: 14px;
     }
@@ -239,23 +294,19 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
     .subheader-title-link {
       width: 100%;
-      min-height: 44px;
+      min-height: 40px;
     }
 
     .subheader-logo-img {
-      width: 20px;
-      height: 20px;
-    }
-
-    .subheader-badge {
-      display: none;
+      width: 18px;
+      height: 18px;
     }
 
     .subheader-cta {
       grid-column: 2;
       grid-row: 1;
       min-height: 36px;
-      padding-inline: 11px;
+      padding-inline: 10px;
     }
 
     .subheader-nav {
@@ -267,7 +318,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
       scroll-behavior: smooth;
       -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
       mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
-      border-top: 1px solid color-mix(in srgb, var(--glass-border) 68%, transparent);
+      border-top: 1px solid color-mix(in srgb, var(--border-subtle) 72%, transparent);
     }
 
     .subheader-links {
@@ -282,14 +333,16 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
   @media (max-width: 420px) {
     .subheader-cta {
-      max-width: 92px;
+      max-width: 96px;
       overflow: hidden;
       text-overflow: ellipsis;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .subheader-title,
     .subheader-link,
+    .subheader-link::after,
     .subheader-cta { transition: none; }
     .subheader-nav { scroll-behavior: auto; }
   }
