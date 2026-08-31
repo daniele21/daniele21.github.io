@@ -269,7 +269,7 @@ export interface FinalCtaContent {
     kicker?: string;
     heading: string;
     body: string;
-    areas: AdvisoryArea[];
+    areas?: AdvisoryArea[];
     fitNote?: string;
     primaryCta: NavLink;
     secondaryCta: NavLink;
