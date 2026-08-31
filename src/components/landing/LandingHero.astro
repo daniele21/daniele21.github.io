@@ -2,7 +2,7 @@
 /**
  * LandingHero.astro
  * Premium single-column hero focused on the core Local AI thesis.
- * Professional identity lives in the persistent landing header.
+ * The primary action sends visitors to concrete work before advisory conversion.
  */
 import { landingData } from '../../content/locales/en/landing';
 
@@ -36,8 +36,8 @@ const resolveHref = (href: string) => {
       </div>
 
       <div class="hero-actions">
-        <a class="primary-button hero-primary-cta" href={resolveHref(hero.mission.primaryCta.href)}>
-          <span>{hero.mission.primaryCta.label}</span>
+        <a class="primary-button hero-primary-cta" href={resolveHref('#infrastructure')}>
+          <span>Explore the work</span>
           <span aria-hidden="true">↓</span>
         </a>
       </div>
@@ -66,7 +66,7 @@ const resolveHref = (href: string) => {
     background:
       radial-gradient(ellipse 62% 48% at 76% 18%, rgba(20, 91, 255, 0.075), transparent 72%),
       radial-gradient(ellipse 48% 48% at 12% 88%, rgba(124, 58, 237, 0.04), transparent 64%),
-      linear-gradient(155deg, #ffffff 0%, #f8fafe 100%);
+      linear-gradient(155deg, var(--surface-canvas) 0%, var(--surface-subtle) 100%);
   }
 
   .hero-section::before {
@@ -75,8 +75,8 @@ const resolveHref = (href: string) => {
     inset: 0;
     pointer-events: none;
     background-image:
-      linear-gradient(to right, rgba(20, 91, 255, 0.027) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(20, 91, 255, 0.027) 1px, transparent 1px);
+      linear-gradient(to right, color-mix(in srgb, var(--accent-blue) 2.7%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--accent-blue) 2.7%, transparent) 1px, transparent 1px);
     background-size: 72px 72px;
     mask-image: radial-gradient(ellipse 78% 66% at 52% 42%, black 16%, transparent 88%);
   }
