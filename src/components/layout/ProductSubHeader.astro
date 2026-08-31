@@ -2,7 +2,8 @@
 /**
  * ProductSubHeader.astro
  * Shared secondary navigation for project deep-dives.
- * The global header owns site navigation; this bar owns project context and sections only.
+ * The global header owns site navigation and the persistent proof CTA; this bar
+ * owns project identity and section navigation only.
  */
 export interface SubHeaderLink {
   label: string;
@@ -20,7 +21,7 @@ export interface Props {
   };
   /**
    * Project routes use the canonical sticky SiteHeader above this bar by default.
-   * Keep this configurable only for transitional/embedded usages.
+   * The optional CTA is rendered only for standalone/transitional usages.
    */
   underSiteHeader?: boolean;
 }
@@ -74,7 +75,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
       </ul>
     </nav>
 
-    {cta && (
+    {cta && !underSiteHeader && (
       <a
         href={cta.href}
         class="subheader-cta"
@@ -106,9 +107,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   .subheader-inner {
     min-height: 48px;
     display: grid;
-    grid-template-columns: minmax(150px, auto) minmax(0, 1fr) auto;
+    grid-template-columns: minmax(150px, auto) minmax(0, 1fr);
     align-items: center;
     gap: clamp(14px, 2vw, 28px);
+  }
+
+  .product-subheader:not(.under-site-header) .subheader-inner {
+    grid-template-columns: minmax(150px, auto) minmax(0, 1fr) auto;
   }
 
   .subheader-brand {
@@ -168,7 +173,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     min-width: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -244,9 +249,10 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     font-weight: 700;
     text-decoration: none;
     white-space: nowrap;
-    transition: color var(--duration-fast) ease,
-                border-color var(--duration-fast) ease,
-                background-color var(--duration-fast) ease;
+    transition:
+      color var(--duration-fast) ease,
+      border-color var(--duration-fast) ease,
+      background-color var(--duration-fast) ease;
   }
 
   .subheader-cta:hover,
@@ -257,9 +263,14 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   }
 
   @media (max-width: 900px) {
-    .subheader-inner {
+    .subheader-inner,
+    .product-subheader:not(.under-site-header) .subheader-inner {
       grid-template-columns: auto minmax(0, 1fr) auto;
       gap: 10px;
+    }
+
+    .product-subheader.under-site-header .subheader-inner {
+      grid-template-columns: minmax(0, auto) minmax(0, 1fr);
     }
 
     .subheader-badge {
@@ -276,7 +287,9 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
       min-height: 88px;
     }
 
-    .subheader-inner {
+    .subheader-inner,
+    .product-subheader.under-site-header .subheader-inner,
+    .product-subheader:not(.under-site-header) .subheader-inner {
       width: 100%;
       min-height: 88px;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -290,6 +303,10 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
       grid-column: 1;
       grid-row: 1;
       min-width: 0;
+    }
+
+    .product-subheader.under-site-header .subheader-brand {
+      grid-column: 1 / -1;
     }
 
     .subheader-title-link {
