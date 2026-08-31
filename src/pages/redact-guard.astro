@@ -4,7 +4,6 @@
  * Product / proving-ground pilot for the archetype-based project page UX.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import RedactGuardHeader from '../components/redactguard/RedactGuardHeader.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import ProjectHero from '../components/project/ProjectHero.astro';
 import ProjectProof from '../components/project/ProjectProof.astro';
@@ -52,13 +51,13 @@ const redactGuardSchema = {
   description={redactGuardData.meta.description}
   jsonLd={redactGuardSchema}
 >
-  <RedactGuardHeader baseUrl={baseUrl} slot="header" />
-
   <ProductSubHeader
     title="RedactGuard"
     badge="v1.0"
+    logoPath="images/redact-guard/logo.png"
     links={subheaderLinks}
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/redact-guard' }}
+    underSiteHeader={true}
   />
 
   <div id="top" data-project-page data-project-archetype="product">
@@ -187,7 +186,7 @@ const redactGuardSchema = {
   }
 
   .project-anchor {
-    scroll-margin-top: 104px;
+    scroll-margin-top: calc(var(--header-height) + 64px);
   }
 
   @media (max-width: 640px) {
