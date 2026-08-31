@@ -11,7 +11,7 @@
  *   <div data-reveal="slide-right">   → slides in from right
  *   <div data-reveal-stagger="100">   → parent: children stagger by 100ms
  *
- * Respects `prefers-reduced-motion: reduce` — skips all animations.
+ * Respects `prefers-reduced-motion: reduce` - skips all animations.
  */
 
 /**

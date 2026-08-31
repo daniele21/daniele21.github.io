@@ -41,7 +41,7 @@
   transform: scale(0.92);
 }
 
-/* ── Revealed state — all types converge to identity ── */
+/* ── Revealed state - all types converge to identity ── */
 [data-reveal].revealed {
   opacity: 1;
   transform: translateY(0) translateX(0) scale(1);

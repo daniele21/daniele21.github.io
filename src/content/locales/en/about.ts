@@ -338,7 +338,7 @@ export const aboutData: AboutContent = {
     title: 'Sharing Knowledge With Zero Hype',
     subtitle: 'Authoring deep-dive architectural analyses on stAI tuned and mentoring the next generation of engineers.',
     staiTunedSummary:
-      'Through stAI tuned, I publish long-form architectural breakdowns designed for practitioners who care about how systems actually work under the hood. No marketing fluff, no buzzwords — just clear mental models, system diagrams, and reproducible implementations.',
+      'Through stAI tuned, I publish long-form architectural breakdowns designed for practitioners who care about how systems actually work under the hood. No marketing fluff, no buzzwords - just clear mental models, system diagrams, and reproducible implementations.',
     staiTunedMetrics: [
       { value: '80+', label: 'Articles Published' },
       { value: 'Gold', label: 'Impact Writer' },
@@ -351,7 +351,7 @@ export const aboutData: AboutContent = {
         readTime: '6 min read',
         url: 'https://staituned.com',
         summary:
-          'Examining why unexamined cloud dependencies introduce privacy, reliability, and vendor risks — and how to establish workload boundaries.',
+          'Examining why unexamined cloud dependencies introduce privacy, reliability, and vendor risks - and how to establish workload boundaries.',
         badge: 'Strategy',
         keyInsight: 'Cloud-first creates silent operational fragility. Local-first establishes true architectural sovereignty.',
       },

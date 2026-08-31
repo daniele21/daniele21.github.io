@@ -50,6 +50,11 @@ const {
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+const isMobile = Boolean(
+  (tag && tag.toLowerCase().includes('mobile')) ||
+  title.toLowerCase().includes('aura') ||
+  (imagePath && imagePath.includes('aura'))
+);
 ---
 
 <PlaneCard
@@ -59,66 +64,55 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
   ariaLabel={`${title}: ${description}`}
 >
   {variant === 'compact' ? (
-    <div class="proof-row-card">
-      <!-- Left: Brand Identity & Content Column -->
-      <div class="proof-row-card__main">
-        <div class="proof-row-card__topline">
-          <div class="proof-row-card__icon-box" aria-hidden={!logoPath ? 'true' : undefined}>
+    <div class="proof-vertical-card">
+      <!-- Top: Identity & Header -->
+      <div class="proof-vertical-card__header">
+        <div class="proof-vertical-card__topline">
+          <div class="proof-vertical-card__icon-box" aria-hidden={!logoPath ? 'true' : undefined}>
             {logoPath ? (
               <img src={asset(logoPath)} alt={logoAlt} loading="lazy" />
             ) : (
-              <svg class="proof-row-card__symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <svg class="proof-vertical-card__symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             )}
           </div>
-          <div class="proof-row-card__header-meta">
-            <span class="proof-row-card__tag">{tag || eyebrow || 'REFERENCE APPLICATION'}</span>
-            <h3 class="proof-row-card__title">{title}</h3>
+          <div class="proof-vertical-card__header-meta">
+            <span class="proof-vertical-card__tag">{tag || eyebrow || 'REFERENCE APPLICATION'}</span>
+            <h3 class="proof-vertical-card__title">{title}</h3>
           </div>
         </div>
 
-        <p class="proof-row-card__question">{description}</p>
-
-        <!-- Validation Section with Chips -->
-        {features && features.length > 0 && (
-          <div class="proof-row-card__validation">
-            <span class="proof-row-card__validation-label">WHAT THIS VALIDATES:</span>
-            <div class="proof-row-card__validation-chips">
-              {features.map((feature) => (
-                <span class="validation-chip">{feature.label}</span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <!-- Footer CTA -->
-        <div class="proof-row-card__cta">
-          <strong>{ctaLabel}</strong>
-          <span class="cta-arrow" aria-hidden="true">→</span>
-        </div>
+        <p class="proof-vertical-card__question">{description}</p>
       </div>
 
-      <!-- Right: App Window Preview Mockup -->
+      <!-- Center: Product Interface Showcase -->
       {imagePath && (
-        <div class="proof-row-card__preview">
-          <div class="proof-row-card__window">
-            <div class="proof-row-card__window-bar" aria-hidden="true">
-              <div class="window-dots">
-                <span class="window-dot window-dot--close"></span>
-                <span class="window-dot window-dot--min"></span>
-                <span class="window-dot window-dot--max"></span>
-              </div>
-              <span class="window-title">{title.toLowerCase().replace(/\s+/g, '')}.local</span>
-              <span class="proof-row-card__action" aria-hidden="true">↗</span>
-            </div>
-            <div class="proof-row-card__window-body">
-              <img src={asset(imagePath)} alt={imageAlt} loading="lazy" />
-              <span class="proof-row-card__window-glare" aria-hidden="true"></span>
-            </div>
+        <div class="proof-vertical-card__preview">
+          <div class="proof-vertical-card__screen">
+            <img class="proof-vertical-card__image" src={asset(imagePath)} alt={imageAlt} loading="lazy" />
+            <span class="proof-vertical-card__screen-glare" aria-hidden="true"></span>
           </div>
         </div>
       )}
+
+      <!-- Bottom Body: Validation Section with Chips -->
+      {features && features.length > 0 && (
+        <div class="proof-vertical-card__validation">
+          <span class="proof-vertical-card__validation-label">WHAT THIS VALIDATES:</span>
+          <div class="proof-vertical-card__validation-chips">
+            {features.map((feature) => (
+              <span class="validation-chip">{feature.label}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Bottom: Footer CTA -->
+      <div class="proof-vertical-card__footer">
+        <strong class="proof-vertical-card__cta-text">{ctaLabel}</strong>
+        <span class="cta-arrow" aria-hidden="true">→</span>
+      </div>
     </div>
   ) : (
     <Fragment slot="header">
@@ -329,7 +323,7 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
   }
 
   /* ==========================================================================
-     COMPACT ROW CARD (PLANE 03 - TEST APPLICATIONS)
+     VERTICAL COMPACT CARD (PLANE 03 - TEST APPLICATIONS)
      Cohesive with Plane 02 BUILD Layer Aesthetics & Dimensions
      ========================================================================== */
 
@@ -340,18 +334,18 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     --product-border: rgba(56, 189, 248, 0.28);
     --product-glow: rgba(56, 189, 248, 0.35);
 
-    height: auto;
-    min-height: 154px;
+    height: 100%;
+    min-height: 440px;
     display: flex;
     flex-direction: column;
     padding: 0;
-    border-radius: 16px;
+    border-radius: 18px;
     border: 1px solid color-mix(in srgb, var(--product-accent) 22%, var(--border-medium));
     background:
-      radial-gradient(circle at 10% 0%, var(--product-soft), transparent 45%),
+      radial-gradient(circle at 50% 0%, var(--product-soft), transparent 55%),
       var(--surface-card);
     box-shadow:
-      0 6px 20px rgba(8, 19, 51, 0.04),
+      0 4px 20px rgba(8, 19, 51, 0.04),
       inset 0 1px 0 rgba(255, 255, 255, 0.95);
     transition:
       transform var(--duration-base) var(--ease-out-expo),
@@ -405,7 +399,7 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
 
   :global(.plane-card.project-proof-card--compact:hover),
   :global(.plane-card.project-proof-card--compact:focus-visible) {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
     border-color: color-mix(in srgb, var(--product-accent) 48%, var(--border-medium));
     box-shadow:
       0 16px 36px rgba(8, 19, 51, 0.09),
@@ -413,36 +407,34 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
       inset 0 1px 0 rgba(255, 255, 255, 0.98);
   }
 
-  /* Grid Layout inside each horizontal row card */
-  .proof-row-card {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(200px, 240px);
-    gap: clamp(14px, 2vw, 22px);
-    align-items: center;
-    padding: 16px 18px;
+  /* Vertical Card Layout */
+  .proof-vertical-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     min-width: 0;
   }
 
-  .proof-row-card__main {
+  .proof-vertical-card__header {
+    padding: 20px 20px 14px;
     display: flex;
     flex-direction: column;
-    min-width: 0;
-    gap: 7px;
+    gap: 10px;
   }
 
   /* Topline */
-  .proof-row-card__topline {
+  .proof-vertical-card__topline {
     display: flex;
     align-items: center;
     gap: 12px;
   }
 
-  .proof-row-card__icon-box {
-    width: 40px;
-    height: 40px;
+  .proof-vertical-card__icon-box {
+    width: 44px;
+    height: 44px;
     display: grid;
     place-items: center;
-    border-radius: 10px;
+    border-radius: 12px;
     flex-shrink: 0;
     background: linear-gradient(145deg, var(--product-soft), color-mix(in srgb, var(--product-accent) 14%, transparent));
     border: 1px solid var(--product-border);
@@ -452,27 +444,105 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
   }
 
-  .proof-row-card__icon-box img {
-    width: 24px;
-    height: 24px;
+  .proof-vertical-card__icon-box img {
+    width: 26px;
+    height: 26px;
     object-fit: contain;
     display: block;
   }
 
-  .proof-row-card__symbol {
-    width: 20px;
-    height: 20px;
+  .proof-vertical-card__symbol {
+    width: 22px;
+    height: 22px;
     color: var(--product-accent);
   }
 
-  .proof-row-card__header-meta {
+  .proof-vertical-card__header-meta {
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 2px;
     min-width: 0;
   }
 
-  .proof-row-card__tag {
+  .proof-vertical-card__tag {
+    color: var(--product-accent);
+    font-family: var(--font-display);
+    font-size: 0.64rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .proof-vertical-card__title {
+    margin: 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .proof-vertical-card__question {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    font-weight: 560;
+    line-height: 1.4;
+    text-wrap: pretty;
+  }
+
+  /* Product Preview Screen (Frameless clean stage) */
+  .proof-vertical-card__preview {
+    padding: 0 18px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .proof-vertical-card__screen {
+    width: 100%;
+    height: 196px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--product-accent) 22%, var(--border-medium));
+    background: #081333;
+    box-shadow:
+      0 6px 18px rgba(8, 19, 51, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    display: flex;
+  }
+
+  .proof-vertical-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition:
+      transform var(--duration-base) var(--ease-out-expo),
+      filter var(--duration-base) ease;
+    filter: saturate(0.98) contrast(1.04);
+  }
+
+  .proof-vertical-card__screen-glare {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(8, 19, 51, 0.04), transparent 40%, rgba(8, 19, 51, 0.22));
+  }
+
+  /* Validation Block */
+  .proof-vertical-card__validation {
+    padding: 0 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .proof-vertical-card__validation-label {
     color: var(--product-accent);
     font-family: var(--font-display);
     font-size: 0.62rem;
@@ -482,56 +552,17 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     text-transform: uppercase;
   }
 
-  .proof-row-card__title {
-    margin: 0;
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: 1.08rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    text-wrap: balance;
-  }
-
-  .proof-row-card__question {
-    margin: 0;
-    color: var(--ink-muted);
-    font-size: 0.8rem;
-    font-weight: 560;
-    line-height: 1.35;
-    text-wrap: pretty;
-  }
-
-  /* Validation Block */
-  .proof-row-card__validation {
+  .proof-vertical-card__validation-chips {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     gap: 6px;
-    margin-top: 2px;
-  }
-
-  .proof-row-card__validation-label {
-    color: var(--product-accent);
-    font-family: var(--font-display);
-    font-size: 0.58rem;
-    font-weight: 850;
-    letter-spacing: 0.07em;
-    line-height: 1.2;
-    text-transform: uppercase;
-  }
-
-  .proof-row-card__validation-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
   }
 
   .validation-chip {
     display: inline-flex;
     align-items: center;
-    padding: 2px 7px;
-    font-size: 0.67rem;
+    padding: 3px 8px;
+    font-size: 0.72rem;
     font-weight: 650;
     line-height: 1.2;
     color: var(--ink);
@@ -547,21 +578,28 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     border-color: color-mix(in srgb, var(--product-accent) 24%, var(--border-subtle));
   }
 
-  /* CTA */
-  .proof-row-card__cta {
-    display: inline-flex;
+  /* CTA Footer */
+  .proof-vertical-card__footer {
+    margin-top: auto;
+    padding: 14px 20px;
+    border-top: 1px solid color-mix(in srgb, var(--product-accent) 12%, var(--border-subtle));
+    background: linear-gradient(90deg, var(--product-soft), transparent);
+    display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: space-between;
+  }
+
+  .proof-vertical-card__cta-text {
     font-family: var(--font-display);
-    font-size: 0.76rem;
-    font-weight: 760;
+    font-size: 0.84rem;
+    font-weight: 780;
     color: var(--product-accent);
-    margin-top: 2px;
     line-height: 1.2;
   }
 
   .cta-arrow {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    color: var(--product-accent);
     transition: transform var(--duration-fast) var(--ease-out-expo);
   }
 
@@ -570,144 +608,44 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
     transform: translateX(4px);
   }
 
-  /* Right Column Preview Window */
-  .proof-row-card__preview {
-    height: 100%;
-    display: flex;
-    align-items: stretch;
-    justify-content: flex-end;
-    min-width: 0;
-  }
-
-  .proof-row-card__window {
-    width: 100%;
-    height: 100%;
-    min-height: 120px;
-    max-height: 136px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 9px;
-    border: 1px solid color-mix(in srgb, var(--product-accent) 20%, var(--border-medium));
-    background: #081333;
-    box-shadow:
-      0 4px 12px rgba(8, 19, 51, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-  }
-
-  .proof-row-card__window-bar {
-    height: 22px;
-    padding: 0 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(180deg, #132448, #0e1b38);
-    border-bottom: 1px solid rgba(188, 208, 255, 0.12);
-    flex-shrink: 0;
-  }
-
-  .window-dots {
-    display: flex;
-    align-items: center;
-    gap: 3.5px;
-  }
-
-  .window-dot {
-    width: 5.5px;
-    height: 5.5px;
-    border-radius: 50%;
-  }
-
-  .window-dot--close { background: #ef4444; opacity: 0.85; }
-  .window-dot--min { background: #f59e0b; opacity: 0.85; }
-  .window-dot--max { background: #10b981; opacity: 0.85; }
-
-  .window-title {
-    font-family: var(--font-mono);
-    font-size: 0.54rem;
-    font-weight: 600;
-    color: rgba(188, 208, 255, 0.6);
-    letter-spacing: 0.02em;
-  }
-
-  .proof-row-card__action {
-    color: rgba(188, 208, 255, 0.7);
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 800;
-    line-height: 1;
-    transition: transform var(--duration-fast) ease, color var(--duration-fast) ease;
-  }
-
-  .proof-row-card__window-body {
-    position: relative;
-    flex: 1;
-    min-height: 98px;
-    overflow: hidden;
-    background: #0b1736;
-  }
-
-  .proof-row-card__window-body img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    transition:
-      transform var(--duration-base) var(--ease-out-expo),
-      filter var(--duration-base) ease;
-    filter: saturate(0.92) contrast(1.02);
-  }
-
-  .proof-row-card__window-glare {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(180deg, rgba(8, 19, 51, 0.12), transparent 40%, rgba(8, 19, 51, 0.22));
-  }
-
-  :global(.plane-card.project-proof-card--compact:hover) .proof-row-card__icon-box,
-  :global(.plane-card.project-proof-card--compact:focus-visible) .proof-row-card__icon-box {
+  :global(.plane-card.project-proof-card--compact:hover) .proof-vertical-card__icon-box,
+  :global(.plane-card.project-proof-card--compact:focus-visible) .proof-vertical-card__icon-box {
     transform: translateY(-2px) scale(1.05);
     box-shadow: 0 0 16px var(--product-glow);
   }
 
-  :global(.plane-card.project-proof-card--compact:hover) .proof-row-card__action,
-  :global(.plane-card.project-proof-card--compact:focus-visible) .proof-row-card__action {
-    color: var(--product-accent-light);
-    transform: translate(1px, -1px);
-  }
-
-  :global(.plane-card.project-proof-card--compact:hover) .proof-row-card__window-body img,
-  :global(.plane-card.project-proof-card--compact:focus-visible) .proof-row-card__window-body img {
-    transform: scale(1.04);
-    filter: saturate(1.02) contrast(1.05);
+  :global(.plane-card.project-proof-card--compact:hover) .proof-vertical-card__image,
+  :global(.plane-card.project-proof-card--compact:focus-visible) .proof-vertical-card__image {
+    transform: scale(1.03);
+    filter: saturate(1.02) contrast(1.06);
   }
 
   @media (max-width: 680px) {
-    .proof-row-card {
-      grid-template-columns: 1fr;
-      gap: 12px;
-      padding: 14px;
+    .proof-vertical-card__header {
+      padding: 16px 16px 12px;
     }
 
-    .proof-row-card__preview {
-      width: 100%;
+    .proof-vertical-card__preview {
+      padding: 0 14px 14px;
     }
 
-    .proof-row-card__window {
-      max-height: 160px;
-      min-height: 130px;
+    .proof-vertical-card__screen {
+      height: 175px;
+    }
+
+    .proof-vertical-card__validation {
+      padding: 0 16px 14px;
+    }
+
+    .proof-vertical-card__footer {
+      padding: 12px 16px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     :global(.plane-card.project-proof-card--compact),
-    .proof-row-card__icon-box,
-    .proof-row-card__action,
-    .proof-row-card__window-body img,
+    .proof-vertical-card__icon-box,
+    .proof-vertical-card__image,
     .cta-arrow {
       transition: none;
     }
@@ -717,12 +655,10 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
       transform: none;
     }
 
-    :global(.plane-card.project-proof-card--compact:hover) .proof-row-card__icon-box,
-    :global(.plane-card.project-proof-card--compact:focus-visible) .proof-row-card__icon-box,
-    :global(.plane-card.project-proof-card--compact:hover) .proof-row-card__action,
-    :global(.plane-card.project-proof-card--compact:focus-visible) .proof-row-card__action,
-    :global(.plane-card.project-proof-card--compact:hover) .proof-row-card__window-body img,
-    :global(.plane-card.project-proof-card--compact:focus-visible) .proof-row-card__window-body img,
+    :global(.plane-card.project-proof-card--compact:hover) .proof-vertical-card__icon-box,
+    :global(.plane-card.project-proof-card--compact:focus-visible) .proof-vertical-card__icon-box,
+    :global(.plane-card.project-proof-card--compact:hover) .proof-vertical-card__image,
+    :global(.plane-card.project-proof-card--compact:focus-visible) .proof-vertical-card__image,
     :global(.plane-card.project-proof-card--compact:hover) .cta-arrow,
     :global(.plane-card.project-proof-card--compact:focus-visible) .cta-arrow {
       transform: none;

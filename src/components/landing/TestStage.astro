@@ -22,7 +22,7 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
   nextLabel="MEASURE"
   visualLabel="Applications used as empirical proving grounds"
 >
-  <PlaneCardGrid layout="rows">
+  <PlaneCardGrid layout="grid">
     {testStage.applications.map((app) => (
       <ProjectProofCard
         variant="compact"
