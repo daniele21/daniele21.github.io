@@ -2,140 +2,205 @@
 
 This contract specializes `repo-template-sw` product-experience rules for technical project deep-dives on this site.
 
-The goal is **consistent comprehension, not identical pages**. Every project should answer the same high-level questions in the same order while preserving project-specific depth, visuals and technical modules.
+The goal is **consistent comprehension, not identical pages**. The homepage owns the shared `Decide -> Build -> Test -> Measure -> Decide Again` method. Project routes show the concrete artifact produced by that method and therefore use the visitor's mental model for the project type as their primary information architecture.
 
-## Governing journey
+## Governing principle
 
 ```text
-OVERVIEW
-→ DECIDE
-→ BUILD
-→ TEST
-→ MEASURE
-→ DECIDE AGAIN
-→ NEXT STEP
+HOMEPAGE
+Decide -> Build -> Test -> Measure -> Decide Again
+
+PROJECT PAGE
+Purpose -> dominant project mental model -> technical depth -> evidence -> status -> connected system
 ```
 
-This mirrors the site's broader Local AI method and gives returning readers a stable mental model across projects.
+Do not replay the homepage methodology as a mandatory project-page table of contents.
 
-## Required semantic phases
+Derived interaction rule:
+
+```text
+one question
+-> one dominant visual
+-> one piece of evidence
+-> deeper only when useful
+```
+
+## Shared semantic requirements
+
+Every full project deep-dive must answer these questions, although the labels and ordering of the middle sections vary by archetype:
 
 ### Overview
 
 Answer in the first screen:
+
 - What is this?
-- What outcome does it enable?
+- What outcome or capability does it enable?
 - What is its current status?
 - What is the primary next action?
 
-Use one dominant product/system visual when useful. Do not turn the hero into a feature inventory.
+Use one dominant real product/system visual when useful. Avoid feature inventories, badge clouds and multiple equal-weight calls to action.
 
-### Decide -Why does this exist?
+### Why / question
 
-Explain the problem, constraints and architectural question that justified the project. For Local AI work, make the Local / Hybrid / Cloud boundary explicit when it is materially relevant.
+State the real problem, workload or hypothesis that makes the artifact worth building or measuring. This may be compact and does not need to be a top-level navigation item.
 
-### Build -What was built?
+### Primary mental model
 
-Show the concrete system and only then progressively disclose architecture, runtime, backends, APIs and implementation detail. Technical depth is encouraged when it supports the project story; it should not dominate before the reader understands why the system exists.
+Show the concept the visitor must understand first:
 
-### Test -Where does it meet reality?
+- architecture for infrastructure;
+- workflow/product for proving grounds;
+- method/evidence for experiments.
 
-Show the real workflow, product surface, test bed or operational scenario. Prefer real screenshots and end-to-end flows over abstract feature lists.
+Prefer a real architecture diagram, product surface, workflow or result over generic card mosaics.
 
-### Measure -What can be claimed today?
+### Technical depth
 
-Use verified evidence only. Depending on the project, this may include benchmark results, latency, throughput, memory, thermal behavior, network boundaries, product proof, runtime diagnostics or explicit maturity/limitations.
+Progressively disclose runtime, API, lifecycle, implementation, architecture or method only after the primary mental model is clear.
 
-If measured results do not exist yet, say what is being measured or what still blocks a stronger claim. Never use decorative charts that can be mistaken for measured evidence.
+### Evidence
 
-### Decide again -What changed after evidence?
+Use verified evidence only. Explicitly separate:
 
-State the current architectural/product decision, trade-offs and remaining limits. This is not a motivational conclusion; it is the consequence of the previous phases.
+- **implemented / proven today**;
+- **not claimed / still needs validation**.
 
-### Next step
+If measured results do not exist yet, state what is being measured or what blocks a stronger claim. Never use decorative charts that can be mistaken for measured evidence.
 
-Offer the most useful next action: source code, demo, related project, benchmark or return to the broader Local AI journey. Do not default to a sales CTA when peer exploration is more appropriate.
+### Status / consequence
 
-## Shared navigation
+State the current maturity, next validation step or architectural consequence. This is a decision boundary, not a motivational conclusion.
 
-Project pages should prefer this stable primary navigation:
+### Connected system
 
-```text
-Overview · Decide · Build · Test · Measure · Decide again
-```
+When a real relationship exists, show where the artifact sits relative to upstream infrastructure, proving grounds or measurement. Prefer contextual related-project navigation over a generic `Back to projects` link.
 
-Project-specific subtopics remain inside the relevant phase rather than competing as top-level navigation items.
-
-On narrow screens, the canonical phase navigation remains horizontally scrollable but must behave as an intentional mobile control rather than clipped desktop navigation:
-
-- the active phase is kept visible and centered when practical;
-- subtle edge fades communicate that additional phases exist off-screen;
-- the sticky project CTA is removed when it competes with phase navigation;
-- normal page content still exposes the final source/demo/next-step CTA;
-- every navigation target remains at least 44px high and keyboard-addressable.
-
-## Archetypes
-
-The shared journey is mandatory for full deep-dives, but internal modules vary by project type.
+## Archetype information architecture
 
 ### Infrastructure
 
-Examples: Local LLM Server, Local ASR Server.
+Examples: Local LLM Server, Local ASR Server, Android Local LLM Harness.
 
-Typical Build modules:
-- runtime flow;
-- lifecycle;
-- backends;
-- architecture;
-- API/developer boundary.
+Canonical navigation:
 
-Typical Measure modules:
-- runtime diagnostics;
-- operational constraints;
-- hardware/runtime evidence;
-- maturity and trust boundaries.
+```text
+Overview · Architecture · Runtime · Evidence · Status
+```
 
-### Product / use case
+Typical composition:
+
+1. Overview / dominant system visual.
+2. Why the infrastructure gap exists.
+3. Architecture / execution flow.
+4. Runtime, lifecycle, backends, API and developer surface.
+5. Evidence and trust/operational limits.
+6. Status and next technical decision.
+7. Connected proving ground / measurement.
+
+### Product / proving ground
 
 Examples: ClosedRoom, Aura Finance, RedactGuard.
 
-Typical Build/Test modules:
-- user workflow;
-- product surfaces;
-- processing pipeline;
-- privacy/trust boundary;
-- architecture where relevant.
+Canonical navigation:
 
-Typical Measure modules:
-- product proof;
-- boundary verification;
-- task-quality evidence;
-- explicit limitations.
+```text
+Overview · Workflow · Product · Architecture · Evidence
+```
+
+Typical composition:
+
+1. Overview / product outcome and real UI.
+2. User or workflow problem.
+3. Dominant end-to-end workflow.
+4. Product surfaces and interaction model.
+5. Under-the-hood architecture and Local AI boundary.
+6. Evidence, human-control boundary and explicit limitations.
+7. Connected infrastructure / measurement.
 
 ### Experiment / measurement
 
-Examples: Android Local LLM Harness, Performance Lab, Traffic Monitoring.
+Examples: Performance Lab, Traffic Monitoring, Traffic Monitoring Android.
 
-Typical modules:
-- research question;
-- device/configuration;
-- methodology;
-- test surfaces;
-- metrics/results;
-- decision consequence.
+Canonical navigation:
+
+```text
+Overview · Method · Evidence · Findings · Status
+```
+
+Typical composition:
+
+1. Overview / question being measured.
+2. Hypothesis and decision context.
+3. Method: workload, model/runtime/device/configuration as relevant.
+4. Evidence / measured results when available.
+5. Interpretation: what the evidence means for the workload.
+6. Limits and missing validation.
+7. Architectural consequence: Local, Hybrid or Cloud where relevant.
+
+Android Local LLM Harness currently behaves as an infrastructure/experiment hybrid. Its final classification should follow whichever reader mental model wins after the three-pilot review; do not force the page into a category merely for taxonomy purity.
+
+## Shared components
+
+Project routes should converge on one shared semantic family:
+
+- `ProjectHero`: project identity, status, value proposition, CTA and dominant visual.
+- `ProductSubHeader`: archetype-specific sticky navigation and mobile context.
+- `ProjectSection`: semantic `<section>` and `<h2>` foundation.
+- `ProjectProof`: concise statement connecting the artifact to what it demonstrates.
+- `ProjectEvidenceNote`: implemented/proven versus not-claimed boundary.
+- `ProjectRelations`: contextual project chain.
+- project-specific visual and technical modules.
+
+`ProjectPhase` is a migration-only component. It may remain on unmigrated routes while the archetype refactor is active, but it is not the target contract.
+
+## Shared navigation
+
+Top-level project navigation is archetype-specific and should normally contain no more than five items.
+
+Desktop:
+
+- project name/status remains visible;
+- archetype sections are directly addressable;
+- one high-value repository/demo action may remain visible.
+
+Mobile:
+
+- preserve compact project identity and current context;
+- archetype section navigation may horizontally scroll when needed;
+- the active item must remain visible when practical;
+- subtle edge fades may communicate additional items;
+- never reduce the route to anonymous methodology tabs;
+- each interactive target remains at least 44px high and keyboard-addressable.
+
+## Hero contract
+
+A visitor should understand the project within five seconds.
+
+Required hierarchy:
+
+1. archetype / status;
+2. project name;
+3. one-sentence outcome or capability;
+4. primary action;
+5. dominant real visual;
+6. optional compact technical metadata.
+
+For evidence-rich visuals, prefer copy-above / full-width-visual layouts over 50/50 layouts that compress the stronger proof.
 
 ## Progressive disclosure
 
-Use this order inside every phase:
+Preferred page-level order:
 
 ```text
 essential conclusion
-→ explanatory context
-→ visual / workflow proof
-→ architecture / code / diagnostics
+-> dominant visual/workflow
+-> explanatory context
+-> architecture/code/diagnostics
+-> evidence boundary
+-> next consequence
 ```
 
-Do not show every advanced implementation detail at the same visual level as the primary project outcome.
+Technical depth is encouraged. It simply should not arrive before the visitor knows why it matters.
 
 ## Adaptive technical content
 
@@ -143,11 +208,11 @@ Responsive behavior preserves **content priority**, not desktop geometry.
 
 ### Tables
 
-Comparison tables should become stacked labeled rows/cards below roughly 640px when the comparison can remain understandable without simultaneous columns. Horizontal scrolling is a fallback for genuinely matrix-like information, not the default response to narrow screens.
+Comparison tables should become stacked labeled rows/cards below roughly 640px when the comparison remains understandable without simultaneous columns. Horizontal scrolling is a fallback for genuinely matrix-like information, not the default response to narrow screens.
 
 ### Code
 
-Code keeps semantic line structure. On narrow screens it may use a horizontal scroller, but that region must be independently keyboard-focusable, must never create page-level overflow and should expose a small affordance such as “Scroll to inspect code” when overflow is expected.
+Code keeps semantic line structure. On narrow screens it may use a horizontal scroller, but that region must be independently keyboard-focusable, must never create page-level overflow and should expose a small affordance such as `Scroll to inspect code` when overflow is expected.
 
 ### Architecture diagrams
 
@@ -165,27 +230,40 @@ Motion is subordinate to comprehension. Project-specific carousels, screenshots 
 
 - WCAG 2.2 AA target.
 - One H1 per route.
-- Phase anchors must remain keyboard-addressable through normal links.
+- One `<main>` landmark supplied by `BaseLayout`; project pages must not add a nested main.
+- Top-level section anchors remain keyboard-addressable through normal links.
+- Project sections use semantic `<section>` and heading hierarchy where the shared primitive owns the section.
 - Minimum meaningful text size remains 14px.
 - Minimum interactive target is 44×44px where applicable.
-- Desktop, tablet and mobile preserve the same phase order.
-- Responsive behavior must preserve content priority rather than merely hide navigation/content.
-- Motion is optional and subordinate to comprehension; reduced-motion preferences must remain respected.
+- Responsive behavior preserves content priority rather than merely hiding navigation/content.
+- Motion is optional and subordinate to comprehension; reduced-motion preferences remain respected.
 - Invalid SVG, runtime console errors and broken visual assets are experience defects, not cosmetic warnings.
+
+## Migration compatibility
+
+During the active refactor, routes are allowed to be in one of two states:
+
+1. **Migrated:** uses archetype navigation and shared project primitives; does not depend on `ProjectPhase` as its page IA.
+2. **Legacy:** retains the old six-state phase journey until its archetype pilot/template is validated.
+
+Tests must identify the state deliberately. A migrated route must never be forced back to `ProjectPhase` merely to satisfy a legacy contract.
 
 ## Validation
 
-A project-page migration is complete only when:
-- all six semantic navigation states are represented (`Overview` plus five project phases);
-- top-level project navigation uses the shared phase model;
+A migrated project page is acceptable only when:
+
+- project purpose is clear in a five-second scan;
+- the visitor can identify what was actually built within roughly fifteen seconds;
+- the dominant architecture/workflow/method is understandable within roughly thirty seconds;
+- top-level navigation matches its archetype and contains no more than five primary items;
+- evidence and missing evidence are visually distinct;
 - no measured claim is invented;
-- project-specific depth stays inside the correct phase;
-- one H1 and valid landmarks remain intact;
+- one H1 and a valid single-main document structure remain intact;
 - meaningful rendered text remains at least 14px;
-- active mobile phase navigation remains visibly discoverable;
+- project identity/context remains discoverable on mobile;
 - no page-level horizontal overflow exists at representative widths;
 - browser/page errors are absent in representative rendered checks;
-- build/check/test gates still pass;
-- representative 1440 / 768 / 390 / 320 rendering is reviewed for important pages.
+- build/check/test gates pass;
+- representative 1440 / 768 / 390 / 320 rendering is reviewed for the three pilot pages before broad migration.
 
-Short-form project pages may intentionally omit deep modules, but should still preserve the same question order where enough evidence exists.
+The migration is complete only when all project routes are in the migrated state and `ProjectPhase` can be retired.
