@@ -1,0 +1,80 @@
+---
+export interface Props {
+  label?: string;
+  statement: string;
+  detail?: string;
+}
+
+const {
+  label = 'WHAT THIS PROVES',
+  statement,
+  detail,
+} = Astro.props;
+---
+
+<aside class="project-proof" aria-label={label}>
+  <div class="shell project-proof-shell">
+    <p class="project-proof-label">{label}</p>
+    <p class="project-proof-statement">{statement}</p>
+    {detail && <p class="project-proof-detail">{detail}</p>}
+  </div>
+</aside>
+
+<style>
+  .project-proof {
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--surface-blue-subtle) 42%, var(--surface-canvas));
+  }
+
+  .project-proof-shell {
+    display: grid;
+    grid-template-columns: minmax(150px, 0.8fr) minmax(0, 3.2fr);
+    column-gap: clamp(24px, 4vw, 56px);
+    row-gap: 10px;
+    align-items: start;
+    padding-top: clamp(28px, 4vw, 42px);
+    padding-bottom: clamp(28px, 4vw, 42px);
+  }
+
+  .project-proof-label {
+    margin: 5px 0 0;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 820;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .project-proof-statement {
+    margin: 0;
+    max-width: 900px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.5vw, 2.15rem);
+    font-weight: 760;
+    letter-spacing: -0.03em;
+    line-height: 1.22;
+    text-wrap: balance;
+  }
+
+  .project-proof-detail {
+    grid-column: 2;
+    margin: 0;
+    max-width: 740px;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 720px) {
+    .project-proof-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .project-proof-detail {
+      grid-column: 1;
+    }
+  }
+</style>
