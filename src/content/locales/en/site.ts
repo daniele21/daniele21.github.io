@@ -18,14 +18,14 @@ export const navigation: NavItem[] = [
     href: '#infrastructure',
     children: [
       {
-        label: 'Local LLM Server',
+        label: 'Korgis',
         href: 'local-llm-server',
-        logoPath: 'images/local-llm-server/logo.svg',
+        logoPath: 'images/local-llm-server/logo.png',
       },
       {
         label: 'Android Local LLM Harness',
         href: 'android-local-llm-harness',
-        logoPath: 'images/harness/logo.svg',
+        logoPath: 'images/harness/logo.png',
       },
       {
         label: 'Local ASR Server',

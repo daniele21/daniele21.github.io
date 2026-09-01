@@ -152,11 +152,11 @@ export const aboutData: AboutContent = {
         timeframe: 'Independent Applied AI Stack · 2024 - Present',
         paragraphs: [
           'Over the last two years, I noticed an unexamined assumption taking hold across the industry: the belief that all AI workloads must live in centralized hyperscaler clouds.',
-          'I began building an independent, open-weight Local AI stack across macOS and Android (Local LLM Server, Android Harness, Local ASR, RedactGuard, ClosedRoom, Aura Finance, and Traffic Monitoring). The goal is not to eliminate the cloud, but to prove where private, on-device compute creates genuine privacy and operational superiority.',
+          'I began building an independent, open-weight Local AI stack across macOS and Android (Korgis / Local LLM Server, Android Local LLM Harness, Local ASR, RedactGuard, ClosedRoom, Aura Finance, and Traffic Monitoring). The goal is not to eliminate the cloud, but to prove where private, on-device compute creates genuine privacy and operational superiority.',
         ],
         pullQuote: 'Local AI first ≠ Local AI only. Find the boundary with evidence, not ideology.',
         keyTakeaway: 'Proving that open-weight local execution is a viable architectural tier for modern products.',
-        tags: ['Local LLM Server', 'Android Harness', 'Apple Silicon MLX', 'llama.cpp', 'Private AI'],
+        tags: ['Korgis (Local LLM Server)', 'Android Local LLM Harness', 'Apple Silicon MLX', 'llama.cpp', 'Private AI'],
       },
     ],
   },
@@ -292,7 +292,7 @@ export const aboutData: AboutContent = {
         description:
           'Architected and built a comprehensive open-weight Local AI ecosystem spanning reusable inference servers, mobile harnesses, reference applications, and network observability.',
         responsibilities: [
-          'Engineered Local LLM Server (C++, Python, MLX, llama.cpp) providing multi-model lifecycle management and OpenAI API compatibility.',
+          'Engineered Korgis / Local LLM Server (C++, Python, MLX, llama.cpp) providing multi-model lifecycle management and OpenAI API compatibility.',
           'Created Android Local LLM Harness for on-device profiling, thermal tracking, and cross-application AIDL boundaries.',
           'Shipped empirical proving grounds: RedactGuard (PII redaction), ClosedRoom (meeting intelligence), and Aura Finance.',
           'Developed non-intrusive traffic monitoring to empirically verify local-first privacy claims without inspecting private payloads.',

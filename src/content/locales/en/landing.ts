@@ -183,12 +183,12 @@ export const landingData: LandingPageData = {
     projects: [
       {
         id: 'local-llm-server',
-        title: 'Local LLM Server',
+        title: 'Korgis',
         eyebrow: 'DESKTOP · SERVER',
-        summary: 'Gives apps one stable way to run local models on a desktop or server.',
+        summary: 'Your AI. Local. Ready to use. Runtime control plane for reliable multi-model local AI applications.',
         href: '/local-llm-server',
-        logoPath: 'images/local-llm-server/logo.svg',
-        logoAlt: 'Local LLM Server logo',
+        logoPath: 'images/local-llm-server/logo.png',
+        logoAlt: 'Korgis logo',
         features: [
           { label: 'OpenAI API' },
           { label: 'Multi-model runtime' },
@@ -196,15 +196,15 @@ export const landingData: LandingPageData = {
         ],
         evidence: 'One local runtime that different apps can reuse.',
         imagePath: 'images/local-llm-server/overview.png',
-        imageAlt: 'Local LLM Server overview interface',
+        imageAlt: 'Korgis overview interface',
       },
       {
         id: 'android-harness',
         title: 'Android Local LLM Harness',
         eyebrow: 'ON-DEVICE · ANDROID',
-        summary: 'Shows what a local model can actually handle on a real phone.',
+        summary: 'Local AI Gateway for Android — one gateway and shared on-device runtime across applications.',
         href: '/android-local-llm-harness',
-        logoPath: 'images/harness/logo.svg',
+        logoPath: 'images/harness/logo.png',
         logoAlt: 'Android Local LLM Harness logo',
         features: [
           { label: 'GGUF runtime' },

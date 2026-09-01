@@ -167,13 +167,13 @@ export const featuredProjects: {
   },
   stack: [
     {
-      title: 'Local LLM Server',
+      title: 'Korgis',
       eyebrow: 'LOCAL RUNTIME · DESKTOP',
       question: 'One inference layer. Multiple local products.',
       description: 'Reusable local inference across products with OpenAI-compatible API endpoints.',
       href: 'local-llm-server',
       image: 'images/local-llm-server/chat-studio.png',
-      imageAlt: 'Local LLM Server chat studio interface.',
+      imageAlt: 'Korgis chat studio interface.',
     },
     {
       title: 'ClosedRoom',

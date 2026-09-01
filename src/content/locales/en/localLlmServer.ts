@@ -253,9 +253,9 @@ export const localLlmServerData: LocalLlmData = {
   },
   surfaces: {
     eyebrow: 'OPERATIONAL EVIDENCE',
-    title: 'Local LLM Studio: Inspectable runtime console',
+    title: 'Korgis: Inspectable runtime console',
     sub:
-      'Local LLM Studio is the bundled operational web console that makes the runtime server visible, testable, and easier to integrate.',
+      'Korgis is the bundled operational web console that makes the runtime server visible, testable, and easier to integrate.',
     items: [
       {
         id: 'chat-studio',
@@ -381,7 +381,7 @@ for chunk in response:
       'OpenAI-compatible streaming (/v1/chat/completions) & non-streaming endpoints',
       'SHA-256 artifact validation & model completeness verification',
       'Safe runtime lease, request draining, and memory unload behavior',
-      'Bundled Local LLM Studio Web UI and programmatic Python lifecycle management',
+      'Bundled Korgis Web UI and programmatic Python lifecycle management',
     ],
     importantLimits: [
       'No built-in authentication layer for open or untrusted network deployments',

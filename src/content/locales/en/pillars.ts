@@ -4,8 +4,8 @@ export const pillars: Pillar[] = [
   {
     id: 'local-llm-server',
     label: 'DESKTOP REASONING',
-    name: 'Local LLM Server',
-    role: 'High-performance <strong>local inference server</strong> with model lifecycle, dynamic routing and telemetry.',
+    name: 'Korgis',
+    role: '<strong>Your AI. Local. Ready to use.</strong> Runtime control plane for reliable multi-model local AI applications.',
     problem:
       'Local applications should not need to couple product logic to <em>inference backend complexities</em>, model formats or runtime processes.',
     description:
@@ -52,7 +52,7 @@ export const pillars: Pillar[] = [
     id: 'android-local-llm-harness',
     label: 'ON-DEVICE MOBILE AI',
     name: 'Android Local LLM Harness',
-    role: 'On-device <strong>LLM runtime harness</strong> for Android apps with strict resource control.',
+    role: '<strong>Local AI Gateway for Android.</strong> Shared on-device LLM runtime, model plane, and control plane.',
     problem:
       'Running LLMs on Android demands <em>rigorous resource management</em>: model integrity, memory bounds, prompt cancellation and telemetry.',
     description:
