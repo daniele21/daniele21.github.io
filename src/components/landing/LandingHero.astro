@@ -31,9 +31,11 @@ const resolveHref = (href: string) => {
       <p class="hero-challenge">{hero.mission.challenge}</p>
       <p class="hero-explanation" set:html={hero.mission.explanation} />
 
-      <div class="hero-position">
-        <p>{hero.mission.position}</p>
-      </div>
+      {hero.mission.position && (
+        <div class="hero-position">
+          <p>{hero.mission.position}</p>
+        </div>
+      )}
 
       <div class="hero-actions">
         <a class="primary-button hero-primary-cta" href={resolveHref('#infrastructure')}>

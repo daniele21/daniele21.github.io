@@ -1,38 +1,42 @@
 export const advisoryData = {
-  kicker: 'LOCAL AI ADVISORY',
-  heading: 'Trying to move an AI workload off the cloud?',
+  kicker: '',
+  heading: 'How I can help you ?',
   body:
-    'I help teams answer one practical question: what can run locally without sacrificing quality, latency or operability — and what should remain Hybrid or Cloud?',
-  areas: [
-    {
-      title: 'Should this workload run locally?',
-      body: 'Evaluate privacy, latency, capability and operational constraints before choosing an execution model.',
-      output: 'Local / Hybrid / Cloud recommendation',
-    },
-    {
-      title: 'Will it run on our hardware?',
-      body: 'Test the target model and workload against real device, memory, latency and thermal constraints.',
-      output: 'Feasibility result against real constraints',
-    },
-    {
-      title: 'How should we architect it?',
-      body: 'Define runtime boundaries, model lifecycle, data flows, fallbacks and the role of optional cloud execution.',
-      output: 'Runtime and data-boundary architecture',
-    },
-    {
-      title: 'How do we prove it works?',
-      body: 'Define the measurements and thresholds needed to validate the architecture on the real workload and hardware.',
-      output: 'Metrics, thresholds and evidence plan',
-    },
-  ],
+    'Thinking about moving an AI workload off the cloud? Here is what I do:',
   fitNote:
-    'Best fit: you already have an AI workload and need evidence before committing to Local, Hybrid or Cloud.',
+    'Best if you already have an AI feature in mind and need clear technical direction.',
   primaryCta: {
-    label: 'Evaluate your workload',
-    href: 'mailto:danielemoltisanti@gmail.com?subject=Evaluate%20a%20Local%20AI%20workload',
+    label: 'Get in touch',
+    href: 'mailto:danielemoltisanti@gmail.com?subject=Local%20AI%20Advisory',
   },
   secondaryCta: {
-    label: 'Connect on LinkedIn',
+    label: 'LinkedIn',
     href: 'https://www.linkedin.com/in/daniele-moltisanti/',
   },
+  areas: [
+    {
+      id: 'strategy',
+      title: 'Where should this model run?',
+      body: 'I evaluate your <strong>privacy needs</strong>, <strong>latency limits</strong>, and <strong>compute costs</strong> to give you a clear <strong>Local, Hybrid, or Cloud</strong> recommendation before you spend weeks building.',
+      output: 'Placement recommendation & feasibility report',
+    },
+    {
+      id: 'hardware',
+      title: 'Will it run fast on your devices?',
+      body: 'I test target models directly on your <strong>real hardware</strong> (Apple Silicon, Android, servers) measuring <strong>generation speed</strong>, <strong>RAM limits</strong>, and <strong>thermals</strong>.',
+      output: 'Hardware benchmark report & RAM sizing',
+    },
+    {
+      id: 'runtime',
+      title: 'How to build the local engine?',
+      body: 'I design the inference runtime: <strong>model loading</strong>, <strong>memory management</strong>, <strong>quantization (GGUF/MLX)</strong>, and <strong>automatic fallback to cloud</strong>.',
+      output: 'Runtime architecture & API design',
+    },
+    {
+      id: 'privacy',
+      title: 'How to prove data stays private?',
+      body: 'I capture network traffic at the process level to mathematically verify <strong>zero outbound data</strong> and give you <strong>audit-ready privacy proof</strong>.',
+      output: 'Network capture proof & zero-egress audit',
+    },
+  ],
 } as const;

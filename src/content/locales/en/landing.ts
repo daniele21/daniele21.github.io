@@ -45,14 +45,14 @@ export const landingData: LandingPageData = {
       ],
     },
     mission: {
-      eyebrow: "WHAT I'M EXPLORING",
+      eyebrow: 'APPLIED AI RESEARCH',
       lead: '',
       title: 'Local AI first ≠',
       titleHighlight: 'Local AI only',
-      challenge: 'Does this workload really need the cloud?',
+      challenge: 'Does every AI workload really need the cloud?',
       explanation:
-        'I build and test real AI systems to find where <strong>Local</strong>, <strong>Hybrid</strong> or <strong>Cloud</strong> actually makes sense.',
-      position: 'Find the boundary with evidence, not ideology.',
+        'I build real systems to find out. I test <strong>Local</strong>, <strong>Hybrid</strong>, and <strong>Cloud</strong> options to measure what actually works.',
+      position: '',
       proofLine:
         'DECIDE → BUILD → TEST → MEASURE → DECIDE AGAIN',
       primaryCta: {
@@ -67,10 +67,10 @@ export const landingData: LandingPageData = {
   },
 
   decisionStage: {
-    kicker: '01 - DECIDE',
+    kicker: '01 DECIDE',
     title: 'When does Local AI actually make sense?',
     intro:
-      'I start from the workload, not the model. Privacy, control, latency and capability tell us whether Local, Hybrid or Cloud is the better fit.',
+      "I don't start from the model, I start from the workload. What are the privacy requirements and latency constraints? That tells you where the model should run.",
     drivers: [
       {
         icon: '🔒',
@@ -93,7 +93,7 @@ export const landingData: LandingPageData = {
         text: 'Does the workload require frontier reasoning or elastic compute?',
       },
     ],
-    keyMessage: 'Local is one option. Hybrid and Cloud remain part of the decision.',
+    keyMessage: 'Local is an option. Not the only one.',
     framework: {
       title: 'Decision Framework',
       flowTitle: 'Workload Requirements',
@@ -156,11 +156,11 @@ export const landingData: LandingPageData = {
   },
 
   buildStage: {
-    kicker: '02 - BUILD',
-    title: 'Make local execution usable.',
+    kicker: '02 BUILD',
+    title: 'Making local inference actually usable.',
     intro:
-      'If Local or Hybrid earns a role, I build the runtime layer products need to actually use it - across desktop, mobile and speech.',
-    proofLine: 'One execution layer. Different environments. Same question: what can realistically stay local?',
+      'When Local or Hybrid makes sense, I build the runtime products need across desktop, mobile, and speech.',
+    proofLine: 'Same question across every device: what can realistically run locally?',
     ecosystemImage: 'images/ecosystem.png',
     ecosystemAlt: 'Connected Local AI architecture across desktop, Android, local server and cloud fallback',
     areas: [
@@ -202,7 +202,7 @@ export const landingData: LandingPageData = {
         id: 'android-harness',
         title: 'Android Local LLM Harness',
         eyebrow: 'ON-DEVICE · ANDROID',
-        summary: 'Local AI Gateway for Android — one gateway and shared on-device runtime across applications.',
+        summary: 'One shared on-device gateway and runtime across Android applications.',
         href: '/android-local-llm-harness',
         logoPath: 'images/harness/logo.png',
         logoAlt: 'Android Local LLM Harness logo',
@@ -230,7 +230,7 @@ export const landingData: LandingPageData = {
       },
     ],
     closingMessage:
-      'Running a model is just the starting point. The architecture layer turns raw weights into dependable, app-ready runtime boundaries.',
+      "Running a model isn't enough. Products need a runtime they can depend on.",
     handoff: {
       output: 'Runtime layer running',
       leadsTo: 'Products working',
@@ -239,11 +239,11 @@ export const landingData: LandingPageData = {
   },
 
   testStage: {
-    kicker: '03 - TEST',
+    kicker: '03 TEST',
     title: 'Put it inside a real product.',
     intro:
-      'Infrastructure only matters if it survives a real workflow. I use my products as proving grounds for privacy, usability and integration constraints.',
-    note: 'Each application is an empirical proving ground.',
+      'Infrastructure means nothing until it runs in a real product. My apps test privacy, usability, and integration in practice.',
+    note: 'Each application tests a distinct workload constraint.',
     applications: [
       {
         name: 'RedactGuard',
@@ -308,7 +308,7 @@ export const landingData: LandingPageData = {
       description: 'Test your application requirements with the same empirical local-first methodology.',
       linkLabel: 'Discuss an architecture →',
     },
-    closingMessage: 'The value of this layer is turning architectural capability into verifiable product evidence.',
+    closingMessage: '',
     handoff: {
       output: 'Products working',
       leadsTo: 'Evidence measured',
@@ -317,10 +317,10 @@ export const landingData: LandingPageData = {
   },
 
   measureStage: {
-    kicker: '04 - MEASURE',
+    kicker: '04 MEASURE',
     title: 'Is it actually good enough?',
     intro:
-      "Running locally isn't the goal. I measure whether it performs well enough - and use the evidence to change the architecture.",
+      "Running locally isn't the goal, performing well is. I measure real numbers to shape the next architecture decision.",
     systems: [
       {
         id: 'performance-lab',
@@ -378,7 +378,7 @@ export const landingData: LandingPageData = {
       },
     ],
     closingMessage:
-      'Working ≠ performing well. Performing well ≠ production ready. Evidence is what allows the next architecture decision.',
+      'Working ≠ good enough. Good enough ≠ production ready. Numbers decide, not opinions.',
     handoff: {
       output: 'Evidence changes the next decision',
       leadsTo: 'DECIDE AGAIN',
@@ -390,13 +390,13 @@ export const landingData: LandingPageData = {
     kicker: 'THE LOOP',
     title: 'Evidence changes the next decision.',
     body:
-      'What I learn from real hardware, real products and measured behavior feeds directly back into the next architecture choice.',
+      "What I learn from real hardware and real products feeds back into the next decision. That's the loop.",
     loopSequence: 'DECIDE → BUILD → TEST → MEASURE → DECIDE AGAIN',
-    payoff: "That's what Local AI first ≠ Local AI only means in practice.",
+    payoff: 'That\'s what "Local AI first ≠ Local AI only" looks like in practice.',
     outcomes: [
-      { label: 'LOCAL', note: 'Workload reaches target thresholds within controlled compute.' },
-      { label: 'HYBRID', note: 'Local execution handles primary path; cloud fallback handles frontier edge cases.' },
-      { label: 'CLOUD', note: 'Open-weight local models cannot yet meet required latency, scale, or quality.' },
+      { label: 'LOCAL', note: 'The workload runs well enough on local hardware.' },
+      { label: 'HYBRID', note: 'Local handles the main flow. Cloud steps in for what local can\'t do.' },
+      { label: 'CLOUD', note: 'Local models can\'t meet the requirements yet. Cloud is the right call.' },
     ],
   },
 
@@ -477,11 +477,11 @@ export const landingData: LandingPageData = {
 
   aboutSignal: {
     kicker: 'ABOUT & TRACK RECORD',
-    heading: 'Applied AI systems engineering with verifiable discipline.',
+    heading: 'Building AI systems. Measuring what works.',
     summary:
-      'I build AI systems to understand where local execution creates real value. My focus spans inference infrastructure, on-device intelligence, and empirical evaluation.',
+      'I build local AI infrastructure and test it inside real products. The goal: understand where running locally actually creates value.',
     highlights: [
-      { label: 'Engineering Standards', detail: 'Bounded memory, explicit failure modes, and reproducible environments.' },
+      { label: 'Clean Engineering', detail: 'Bounded memory, explicit failure modes, and reproducible environments.' },
       { label: 'Ecosystem Focus', detail: 'Apple Silicon MLX, Android NPU/NDK, open-weight GGUF architectures.' },
     ],
     linkedinUrl: 'https://www.linkedin.com/in/daniele-moltisanti/',
