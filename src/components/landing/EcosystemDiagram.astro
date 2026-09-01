@@ -1,388 +1,335 @@
 ---
-/** Compact, mission-first view of the Local AI execution layer. */
+/**
+ * EcosystemDiagram.astro
+ * Displays the infrastructure infographic PNG as base image,
+ * with permanent, distinct animated-gradient interactive cards covering
+ * Korgis, Harnex, and Local ASR that link directly to their project pages.
+ */
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
 
-const inputs = [
-  { id: 'text', label: 'Text' },
-  { id: 'voice', label: 'Voice' },
-  { id: 'mobile', label: 'Mobile' },
-];
-
-const systems = [
-  { id: 'llm', tag: 'TEXT · MODELS', title: 'Korgis', role: 'Your AI. Local. Ready to use.', href: '/local-llm-server', logoPath: 'images/local-llm-server/logo.png' },
-  { id: 'asr', tag: 'VOICE · AUDIO', title: 'Local ASR Server', role: 'Private speech processing', href: '/local-asr-server', logoPath: null },
-  { id: 'android', tag: 'ON-DEVICE', title: 'Android Local LLM Harness', role: 'Local AI Gateway for Android', href: '/android-local-llm-harness', logoPath: 'images/harness/logo.png' },
+const projects = [
+  {
+    id: 'korgis',
+    logoPath: 'images/local-llm-server/logo.png',
+    title: 'Korgis',
+    payoff: 'Desktop LLM inference',
+    href: '/local-llm-server',
+  },
+  {
+    id: 'harnex',
+    logoPath: 'images/harness/logo.png',
+    title: 'Harnex',
+    payoff: 'Android LLM inference',
+    href: '/android-local-llm-harness',
+  },
+  {
+    id: 'local-asr',
+    logoPath: null,
+    title: 'Local ASR',
+    payoff: 'Audio → text',
+    href: '/local-asr-server',
+  },
 ];
 ---
 
-<section class="ecosystem-diagram" aria-labelledby="ecosystem-title">
-  <header class="mission">
-    <div class="mission-copy">
-      <span class="eyebrow"><span class="signal-dot" aria-hidden="true"></span> LOCAL AI STACK</span>
-      <h3 id="ecosystem-title">One local AI layer for text, voice and mobile.</h3>
-      <p>Private by default. Cloud only when needed.</p>
-    </div>
+<div class="eco-wrapper" aria-label="Local AI execution layer architecture">
+  <!-- Base infographic image -->
+  <img
+    class="eco-base-img"
+    src={resolveHref('images/infrastracture.png')}
+    alt="Local AI execution layer architecture diagram: Laptop and phone devices, Text/Images/Audio inputs, Local AI execution layer (Korgis, Harnex, Local ASR) and Optional cloud fallback."
+    loading="lazy"
+    decoding="async"
+  />
 
-    <ul class="input-list" aria-label="Supported application experiences">
-      {inputs.map((input) => (
-        <li class={`input input--${input.id}`}>
-          <span class="input-icon" aria-hidden="true">
-            {input.id === 'text' && <svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 12h6M9 16h5"></path></svg>}
-            {input.id === 'voice' && <svg viewBox="0 0 24 24"><path d="M3 13v-2M6 16V8M9 18V6M12 15V9M17 5a2 2 0 0 1 2 2v6a2 2 0 0 1-4 0V7a2 2 0 0 1 2-2ZM13 13a4 4 0 0 0 8 0M17 17v4M14 21h6"></path></svg>}
-            {input.id === 'mobile' && <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2.5"></rect><path d="M10 5h4M11 19h2"></path><circle cx="12" cy="12" r="2.5"></circle></svg>}
-          </span>
-          <span>{input.label}</span>
-        </li>
-      ))}
-    </ul>
-  </header>
-
-  <div class="flow-line" aria-hidden="true"><span></span></div>
-
-  <div class="runtime">
-    <header class="runtime-header">
-      <span class="interface-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><path d="M12 2.5 20 6v5.5c0 5-2.7 8.2-8 10-5.3-1.8-8-5-8-10V6z"></path><path d="m8.5 12 2.2 2.2 4.8-5"></path></svg>
-      </span>
-      <span class="interface-copy">
-        <strong>Local AI Interface</strong>
-        <span>One stable boundary for applications</span>
-      </span>
-      <span class="compatibility">OPENAI-COMPATIBLE</span>
-    </header>
-
-    <div class="project-grid">
-      {systems.map((system) => (
-        <a href={resolveHref(system.href)} class={`project project--${system.id}`} aria-label={`Explore ${system.title}`}>
-          <span class="project-icon">
-            {system.logoPath ? <img src={resolveHref(system.logoPath)} alt="" loading="lazy" /> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13v-2M8 17V7M12 20V4M16 17V7M20 13v-2"></path></svg>}
-          </span>
-          <span class="project-copy">
-            <span class="project-tag">{system.tag}</span>
-            <strong>{system.title}</strong>
-            <span class="project-role">{system.role}</span>
-          </span>
-          <span class="project-action" aria-hidden="true">↗</span>
-        </a>
-      ))}
-    </div>
-
-    <footer class="runtime-footer">
-      <span class="local-status"><span aria-hidden="true"></span> RUNS LOCALLY</span>
-      <span>Private execution across devices</span>
-    </footer>
+  <!-- Interactive project cards with distinct animated gradients -->
+  <div class="eco-overlays" aria-label="Interactive project links">
+    {projects.map((project) => (
+      <a
+        href={resolveHref(project.href)}
+        class={`eco-card eco-card--${project.id}`}
+        aria-label={`Explore ${project.title} — ${project.payoff}`}
+      >
+        <span class="card-icon">
+          {project.logoPath ? (
+            <img src={resolveHref(project.logoPath)} alt="" loading="lazy" />
+          ) : (
+            <span class="mic-badge" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+              </svg>
+            </span>
+          )}
+        </span>
+        <span class="card-copy">
+          <strong class="card-title">{project.title}</strong>
+          <span class="card-payoff">{project.payoff}</span>
+        </span>
+      </a>
+    ))}
   </div>
-
-  <div class="consumers" aria-label="Platforms using the local AI layer">
-    <span class="consumer-kicker">USED BY</span>
-    <ul class="consumer-list">
-      <li class="consumer consumer--desktop">
-        <span class="consumer-icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32">
-            <rect x="3" y="5" width="20" height="14" rx="2.5"></rect>
-            <path d="M9 24h8M13 19v5"></path>
-            <rect x="24" y="11" width="5" height="12" rx="1.5"></rect>
-          </svg>
-        </span>
-        <span class="consumer-copy">
-          <strong>macOS / Desktop</strong>
-          <span>Apps and local services</span>
-        </span>
-      </li>
-      <li class="consumer consumer--android">
-        <span class="consumer-icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32">
-            <rect x="9" y="3" width="14" height="26" rx="3.5"></rect>
-            <path d="M13 7h6M15 25h2"></path>
-            <rect x="12" y="11" width="8" height="8" rx="2"></rect>
-            <path d="M16 8v3M16 19v3M9 15h3M20 15h3"></path>
-          </svg>
-        </span>
-        <span class="consumer-copy">
-          <strong>Android / On-device</strong>
-          <span>Mobile apps and inference</span>
-        </span>
-      </li>
-    </ul>
-  </div>
-
-  <aside class="cloud-note" aria-label="Optional cloud capabilities">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .6-8A6 6 0 0 0 6.2 8.8 4.6 4.6 0 0 0 7 18Z"></path></svg>
-    <strong>Optional cloud</strong>
-    <span>for scale, frontier models and specialist services</span>
-  </aside>
-</section>
+</div>
 
 <style>
-  .ecosystem-diagram {
-    --hairline: rgba(188, 208, 255, 0.15);
-    --muted-on-dark: rgba(185, 199, 226, 0.72);
+  /* ═══════════════════════════════════════════════════════════════
+     ECOSYSTEM DIAGRAM – Interactive cards with distinct animated gradients
+     ═══════════════════════════════════════════════════════════════ */
+
+  .eco-wrapper {
     position: relative;
-    isolation: isolate;
     width: 100%;
-    animation: ecosystem-arrive var(--duration-slow) var(--ease-out-expo) both;
+    max-width: 1100px;
+    margin: 0 auto;
+    container-type: inline-size;
   }
 
-  .mission {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    gap: clamp(20px, 3vw, 48px);
-    padding: 0 clamp(4px, 1vw, 12px) 18px;
-  }
-
-  .mission-copy {
-    min-width: 0;
-  }
-
-  .eyebrow, .compatibility, .project-tag, .local-status, .consumer-kicker {
-    font-family: var(--font-display);
-    font-size: var(--text-badge);
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    line-height: 1.2;
-  }
-
-  .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--accent-blue-dark); }
-
-  .signal-dot, .local-status > span {
-    width: 6px;
-    height: 6px;
-    flex: 0 0 auto;
-    border-radius: 50%;
-    background: var(--status-good-text);
-    box-shadow: 0 0 0 3px var(--status-good-bg), 0 0 12px rgba(21, 128, 61, 0.22);
-  }
-
-  .mission h3 {
-    margin: 8px 0 0;
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: clamp(1.2rem, 2.2vw, 1.95rem);
-    font-weight: 800;
-    letter-spacing: -0.045em;
-    line-height: 1.15;
-    white-space: nowrap;
-  }
-
-  .mission p { margin: 8px 0 0; color: var(--ink-muted); font-size: clamp(0.84rem, 1.3vw, 0.98rem); }
-
-  .input-list {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(8px, 1.2vw, 16px);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .input {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    min-width: 0;
-    color: var(--ink-subtle);
-    font-family: var(--font-display);
-    font-size: 0.69rem;
-    font-weight: 750;
-  }
-
-  .input-icon { width: 34px; height: 34px; display: grid; place-items: center; color: var(--accent-blue-dark); }
-  .input-icon svg, .interface-mark svg, .cloud-note svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
-  .input-icon svg { width: 29px; height: 29px; stroke-width: 1.7; }
-
-  .flow-line { height: 14px; display: grid; place-items: center; }
-  .flow-line span { position: relative; width: 1px; height: 14px; background: linear-gradient(var(--border-focus), rgba(20, 91, 255, 0.2)); }
-  .flow-line span::after { content: ''; position: absolute; bottom: 1px; left: 50%; width: 5px; height: 5px; border-right: 1.5px solid var(--border-focus); border-bottom: 1.5px solid var(--border-focus); transform: translateX(-50%) rotate(45deg); }
-  .flow-line span::before { content: ''; position: absolute; top: 0; left: 50%; width: 4px; height: 4px; border-radius: 50%; background: var(--accent-blue); box-shadow: 0 0 8px rgba(20, 91, 255, 0.7); animation: signal-flow 2.4s var(--ease-in-out-smooth) infinite; }
-
-  .runtime {
-    position: relative;
-    overflow: hidden;
-    color: var(--ink-inverse);
-    background: radial-gradient(circle at 85% -20%, rgba(37, 99, 235, 0.3), transparent 42%), linear-gradient(135deg, #07132d, #081936 52%, #0a2049);
-    border: 1px solid rgba(96, 165, 250, 0.38);
-    border-radius: 16px;
-    box-shadow: 0 18px 40px rgba(8, 19, 51, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  }
-
-  .runtime::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(188, 208, 255, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(188, 208, 255, 0.025) 1px, transparent 1px); background-size: 28px 28px; mask-image: linear-gradient(to bottom, black, transparent); }
-  .runtime-header, .project-grid, .runtime-footer { position: relative; z-index: 1; }
-
-  .runtime-header {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 10px;
-    min-height: 62px;
-    padding: 10px clamp(14px, 2vw, 22px);
-    border-bottom: 1px solid var(--hairline);
-  }
-
-  .interface-mark { width: 34px; height: 34px; display: grid; place-items: center; color: #7fa5ff; }
-  .interface-mark svg { width: 26px; height: 26px; stroke-width: 1.6; }
-  .interface-copy { min-width: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
-  .interface-copy strong { color: #fff; font-family: var(--font-display); font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; }
-  .interface-copy span { color: var(--muted-on-dark); font-size: 0.74rem; }
-  .compatibility { color: rgba(147, 181, 255, 0.9); font-size: 0.63rem; white-space: nowrap; }
-
-  .project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-
-  .project {
-    --project-accent: 56, 189, 248;
-    position: relative;
-    min-width: 0;
-    min-height: 112px;
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 12px;
-    padding: 18px clamp(14px, 2vw, 22px);
-    color: inherit;
-    text-decoration: none;
-    transition: background-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease, transform var(--duration-fast) var(--ease-out-expo);
-  }
-
-  .project + .project { border-left: 1px solid var(--hairline); }
-  .project:hover, .project:focus-visible { z-index: 2; outline: none; background: rgba(var(--project-accent), 0.09); box-shadow: inset 0 -2px 0 rgba(var(--project-accent), 0.8); transform: translateY(-2px); }
-  .project--asr { --project-accent: 251, 191, 36; }
-  .project--android { --project-accent: 52, 211, 153; }
-
-  .project-icon { width: 40px; height: 40px; display: grid; place-items: center; overflow: hidden; color: rgb(var(--project-accent)); background: rgba(var(--project-accent), 0.1); border: 1px solid rgba(var(--project-accent), 0.24); border-radius: 10px; }
-  .project-icon img { width: 31px; height: 31px; border-radius: 7px; object-fit: contain; }
-  .project-icon svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
-  .project-copy { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-  .project-tag { color: rgb(var(--project-accent)); font-size: 0.58rem; }
-  .project-copy strong { color: #fff; font-family: var(--font-display); font-size: clamp(0.82rem, 1.15vw, 0.98rem); font-weight: 780; letter-spacing: -0.02em; line-height: 1.2; }
-  .project-role { color: var(--muted-on-dark); font-size: 0.68rem; line-height: 1.25; }
-  .project-action { color: rgba(var(--project-accent), 0.68); font-family: var(--font-display); font-size: 0.82rem; font-weight: 800; transition: color var(--duration-fast) ease, transform var(--duration-fast) ease; }
-  .project:hover .project-action, .project:focus-visible .project-action { color: rgb(var(--project-accent)); transform: translate(2px, -2px); }
-
-  .runtime-footer { min-height: 40px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; padding: 8px 14px; color: rgba(185, 199, 226, 0.68); border-top: 1px solid var(--hairline); font-size: 0.65rem; }
-  .local-status { display: inline-flex; align-items: center; gap: 7px; margin-right: 6px; color: rgba(134, 239, 172, 0.82); font-size: 0.59rem; }
-  .local-status > span { width: 5px; height: 5px; background: currentColor; box-shadow: 0 0 7px rgba(134, 239, 172, 0.38); }
-
-  .consumers {
-    position: relative;
-    width: min(100%, 660px);
-    margin: 12px auto 0;
-    padding-top: 12px;
-  }
-
-  .consumers::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 1px;
-    height: 12px;
-    background: linear-gradient(rgba(20, 91, 255, 0.48), rgba(20, 91, 255, 0.12));
-  }
-
-  .consumer-kicker {
+  /* ── Base infographic image ──────────────────────────────────── */
+  .eco-base-img {
     display: block;
-    margin-bottom: 8px;
-    color: var(--ink-muted);
-    font-size: 0.58rem;
-    text-align: center;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
   }
 
-  .consumer-list {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .consumer-list::before {
-    content: '';
+  /* ── Overlays layer ──────────────────────────────────────────── */
+  .eco-overlays {
     position: absolute;
-    top: 0;
-    right: 25%;
-    left: 25%;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(20, 91, 255, 0.12), rgba(20, 91, 255, 0.42), rgba(20, 91, 255, 0.12));
+    inset: 0;
+    pointer-events: none;
   }
 
-  .consumer {
-    position: relative;
+  /* ── Shared Card Base ────────────────────────────────────────── */
+  .eco-card {
+    pointer-events: auto;
+    position: absolute;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    min-width: 0;
-    padding: 14px 12px 4px;
+    gap: clamp(8px, 1.4cqi, 16px);
+    padding: 0 clamp(8px, 1.4cqi, 18px);
+
+    opacity: 1;
+    border-radius: clamp(8px, 1.3cqi, 16px);
+    text-decoration: none;
+    color: inherit;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    background-size: 200% 200%;
+    transition:
+      transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 200ms ease;
   }
 
-  .consumer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 1px;
-    height: 9px;
-    background: rgba(20, 91, 255, 0.3);
+  .eco-card:hover,
+  .eco-card:focus-visible {
+    outline: none;
+    transform: translateY(-2.5px);
+    z-index: 10;
   }
 
-  .consumer-icon {
-    width: 38px;
-    height: 38px;
+  /* ── Position coordinates ────────────────────────────────────── */
+  .eco-card--korgis {
+    left: 6.63%;
+    top: 64.40%;
+    width: 21.89%;
+    height: 14.95%;
+
+    /* Korgis: Blue & Cyan subtle animated gradient */
+    background-image: linear-gradient(135deg, #ffffff 0%, #eff6ff 30%, #e0f2fe 65%, #ffffff 100%);
+    border: 1.5px solid rgba(59, 130, 246, 0.45);
+    box-shadow:
+      0 4px 14px rgba(37, 99, 235, 0.08),
+      0 0 12px rgba(56, 189, 248, 0.15);
+    animation: korgis-glow 5s ease-in-out infinite alternate;
+  }
+
+  .eco-card--korgis:hover,
+  .eco-card--korgis:focus-visible {
+    border-color: #2563eb;
+    box-shadow:
+      0 10px 24px -3px rgba(37, 99, 235, 0.22),
+      0 0 0 2px rgba(59, 130, 246, 0.35);
+  }
+
+  .eco-card--harnex {
+    left: 29.83%;
+    top: 64.40%;
+    width: 22.03%;
+    height: 14.95%;
+
+    /* Harnex: Emerald Teal & Purple subtle animated gradient */
+    background-image: linear-gradient(135deg, #ffffff 0%, #ecfdf5 30%, #f3e8ff 65%, #ffffff 100%);
+    border: 1.5px solid rgba(16, 185, 129, 0.45);
+    box-shadow:
+      0 4px 14px rgba(16, 185, 129, 0.08),
+      0 0 12px rgba(168, 85, 247, 0.14);
+    animation: harnex-glow 5.5s ease-in-out infinite alternate;
+  }
+
+  .eco-card--harnex:hover,
+  .eco-card--harnex:focus-visible {
+    border-color: #059669;
+    box-shadow:
+      0 10px 24px -3px rgba(16, 185, 129, 0.22),
+      0 0 0 2px rgba(16, 185, 129, 0.35);
+  }
+
+  .eco-card--local-asr {
+    left: 53.66%;
+    top: 64.40%;
+    width: 19.06%;
+    height: 14.95%;
+
+    /* Local ASR: Amber & Coral subtle animated gradient */
+    background-image: linear-gradient(135deg, #ffffff 0%, #fffbeb 30%, #fef2f2 65%, #ffffff 100%);
+    border: 1.5px solid rgba(245, 158, 11, 0.45);
+    box-shadow:
+      0 4px 14px rgba(245, 158, 11, 0.08),
+      0 0 12px rgba(239, 68, 68, 0.12);
+    animation: asr-glow 5.2s ease-in-out infinite alternate;
+  }
+
+  .eco-card--local-asr:hover,
+  .eco-card--local-asr:focus-visible {
+    border-color: #d97706;
+    box-shadow:
+      0 10px 24px -3px rgba(245, 158, 11, 0.22),
+      0 0 0 2px rgba(245, 158, 11, 0.35);
+  }
+
+  /* ── Gradient Animations ─────────────────────────────────────── */
+  @keyframes korgis-glow {
+    0% {
+      background-position: 0% 50%;
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.07), 0 0 10px rgba(56, 189, 248, 0.12);
+    }
+    100% {
+      background-position: 100% 50%;
+      border-color: rgba(14, 165, 233, 0.65);
+      box-shadow: 0 6px 18px rgba(14, 165, 233, 0.14), 0 0 16px rgba(59, 130, 246, 0.2);
+    }
+  }
+
+  @keyframes harnex-glow {
+    0% {
+      background-position: 0% 50%;
+      border-color: rgba(16, 185, 129, 0.4);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.07), 0 0 10px rgba(168, 85, 247, 0.12);
+    }
+    100% {
+      background-position: 100% 50%;
+      border-color: rgba(168, 85, 247, 0.6);
+      box-shadow: 0 6px 18px rgba(168, 85, 247, 0.14), 0 0 16px rgba(16, 185, 129, 0.2);
+    }
+  }
+
+  @keyframes asr-glow {
+    0% {
+      background-position: 0% 50%;
+      border-color: rgba(245, 158, 11, 0.4);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.07), 0 0 10px rgba(239, 68, 68, 0.1);
+    }
+    100% {
+      background-position: 100% 50%;
+      border-color: rgba(249, 115, 22, 0.6);
+      box-shadow: 0 6px 18px rgba(249, 115, 22, 0.14), 0 0 16px rgba(245, 158, 11, 0.18);
+    }
+  }
+
+  /* ── Card Icon / Logo ────────────────────────────────────────── */
+  .card-icon {
+    flex: 0 0 auto;
+    width: clamp(26px, 4.4cqi, 48px);
+    height: clamp(26px, 4.4cqi, 48px);
     display: grid;
     place-items: center;
-    flex: 0 0 auto;
-    color: var(--accent-blue-dark);
+    transition: transform 200ms ease;
   }
 
-  .consumer--android .consumer-icon { color: var(--accent-teal, #0d9488); }
-  .consumer-icon svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-  .consumer-copy { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
-  .consumer-copy strong { color: var(--ink-display); font-family: var(--font-display); font-size: 0.77rem; font-weight: 780; letter-spacing: -0.015em; }
-  .consumer-copy span { color: var(--ink-muted); font-size: 0.66rem; line-height: 1.25; }
-
-  .cloud-note { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 5px; width: fit-content; max-width: calc(100% - 24px); margin: 10px auto 0; color: var(--ink-subtle); font-size: 0.72rem; }
-  .cloud-note svg { width: 16px; height: 16px; color: var(--accent-violet); stroke-width: 1.8; }
-  .cloud-note strong { color: var(--accent-violet); font-family: var(--font-display); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.055em; }
-
-  @keyframes ecosystem-arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes signal-flow { 0%, 20% { opacity: 0; transform: translate(-50%, 0); } 45% { opacity: 1; } 80%, 100% { opacity: 0; transform: translate(-50%, 10px); } }
-
-  @media (max-width: 860px) {
-    .mission { grid-template-columns: 1fr; align-items: start; gap: 16px; }
-    .input-list { max-width: 360px; }
-    .project { grid-template-columns: auto minmax(0, 1fr); }
-    .project-action { display: none; }
+  .eco-card:hover .card-icon,
+  .eco-card:focus-visible .card-icon {
+    transform: scale(1.05);
   }
 
-  @media (max-width: 640px) {
-    .mission { padding-bottom: 12px; }
-    .mission h3 {
-      font-size: clamp(1.25rem, 6.5vw, 1.65rem);
-      white-space: normal;
-      text-wrap: balance;
-    }
-    .runtime-header { grid-template-columns: auto minmax(0, 1fr); }
-    .compatibility { grid-column: 2; }
-    .project-grid { grid-template-columns: 1fr; }
-    .project { grid-template-columns: auto minmax(0, 1fr) auto; min-height: 88px; padding: 13px 14px; }
-    .project + .project { border-top: 1px solid var(--hairline); border-left: 0; }
-    .project-action { display: block; }
-    .runtime-footer { justify-content: flex-start; }
-    .consumer-list { gap: 4px; }
-    .consumer { align-items: flex-start; justify-content: flex-start; padding-inline: 4px; }
-    .consumer-icon { width: 32px; height: 32px; }
-    .consumer-icon svg { width: 30px; height: 30px; }
-    .consumer-copy strong { font-size: 0.7rem; }
-    .consumer-copy span { font-size: 0.61rem; }
+  .card-icon img {
+    width: 100%;
+    height: 100%;
+    border-radius: clamp(6px, 1cqi, 12px);
+    object-fit: contain;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   }
 
+  /* Microphone badge for Local ASR */
+  .mic-badge {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    border: 1.5px solid #f59e0b;
+    border-radius: clamp(6px, 1cqi, 12px);
+    background: #ffffff;
+    color: #d97706;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.1);
+  }
+
+  .mic-badge svg {
+    width: 58%;
+    height: 58%;
+  }
+
+  /* ── Card text copy (Full width available now) ───────────────── */
+  .card-copy {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(1px, 0.25cqi, 3px);
+  }
+
+  .card-title {
+    font-family: var(--font-display, -apple-system, BlinkMacSystemFont, sans-serif);
+    font-size: clamp(0.74rem, 1.5cqi, 1.15rem);
+    font-weight: 820;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-payoff {
+    font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+    font-size: clamp(0.56rem, 1.12cqi, 0.84rem);
+    font-weight: 550;
+    color: #64748b;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── Reduced motion ──────────────────────────────────────────── */
   @media (prefers-reduced-motion: reduce) {
-    .ecosystem-diagram, .flow-line span::before { animation: none; }
-    .project, .project-action { transition: none; }
-    .project:hover, .project:focus-visible, .project:hover .project-action, .project:focus-visible .project-action { transform: none; }
+    .eco-card,
+    .eco-card--korgis,
+    .eco-card--harnex,
+    .eco-card--local-asr {
+      animation: none;
+      transition: none;
+    }
+
+    .eco-card:hover,
+    .eco-card:focus-visible,
+    .eco-card:hover .card-icon,
+    .eco-card:focus-visible .card-icon {
+      transform: none;
+    }
   }
 </style>
