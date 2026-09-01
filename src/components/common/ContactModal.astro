@@ -1,0 +1,475 @@
+---
+/**
+ * ContactModal.astro
+ * Minimal, accessible, and high-converting contact modal.
+ * Built for direct technical inquiries and workload evaluations.
+ */
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<div
+  id="contact-modal"
+  class="contact-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="contact-modal-title"
+  aria-hidden="true"
+>
+  <div class="modal-backdrop" id="contact-modal-backdrop"></div>
+
+  <div class="modal-dialog">
+    <!-- Close button -->
+    <button
+      type="button"
+      class="modal-close-btn"
+      id="contact-modal-close"
+      aria-label="Close dialog"
+    >
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Header / Value Prop -->
+    <div class="modal-header">
+      <div class="modal-badge">
+        <span class="badge-dot" aria-hidden="true"></span>
+        <span>DIRECT INQUIRY</span>
+      </div>
+      <h2 id="contact-modal-title" class="modal-title">Let's discuss your AI workload.</h2>
+      <p class="modal-subtitle">
+        Tell me about your model requirements, latency goals, or privacy constraints. I review every message personally.
+      </p>
+    </div>
+
+    <!-- Contact Form -->
+    <form class="contact-form" id="contact-form" method="POST" action={`${baseUrl}/thank-you/`}>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="contact-name" class="field-label">Name <span class="required-star">*</span></label>
+          <input
+            type="text"
+            id="contact-name"
+            name="name"
+            class="field-input"
+            placeholder="Your name"
+            required
+            autocomplete="name"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="contact-email" class="field-label">Work Email <span class="required-star">*</span></label>
+          <input
+            type="email"
+            id="contact-email"
+            name="email"
+            class="field-input"
+            placeholder="name@company.com"
+            required
+            autocomplete="email"
+          />
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="contact-workload" class="field-label">
+          What are you looking to evaluate? <span class="required-star">*</span>
+        </label>
+        <textarea
+          id="contact-workload"
+          name="workload"
+          class="field-textarea"
+          rows="3"
+          placeholder="Brief description of the model, target devices (Mac, Android, Server), or privacy/latency constraints."
+          required
+        ></textarea>
+      </div>
+
+      <!-- Compliance & Privacy Consent -->
+      <div class="form-compliance">
+        <label class="checkbox-label" for="contact-consent">
+          <input
+            type="checkbox"
+            id="contact-consent"
+            name="consent"
+            class="checkbox-input"
+            required
+          />
+          <span class="checkbox-custom" aria-hidden="true"></span>
+          <span class="compliance-text">
+            I agree to the processing of my contact details to reply to this inquiry in accordance with the <a href={`${baseUrl}/privacy/`} target="_blank" class="privacy-link">Privacy Policy</a>.
+          </span>
+        </label>
+
+        <div class="privacy-guarantee">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <rect x="2.5" y="6.5" width="11" height="8" rx="1.5"></rect>
+            <path d="M5 6.5V4.5a3 3 0 0 1 6 0v2"></path>
+          </svg>
+          <span>Direct contact only · No newsletters · Data deleted upon request</span>
+        </div>
+      </div>
+
+      <!-- Submit Action -->
+      <div class="form-actions">
+        <button type="submit" class="primary-button submit-btn" id="contact-submit-btn">
+          <span>Send inquiry</span>
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function setupContactModal() {
+    const modal = document.getElementById('contact-modal');
+    const backdrop = document.getElementById('contact-modal-backdrop');
+    const closeBtn = document.getElementById('contact-modal-close');
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const nameInput = document.getElementById('contact-name') as HTMLInputElement | null;
+
+    if (!modal) return;
+
+    let previouslyFocusedElement: HTMLElement | null = null;
+
+    function openModal(e?: Event) {
+      if (e) e.preventDefault();
+      previouslyFocusedElement = document.activeElement as HTMLElement;
+      modal?.classList.add('is-open');
+      modal?.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        nameInput?.focus();
+      }, 80);
+    }
+
+    function closeModal() {
+      modal?.classList.remove('is-open');
+      modal?.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (previouslyFocusedElement) {
+        previouslyFocusedElement.focus();
+      }
+    }
+
+    // Attach open triggers to any element with data-open-contact-modal
+    document.querySelectorAll('[data-open-contact-modal]').forEach((trigger) => {
+      trigger.removeEventListener('click', openModal);
+      trigger.addEventListener('click', openModal);
+    });
+
+    closeBtn?.addEventListener('click', closeModal);
+    backdrop?.addEventListener('click', closeModal);
+
+    // Keyboard support: ESC to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+        closeModal();
+      }
+    });
+
+    // Form submission handling
+    if (form) {
+      form.addEventListener('submit', () => {
+        const submitBtn = document.getElementById('contact-submit-btn');
+        if (submitBtn) {
+          submitBtn.setAttribute('disabled', 'true');
+          submitBtn.innerHTML = '<span>Sending...</span>';
+        }
+      });
+    }
+  }
+
+  // Run on initial load and view transitions
+  setupContactModal();
+  document.addEventListener('astro:page-load', setupContactModal);
+</script>
+
+<style>
+  .contact-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(16px, 3vw, 24px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0.22s ease;
+  }
+
+  .contact-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 14, 28, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 540px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 60px rgba(8, 19, 51, 0.22);
+    padding: clamp(24px, 4vw, 36px);
+    transform: translateY(12px) scale(0.98);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .contact-modal.is-open .modal-dialog {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-subtle);
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .modal-close-btn:hover {
+    color: var(--ink-display);
+    background: var(--surface-muted);
+    transform: scale(1.05);
+  }
+
+  /* Header */
+  .modal-header {
+    margin-bottom: 20px;
+    padding-right: 32px;
+  }
+
+  .modal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    background: var(--surface-blue-subtle);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: var(--accent-blue-dark);
+    margin-bottom: 10px;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+  }
+
+  .modal-title {
+    margin: 0 0 8px;
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+    line-height: 1.18;
+    font-weight: 850;
+    letter-spacing: -0.035em;
+    color: var(--ink-display);
+  }
+
+  .modal-subtitle {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+  }
+
+  /* Form */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field-label {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    color: var(--ink-display);
+  }
+
+  .required-star {
+    color: var(--accent-blue);
+  }
+
+  .field-input,
+  .field-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    color: var(--ink);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+  }
+
+  .field-input:focus-visible,
+  .field-textarea:focus-visible {
+    outline: none;
+    border-color: var(--accent-blue);
+    background: var(--surface-card);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue) 16%, transparent);
+  }
+
+  .field-input::placeholder,
+  .field-textarea::placeholder {
+    color: var(--ink-subtle);
+    font-size: 0.88rem;
+  }
+
+  .field-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  /* Compliance */
+  .form-compliance {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 4px;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .checkbox-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .checkbox-custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-xs);
+    background: var(--surface-subtle);
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.15s ease;
+  }
+
+  .checkbox-input:checked + .checkbox-custom {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+  }
+
+  .checkbox-input:checked + .checkbox-custom::after {
+    content: '';
+    width: 4px;
+    height: 8px;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  .compliance-text {
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: var(--ink-muted);
+  }
+
+  .privacy-link {
+    color: var(--accent-blue-dark);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 600;
+  }
+
+  .privacy-link:hover {
+    color: var(--accent-blue);
+  }
+
+  .privacy-guarantee {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: var(--ink-subtle);
+    font-weight: 550;
+  }
+
+  .privacy-guarantee svg {
+    color: var(--accent-blue);
+    flex-shrink: 0;
+  }
+
+  /* Actions */
+  .form-actions {
+    margin-top: 6px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 540px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-modal,
+    .modal-dialog {
+      transition: none;
+    }
+  }
+</style>

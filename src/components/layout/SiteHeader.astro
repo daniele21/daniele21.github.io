@@ -3,10 +3,9 @@
  * SiteHeader - canonical site navigation.
  *
  * CTA hierarchy:
- * - persistent proof action: GitHub
- * - advisory remains a secondary navigation destination
- * - project-specific repository actions live in the project hero, not in a
- *   second persistent header CTA.
+ * - Brand identity with full name and technical role
+ * - Direct primary navigation with dropdown categories
+ * - Persistent contact CTA (Get in touch)
  */
 import { navigation, getContent, socialLinks } from '../../content';
 
@@ -23,21 +22,26 @@ function getHref(href: string) {
 <header class="site-header" data-header>
   <div class="shell header-inner">
     <a class="brand" href={`${baseUrl}/#top`} aria-label={`${hdr.brandName}, home`}>
-      <img
-        src={`${baseUrl}/images/sign_1.png`}
-        alt=""
-        class="brand-signature brand-signature-light"
-        width="48"
-        height="32"
-      />
-      <img
-        src={`${baseUrl}/images/sign_dark.png`}
-        alt=""
-        class="brand-signature brand-signature-dark"
-        width="48"
-        height="32"
-      />
-      <span class="sr-only">{hdr.brandName}</span>
+      <div class="brand-signature-wrap">
+        <img
+          src={`${baseUrl}/images/sign_1.png`}
+          alt=""
+          class="brand-signature brand-signature-light"
+          width="40"
+          height="28"
+        />
+        <img
+          src={`${baseUrl}/images/sign_dark.png`}
+          alt=""
+          class="brand-signature brand-signature-dark"
+          width="40"
+          height="28"
+        />
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">{hdr.brandName}</span>
+        {hdr.brandRole && <span class="brand-role">{hdr.brandRole}</span>}
+      </div>
     </a>
 
     <nav class="site-nav" id="site-navigation" aria-label="Primary navigation" data-navigation>
@@ -46,7 +50,7 @@ function getHref(href: string) {
           <div class="nav-dropdown" data-dropdown>
             <a href={getHref(item.href)} class="nav-link dropdown-toggle" aria-expanded="false" data-dropdown-toggle>
               <span>{item.label}</span>
-              <svg class="chevron-icon" viewBox="0 0 24 24" width="10" height="10" aria-hidden="true">
+              <svg class="chevron-icon" viewBox="0 0 24 24" width="9" height="9" aria-hidden="true">
                 <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               </svg>
             </a>
@@ -59,8 +63,8 @@ function getHref(href: string) {
                         src={`${baseUrl}/${sub.logoPath.replace(/^\//, '')}`}
                         alt=""
                         class="dropdown-logo-img"
-                        width="18"
-                        height="18"
+                        width="16"
+                        height="16"
                       />
                     )}
                     <span>{sub.label}</span>
@@ -87,7 +91,7 @@ function getHref(href: string) {
           aria-label="LinkedIn profile"
           title="LinkedIn"
         >
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
           </svg>
         </a>
@@ -99,11 +103,21 @@ function getHref(href: string) {
           aria-label="GitHub profile"
           title="GitHub"
         >
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
           </svg>
         </a>
       </div>
+
+      <button
+        type="button"
+        class="header-cta-btn primary-button"
+        data-open-contact-modal
+        aria-label="Open contact inquiry form"
+      >
+        <span>Get in touch</span>
+        <span aria-hidden="true">→</span>
+      </button>
 
       <button class="theme-toggle" type="button" aria-label={hdr.themeToggleAriaLabel} data-theme-toggle>
         <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -130,7 +144,7 @@ function getHref(href: string) {
     z-index: 50;
     height: var(--header-height);
     background: color-mix(in srgb, var(--surface-card) 92%, transparent);
-    border-bottom: 1px solid transparent;
+    border-bottom: 1px solid var(--border-subtle);
     backdrop-filter: blur(14px) saturate(1.25);
     -webkit-backdrop-filter: blur(14px) saturate(1.25);
     transition:
@@ -148,24 +162,30 @@ function getHref(href: string) {
   .header-inner {
     height: 100%;
     display: grid;
-    grid-template-columns: 56px minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: clamp(20px, 3vw, 40px);
+    gap: clamp(14px, 2vw, 32px);
   }
 
   .brand {
-    width: 48px;
-    min-width: 48px;
-    min-height: var(--touch-target-min);
     display: inline-flex;
     align-items: center;
+    gap: 10px;
     text-decoration: none;
+    min-height: var(--touch-target-min);
+  }
+
+  .brand-signature-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 
   .brand-signature {
     display: block;
-    width: 48px;
-    height: 32px;
+    width: 38px;
+    height: 26px;
     object-fit: contain;
     object-position: left center;
   }
@@ -174,14 +194,48 @@ function getHref(href: string) {
   :global(html[data-theme='dark']) .brand-signature-light { display: none; }
   :global(html[data-theme='dark']) .brand-signature-dark { display: block; }
 
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    line-height: 1.25;
+  }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 750;
+    letter-spacing: -0.012em;
+    color: var(--ink-display);
+    white-space: nowrap;
+    transition: color var(--duration-fast) ease;
+  }
+
+  .brand:hover .brand-name,
+  .brand:focus-visible .brand-name {
+    color: var(--accent-blue);
+  }
+
+  .brand-role {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    letter-spacing: 0.005em;
+    white-space: nowrap;
+    transition: color var(--duration-fast) ease;
+  }
+
   .site-nav {
     min-width: 0;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: clamp(18px, 2vw, 28px);
-    font-size: var(--text-small);
-    font-weight: 650;
+    gap: clamp(12px, 1.4vw, 22px);
+    font-size: var(--text-caption);
+    font-weight: 550;
+    letter-spacing: -0.005em;
     white-space: nowrap;
   }
 
@@ -192,13 +246,14 @@ function getHref(href: string) {
     align-items: center;
     color: var(--ink-muted);
     text-decoration: none;
+    font-size: var(--text-caption);
     transition: color var(--duration-fast) ease;
   }
 
   .nav-link::after {
     content: '';
     position: absolute;
-    bottom: 7px;
+    bottom: 8px;
     left: 0;
     width: 100%;
     height: 2px;
@@ -222,28 +277,28 @@ function getHref(href: string) {
 
   .advisory-link {
     color: var(--ink);
-    font-weight: 720;
+    font-weight: 650;
   }
 
   .header-actions {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 6px;
   }
 
   .header-socials {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
   }
 
   .header-social-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
     padding: 0;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-full);
@@ -270,11 +325,24 @@ function getHref(href: string) {
     flex-shrink: 0;
   }
 
+  .header-cta-btn {
+    min-height: 34px;
+    padding: 5px 13px;
+    font-size: var(--text-caption);
+    font-weight: 650;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
   .theme-toggle {
     display: grid;
     place-items: center;
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
     padding: 0;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-full);
@@ -295,8 +363,8 @@ function getHref(href: string) {
   }
 
   .theme-toggle svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
@@ -339,8 +407,8 @@ function getHref(href: string) {
     top: calc(100% - 2px);
     left: 50%;
     transform: translateX(-50%) translateY(4px);
-    min-width: 210px;
-    padding: 6px;
+    min-width: 200px;
+    padding: 5px;
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-sm);
     background: var(--glass-bg);
@@ -386,15 +454,15 @@ function getHref(href: string) {
   }
 
   .dropdown-item {
-    min-height: 40px;
+    min-height: 36px;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 7px 12px;
+    padding: 6px 10px;
     border-radius: calc(var(--radius-sm) - 2px);
     color: var(--ink-muted);
     font-size: var(--text-caption);
-    font-weight: 600;
+    font-weight: 550;
     text-decoration: none;
     white-space: nowrap;
     transition: color 0.15s ease, background-color 0.15s ease;
@@ -407,8 +475,8 @@ function getHref(href: string) {
   }
 
   .dropdown-logo-img {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     object-fit: contain;
     border-radius: 4px;
     flex-shrink: 0;
@@ -416,10 +484,15 @@ function getHref(href: string) {
 
   .menu-toggle { display: none; }
 
-  @media (max-width: 1040px) {
+  @media (max-width: 1200px) {
+    .brand-role {
+      display: none;
+    }
+  }
+
+  @media (max-width: 980px) {
     .site-nav {
-      gap: 15px;
-      font-size: var(--text-caption);
+      gap: 12px;
     }
   }
 
@@ -430,6 +503,10 @@ function getHref(href: string) {
       gap: var(--space-3);
     }
 
+    .brand-role {
+      display: none;
+    }
+
     .header-actions {
       margin-left: auto;
     }
@@ -438,8 +515,8 @@ function getHref(href: string) {
       display: grid;
       place-content: center;
       gap: 5px;
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
       padding: 0;
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
@@ -448,7 +525,7 @@ function getHref(href: string) {
     }
 
     .menu-toggle span:not(.sr-only) {
-      width: 20px;
+      width: 18px;
       height: 2px;
       background: var(--ink);
       border-radius: 2px;
@@ -497,11 +574,11 @@ function getHref(href: string) {
     }
 
     .site-nav .nav-link {
-      min-height: 44px;
+      min-height: 40px;
       justify-content: space-between;
-      padding: 9px 12px;
+      padding: 8px 12px;
       border-radius: var(--radius-sm);
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
     .site-nav .nav-link::after { display: none; }

@@ -344,6 +344,7 @@ export interface HomeContent {
 export interface CommonContent {
   header: {
     brandName: string;
+    brandRole?: string;
     brandAltLight: string;
     brandAltDark: string;
     themeToggleAriaLabel: string;

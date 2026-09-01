@@ -1,0 +1,197 @@
+---
+/**
+ * thank-you.astro
+ * Minimal, reassuring confirmation page displayed after a contact inquiry.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getContent, socialLinks } from '../content';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout
+  title="Message Received · Daniele Moltisanti"
+  description="Thank you for getting in touch. I review every technical inquiry personally."
+>
+  <section class="thankyou-section">
+    <div class="shell thankyou-shell">
+      <article class="thankyou-card">
+        <!-- Status signal -->
+        <div class="status-indicator">
+          <div class="check-circle" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <span class="status-kicker">INQUIRY RECEIVED</span>
+        </div>
+
+        <h1 class="thankyou-title">Thank you for reaching out.</h1>
+        <p class="thankyou-lead">
+          I review every message personally. I will evaluate your project details and follow up with you within <strong>24–48 business hours</strong>.
+        </p>
+
+        <!-- Compliance & data safety note -->
+        <div class="thankyou-privacy-box">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <rect x="2.5" y="6.5" width="11" height="8" rx="1.5"></rect>
+            <path d="M5 6.5V4.5a3 3 0 0 1 6 0v2"></path>
+          </svg>
+          <p>Your details are processed strictly to answer this technical conversation. Zero spam, zero third-party sharing.</p>
+        </div>
+
+        <!-- Next Actions -->
+        <div class="thankyou-actions">
+          <a class="primary-button action-btn" href={`${baseUrl}/`}>
+            <span>Return to homepage</span>
+            <span aria-hidden="true">→</span>
+          </a>
+          <a
+            class="secondary-button action-btn"
+            href={socialLinks.staituned}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>Explore stAI tuned</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .thankyou-section {
+    min-height: calc(100vh - var(--header-height) - 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(60px, 10vw, 120px) 0;
+    position: relative;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 30%, color-mix(in srgb, var(--accent-blue) 8%, transparent), transparent 75%),
+      linear-gradient(160deg, var(--surface-subtle) 0%, var(--surface-canvas) 85%);
+  }
+
+  .thankyou-shell {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .thankyou-card {
+    max-width: 580px;
+    width: 100%;
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 16px 48px rgba(8, 19, 51, 0.06);
+    padding: clamp(32px, 5vw, 48px);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .check-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--accent-blue) 12%, transparent);
+    color: var(--accent-blue-dark);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 25%, transparent);
+  }
+
+  .status-kicker {
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 850;
+    letter-spacing: 0.1em;
+    color: var(--accent-blue-dark);
+  }
+
+  .thankyou-title {
+    margin: 0 0 14px;
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.35rem);
+    line-height: 1.15;
+    font-weight: 850;
+    letter-spacing: -0.04em;
+    color: var(--ink-display);
+    text-wrap: balance;
+  }
+
+  .thankyou-lead {
+    margin: 0 0 24px;
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
+    line-height: 1.62;
+    color: var(--ink-muted);
+  }
+
+  .thankyou-lead strong {
+    color: var(--ink-display);
+  }
+
+  /* Privacy Box */
+  .thankyou-privacy-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    margin-bottom: 28px;
+    text-align: left;
+  }
+
+  .thankyou-privacy-box svg {
+    color: var(--accent-blue);
+    flex-shrink: 0;
+  }
+
+  .thankyou-privacy-box p {
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--ink-subtle);
+  }
+
+  /* Actions */
+  .thankyou-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .action-btn {
+    min-height: 48px;
+    padding-inline: 20px;
+  }
+
+  @media (max-width: 520px) {
+    .thankyou-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .action-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

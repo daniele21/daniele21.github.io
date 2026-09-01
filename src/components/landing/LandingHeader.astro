@@ -72,15 +72,15 @@ const resolveHref = (href: string) => {
         </a>
       </div>
 
-      <a
+      <button
+        type="button"
         class="header-cta primary-button"
-        href={resolveHref(header.cta.href)}
-        target={header.cta.external ? '_blank' : undefined}
-        rel={header.cta.external ? 'noopener noreferrer' : undefined}
+        data-open-contact-modal
+        aria-label="Open contact inquiry form"
       >
-        {header.cta.label}
-        {header.cta.external && <span class="ext-icon" aria-hidden="true">↗</span>}
-      </a>
+        <span>{header.cta.label}</span>
+        <span class="cta-arrow" aria-hidden="true">→</span>
+      </button>
     </nav>
   </div>
 </header>

@@ -32,6 +32,8 @@ const expectedRoutes = [
   'traffic-monitoring/index.html',
   'traffic-monitoring-android/index.html',
   'performance-lab/index.html',
+  'thank-you/index.html',
+  'privacy/index.html',
 ];
 
 let errors = 0;

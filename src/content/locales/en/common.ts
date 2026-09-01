@@ -3,6 +3,7 @@ import type { CommonContent } from '../../../types/content';
 export const commonContent: CommonContent = {
   header: {
     brandName: 'Daniele Moltisanti',
+    brandRole: 'Principal AI Engineer & AI Strategy Lead',
     brandAltLight: 'Daniele Moltisanti signature',
     brandAltDark: 'Daniele Moltisanti signature',
     themeToggleAriaLabel: 'Toggle color theme',

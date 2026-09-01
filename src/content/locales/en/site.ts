@@ -74,7 +74,7 @@ export const navigation: NavItem[] = [
       },
     ],
   },
-  { label: 'Advisory', href: '#advisory' },
+  { label: 'About Me', href: 'about' },
 ];
 
 export const socialLinks = {

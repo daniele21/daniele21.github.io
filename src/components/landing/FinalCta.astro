@@ -50,10 +50,15 @@ import { advisoryData } from '../../content/locales/en/advisory';
       </div>
 
       <div class="banner-actions">
-        <a class="primary-button banner-primary" href={advisoryData.primaryCta.href}>
+        <button
+          type="button"
+          class="primary-button banner-primary"
+          data-open-contact-modal
+          aria-label="Open contact inquiry form"
+        >
           <span>{advisoryData.primaryCta.label}</span>
           <span aria-hidden="true">→</span>
-        </a>
+        </button>
         <div class="banner-socials" aria-label="Social profiles">
           <a
             class="social-icon-btn"

@@ -3,11 +3,11 @@ import type { AboutContent } from '../../../types/about';
 export const aboutData: AboutContent = {
   metaTitle: 'About Daniele Moltisanti - Principal AI Engineer & AI Strategy Lead',
   metaDescription:
-    'Principal AI Engineer, AI Strategist, and founder of stAI tuned. Bridging enterprise AI leadership, on-device local execution, and empirical systems engineering.',
+    'Principal AI Engineer & AI Strategy Lead specializing in Local AI & On-device LLMs, Edge & Local AI Architecture, and founder of stAI tuned.',
 
   profile: {
     name: 'Daniele Moltisanti',
-    headline: 'Principal AI Engineer · AI Strategy & Technical Leadership',
+    headline: 'Principal AI Engineer & AI Strategy Lead · Local AI & On-device LLMs',
     subheadline: 'Data Scientist Manager at Sky Italia · Founder & Author at stAI tuned',
     tagline: 'Bridging experimental AI research, enterprise scale, and privacy-first on-device compute.',
     location: 'Milan, Italy',

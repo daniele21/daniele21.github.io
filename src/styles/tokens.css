@@ -126,7 +126,7 @@
 
   /* Layout Tokens */
   --shell-max-width: 1140px;
-  --header-height: 74px;
+  --header-height: 66px;
 }
 
 /* Canonical dark theme. Components consume semantic tokens rather than owning

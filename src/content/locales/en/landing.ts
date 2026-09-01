@@ -13,24 +13,28 @@ export const landingData: LandingPageData = {
       { label: 'About', href: '/about' },
     ],
     cta: {
-      label: 'Follow my work',
-      href: 'https://www.linkedin.com/in/daniele-moltisanti/',
-      external: true,
+      label: 'Get in touch',
+      href: '#contact-modal',
+      external: false,
     },
   },
 
   hero: {
     identity: {
       name: 'Daniele Moltisanti',
-      role: 'Principal AI Engineer',
-      specialization: 'Local AI · AI Strategy',
+      role: 'Principal AI Engineer & AI Strategy Lead',
+      specialization: 'Local AI & On-device LLMs · Edge & Local AI Architecture',
       affiliation: 'Sky Italia',
       education: 'Politecnico di Milano',
       location: 'Milan, Italy',
       portraitPath: 'images/profile-photo.jpg',
-      portraitAlt: 'Daniele Moltisanti - Principal AI Engineer',
+      portraitAlt: 'Daniele Moltisanti - Principal AI Engineer & AI Strategy Lead',
       bio: 'I build AI systems to understand where local execution creates real value.',
-      focusBadges: ['Local & On-device AI', 'Efficient Inference', 'Privacy-first Systems'],
+      focusBadges: [
+        'Local AI & On-device LLMs',
+        'Edge & Local AI Architecture',
+        'AI Strategy & Advisory',
+      ],
       socials: [
         {
           platform: 'linkedin',
