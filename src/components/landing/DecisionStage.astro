@@ -1,5 +1,5 @@
 ---
-/** Plane 01: Strategy / DECIDE - When does Local AI actually make sense? */
+/** Plane 01: decide where the workload should run. */
 import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
 import DecisionTable from './DecisionTable.astro';
@@ -12,12 +12,12 @@ const { decisionStage } = landingData;
   number={1}
   side="left"
   surface="canvas"
-  kicker={decisionStage.kicker}
-  title={decisionStage.title}
-  intro={decisionStage.intro}
+  kicker=""
+  title="Where should AI run?"
+  intro="Start with the workload, not the model. Privacy, latency, control, capability and scale tell you whether Local, Hybrid or Cloud makes sense."
   handoff={decisionStage.handoff}
   nextLabel="BUILD"
-  visualLabel="Workload decision trade-off matrix"
+  visualLabel="Local, Hybrid and Cloud workload decision matrix"
 >
   <DecisionTable />
 </PlaneTemplate>
