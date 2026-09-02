@@ -2,42 +2,50 @@
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
 
+// Placeholder averages for the homepage composition. Replace these values with
+// representative-run averages when the benchmark dataset is validated.
 const deviceRuns = [
   {
     id: 'mac',
-    label: 'Mac',
+    label: 'MacBook Air M2 (16GB)',
     model: 'Nemotron Nano 4B Q4',
     metrics: {
-      ttft: '—',
-      tokens: '—',
-      peakRam: '—',
-      thermal: '—',
-      taskSuccess: '—',
+      ttft: '0.42 s',
+      tokens: '18',
+      peakRam: '2.6 GB',
+      thermal: '76 °C',
+      taskSuccess: '86%',
     },
+    status: 'Good',
+    statusNote: 'Smooth experience for most tasks.',
+    tone: 'good',
   },
   {
     id: 'android',
-    label: 'Android',
+    label: 'Nothing Phone (2) 12GB',
     model: 'Qwen 3.5 2B Q4_K_M',
     metrics: {
-      ttft: '—',
-      tokens: '—',
-      peakRam: '—',
-      thermal: '—',
-      taskSuccess: '—',
+      ttft: '0.91 s',
+      tokens: '6.8',
+      peakRam: '1.4 GB',
+      thermal: '42 °C',
+      taskSuccess: '71%',
     },
+    status: 'Review',
+    statusNote: 'Good for light tasks; review harder flows.',
+    tone: 'review',
   },
 ];
 
 const decisions = [
   {
     name: 'Local',
-    description: 'Critical thresholds pass.',
+    description: 'All critical thresholds pass.',
     tone: 'local',
   },
   {
     name: 'Hybrid',
-    description: 'Local works, with fallback where needed.',
+    description: 'Local handles the main flow; harder cases need fallback.',
     tone: 'hybrid',
   },
   {
@@ -49,224 +57,214 @@ const decisions = [
 ---
 
 <div class="performance-lab-surface" aria-label="Performance Lab evidence for Local, Hybrid and Cloud decisions">
-  <article class="lab-card">
-    <header class="lab-header">
-      <div class="lab-heading-copy">
-        <h3>Performance Lab</h3>
-        <p class="lab-question">Can this workload run locally?</p>
-        <p class="lab-purpose">
-          Real model × real device → evidence for a Local, Hybrid or Cloud decision.
-        </p>
-      </div>
+  <div class="lab-tools-row">
+    <div class="decision-flow" aria-label="Performance Lab method">
+      <span>Workload</span>
+      <span class="flow-operator" aria-hidden="true">×</span>
+      <span>Model</span>
+      <span class="flow-operator" aria-hidden="true">×</span>
+      <span>Device</span>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <strong>Evidence</strong>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <strong>Decision</strong>
+    </div>
 
-      <a href={resolveHref('performance-lab')} class="lab-link">
-        Open the lab <span aria-hidden="true">→</span>
-      </a>
-    </header>
+    <a href={resolveHref('performance-lab')} class="lab-link">
+      Open the lab <span aria-hidden="true">→</span>
+    </a>
+  </div>
 
-    <section class="evidence-panel" aria-labelledby="evidence-title">
-      <div class="evidence-panel__topline">
-        <h4 id="evidence-title">Real evidence — my devices</h4>
-        <span class="evidence-status">Validated averages pending</span>
-      </div>
+  <div class="lab-note">
+    <span class="note-spark" aria-hidden="true">✦</span>
+    <span>Measure only what can change the deployment decision.</span>
+  </div>
 
-      <div class="evidence-table-scroll">
-        <div class="evidence-table" role="table" aria-label="Performance Lab metrics by device">
-          <div class="evidence-groups" role="row">
-            <div class="group-label group-label--context" role="columnheader">What matters</div>
+  <section class="evidence-panel" aria-labelledby="evidence-title">
+    <div class="evidence-panel__topline">
+      <h3 id="evidence-title">Real evidence — my devices</h3>
+    </div>
 
-            <div class="metric-group metric-group--speed" role="columnheader" aria-colspan="2">
-              <span class="metric-icon metric-icon--speed" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m13 2-9 12h8l-1 8 9-12h-8l1-8Z" />
-                </svg>
-              </span>
-              <strong>Speed</strong>
-            </div>
+    <div class="evidence-table-scroll">
+      <div class="evidence-table" role="table" aria-label="Performance Lab metrics by device">
+        <div class="evidence-groups" role="row">
+          <div class="group-label group-label--context" role="columnheader">What matters</div>
 
-            <div class="metric-group metric-group--memory" role="columnheader">
-              <span class="metric-icon metric-icon--memory" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="7" y="7" width="10" height="10" rx="1" />
-                  <path d="M9 2v3M15 2v3M9 19v3M15 19v3M19 9h3M19 14h3M2 9h3M2 14h3" />
-                </svg>
-              </span>
-              <strong>Memory</strong>
-            </div>
-
-            <div class="metric-group metric-group--stability" role="columnheader">
-              <span class="metric-icon metric-icon--stability" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14 14.76V5a2 2 0 0 0-4 0v9.76a4 4 0 1 0 4 0Z" />
-                </svg>
-              </span>
-              <strong>Stability</strong>
-            </div>
-
-            <div class="metric-group metric-group--quality" role="columnheader">
-              <span class="metric-icon metric-icon--quality" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="m8.5 12 2.2 2.2L15.8 9" />
-                </svg>
-              </span>
-              <strong>Quality</strong>
-            </div>
+          <div class="metric-group metric-group--speed" role="columnheader" aria-colspan="2">
+            <span class="metric-icon metric-icon--speed" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m13 2-9 12h8l-1 8 9-12h-8l1-8Z" />
+              </svg>
+            </span>
+            <strong>Speed</strong>
           </div>
 
-          <div class="metric-subheaders" role="row">
-            <div aria-hidden="true"></div>
-            <div role="columnheader">TTFT</div>
-            <div role="columnheader">Tokens/s</div>
-            <div role="columnheader">Peak RAM</div>
-            <div role="columnheader">Thermal</div>
-            <div role="columnheader">Task success</div>
+          <div class="metric-group metric-group--memory" role="columnheader">
+            <span class="metric-icon metric-icon--memory" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="7" width="10" height="10" rx="1" />
+                <path d="M9 2v3M15 2v3M9 19v3M15 19v3M19 9h3M19 14h3M2 9h3M2 14h3" />
+              </svg>
+            </span>
+            <strong>Memory</strong>
           </div>
 
-          <div class="device-rows" role="rowgroup">
-            {deviceRuns.map((device) => (
-              <div class="device-row" role="row">
-                <div class="device-cell" role="rowheader">
-                  <span class:list={['device-icon', `device-icon--${device.id}`]} aria-hidden="true">
-                    {device.id === 'mac' ? (
-                      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="7" y="6" width="18" height="14" rx="1.8" />
-                        <path d="M3.5 24h25M11 24l1-2h8l1 2" />
-                      </svg>
-                    ) : (
-                      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="10" y="3" width="12" height="26" rx="2.5" />
-                        <path d="M14 6h4M15 26h2" />
-                      </svg>
-                    )}
-                  </span>
-                  <div>
-                    <strong>{device.label}</strong>
-                    <span>Model: <b>{device.model}</b></span>
-                  </div>
-                </div>
+          <div class="metric-group metric-group--stability" role="columnheader">
+            <span class="metric-icon metric-icon--stability" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 14.76V5a2 2 0 0 0-4 0v9.76a4 4 0 1 0 4 0Z" />
+              </svg>
+            </span>
+            <strong>Stability</strong>
+          </div>
 
-                <div class="metric-value metric-value--pending" role="cell">
-                  <strong>{device.metrics.ttft}</strong>
-                  <span>pending</span>
-                </div>
-                <div class="metric-value metric-value--pending" role="cell">
-                  <strong>{device.metrics.tokens}</strong>
-                  <span>pending</span>
-                </div>
-                <div class="metric-value metric-value--pending" role="cell">
-                  <strong>{device.metrics.peakRam}</strong>
-                  <span>pending</span>
-                </div>
-                <div class="metric-value metric-value--pending" role="cell">
-                  <strong>{device.metrics.thermal}</strong>
-                  <span>pending</span>
-                </div>
-                <div class="metric-value metric-value--pending" role="cell">
-                  <strong>{device.metrics.taskSuccess}</strong>
-                  <span>pending</span>
+          <div class="metric-group metric-group--quality" role="columnheader">
+            <span class="metric-icon metric-icon--quality" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <path d="m8.5 12 2.2 2.2L15.8 9" />
+              </svg>
+            </span>
+            <strong>Quality</strong>
+          </div>
+
+          <div class="group-label group-label--status" aria-hidden="true"></div>
+        </div>
+
+        <div class="metric-subheaders" role="row">
+          <div aria-hidden="true"></div>
+          <div role="columnheader">TTFT</div>
+          <div role="columnheader">Tokens/s</div>
+          <div role="columnheader">Peak RAM</div>
+          <div role="columnheader">Thermal</div>
+          <div role="columnheader">Task success</div>
+          <div aria-hidden="true"></div>
+        </div>
+
+        <div class="device-rows" role="rowgroup">
+          {deviceRuns.map((device) => (
+            <div class="device-row" role="row">
+              <div class="device-cell" role="rowheader">
+                <span class:list={['device-icon', `device-icon--${device.id}`]} aria-hidden="true">
+                  {device.id === 'mac' ? (
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="7" y="6" width="18" height="14" rx="1.8" />
+                      <path d="M3.5 24h25M11 24l1-2h8l1 2" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="10" y="3" width="12" height="26" rx="2.5" />
+                      <path d="M14 6h4M15 26h2" />
+                    </svg>
+                  )}
+                </span>
+                <div class="device-copy">
+                  <strong>{device.label}</strong>
+                  <span>Model: <b>{device.model}</b></span>
                 </div>
               </div>
-            ))}
-          </div>
+
+              <div class="metric-value" role="cell"><strong>{device.metrics.ttft}</strong></div>
+              <div class="metric-value" role="cell"><strong>{device.metrics.tokens}</strong></div>
+              <div class="metric-value" role="cell"><strong>{device.metrics.peakRam}</strong></div>
+              <div class="metric-value" role="cell"><strong>{device.metrics.thermal}</strong></div>
+              <div class:list={['metric-value', `metric-value--${device.tone}`]} role="cell">
+                <strong>{device.metrics.taskSuccess}</strong>
+              </div>
+
+              <div class="run-status" role="cell">
+                <strong class:list={[`run-status--${device.tone}`]}>
+                  <span class="status-dot" aria-hidden="true"></span>{device.status}
+                </strong>
+                <span>{device.statusNote}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
+    </div>
 
-      <div class="evidence-panel__footer">
-        <span>Publish averages only after representative runs.</span>
-        <a href={resolveHref('performance-lab#evidence')}>See full benchmarks →</a>
-      </div>
-    </section>
+    <div class="evidence-panel__footer">
+      <span>Placeholder averages — replace with representative-run values.</span>
+      <a href={resolveHref('performance-lab#evidence')}>See full benchmarks →</a>
+    </div>
+  </section>
 
-    <section class="decision-band" aria-label="Architecture decision outcomes">
-      <div class="decision-copy">
-        <strong>These results determine where the workload should run.</strong>
-      </div>
+  <section class="decision-band" aria-label="Architecture decision outcomes">
+    <div class="decision-copy">
+      <strong>These results determine where the workload should run.</strong>
+    </div>
 
-      <div class="decision-grid">
-        {decisions.map((decision) => (
-          <div class:list={['decision-card', `decision-card--${decision.tone}`]}>
-            <span class="decision-icon" aria-hidden="true">
-              {decision.tone === 'local' ? '✓' : decision.tone === 'hybrid' ? '↔' : '☁'}
-            </span>
-            <div>
-              <strong>{decision.name}</strong>
-              <span>{decision.description}</span>
-            </div>
+    <div class="decision-grid">
+      {decisions.map((decision) => (
+        <div class:list={['decision-card', `decision-card--${decision.tone}`]}>
+          <span class="decision-icon" aria-hidden="true">
+            {decision.tone === 'local' ? '✓' : decision.tone === 'hybrid' ? '↔' : '☁'}
+          </span>
+          <div>
+            <strong>{decision.name}</strong>
+            <span>{decision.description}</span>
           </div>
-        ))}
-      </div>
-    </section>
-  </article>
+        </div>
+      ))}
+    </div>
+  </section>
 </div>
 
 <style>
   .performance-lab-surface {
     width: 100%;
-  }
-
-  .lab-card {
-    padding: clamp(24px, 3.2vw, 38px);
-    border: 1px solid color-mix(in srgb, var(--accent-blue) 16%, var(--border-medium));
-    border-radius: var(--radius-lg);
-    background:
-      radial-gradient(circle at 94% 0%, color-mix(in srgb, var(--accent-blue) 6%, transparent), transparent 34%),
-      var(--surface-card);
-    box-shadow: 0 7px 28px rgba(8, 19, 51, 0.045);
-  }
-
-  .lab-header {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    gap: clamp(18px, 2.6vw, 28px);
+  }
+
+  .lab-tools-row {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
-    gap: clamp(24px, 4vw, 56px);
+    gap: 18px;
   }
 
-  .lab-heading-copy {
-    max-width: 650px;
-  }
-
-  .lab-heading-copy h3 {
-    margin: 0 0 7px;
-    font-family: var(--font-display);
-    font-size: clamp(1.2rem, 1.8vw, 1.55rem);
-    line-height: 1.2;
-    letter-spacing: -0.03em;
-    font-weight: 830;
+  .decision-flow {
+    min-height: 52px;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
     color: var(--ink-display);
-  }
-
-  .lab-question {
-    margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(1.15rem, 1.7vw, 1.45rem);
-    line-height: 1.28;
-    letter-spacing: -0.025em;
-    font-weight: 760;
-    color: var(--ink-display);
+    font-size: 0.78rem;
+    font-weight: 700;
   }
 
-  .lab-purpose {
-    margin: 9px 0 0;
-    font-size: 0.9rem;
-    line-height: 1.52;
-    color: var(--ink-muted);
+  .decision-flow strong {
+    color: var(--ink-display);
+    font-weight: 800;
+  }
+
+  .flow-operator,
+  .flow-arrow {
+    color: var(--ink-subtle);
   }
 
   .lab-link {
-    min-height: 40px;
+    flex-shrink: 0;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 7px;
-    flex-shrink: 0;
-    padding: 0 12px;
-    border-radius: var(--radius-full);
+    min-height: 40px;
+    padding: 0 10px;
     color: var(--accent-blue-dark);
     text-decoration: none;
     font-family: var(--font-display);
     font-size: var(--text-caption);
     font-weight: 760;
+    border-radius: var(--radius-full);
     transition: color var(--duration-fast) ease, background var(--duration-fast) ease;
   }
 
@@ -276,8 +274,26 @@ const decisions = [
     background: var(--surface-blue-subtle);
   }
 
+  .lab-note {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 16%, var(--border-medium));
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--surface-blue-subtle) 46%, var(--surface-card));
+    color: var(--ink-muted);
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  .note-spark {
+    color: var(--accent-blue);
+    font-size: 1rem;
+  }
+
   .evidence-panel {
-    margin-top: clamp(34px, 5vw, 56px);
     overflow: hidden;
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
@@ -285,14 +301,10 @@ const decisions = [
   }
 
   .evidence-panel__topline {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    padding: 14px 18px 10px;
+    padding: 16px 18px 10px;
   }
 
-  .evidence-panel__topline h4 {
+  .evidence-panel__topline h3 {
     margin: 0;
     font-family: var(--font-display);
     font-size: 0.72rem;
@@ -303,12 +315,6 @@ const decisions = [
     color: var(--ink-muted);
   }
 
-  .evidence-status {
-    font-size: 0.7rem;
-    line-height: 1.3;
-    color: var(--ink-subtle);
-  }
-
   .evidence-table-scroll {
     width: 100%;
     overflow-x: auto;
@@ -316,14 +322,14 @@ const decisions = [
   }
 
   .evidence-table {
-    min-width: 880px;
+    min-width: 1040px;
   }
 
   .evidence-groups,
   .metric-subheaders,
   .device-row {
     display: grid;
-    grid-template-columns: minmax(250px, 1.55fr) repeat(5, minmax(96px, 0.8fr));
+    grid-template-columns: minmax(235px, 1.55fr) repeat(5, minmax(90px, 0.72fr)) minmax(155px, 1fr);
   }
 
   .evidence-groups {
@@ -352,6 +358,11 @@ const decisions = [
     color: var(--ink-muted);
   }
 
+  .group-label--status {
+    grid-column: 7;
+    border-left: 1px solid var(--border-subtle);
+  }
+
   .metric-group {
     justify-content: center;
     border-left: 1px solid var(--border-subtle);
@@ -359,10 +370,7 @@ const decisions = [
     color: var(--ink-display);
   }
 
-  .metric-group--speed {
-    grid-column: 2 / span 2;
-  }
-
+  .metric-group--speed { grid-column: 2 / span 2; }
   .metric-group--memory { grid-column: 4; }
   .metric-group--stability { grid-column: 5; }
   .metric-group--quality { grid-column: 6; }
@@ -386,25 +394,10 @@ const decisions = [
     height: 16px;
   }
 
-  .metric-icon--speed {
-    color: #15803d;
-    background: #edf9f0;
-  }
-
-  .metric-icon--memory {
-    color: #7c3aed;
-    background: #f4efff;
-  }
-
-  .metric-icon--stability {
-    color: #ea580c;
-    background: #fff3ec;
-  }
-
-  .metric-icon--quality {
-    color: var(--accent-blue-dark);
-    background: var(--surface-blue-subtle);
-  }
+  .metric-icon--speed { color: #15803d; background: #edf9f0; }
+  .metric-icon--memory { color: #7c3aed; background: #f4efff; }
+  .metric-icon--stability { color: #ea580c; background: #fff3ec; }
+  .metric-icon--quality { color: var(--accent-blue-dark); background: var(--surface-blue-subtle); }
 
   .metric-subheaders {
     min-height: 38px;
@@ -423,37 +416,33 @@ const decisions = [
     border-left: 1px solid var(--border-subtle);
   }
 
-  .metric-subheaders > div:first-child {
-    border-left: 0;
-  }
+  .metric-subheaders > div:first-child { border-left: 0; }
 
   .device-row {
-    min-height: 96px;
+    min-height: 92px;
     align-items: stretch;
     border-bottom: 1px solid var(--border-subtle);
   }
 
-  .device-row:last-child {
-    border-bottom: 0;
-  }
+  .device-row:last-child { border-bottom: 0; }
 
   .device-cell {
     display: flex;
     align-items: center;
     gap: 13px;
     min-width: 0;
-    padding: 15px 18px;
+    padding: 14px 16px;
   }
 
   .device-icon {
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
     display: grid;
     place-items: center;
-    flex-shrink: 0;
     border-radius: var(--radius-md);
     background: var(--surface-subtle);
-    color: var(--ink-display);
+    color: var(--ink-muted);
   }
 
   .device-icon svg {
@@ -461,101 +450,121 @@ const decisions = [
     height: 29px;
   }
 
-  .device-cell > div {
+  .device-copy {
     min-width: 0;
   }
 
-  .device-cell strong {
+  .device-copy > strong {
     display: block;
+    margin-bottom: 4px;
     font-family: var(--font-display);
-    font-size: 0.9rem;
+    font-size: 0.86rem;
     line-height: 1.3;
-    font-weight: 780;
     color: var(--ink-display);
   }
 
-  .device-cell span {
+  .device-copy > span {
     display: block;
-    margin-top: 4px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 0.7rem;
-    line-height: 1.35;
     color: var(--ink-muted);
+    font-size: 0.72rem;
   }
 
-  .device-cell b {
+  .device-copy b {
     color: var(--accent-blue-dark);
-    font-weight: 720;
+    font-weight: 760;
   }
 
-  .metric-value {
+  .metric-value,
+  .run-status {
+    min-width: 0;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
-    padding: 13px 8px;
     border-left: 1px solid var(--border-subtle);
-    text-align: center;
+    padding: 12px 10px;
   }
 
   .metric-value strong {
     font-family: var(--font-display);
-    font-size: clamp(1.05rem, 1.5vw, 1.28rem);
-    line-height: 1;
-    font-weight: 820;
+    font-size: clamp(1rem, 1.35vw, 1.22rem);
+    line-height: 1.2;
+    font-weight: 800;
     color: var(--ink-display);
   }
 
-  .metric-value span {
-    font-size: 0.64rem;
-    line-height: 1.25;
-    color: var(--ink-subtle);
+  .metric-value--good strong { color: #169c45; }
+  .metric-value--review strong { color: #d67a00; }
+
+  .run-status {
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    padding-inline: 14px;
   }
 
-  .metric-value--pending strong {
-    color: var(--ink-subtle);
+  .run-status > strong {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 0.74rem;
+    line-height: 1.25;
   }
+
+  .run-status > span {
+    color: var(--ink-muted);
+    font-size: 0.67rem;
+    line-height: 1.4;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .run-status--good { color: #169c45; }
+  .run-status--review { color: #d67a00; }
 
   .evidence-panel__footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 10px 18px;
+    min-height: 44px;
+    padding: 9px 18px;
     border-top: 1px solid var(--border-subtle);
-    background: color-mix(in srgb, var(--surface-subtle) 58%, var(--surface-card));
-    font-size: 0.68rem;
-    line-height: 1.35;
     color: var(--ink-subtle);
+    font-size: 0.68rem;
   }
 
   .evidence-panel__footer a {
     color: var(--accent-blue-dark);
     text-decoration: none;
-    font-weight: 720;
-    white-space: nowrap;
+    font-weight: 760;
   }
 
   .decision-band {
     display: grid;
-    grid-template-columns: minmax(230px, 0.9fr) minmax(0, 2fr);
-    gap: clamp(20px, 3vw, 38px);
+    grid-template-columns: minmax(220px, 0.9fr) minmax(0, 2.2fr);
+    gap: clamp(18px, 2.5vw, 28px);
     align-items: center;
-    margin-top: 18px;
-    padding: clamp(18px, 2.4vw, 24px);
-    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--border-medium));
+    padding: clamp(16px, 2vw, 22px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-medium));
     border-radius: var(--radius-lg);
-    background: color-mix(in srgb, var(--accent-blue) 3%, var(--surface-card));
+    background: color-mix(in srgb, var(--surface-blue-subtle) 34%, var(--surface-card));
   }
 
   .decision-copy strong {
     display: block;
-    max-width: 290px;
+    max-width: 260px;
     font-family: var(--font-display);
-    font-size: clamp(0.96rem, 1.35vw, 1.12rem);
+    font-size: clamp(0.95rem, 1.35vw, 1.08rem);
     line-height: 1.35;
     letter-spacing: -0.02em;
     color: var(--ink-display);
@@ -564,15 +573,16 @@ const decisions = [
   .decision-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 9px;
+    gap: 8px;
   }
 
   .decision-card {
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: 10px;
-    min-width: 0;
-    padding: 11px 12px;
+    min-height: 68px;
+    padding: 10px 12px;
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-md);
     background: var(--surface-card);
@@ -581,83 +591,68 @@ const decisions = [
   .decision-icon {
     width: 34px;
     height: 34px;
+    flex: 0 0 34px;
     display: grid;
     place-items: center;
-    flex-shrink: 0;
     border-radius: 50%;
     font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 800;
+    font-weight: 850;
   }
 
-  .decision-card--local .decision-icon {
-    color: #15803d;
-    background: #edf9f0;
-  }
-
-  .decision-card--hybrid .decision-icon {
-    color: #d97706;
-    background: #fff7e8;
-  }
-
-  .decision-card--cloud .decision-icon {
-    color: #dc2626;
-    background: #fff0f0;
-  }
-
-  .decision-card > div {
-    min-width: 0;
-  }
-
-  .decision-card strong {
+  .decision-card > div > strong {
     display: block;
+    margin-bottom: 2px;
     font-family: var(--font-display);
-    font-size: 0.82rem;
-    line-height: 1.3;
+    font-size: 0.78rem;
+    line-height: 1.2;
     color: var(--ink-display);
   }
 
-  .decision-card span:last-child {
+  .decision-card > div > span {
     display: block;
-    margin-top: 2px;
-    font-size: 0.67rem;
-    line-height: 1.35;
     color: var(--ink-muted);
+    font-size: 0.66rem;
+    line-height: 1.4;
   }
 
-  @media (max-width: 900px) {
+  .decision-card--local .decision-icon { color: #15803d; background: #eaf8ee; }
+  .decision-card--hybrid .decision-icon { color: #d97706; background: #fff3e3; }
+  .decision-card--cloud .decision-icon { color: #dc2626; background: #feecec; }
+
+  @media (max-width: 980px) {
+    .lab-tools-row {
+      align-items: flex-start;
+      flex-direction: column-reverse;
+    }
+
+    .lab-link { align-self: flex-end; }
+
     .decision-band {
       grid-template-columns: 1fr;
     }
+
+    .decision-copy strong { max-width: none; }
   }
 
   @media (max-width: 720px) {
-    .lab-card {
-      padding: 20px;
-    }
+    .decision-grid { grid-template-columns: 1fr; }
 
-    .lab-header {
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .lab-link {
-      align-self: flex-start;
-      padding-left: 0;
-    }
-
-    .evidence-panel {
-      margin-top: 32px;
-    }
-
-    .evidence-panel__topline,
     .evidence-panel__footer {
       align-items: flex-start;
       flex-direction: column;
     }
+  }
 
-    .decision-grid {
-      grid-template-columns: 1fr;
+  @media (max-width: 560px) {
+    .decision-flow {
+      width: 100%;
+      gap: 8px;
+    }
+
+    .lab-link { align-self: flex-start; }
+
+    .lab-note {
+      align-items: flex-start;
     }
   }
 </style>
