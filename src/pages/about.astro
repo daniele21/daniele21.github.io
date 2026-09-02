@@ -1,117 +1,79 @@
 ---
-/**
- * about.astro
- * Positioning-first profile page: Local AI thesis, concrete proof, then track record.
- */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { aboutData } from '../content/locales/en/about';
 
-const {
-  profile,
-  now,
-  story,
-  manifesto,
-  experience,
-  divulgation,
-  recognition,
-} = aboutData;
-
+const { profile, now, experience } = aboutData;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
-const pageHref = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
-
-const selectedPrincipleTitles = [
-  'Local AI First ≠ Local AI Only',
-  'Architectural Data Boundaries',
-  'Empirical Verification Over Leaderboards',
-];
-const selectedPrinciples = manifesto.principles.filter((principle) =>
-  selectedPrincipleTitles.includes(principle.title)
-);
 const selectedRoles = experience.roles.slice(0, 3);
+const currentFocus = now.items.slice(0, 3);
+
+const workAreas = [
+  {
+    title: 'GenAI systems',
+    body: 'LLM evaluation, retrieval, integration and production architecture — starting from the product problem rather than a model catalogue.',
+  },
+  {
+    title: 'Local & on-device AI',
+    body: 'Understanding what can move from cloud APIs to infrastructure and devices we control, and where that trade-off actually creates value.',
+  },
+  {
+    title: 'AI engineering & strategy',
+    body: 'Connecting technical choices with privacy, performance, operating constraints and the decisions teams need to make.',
+  },
+];
+
+const proofPoints = [
+  {
+    title: 'Enterprise AI delivery',
+    body: `I lead and design AI initiatives in complex production environments at ${profile.affiliation}.`,
+  },
+  {
+    title: 'Hands-on systems',
+    body: 'I build the infrastructure and proving grounds myself: local inference, Android runtimes, speech, product applications and measurement tooling.',
+  },
+  {
+    title: 'Public technical work',
+    body: 'I use stAI tuned, GitHub and LinkedIn to document architecture trade-offs, experiments and what survives contact with real systems.',
+  },
+];
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: profile.name,
   jobTitle: profile.headline,
-  worksFor: {
-    '@type': 'Organization',
-    name: profile.affiliation,
-  },
-  alumniOf: {
-    '@type': 'EducationalOrganization',
-    name: 'Politecnico di Milano',
-  },
+  worksFor: { '@type': 'Organization', name: profile.affiliation },
+  alumniOf: { '@type': 'EducationalOrganization', name: 'Politecnico di Milano' },
   url: 'https://daniele21.github.io/about',
-  sameAs: [
-    profile.socialLinks.linkedin,
-    profile.socialLinks.github,
-    profile.socialLinks.staituned,
-  ],
-  knowsAbout: [
-    'Local AI',
-    'On-device inference',
-    'Enterprise AI Architecture',
-    'Generative AI Systems',
-    'AI Strategy & Governance',
-  ],
+  sameAs: [profile.socialLinks.linkedin, profile.socialLinks.github, profile.socialLinks.staituned],
+  knowsAbout: ['Generative AI Systems', 'Local AI', 'On-device inference', 'AI Architecture', 'AI Strategy'],
 };
 ---
 
 <BaseLayout
-  title="About Daniele Moltisanti - Local AI Systems & Architecture"
-  description="I build and benchmark Local AI systems to determine when AI should run locally, hybrid, or in the cloud."
+  title="About Daniele Moltisanti - GenAI, Local AI & AI Architecture"
+  description="AI engineer and strategy lead working on GenAI systems, Local AI and evidence-led architecture decisions across Local, Hybrid and Cloud."
   jsonLd={jsonLd}
 >
   <div class="about-page">
     <div class="about-shell">
       <section class="about-hero" aria-labelledby="about-title">
         <div class="hero-copy">
-          <p class="section-kicker">ABOUT · LOCAL AI</p>
-          <p class="hero-name">{profile.name}</p>
-          <h1 id="about-title">I build Local AI systems to prove when AI can leave the cloud.</h1>
+          <h1 id="about-title">I work where GenAI architecture, product constraints and hands-on engineering meet.</h1>
           <p class="hero-lead">
-            I design, build, and benchmark AI running on devices and infrastructure we control across desktop, mobile, and speech.
+            I'm <strong>{profile.name}</strong>, an AI engineer and strategy lead based in {profile.location}. I work on GenAI systems broadly, with a particular focus on Local and on-device AI — and on deciding what should run Local, Hybrid or Cloud.
           </p>
-          <p class="hero-so-what">
-            <strong>The goal:</strong> decide with evidence when Local, Hybrid or Cloud is the right architecture.
-          </p>
-
-          <div class="hero-actions">
-            <a class="primary-button" href={pageHref('#infrastructure')}>Explore the work ↓</a>
-            <div class="hero-social-group" aria-label="Social profiles">
-              <a
-                class="social-icon-btn"
-                href={profile.socialLinks.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn profile"
-                title="LinkedIn"
-              >
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                </svg>
-              </a>
-              <a
-                class="social-icon-btn"
-                href={profile.socialLinks.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub profile"
-                title="GitHub"
-              >
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-
           <div class="hero-meta">
             <span>{profile.headline}</span>
             <span aria-hidden="true">·</span>
-            <span>{profile.location}</span>
+            <span>{profile.affiliation}</span>
+          </div>
+          <div class="hero-actions">
+            <button type="button" class="primary-button" data-open-contact-modal>
+              Discuss a workload <span aria-hidden="true">→</span>
+            </button>
+            <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" class="secondary-link">LinkedIn ↗</a>
           </div>
         </div>
 
@@ -127,172 +89,88 @@ const jsonLd = {
         </div>
       </section>
 
-      <section class="proof-model" aria-label="How I prove Local AI viability">
-        <article>
-          <span>01 · BUILD</span>
-          <h2>Reusable local infrastructure</h2>
-          <p>Inference runtimes and system boundaries that applications can actually depend on.</p>
-        </article>
-        <article>
-          <span>02 · TEST</span>
-          <h2>Real applications</h2>
-          <p>Privacy, mobile and meeting workflows that expose constraints demos can hide.</p>
-        </article>
-        <article>
-          <span>03 · MEASURE</span>
-          <h2>Performance & boundary evidence</h2>
-          <p>Latency, memory, thermal and network signals that can change the architecture decision.</p>
-        </article>
+      <section class="about-section" aria-labelledby="work-title">
+        <header class="section-heading">
+          <h2 id="work-title">What I work on</h2>
+          <p>Three areas, one recurring question: what architecture makes this AI workload useful, controllable and sustainable?</p>
+        </header>
+        <div class="row-list">
+          {workAreas.map((area) => (
+            <article class="info-row">
+              <h3>{area.title}</h3>
+              <p>{area.body}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
-      <section class="about-section now-section" id="now" aria-labelledby="now-title">
-        <header class="section-heading-row">
-          <div>
-            <p class="section-kicker">NOW · {now.lastUpdated.toUpperCase()}</p>
-            <h2 id="now-title">What I’m testing now</h2>
-          </div>
-          <p class="section-intro">Current work at the boundary between model capability and real execution constraints.</p>
+      <section class="about-section proof-section" aria-labelledby="proof-title">
+        <header class="section-heading">
+          <h2 id="proof-title">Why my perspective may be useful</h2>
+          <p>The advisory point of view comes from building systems, operating inside enterprise constraints and documenting the trade-offs in public.</p>
         </header>
+        <div class="proof-grid">
+          {proofPoints.map((point) => (
+            <article class="proof-card">
+              <h3>{point.title}</h3>
+              <p>{point.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
-        <div class="now-list">
-          {now.items.map((item) => (
-            <article class="now-row">
-              <div class="now-marker" aria-hidden="true"></div>
-              <div class="now-copy">
-                <span class="now-tag">{item.tag}</span>
+      <section class="about-section" aria-labelledby="now-title">
+        <header class="section-heading">
+          <h2 id="now-title">What I'm exploring now</h2>
+          <p>Current technical questions I’m using to push the Local / Hybrid / Cloud boundary.</p>
+        </header>
+        <div class="current-list">
+          {currentFocus.map((item) => (
+            <article class="current-row">
+              <div>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
               </div>
-              <span class="now-status">{item.status}</span>
+              <span>{item.status}</span>
             </article>
           ))}
         </div>
       </section>
 
-      <section class="about-section principles-section" id="principles" aria-labelledby="principles-title">
-        <header class="section-heading-row">
-          <div>
-            <p class="section-kicker">HOW I DECIDE</p>
-            <h2 id="principles-title">No Local AI ideology. Just architectural evidence.</h2>
-          </div>
-          <p class="section-intro">The same principles guide what I build, benchmark and recommend.</p>
+      <section class="about-section" aria-labelledby="track-title">
+        <header class="section-heading">
+          <h2 id="track-title">Selected track record</h2>
+          <p>Enough context to understand where the perspective comes from. LinkedIn has the full chronology.</p>
         </header>
-
-        <div class="principles-grid">
-          {selectedPrinciples.map((principle) => (
-            <article class="principle">
-              <span class="principle-number">{principle.number}</span>
-              <span class="principle-kicker">{principle.kicker}</span>
-              <h3>{principle.title}</h3>
-              <p>{principle.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section class="about-section journey-section" id="journey" aria-labelledby="journey-title">
-        <header class="section-heading-row">
-          <div>
-            <p class="section-kicker">WHY I WORK THIS WAY</p>
-            <h2 id="journey-title">Research rigor, enterprise constraints, then back to the device.</h2>
-          </div>
-          <p class="section-intro">The track record matters because Local AI is a systems problem, not only a model problem.</p>
-        </header>
-
-        <div class="journey-list">
-          {story.chapters.map((chapter) => (
-            <article class="journey-row">
-              <div class="journey-index">{chapter.number}</div>
-              <div class="journey-period">{chapter.timeframe}</div>
-              <div class="journey-copy">
-                <span>{chapter.kicker}</span>
-                <h3>{chapter.title}</h3>
-                <p>{chapter.keyTakeaway || chapter.paragraphs[0]}</p>
+        <div class="experience-list">
+          {selectedRoles.map((role) => (
+            <article class="experience-row">
+              <div class="experience-meta">
+                <strong>{role.company}</strong>
+                <span>{role.period}</span>
               </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section class="about-section proof-section" id="proof" aria-labelledby="proof-title">
-        <header class="section-heading-row">
-          <div>
-            <p class="section-kicker">TRACK RECORD</p>
-            <h2 id="proof-title">I also build AI under enterprise constraints.</h2>
-          </div>
-          <p class="section-intro">Local AI experimentation is grounded in experience with production systems, teams and operational trade-offs.</p>
-        </header>
-
-        <div class="proof-layout">
-          <div class="experience-list">
-            {selectedRoles.map((role) => (
-              <article class="experience-row">
-                <div class="experience-company">
-                  <strong>{role.company}</strong>
-                  <span>{role.period}</span>
-                </div>
-                <div class="experience-copy">
-                  <h3>{role.role}</h3>
-                  <p>{role.description}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <aside class="recognition-panel" aria-label="Recognition and education">
-            <p class="mini-label">RECOGNITION</p>
-            {recognition.awards.map((award) => (
-              <div class="recognition-row">
-                <span>{award.year}</span>
-                <strong>{award.title}</strong>
-                <small>{award.organization}</small>
-              </div>
-            ))}
-
-            <div class="recognition-divider"></div>
-            <p class="mini-label">EDUCATION</p>
-            {recognition.education.map((item) => (
-              <div class="recognition-row">
-                <span>{item.period}</span>
-                <strong>{item.degree}</strong>
-                <small>{item.institution}</small>
-              </div>
-            ))}
-          </aside>
-        </div>
-      </section>
-
-      <section class="about-section writing-section" id="writing" aria-labelledby="writing-title">
-        <div class="writing-intro">
-          <p class="section-kicker">WRITING</p>
-          <h2 id="writing-title">I build systems and explain what survives contact with reality.</h2>
-          <p>{divulgation.staiTunedSummary}</p>
-          <a class="text-link" href={profile.socialLinks.staituned} target="_blank" rel="noopener noreferrer">
-            Explore stAI tuned ↗
-          </a>
-        </div>
-
-        <div class="article-list" aria-label="Featured writing topics">
-          {divulgation.featuredArticles.map((article, index) => (
-            <article class="article-row">
-              <span class="article-index">0{index + 1}</span>
               <div>
-                <span class="article-topic">{article.topic}</span>
-                <h3>{article.title}</h3>
-                <p>{article.summary}</p>
+                <h3>{role.role}</h3>
+                <p>{role.description}</p>
               </div>
             </article>
           ))}
         </div>
+        <div class="track-links">
+          <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">Full experience on LinkedIn ↗</a>
+          <a href={profile.socialLinks.staituned} target="_blank" rel="noopener noreferrer">Technical writing on stAI tuned ↗</a>
+          <a href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer">Projects on GitHub ↗</a>
+        </div>
       </section>
 
-      <section class="advisory-bridge" aria-labelledby="about-advisory-title">
+      <section class="about-cta" aria-labelledby="about-cta-title">
         <div>
-          <p class="section-kicker">LOCAL AI ADVISORY</p>
-          <h2 id="about-advisory-title">Working on the same question?</h2>
-          <p>If you need to decide what should run Local, Hybrid or Cloud, I can apply the same workload-first approach to your architecture.</p>
+          <h2 id="about-cta-title">Have an AI workload to figure out?</h2>
+          <p>Tell me what you're trying to run and what constraints matter. I'll start from the workload, not the model.</p>
         </div>
-        <a class="primary-button" href={pageHref('#advisory')}>Evaluate your workload →</a>
+        <button type="button" class="primary-button" data-open-contact-modal>
+          Evaluate my workload <span aria-hidden="true">→</span>
+        </button>
       </section>
     </div>
   </div>
@@ -301,405 +179,264 @@ const jsonLd = {
 <style>
   .about-page {
     background: var(--surface-canvas);
-    padding: clamp(26px, 3vw, 44px) 0 clamp(64px, 8vw, 104px);
+    padding: clamp(28px, 4vw, 48px) 0 clamp(72px, 9vw, 118px);
   }
 
   .about-shell {
-    width: min(calc(100% - clamp(28px, 5vw, 64px)), 1120px);
+    width: min(calc(100% - clamp(28px, 5vw, 64px)), 1100px);
     margin-inline: auto;
   }
 
-  .section-kicker,
-  .mini-label {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 800;
-    letter-spacing: 0.115em;
-    text-transform: uppercase;
-    color: var(--accent-blue-dark);
-  }
-
   .about-hero {
-    min-height: min(720px, calc(100svh - var(--header-height) - 36px));
+    min-height: min(680px, calc(100svh - var(--header-height) - 28px));
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(230px, 300px);
-    gap: clamp(48px, 7vw, 96px);
+    gap: clamp(44px, 7vw, 90px);
     align-items: center;
-    padding: clamp(52px, 7vw, 92px) 0;
+    padding: clamp(54px, 7vw, 88px) 0;
     border-bottom: 1px solid var(--border-medium);
   }
 
-  .hero-copy { max-width: 790px; }
-
-  .hero-name {
-    margin: 10px 0 18px;
-    color: var(--ink-subtle);
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 700;
-  }
-
   .hero-copy h1 {
-    margin: 0;
-    max-width: 820px;
+    max-width: 790px;
+    margin: 0 0 22px;
     font-family: var(--font-display);
-    font-size: clamp(2.8rem, 6.5vw, 5.7rem);
-    line-height: 0.98;
-    letter-spacing: -0.062em;
-    font-weight: 860;
+    font-size: clamp(2.5rem, 5vw, 4.4rem);
+    line-height: 1.04;
+    letter-spacing: -0.055em;
+    font-weight: 850;
     color: var(--ink-display);
     text-wrap: balance;
   }
 
   .hero-lead {
-    max-width: 730px;
-    margin: 26px 0 0;
-    font-size: clamp(1.08rem, 1.55vw, 1.28rem);
-    line-height: 1.62;
+    max-width: 720px;
+    margin: 0;
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    line-height: 1.68;
     color: var(--ink-muted);
   }
 
-  .hero-so-what {
-    max-width: 730px;
-    margin: 18px 0 0;
-    padding-left: 16px;
-    border-left: 3px solid var(--accent-blue);
-    color: var(--ink);
-    line-height: 1.55;
-  }
-
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px 16px;
-    margin-top: 30px;
-  }
-
-  .hero-social-group {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .social-icon-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-medium);
-    background: var(--surface-card);
-    color: var(--ink);
-    transition: transform 0.18s ease, color 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
-    text-decoration: none;
-  }
-
-  .social-icon-btn:hover {
-    transform: translateY(-2px);
-    color: var(--accent-blue-dark);
-    border-color: color-mix(in srgb, var(--accent-blue) 45%, var(--border-medium));
-    background: var(--surface-subtle);
-    box-shadow: 0 4px 14px rgba(8, 19, 51, 0.08);
-  }
-
-  .social-icon-btn svg {
-    display: block;
-    flex-shrink: 0;
+  .hero-lead strong {
+    color: var(--ink-display);
+    font-weight: 720;
   }
 
   .hero-meta {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
-    margin-top: 24px;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 18px;
+    font-size: 0.8rem;
     color: var(--ink-subtle);
-    font-size: var(--text-caption);
   }
 
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 28px;
+  }
+
+  .hero-actions button,
+  .about-cta button { cursor: pointer; }
+
+  .secondary-link,
+  .track-links a {
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: 0.84rem;
+    font-weight: 680;
+  }
+
+  .secondary-link:hover,
+  .track-links a:hover { color: var(--accent-blue-dark); }
+
   .hero-portrait-wrap {
-    justify-self: end;
-    width: min(100%, 300px);
-    aspect-ratio: 5 / 6;
     overflow: hidden;
     border: 1px solid var(--border-medium);
-    border-radius: clamp(22px, 3vw, 34px);
+    border-radius: clamp(24px, 3vw, 34px);
     background: var(--surface-subtle);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-card);
   }
 
   .hero-portrait-wrap img {
-    width: 100%;
-    height: 100%;
     display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 5 / 6;
     object-fit: cover;
   }
 
-  .proof-model {
+  .about-section {
+    padding: clamp(64px, 8vw, 100px) 0;
+    border-bottom: 1px solid var(--border-medium);
+  }
+
+  .section-heading {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1fr);
+    gap: clamp(26px, 5vw, 64px);
+    align-items: start;
+    margin-bottom: clamp(30px, 4vw, 46px);
+  }
+
+  .section-heading h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.65rem);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    font-weight: 820;
+    color: var(--ink-display);
+  }
+
+  .section-heading > p {
+    max-width: 620px;
+    margin: 3px 0 0;
+    font-size: 0.96rem;
+    line-height: 1.65;
+    color: var(--ink-muted);
+  }
+
+  .row-list,
+  .current-list,
+  .experience-list { border-top: 1px solid var(--border-medium); }
+
+  .info-row,
+  .current-row,
+  .experience-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 0.48fr) minmax(0, 1fr);
+    gap: clamp(22px, 4vw, 54px);
+    padding: 21px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .info-row h3,
+  .current-row h3,
+  .experience-row h3,
+  .proof-card h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.4;
+    font-weight: 780;
+    color: var(--ink-display);
+  }
+
+  .info-row p,
+  .current-row p,
+  .experience-row p,
+  .proof-card p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.62;
+    color: var(--ink-muted);
+  }
+
+  .proof-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-bottom: 1px solid var(--border-medium);
+    gap: 14px;
   }
 
-  .proof-model article {
-    min-height: 190px;
-    padding: 30px clamp(22px, 3vw, 38px);
-    border-right: 1px solid var(--border-medium);
-  }
-
-  .proof-model article:first-child { padding-left: 0; }
-  .proof-model article:last-child { border-right: 0; }
-
-  .proof-model span,
-  .now-tag,
-  .principle-kicker,
-  .article-topic,
-  .journey-copy > span {
-    color: var(--accent-blue-dark);
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 780;
-  }
-
-  .proof-model h2 {
-    margin: 14px 0 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.25rem, 1.9vw, 1.62rem);
-    line-height: 1.2;
-    letter-spacing: -0.03em;
-    color: var(--ink-display);
-  }
-
-  .proof-model p {
-    margin: 12px 0 0;
-    color: var(--ink-muted);
-    font-size: 0.92rem;
-    line-height: 1.6;
-  }
-
-  .about-section {
-    padding: clamp(72px, 9vw, 120px) 0;
-    border-bottom: 1px solid var(--border-medium);
-  }
-
-  .section-heading-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(250px, 390px);
-    gap: clamp(28px, 5vw, 72px);
-    align-items: end;
-    margin-bottom: clamp(34px, 5vw, 56px);
-  }
-
-  .section-heading-row h2,
-  .writing-intro h2,
-  .advisory-bridge h2 {
-    margin: 9px 0 0;
-    font-family: var(--font-display);
-    font-size: clamp(2.2rem, 4.5vw, 4.15rem);
-    line-height: 1.02;
-    letter-spacing: -0.052em;
-    font-weight: 830;
-    color: var(--ink-display);
-    text-wrap: balance;
-  }
-
-  .section-intro {
-    margin: 0;
-    color: var(--ink-muted);
-    font-size: 0.98rem;
-    line-height: 1.6;
-  }
-
-  .now-list,
-  .experience-list,
-  .article-list { border-top: 1px solid var(--border-medium); }
-
-  .now-row {
-    display: grid;
-    grid-template-columns: 12px minmax(0, 1fr) auto;
-    gap: 18px;
-    align-items: start;
-    padding: 24px 0;
-    border-bottom: 1px solid var(--border-medium);
-  }
-
-  .now-marker {
-    width: 7px;
-    height: 7px;
-    margin-top: 10px;
-    border-radius: 50%;
-    background: var(--accent-teal);
-    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-teal) 9%, transparent);
-  }
-
-  .now-copy h3,
-  .journey-copy h3,
-  .principle h3,
-  .article-row h3,
-  .experience-copy h3 {
-    margin: 5px 0 6px;
-    font-family: var(--font-display);
-    color: var(--ink-display);
-    font-weight: 790;
-    letter-spacing: -0.025em;
-  }
-
-  .now-copy p,
-  .journey-copy p,
-  .principle p,
-  .article-row p,
-  .experience-copy p {
-    margin: 0;
-    color: var(--ink-muted);
-    font-size: 0.93rem;
-    line-height: 1.6;
-  }
-
-  .now-status {
-    padding: 5px 10px;
+  .proof-card {
+    padding: 22px;
     border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+
+  .proof-card h3 { margin-bottom: 8px; }
+
+  .current-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .current-row h3 { margin-bottom: 5px; }
+
+  .current-row > span {
+    padding: 5px 9px;
     border-radius: var(--radius-full);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    font-size: 0.72rem;
     color: var(--ink-muted);
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 680;
     white-space: nowrap;
   }
 
-  .principles-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-block: 1px solid var(--border-medium);
+  .experience-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
   }
 
-  .principle {
-    padding: clamp(28px, 4vw, 42px);
-    border-right: 1px solid var(--border-medium);
-  }
-
-  .principle:first-child { padding-left: 0; }
-  .principle:last-child { border-right: 0; }
-  .principle-number { display: block; margin-bottom: 28px; color: var(--ink-subtle); font-family: var(--font-display); font-weight: 800; }
-  .principle h3 { font-size: clamp(1.25rem, 1.9vw, 1.62rem); line-height: 1.18; }
-  .principle p { margin-top: 14px; }
-
-  .journey-list { position: relative; }
-  .journey-row {
-    display: grid;
-    grid-template-columns: 44px 190px minmax(0, 1fr);
-    gap: clamp(18px, 3vw, 38px);
-    padding: 26px 0;
-    border-bottom: 1px solid var(--border-subtle);
-  }
-  .journey-index {
-    width: 44px;
-    height: 44px;
-    display: grid;
-    place-items: center;
-    border: 1px solid color-mix(in srgb, var(--accent-blue) 34%, var(--border-medium));
-    border-radius: 50%;
-    color: var(--accent-blue-dark);
+  .experience-meta strong {
     font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 800;
-  }
-  .journey-period { padding-top: 9px; color: var(--ink-subtle); font-size: var(--text-caption); line-height: 1.45; }
-  .journey-copy { max-width: 700px; }
-  .journey-copy h3 { font-size: clamp(1.25rem, 1.9vw, 1.62rem); }
-
-  .proof-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.65fr) minmax(270px, 0.75fr);
-    gap: clamp(44px, 7vw, 88px);
+    font-size: 0.92rem;
+    color: var(--ink-display);
   }
 
-  .experience-row {
-    display: grid;
-    grid-template-columns: 180px minmax(0, 1fr);
-    gap: 28px;
-    padding: 26px 0;
-    border-bottom: 1px solid var(--border-medium);
+  .experience-meta span {
+    font-size: 0.76rem;
+    color: var(--ink-subtle);
   }
-  .experience-company { display: flex; flex-direction: column; gap: 4px; }
-  .experience-company strong { color: var(--ink-display); font-family: var(--font-display); }
-  .experience-company span { color: var(--ink-subtle); font-size: var(--text-caption); }
-  .experience-copy h3 { margin-top: 0; font-size: 1.05rem; }
 
-  .recognition-panel {
-    padding: 28px;
-    border: 1px solid var(--border-medium);
+  .experience-row h3 { margin-bottom: 5px; }
+
+  .track-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    margin-top: 22px;
+  }
+
+  .about-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: clamp(62px, 8vw, 100px);
+    padding: clamp(26px, 4vw, 40px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, var(--border-medium));
     border-radius: var(--radius-lg);
-    background: var(--surface-subtle);
-  }
-  .recognition-row { display: flex; flex-direction: column; gap: 3px; padding: 16px 0; border-bottom: 1px solid var(--border-medium); }
-  .recognition-row:last-child { border-bottom: 0; }
-  .recognition-row span,
-  .recognition-row small { color: var(--ink-subtle); font-size: var(--text-caption); }
-  .recognition-row strong { color: var(--ink-display); font-family: var(--font-display); font-size: 0.94rem; line-height: 1.35; }
-  .recognition-divider { height: 1px; margin: 26px 0; background: var(--border-strong); }
-
-  .writing-section {
-    display: grid;
-    grid-template-columns: minmax(300px, 0.85fr) minmax(0, 1.15fr);
-    gap: clamp(42px, 7vw, 88px);
-    align-items: start;
-  }
-  .writing-intro { position: sticky; top: calc(var(--header-height) + 40px); }
-  .writing-intro > p:not(.section-kicker) { margin: 20px 0 0; color: var(--ink-muted); line-height: 1.65; }
-  .text-link { display: inline-flex; margin-top: 22px; color: var(--accent-blue-dark); font-family: var(--font-display); font-weight: 740; text-decoration: none; }
-  .article-row { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 18px; padding: 26px 0; border-bottom: 1px solid var(--border-medium); }
-  .article-index { padding-top: 4px; color: var(--ink-subtle); font-family: var(--font-display); font-size: var(--text-caption); font-weight: 760; }
-  .article-row h3 { font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.25; }
-
-  .advisory-bridge {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 42px;
-    align-items: end;
-    margin-top: clamp(72px, 9vw, 120px);
-    padding: clamp(38px, 5vw, 58px) 0;
-    border-block: 1px solid var(--border-medium);
-  }
-  .advisory-bridge h2 { max-width: 760px; }
-  .advisory-bridge p:not(.section-kicker) { max-width: 690px; margin: 16px 0 0; color: var(--ink-muted); line-height: 1.6; }
-
-  @media (max-width: 920px) {
-    .about-hero { min-height: auto; grid-template-columns: 1fr 220px; gap: 36px; }
-    .proof-model { grid-template-columns: 1fr; }
-    .proof-model article,
-    .proof-model article:first-child { min-height: 0; padding: 26px 0; border-right: 0; border-bottom: 1px solid var(--border-medium); }
-    .section-heading-row,
-    .writing-section,
-    .proof-layout,
-    .advisory-bridge { grid-template-columns: 1fr; }
-    .principles-grid { grid-template-columns: 1fr; }
-    .principle,
-    .principle:first-child { padding: 28px 0; border-right: 0; border-bottom: 1px solid var(--border-medium); }
-    .writing-intro { position: static; }
+    background: color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card));
   }
 
-  @media (max-width: 680px) {
-    .about-shell { width: min(calc(100% - 28px), 1120px); }
-    .about-hero { display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 30px; padding-top: 30px; }
-    .hero-portrait-wrap { width: 132px; border-radius: 20px; }
-    .hero-copy h1 { font-size: clamp(2.65rem, 13vw, 4rem); }
-    .hero-meta span[aria-hidden='true'] { display: none; }
-    .hero-meta { flex-direction: column; align-items: flex-start; }
-    .about-section { padding: 68px 0; }
-    .section-heading-row { gap: 18px; margin-bottom: 30px; }
-    .section-heading-row h2,
-    .writing-intro h2,
-    .advisory-bridge h2 { font-size: clamp(2rem, 10vw, 3.2rem); }
-    .now-row { grid-template-columns: 12px minmax(0, 1fr); }
-    .now-status { grid-column: 2; justify-self: start; margin-top: 6px; }
-    .journey-row { grid-template-columns: 44px minmax(0, 1fr); gap: 16px; }
-    .journey-period,
-    .journey-copy { grid-column: 2; }
-    .journey-period { padding-top: 0; }
-    .experience-row { grid-template-columns: 1fr; gap: 10px; }
-    .advisory-bridge .primary-button { width: 100%; justify-content: center; }
+  .about-cta h2 {
+    margin: 0 0 6px;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+    color: var(--ink-display);
+  }
+
+  .about-cta p {
+    max-width: 650px;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+  }
+
+  .about-cta button { flex-shrink: 0; }
+
+  @media (max-width: 820px) {
+    .about-hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-portrait-wrap { max-width: 280px; order: -1; }
+    .section-heading { grid-template-columns: 1fr; gap: 10px; }
+    .proof-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 620px) {
+    .info-row,
+    .experience-row { grid-template-columns: 1fr; gap: 7px; }
+    .current-row { grid-template-columns: 1fr; gap: 12px; }
+    .current-row > span { width: fit-content; }
+    .about-cta { align-items: flex-start; flex-direction: column; }
+    .about-cta button { width: 100%; justify-content: center; }
   }
 </style>
