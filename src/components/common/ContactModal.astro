@@ -1,9 +1,5 @@
 ---
-/**
- * ContactModal.astro
- * Minimal, accessible, and high-converting contact modal.
- * Built for direct technical inquiries and workload evaluations.
- */
+/** Accessible contact modal for concrete AI workload discussions. */
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
@@ -18,7 +14,6 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
   <div class="modal-backdrop" id="contact-modal-backdrop"></div>
 
   <div class="modal-dialog">
-    <!-- Close button -->
     <button
       type="button"
       class="modal-close-btn"
@@ -31,19 +26,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
       </svg>
     </button>
 
-    <!-- Header / Value Prop -->
     <div class="modal-header">
-      <div class="modal-badge">
-        <span class="badge-dot" aria-hidden="true"></span>
-        <span>DIRECT INQUIRY</span>
-      </div>
-      <h2 id="contact-modal-title" class="modal-title">Let's discuss your AI workload.</h2>
+      <h2 id="contact-modal-title" class="modal-title">Tell me what you're trying to run.</h2>
       <p class="modal-subtitle">
-        Tell me about your model requirements, latency goals, or privacy constraints. I review every message personally.
+        Model, workload, devices, privacy or latency constraints. I'll use these to understand what I would test first.
       </p>
     </div>
 
-    <!-- Contact Form -->
     <form class="contact-form" id="contact-form" method="POST" action={`${baseUrl}/thank-you/`}>
       <div class="form-row">
         <div class="form-field">
@@ -60,7 +49,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
 
         <div class="form-field">
-          <label for="contact-email" class="field-label">Work Email <span class="required-star">*</span></label>
+          <label for="contact-email" class="field-label">Work email <span class="required-star">*</span></label>
           <input
             type="email"
             id="contact-email"
@@ -75,19 +64,18 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
       <div class="form-field">
         <label for="contact-workload" class="field-label">
-          What are you looking to evaluate? <span class="required-star">*</span>
+          What are you trying to run? <span class="required-star">*</span>
         </label>
         <textarea
           id="contact-workload"
           name="workload"
           class="field-textarea"
-          rows="3"
-          placeholder="Brief description of the model, target devices (Mac, Android, Server), or privacy/latency constraints."
+          rows="4"
+          placeholder="What the AI feature should do, where it needs to run, and any privacy, latency or hardware constraints."
           required
         ></textarea>
       </div>
 
-      <!-- Compliance & Privacy Consent -->
       <div class="form-compliance">
         <label class="checkbox-label" for="contact-consent">
           <input
@@ -112,10 +100,9 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </div>
 
-      <!-- Submit Action -->
       <div class="form-actions">
         <button type="submit" class="primary-button submit-btn" id="contact-submit-btn">
-          <span>Send inquiry</span>
+          <span>Send workload</span>
           <span aria-hidden="true">→</span>
         </button>
       </div>
@@ -141,21 +128,16 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
       modal?.classList.add('is-open');
       modal?.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      setTimeout(() => {
-        nameInput?.focus();
-      }, 80);
+      setTimeout(() => nameInput?.focus(), 80);
     }
 
     function closeModal() {
       modal?.classList.remove('is-open');
       modal?.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
-      if (previouslyFocusedElement) {
-        previouslyFocusedElement.focus();
-      }
+      previouslyFocusedElement?.focus();
     }
 
-    // Attach open triggers to any element with data-open-contact-modal
     document.querySelectorAll('[data-open-contact-modal]').forEach((trigger) => {
       trigger.removeEventListener('click', openModal);
       trigger.addEventListener('click', openModal);
@@ -164,14 +146,10 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     closeBtn?.addEventListener('click', closeModal);
     backdrop?.addEventListener('click', closeModal);
 
-    // Keyboard support: ESC to close
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('is-open')) {
-        closeModal();
-      }
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
     });
 
-    // Form submission handling
     if (form) {
       form.addEventListener('submit', () => {
         const submitBtn = document.getElementById('contact-submit-btn');
@@ -183,7 +161,6 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     }
   }
 
-  // Run on initial load and view transitions
   setupContactModal();
   document.addEventListener('astro:page-load', setupContactModal);
 </script>
@@ -219,21 +196,19 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 540px;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: clamp(26px, 4vw, 38px);
     background: var(--surface-card);
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
     box-shadow: 0 20px 60px rgba(8, 19, 51, 0.22);
-    padding: clamp(24px, 4vw, 36px);
     transform: translateY(12px) scale(0.98);
     transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    max-height: 90vh;
-    overflow-y: auto;
   }
 
-  .contact-modal.is-open .modal-dialog {
-    transform: translateY(0) scale(1);
-  }
+  .contact-modal.is-open .modal-dialog { transform: translateY(0) scale(1); }
 
   .modal-close-btn {
     position: absolute;
@@ -258,52 +233,30 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     transform: scale(1.05);
   }
 
-  /* Header */
   .modal-header {
-    margin-bottom: 20px;
-    padding-right: 32px;
-  }
-
-  .modal-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 3px 8px;
-    background: var(--surface-blue-subtle);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-display);
-    font-size: var(--text-badge);
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    color: var(--accent-blue-dark);
-    margin-bottom: 10px;
-  }
-
-  .badge-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent-blue);
+    margin-bottom: 22px;
+    padding-right: 34px;
   }
 
   .modal-title {
-    margin: 0 0 8px;
+    max-width: 430px;
+    margin: 0 0 9px;
     font-family: var(--font-display);
-    font-size: clamp(1.35rem, 2.2vw, 1.7rem);
-    line-height: 1.18;
+    font-size: clamp(1.55rem, 2.7vw, 2rem);
+    line-height: 1.12;
     font-weight: 850;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.04em;
     color: var(--ink-display);
   }
 
   .modal-subtitle {
+    max-width: 470px;
     margin: 0;
-    font-size: 0.92rem;
-    line-height: 1.55;
+    font-size: 0.93rem;
+    line-height: 1.58;
     color: var(--ink-muted);
   }
 
-  /* Form */
   .contact-form {
     display: flex;
     flex-direction: column;
@@ -329,14 +282,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     color: var(--ink-display);
   }
 
-  .required-star {
-    color: var(--accent-blue);
-  }
+  .required-star { color: var(--accent-blue); }
 
   .field-input,
   .field-textarea {
     width: 100%;
-    padding: 10px 14px;
+    box-sizing: border-box;
+    padding: 11px 14px;
     font-family: var(--font-sans);
     font-size: 0.92rem;
     color: var(--ink);
@@ -344,7 +296,6 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-md);
     transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
-    box-sizing: border-box;
   }
 
   .field-input:focus-visible,
@@ -358,15 +309,14 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
   .field-input::placeholder,
   .field-textarea::placeholder {
     color: var(--ink-subtle);
-    font-size: 0.88rem;
+    font-size: 0.87rem;
   }
 
   .field-textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 104px;
   }
 
-  /* Compliance */
   .form-compliance {
     display: flex;
     flex-direction: column;
@@ -395,11 +345,11 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     justify-content: center;
     width: 18px;
     height: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-xs);
     background: var(--surface-subtle);
-    flex-shrink: 0;
-    margin-top: 2px;
     transition: all 0.15s ease;
   }
 
@@ -418,7 +368,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
   }
 
   .compliance-text {
-    font-size: 0.84rem;
+    font-size: 0.83rem;
     line-height: 1.45;
     color: var(--ink-muted);
   }
@@ -430,15 +380,11 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     font-weight: 600;
   }
 
-  .privacy-link:hover {
-    color: var(--accent-blue);
-  }
-
   .privacy-guarantee {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.78rem;
+    font-size: 0.77rem;
     color: var(--ink-subtle);
     font-weight: 550;
   }
@@ -448,10 +394,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     flex-shrink: 0;
   }
 
-  /* Actions */
-  .form-actions {
-    margin-top: 6px;
-  }
+  .form-actions { margin-top: 6px; }
 
   .submit-btn {
     width: 100%;
@@ -461,15 +404,11 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
   }
 
   @media (max-width: 540px) {
-    .form-row {
-      grid-template-columns: 1fr;
-    }
+    .form-row { grid-template-columns: 1fr; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .contact-modal,
-    .modal-dialog {
-      transition: none;
-    }
+    .modal-dialog { transition: none; }
   }
 </style>
