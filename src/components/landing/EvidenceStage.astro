@@ -1,6 +1,5 @@
 ---
-/** Dedicated Measure stage. This intentionally does not use PlaneTemplate:
- * the Performance Lab target needs a two-column hero followed by one evidence surface. */
+/** Dedicated Measure stage tuned to the approved Performance Lab reference. */
 import StageRail from './StageRail.astro';
 import EvidenceMatrix from './EvidenceMatrix.astro';
 
@@ -44,6 +43,7 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
               <strong>Workload</strong>
             </div>
             <span class="flow-operator" aria-hidden="true">×</span>
+
             <div class="flow-item">
               <span class="flow-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -54,6 +54,7 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
               <strong>Model</strong>
             </div>
             <span class="flow-operator" aria-hidden="true">×</span>
+
             <div class="flow-item">
               <span class="flow-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -64,6 +65,7 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
               <strong>Device</strong>
             </div>
             <span class="flow-arrow" aria-hidden="true">→</span>
+
             <div class="flow-item">
               <span class="flow-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
@@ -73,6 +75,7 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
               <strong>Evidence</strong>
             </div>
             <span class="flow-arrow" aria-hidden="true">→</span>
+
             <div class="flow-item">
               <span class="flow-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -97,8 +100,8 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
     --plane-rail-inset: clamp(48px, 5vw, 68px);
     position: relative;
     overflow: clip;
-    padding: clamp(58px, 6vw, 82px) 0 clamp(76px, 8vw, 108px);
-    background: var(--surface-subtle);
+    padding: clamp(48px, 5vw, 68px) 0 clamp(66px, 7vw, 88px);
+    background: var(--surface-canvas);
   }
 
   .evidence-shell {
@@ -107,28 +110,30 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
 
   .evidence-layout {
     min-width: 0;
-    padding-inline: clamp(64px, 7vw, 96px);
+    /* Keep the desktop surface nearly full-shell like the approved reference,
+       while leaving a small safety lane for the right-side journey rail. */
+    padding: 0 clamp(24px, 2.3vw, 32px) 0 0;
   }
 
   .evidence-hero {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(540px, 1.1fr);
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
     align-items: start;
-    gap: clamp(42px, 5vw, 76px);
-    margin-bottom: clamp(28px, 3.5vw, 42px);
+    gap: clamp(34px, 4vw, 52px);
+    margin-bottom: 24px;
   }
 
   .evidence-copy {
-    max-width: 650px;
+    max-width: 590px;
   }
 
   .evidence-kicker {
     margin: 0 0 10px;
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    line-height: 1.25;
+    line-height: 1.2;
     font-weight: 820;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.075em;
     text-transform: uppercase;
     color: var(--accent-blue);
   }
@@ -136,19 +141,19 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
   .evidence-copy h2 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(2.25rem, 3.55vw, 3.5rem);
-    line-height: 1.03;
-    letter-spacing: -0.055em;
+    font-size: clamp(2.3rem, 3.2vw, 3.2rem);
+    line-height: 1.02;
+    letter-spacing: -0.052em;
     font-weight: 850;
     color: var(--ink-display);
     text-wrap: balance;
   }
 
   .evidence-copy > p:last-child {
-    max-width: 640px;
-    margin: 16px 0 0;
-    font-size: clamp(1rem, 1.2vw, 1.12rem);
-    line-height: 1.55;
+    max-width: 590px;
+    margin: 14px 0 0;
+    font-size: clamp(1rem, 1.05vw, 1.075rem);
+    line-height: 1.5;
     color: var(--ink-muted);
   }
 
@@ -168,9 +173,9 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
     align-self: flex-end;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    min-height: 40px;
-    padding: 0 6px;
+    gap: 7px;
+    min-height: 36px;
+    padding: 0 4px;
     color: var(--accent-blue-dark);
     text-decoration: none;
     font-family: var(--font-display);
@@ -186,38 +191,38 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
 
   .method-flow {
     width: 100%;
-    min-height: 72px;
+    min-height: 58px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: clamp(7px, 1vw, 13px);
-    margin-top: clamp(34px, 4vw, 48px);
-    padding: 14px clamp(16px, 2vw, 24px);
+    gap: clamp(6px, 0.75vw, 10px);
+    margin-top: 32px;
+    padding: 10px clamp(13px, 1.45vw, 18px);
     border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
+    border-radius: 14px;
     background: var(--surface-card);
-    box-shadow: 0 2px 8px rgba(8, 19, 51, 0.025);
+    box-shadow: 0 1px 4px rgba(8, 19, 51, 0.02);
   }
 
   .flow-item {
     min-width: 0;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     color: var(--ink-display);
     white-space: nowrap;
   }
 
   .flow-item strong {
     font-family: var(--font-display);
-    font-size: 0.8rem;
-    line-height: 1.2;
-    font-weight: 760;
+    font-size: var(--text-caption);
+    line-height: 1.15;
+    font-weight: 750;
   }
 
   .flow-icon {
-    width: 24px;
-    height: 24px;
+    width: 21px;
+    height: 21px;
     display: grid;
     place-items: center;
     flex: 0 0 auto;
@@ -225,8 +230,8 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
   }
 
   .flow-icon svg {
-    width: 21px;
-    height: 21px;
+    width: 19px;
+    height: 19px;
   }
 
   .flow-operator,
@@ -234,49 +239,45 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
     flex: 0 0 auto;
     color: var(--ink-subtle);
     font-family: var(--font-display);
-    font-size: 0.88rem;
+    font-size: var(--text-caption);
     font-weight: 720;
   }
 
   @media (max-width: 1080px) {
     .evidence-layout {
-      padding-left: clamp(54px, 6vw, 72px);
-      padding-right: clamp(28px, 4vw, 44px);
+      padding-left: clamp(52px, 6vw, 68px);
+      padding-right: clamp(18px, 3vw, 28px);
     }
 
     .evidence-hero {
       grid-template-columns: 1fr;
-      gap: 20px;
-    }
-
-    .evidence-method {
-      align-items: stretch;
+      gap: 18px;
     }
 
     .lab-link {
       align-self: flex-start;
       order: 2;
-      margin-top: 12px;
+      margin-top: 8px;
     }
 
     .method-flow {
       order: 1;
-      margin-top: 4px;
+      margin-top: 0;
     }
   }
 
   @media (max-width: 760px) {
     .evidence-stage {
-      padding: 56px 0 72px;
+      padding: 52px 0 68px;
     }
 
     .evidence-layout {
-      padding-left: 48px;
-      padding-right: 4px;
+      padding-left: 46px;
+      padding-right: 2px;
     }
 
     .evidence-copy h2 {
-      font-size: clamp(2rem, 10vw, 2.75rem);
+      font-size: clamp(2rem, 10vw, 2.7rem);
     }
 
     .method-flow {
