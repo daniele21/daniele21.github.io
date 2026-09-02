@@ -70,9 +70,15 @@ for (const route of expectedRoutes) {
 
 console.log('\n🔍 3. Verifying landing plane composition...');
 const landingHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf-8');
+const methodStageCount = (landingHtml.match(/class="[^"]*\bmethod-stage\b[^"]*"/g) || []).length;
+if (methodStageCount !== 4) {
+  console.error(`❌ Landing has ${methodStageCount} method stages (expected 4).`);
+  errors++;
+}
+
 const planeSectionCount = (landingHtml.match(/class="[^"]*\bplane-section\b[^"]*"/g) || []).length;
-if (planeSectionCount !== 4) {
-  console.error(`❌ Landing has ${planeSectionCount} shared plane sections (expected 4).`);
+if (planeSectionCount !== 3) {
+  console.error(`❌ Landing has ${planeSectionCount} shared plane sections (expected 3 plus the dedicated Evidence stage).`);
   errors++;
 }
 
@@ -86,13 +92,20 @@ const planeConsumers = [
   'src/components/landing/DecisionStage.astro',
   'src/components/landing/BuildStage.astro',
   'src/components/landing/TestStage.astro',
-  'src/components/landing/EvidenceStage.astro',
 ];
 
 for (const sourcePath of planeConsumers) {
   const source = fs.readFileSync(path.resolve(sourcePath), 'utf-8');
   if (!source.includes("import PlaneTemplate from './PlaneTemplate.astro'") || !source.includes('<PlaneTemplate')) {
     console.error(`❌ ${sourcePath} does not use the shared centered plane template.`);
+    errors++;
+  }
+}
+
+const evidenceStageSource = fs.readFileSync(path.resolve('src/components/landing/EvidenceStage.astro'), 'utf-8');
+for (const fragment of ['method-stage evidence-stage', '<StageRail number={4}', '<EvidenceMatrix />']) {
+  if (!evidenceStageSource.includes(fragment)) {
+    console.error(`❌ EvidenceStage is missing its dedicated Measure-stage contract fragment: ${fragment}`);
     errors++;
   }
 }
