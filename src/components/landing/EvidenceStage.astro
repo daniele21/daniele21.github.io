@@ -1,5 +1,5 @@
 ---
-/** Plane 04: Observability & Measurement / MEASURE - Is it actually good enough? */
+/** Plane 04: measure whether the architecture is actually good enough. */
 import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
 import EvidenceMatrix from './EvidenceMatrix.astro';
@@ -12,12 +12,12 @@ const { measureStage } = landingData;
   number={4}
   side="right"
   surface="subtle"
-  kicker={measureStage.kicker}
-  title={measureStage.title}
-  intro={measureStage.intro}
+  kicker=""
+  title="Is it actually good enough?"
+  intro="Local only makes sense if quality, speed and resource use work for the real workload."
   handoff={measureStage.handoff}
   nextLabel="DECIDE AGAIN"
-  visualLabel="Performance and observability evidence matrix"
+  visualLabel="Performance, resource, quality and privacy measurement framework"
   isFinal
 >
   <EvidenceMatrix />
