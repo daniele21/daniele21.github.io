@@ -1,5 +1,5 @@
 ---
-/** Plane 03: Applications / TEST - What happens in a real product? */
+/** Plane 03: use real products as proving grounds. */
 import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
 import PlaneCardGrid from './PlaneCardGrid.astro';
@@ -15,9 +15,9 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
   number={3}
   side="left"
   surface="canvas"
-  kicker={testStage.kicker}
-  title={testStage.title}
-  intro={testStage.intro}
+  kicker=""
+  title="Does it work in a real product?"
+  intro="Infrastructure only matters when a real application can depend on it."
   handoff={testStage.handoff}
   nextLabel="MEASURE"
   visualLabel="Applications used as empirical proving grounds"
@@ -26,7 +26,6 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
     {testStage.applications.map((app) => (
       <ProjectProofCard
         variant="compact"
-        tag={app.tag}
         title={app.name}
         description={app.question}
         href={resolveHref(app.href)}
@@ -36,7 +35,7 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
         imageAlt={`${app.name} product interface`}
         tone={app.colorClass as 'blue' | 'green' | 'purple' | 'red'}
         features={app.features}
-        ctaLabel={`Explore ${app.name}`}
+        ctaLabel={`See the proof`}
       />
     ))}
   </PlaneCardGrid>
