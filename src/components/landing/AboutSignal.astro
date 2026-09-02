@@ -1,215 +1,148 @@
 ---
-/**
- * AboutSignal.astro
- * Compact credibility signal and background preview on the homepage.
- */
+/** Compact homepage introduction. The full background stays on the About page. */
 import { landingData } from '../../content/locales/en/landing';
 
 const { aboutSignal } = landingData;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const focusAreas = [
+  {
+    title: 'GenAI systems',
+    detail: 'From LLM evaluation and retrieval to production architecture and integration.',
+  },
+  {
+    title: 'Local & on-device AI',
+    detail: 'Understanding what can move from cloud APIs to infrastructure and devices we control.',
+  },
+  {
+    title: 'AI engineering & strategy',
+    detail: 'Connecting architecture decisions to real product, privacy and performance constraints.',
+  },
+];
 ---
 
-<section class="stage-section about-signal-section" id="about" aria-labelledby="about-title">
-  <div class="shell stage-shell">
-    <div class="about-grid">
-      <!-- Left Column: Bio & Summary -->
-      <div class="about-main">
-        <p class="stage-kicker">{aboutSignal.kicker}</p>
-        <h2 id="about-title" class="stage-heading">{aboutSignal.heading}</h2>
-        <p class="about-summary">{aboutSignal.summary}</p>
+<section class="about-signal-section" id="about" aria-labelledby="about-title">
+  <div class="shell about-shell">
+    <div class="about-main">
+      <h2 id="about-title">Who am I?</h2>
+      <p class="about-summary">
+        I'm an AI engineer and strategy lead focused on turning GenAI choices into systems that can be built, tested and measured — with a particular focus on Local and on-device AI.
+      </p>
+      <a class="primary-button about-cta" href={`${baseUrl}/about`}>
+        More about me <span aria-hidden="true">→</span>
+      </a>
+    </div>
 
-        <div class="about-actions">
-          <a class="primary-button" href={`${baseUrl}/about`}>
-            About me & track record <span aria-hidden="true">→</span>
-          </a>
-          <div class="social-icon-group" aria-label="Social profiles">
-            <a
-              class="social-icon-btn"
-              href={aboutSignal.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn profile"
-              title="LinkedIn"
-            >
-              <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-              </svg>
-            </a>
-            <a
-              class="social-icon-btn"
-              href={aboutSignal.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub profile"
-              title="GitHub"
-            >
-              <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-              </svg>
-            </a>
-          </div>
+    <div class="focus-list" aria-label="Main areas of work">
+      {focusAreas.map((area) => (
+        <div class="focus-item">
+          <h3>{area.title}</h3>
+          <p>{area.detail}</p>
         </div>
-      </div>
+      ))}
+    </div>
 
-      <!-- Right Column: 2 Core Discipline Highlights -->
-      <div class="about-highlights">
-        <span class="highlights-kicker">ENGINEERING DISCIPLINE</span>
-        <div class="highlights-list">
-          {aboutSignal.highlights.map((item) => (
-            <div class="highlight-card">
-              <span class="hl-bullet" aria-hidden="true">▣</span>
-              <div class="hl-content">
-                <h3 class="hl-label">{item.label}</h3>
-                <p class="hl-detail">{item.detail}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div class="about-links" aria-label="Professional profiles">
+      <a href={aboutSignal.linkedinUrl} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      <a href={aboutSignal.githubUrl} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
     </div>
   </div>
 </section>
 
 <style>
   .about-signal-section {
-    padding: clamp(56px, 7vw, 92px) 0;
+    padding: clamp(62px, 8vw, 104px) 0;
     background: var(--surface-canvas);
     border-bottom: 1px solid var(--border-subtle);
   }
 
-  .about-grid {
+  .about-shell {
     display: grid;
-    grid-template-columns: minmax(320px, 1.25fr) minmax(300px, 1fr);
-    gap: clamp(28px, 4.5vw, 56px);
-    align-items: center;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(420px, 1.25fr);
+    gap: clamp(30px, 5vw, 68px);
+    align-items: start;
   }
 
-  .about-main .stage-kicker {
-    margin-bottom: var(--space-2);
-  }
-
-  .stage-heading {
-    margin: 0 0 var(--space-3);
+  .about-main h2 {
+    margin: 0 0 14px;
     font-family: var(--font-display);
-    font-size: clamp(1.75rem, 2.5vw, 2.35rem);
-    line-height: 1.15;
-    letter-spacing: -0.03em;
-    font-weight: 800;
+    font-size: clamp(2rem, 3.2vw, 2.9rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    font-weight: 840;
     color: var(--ink-display);
-    text-wrap: balance;
   }
 
   .about-summary {
-    font-size: var(--text-lead);
+    max-width: 570px;
+    margin: 0 0 24px;
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
+    line-height: 1.65;
     color: var(--ink-muted);
-    line-height: 1.6;
-    margin: 0 0 var(--space-5);
   }
 
-  .about-actions {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--space-3);
+  .about-cta {
+    min-height: 44px;
+    padding-inline: 16px;
   }
 
-  .social-icon-group {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  .focus-list {
+    border-top: 1px solid var(--border-medium);
   }
 
-  .social-icon-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-medium);
-    background: var(--surface-card);
-    color: var(--ink);
-    transition: transform 0.18s ease, color 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  .focus-item {
+    display: grid;
+    grid-template-columns: minmax(145px, 0.45fr) minmax(0, 1fr);
+    gap: 18px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border-subtle);
   }
 
-  .social-icon-btn:hover {
-    transform: translateY(-2px);
-    color: var(--accent-blue-dark);
-    border-color: color-mix(in srgb, var(--accent-blue) 45%, var(--border-medium));
-    background: var(--surface-subtle);
-    box-shadow: 0 4px 14px rgba(8, 19, 51, 0.08);
-  }
-
-  .social-icon {
-    display: block;
-    flex-shrink: 0;
-  }
-
-  /* Highlights Panel */
-  .about-highlights {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    padding: clamp(20px, 2.6vw, 28px);
-    background: var(--surface-subtle);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card);
-  }
-
-  .highlights-kicker {
+  .focus-item h3 {
+    margin: 0;
     font-family: var(--font-display);
-    font-size: var(--text-badge);
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    color: var(--accent-blue-dark);
-  }
-
-  .highlights-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .highlight-card {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-3);
-    padding: var(--space-3) 0;
-    border-top: 1px solid var(--border-subtle);
-  }
-
-  .highlight-card:first-child {
-    border-top: none;
-    padding-top: 0;
-  }
-
-  .hl-bullet {
-    color: var(--accent-blue);
-    font-size: 1rem;
-    line-height: 1.3;
-    flex-shrink: 0;
-  }
-
-  .hl-label {
-    margin: 0 0 2px;
-    font-family: var(--font-display);
-    font-size: 0.92rem;
-    font-weight: 800;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    font-weight: 780;
     color: var(--ink-display);
   }
 
-  .hl-detail {
+  .focus-item p {
     margin: 0;
-    font-size: var(--text-caption);
+    font-size: 0.86rem;
+    line-height: 1.55;
     color: var(--ink-muted);
-    line-height: 1.45;
   }
 
+  .about-links {
+    grid-column: 2;
+    display: flex;
+    gap: 18px;
+    margin-top: -46px;
+    justify-content: flex-end;
+  }
+
+  .about-links a {
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 650;
+    transition: color var(--duration-fast) ease;
+  }
+
+  .about-links a:hover,
+  .about-links a:focus-visible { color: var(--accent-blue-dark); }
+
   @media (max-width: 860px) {
-    .about-grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-6);
+    .about-shell { grid-template-columns: 1fr; }
+    .about-links {
+      grid-column: 1;
+      margin-top: 0;
+      justify-content: flex-start;
     }
+  }
+
+  @media (max-width: 560px) {
+    .focus-item { grid-template-columns: 1fr; gap: 5px; }
   }
 </style>
