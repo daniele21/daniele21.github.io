@@ -1,13 +1,13 @@
 export const advisoryData = {
   kicker: '',
-  heading: 'How I can help you ?',
+  heading: 'Have an AI workload to figure out?',
   body:
-    'Thinking about moving an AI workload off the cloud? Here is what I do:',
+    'I help teams decide what should run Local, Hybrid or Cloud — and validate the decision on real systems.',
   fitNote:
-    'Best if you already have an AI feature in mind and need clear technical direction.',
+    'Best if you already have an AI feature or workload in mind and need clear technical direction.',
   primaryCta: {
-    label: 'Get in touch',
-    href: 'mailto:danielemoltisanti@gmail.com?subject=Local%20AI%20Advisory',
+    label: 'Evaluate my workload',
+    href: 'mailto:danielemoltisanti@gmail.com?subject=AI%20workload%20evaluation',
   },
   secondaryCta: {
     label: 'LinkedIn',
@@ -15,28 +15,22 @@ export const advisoryData = {
   },
   areas: [
     {
-      id: 'strategy',
-      title: 'Where should this model run?',
-      body: 'I evaluate your <strong>privacy needs</strong>, <strong>latency limits</strong>, and <strong>compute costs</strong> to give you a clear <strong>Local, Hybrid, or Cloud</strong> recommendation before you spend weeks building.',
-      output: 'Placement recommendation & feasibility report',
+      id: 'decide',
+      title: 'Where should it run?',
+      body: 'I evaluate <strong>privacy</strong>, <strong>latency</strong>, <strong>system control</strong>, model capability and scale to recommend the right <strong>Local, Hybrid or Cloud</strong> boundary.',
+      output: 'Architecture recommendation & feasibility',
     },
     {
-      id: 'hardware',
-      title: 'Will it run fast on your devices?',
-      body: 'I test target models directly on your <strong>real hardware</strong> (Apple Silicon, Android, servers) measuring <strong>generation speed</strong>, <strong>RAM limits</strong>, and <strong>thermals</strong>.',
-      output: 'Hardware benchmark report & RAM sizing',
+      id: 'validate',
+      title: 'Will it actually work?',
+      body: 'I test the workload on <strong>real hardware</strong> and inspect performance, resource use, quality and network behavior to find the limits before they become product problems.',
+      output: 'Performance, hardware & privacy validation',
     },
     {
-      id: 'runtime',
-      title: 'How to build the local engine?',
-      body: 'I design the inference runtime: <strong>model loading</strong>, <strong>memory management</strong>, <strong>quantization (GGUF/MLX)</strong>, and <strong>automatic fallback to cloud</strong>.',
-      output: 'Runtime architecture & API design',
-    },
-    {
-      id: 'privacy',
-      title: 'How to prove data stays private?',
-      body: 'I capture network traffic at the process level to mathematically verify <strong>zero outbound data</strong> and give you <strong>audit-ready privacy proof</strong>.',
-      output: 'Network capture proof & zero-egress audit',
+      id: 'build',
+      title: 'How should the system work?',
+      body: 'I design the <strong>GenAI and runtime architecture</strong>: model execution, memory, APIs, quantization and the boundary between local infrastructure and optional cloud services.',
+      output: 'Runtime architecture & implementation direction',
     },
   ],
 } as const;
