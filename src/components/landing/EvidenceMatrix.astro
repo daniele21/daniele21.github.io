@@ -1,851 +1,342 @@
 ---
-import { landingData } from '../../content/locales/en/landing';
-
-const { measureStage } = landingData;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
-const metricDirection: Record<string, string> = {
-  TTFT: 'Lower is better',
-  Decode: 'Higher is better',
-  Prefill: 'Higher is better',
-  'Peak RAM': 'Lower is better',
-};
+
+const measurements = [
+  {
+    title: 'Speed',
+    detail: 'TTFT · tokens/s',
+    description: 'How quickly the workload becomes useful to the person using it.',
+  },
+  {
+    title: 'Resources',
+    detail: 'RAM · thermals · battery',
+    description: 'What sustained local execution costs on the target device.',
+  },
+  {
+    title: 'Quality',
+    detail: 'Task accuracy · evaluation',
+    description: 'Whether the model is good enough for the actual product task.',
+  },
+  {
+    title: 'Privacy',
+    detail: 'Network activity · data egress',
+    description: 'Whether the observed run respects the expected data boundary.',
+  },
+];
 ---
 
-<div class="evidence-matrix-container" aria-label="Measurement systems and empirical evidence">
-  <div class="evidence-systems-grid">
-    {measureStage.systems.map((system) => (
-      <article class={`evidence-system-card system-card--${system.id}`} aria-labelledby={`${system.id}-title`}>
-        <header class="system-header">
-          <div class="system-header__left">
-            <div class="system-icon-box" aria-hidden="true">
-              {system.id === 'performance-lab' ? (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  <path d="m9 12 2 2 4-4" />
-                </svg>
-              )}
-            </div>
-            <div class="system-header__titles">
-              <span class="system-tag">{system.tag}</span>
-              <h3 class="system-title" id={`${system.id}-title`}>{system.title}</h3>
-            </div>
+<div class="evidence-surface" aria-label="What I measure before deciding whether Local AI is good enough">
+  <article class="evidence-card evidence-card--primary">
+    <div class="card-heading-row">
+      <div>
+        <h3>Performance Lab</h3>
+        <p>What should be measured before calling a local setup good enough?</p>
+      </div>
+      <a href={resolveHref('performance-lab')} class="card-link">
+        Open the lab <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="measurement-grid">
+      {measurements.map((item) => (
+        <div class="measurement-item">
+          <div class="measurement-topline">
+            <strong>{item.title}</strong>
+            <span>{item.detail}</span>
           </div>
-          <span class="system-state">{system.id === 'performance-lab' ? 'SAMPLE DATA' : 'LOCAL ONLY'}</span>
-        </header>
-
-        <p class="system-question">{system.question}</p>
-
-        {system.id === 'performance-lab' && system.benchmarkProfiles ? (
-          <div class="telemetry-screen" data-benchmark-carousel>
-            <div class="telemetry-screen__bar">
-              <div class="telemetry-screen__meta">
-                <span class="telemetry-dot" aria-hidden="true"></span>
-                <span class="telemetry-label">TELEMETRY MONITOR</span>
-              </div>
-
-              <div class="device-tabs" role="tablist" aria-label="Choose benchmark device">
-                {system.benchmarkProfiles.map((profile, index) => (
-                  <button
-                    class:list={['device-tab', { 'is-active': index === 0 }]}
-                    type="button"
-                    role="tab"
-                    id={`benchmark-tab-${profile.id}`}
-                    aria-selected={index === 0 ? 'true' : 'false'}
-                    aria-controls={`benchmark-panel-${profile.id}`}
-                    tabindex={index === 0 ? 0 : -1}
-                    data-device-tab
-                  >
-                    <span class="device-tab-icon" aria-hidden="true">
-                      {profile.deviceKind === 'mobile' ? (
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2" /><path d="M10 5h4M11 18h2" /></svg>
-                      ) : (
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>
-                      )}
-                    </span>
-                    <span>{profile.device}</span>
-                  </button>
-                ))}
-              </div>
-
-              <div class="model-badge" aria-hidden="true">
-                <span class="model-name">Qwen 3.5 2B</span>
-                <code>Q4_K_M</code>
-              </div>
-            </div>
-
-            {system.benchmarkProfiles.map((profile, index) => (
-              <section
-                class="benchmark-panel"
-                role="tabpanel"
-                id={`benchmark-panel-${profile.id}`}
-                aria-labelledby={`benchmark-tab-${profile.id}`}
-                tabindex="0"
-                hidden={index !== 0}
-                data-device-panel
-              >
-                <div class="performance-metrics" aria-label={`${profile.device} performance results`}>
-                  {profile.metrics.map((metric) => {
-                    const isHeroSpeed = metric.label === 'Decode';
-                    const isHeroLatency = metric.label === 'TTFT';
-                    return (
-                      <div class:list={[
-                        'metric-cell',
-                        { 'metric-cell--hero-speed': isHeroSpeed },
-                        { 'metric-cell--hero-latency': isHeroLatency },
-                      ]}>
-                        <div class="metric-heading">
-                          <span class="metric-label">{metric.label}</span>
-                          <span class="metric-direction" aria-label={metricDirection[metric.label]}>
-                            {metricDirection[metric.label]?.startsWith('Lower') ? '↓' : '↑'}
-                          </span>
-                        </div>
-                        <div class="metric-reading">
-                          <strong>{metric.value}</strong>
-                          {metric.unit && <span class="metric-unit">{metric.unit}</span>}
-                        </div>
-                        <span class="metric-note">{metric.note}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            ))}
-          </div>
-        ) : (
-          <div class="telemetry-screen telemetry-screen--traffic">
-            <div class="telemetry-screen__bar">
-              <div class="telemetry-screen__meta">
-                <span class="telemetry-dot telemetry-dot--green" aria-hidden="true"></span>
-                <span class="telemetry-label">NETWORK INSPECTOR</span>
-              </div>
-              <span class="network-status-tag">ZERO EGRESS VERIFIED</span>
-            </div>
-
-            <dl class="evidence-list" aria-label="Traffic Monitoring evidence">
-              <div class="evidence-row evidence-row--hero-local">
-                <dt>
-                  <span>100% LOCAL TRAFFIC</span>
-                  <small>Loopback + LAN only</small>
-                </dt>
-                <dd class="dd-highlight">
-                  <span>100%</span>
-                  <span class="verified-badge" aria-hidden="true">✔</span>
-                </dd>
-              </div>
-
-              <div class="evidence-row evidence-row--hero-egress">
-                <dt>
-                  <span>0 B EGRESS</span>
-                  <small>Zero payload out</small>
-                </dt>
-                <dd>0 B</dd>
-              </div>
-
-              <div class="evidence-row">
-                <dt>
-                  <span>PROCESSES</span>
-                  <small>LLM · ASR · app</small>
-                </dt>
-                <dd>3</dd>
-              </div>
-
-              <div class="evidence-row">
-                <dt>
-                  <span>ENDPOINTS</span>
-                  <small>None contacted</small>
-                </dt>
-                <dd>0</dd>
-              </div>
-            </dl>
-          </div>
-        )}
-
-        <div class="system-bottom-bar">
-          <div class="system-status-rail">
-            <span class="status-indicator-dot" aria-hidden="true"></span>
-            <p>
-              <strong>{system.id === 'performance-lab' ? 'DATA NOTE:' : 'EVIDENCE:'}</strong>{' '}
-              {system.statusNote}
-            </p>
-          </div>
-
-          <a href={resolveHref(system.href)} class="system-footer-cta" aria-label={`${system.ctaLabel}: ${system.title}`}>
-            <strong>{system.ctaLabel}</strong>
-            <span aria-hidden="true">→</span>
-          </a>
+          <p>{item.description}</p>
         </div>
-      </article>
-    ))}
+      ))}
+    </div>
+
+    <p class="evidence-note">
+      Representative benchmark numbers belong here only after validated device runs. Until then, the homepage shows what I measure — not sample claims.
+    </p>
+  </article>
+
+  <article class="evidence-card evidence-card--secondary">
+    <div class="card-heading-row">
+      <div>
+        <h3>Traffic Monitoring</h3>
+        <p>Does the observed workload stay inside the boundary we expect?</p>
+      </div>
+      <a href={resolveHref('traffic-monitoring')} class="card-link">
+        See network evidence <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="network-proof-grid">
+      <div class="network-proof">
+        <span class="proof-icon" aria-hidden="true">◎</span>
+        <div>
+          <strong>Process-level visibility</strong>
+          <p>Observe the AI processes involved in a run instead of assuming the architecture behaves as designed.</p>
+        </div>
+      </div>
+      <div class="network-proof">
+        <span class="proof-icon" aria-hidden="true">↗</span>
+        <div>
+          <strong>Outbound inspection</strong>
+          <p>Inspect network activity to verify whether sensitive data leaves the expected boundary during that run.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <div class="evidence-loop">
+    <div>
+      <strong>Evidence changes the next decision.</strong>
+      <span>Measure, then decide again.</span>
+    </div>
+    <div class="decision-options" aria-label="Architecture decision outcomes">
+      <span>Local</span>
+      <span>Hybrid</span>
+      <span>Cloud</span>
+    </div>
   </div>
 </div>
 
-<script>
-  document.querySelectorAll<HTMLElement>('[data-benchmark-carousel]').forEach((carousel) => {
-    const tabs = Array.from(carousel.querySelectorAll<HTMLButtonElement>('[data-device-tab]'));
-    const panels = Array.from(carousel.querySelectorAll<HTMLElement>('[data-device-panel]'));
-    const selectTab = (nextIndex: number, focus = false) => {
-      tabs.forEach((tab, index) => {
-        const active = index === nextIndex;
-        tab.classList.toggle('is-active', active);
-        tab.setAttribute('aria-selected', String(active));
-        tab.tabIndex = active ? 0 : -1;
-        panels[index].hidden = !active;
-      });
-      if (focus) tabs[nextIndex].focus();
-    };
-    tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => selectTab(index));
-      tab.addEventListener('keydown', (event) => {
-        let nextIndex = index;
-        if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
-        else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
-        else if (event.key === 'Home') nextIndex = 0;
-        else if (event.key === 'End') nextIndex = tabs.length - 1;
-        else return;
-        event.preventDefault();
-        selectTab(nextIndex, true);
-      });
-    });
-  });
-</script>
-
 <style>
-  .evidence-matrix-container {
-    width: 100%;
-    container-type: inline-size;
-  }
-
-  .evidence-systems-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
-    align-items: stretch;
-  }
-
-  .evidence-system-card {
-    --system-accent: var(--accent-blue);
-    --system-accent-soft: rgba(20, 91, 255, 0.07);
-
-    position: relative;
+  .evidence-surface {
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    min-width: 0;
-    overflow: hidden;
-    padding: 12px 16px;
-    background:
-      radial-gradient(circle at 92% 0%, var(--system-accent-soft), transparent 36%),
-      var(--surface-card);
+    gap: 14px;
+    width: 100%;
+  }
+
+  .evidence-card {
+    padding: clamp(20px, 2.6vw, 30px);
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
-    box-shadow:
-      0 6px 20px rgba(8, 19, 51, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.95);
-    transition:
-      transform var(--duration-fast) ease,
-      border-color var(--duration-fast) ease,
-      box-shadow var(--duration-base) ease;
+    background: var(--surface-card);
+    box-shadow: 0 5px 22px rgba(8, 19, 51, 0.045);
   }
 
-  .system-card--traffic-monitoring {
-    --system-accent: #7c3aed;
-    --system-accent-soft: rgba(124, 58, 237, 0.075);
+  .evidence-card--primary {
+    background:
+      radial-gradient(circle at 92% 2%, color-mix(in srgb, var(--accent-blue) 7%, transparent), transparent 34%),
+      var(--surface-card);
   }
 
-  .evidence-system-card:hover,
-  .evidence-system-card:focus-within {
-    border-color: color-mix(in srgb, var(--system-accent) 40%, var(--border-medium));
-    box-shadow: 0 14px 32px rgba(8, 19, 51, 0.08);
-  }
-
-  /* Compact Header */
-  .system-header {
+  .card-heading-row {
     display: flex;
+    align-items: flex-start;
     justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+    gap: 22px;
+    margin-bottom: 20px;
   }
 
-  .system-header__left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-  }
-
-  .system-icon-box {
-    width: 32px;
-    height: 32px;
-    display: grid;
-    place-items: center;
-    border-radius: 8px;
-    background: var(--system-accent-soft);
-    color: var(--system-accent);
-    border: 1px solid color-mix(in srgb, var(--system-accent) 22%, transparent);
-    flex-shrink: 0;
-  }
-
-  .system-icon-box svg {
-    width: 17px;
-    height: 17px;
-  }
-
-  .system-header__titles {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    min-width: 0;
-  }
-
-  .system-tag {
+  .card-heading-row h3 {
+    margin: 0 0 5px;
     font-family: var(--font-display);
-    font-size: 0.6rem;
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    color: var(--system-accent);
-    text-transform: uppercase;
-    line-height: 1.1;
-  }
-
-  .system-title {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 0.98rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--ink-display);
-    line-height: 1.15;
-  }
-
-  .system-state {
-    display: inline-flex;
-    align-items: center;
-    height: 20px;
-    padding: 2px 7px;
-    color: var(--system-accent);
-    background: var(--system-accent-soft);
-    border: 1px solid color-mix(in srgb, var(--system-accent) 22%, transparent);
-    border-radius: var(--radius-full);
-    font-family: var(--font-display);
-    font-size: 0.54rem;
-    font-weight: 850;
-    letter-spacing: 0.07em;
-    white-space: nowrap;
-  }
-
-  .system-question {
-    margin: 0;
-    font-size: 0.76rem;
-    color: var(--ink-muted);
-    font-weight: 560;
-    line-height: 1.3;
-    text-wrap: pretty;
-  }
-
-  /* ==========================================================================
-     DARK TELEMETRY MONITOR SCREEN (High Contrast, Depth & Hierarchy)
-     ========================================================================== */
-
-  .telemetry-screen {
-    position: relative;
-    border-radius: 11px;
-    overflow: hidden;
-    background: linear-gradient(142deg, #07132d 0%, #091a38 52%, #0a2148 100%);
-    border: 1px solid rgba(96, 165, 250, 0.35);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.09),
-      0 6px 18px rgba(8, 19, 51, 0.16);
-    display: flex;
-    flex-direction: column;
-  }
-
-  .telemetry-screen--traffic {
-    border-color: rgba(168, 85, 247, 0.35);
-    background: linear-gradient(142deg, #090f2b 0%, #10163a 52%, #141c48 100%);
-  }
-
-  /* Screen Topbar */
-  .telemetry-screen__bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 6px 10px;
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid rgba(188, 208, 255, 0.1);
-  }
-
-  .telemetry-screen__meta {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .telemetry-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #38bdf8;
-    box-shadow: 0 0 8px #38bdf8;
-  }
-
-  .telemetry-dot--green {
-    background: #34d399;
-    box-shadow: 0 0 8px #34d399;
-  }
-
-  .telemetry-label {
-    font-family: var(--font-display);
-    font-size: 0.58rem;
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    color: rgba(188, 208, 255, 0.8);
-  }
-
-  .network-status-tag {
-    font-family: var(--font-display);
-    font-size: 0.54rem;
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    color: #34d399;
-    background: rgba(52, 211, 153, 0.12);
-    border: 1px solid rgba(52, 211, 153, 0.3);
-    padding: 2px 7px;
-    border-radius: 4px;
-  }
-
-  /* Segmented Device Switcher */
-  .device-tabs {
-    display: flex;
-    gap: 3px;
-    padding: 2px;
-    background: rgba(8, 19, 51, 0.65);
-    border: 1px solid rgba(188, 208, 255, 0.15);
-    border-radius: 6px;
-  }
-
-  .device-tab {
-    appearance: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    min-width: 0;
-    height: 22px;
-    padding: 0 7px;
-    color: rgba(188, 208, 255, 0.72);
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    font-family: var(--font-display);
-    font-size: 0.58rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 150ms ease;
-  }
-
-  .device-tab-icon {
-    display: grid;
-    place-items: center;
-    flex: 0 0 auto;
-  }
-
-  .device-tab-icon svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .device-tab:hover {
-    color: #ffffff;
-  }
-
-  .device-tab.is-active {
-    color: #ffffff;
-    background: rgba(56, 189, 248, 0.22);
-    border-color: rgba(56, 189, 248, 0.45);
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
-  }
-
-  .device-tab:focus-visible,
-  .benchmark-panel:focus-visible,
-  .system-footer-cta:focus-visible {
-    outline: 2px solid #38bdf8;
-    outline-offset: 1px;
-  }
-
-  /* Model Badge */
-  .model-badge {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.56rem;
-    white-space: nowrap;
-  }
-
-  .model-name {
-    font-family: var(--font-display);
-    font-weight: 800;
-    color: #38bdf8;
-  }
-
-  .model-badge code {
-    padding: 1px 4px;
-    color: rgba(188, 208, 255, 0.85);
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(188, 208, 255, 0.15);
-    border-radius: 3px;
-    font-size: 0.52rem;
-    font-family: var(--font-mono);
-  }
-
-  .benchmark-panel {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .benchmark-panel[hidden] {
-    display: none;
-  }
-
-  /* Performance Metrics Grid */
-  .performance-metrics {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .metric-cell {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    padding: 7px 9px;
-    border-right: 1px solid rgba(188, 208, 255, 0.09);
-    transition: background var(--duration-fast) ease;
-  }
-
-  .metric-cell:last-child {
-    border-right: 0;
-  }
-
-  /* Hero Speed Metric (Decode tok/s) */
-  .metric-cell--hero-speed {
-    background: radial-gradient(circle at 50% 0%, rgba(52, 211, 153, 0.14), transparent 75%);
-  }
-
-  .metric-cell--hero-speed .metric-label {
-    color: #34d399;
-    font-weight: 900;
-  }
-
-  .metric-cell--hero-speed .metric-reading strong {
-    color: #34d399;
-    text-shadow: 0 0 14px rgba(52, 211, 153, 0.4);
-    font-size: 1.18rem;
-  }
-
-  .metric-cell--hero-speed .metric-unit {
-    color: rgba(52, 211, 153, 0.85);
-  }
-
-  .metric-cell--hero-speed .metric-direction {
-    color: #34d399;
-  }
-
-  /* Hero Latency Metric (TTFT ms) */
-  .metric-cell--hero-latency {
-    background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.14), transparent 75%);
-  }
-
-  .metric-cell--hero-latency .metric-label {
-    color: #38bdf8;
-    font-weight: 900;
-  }
-
-  .metric-cell--hero-latency .metric-reading strong {
-    color: #38bdf8;
-    text-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
-    font-size: 1.18rem;
-  }
-
-  .metric-cell--hero-latency .metric-unit {
-    color: rgba(56, 189, 248, 0.85);
-  }
-
-  .metric-cell--hero-latency .metric-direction {
-    color: #38bdf8;
-  }
-
-  .metric-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-  }
-
-  .metric-label {
-    color: rgba(188, 208, 255, 0.65);
-    font-family: var(--font-display);
-    font-size: 0.56rem;
-    font-weight: 850;
-    letter-spacing: 0.07em;
-    line-height: 1;
-    text-transform: uppercase;
-  }
-
-  .metric-direction {
-    color: rgba(188, 208, 255, 0.6);
-    font-size: 0.65rem;
-    font-weight: 900;
-    line-height: 1;
-  }
-
-  .metric-reading {
-    display: flex;
-    align-items: baseline;
-    gap: 3px;
-    margin-top: 1px;
-  }
-
-  .metric-reading strong {
-    color: #ffffff;
-    font-family: var(--font-mono);
-    font-size: 1.12rem;
-    font-weight: 850;
-    letter-spacing: -0.04em;
-    line-height: 1;
-  }
-
-  .metric-unit {
-    color: rgba(188, 208, 255, 0.6);
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    font-weight: 750;
-  }
-
-  .metric-note {
-    color: rgba(188, 208, 255, 0.55);
-    font-size: 0.55rem;
-    line-height: 1.15;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  /* Traffic Monitoring Evidence List */
-  .evidence-list {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin: 0;
-    padding: 0;
-  }
-
-  .evidence-row {
-    display: flex;
-    min-width: 0;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    gap: 2px;
-    padding: 7px 9px;
-    border-right: 1px solid rgba(188, 208, 255, 0.08);
-  }
-
-  .evidence-row:last-child {
-    border-right: 0;
-  }
-
-  .evidence-row--hero-local {
-    background: radial-gradient(circle at 50% 0%, rgba(52, 211, 153, 0.16), transparent 75%);
-  }
-
-  .evidence-row--hero-local dt span {
-    color: #34d399;
-  }
-
-  .evidence-row--hero-local dd {
-    color: #34d399;
-    text-shadow: 0 0 14px rgba(52, 211, 153, 0.4);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .verified-badge {
-    font-size: 0.72rem;
-    color: #34d399;
-  }
-
-  .evidence-row--hero-egress {
-    background: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.14), transparent 75%);
-  }
-
-  .evidence-row--hero-egress dt span {
-    color: #c084fc;
-  }
-
-  .evidence-row--hero-egress dd {
-    color: #c084fc;
-    text-shadow: 0 0 14px rgba(192, 132, 252, 0.4);
-  }
-
-  .evidence-row dt,
-  .evidence-row dd {
-    margin: 0;
-  }
-
-  .evidence-row dt {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    gap: 1px;
-    line-height: 1.15;
-  }
-
-  .evidence-row dt span {
-    color: rgba(188, 208, 255, 0.7);
-    font-family: var(--font-display);
-    font-size: 0.56rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .evidence-row dt small {
-    color: rgba(188, 208, 255, 0.5);
-    font-size: 0.52rem;
-  }
-
-  .evidence-row dd {
-    color: #ffffff;
-    font-family: var(--font-mono);
-    font-size: 1.14rem;
-    font-weight: 850;
-    line-height: 1;
-    text-align: left;
-  }
-
-  /* Streamlined Bottom Bar */
-  .system-bottom-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding-top: 4px;
-    border-top: 1px solid var(--border-subtle);
-    min-height: 22px;
-  }
-
-  .system-status-rail {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    min-width: 0;
-    flex: 1;
-  }
-
-  .status-indicator-dot {
-    width: 5px;
-    height: 5px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: var(--system-accent);
-    box-shadow: 0 0 6px color-mix(in srgb, var(--system-accent) 35%, transparent);
-  }
-
-  .system-status-rail p {
-    margin: 0;
-    color: var(--ink-muted);
-    font-size: 0.6rem;
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
     line-height: 1.25;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    letter-spacing: -0.025em;
+    font-weight: 800;
+    color: var(--ink-display);
   }
 
-  .system-status-rail strong {
-    color: var(--ink-subtle);
-    font-family: var(--font-display);
-    font-size: 0.56rem;
-    font-weight: 850;
-    letter-spacing: 0.06em;
+  .card-heading-row p {
+    max-width: 650px;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--ink-muted);
   }
 
-  .system-footer-cta {
+  .card-link {
+    min-height: 38px;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    color: var(--system-accent);
+    gap: 6px;
+    flex-shrink: 0;
+    padding: 0 11px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+    color: var(--ink-display);
     text-decoration: none;
     font-family: var(--font-display);
-    font-size: 0.7rem;
-    font-weight: 750;
-    white-space: nowrap;
+    font-size: var(--text-caption);
+    font-weight: 720;
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+  }
+
+  .card-link:hover,
+  .card-link:focus-visible {
+    transform: translateY(-1px);
+    color: var(--accent-blue-dark);
+    border-color: color-mix(in srgb, var(--accent-blue) 42%, var(--border-medium));
+  }
+
+  .measurement-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .measurement-item {
+    min-width: 0;
+    padding: 17px;
+    border-right: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--surface-subtle) 56%, var(--surface-card));
+  }
+
+  .measurement-item:last-child { border-right: 0; }
+
+  .measurement-topline {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .measurement-topline strong {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 780;
+    color: var(--ink-display);
+  }
+
+  .measurement-topline span {
+    font-size: 0.73rem;
+    line-height: 1.35;
+    color: var(--accent-blue-dark);
+    font-weight: 680;
+  }
+
+  .measurement-item p {
+    margin: 0;
+    font-size: 0.79rem;
+    line-height: 1.5;
+    color: var(--ink-muted);
+  }
+
+  .evidence-note {
+    margin: 14px 0 0;
+    padding-top: 13px;
+    border-top: 1px solid var(--border-subtle);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--ink-subtle);
+  }
+
+  .network-proof-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .network-proof {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+  }
+
+  .proof-icon {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
-    transition: color var(--duration-fast) ease;
+    border-radius: var(--radius-full);
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
+    font-weight: 800;
   }
 
-  .system-footer-cta span {
-    transition: transform var(--duration-fast) ease;
+  .network-proof strong {
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: var(--ink-display);
   }
 
-  .system-footer-cta:hover span,
-  .system-footer-cta:focus-visible span {
-    transform: translateX(3px);
+  .network-proof p {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--ink-muted);
   }
 
-  @container (max-width: 520px) {
-    .evidence-systems-grid {
-      grid-template-columns: 1fr;
-    }
+  .evidence-loop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 18px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-medium));
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--accent-blue) 3.5%, var(--surface-card));
+  }
 
-    .telemetry-screen__bar {
-      flex-direction: column;
+  .evidence-loop > div:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .evidence-loop strong {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: var(--ink-display);
+  }
+
+  .evidence-loop span {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+  }
+
+  .decision-options {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .decision-options span {
+    padding: 5px 9px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 740;
+    color: var(--ink-display);
+  }
+
+  @media (max-width: 860px) {
+    .measurement-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .measurement-item:nth-child(2) { border-right: 0; }
+    .measurement-item:nth-child(-n + 2) { border-bottom: 1px solid var(--border-subtle); }
+  }
+
+  @media (max-width: 680px) {
+    .card-heading-row,
+    .evidence-loop {
       align-items: flex-start;
-      gap: 4px;
+      flex-direction: column;
     }
 
-    .performance-metrics,
-    .evidence-list {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+    .network-proof-grid { grid-template-columns: 1fr; }
+    .card-link { width: 100%; justify-content: center; }
+  }
 
-    .metric-cell:nth-child(2) {
+  @media (max-width: 480px) {
+    .measurement-grid { grid-template-columns: 1fr; }
+    .measurement-item,
+    .measurement-item:nth-child(2) {
       border-right: 0;
+      border-bottom: 1px solid var(--border-subtle);
     }
-
-    .metric-cell:nth-child(-n + 2) {
-      border-bottom: 1px solid rgba(188, 208, 255, 0.09);
-    }
-
-    .evidence-row:nth-child(odd) {
-      border-left: 0;
-    }
-
-    .evidence-row:nth-child(n + 3) {
-      border-top: 1px solid rgba(188, 208, 255, 0.09);
-    }
-
-    .system-bottom-bar {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .evidence-system-card,
-    .device-tab,
-    .system-footer-cta span {
-      transition: none;
-    }
-
-    .system-footer-cta:hover span,
-    .system-footer-cta:focus-visible span {
-      transform: none;
-    }
+    .measurement-item:last-child { border-bottom: 0; }
+    .decision-options { flex-wrap: wrap; }
   }
 </style>
