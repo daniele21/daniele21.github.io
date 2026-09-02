@@ -34,42 +34,60 @@ const projects = [
 ---
 
 <div class="eco-wrapper" aria-label="Local AI execution layer architecture">
-  <!-- Base infographic image -->
-  <img
-    class="eco-base-img"
-    src={resolveHref('images/infrastracture.png')}
-    alt="Local AI execution layer architecture diagram: Laptop and phone devices, Text/Images/Audio inputs, Local AI execution layer (Korgis, Harnex, Local ASR) and Optional cloud fallback."
-    loading="lazy"
-    decoding="async"
-  />
+  <!-- Minimal device platform badges -->
+  <div class="device-tag device-tag--mac" aria-label="Mac platform">
+    <svg viewBox="0 0 170 170" fill="currentColor" aria-hidden="true">
+      <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.74 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.58-7.7-11.63-13.99-6.43-9.98-11.39-21.2-14.88-33.66-3.49-12.45-5.24-24.16-5.24-35.13 0-14.56 3.65-26.6 10.96-36.12 7.31-9.52 16.5-14.39 27.56-14.6 4.79 0 10.23 1.25 16.32 3.75 6.09 2.49 10.11 3.8 12.06 3.91 1.54-.11 5.75-1.46 12.63-4.05 6.88-2.59 12.66-3.78 17.34-3.57 13.48.63 24.34 5.71 32.58 15.24-11.75 7.1-17.51 16.84-17.29 29.21.22 9.68 3.93 17.77 11.13 24.27 7.2 6.5 15.65 10.15 25.35 10.95-2.22 6.74-4.89 13.43-8.02 20.08zM119.22 31.84c0-7.39 2.65-14.28 7.95-20.67 5.3-6.39 11.95-10.45 19.95-12.17 1.05 7.7-1.41 14.83-7.39 21.39-5.98 6.56-12.81 10.37-20.51 11.45z"/>
+    </svg>
+    <span>Mac</span>
+  </div>
 
-  <!-- Interactive project cards with distinct animated gradients -->
-  <div class="eco-overlays" aria-label="Interactive project links">
-    {projects.map((project) => (
-      <a
-        href={resolveHref(project.href)}
-        class={`eco-card eco-card--${project.id}`}
-        aria-label={`Explore ${project.title} — ${project.payoff}`}
-      >
-        <span class="card-icon">
-          {project.logoPath ? (
-            <img src={resolveHref(project.logoPath)} alt="" loading="lazy" />
-          ) : (
-            <span class="mic-badge" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                <line x1="12" y1="19" x2="12" y2="22"/>
-              </svg>
-            </span>
-          )}
-        </span>
-        <span class="card-copy">
-          <strong class="card-title">{project.title}</strong>
-          <span class="card-payoff">{project.payoff}</span>
-        </span>
-      </a>
-    ))}
+  <div class="device-tag device-tag--android" aria-label="Android platform">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.996-3.4572c.1556-.269.0634-.613-.2056-.7686-.269-.1556-.613-.0634-.7686.2056l-2.023 3.504C15.302 8.1678 13.702 7.763 12 7.763s-3.302.4048-4.8803 1.0422L5.0967 5.3012c-.1556-.269-.4996-.3612-.7686-.2056-.269.1556-.3612.4996-.2056.7686l1.996 3.4572C2.6845 11.2386 0 14.9754 0 19.3496h24c0-4.3742-2.6845-8.111-6.1185-10.0282"/>
+    </svg>
+    <span>Android</span>
+  </div>
+
+  <!-- Dedicated canvas container with 1:1 image aspect ratio -->
+  <div class="eco-canvas">
+    <!-- Base infographic image -->
+    <img
+      class="eco-base-img"
+      src={resolveHref('images/infrastracture.png')}
+      alt="Local AI execution layer architecture diagram: Laptop and phone devices, Text/Images/Audio inputs, Local AI execution layer (Korgis, Harnex, Local ASR) and Optional cloud fallback."
+      loading="lazy"
+      decoding="async"
+    />
+
+    <!-- Interactive project cards precisely mapped 1:1 over the image -->
+    <div class="eco-overlays" aria-label="Interactive project links">
+      {projects.map((project) => (
+        <a
+          href={resolveHref(project.href)}
+          class={`eco-card eco-card--${project.id}`}
+          aria-label={`Explore ${project.title} — ${project.payoff}`}
+        >
+          <span class="card-icon">
+            {project.logoPath ? (
+              <img src={resolveHref(project.logoPath)} alt="" loading="lazy" />
+            ) : (
+              <span class="mic-badge" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="22"/>
+                </svg>
+              </span>
+            )}
+          </span>
+          <span class="card-copy">
+            <strong class="card-title">{project.title}</strong>
+            <span class="card-payoff">{project.payoff}</span>
+          </span>
+        </a>
+      ))}
+    </div>
   </div>
 </div>
 
@@ -81,9 +99,62 @@ const projects = [
   .eco-wrapper {
     position: relative;
     width: 100%;
-    max-width: 1100px;
+    max-width: min(100%, 760px);
     margin: 0 auto;
+    padding-top: clamp(20px, 4.2cqi, 34px);
     container-type: inline-size;
+  }
+
+  /* ── Minimal Device Platform Badges ──────────────────────────── */
+  .device-tag {
+    position: absolute;
+    top: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(4px, 0.7cqi, 7px);
+    padding: clamp(3px, 0.45cqi, 5px) clamp(8px, 1.2cqi, 12px);
+    background: #ffffff;
+    border: 1px solid rgba(203, 213, 225, 0.85);
+    border-radius: 999px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+    font-family: var(--font-display, -apple-system, BlinkMacSystemFont, sans-serif);
+    font-size: clamp(0.58rem, 1.15cqi, 0.74rem);
+    font-weight: 750;
+    color: #334155;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .device-tag--mac {
+    left: 31.32%;
+    transform: translateX(-50%);
+  }
+
+  .device-tag--android {
+    left: 62.91%;
+    transform: translateX(-50%);
+  }
+
+  .device-tag svg {
+    width: clamp(10px, 1.4cqi, 14px);
+    height: clamp(10px, 1.4cqi, 14px);
+  }
+
+  .device-tag--mac svg {
+    color: #0f172a;
+  }
+
+  .device-tag--android svg {
+    color: #10b981;
+  }
+
+  /* ── Canvas container (strictly 1:1 with base image bounds) ──── */
+  .eco-canvas {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   /* ── Base infographic image ──────────────────────────────────── */
@@ -92,12 +163,15 @@ const projects = [
     width: 100%;
     height: auto;
     border-radius: 12px;
+    image-rendering: -webkit-optimize-contrast;
   }
 
-  /* ── Overlays layer ──────────────────────────────────────────── */
+  /* ── Overlays layer (matches image height exactly) ───────────── */
   .eco-overlays {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
   }
 
@@ -107,8 +181,8 @@ const projects = [
     position: absolute;
     display: flex;
     align-items: center;
-    gap: clamp(8px, 1.4cqi, 16px);
-    padding: 0 clamp(8px, 1.4cqi, 18px);
+    gap: clamp(6px, 1.1cqi, 13px);
+    padding: 0 clamp(6px, 1.2cqi, 14px);
 
     opacity: 1;
     border-radius: clamp(8px, 1.3cqi, 16px);
@@ -131,7 +205,7 @@ const projects = [
     z-index: 10;
   }
 
-  /* ── Position coordinates ────────────────────────────────────── */
+  /* ── Exact percentage coordinates covering the PNG cards ────── */
   .eco-card--korgis {
     left: 6.63%;
     top: 64.40%;
@@ -244,8 +318,8 @@ const projects = [
   /* ── Card Icon / Logo ────────────────────────────────────────── */
   .card-icon {
     flex: 0 0 auto;
-    width: clamp(26px, 4.4cqi, 48px);
-    height: clamp(26px, 4.4cqi, 48px);
+    width: clamp(24px, 4.2cqi, 44px);
+    height: clamp(24px, 4.2cqi, 44px);
     display: grid;
     place-items: center;
     transition: transform 200ms ease;
@@ -282,37 +356,33 @@ const projects = [
     height: 58%;
   }
 
-  /* ── Card text copy (Full width available now) ───────────────── */
+  /* ── Card text copy ──────────────────────────────────────────── */
   .card-copy {
     flex: 1 1 auto;
     min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: clamp(1px, 0.25cqi, 3px);
+    gap: clamp(0px, 0.2cqi, 2px);
   }
 
   .card-title {
     font-family: var(--font-display, -apple-system, BlinkMacSystemFont, sans-serif);
-    font-size: clamp(0.74rem, 1.5cqi, 1.15rem);
+    font-size: clamp(0.68rem, 1.75cqi, 0.98rem);
     font-weight: 820;
     color: #0f172a;
     letter-spacing: -0.02em;
     line-height: 1.15;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .card-payoff {
     font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
-    font-size: clamp(0.56rem, 1.12cqi, 0.84rem);
+    font-size: clamp(0.5rem, 1.25cqi, 0.74rem);
     font-weight: 550;
     color: #64748b;
-    line-height: 1.25;
+    line-height: 1.2;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   /* ── Reduced motion ──────────────────────────────────────────── */
