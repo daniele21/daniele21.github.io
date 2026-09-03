@@ -144,6 +144,7 @@ export interface NavSubItem {
 export interface NavItem {
   label: string;
   href: string;
+  icon?: 'compass' | 'cpu' | 'apps' | 'chart' | 'user' | string;
   children?: NavSubItem[];
 }
 

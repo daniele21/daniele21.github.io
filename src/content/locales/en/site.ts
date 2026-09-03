@@ -12,11 +12,11 @@ export const siteMetadata: SiteMetadata = {
 };
 
 export const navigation: NavItem[] = [
-  { label: 'Where should AI run?', href: '#strategy' },
-  { label: 'What does it take?', href: '#infrastructure' },
-  { label: 'Does it work?', href: '#applications' },
-  { label: 'Is it good enough?', href: '#evidence' },
-  { label: 'Who am I?', href: 'about' },
+  { label: 'Where should AI run?', href: '#strategy', icon: 'compass' },
+  { label: 'What does it take?', href: '#infrastructure', icon: 'cpu' },
+  { label: 'Does it work?', href: '#applications', icon: 'apps' },
+  { label: 'Is it good enough?', href: '#evidence', icon: 'chart' },
+  { label: 'Who am I?', href: 'about', icon: 'user' },
 ];
 
 export const socialLinks = {

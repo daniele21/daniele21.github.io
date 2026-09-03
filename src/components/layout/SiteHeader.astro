@@ -1,6 +1,7 @@
 ---
 /** Canonical site navigation built around the questions visitors need answered. */
 import { navigation, getContent } from '../../content';
+import NavIcon from '../icons/NavIcon.astro';
 
 const { header: hdr } = getContent().common;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -39,7 +40,14 @@ function getHref(href: string) {
 
     <nav class="site-nav" id="site-navigation" aria-label="Primary navigation" data-navigation>
       {navigation.map((item) => (
-        <a href={getHref(item.href)} class="nav-link">{item.label}</a>
+        <a href={getHref(item.href)} class="nav-link">
+          {item.icon && (
+            <span class="nav-link-icon" aria-hidden="true">
+              <NavIcon name={item.icon} size={16} />
+            </span>
+          )}
+          <span class="nav-link-text">{item.label}</span>
+        </a>
       ))}
     </nav>
 
@@ -154,29 +162,49 @@ function getHref(href: string) {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: clamp(10px, 1.15vw, 18px);
+    gap: clamp(6px, 1vw, 14px);
     white-space: nowrap;
   }
 
   .nav-link {
     position: relative;
     display: inline-flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 6px 8px;
     min-height: var(--touch-target-min);
     color: var(--ink-muted);
     text-decoration: none;
-    font-size: clamp(0.72rem, 0.82vw, var(--text-caption));
-    font-weight: 570;
-    letter-spacing: -0.01em;
+    border-radius: var(--radius-sm);
+    transition: color var(--duration-fast) ease;
+  }
+
+  .nav-link-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-subtle);
+    transition: color var(--duration-fast) ease, transform var(--duration-fast) ease;
+  }
+
+  .nav-link-text {
+    font-size: clamp(0.68rem, 0.72vw, 0.76rem);
+    font-weight: 580;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    white-space: nowrap;
+    text-align: center;
     transition: color var(--duration-fast) ease;
   }
 
   .nav-link::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 2px;
     height: 2px;
     border-radius: 99px;
     background: var(--accent-blue);
@@ -187,6 +215,17 @@ function getHref(href: string) {
 
   .nav-link:hover,
   .nav-link:focus-visible {
+    color: var(--ink-display);
+  }
+
+  .nav-link:hover .nav-link-icon,
+  .nav-link:focus-visible .nav-link-icon {
+    color: var(--accent-blue);
+    transform: translateY(-1px);
+  }
+
+  .nav-link:hover .nav-link-text,
+  .nav-link:focus-visible .nav-link-text {
     color: var(--ink-display);
   }
 
@@ -273,8 +312,9 @@ function getHref(href: string) {
 
   @media (max-width: 1200px) {
     .brand-role { display: none; }
-    .site-nav { gap: 10px; }
-    .nav-link { font-size: 0.72rem; }
+    .site-nav { gap: 6px; }
+    .nav-link { padding: 4px 6px; }
+    .nav-link-text { font-size: 0.67rem; }
   }
 
   @media (max-width: 980px) {
@@ -304,9 +344,22 @@ function getHref(href: string) {
 
     .nav-link {
       min-height: 48px;
-      padding: 0 4px;
-      font-size: 0.92rem;
+      padding: 0 6px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
       border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-link-icon {
+      color: var(--accent-blue);
+    }
+
+    .nav-link-text {
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-align: left;
     }
 
     .nav-link:last-child { border-bottom: 0; }
