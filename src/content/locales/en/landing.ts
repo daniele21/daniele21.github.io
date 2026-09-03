@@ -29,7 +29,7 @@ export const landingData: LandingPageData = {
       location: 'Milan, Italy',
       portraitPath: 'images/profile-photo.jpg',
       portraitAlt: 'Daniele Moltisanti - Principal AI Engineer & AI Strategy Lead',
-      bio: 'I build AI systems to understand where local execution creates real value.',
+      bio: 'I experiment with AI systems to understand where local execution creates real value.',
       focusBadges: [
         'Local AI & On-device LLMs',
         'Edge & Local AI Architecture',
@@ -49,23 +49,22 @@ export const landingData: LandingPageData = {
       ],
     },
     mission: {
-      eyebrow: 'APPLIED AI RESEARCH',
+      eyebrow: '',
       lead: '',
       title: 'Local AI first ≠',
       titleHighlight: 'Local AI only',
       challenge: 'Does every AI workload really need the cloud?',
       explanation:
-        'I build real systems to find out. I test <strong>Local</strong>, <strong>Hybrid</strong>, and <strong>Cloud</strong> options to measure what actually works.',
+        'I experiment with real systems to find what should run <strong>Local</strong>, <strong>Hybrid</strong> or <strong>Cloud</strong> — and help teams make that decision with evidence.',
       position: '',
-      proofLine:
-        'DECIDE → BUILD → TEST → MEASURE → DECIDE AGAIN',
+      proofLine: '',
       primaryCta: {
-        label: 'Explore the method',
-        href: '#strategy',
+        label: 'Discuss a workload',
+        href: '#contact-modal',
       },
       secondaryCta: {
-        label: 'About my work',
-        href: '/about',
+        label: 'See how I work',
+        href: '#strategy',
       },
     },
   },
