@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 150" role="img" aria-labelledby="title desc">
+  <title id="title">Samsung Galaxy A56</title>
+  <desc id="desc">Stylized rear view of a Samsung Galaxy A56 used as a Performance Lab device thumbnail.</desc>
+  <defs>
+    <linearGradient id="sg-frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b4452"/>
+      <stop offset="0.5" stop-color="#1e242d"/>
+      <stop offset="1" stop-color="#12161c"/>
+    </linearGradient>
+    <linearGradient id="sg-back" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#242b36"/>
+      <stop offset="0.35" stop-color="#1a2029"/>
+      <stop offset="1" stop-color="#10141a"/>
+    </linearGradient>
+    <linearGradient id="sg-glare" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6e7d94" stop-opacity="0.35"/>
+      <stop offset="0.4" stop-color="#465263" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#28323f" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="sg-lens-ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8a97a9"/>
+      <stop offset="0.5" stop-color="#465160"/>
+      <stop offset="1" stop-color="#768496"/>
+    </linearGradient>
+    <linearGradient id="sg-lens-glass" x1="0.2" y1="0.2" x2="0.8" y2="0.8">
+      <stop offset="0" stop-color="#1b2533"/>
+      <stop offset="0.7" stop-color="#0b1017"/>
+      <stop offset="1" stop-color="#05080c"/>
+    </linearGradient>
+    <filter id="sg-shadow" x="-30%" y="-20%" width="160%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#111827" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#sg-shadow)">
+    <!-- Outer Frame with Key Island bump on the right side -->
+    <path d="M 31.5 5 L 68.5 5 A 13.5 13.5 0 0 1 82 18.5 L 82 38 Q 83.5 39.5 83.8 42 L 83.8 62 Q 83.5 64.5 82 66 L 82 131.5 A 13.5 13.5 0 0 1 68.5 145 L 31.5 145 A 13.5 13.5 0 0 1 18 131.5 L 18 18.5 A 13.5 13.5 0 0 1 31.5 5 Z" fill="url(#sg-frame)"/>
+
+    <!-- Antenna bands on side edges -->
+    <rect x="18" y="24" width="1.2" height="2.5" fill="#4d5867" opacity="0.6"/>
+    <rect x="18" y="122" width="1.2" height="2.5" fill="#4d5867" opacity="0.6"/>
+    <rect x="80.8" y="24" width="1.2" height="2.5" fill="#4d5867" opacity="0.6"/>
+    <rect x="80.8" y="122" width="1.2" height="2.5" fill="#4d5867" opacity="0.6"/>
+
+    <!-- Rear Glass Panel -->
+    <rect x="20.5" y="7.5" width="59" height="135" rx="11.5" fill="url(#sg-back)" stroke="#3e4857" stroke-width="0.8"/>
+
+    <!-- Subtle frosted glass diagonal reflection / sheen -->
+    <path d="M 21 35 L 56 7.8 A 11.5 11.5 0 0 1 68.5 7.5 L 79 7.5 L 21 95 Z" fill="url(#sg-glare)"/>
+
+    <!-- Camera 1 (Top) -->
+    <g id="cam-top">
+      <circle cx="33" cy="25" r="7.5" fill="#12161d" stroke="url(#sg-lens-ring)" stroke-width="1.4"/>
+      <circle cx="33" cy="25" r="5.6" fill="url(#sg-lens-glass)"/>
+      <circle cx="33" cy="25" r="3.2" fill="#080c12"/>
+      <circle cx="33" cy="25" r="1.5" fill="#05080c"/>
+      <path d="M 30.5 22.5 A 3.8 3.8 0 0 1 34.8 22" fill="none" stroke="#60a5fa" stroke-width="0.8" stroke-linecap="round" opacity="0.75"/>
+      <circle cx="34.5" cy="23.5" r="0.6" fill="#ffffff" opacity="0.8"/>
+    </g>
+
+    <!-- Camera 2 (Middle) -->
+    <g id="cam-mid">
+      <circle cx="33" cy="43" r="7.5" fill="#12161d" stroke="url(#sg-lens-ring)" stroke-width="1.4"/>
+      <circle cx="33" cy="43" r="5.6" fill="url(#sg-lens-glass)"/>
+      <circle cx="33" cy="43" r="3.2" fill="#080c12"/>
+      <circle cx="33" cy="43" r="1.5" fill="#05080c"/>
+      <path d="M 30.5 40.5 A 3.8 3.8 0 0 1 34.8 40" fill="none" stroke="#60a5fa" stroke-width="0.8" stroke-linecap="round" opacity="0.75"/>
+      <circle cx="34.5" cy="41.5" r="0.6" fill="#ffffff" opacity="0.8"/>
+    </g>
+
+    <!-- Camera 3 (Bottom) -->
+    <g id="cam-bot">
+      <circle cx="33" cy="61" r="7.5" fill="#12161d" stroke="url(#sg-lens-ring)" stroke-width="1.4"/>
+      <circle cx="33" cy="61" r="5.6" fill="url(#sg-lens-glass)"/>
+      <circle cx="33" cy="61" r="3.2" fill="#080c12"/>
+      <circle cx="33" cy="61" r="1.5" fill="#05080c"/>
+      <path d="M 30.5 58.5 A 3.8 3.8 0 0 1 34.8 58" fill="none" stroke="#60a5fa" stroke-width="0.8" stroke-linecap="round" opacity="0.75"/>
+      <circle cx="34.5" cy="59.5" r="0.6" fill="#ffffff" opacity="0.8"/>
+    </g>
+
+    <!-- LED Flash -->
+    <g id="flash">
+      <circle cx="47" cy="34" r="2.8" fill="#181e26" stroke="#485362" stroke-width="0.9"/>
+      <circle cx="47" cy="34" r="1.8" fill="#fff5dd"/>
+      <circle cx="47" cy="34" r="0.9" fill="#fef08a" opacity="0.9"/>
+    </g>
+
+    <!-- Subtle Samsung Wordmark at bottom -->
+    <text x="50" y="132" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="4.2" font-weight="700" letter-spacing="0.16em" fill="#586475" opacity="0.7">SAMSUNG</text>
+  </g>
+</svg>
