@@ -1,8 +1,8 @@
 ---
 /**
  * LandingHero.astro
- * Premium single-column hero focused on the core Local AI thesis.
- * The primary action sends visitors to concrete work before advisory conversion.
+ * Experiment-first hero: keep the Local AI thesis, make the practical value
+ * explicit, and offer both a workload conversation and the evidence path.
  */
 import { landingData } from '../../content/locales/en/landing';
 
@@ -13,16 +13,13 @@ const resolveHref = (href: string) => {
   if (href.startsWith('#')) return href;
   return `${baseUrl}/${href.replace(/^\//, '')}`;
 };
+
+const githubUrl = hero.identity.socials?.find((link) => link.platform === 'github')?.href ?? 'https://github.com/daniele21';
 ---
 
 <section class="hero-section" aria-labelledby="hero-title">
   <div class="shell hero-shell">
     <div class="hero-main">
-      <div class="hero-eyebrow-row">
-        <span class="hero-signal" aria-hidden="true"></span>
-        <p class="hero-eyebrow">{hero.mission.eyebrow}</p>
-      </div>
-
       <h1 id="hero-title" class="hero-heading">
         <span>{hero.mission.title}</span>
         <span class="hero-highlight">{hero.mission.titleHighlight}</span>
@@ -38,22 +35,32 @@ const resolveHref = (href: string) => {
       )}
 
       <div class="hero-actions">
-        <a class="primary-button hero-primary-cta" href={resolveHref('#infrastructure')}>
-          <span>Explore the work</span>
+        <button
+          type="button"
+          class="primary-button hero-primary-cta"
+          data-open-contact-modal
+          aria-label="Discuss an AI workload"
+        >
+          <span>{hero.mission.primaryCta.label}</span>
+          <span aria-hidden="true">→</span>
+        </button>
+
+        <a class="secondary-button hero-secondary-cta" href={resolveHref(hero.mission.secondaryCta.href)}>
+          <span>{hero.mission.secondaryCta.label}</span>
           <span aria-hidden="true">↓</span>
         </a>
       </div>
     </div>
 
-    <nav class="method-strip" aria-label="Research method">
-      <span class="method-step is-active"><span class="step-index">01</span> DECIDE</span>
-      <span class="method-arrow" aria-hidden="true">→</span>
-      <span class="method-step"><span class="step-index">02</span> BUILD</span>
-      <span class="method-arrow" aria-hidden="true">→</span>
-      <span class="method-step"><span class="step-index">03</span> TEST</span>
-      <span class="method-arrow" aria-hidden="true">→</span>
-      <span class="method-step"><span class="step-index">04</span> MEASURE</span>
-    </nav>
+    <div class="hero-trust" aria-label="Professional proof">
+      <span class="trust-role">{hero.identity.role}</span>
+      <a href={githubUrl} target="_blank" rel="noopener noreferrer">
+        Open-source systems <span aria-hidden="true">↗</span>
+      </a>
+      <a href="https://staituned.com" target="_blank" rel="noopener noreferrer">
+        Writing at stAI tuned <span aria-hidden="true">↗</span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -92,33 +99,7 @@ const resolveHref = (href: string) => {
 
   .hero-main {
     max-width: 1040px;
-    padding: clamp(48px, 7vw, 90px) 0 clamp(34px, 4.5vw, 56px);
-  }
-
-  .hero-eyebrow-row {
-    display: flex;
-    align-items: center;
-    width: fit-content;
-    gap: 9px;
-    margin-bottom: clamp(12px, 1.5vw, 18px);
-  }
-
-  .hero-signal {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--accent-blue);
-    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-blue) 10%, transparent);
-  }
-
-  .hero-eyebrow {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 820;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent-blue-dark);
+    padding: clamp(52px, 7vw, 92px) 0 clamp(34px, 4.5vw, 54px);
   }
 
   .hero-heading {
@@ -172,10 +153,10 @@ const resolveHref = (href: string) => {
   }
 
   .hero-explanation {
-    max-width: 760px;
+    max-width: 900px;
     margin: 0;
     font-size: clamp(1rem, 1.35vw, 1.16rem);
-    line-height: 1.62;
+    line-height: 1.58;
     color: var(--ink-muted);
   }
 
@@ -199,66 +180,49 @@ const resolveHref = (href: string) => {
   .hero-actions {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     margin-top: clamp(24px, 3vw, 34px);
   }
 
-  .hero-primary-cta {
+  .hero-primary-cta,
+  .hero-secondary-cta {
     min-height: 48px;
     padding-inline: 18px;
     gap: 10px;
   }
 
-  .method-strip {
+  .hero-trust {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: clamp(8px, 1.3vw, 16px);
-    padding-top: clamp(18px, 2vw, 24px);
+    gap: 10px clamp(20px, 3vw, 34px);
+    padding-top: clamp(17px, 2vw, 22px);
     border-top: 1px solid color-mix(in srgb, var(--border-medium) 78%, transparent);
-  }
-
-  .method-step,
-  .method-arrow {
+    color: var(--ink-muted);
     font-family: var(--font-display);
+    font-size: var(--text-caption);
+    line-height: 1.4;
   }
 
-  .method-step {
+  .trust-role {
+    color: var(--ink);
+    font-weight: 690;
+  }
+
+  .hero-trust a {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    min-height: 34px;
+    gap: 5px;
     color: var(--ink-muted);
-    font-size: var(--text-caption);
-    font-weight: 760;
-    letter-spacing: 0.045em;
+    font-weight: 650;
+    text-decoration: none;
+    transition: color var(--duration-fast) ease;
   }
 
-  .method-step.is-active {
+  .hero-trust a:hover,
+  .hero-trust a:focus-visible {
     color: var(--accent-blue-dark);
-  }
-
-  .step-index {
-    display: inline-grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    border: 1px solid var(--border-medium);
-    border-radius: 50%;
-    color: var(--ink-display);
-    font-size: var(--text-badge);
-    font-weight: 820;
-    background: color-mix(in srgb, var(--surface-card) 86%, transparent);
-  }
-
-  .method-step.is-active .step-index {
-    border-color: color-mix(in srgb, var(--accent-blue) 38%, var(--border-medium));
-    color: var(--accent-blue-dark);
-    background: var(--surface-blue-subtle);
-  }
-
-  .method-arrow {
-    color: var(--ink-subtle);
-    font-size: 0.9rem;
   }
 
   @media (max-width: 820px) {
@@ -298,19 +262,27 @@ const resolveHref = (href: string) => {
       font-size: 1.22rem;
     }
 
-    .method-strip {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px 12px;
+    .hero-actions {
+      align-items: stretch;
     }
 
-    .method-arrow {
-      display: none;
+    .hero-primary-cta,
+    .hero-secondary-cta {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .hero-trust {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 8px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-primary-cta {
+    .hero-primary-cta,
+    .hero-secondary-cta,
+    .hero-trust a {
       transition: none;
     }
   }
