@@ -1,4 +1,7 @@
 ---
+import GitHubIcon from '../icons/GitHubIcon.astro';
+import LinkedInIcon from '../icons/LinkedInIcon.astro';
+
 export interface ProjectHeroAction {
   label: string;
   href: string;
@@ -62,19 +65,34 @@ const resolveHref = (href: string) => {
 
       {actions.length > 0 && (
         <div class="project-hero-actions">
-          {actions.map((action, index) => (
-            <a
-              href={resolveHref(action.href)}
-              class:list={[
-                'project-hero-action',
-                action.variant === 'secondary' || index > 0 ? 'is-secondary' : 'is-primary',
-              ]}
-              target={action.href.startsWith('http') ? '_blank' : undefined}
-              rel={action.href.startsWith('http') ? 'noreferrer' : undefined}
-            >
-              {action.label}
-            </a>
-          ))}
+          {actions.map((action, index) => {
+            const isGitHub = action.href.includes('github.com') || action.label.toLowerCase().includes('github');
+            const isLinkedIn = action.href.includes('linkedin.com') || action.label.toLowerCase().includes('linkedin');
+            const isIconOnly = isGitHub || isLinkedIn;
+
+            return (
+              <a
+                href={resolveHref(action.href)}
+                class:list={[
+                  'project-hero-action',
+                  action.variant === 'secondary' || index > 0 ? 'is-secondary' : 'is-primary',
+                  isIconOnly && 'is-icon-only',
+                ]}
+                target={action.href.startsWith('http') ? '_blank' : undefined}
+                rel={action.href.startsWith('http') ? 'noreferrer' : undefined}
+                aria-label={isGitHub ? 'GitHub repository' : isLinkedIn ? 'LinkedIn profile' : action.label}
+                title={isGitHub ? 'GitHub' : isLinkedIn ? 'LinkedIn' : undefined}
+              >
+                {isGitHub ? (
+                  <GitHubIcon size={19} />
+                ) : isLinkedIn ? (
+                  <LinkedInIcon size={19} />
+                ) : (
+                  action.label
+                )}
+              </a>
+            );
+          })}
         </div>
       )}
     </div>
@@ -207,6 +225,13 @@ const resolveHref = (href: string) => {
 
   .project-hero-action:hover {
     transform: translateY(-1px);
+  }
+
+  .project-hero-action.is-icon-only {
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+    padding: 0;
+    flex-shrink: 0;
   }
 
   .project-hero-action.is-primary {

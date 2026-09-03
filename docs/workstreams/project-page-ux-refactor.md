@@ -51,9 +51,9 @@ Derived rule: **one question -> one dominant visual -> one piece of evidence -> 
 
 Current routes:
 
-- Local LLM Server — migrated
-- Android Local LLM Harness — migrated
-- Local ASR Server — transitional
+- Local LLM Server - migrated
+- Android Local LLM Harness - migrated
+- Local ASR Server - transitional
 
 Canonical navigation:
 
@@ -65,9 +65,9 @@ Primary visual emphasis: architecture, runtime flow, developer/API surface.
 
 Current routes:
 
-- RedactGuard — migrated
-- ClosedRoom — migrated
-- Aura Finance — migrated
+- RedactGuard - migrated
+- ClosedRoom - migrated
+- Aura Finance - migrated
 
 Canonical navigation:
 
@@ -79,9 +79,9 @@ Primary visual emphasis: real workflow and product UI before technical architect
 
 Current routes:
 
-- Performance Lab — migrated
-- Traffic Monitoring — transitional
-- Traffic Monitoring Android — transitional
+- Performance Lab - migrated
+- Traffic Monitoring - transitional
+- Traffic Monitoring Android - transitional
 
 Canonical navigation:
 

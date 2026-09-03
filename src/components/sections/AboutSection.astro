@@ -3,6 +3,8 @@
  * AboutSection - Personal bio and profile photo.
  */
 import { socialLinks, getContent } from '../../content';
+import GitHubIcon from '../icons/GitHubIcon.astro';
+import LinkedInIcon from '../icons/LinkedInIcon.astro';
 
 const { about } = getContent().home;
 ---
@@ -23,8 +25,26 @@ const { about } = getContent().home;
       ))}
       
       <div class="about-links">
-        <a class="about-link" href={socialLinks.linkedin} target="_blank" rel="noreferrer">{about.links.linkedin}</a>
-        <a class="about-link" href={socialLinks.github} target="_blank" rel="noreferrer">{about.links.github}</a>
+        <a
+          class="about-link about-link-icon"
+          href={socialLinks.github}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="GitHub profile"
+          title="GitHub"
+        >
+          <GitHubIcon size={18} />
+        </a>
+        <a
+          class="about-link about-link-icon"
+          href={socialLinks.linkedin}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="LinkedIn profile"
+          title="LinkedIn"
+        >
+          <LinkedInIcon size={18} />
+        </a>
         <a class="about-link" href={socialLinks.staituned} target="_blank" rel="noreferrer">{about.links.stai}</a>
         <span class="about-link-muted" title="Coming soon">{about.links.speakingLabel} <small>{about.links.speakingSub}</small></span>
       </div>
@@ -81,6 +101,11 @@ const { about } = getContent().home;
     border-color: var(--border-strong);
     color: var(--accent-blue);
     transform: translateY(-2px);
+  }
+
+  .about-link.about-link-icon {
+    padding: 8px 12px;
+    justify-content: center;
   }
 
   .about-link-muted {

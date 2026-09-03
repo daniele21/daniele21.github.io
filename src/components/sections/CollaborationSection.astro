@@ -3,6 +3,8 @@
  * CollaborationSection - Dark card CTA section with contact email and location.
  */
 import { socialLinks, getContent } from '../../content';
+import GitHubIcon from '../icons/GitHubIcon.astro';
+import LinkedInIcon from '../icons/LinkedInIcon.astro';
 
 const { collaboration: col } = getContent().home;
 ---
@@ -26,7 +28,14 @@ const { collaboration: col } = getContent().home;
 
     <div class="collaboration-actions">
       <a class="button button-primary" href={`mailto:${col.email}`}>{col.primaryActionLabel} <span aria-hidden="true">→</span></a>
-      <a class="button button-secondary" href={socialLinks.linkedin} target="_blank" rel="noreferrer" style="color:#fff;border-color:rgba(255,255,255,0.4);background:transparent;">{col.secondaryActionLabel}</a>
+      <div class="collaboration-socials">
+        <a class="button button-secondary button-icon-only" href={socialLinks.github} target="_blank" rel="noreferrer" aria-label="GitHub profile" title="GitHub">
+          <GitHubIcon size={20} />
+        </a>
+        <a class="button button-secondary button-icon-only" href={socialLinks.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+          <LinkedInIcon size={20} />
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -137,6 +146,25 @@ const { collaboration: col } = getContent().home;
   .collaboration .button-primary:hover {
     background: #f0f4ff;
     box-shadow: 0 12px 32px rgba(255, 255, 255, 0.3);
+  }
+
+  .collaboration-socials {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .collaboration .button-secondary.button-icon-only {
+    flex: 1;
+    min-height: 48px;
+    padding: 0;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: transparent;
+  }
+
+  .collaboration .button-secondary.button-icon-only:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .collaboration-info {

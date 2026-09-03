@@ -1,5 +1,7 @@
 ---
 import { writingData } from '../../content';
+import GitHubIcon from '../icons/GitHubIcon.astro';
+import LinkedInIcon from '../icons/LinkedInIcon.astro';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -48,21 +50,34 @@ function getHref(href: string) {
       <div class="channels-strip">
         <span class="channels-label">Publishing channels:</span>
         <div class="channels-list">
-          {writingData.channels.map((channel) => (
-            <a
-              class="channel-pill"
-              href={channel.href}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="channel-mark">{channel.mark}</span>
-              <div class="channel-info">
-                <strong>{channel.name}</strong>
-                <small>{channel.purpose}</small>
-              </div>
-              <span class="channel-arrow" aria-hidden="true">↗</span>
-            </a>
-          ))}
+          {writingData.channels.map((channel) => {
+            const isGitHub = channel.name.toLowerCase().includes('github');
+            const isLinkedIn = channel.name.toLowerCase().includes('linkedin');
+
+            return (
+              <a
+                class="channel-pill"
+                href={channel.href}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span class="channel-mark">
+                  {isGitHub ? (
+                    <GitHubIcon size={18} />
+                  ) : isLinkedIn ? (
+                    <LinkedInIcon size={18} />
+                  ) : (
+                    channel.mark
+                  )}
+                </span>
+                <div class="channel-info">
+                  <strong>{channel.name}</strong>
+                  <small>{channel.purpose}</small>
+                </div>
+                <span class="channel-arrow" aria-hidden="true">↗</span>
+              </a>
+            );
+          })}
         </div>
       </div>
     </div>

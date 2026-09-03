@@ -1,5 +1,6 @@
 ---
 import { evidenceData } from '../../content';
+import GitHubIcon from '../icons/GitHubIcon.astro';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
@@ -117,11 +118,13 @@ function getHref(href: string) {
                   </a>
                   <a
                     href={platform.repositoryUrl}
-                    class="btn-secondary"
+                    class="btn-secondary btn-icon-only"
                     target="_blank"
                     rel="noreferrer"
+                    aria-label="GitHub repository"
+                    title="GitHub"
                   >
-                    GitHub ↗
+                    <GitHubIcon size={16} />
                   </a>
                 </div>
               </div>
@@ -485,6 +488,15 @@ function getHref(href: string) {
   .btn-secondary:hover {
     transform: translateY(-1px);
     border-color: var(--accent-blue);
+  }
+
+  .btn-secondary.btn-icon-only {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .panel-preview {

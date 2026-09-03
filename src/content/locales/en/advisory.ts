@@ -2,7 +2,7 @@ export const advisoryData = {
   kicker: '',
   heading: 'Have an AI workload to figure out?',
   body:
-    'I help teams decide what should run Local, Hybrid or Cloud — and validate the decision on real systems.',
+    'I help teams decide what should run Local, Hybrid or Cloud - and validate the decision on real systems.',
   fitNote:
     'Best if you already have an AI feature or workload in mind and need clear technical direction.',
   primaryCta: {

@@ -1,6 +1,7 @@
 ---
 import { trafficMonitoringData as mac } from '../../../content';
 import TrafficBrandMark from '../shared/TrafficBrandMark.astro';
+import GitHubIcon from '../../icons/GitHubIcon.astro';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 ---
@@ -32,11 +33,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
         </a>
         <a
           href={mac.hero.secondaryCtaHref}
-          class="btn-secondary"
+          class="btn-secondary btn-icon-only"
           target="_blank"
           rel="noreferrer"
+          aria-label="GitHub repository"
+          title="GitHub"
         >
-          {mac.hero.secondaryCtaLabel}
+          <GitHubIcon size={19} />
         </a>
       </div>
     </div>
@@ -194,6 +197,15 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
   .btn-secondary:hover {
     transform: translateY(-2px);
     border-color: var(--accent-blue);
+  }
+
+  .btn-secondary.btn-icon-only {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .hero-visual {

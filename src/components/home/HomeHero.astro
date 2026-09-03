@@ -1,5 +1,7 @@
 ---
 import { heroData } from '../../content';
+import GitHubIcon from '../icons/GitHubIcon.astro';
+import LinkedInIcon from '../icons/LinkedInIcon.astro';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -33,12 +35,24 @@ const proofImgSrc = `${baseUrl}/${heroData.proofCard.image.replace(/^\//, '')}`;
           {heroData.primaryAction.label} <span aria-hidden="true">→</span>
         </a>
         <a
-          class="button button-ghost"
+          class="button button-ghost button-icon-only"
+          href="https://github.com/daniele21"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="GitHub profile"
+          title="GitHub"
+        >
+          <GitHubIcon size={20} />
+        </a>
+        <a
+          class="button button-ghost button-icon-only"
           href={heroData.linkedinAction.href}
           target="_blank"
           rel="noreferrer"
+          aria-label="LinkedIn profile"
+          title="LinkedIn"
         >
-          {heroData.linkedinAction.label}
+          <LinkedInIcon size={20} />
         </a>
       </div>
 
@@ -202,6 +216,17 @@ const proofImgSrc = `${baseUrl}/${heroData.proofCard.image.replace(/^\//, '')}`;
   .button-ghost:hover {
     border-color: var(--accent-blue-light);
     color: var(--accent-blue);
+  }
+
+  .button.button-icon-only {
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 
   .hero-current {

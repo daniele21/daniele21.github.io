@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { aboutData } from '../content/locales/en/about';
+import LinkedInIcon from '../components/icons/LinkedInIcon.astro';
+import GitHubIcon from '../components/icons/GitHubIcon.astro';
 
 const { profile, now, experience } = aboutData;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
@@ -11,7 +13,7 @@ const currentFocus = now.items.slice(0, 3);
 const workAreas = [
   {
     title: 'GenAI systems',
-    body: 'LLM evaluation, retrieval, integration and production architecture — starting from the product problem rather than a model catalogue.',
+    body: 'LLM evaluation, retrieval, integration and production architecture - starting from the product problem rather than a model catalogue.',
   },
   {
     title: 'Local & on-device AI',
@@ -62,7 +64,7 @@ const jsonLd = {
         <div class="hero-copy">
           <h1 id="about-title">I work where GenAI architecture, product constraints and hands-on engineering meet.</h1>
           <p class="hero-lead">
-            I'm <strong>{profile.name}</strong>, an AI engineer and strategy lead based in {profile.location}. I work on GenAI systems broadly, with a particular focus on Local and on-device AI — and on deciding what should run Local, Hybrid or Cloud.
+            I'm <strong>{profile.name}</strong>, an AI engineer and strategy lead based in {profile.location}. I work on GenAI systems broadly, with a particular focus on Local and on-device AI - and on deciding what should run Local, Hybrid or Cloud.
           </p>
           <div class="hero-meta">
             <span>{profile.headline}</span>
@@ -73,7 +75,28 @@ const jsonLd = {
             <button type="button" class="primary-button" data-open-contact-modal>
               Discuss a workload <span aria-hidden="true">→</span>
             </button>
-            <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" class="secondary-link">LinkedIn ↗</a>
+            <div class="hero-social-links" aria-label="Social profiles">
+              <a
+                href={profile.socialLinks.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hero-social-btn"
+                aria-label="LinkedIn profile"
+                title="LinkedIn"
+              >
+                <LinkedInIcon size={18} />
+              </a>
+              <a
+                href={profile.socialLinks.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hero-social-btn"
+                aria-label="GitHub profile"
+                title="GitHub"
+              >
+                <GitHubIcon size={18} />
+              </a>
+            </div>
           </div>
         </div>
 
@@ -157,9 +180,29 @@ const jsonLd = {
           ))}
         </div>
         <div class="track-links">
-          <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">Full experience on LinkedIn ↗</a>
           <a href={profile.socialLinks.staituned} target="_blank" rel="noopener noreferrer">Technical writing on stAI tuned ↗</a>
-          <a href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer">Projects on GitHub ↗</a>
+          <div class="track-social-links" aria-label="Social profiles">
+            <a
+              href={profile.socialLinks.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="track-social-btn"
+              aria-label="LinkedIn profile"
+              title="LinkedIn"
+            >
+              <LinkedInIcon size={18} />
+            </a>
+            <a
+              href={profile.socialLinks.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="track-social-btn"
+              aria-label="GitHub profile"
+              title="GitHub"
+            >
+              <GitHubIcon size={18} />
+            </a>
+          </div>
         </div>
       </section>
 
@@ -391,8 +434,42 @@ const jsonLd = {
   .track-links {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 16px 24px;
     margin-top: 22px;
+  }
+
+  .hero-social-links,
+  .track-social-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-social-btn,
+  .track-social-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: all var(--duration-fast) ease;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .hero-social-btn:hover,
+  .hero-social-btn:focus-visible,
+  .track-social-btn:hover,
+  .track-social-btn:focus-visible {
+    color: var(--accent-blue-dark);
+    border-color: var(--accent-blue);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
   }
 
   .about-cta {

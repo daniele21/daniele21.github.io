@@ -121,14 +121,14 @@ export interface HarnessData {
 
 export const harnessData: HarnessData = {
   meta: {
-    title: "Harnex — Your local AI harness for Android",
+    title: "Harnex - Your local AI harness for Android",
     description: "Harnex is your local AI harness for Android: one gateway, shared on-device LLM runtime, model plane, and control plane for Android applications.",
   },
   hero: {
     eyebrow: "From AI strategy to reusable infrastructure",
     titleLine1: "Build local AI once.",
     titleLine2: "Reuse it across Android.",
-    lede: "**Harnex** is your **local AI harness for Android**: one gateway, shared on-device LLM runtime, model plane, and control plane—so Android teams can build local AI features without rebuilding the AI infrastructure inside every app.",
+    lede: "**Harnex** is your **local AI harness for Android**: one gateway, shared on-device LLM runtime, model plane, and control plane - so Android teams can build local AI features without rebuilding the AI infrastructure inside every app.",
     keyPills: [
       "Local-first execution",
       "Explicit model identity",

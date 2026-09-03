@@ -26,6 +26,9 @@ export interface Props {
   underSiteHeader?: boolean;
 }
 
+import GitHubIcon from '../icons/GitHubIcon.astro';
+import LinkedInIcon from '../icons/LinkedInIcon.astro';
+
 const {
   title,
   badge,
@@ -35,6 +38,10 @@ const {
   underSiteHeader = true,
 } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
+const isGitHub = cta && (cta.href.includes('github.com') || cta.label.toLowerCase().includes('github'));
+const isLinkedIn = cta && (cta.href.includes('linkedin.com') || cta.label.toLowerCase().includes('linkedin'));
+const isIconOnly = Boolean(isGitHub || isLinkedIn);
 ---
 
 <div
@@ -78,11 +85,18 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
     {cta && !underSiteHeader && (
       <a
         href={cta.href}
-        class="subheader-cta"
+        class:list={['subheader-cta', isIconOnly && 'is-icon-only']}
         target={cta.href.startsWith('http') ? '_blank' : '_self'}
         rel={cta.href.startsWith('http') ? 'noreferrer' : undefined}
+        aria-label={isGitHub ? 'GitHub repository' : isLinkedIn ? 'LinkedIn profile' : cta.label}
       >
-        {cta.label}
+        {isGitHub ? (
+          <GitHubIcon size={16} />
+        ) : isLinkedIn ? (
+          <LinkedInIcon size={16} />
+        ) : (
+          cta.label
+        )}
       </a>
     )}
   </div>
@@ -253,6 +267,11 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
       color var(--duration-fast) ease,
       border-color var(--duration-fast) ease,
       background-color var(--duration-fast) ease;
+  }
+
+  .subheader-cta.is-icon-only {
+    width: var(--touch-target-min);
+    padding: 0;
   }
 
   .subheader-cta:hover,
