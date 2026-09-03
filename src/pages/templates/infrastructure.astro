@@ -1,0 +1,555 @@
+---
+/**
+ * templates/infrastructure.astro
+ *
+ * Standardized previewable template for infrastructure / architecture project pages.
+ * Defines the canonical section sequence and layout for projects like
+ * Harnex, Korgis, Local ASR Server, etc.
+ *
+ * ROUTE: /templates/infrastructure
+ *
+ * HOW TO USE FOR A NEW PROJECT:
+ *   1. Copy this file → rename to src/pages/your-project.astro
+ *   2. Copy _templateInfrastructure.ts → rename to yourProject.ts
+ *   3. Adjust relative imports (from '../../' to '../')
+ *   4. Replace data import with your project's content file
+ *   5. Add project-specific components inside the <slot> areas if needed
+ *
+ * SECTION SEQUENCE:
+ *   SubHeader → Hero → Proof → Why → Problems →
+ *   Architecture → Runtime → Evidence → Status → Relations → CTA
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductSubHeader from '../../components/layout/ProductSubHeader.astro';
+import ProjectHero from '../../components/project/ProjectHero.astro';
+import ProjectProof from '../../components/project/ProjectProof.astro';
+import ProjectSection from '../../components/project/ProjectSection.astro';
+import ProjectEvidenceNote from '../../components/project/ProjectEvidenceNote.astro';
+import ProjectDecisionBand from '../../components/project/ProjectDecisionBand.astro';
+import ProjectRelations from '../../components/project/ProjectRelations.astro';
+import ProjectCta from '../../components/project/ProjectCta.astro';
+
+/* ------------------------------------------------------------------ */
+/*  Content data import                                               */
+/* ------------------------------------------------------------------ */
+import { templateInfrastructureData as data } from '../../content/locales/en/_templateInfrastructure';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
+/* ------------------------------------------------------------------ */
+/*  SubHeader anchor links — matches the section IDs below             */
+/* ------------------------------------------------------------------ */
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Runtime', href: '#runtime' },
+  { label: 'Evidence', href: '#evidence' },
+  { label: 'Status', href: '#status' },
+];
+
+/* ------------------------------------------------------------------ */
+/*  JSON-LD structured data for SEO                                    */
+/* ------------------------------------------------------------------ */
+const projectSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": data.hero.title,
+  "applicationCategory": "DeveloperApplication",
+  "description": data.meta.description,
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": "https://daniele21.github.io/"
+  },
+  "codeRepository": data.cta.primaryAction.href,
+};
+---
+
+<BaseLayout
+  title={data.meta.title}
+  description={data.meta.description}
+  jsonLd={projectSchema}
+>
+  <!-- ============================================================= -->
+  <!-- SUB-HEADER — sticky project navigation                         -->
+  <!-- ============================================================= -->
+  <ProductSubHeader
+    title={data.hero.title}
+    badge={data.hero.status.split('·')[0]?.trim()}
+    logoPath={data.hero.logoPath}
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: data.cta.primaryAction.href }}
+  />
+
+  <div id="top" data-project-page data-project-archetype="infrastructure">
+
+    <!-- =========================================================== -->
+    <!-- HERO — title, lede, meta pills, actions + visual             -->
+    <!-- =========================================================== -->
+    <ProjectHero
+      eyebrow={data.hero.eyebrow}
+      title={data.hero.title}
+      lede={data.hero.lede}
+      status={data.hero.status}
+      logoPath={data.hero.logoPath}
+      meta={data.hero.meta}
+      actions={data.hero.actions}
+      visualLabel={data.hero.visualLabel}
+    >
+      <div class="infra-hero-visual">
+        <img
+          data-zoomable
+          src={`${baseUrl}/${data.hero.imageHero}`}
+          alt={data.hero.visualLabel}
+          width="1400"
+          height="900"
+          loading="eager"
+        />
+        {(data.hero.imageCaptionLeft || data.hero.imageCaptionRight) && (
+          <div class="infra-hero-caption">
+            <span>{data.hero.imageCaptionLeft}</span>
+            <span>{data.hero.imageCaptionRight}</span>
+          </div>
+        )}
+      </div>
+    </ProjectHero>
+
+    <!-- =========================================================== -->
+    <!-- PROOF — thesis statement                                      -->
+    <!-- =========================================================== -->
+    <ProjectProof
+      statement={data.proof.statement}
+      detail={data.proof.detail}
+    />
+
+    <!-- =========================================================== -->
+    <!-- WHY — design principles                                       -->
+    <!-- =========================================================== -->
+    <ProjectSection
+      id="why"
+      eyebrow={data.why.eyebrow}
+      title={data.why.title}
+      description={data.why.description}
+      tone="canvas"
+    >
+      <div class="principle-strip" aria-label="Design principles">
+        {data.why.principles.map((principle) => (
+          <article class={`principle-card principle-card--${principle.color || 'blue'}`}>
+            <strong>{principle.title}</strong>
+            <p>{principle.subtitle}</p>
+          </article>
+        ))}
+      </div>
+    </ProjectSection>
+
+    <!-- =========================================================== -->
+    <!-- PROBLEMS — what this project solves                           -->
+    <!-- =========================================================== -->
+    <ProjectSection
+      id="problems"
+      eyebrow={data.problems.eyebrow}
+      title={data.problems.title}
+      description={data.problems.description}
+      tone="subtle"
+    >
+      <div class="problem-grid" aria-label="Problems addressed">
+        {data.problems.items.map((item) => (
+          <article class="problem-card">
+            <div class={`problem-index problem-index--${item.color || 'blue'}`}>
+              {String(item.id).padStart(2, '0')}
+            </div>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </ProjectSection>
+
+    <!-- =========================================================== -->
+    <!-- ARCHITECTURE — system design deep-dive                        -->
+    <!-- =========================================================== -->
+    <div id="architecture" class="project-anchor">
+      <ProjectSection
+        id="architecture-inner"
+        eyebrow={data.architecture.eyebrow}
+        title={data.architecture.title}
+        description={data.architecture.description}
+        tone="canvas"
+        width="wide"
+      >
+        {data.architecture.diagramImage && (
+          <div class="architecture-diagram">
+            <img
+              data-zoomable
+              src={`${baseUrl}/${data.architecture.diagramImage}`}
+              alt={data.architecture.diagramAlt || 'Architecture diagram'}
+              width="1200"
+              height="700"
+              loading="lazy"
+            />
+          </div>
+        )}
+        <!-- Project-specific architecture components can be placed here -->
+      </ProjectSection>
+    </div>
+
+    <!-- =========================================================== -->
+    <!-- RUNTIME — code preview, surfaces, operational details         -->
+    <!-- =========================================================== -->
+    <div id="runtime" class="project-anchor">
+      <ProjectSection
+        id="runtime-inner"
+        eyebrow={data.runtime.eyebrow}
+        title={data.runtime.title}
+        description={data.runtime.description}
+        tone="subtle"
+      >
+        {data.runtime.codePreview && (
+          <div class="code-preview">
+            <div class="code-preview-header">
+              <span class="code-preview-lang">{data.runtime.codePreview.language}</span>
+              <span class="code-preview-title">{data.runtime.codePreview.title}</span>
+            </div>
+            <pre><code set:text={data.runtime.codePreview.code} /></pre>
+          </div>
+        )}
+        <!-- Project-specific runtime components can be placed here -->
+      </ProjectSection>
+    </div>
+
+    <!-- =========================================================== -->
+    <!-- EVIDENCE — honest assessment of maturity                      -->
+    <!-- =========================================================== -->
+    <ProjectSection
+      id="evidence"
+      eyebrow={data.evidence.eyebrow}
+      title={data.evidence.title}
+      description={data.evidence.description}
+      tone="subtle"
+      width="wide"
+    >
+      <ProjectEvidenceNote
+        title={data.evidence.note.title}
+        body={data.evidence.note.body}
+        evidenced={data.evidence.note.evidenced}
+        missing={data.evidence.note.missing}
+      />
+    </ProjectSection>
+
+    <!-- =========================================================== -->
+    <!-- STATUS — roadmap or decision band                             -->
+    <!-- =========================================================== -->
+    <ProjectSection
+      id="status"
+      eyebrow={data.status.eyebrow}
+      title={data.status.title}
+      description={data.status.description}
+      tone="canvas"
+      width="wide"
+    >
+      {data.status.roadmap && (
+        <div class="roadmap-track">
+          {data.status.roadmap.map((phase) => (
+            <article class:list={['roadmap-phase', phase.active && 'is-active']}>
+              <span class="roadmap-label">{phase.phase}</span>
+              <strong>{phase.title}</strong>
+              <p>{phase.description}</p>
+            </article>
+          ))}
+        </div>
+      )}
+      {data.status.decision && (
+        <ProjectDecisionBand
+          title={data.status.decision.title}
+          body={data.status.decision.body}
+          signals={data.status.decision.signals}
+        />
+      )}
+    </ProjectSection>
+
+    <!-- =========================================================== -->
+    <!-- RELATIONS — ecosystem context                                 -->
+    <!-- =========================================================== -->
+    <ProjectRelations items={data.relations} />
+
+    <!-- =========================================================== -->
+    <!-- CTA — final call to action                                    -->
+    <!-- =========================================================== -->
+    <ProjectCta
+      badge={data.cta.badge}
+      title={data.cta.title}
+      description={data.cta.description}
+      primaryLabel={data.cta.primaryAction.label}
+      primaryHref={data.cta.primaryAction.href}
+      secondaryLabel={data.cta.secondaryAction?.label}
+      secondaryHref={data.cta.secondaryAction?.href}
+      variant="dark"
+    />
+  </div>
+</BaseLayout>
+
+<!-- ================================================================= -->
+<!--  Template styles                                                   -->
+<!-- ================================================================= -->
+<style>
+  /* ---------------------------------------------------------------- */
+  /*  Hero visual                                                      */
+  /* ---------------------------------------------------------------- */
+  .infra-hero-visual {
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(18px, 2.5vw, 28px);
+    background: var(--surface-subtle);
+    box-shadow: var(--shadow-md);
+  }
+
+  .infra-hero-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 720px;
+    object-fit: contain;
+  }
+
+  .infra-hero-caption {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Principles strip                                                 */
+  /* ---------------------------------------------------------------- */
+  .principle-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .principle-card {
+    padding: clamp(20px, 2.5vw, 28px);
+    border-top: 2px solid var(--accent-blue);
+    background: var(--surface-card);
+  }
+
+  .principle-card--teal { border-top-color: var(--accent-teal, #14b8a6); }
+  .principle-card--violet { border-top-color: var(--accent-violet, #8b5cf6); }
+
+  .principle-card strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+  }
+
+  .principle-card p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.55;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Problem grid                                                     */
+  /* ---------------------------------------------------------------- */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .problem-card {
+    padding: clamp(20px, 3vw, 28px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
+  }
+
+  .problem-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .problem-index {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    margin-bottom: var(--space-3);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+
+  .problem-index--blue { color: var(--accent-blue); background: var(--surface-blue-subtle); }
+  .problem-index--teal { color: var(--accent-teal, #14b8a6); background: color-mix(in srgb, var(--accent-teal, #14b8a6) 10%, var(--surface-card)); }
+  .problem-index--violet { color: var(--accent-violet, #8b5cf6); background: color-mix(in srgb, var(--accent-violet, #8b5cf6) 10%, var(--surface-card)); }
+
+  .problem-card h3 {
+    margin: 0 0 8px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .problem-card p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.6;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Architecture diagram                                             */
+  /* ---------------------------------------------------------------- */
+  .architecture-diagram {
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(14px, 2vw, 22px);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-md);
+  }
+
+  .architecture-diagram img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 700px;
+    object-fit: contain;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Code preview                                                     */
+  /* ---------------------------------------------------------------- */
+  .code-preview {
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(14px, 2vw, 22px);
+    background: #1e293b;
+    box-shadow: var(--shadow-md);
+  }
+
+  .code-preview-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .code-preview-lang {
+    padding: 2px 8px;
+    border-radius: var(--radius-sm, 4px);
+    background: rgba(96, 165, 250, 0.15);
+    color: #93c5fd;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .code-preview-title {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--text-caption);
+    font-weight: 600;
+  }
+
+  .code-preview pre {
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+  }
+
+  .code-preview code {
+    color: #e2e8f0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.65;
+    white-space: pre;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Roadmap track                                                    */
+  /* ---------------------------------------------------------------- */
+  .roadmap-track {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .roadmap-phase {
+    padding: clamp(20px, 2.5vw, 28px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+
+  .roadmap-phase.is-active {
+    border-color: color-mix(in srgb, var(--accent-blue) 45%, var(--border-medium));
+    background: var(--surface-blue-subtle);
+  }
+
+  .roadmap-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .roadmap-phase strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+  }
+
+  .roadmap-phase p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.55;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Utilities                                                        */
+  /* ---------------------------------------------------------------- */
+  .project-anchor {
+    scroll-margin-top: calc(var(--header-height, 64px) + 64px);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Responsive                                                       */
+  /* ---------------------------------------------------------------- */
+  @media (max-width: 760px) {
+    .principle-strip,
+    .problem-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .infra-hero-caption {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 2px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .problem-card { transition: none; }
+  }
+</style>

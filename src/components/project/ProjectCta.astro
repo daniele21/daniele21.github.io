@@ -1,0 +1,271 @@
+---
+/**
+ * ProjectCta.astro
+ *
+ * Shared call-to-action block for project pages.
+ * Replaces the per-project CTA components (HarnessCta, ClosedRoomCta, etc.)
+ * with a single, configurable component driven by content data.
+ *
+ * Supports two visual variants:
+ * - "dark" (default): dark gradient background, white text (infrastructure style)
+ * - "teal": teal/blue gradient background (product/app style)
+ */
+export interface Props {
+  badge?: string;
+  kicker?: string;
+  title: string;
+  titleAccent?: string;
+  description: string;
+  primaryLabel: string;
+  primaryHref: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  variant?: 'dark' | 'teal';
+}
+
+const {
+  badge,
+  kicker,
+  title,
+  titleAccent,
+  description,
+  primaryLabel,
+  primaryHref,
+  secondaryLabel,
+  secondaryHref,
+  variant = 'dark',
+} = Astro.props;
+---
+
+<section class="project-cta" aria-label="Call to action">
+  <div class="shell">
+    <div class:list={['cta-box', `cta-box--${variant}`]}>
+      <div class="cta-content">
+        {badge && <div class="cta-badge">{badge}</div>}
+        {kicker && <p class="cta-kicker">{kicker}</p>}
+
+        <h2>
+          {title}
+          {titleAccent && (
+            <>
+              <br />
+              <span class="cta-accent">{titleAccent}</span>
+            </>
+          )}
+        </h2>
+
+        <p class="cta-description">{description}</p>
+      </div>
+
+      <div class="cta-actions">
+        <a
+          class="cta-btn cta-btn--primary"
+          href={primaryHref}
+          target={primaryHref.startsWith('http') ? '_blank' : undefined}
+          rel={primaryHref.startsWith('http') ? 'noreferrer' : undefined}
+        >
+          {primaryLabel}
+        </a>
+        {secondaryLabel && secondaryHref && (
+          <a
+            class="cta-btn cta-btn--secondary"
+            href={secondaryHref}
+            target={secondaryHref.startsWith('http') ? '_blank' : undefined}
+            rel={secondaryHref.startsWith('http') ? 'noreferrer' : undefined}
+          >
+            {secondaryLabel}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---------------------------------------------------------------- */
+  /*  Container                                                        */
+  /* ---------------------------------------------------------------- */
+  .project-cta {
+    padding: clamp(64px, 8vw, 96px) 0;
+  }
+
+  .cta-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: clamp(24px, 4vw, 48px);
+    padding: clamp(40px, 5vw, 64px);
+    border-radius: var(--radius-xl);
+    color: #ffffff;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative gradient orb */
+  .cta-box::after {
+    content: '';
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    right: -100px;
+    top: -180px;
+    pointer-events: none;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Variant: dark (infrastructure)                                   */
+  /* ---------------------------------------------------------------- */
+  .cta-box--dark {
+    background: linear-gradient(140deg, #172554, #0f172a);
+  }
+
+  .cta-box--dark::after {
+    background: radial-gradient(circle, rgba(45, 212, 191, 0.24), transparent 70%);
+  }
+
+  .cta-box--dark .cta-accent {
+    color: #6ee7b7;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Variant: teal (product / app)                                    */
+  /* ---------------------------------------------------------------- */
+  .cta-box--teal {
+    background: linear-gradient(135deg, #0b2539, #16435e 68%, #0f766e);
+  }
+
+  .cta-box--teal::after {
+    background: radial-gradient(circle, rgba(96, 165, 250, 0.2), transparent 70%);
+  }
+
+  .cta-box--teal .cta-accent {
+    color: #76e0ce;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Content                                                          */
+  /* ---------------------------------------------------------------- */
+  .cta-content {
+    max-width: 680px;
+  }
+
+  .cta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    margin-bottom: var(--space-3);
+    border-radius: var(--radius-full);
+    background: rgba(96, 165, 250, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #93c5fd;
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cta-kicker {
+    margin: 0 0 var(--space-2);
+    color: #9dd7e9;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--space-3);
+    color: #ffffff;
+  }
+
+  .cta-description {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: var(--text-body-lg, 1.1rem);
+    line-height: 1.6;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Actions                                                          */
+  /* ---------------------------------------------------------------- */
+  .cta-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-display);
+    font-size: var(--text-small, 0.875rem);
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      transform var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  .cta-btn--primary {
+    background: linear-gradient(135deg, var(--accent-blue-dark, #1d4ed8), var(--accent-blue, #3b82f6));
+    color: #ffffff;
+    box-shadow: var(--shadow-glow, 0 4px 20px rgba(59, 130, 246, 0.3));
+  }
+
+  .cta-btn--secondary {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Responsive                                                       */
+  /* ---------------------------------------------------------------- */
+  @media (max-width: 980px) {
+    .cta-box {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .cta-actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cta-actions {
+      width: 100%;
+    }
+
+    .cta-btn {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-btn { transition: none; }
+  }
+</style>

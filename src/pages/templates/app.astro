@@ -1,0 +1,709 @@
+---
+/**
+ * templates/app.astro
+ *
+ * Standardized previewable template for application / product project pages.
+ * Defines the canonical section sequence and layout for projects like
+ * ClosedRoom, Aura Finance, RedactGuard, etc.
+ *
+ * ROUTE: /templates/app
+ *
+ * HOW TO USE FOR A NEW PROJECT:
+ *   1. Copy this file → rename to src/pages/your-product.astro
+ *   2. Copy _templateApp.ts → rename to yourProduct.ts
+ *   3. Adjust relative imports (from '../../' to '../')
+ *   4. Replace data import with your project's content file
+ *   5. Add project-specific components inside the <slot> areas if needed
+ *
+ * SECTION SEQUENCE:
+ *   SubHeader → Hero → Proof → Problem → Benefits →
+ *   Workflow → Product → Architecture → Evidence → Relations → CTA
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductSubHeader from '../../components/layout/ProductSubHeader.astro';
+import ProjectHero from '../../components/project/ProjectHero.astro';
+import ProjectProof from '../../components/project/ProjectProof.astro';
+import ProjectSection from '../../components/project/ProjectSection.astro';
+import ProjectEvidenceNote from '../../components/project/ProjectEvidenceNote.astro';
+import ProjectRelations from '../../components/project/ProjectRelations.astro';
+import ProjectCta from '../../components/project/ProjectCta.astro';
+
+/* ------------------------------------------------------------------ */
+/*  Content data import                                               */
+/* ------------------------------------------------------------------ */
+import { templateAppData as data } from '../../content/locales/en/_templateApp';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
+/* ------------------------------------------------------------------ */
+/*  SubHeader anchor links — matches the section IDs below             */
+/* ------------------------------------------------------------------ */
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Workflow', href: '#workflow' },
+  { label: 'Product', href: '#product' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Evidence', href: '#evidence' },
+];
+
+/* ------------------------------------------------------------------ */
+/*  JSON-LD structured data for SEO                                    */
+/* ------------------------------------------------------------------ */
+const projectSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": data.hero.title,
+  "applicationCategory": "BusinessApplication",
+  "description": data.meta.description,
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": "https://daniele21.github.io/"
+  },
+  "codeRepository": data.cta.primaryAction.href,
+};
+---
+
+<BaseLayout
+  title={data.meta.title}
+  description={data.meta.description}
+  jsonLd={projectSchema}
+>
+  <!-- ============================================================= -->
+  <!-- SUB-HEADER — sticky project navigation                         -->
+  <!-- ============================================================= -->
+  <ProductSubHeader
+    title={data.hero.title}
+    badge={data.hero.status.split('·')[0]?.trim()}
+    logoPath={data.hero.logoPath}
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: data.cta.primaryAction.href }}
+  />
+
+  <div id="top" data-project-page data-project-archetype="product">
+
+    <!-- =========================================================== -->
+    <!-- HERO — title, lede, meta pills, actions + visual             -->
+    <!-- =========================================================== -->
+    <ProjectHero
+      eyebrow={data.hero.eyebrow}
+      title={data.hero.title}
+      lede={data.hero.lede}
+      status={data.hero.status}
+      logoPath={data.hero.logoPath}
+      meta={data.hero.meta}
+      actions={data.hero.actions}
+      visualLabel={data.hero.visualLabel}
+    >
+      <div class="app-hero-visual">
+        {data.hero.visuals.map((visual, index) => (
+          <figure class:list={['hero-shot', index === 0 ? 'hero-shot-main' : 'hero-shot-secondary']}>
+            <img
+              data-zoomable
+              src={`${baseUrl}/${visual.image}`}
+              alt={visual.alt}
+              width="1440"
+              height="900"
+              loading="eager"
+            />
+            {visual.caption && <figcaption>{visual.caption}</figcaption>}
+          </figure>
+        ))}
+        {data.hero.visualNote && (
+          <p class="hero-flow-note">{data.hero.visualNote}</p>
+        )}
+      </div>
+    </ProjectHero>
+
+    <!-- =========================================================== -->
+    <!-- PROOF — thesis statement                                      -->
+    <!-- =========================================================== -->
+    <ProjectProof
+      statement={data.proof.statement}
+      detail={data.proof.detail}
+    />
+
+    <!-- =========================================================== -->
+    <!-- PROBLEM — why this product exists                             -->
+    <!-- =========================================================== -->
+    <section class="section section-alt" id="why">
+      <div class="shell">
+        <div class="section-head">
+          <div class="kicker">{data.problem.kicker}</div>
+          <h2>
+            {data.problem.titleLine1}
+            {data.problem.titleLine2 && (
+              <>
+                <br />
+                <span class="accent-text">{data.problem.titleLine2}</span>
+              </>
+            )}
+          </h2>
+          <p class="lead">{data.problem.lede}</p>
+        </div>
+
+        <div class="problem-grid">
+          {data.problem.items.map((item) => (
+            <article class="card">
+              <div class={`icon icon--${item.color || 'blue'}`}>{item.id}</div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </article>
+          ))}
+        </div>
+
+        {data.problem.statement && (
+          <div class="statement" set:html={data.problem.statement.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')} />
+        )}
+      </div>
+    </section>
+
+    <!-- =========================================================== -->
+    <!-- BENEFITS — key value props                                    -->
+    <!-- =========================================================== -->
+    <ProjectSection
+      id="benefits"
+      eyebrow={data.benefits.eyebrow}
+      title={data.benefits.title}
+      description={data.benefits.description}
+      tone="canvas"
+    >
+      <div class="benefits-grid" aria-label="Product benefits">
+        {data.benefits.items.map((item) => (
+          <article class="benefit-card">
+            {item.icon && <span class="benefit-icon" aria-hidden="true">{item.icon}</span>}
+            <strong>{item.title}</strong>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </ProjectSection>
+
+    <!-- =========================================================== -->
+    <!-- WORKFLOW — how the product works                               -->
+    <!-- =========================================================== -->
+    <div id="workflow" class="project-anchor">
+      <ProjectSection
+        id="workflow-inner"
+        eyebrow={data.workflow.eyebrow}
+        title={data.workflow.title}
+        description={data.workflow.description}
+        tone="subtle"
+        width="wide"
+      >
+        <div class="workflow-steps">
+          {data.workflow.steps.map((step) => (
+            <article class="workflow-step">
+              <div class="workflow-step-header">
+                <span class="step-number">{String(step.step).padStart(2, '0')}</span>
+                <div>
+                  <strong>{step.title}</strong>
+                  <p>{step.description}</p>
+                </div>
+              </div>
+              {step.image && (
+                <div class="workflow-step-visual">
+                  <img
+                    data-zoomable
+                    src={`${baseUrl}/${step.image}`}
+                    alt={step.imageAlt || step.title}
+                    width="800"
+                    height="500"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </ProjectSection>
+    </div>
+
+    <!-- =========================================================== -->
+    <!-- PRODUCT — screenshot showcase                                 -->
+    <!-- =========================================================== -->
+    <div id="product" class="project-anchor">
+      <ProjectSection
+        id="product-inner"
+        eyebrow={data.product.eyebrow}
+        title={data.product.title}
+        description={data.product.description}
+        tone="canvas"
+        width="wide"
+      >
+        <div class="product-gallery">
+          {data.product.screenshots.map((shot) => (
+            <figure class="product-shot">
+              <img
+                data-zoomable
+                src={`${baseUrl}/${shot.image}`}
+                alt={shot.alt}
+                width="1440"
+                height="900"
+                loading="lazy"
+              />
+              {shot.caption && <figcaption>{shot.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      </ProjectSection>
+    </div>
+
+    <!-- =========================================================== -->
+    <!-- ARCHITECTURE — technical design                               -->
+    <!-- =========================================================== -->
+    <div id="architecture" class="project-anchor">
+      <ProjectSection
+        id="architecture-inner"
+        eyebrow={data.architecture.eyebrow}
+        title={data.architecture.title}
+        description={data.architecture.description}
+        tone="subtle"
+        width="wide"
+      >
+        {data.architecture.diagramImage && (
+          <div class="architecture-diagram">
+            <img
+              data-zoomable
+              src={`${baseUrl}/${data.architecture.diagramImage}`}
+              alt={data.architecture.diagramAlt || 'Architecture diagram'}
+              width="1200"
+              height="700"
+              loading="lazy"
+            />
+          </div>
+        )}
+        <!-- Project-specific architecture components can be placed here -->
+      </ProjectSection>
+    </div>
+
+    <!-- =========================================================== -->
+    <!-- EVIDENCE — honest assessment of maturity                      -->
+    <!-- =========================================================== -->
+    <ProjectSection
+      id="evidence"
+      eyebrow={data.evidence.eyebrow}
+      title={data.evidence.title}
+      description={data.evidence.description}
+      tone="subtle"
+      width="wide"
+    >
+      <ProjectEvidenceNote
+        title={data.evidence.note.title}
+        body={data.evidence.note.body}
+        evidenced={data.evidence.note.evidenced}
+        missing={data.evidence.note.missing}
+      />
+    </ProjectSection>
+
+    <!-- =========================================================== -->
+    <!-- RELATIONS — ecosystem context                                 -->
+    <!-- =========================================================== -->
+    <ProjectRelations items={data.relations} />
+
+    <!-- =========================================================== -->
+    <!-- CTA — final call to action                                    -->
+    <!-- =========================================================== -->
+    <ProjectCta
+      kicker={data.cta.kicker}
+      title={data.cta.titleLine1}
+      titleAccent={data.cta.titleLine2}
+      description={data.cta.lede}
+      primaryLabel={data.cta.primaryAction.label}
+      primaryHref={data.cta.primaryAction.href}
+      secondaryLabel={data.cta.secondaryAction?.label}
+      secondaryHref={data.cta.secondaryAction?.href}
+      variant="teal"
+    />
+  </div>
+</BaseLayout>
+
+<!-- ================================================================= -->
+<!--  Template styles                                                   -->
+<!-- ================================================================= -->
+<style>
+  /* ---------------------------------------------------------------- */
+  /*  Hero visual — overlapping screenshot layout                      */
+  /* ---------------------------------------------------------------- */
+  .app-hero-visual {
+    position: relative;
+    min-height: clamp(430px, 58vw, 680px);
+    padding: clamp(24px, 4vw, 46px);
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(18px, 2.5vw, 28px);
+    background: var(--surface-subtle);
+    overflow: hidden;
+  }
+
+  .hero-shot {
+    margin: 0;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(14px, 2vw, 22px);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .hero-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .hero-shot figcaption {
+    padding: 9px 12px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+  }
+
+  .hero-shot-main {
+    width: min(78%, 820px);
+  }
+
+  .hero-shot-secondary {
+    position: absolute;
+    right: clamp(20px, 4vw, 48px);
+    bottom: clamp(48px, 6vw, 78px);
+    width: min(48%, 520px);
+  }
+
+  .hero-flow-note {
+    position: absolute;
+    left: clamp(24px, 4vw, 46px);
+    bottom: clamp(18px, 3vw, 32px);
+    margin: 0;
+    color: var(--ink-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Problem section                                                  */
+  /* ---------------------------------------------------------------- */
+  .section {
+    padding: clamp(60px, 7vw, 96px) 0;
+  }
+
+  .section-alt {
+    background: var(--surface-muted);
+    border-block: 1px solid var(--border-subtle);
+  }
+
+  .section-head {
+    max-width: 780px;
+    margin-bottom: var(--space-8);
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-top: 0;
+    margin-bottom: var(--space-3);
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .accent-text {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal, #14b8a6));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .lead {
+    font-size: var(--text-body-lg);
+    line-height: 1.65;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  .card {
+    padding: var(--space-6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    margin-bottom: var(--space-4);
+    border-radius: var(--radius-md);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+
+  .icon--blue { color: var(--accent-blue); background: var(--surface-blue-subtle); }
+  .icon--teal { color: var(--accent-teal, #14b8a6); background: color-mix(in srgb, var(--accent-teal, #14b8a6) 10%, var(--surface-card)); }
+  .icon--violet { color: var(--accent-violet, #8b5cf6); background: color-mix(in srgb, var(--accent-violet, #8b5cf6) 10%, var(--surface-card)); }
+
+  .card h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--space-2);
+    color: var(--ink);
+  }
+
+  .card p {
+    margin: 0;
+    font-size: 0.925rem;
+    line-height: 1.6;
+    color: var(--ink-muted);
+  }
+
+  .statement {
+    margin-top: var(--space-6);
+    padding: var(--space-5) var(--space-6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--surface-blue-subtle), var(--surface-card) 78%);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .statement :global(strong) {
+    color: var(--accent-blue-dark, var(--accent-blue));
+    font-weight: 800;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Benefits grid                                                    */
+  /* ---------------------------------------------------------------- */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .benefit-card {
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
+  }
+
+  .benefit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .benefit-icon {
+    display: block;
+    margin-bottom: var(--space-3);
+    font-size: 1.5rem;
+  }
+
+  .benefit-card strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+  }
+
+  .benefit-card p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.55;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Workflow steps                                                   */
+  /* ---------------------------------------------------------------- */
+  .workflow-steps {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .workflow-step {
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    overflow: hidden;
+  }
+
+  .workflow-step-header {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: var(--space-3);
+    padding: clamp(20px, 3vw, 28px);
+  }
+
+  .step-number {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-full);
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 800;
+  }
+
+  .workflow-step strong {
+    display: block;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  }
+
+  .workflow-step p {
+    margin: 6px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.55;
+  }
+
+  .workflow-step-visual {
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .workflow-step-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+    background: var(--surface-subtle);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Product gallery                                                  */
+  /* ---------------------------------------------------------------- */
+  .product-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+    gap: var(--space-4);
+  }
+
+  .product-shot {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(14px, 2vw, 22px);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-md);
+  }
+
+  .product-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 600px;
+    object-fit: contain;
+    background: var(--surface-subtle);
+  }
+
+  .product-shot figcaption {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    font-weight: 600;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Architecture diagram                                             */
+  /* ---------------------------------------------------------------- */
+  .architecture-diagram {
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(14px, 2vw, 22px);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-md);
+  }
+
+  .architecture-diagram img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 700px;
+    object-fit: contain;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Utilities                                                        */
+  /* ---------------------------------------------------------------- */
+  .project-anchor {
+    scroll-margin-top: calc(var(--header-height, 64px) + 64px);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Responsive                                                       */
+  /* ---------------------------------------------------------------- */
+  @media (max-width: 980px) {
+    .problem-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .app-hero-visual {
+      min-height: 0;
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero-shot-main,
+    .hero-shot-secondary {
+      position: static;
+      width: 100%;
+    }
+
+    .hero-flow-note {
+      position: static;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card,
+    .benefit-card { transition: none; }
+  }
+</style>
