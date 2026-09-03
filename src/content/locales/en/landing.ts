@@ -55,7 +55,7 @@ export const landingData: LandingPageData = {
       titleHighlight: 'Local AI only',
       challenge: 'Does every AI workload really need the cloud?',
       explanation:
-        'I experiment with real systems to find what should run <strong>Local</strong>, <strong>Hybrid</strong> or <strong>Cloud</strong> — and help teams make that decision with evidence.',
+        'I experiment with real systems to find what should run <strong>Local</strong>, <strong>Hybrid</strong> or <strong>Cloud</strong>. I help teams make that decision with evidence.',
       position: '',
       proofLine: '',
       primaryCta: {
