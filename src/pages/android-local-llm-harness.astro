@@ -57,9 +57,9 @@ const harnessSchema = {
   jsonLd={harnessSchema}
 >
   <ProductSubHeader
-    title="Android Local LLM Harness"
+    title="Harnex"
     badge="Spec & prototype"
-    logoPath="images/harness/logo.svg"
+    logoPath="images/harness/harnex-symbol.png"
     links={subheaderLinks}
     cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness' }}
   />
@@ -67,22 +67,22 @@ const harnessSchema = {
   <div id="top" data-project-page data-project-archetype="infrastructure">
     <ProjectHero
       eyebrow="INFRASTRUCTURE · ANDROID LOCAL AI"
-      title="Android Local LLM Harness"
-      lede="A reusable Android foundation for GGUF models, on-device inference, runtime lifecycle and diagnostics, designed to evolve toward a shared local AI gateway."
+      title="Harnex"
+      lede="Your local AI harness for Android: one gateway, shared on-device LLM runtime, model plane, and control plane so Android teams can build local AI features without rebuilding infrastructure inside every app."
       status="Spec & prototype · active validation"
-      logoPath="images/harness/logo.svg"
+      logoPath="images/harness/harnex-symbol.png"
       meta={['Android API 26+', 'GGUF + llama.cpp', 'Kotlin + JNI/C++', 'MIT']}
       actions={[
         { label: 'Explore architecture ↓', href: '#architecture' },
         { label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness', variant: 'secondary' },
       ]}
-      visualLabel="Android Local LLM Harness architecture"
+      visualLabel="Harnex architecture & Local AI Gateway vision"
     >
       <div class="harness-hero-visual">
         <img
           data-zoomable
           src={`${baseUrl}/${hero.imageHero}`}
-          alt="Android Local LLM Harness architecture showing the app, gateway and local inference engine"
+          alt="Harnex architecture showing the app, gateway and local inference engine"
           width="1400"
           height="900"
           loading="eager"
@@ -96,7 +96,7 @@ const harnessSchema = {
 
     <ProjectProof
       statement="On-device AI becomes reusable infrastructure only when model identity, lifecycle, memory ownership, client boundaries and diagnostics are explicit."
-      detail="Harness is proving those foundations in one connected Android console before moving runtime ownership into the final cross-application Binder/AIDL gateway."
+      detail="Harnex is proving those foundations in one connected Android console before moving runtime ownership into the final cross-application Binder/AIDL gateway."
     />
 
     <HarnessMission />
@@ -124,7 +124,7 @@ const harnessSchema = {
       <HarnessMaturity />
       <ProjectEvidenceNote
         title="Integrated capability is not yet production-readiness evidence."
-        body="Harness currently integrates embedded GGUF inference, streaming, cancellation, model lifecycle and diagnostic surfaces. Representative device evidence and the shared Binder/AIDL host remain necessary before describing it as a production Android inference platform."
+        body="Harnex currently integrates embedded GGUF inference, streaming, cancellation, model lifecycle and diagnostic surfaces. Representative device evidence and the shared Binder/AIDL host remain necessary before describing it as a production Android inference platform."
         evidenced={[
           'Embedded GGUF inference path is integrated',
           'Streaming, cancellation and model lifecycle are implemented',
@@ -155,7 +155,7 @@ const harnessSchema = {
       items={[
         {
           stage: 'BUILD · INFRASTRUCTURE',
-          title: 'Android LLM Harness',
+          title: 'Harnex',
           current: true,
           note: 'Runtime, models and diagnostics on-device',
         },

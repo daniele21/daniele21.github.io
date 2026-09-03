@@ -29,8 +29,8 @@ export const homeContent: HomeContent = {
     llmServerSub: 'Inference',
     asrServerTitle: 'Local ASR Server',
     asrServerSub: 'Speech',
-    harnessTitle: 'Android Local LLM Harness',
-    harnessSub: 'Local AI Gateway',
+    harnessTitle: 'Harnex',
+    harnessSub: 'Your local AI harness for Android',
     appTitle: 'APPLICATIONS',
     appSub: 'Built on the stack',
     closedRoomTitle: 'ClosedRoom',
@@ -49,11 +49,13 @@ export const homeContent: HomeContent = {
     missionTextPrefix: 'Build and test ',
     missionTextHighlight: 'reusable local-AI, data-protection and observability foundations',
     missionTextSuffix:
-      ' that give products more control over model lifecycle, data, runtime and cost - and make local-first behavior measurable across desktop and mobile.',
-    principlesBadges: [
-      { titleHighlight: 'Local', textSuffix: ' where sufficient' },
-      { titleHighlight: 'Cloud', textSuffix: ' where valuable' },
-      { titleHighlight: 'Portable', textSuffix: ' by design' },
+      ' that let engineering teams deploy AI products with predictable performance and zero cloud dependency.',
+    pills: [
+      'GGUF / llama.cpp',
+      'Whisper',
+      'Local-first Gateway',
+      'Private Network Guard',
+      'Hardware Calibration',
     ],
   },
   whyLocalFirst: {
@@ -173,7 +175,7 @@ export const homeContent: HomeContent = {
     nodes: [
       { label: 'Local LLM Server', accent: 'teal' },
       { label: 'Local ASR Server', accent: 'blue' },
-      { label: 'Android LLM Harness', accent: 'violet' },
+      { label: 'Harnex', accent: 'violet' },
     ],
     protocolsText: 'APIs / Protocols (gRPC, WebSocket, Local IPC)',
     outputAppsText:

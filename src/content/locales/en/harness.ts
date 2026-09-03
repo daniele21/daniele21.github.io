@@ -121,14 +121,14 @@ export interface HarnessData {
 
 export const harnessData: HarnessData = {
   meta: {
-    title: "Harness, Local AI Gateway for Android",
-    description: "Harness is a local-first Android AI infrastructure project: one gateway, shared model and runtime foundations, measurable on-device inference.",
+    title: "Harnex — Your local AI harness for Android",
+    description: "Harnex is your local AI harness for Android: one gateway, shared on-device LLM runtime, model plane, and control plane for Android applications.",
   },
   hero: {
     eyebrow: "From AI strategy to reusable infrastructure",
     titleLine1: "Build local AI once.",
     titleLine2: "Reuse it across Android.",
-    lede: "Harness is a **Local AI Gateway for Android**: one foundation for **GGUF models**, **on-device inference**, **runtime lifecycle** and **diagnostics**.",
+    lede: "**Harnex** is your **local AI harness for Android**: one gateway, shared on-device LLM runtime, model plane, and control plane—so Android teams can build local AI features without rebuilding the AI infrastructure inside every app.",
     keyPills: [
       "Local-first execution",
       "Explicit model identity",
@@ -142,7 +142,7 @@ export const harnessData: HarnessData = {
   mission: {
     eyebrow: "Project Mission",
     statement: "Make local AI on Android explicit, measurable and reusable.",
-    lede: "Running LLMs on-device shouldn't mean re-implementing model loading, memory limits, and runtime bindings in every single app. Harness abstracts on-device inference into an explicit system service.",
+    lede: "Running LLMs on-device shouldn't mean re-implementing model loading, memory limits, and runtime bindings in every single app. Harnex abstracts on-device inference into an explicit system service.",
     principles: [
       { title: "Explicit", subtitle: "No opaque black boxes", color: "blue" },
       { title: "Measurable", subtitle: "Tokens/sec & RAM tracking", color: "teal" },
@@ -178,8 +178,8 @@ export const harnessData: HarnessData = {
   },
   concept: {
     eyebrow: "Concept",
-    title: "Think of Harness as the local AI layer of an Android device.",
-    lede: "Just as Android provides system services for location, camera, or network, Harness provides a system gateway for local LLM execution.",
+    title: "Think of Harnex as the local AI layer of an Android device.",
+    lede: "Just as Android provides system services for location, camera, or network, Harnex provides a system gateway for local LLM execution.",
     items: [
       {
         n: "01",
@@ -201,7 +201,7 @@ export const harnessData: HarnessData = {
   surfaces: {
     eyebrow: "Connected console",
     title: "Five product surfaces. One inference foundation.",
-    sub: "Harness connects runtime controls, model management, interactive testing, diagnostics and system settings into a unified mobile console.",
+    sub: "Harnex connects runtime controls, model management, interactive testing, diagnostics and system settings into a unified mobile console.",
     items: [
       {
         id: "overview",
@@ -234,7 +234,7 @@ export const harnessData: HarnessData = {
         image: "images/harness/harness-settings.png",
       },
     ],
-    securityNotice: "Current boundary: the runtime is still embedded and in-process inside Harness. Other Android apps cannot connect to a shared Binder/AIDL service yet. The gateway is the target architecture, not a current capability.",
+    securityNotice: "Current boundary: the runtime is still embedded and in-process inside Harnex. Other Android apps cannot connect to a shared Binder/AIDL service yet. The gateway is the target architecture, not a current capability.",
   },
   architecture: {
     eyebrow: "Under the hood",
@@ -328,7 +328,7 @@ handle.cancel()`,
   maturity: {
     eyebrow: "Evidence & maturity",
     title: "Useful today. Still an engineering and validation project.",
-    sub: "Harness should not be presented as a production-ready Android inference platform yet. The current value is a connected console and tested foundation that de-risks the final gateway architecture.",
+    sub: "Harnex should not be presented as a production-ready Android inference platform yet. The current value is a connected console and tested foundation that de-risks the final gateway architecture.",
     cards: [
       {
         title: "Integrated today",
@@ -356,6 +356,6 @@ handle.cancel()`,
   cta: {
     badge: "Open-source · MIT",
     title: "Make local AI explicit, measurable and reusable on Android.",
-    sub: "Harness is part of a broader mission: move beyond isolated AI experiments and build product infrastructure that can be understood, evaluated and scaled deliberately.",
+    sub: "Harnex is part of a broader mission: move beyond isolated AI experiments and build product infrastructure that can be understood, evaluated and scaled deliberately.",
   },
 };

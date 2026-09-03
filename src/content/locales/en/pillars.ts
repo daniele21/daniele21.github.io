@@ -51,7 +51,7 @@ export const pillars: Pillar[] = [
   {
     id: 'android-local-llm-harness',
     label: 'ON-DEVICE MOBILE AI',
-    name: 'Android Local LLM Harness',
+    name: 'Harnex',
     role: '<strong>Local AI Gateway for Android.</strong> Shared on-device LLM runtime, model plane, and control plane.',
     problem:
       'Running LLMs on Android demands <em>rigorous resource management</em>: model integrity, memory bounds, prompt cancellation and telemetry.',

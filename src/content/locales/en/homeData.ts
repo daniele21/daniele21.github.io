@@ -130,7 +130,7 @@ export const heroData: HeroData = {
   proofCard: {
     tag: 'ANDROID · REAL RUN',
     image: 'images/harness/harness-playground-current.webp',
-    alt: 'Android Local LLM Harness running Qwen locally on a physical device',
+    alt: 'Harnex running Qwen locally on a physical device',
     href: 'android-local-llm-harness',
     metrics: [
       { value: '1318 ms', label: 'TTFT' },
@@ -146,7 +146,7 @@ export const featuredProjects: {
   more: SecondaryWorkItem[];
 } = {
   main: {
-    title: 'Android Local LLM Harness',
+    title: 'Harnex',
     eyebrow: 'ON-DEVICE AI · RUNTIME',
     question: 'Can Android become a reusable local AI runtime?',
     description: 'A shared local LLM runtime tested on real devices with resident model management, IPC and runtime metrics.',
@@ -155,12 +155,12 @@ export const featuredProjects: {
     splitImages: [
       {
         src: 'images/harness/harness-split-prompt.webp',
-        alt: 'Harness on-device prompt and configuration request',
+        alt: 'Harnex on-device prompt and configuration request',
         tag: '01 · PROMPT',
       },
       {
         src: 'images/harness/harness-split-response.webp',
-        alt: 'Harness local model response and runtime metrics',
+        alt: 'Harnex local model response and runtime metrics',
         tag: '02 · RESPONSE',
       },
     ],
@@ -269,7 +269,7 @@ export const evidenceSpotlight: EvidenceSpotlightData = {
       description: 'Full on-device turn duration',
     },
   ],
-  note: 'Single observed Harness run on physical Android hardware. Device thermals, model quantization, prompt length and runtime context matter.',
+  note: 'Single observed Harnex run on physical Android hardware. Device thermals, model quantization, prompt length and runtime context matter.',
 };
 
 export const writingData: {

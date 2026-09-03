@@ -2,9 +2,6 @@
 /** Dedicated Measure stage tuned to the approved Performance Lab reference. */
 import StageRail from './StageRail.astro';
 import EvidenceMatrix from './EvidenceMatrix.astro';
-
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
 ---
 
 <section
@@ -13,84 +10,24 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
   data-stage="04"
   aria-labelledby="evidence-title"
 >
-  <div class="shell evidence-shell">
+  <div class="shell stage-shell evidence-shell">
     <StageRail number={4} side="right" isFinal />
 
-    <div class="evidence-layout">
-      <header class="evidence-hero">
+    <div class="stage-layout evidence-layout">
+      <header class="stage-copy evidence-hero">
         <div class="evidence-copy">
-          <p class="evidence-kicker">Performance Lab</p>
-          <h2 id="evidence-title">Can this workload run locally?</h2>
-          <p>
+          <p class="stage-kicker evidence-kicker">Performance Lab</p>
+          <h2 id="evidence-title" class="stage-heading evidence-heading">Can this workload run locally?</h2>
+          <p class="stage-intro evidence-intro">
             Performance Lab benchmarks the <strong>real model</strong> on <strong>real devices</strong>
             to turn <strong>evidence</strong> into a <strong>Local, Hybrid or Cloud</strong> decision.
           </p>
         </div>
-
-        <div class="evidence-method">
-          <a href={resolveHref('performance-lab')} class="lab-link">
-            Open the lab <span aria-hidden="true">→</span>
-          </a>
-
-          <div class="method-flow" aria-label="Performance Lab method">
-            <div class="flow-item">
-              <span class="flow-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M6 3h8l4 4v14H6z" />
-                  <path d="M14 3v5h5" />
-                </svg>
-              </span>
-              <strong>Workload</strong>
-            </div>
-            <span class="flow-operator" aria-hidden="true">×</span>
-
-            <div class="flow-item">
-              <span class="flow-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m12 2 8 4.5v9L12 20l-8-4.5v-9z" />
-                  <path d="m4 6.5 8 4.5 8-4.5M12 11v9" />
-                </svg>
-              </span>
-              <strong>Model</strong>
-            </div>
-            <span class="flow-operator" aria-hidden="true">×</span>
-
-            <div class="flow-item">
-              <span class="flow-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="4" y="4" width="16" height="11" rx="1.5" />
-                  <path d="M2 19h20M8 19l1-2h6l1 2" />
-                </svg>
-              </span>
-              <strong>Device</strong>
-            </div>
-            <span class="flow-arrow" aria-hidden="true">→</span>
-
-            <div class="flow-item">
-              <span class="flow-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-                  <path d="M5 19V10M12 19V5M19 19v-7" />
-                </svg>
-              </span>
-              <strong>Evidence</strong>
-            </div>
-            <span class="flow-arrow" aria-hidden="true">→</span>
-
-            <div class="flow-item">
-              <span class="flow-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="8" />
-                  <circle cx="12" cy="12" r="3.5" />
-                  <path d="M12 2v3M22 12h-3" />
-                </svg>
-              </span>
-              <strong>Decision</strong>
-            </div>
-          </div>
-        </div>
       </header>
 
-      <EvidenceMatrix />
+      <div class="stage-visual evidence-visual" aria-label="Performance Lab benchmark evidence matrix">
+        <EvidenceMatrix />
+      </div>
     </div>
   </div>
 </section>
@@ -98,53 +35,38 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
 <style>
   .evidence-stage {
     --plane-rail-inset: clamp(48px, 5vw, 68px);
-    --evidence-rail-safe: clamp(88px, 6.5vw, 108px);
     position: relative;
     overflow: clip;
-    isolation: isolate;
     padding: clamp(54px, 5.5vw, 76px) 0 clamp(72px, 7vw, 96px);
     background: var(--surface-canvas);
   }
 
-  /* MEASURE owns a wider local shell than the rest of the landing. The extra
-     width is not content width: it is a dedicated right-hand lane for StageRail.
-     This keeps the approved ~1440px visual surface while preventing the path
-     marker from occupying CTA / flow / evidence space. */
   .evidence-shell {
-    width: min(calc(100% - clamp(80px, 8vw, 136px)), 1548px);
-    margin-inline: auto;
     position: relative;
   }
 
   .evidence-layout {
+    width: 100%;
     min-width: 0;
-    position: relative;
-    z-index: 2;
-    margin-right: var(--evidence-rail-safe);
-  }
-
-  /* StageRail defaults to z-index: 4 because the generic stages let the path
-     float above their surfaces. MEASURE has a dedicated gutter, so keep its
-     rail behind the content plane and inside that gutter instead. */
-  :global(.evidence-stage .stage-rail) {
-    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 3.5vw, 36px);
+    padding-inline: clamp(64px, 7vw, 96px);
   }
 
   .evidence-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-    align-items: start;
-    gap: clamp(48px, 4.4vw, 72px);
-    margin-bottom: 28px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .evidence-copy {
     min-width: 0;
-    max-width: 670px;
+    max-width: 720px;
   }
 
   .evidence-kicker {
-    margin: 0 0 12px;
+    margin: 0 0 10px;
     font-family: var(--font-display);
     font-size: var(--text-caption);
     line-height: 1.2;
@@ -154,175 +76,81 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
     color: var(--accent-blue);
   }
 
-  .evidence-copy h2 {
+  @media (max-width: 640px) {
+    .stage-wip-ribbon-wrap {
+      width: 145px;
+      height: 145px;
+    }
+
+    .stage-wip-ribbon {
+      top: 28px;
+      right: -38px;
+      width: 190px;
+      padding: 6px 0;
+      font-size: 0.62rem;
+      gap: 5px;
+      letter-spacing: 0.05em;
+    }
+
+    .stage-wip-icon {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  .evidence-heading {
     margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 3.1vw, 3.35rem);
-    line-height: 1.02;
-    letter-spacing: -0.052em;
+    font-size: clamp(2.1rem, 2.9vw, 3.1rem);
+    line-height: 1.05;
+    letter-spacing: -0.048em;
     font-weight: 850;
     color: var(--ink-display);
+    text-wrap: pretty;
   }
 
-  .evidence-copy > p:last-child {
-    max-width: 660px;
-    margin: 15px 0 0;
-    font-size: clamp(1rem, 1.05vw, 1.1rem);
-    line-height: 1.48;
+  .evidence-intro {
+    max-width: 680px;
+    margin: 14px 0 0;
+    font-size: clamp(1rem, 1.1vw, 1.12rem);
+    line-height: 1.55;
     color: var(--ink-muted);
+    text-wrap: pretty;
   }
 
-  .evidence-copy strong {
+  .evidence-intro strong {
     color: var(--ink-display);
     font-weight: 740;
   }
 
-  .evidence-method {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .lab-link {
-    position: relative;
-    z-index: 3;
-    align-self: flex-end;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    min-height: 36px;
-    padding: 0 4px;
-    color: var(--accent-blue-dark);
-    text-decoration: none;
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 780;
-    border-radius: var(--radius-sm);
-  }
-
-  .lab-link:hover,
-  .lab-link:focus-visible {
-    color: var(--accent-blue);
-  }
-
-  .method-flow {
+  .evidence-visual {
     width: 100%;
-    min-height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: clamp(7px, 0.8vw, 12px);
-    margin-top: 39px;
-    padding: 12px clamp(16px, 1.6vw, 22px);
-    border: 1px solid var(--border-medium);
-    border-radius: 15px;
-    background: var(--surface-card);
-    box-shadow: 0 1px 4px rgba(8, 19, 51, 0.02);
-  }
-
-  .flow-item {
     min-width: 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    color: var(--ink-display);
-    white-space: nowrap;
-  }
-
-  .flow-item strong {
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    line-height: 1.15;
-    font-weight: 760;
-  }
-
-  .flow-icon {
-    width: 23px;
-    height: 23px;
-    display: grid;
-    place-items: center;
-    flex: 0 0 auto;
-    color: var(--ink-display);
-  }
-
-  .flow-icon svg {
-    width: 21px;
-    height: 21px;
-  }
-
-  .flow-operator,
-  .flow-arrow {
-    flex: 0 0 auto;
-    color: var(--ink-subtle);
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 720;
-  }
-
-  @media (min-width: 1320px) {
-    .evidence-hero {
-      grid-template-columns: minmax(620px, 0.92fr) minmax(0, 1.08fr);
-    }
-
-    .evidence-copy h2 {
-      white-space: nowrap;
-    }
-  }
-
-  @media (max-width: 1180px) {
-    .evidence-stage {
-      --evidence-rail-safe: 68px;
-    }
-
-    .evidence-shell {
-      width: min(calc(100% - 42px), 1110px);
-    }
-
-    .evidence-hero {
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-
-    .evidence-method {
-      align-items: stretch;
-    }
-
-    .lab-link {
-      align-self: flex-start;
-      order: 2;
-      margin-top: 8px;
-    }
-
-    .method-flow {
-      order: 1;
-      margin-top: 0;
-    }
   }
 
   @media (max-width: 760px) {
     .evidence-stage {
-      --evidence-rail-safe: 0px;
-      padding: 52px 0 68px;
-    }
-
-    .evidence-shell {
-      width: calc(100% - 28px);
+      padding: 50px 0 68px;
     }
 
     .evidence-layout {
-      margin-right: 0;
+      padding-left: 48px;
+      padding-right: 12px;
+    }
+
+    .evidence-heading {
+      font-size: clamp(1.85rem, 8vw, 2.5rem);
+    }
+  }
+
+  @media (max-width: 540px) {
+    .evidence-stage {
+      padding: 44px 0 60px;
+    }
+
+    .evidence-layout {
       padding-left: 42px;
-    }
-
-    .evidence-copy h2 {
-      font-size: clamp(2rem, 10vw, 2.7rem);
-    }
-
-    .method-flow {
-      justify-content: flex-start;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      padding-right: 4px;
     }
   }
 </style>

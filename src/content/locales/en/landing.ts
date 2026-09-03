@@ -204,12 +204,12 @@ export const landingData: LandingPageData = {
       },
       {
         id: 'android-harness',
-        title: 'Android Local LLM Harness',
+        title: 'Harnex',
         eyebrow: 'ON-DEVICE · ANDROID',
         summary: 'One shared on-device gateway and runtime across Android applications.',
         href: '/android-local-llm-harness',
         logoPath: 'images/harness/logo.png',
-        logoAlt: 'Android Local LLM Harness logo',
+        logoAlt: 'Harnex logo',
         features: [
           { label: 'GGUF runtime' },
           { label: 'Thermal testing' },
@@ -217,7 +217,7 @@ export const landingData: LandingPageData = {
         ],
         evidence: 'A real phone exposes limits a desktop demo can hide.',
         imagePath: 'images/harness/harness-overview.png',
-        imageAlt: 'Android Local LLM Harness overview',
+        imageAlt: 'Harnex overview',
       },
       {
         id: 'local-asr-server',
@@ -422,7 +422,7 @@ export const landingData: LandingPageData = {
       },
       {
         id: 'android-harness',
-        title: 'Android Local LLM Harness',
+        title: 'Harnex',
         role: 'On-device inference lab & execution gateway',
         description:
           'Mobile runtime environment profiling memory pressure, thermal degradation, NPU acceleration, and cross-application AIDL boundaries.',

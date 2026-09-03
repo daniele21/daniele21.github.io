@@ -3,7 +3,7 @@
  * EcosystemDiagram.astro
  * Displays the infrastructure infographic PNG as base image,
  * with permanent, distinct animated-gradient interactive cards covering
- * Korgis, Harnex, and Local ASR that link directly to their project pages.
+ * Korgis, Android Local LLM Harness, and Local ASR that link directly to their project pages.
  */
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
@@ -17,10 +17,10 @@ const projects = [
     href: '/local-llm-server',
   },
   {
-    id: 'harnex',
+    id: 'harness',
     logoPath: 'images/harness/logo.png',
     title: 'Harnex',
-    payoff: 'Android LLM inference',
+    payoff: 'Android AI harness',
     href: '/android-local-llm-harness',
   },
   {
@@ -229,23 +229,23 @@ const projects = [
       0 0 0 2px rgba(59, 130, 246, 0.35);
   }
 
-  .eco-card--harnex {
+  .eco-card--harness {
     left: 29.83%;
     top: 64.40%;
     width: 22.03%;
     height: 14.95%;
 
-    /* Harnex: Emerald Teal & Purple subtle animated gradient */
+    /* Android Local LLM Harness: Emerald Teal & Purple subtle animated gradient */
     background-image: linear-gradient(135deg, #ffffff 0%, #ecfdf5 30%, #f3e8ff 65%, #ffffff 100%);
     border: 1.5px solid rgba(16, 185, 129, 0.45);
     box-shadow:
       0 4px 14px rgba(16, 185, 129, 0.08),
       0 0 12px rgba(168, 85, 247, 0.14);
-    animation: harnex-glow 5.5s ease-in-out infinite alternate;
+    animation: harness-glow 5.5s ease-in-out infinite alternate;
   }
 
-  .eco-card--harnex:hover,
-  .eco-card--harnex:focus-visible {
+  .eco-card--harness:hover,
+  .eco-card--harness:focus-visible {
     border-color: #059669;
     box-shadow:
       0 10px 24px -3px rgba(16, 185, 129, 0.22),
@@ -289,7 +289,7 @@ const projects = [
     }
   }
 
-  @keyframes harnex-glow {
+  @keyframes harness-glow {
     0% {
       background-position: 0% 50%;
       border-color: rgba(16, 185, 129, 0.4);
@@ -368,12 +368,14 @@ const projects = [
 
   .card-title {
     font-family: var(--font-display, -apple-system, BlinkMacSystemFont, sans-serif);
-    font-size: clamp(0.68rem, 1.75cqi, 0.98rem);
+    font-size: clamp(0.58rem, 1.45cqi, 0.92rem);
     font-weight: 820;
     color: #0f172a;
     letter-spacing: -0.02em;
     line-height: 1.15;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .card-payoff {
@@ -389,7 +391,7 @@ const projects = [
   @media (prefers-reduced-motion: reduce) {
     .eco-card,
     .eco-card--korgis,
-    .eco-card--harnex,
+    .eco-card--harness,
     .eco-card--local-asr {
       animation: none;
       transition: none;
