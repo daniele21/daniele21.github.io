@@ -11,7 +11,7 @@ export const aboutData: AboutContent = {
     subheadline: 'Data Scientist Manager at Sky Italia · Founder & Author at stAI tuned',
     tagline: 'Bridging experimental AI research, enterprise scale, and privacy-first on-device compute.',
     location: 'Milan, Italy',
-    locationStatus: 'Available for technical strategy & AI architecture advisory',
+    locationStatus: 'Available for technical strategy & AI Advisory',
     affiliation: 'Sky Italia',
     affiliationRole: 'Data Scientist Manager / Principal AI Engineer',
     portraitPath: 'images/profile-photo.jpg',

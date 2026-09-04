@@ -85,7 +85,7 @@ export interface InfrastructureProof {
   detail?: string;
 }
 
-/** "Why it exists" — design principles section. */
+/** "Why it exists" - design principles section. */
 export interface InfrastructureWhy {
   eyebrow: string;
   title: string;

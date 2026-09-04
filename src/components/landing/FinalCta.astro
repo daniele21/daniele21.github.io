@@ -1,203 +1,814 @@
 ---
 import { advisoryData } from '../../content/locales/en/advisory';
+import AdvisoryIcon from '../icons/AdvisoryIcon.astro';
 ---
 
 <section class="advisory-section" id="advisory" aria-labelledby="advisory-heading">
   <div class="shell advisory-shell">
-    <header class="advisory-header">
-      <h2 id="advisory-heading" class="advisory-heading">{advisoryData.heading}</h2>
+    <header class="advisory-header reveal">
+      <p class="advisory-kicker">{advisoryData.kicker}</p>
+      <h2 id="advisory-heading" class="advisory-heading">
+        <span>{advisoryData.heading}</span>
+        <strong>{advisoryData.headingAccent}</strong>
+      </h2>
       <p class="advisory-body">{advisoryData.body}</p>
+      <p class="deployment-modes" aria-label={`Deployment modes: ${advisoryData.deploymentModes.join(', ')}`}>
+        {advisoryData.deploymentModes.map((mode, index) => (
+          <><span>{mode}</span>{index < advisoryData.deploymentModes.length - 1 && <i aria-hidden="true">•</i>}</>
+        ))}
+      </p>
+      <button
+        type="button"
+        class="primary-button advisory-header-cta"
+        data-open-contact-modal
+        aria-label="Ask my support"
+      >
+        <span>{advisoryData.primaryCta.label}</span>
+        <AdvisoryIcon name="arrow-right" size={18} />
+      </button>
     </header>
 
-    <div class="advisory-grid" aria-label="Ways I can help with an AI workload">
-      {advisoryData.areas.map((area) => (
-        <article class="advisory-card">
-          <h3 class="card-question">{area.title}</h3>
-          <p class="card-benefit" set:html={area.body} />
-          <div class="card-output">
-            <span>You get</span>
-            <strong>{area.output}</strong>
-          </div>
-        </article>
+    <div class="advisory-flow" aria-label="Advisory process">
+      {advisoryData.areas.map((area, index) => (
+        <>
+          <article class:list={['advisory-card', `advisory-card--${area.id}`, 'reveal']} style={`--reveal-delay: ${index * 110}ms`}>
+            <header class="card-header">
+              <div class="card-step">
+                <span class="card-number">{area.number}</span>
+                <span class="card-phase">{area.phase}</span>
+              </div>
+              <h3>{area.title}</h3>
+              <p>{area.body}</p>
+            </header>
+
+            <div class="card-detail">
+              <ul class="factor-list">
+                {area.points.map((point) => (
+                  <li>
+                    <span class="factor-icon"><AdvisoryIcon name={point.icon} size={19} /></span>
+                    <span>{point.label}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {area.id === 'decide' && (
+                <div class="decision-visual" aria-label="Local, hybrid and cloud options">
+                  <span class="decision-circle decision-circle--local">Local</span>
+                  <span class="decision-circle decision-circle--hybrid">Hybrid</span>
+                  <span class="decision-circle decision-circle--cloud">Cloud</span>
+                </div>
+              )}
+
+              {area.id === 'design' && (
+                <div class="architecture-visual" aria-label="Data flows through an AI runtime to on-device or cloud execution">
+                  <span class="architecture-node architecture-node--data">Your data</span>
+                  <span class="architecture-line architecture-line--input" aria-hidden="true"></span>
+                  <span class="architecture-node architecture-node--runtime">AI runtime</span>
+                  <span class="architecture-line architecture-line--output" aria-hidden="true"></span>
+                  <span class="architecture-branch" aria-hidden="true"></span>
+                  <span class="architecture-node architecture-node--device">
+                    <AdvisoryIcon name="laptop" size={23} />
+                    <small>On-device</small>
+                  </span>
+                  <span class="architecture-node architecture-node--cloud">
+                    <AdvisoryIcon name="cloud" size={23} />
+                    <small>Cloud<br />(optional)</small>
+                  </span>
+                </div>
+              )}
+
+              {area.id === 'prove' && (
+                <div class="terminal-visual" aria-label="Stable local inference result">
+                  <span class="terminal-title">Running inference...</span>
+                  <span>&gt; Model: Qwen 3</span>
+                  <span>&gt; Device: MacBook Pro</span>
+                  <span>&gt; Tokens/s: 38.4</span>
+                  <span>&gt; Memory: 4.1 GB</span>
+                  <span>&gt; Status: <strong>✓ Stable</strong></span>
+                </div>
+              )}
+            </div>
+
+            <div class="card-output">
+              <span class="output-icon"><AdvisoryIcon name={area.outputIcon} size={34} /></span>
+              <span class="output-copy">
+                <small>You get</small>
+                <strong>{area.output}</strong>
+                <span>{area.outputDetail}</span>
+              </span>
+              <span class="output-arrow" aria-hidden="true"><AdvisoryIcon name="arrow-right" size={22} /></span>
+            </div>
+          </article>
+
+          {index < advisoryData.areas.length - 1 && (
+            <div class="flow-arrow reveal" aria-hidden="true" style={`--reveal-delay: ${index * 110 + 70}ms`}>
+              <span><AdvisoryIcon name="arrow-right" size={22} /></span>
+            </div>
+          )}
+        </>
       ))}
     </div>
 
-    <div class="advisory-bottom-banner">
-      <div class="banner-content">
-        <h3>Have something you're trying to build?</h3>
-        <p>{advisoryData.fitNote}</p>
+    <div class="advisory-principles reveal">
+      <div class="principle-statement">
+        <span class="principle-mark" aria-hidden="true"><AdvisoryIcon name="scale" size={42} /></span>
+        <p>
+          <span>Local when it makes sense. Cloud when it doesn’t.</span>
+          <strong>Evidence decides.</strong>
+        </p>
       </div>
-      <button
-        type="button"
-        class="primary-button banner-primary"
-        data-open-contact-modal
-        aria-label="Evaluate an AI workload"
-      >
-        <span>{advisoryData.primaryCta.label}</span>
-        <span aria-hidden="true">→</span>
-      </button>
+      <ul>
+        {advisoryData.principles.map((principle) => (
+          <li><span aria-hidden="true"><AdvisoryIcon name="check-circle" size={19} /></span>{principle}</li>
+        ))}
+      </ul>
     </div>
+
   </div>
 </section>
 
 <style>
   .advisory-section {
+    color-scheme: light;
+    --surface-canvas: #fbfdff;
+    --surface-subtle: #f6f9ff;
+    --surface-card: #ffffff;
+    --surface-inverse: #081333;
+    --ink-display: #071331;
+    --ink-muted: #405477;
+    --border-subtle: #e3eaf5;
+    --border-medium: #d7e2f2;
+    --accent-blue: #145bff;
+    --accent-blue-light: #4c84ff;
+    --accent-blue-hover: #0d47df;
     position: relative;
     scroll-margin-top: calc(var(--header-height) + 24px);
-    padding: clamp(68px, 8.5vw, 116px) 0;
+    padding: clamp(28px, 3vw, 42px) 0 clamp(30px, 3vw, 46px);
     overflow: clip;
     border-top: 1px solid var(--border-subtle);
     background:
-      radial-gradient(ellipse 60% 50% at 50% 12%, color-mix(in srgb, var(--accent-blue) 7%, transparent), transparent 74%),
-      linear-gradient(160deg, var(--surface-subtle) 0%, var(--surface-canvas) 85%);
+      radial-gradient(ellipse 52% 34% at 50% 6%, color-mix(in srgb, var(--accent-blue) 7%, transparent), transparent 76%),
+      linear-gradient(180deg, color-mix(in srgb, var(--surface-subtle) 78%, var(--surface-canvas)) 0%, var(--surface-canvas) 74%);
+  }
+
+  .advisory-section::before {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: '';
+    opacity: 0.34;
+    background-image: linear-gradient(color-mix(in srgb, var(--accent-blue) 4%, transparent) 1px, transparent 1px);
+    background-size: 100% 96px;
+    mask-image: linear-gradient(to bottom, black, transparent 58%);
   }
 
   .advisory-shell {
     position: relative;
     z-index: 1;
-    max-width: 1140px;
-    margin-inline: auto;
+    width: min(calc(100% - clamp(32px, 6.25vw, 96px)), 1440px);
+    max-width: none;
     display: flex;
     flex-direction: column;
-    gap: clamp(30px, 4vw, 44px);
+    gap: clamp(20px, 2vw, 28px);
   }
 
   .advisory-header {
-    max-width: 760px;
+    max-width: 920px;
     margin-inline: auto;
     text-align: center;
   }
 
-  .advisory-heading {
-    margin: 0 0 12px;
+  .advisory-kicker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 0 0 22px;
     font-family: var(--font-display);
-    font-size: clamp(2rem, 3.8vw, 3.15rem);
-    line-height: 1.08;
-    letter-spacing: -0.045em;
-    font-weight: 850;
+    font-size: var(--text-caption);
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--accent-blue) 46%, var(--ink-muted));
+  }
+
+  .advisory-kicker::before,
+  .advisory-kicker::after {
+    width: 52px;
+    height: 1px;
+    content: '';
+    background: color-mix(in srgb, var(--accent-blue) 30%, var(--border-subtle));
+  }
+
+  .advisory-heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.65rem, 4.2vw, 3.65rem);
+    line-height: 0.96;
+    letter-spacing: -0.06em;
+    font-weight: 800;
     color: var(--ink-display);
     text-wrap: balance;
   }
 
-  .advisory-body {
-    max-width: 680px;
-    margin: 0 auto;
-    font-size: clamp(1.02rem, 1.25vw, 1.15rem);
-    line-height: 1.6;
-    color: var(--ink-muted);
-    text-wrap: pretty;
+  .advisory-heading span,
+  .advisory-heading strong {
+    display: block;
   }
 
-  .advisory-grid {
+  .advisory-heading strong {
+    color: var(--accent-blue);
+    font-weight: inherit;
+  }
+
+  .advisory-body {
+    margin: 15px 0 0;
+    font-size: clamp(1.02rem, 1.45vw, 1.24rem);
+    line-height: 1.45;
+    color: var(--ink-muted);
+    text-wrap: balance;
+  }
+
+  .deployment-modes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 16px 0 0;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--ink-muted) 88%, transparent);
+  }
+
+  .deployment-modes i {
+    color: var(--accent-blue);
+    font-style: normal;
+  }
+
+  .advisory-header-cta {
+    min-height: 42px;
+    margin-top: 20px;
+    padding: 8px 17px;
+    border-radius: 9px;
+    font-size: var(--text-caption);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--accent-blue) 22%, transparent);
+  }
+
+  .advisory-header-cta :global(svg) {
+    transition: transform var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .advisory-header-cta:hover :global(svg) { transform: translateX(3px); }
+
+  .advisory-flow {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(14px, 2vw, 22px);
+    grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr) 42px minmax(0, 1fr);
+    align-items: stretch;
   }
 
   .advisory-card {
+    position: relative;
     min-width: 0;
+    min-height: 470px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    padding: clamp(22px, 2.6vw, 30px);
-    background: var(--surface-card);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 4px 20px rgba(8, 19, 51, 0.03);
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    padding: clamp(22px, 2vw, 30px) clamp(20px, 2vw, 28px) 18px;
+    background: color-mix(in srgb, var(--surface-card) 96%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-medium));
+    border-radius: 14px;
+    box-shadow: 0 12px 34px rgba(8, 19, 51, 0.04);
+    transition:
+      transform var(--duration-base) var(--ease-out-expo),
+      border-color var(--duration-base) ease,
+      box-shadow var(--duration-base) ease;
   }
 
   .advisory-card:hover {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--accent-blue) 38%, var(--border-medium));
-    box-shadow: 0 10px 28px rgba(8, 19, 51, 0.07);
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--accent-blue) 42%, var(--border-medium));
+    box-shadow: 0 18px 46px rgba(8, 19, 51, 0.08);
   }
 
-  .card-question {
+  .card-header {
+    min-height: 124px;
+  }
+
+  .card-step {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 12px;
+    font-family: var(--font-display);
+    line-height: 1;
+  }
+
+  .card-number {
+    color: var(--accent-blue);
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
+
+  .card-phase {
+    color: color-mix(in srgb, var(--ink-muted) 82%, transparent);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .card-header h3 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(1.15rem, 1.45vw, 1.34rem);
-    line-height: 1.25;
-    letter-spacing: -0.025em;
+    font-size: clamp(1.35rem, 1.8vw, 1.75rem);
+    line-height: 1.12;
+    letter-spacing: -0.04em;
     font-weight: 800;
     color: var(--ink-display);
   }
 
-  .card-benefit {
-    flex: 1;
-    margin: 0;
-    font-size: 0.92rem;
-    line-height: 1.62;
+  .card-header p {
+    margin: 8px 0 0;
+    max-width: 390px;
+    font-size: 1rem;
+    line-height: 1.48;
     color: var(--ink-muted);
   }
 
-  .card-benefit :global(strong) {
+  .card-detail {
+    flex: 1;
+    min-height: 188px;
+    display: grid;
+    grid-template-columns: minmax(145px, 1fr) minmax(132px, 0.9fr);
+    align-items: center;
+    gap: 10px;
+    padding: 14px 4px 16px;
+  }
+
+  .factor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .factor-list li {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    color: var(--ink-muted);
+    font-size: 0.94rem;
+    line-height: 1.25;
+  }
+
+  .factor-icon {
+    flex: 0 0 22px;
+    display: grid;
+    place-items: center;
+    color: color-mix(in srgb, var(--ink-display) 88%, var(--accent-blue));
+  }
+
+  .decision-visual {
+    position: relative;
+    width: 172px;
+    height: 166px;
+    justify-self: end;
+  }
+
+  .decision-circle {
+    position: absolute;
+    width: 104px;
+    height: 104px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-size: var(--text-caption);
+    font-weight: 650;
     color: var(--ink-display);
-    font-weight: 720;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 7%, transparent);
+  }
+
+  .decision-circle--local {
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background: color-mix(in srgb, var(--accent-blue) 29%, transparent);
+  }
+
+  .decision-circle--hybrid {
+    top: 28px;
+    right: 0;
+    z-index: 1;
+    background: color-mix(in srgb, var(--ink-muted) 12%, transparent);
+  }
+
+  .decision-circle--cloud {
+    bottom: 0;
+    left: 15px;
+    background: color-mix(in srgb, var(--ink-muted) 15%, transparent);
+  }
+
+  .architecture-visual {
+    position: relative;
+    width: 160px;
+    height: 176px;
+    justify-self: end;
+  }
+
+  .architecture-node {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 11%, var(--border-subtle));
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--accent-blue) 6%, var(--surface-card));
+    color: var(--ink-display);
+    font-size: var(--text-caption);
+    text-align: center;
+  }
+
+  .architecture-node--data {
+    top: 0;
+    left: 30px;
+    width: 100px;
+    height: 40px;
+  }
+
+  .architecture-node--runtime {
+    top: 61px;
+    left: 24px;
+    width: 112px;
+    height: 40px;
+    z-index: 2;
+    border-color: var(--accent-blue-light);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent-blue) 72%, white), var(--accent-blue));
+    color: white;
+    box-shadow: 0 7px 18px color-mix(in srgb, var(--accent-blue) 24%, transparent);
+  }
+
+  .architecture-node--device,
+  .architecture-node--cloud {
+    bottom: 0;
+    width: 70px;
+    height: 57px;
+    gap: 2px;
+    align-content: center;
+  }
+
+  .architecture-node--device { left: 3px; }
+  .architecture-node--cloud { right: 3px; }
+
+  .architecture-node small {
+    font-size: var(--text-caption);
+    line-height: 1;
+  }
+
+  .architecture-line {
+    position: absolute;
+    left: 79px;
+    width: 2px;
+    background: var(--accent-blue);
+  }
+
+  .architecture-line::after {
+    position: absolute;
+    bottom: -1px;
+    left: -2px;
+    width: 5px;
+    height: 5px;
+    content: '';
+    border-right: 1.5px solid var(--accent-blue);
+    border-bottom: 1.5px solid var(--accent-blue);
+    transform: rotate(45deg);
+  }
+
+  .architecture-line--input { top: 40px; height: 21px; }
+  .architecture-line--output { top: 101px; height: 17px; }
+
+  .architecture-branch {
+    position: absolute;
+    top: 117px;
+    left: 37px;
+    width: 86px;
+    height: 10px;
+    border-top: 1.5px solid var(--accent-blue);
+    border-left: 1.5px solid var(--accent-blue);
+    border-right: 1.5px solid var(--accent-blue);
+    border-radius: 5px 5px 0 0;
+  }
+
+  .terminal-visual {
+    justify-self: end;
+    width: 168px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px;
+    border: 4px solid color-mix(in srgb, var(--surface-inverse) 88%, #5e687b);
+    border-radius: 8px;
+    background: #0a101b;
+    color: #c9d2e0;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.25;
+    box-shadow: 0 9px 18px rgba(8, 19, 51, 0.2);
+  }
+
+  .terminal-title {
+    margin-bottom: 3px;
+    color: #ffffff;
+  }
+
+  .terminal-visual strong {
+    color: #66d98a;
+    font-weight: 500;
   }
 
   .card-output {
+    min-height: 88px;
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) 22px;
+    align-items: center;
+    gap: 13px;
+    margin-top: auto;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent-blue) 5%, var(--surface-card)), color-mix(in srgb, var(--accent-blue) 2%, var(--surface-card)));
+  }
+
+  .output-icon {
+    display: grid;
+    place-items: center;
+    color: var(--accent-blue);
+  }
+
+  .output-copy {
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border-subtle);
+    line-height: 1.25;
   }
 
-  .card-output span {
-    font-size: 0.74rem;
-    color: var(--ink-subtle);
+  .output-copy small {
+    margin-bottom: 3px;
+    font-size: var(--text-caption);
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--ink-muted) 80%, var(--accent-blue));
   }
 
-  .card-output strong {
-    font-size: 0.88rem;
-    line-height: 1.4;
+  .output-copy strong {
+    overflow: hidden;
     color: var(--ink-display);
-  }
-
-  .advisory-bottom-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 26px;
-    padding: clamp(22px, 3vw, 32px);
-    background: color-mix(in srgb, var(--accent-blue) 3.5%, var(--surface-card));
-    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--border-medium));
-    border-radius: var(--radius-lg);
-  }
-
-  .banner-content h3 {
-    margin: 0 0 4px;
-    font-family: var(--font-display);
-    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
-    color: var(--ink-display);
-  }
-
-  .banner-content p {
-    max-width: 650px;
-    margin: 0;
-    font-size: 0.88rem;
-    line-height: 1.5;
-    color: var(--ink-muted);
-  }
-
-  .banner-primary {
-    flex-shrink: 0;
-    min-height: 46px;
-    padding-inline: 18px;
-    cursor: pointer;
+    font-size: 0.93rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  @media (max-width: 900px) {
-    .advisory-grid { grid-template-columns: 1fr; }
-    .advisory-card { max-width: 720px; width: 100%; margin-inline: auto; }
+  .output-copy > span {
+    margin-top: 2px;
+    overflow: hidden;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .output-arrow {
+    color: var(--ink-display);
+    transition: transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  .advisory-card:hover .output-arrow { transform: translateX(4px); }
+
+  .flow-arrow {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    color: var(--accent-blue);
+  }
+
+  .flow-arrow::before,
+  .flow-arrow::after {
+    position: absolute;
+    top: 50%;
+    width: 15px;
+    height: 1px;
+    content: '';
+    background: color-mix(in srgb, var(--accent-blue) 38%, var(--border-subtle));
+  }
+
+  .flow-arrow::before { left: 0; }
+  .flow-arrow::after { right: 0; }
+
+  .flow-arrow span {
+    position: relative;
+    z-index: 1;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 34%, var(--border-medium));
+    border-radius: 50%;
+    background: var(--surface-card);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-blue) 10%, transparent);
+  }
+
+  .advisory-principles {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.9fr);
+    align-items: center;
+    gap: clamp(28px, 5vw, 76px);
+    padding: 22px clamp(24px, 5vw, 72px);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .principle-statement {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .principle-mark {
+    flex: 0 0 56px;
+    display: grid;
+    place-items: center;
+    color: color-mix(in srgb, var(--ink-display) 82%, var(--accent-blue));
+  }
+
+  .principle-statement p {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 1.55vw, 1.45rem);
+    line-height: 1.38;
+    letter-spacing: -0.025em;
+    color: var(--ink-display);
+  }
+
+  .principle-statement strong {
+    color: var(--accent-blue);
+    font-weight: 700;
+  }
+
+  .advisory-principles ul {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0 0 0 clamp(24px, 4vw, 58px);
+    border-left: 1px solid var(--border-subtle);
+    list-style: none;
+  }
+
+  .advisory-principles li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+  }
+
+  .advisory-principles li > span {
+    display: grid;
+    color: color-mix(in srgb, var(--ink-display) 82%, var(--accent-blue));
+  }
+
+  .reveal {
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .flow-arrow span {
+      animation: arrow-breathe 2.8s ease-in-out infinite;
+    }
+
+    @keyframes arrow-breathe {
+      0%, 100% { box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-blue) 10%, transparent); }
+      50% { box-shadow: 0 4px 20px color-mix(in srgb, var(--accent-blue) 26%, transparent); }
+    }
+  }
+
+  @media (max-width: 1180px) {
+    .advisory-shell { max-width: 760px; }
+
+    .advisory-flow {
+      grid-template-columns: 1fr;
+    }
+
+    .advisory-card { min-height: 460px; }
+
+    .flow-arrow {
+      height: 54px;
+      transform: rotate(90deg);
+    }
+
+    .flow-arrow::before,
+    .flow-arrow::after { width: calc(50% - 18px); }
+
+    .advisory-principles {
+      grid-template-columns: 1fr;
+    }
+
+    .advisory-principles ul {
+      padding: 20px 0 0;
+      border-top: 1px solid var(--border-subtle);
+      border-left: 0;
+    }
+
   }
 
   @media (max-width: 680px) {
-    .advisory-header { text-align: left; margin-inline: 0; }
-    .advisory-body { margin-inline: 0; }
-    .advisory-bottom-banner { align-items: flex-start; flex-direction: column; }
-    .banner-primary { width: 100%; justify-content: center; }
+    .advisory-section {
+      padding-top: 44px;
+    }
+
+    .advisory-shell { gap: 28px; }
+
+    .advisory-header { text-align: left; }
+
+    .advisory-kicker {
+      justify-content: flex-start;
+      font-size: var(--text-caption);
+      letter-spacing: 0.15em;
+    }
+
+    .advisory-kicker::before { width: 32px; }
+    .advisory-kicker::after { display: none; }
+
+    .advisory-heading {
+      font-size: clamp(2.35rem, 12vw, 3.4rem);
+    }
+
+    .deployment-modes {
+      justify-content: flex-start;
+      gap: 10px;
+      letter-spacing: 0.12em;
+    }
+
+    .advisory-card {
+      min-height: 0;
+      padding: 22px 18px 16px;
+    }
+
+    .card-header { min-height: 0; }
+
+    .card-detail {
+      min-height: 360px;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding-block: 22px;
+    }
+
+    .decision-visual,
+    .architecture-visual,
+    .terminal-visual {
+      justify-self: center;
+    }
+
+    .card-output {
+      grid-template-columns: 42px minmax(0, 1fr) 20px;
+      padding-inline: 12px;
+    }
+
+    .output-icon :global(svg) { width: 30px; height: 30px; }
+
+    .output-copy strong,
+    .output-copy > span {
+      white-space: normal;
+    }
+
+    .principle-statement {
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .advisory-principles {
+      padding-inline: 4px;
+    }
+
+    .advisory-header-cta { width: 100%; }
+  }
+
+  @media (max-width: 390px) {
+    .card-output {
+      grid-template-columns: 1fr 20px;
+    }
+
+    .output-icon { display: none; }
   }
 </style>

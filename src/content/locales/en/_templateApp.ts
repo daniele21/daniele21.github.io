@@ -19,12 +19,12 @@ export const templateAppData: AppProjectData = {
   /*  SEO & page metadata                                              */
   /* ---------------------------------------------------------------- */
   meta: {
-    title: 'TODO: Product Name — Daniele Moltisanti',
+    title: 'TODO: Product Name - Daniele Moltisanti',
     description: 'TODO: One-sentence description of what this product does and the problem it solves.',
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Hero — first visible section, above the fold                     */
+  /*  Hero - first visible section, above the fold                     */
   /* ---------------------------------------------------------------- */
   hero: {
     eyebrow: 'PRODUCT · TODO: CATEGORY',
@@ -58,7 +58,7 @@ export const templateAppData: AppProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Proof statement — right after hero                               */
+  /*  Proof statement - right after hero                               */
   /* ---------------------------------------------------------------- */
   proof: {
     statement: 'TODO: One sentence that defines the thesis this product proves.',
@@ -66,7 +66,7 @@ export const templateAppData: AppProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Problem — why this product exists                                */
+  /*  Problem - why this product exists                                */
   /* ---------------------------------------------------------------- */
   problem: {
     kicker: 'THE PROBLEM',
@@ -97,7 +97,7 @@ export const templateAppData: AppProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Benefits — what the user gains                                   */
+  /*  Benefits - what the user gains                                   */
   /* ---------------------------------------------------------------- */
   benefits: {
     eyebrow: 'WHAT YOU GET',
@@ -123,7 +123,7 @@ export const templateAppData: AppProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Workflow — how the product works                                 */
+  /*  Workflow - how the product works                                 */
   /* ---------------------------------------------------------------- */
   workflow: {
     eyebrow: 'HOW IT WORKS',
@@ -155,7 +155,7 @@ export const templateAppData: AppProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Product — screenshot showcase                                    */
+  /*  Product - screenshot showcase                                    */
   /* ---------------------------------------------------------------- */
   product: {
     eyebrow: 'THE PRODUCT',
@@ -176,7 +176,7 @@ export const templateAppData: AppProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Architecture — technical design                                  */
+  /*  Architecture - technical design                                  */
   /* ---------------------------------------------------------------- */
   architecture: {
     eyebrow: 'ARCHITECTURE',
@@ -187,7 +187,7 @@ export const templateAppData: AppProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Evidence & limits — honest assessment                            */
+  /*  Evidence & limits - honest assessment                            */
   /* ---------------------------------------------------------------- */
   evidence: {
     eyebrow: 'EVIDENCE & LIMITS',
@@ -209,7 +209,7 @@ export const templateAppData: AppProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Relations — where this product fits in the ecosystem             */
+  /*  Relations - where this product fits in the ecosystem             */
   /* ---------------------------------------------------------------- */
   relations: [
     {
@@ -233,7 +233,7 @@ export const templateAppData: AppProjectData = {
   ],
 
   /* ---------------------------------------------------------------- */
-  /*  CTA — final call to action at page bottom                        */
+  /*  CTA - final call to action at page bottom                        */
   /* ---------------------------------------------------------------- */
   cta: {
     kicker: 'TODO: CTA KICKER',

@@ -36,7 +36,7 @@ import { templateAppData as data } from '../../content/locales/en/_templateApp';
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 
 /* ------------------------------------------------------------------ */
-/*  SubHeader anchor links — matches the section IDs below             */
+/*  SubHeader anchor links - matches the section IDs below             */
 /* ------------------------------------------------------------------ */
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
@@ -70,7 +70,7 @@ const projectSchema = {
   jsonLd={projectSchema}
 >
   <!-- ============================================================= -->
-  <!-- SUB-HEADER — sticky project navigation                         -->
+  <!-- SUB-HEADER - sticky project navigation                         -->
   <!-- ============================================================= -->
   <ProductSubHeader
     title={data.hero.title}
@@ -83,7 +83,7 @@ const projectSchema = {
   <div id="top" data-project-page data-project-archetype="product">
 
     <!-- =========================================================== -->
-    <!-- HERO — title, lede, meta pills, actions + visual             -->
+    <!-- HERO - title, lede, meta pills, actions + visual             -->
     <!-- =========================================================== -->
     <ProjectHero
       eyebrow={data.hero.eyebrow}
@@ -116,7 +116,7 @@ const projectSchema = {
     </ProjectHero>
 
     <!-- =========================================================== -->
-    <!-- PROOF — thesis statement                                      -->
+    <!-- PROOF - thesis statement                                      -->
     <!-- =========================================================== -->
     <ProjectProof
       statement={data.proof.statement}
@@ -124,7 +124,7 @@ const projectSchema = {
     />
 
     <!-- =========================================================== -->
-    <!-- PROBLEM — why this product exists                             -->
+    <!-- PROBLEM - why this product exists                             -->
     <!-- =========================================================== -->
     <section class="section section-alt" id="why">
       <div class="shell">
@@ -159,7 +159,7 @@ const projectSchema = {
     </section>
 
     <!-- =========================================================== -->
-    <!-- BENEFITS — key value props                                    -->
+    <!-- BENEFITS - key value props                                    -->
     <!-- =========================================================== -->
     <ProjectSection
       id="benefits"
@@ -180,7 +180,7 @@ const projectSchema = {
     </ProjectSection>
 
     <!-- =========================================================== -->
-    <!-- WORKFLOW — how the product works                               -->
+    <!-- WORKFLOW - how the product works                               -->
     <!-- =========================================================== -->
     <div id="workflow" class="project-anchor">
       <ProjectSection
@@ -220,7 +220,7 @@ const projectSchema = {
     </div>
 
     <!-- =========================================================== -->
-    <!-- PRODUCT — screenshot showcase                                 -->
+    <!-- PRODUCT - screenshot showcase                                 -->
     <!-- =========================================================== -->
     <div id="product" class="project-anchor">
       <ProjectSection
@@ -250,7 +250,7 @@ const projectSchema = {
     </div>
 
     <!-- =========================================================== -->
-    <!-- ARCHITECTURE — technical design                               -->
+    <!-- ARCHITECTURE - technical design                               -->
     <!-- =========================================================== -->
     <div id="architecture" class="project-anchor">
       <ProjectSection
@@ -278,7 +278,7 @@ const projectSchema = {
     </div>
 
     <!-- =========================================================== -->
-    <!-- EVIDENCE — honest assessment of maturity                      -->
+    <!-- EVIDENCE - honest assessment of maturity                      -->
     <!-- =========================================================== -->
     <ProjectSection
       id="evidence"
@@ -297,12 +297,12 @@ const projectSchema = {
     </ProjectSection>
 
     <!-- =========================================================== -->
-    <!-- RELATIONS — ecosystem context                                 -->
+    <!-- RELATIONS - ecosystem context                                 -->
     <!-- =========================================================== -->
     <ProjectRelations items={data.relations} />
 
     <!-- =========================================================== -->
-    <!-- CTA — final call to action                                    -->
+    <!-- CTA - final call to action                                    -->
     <!-- =========================================================== -->
     <ProjectCta
       kicker={data.cta.kicker}
@@ -323,7 +323,7 @@ const projectSchema = {
 <!-- ================================================================= -->
 <style>
   /* ---------------------------------------------------------------- */
-  /*  Hero visual — overlapping screenshot layout                      */
+  /*  Hero visual - overlapping screenshot layout                      */
   /* ---------------------------------------------------------------- */
   .app-hero-visual {
     position: relative;

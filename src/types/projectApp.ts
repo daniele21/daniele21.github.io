@@ -82,7 +82,7 @@ export interface AppHero {
   meta: string[];
   actions: ProjectAction[];
   visualLabel: string;
-  /** Primary hero visuals — supports multiple images (e.g. phone screenshots). */
+  /** Primary hero visuals - supports multiple images (e.g. phone screenshots). */
   visuals: ProductScreenshot[];
   /** Optional contextual note displayed in the hero visual. */
   visualNote?: string;
@@ -94,7 +94,7 @@ export interface AppProof {
   detail?: string;
 }
 
-/** Problem section — why this product exists. */
+/** Problem section - why this product exists. */
 export interface AppProblem {
   kicker: string;
   titleLine1: string;
@@ -113,7 +113,7 @@ export interface AppBenefits {
   items: BenefitItem[];
 }
 
-/** Workflow / solution section — the "how it works" walkthrough. */
+/** Workflow / solution section - the "how it works" walkthrough. */
 export interface AppWorkflow {
   eyebrow: string;
   title: string;

@@ -19,12 +19,12 @@ export const templateInfrastructureData: InfrastructureProjectData = {
   /*  SEO & page metadata                                              */
   /* ---------------------------------------------------------------- */
   meta: {
-    title: 'TODO: Project Name — Daniele Moltisanti',
+    title: 'TODO: Project Name - Daniele Moltisanti',
     description: 'TODO: One-sentence description of what this infrastructure project does and why it matters.',
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Hero — first visible section, above the fold                     */
+  /*  Hero - first visible section, above the fold                     */
   /* ---------------------------------------------------------------- */
   hero: {
     eyebrow: 'INFRASTRUCTURE · TODO: DOMAIN',
@@ -49,7 +49,7 @@ export const templateInfrastructureData: InfrastructureProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Proof statement — right after hero                               */
+  /*  Proof statement - right after hero                               */
   /* ---------------------------------------------------------------- */
   proof: {
     statement: 'TODO: One sentence that defines the thesis this project proves.',
@@ -57,7 +57,7 @@ export const templateInfrastructureData: InfrastructureProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Why it exists — design principles                                */
+  /*  Why it exists - design principles                                */
   /* ---------------------------------------------------------------- */
   why: {
     eyebrow: 'WHY IT EXISTS',
@@ -83,7 +83,7 @@ export const templateInfrastructureData: InfrastructureProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Problems — the specific issues this project solves               */
+  /*  Problems - the specific issues this project solves               */
   /* ---------------------------------------------------------------- */
   problems: {
     eyebrow: 'THE PROBLEM',
@@ -112,7 +112,7 @@ export const templateInfrastructureData: InfrastructureProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Architecture — system design deep-dive                           */
+  /*  Architecture - system design deep-dive                           */
   /* ---------------------------------------------------------------- */
   architecture: {
     eyebrow: 'ARCHITECTURE',
@@ -123,7 +123,7 @@ export const templateInfrastructureData: InfrastructureProjectData = {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Runtime — code preview, surfaces, operational details            */
+  /*  Runtime - code preview, surfaces, operational details            */
   /* ---------------------------------------------------------------- */
   runtime: {
     eyebrow: 'RUNTIME',
@@ -140,7 +140,7 @@ fun main() {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Evidence & limits — honest assessment of project maturity        */
+  /*  Evidence & limits - honest assessment of project maturity        */
   /* ---------------------------------------------------------------- */
   evidence: {
     eyebrow: 'EVIDENCE & LIMITS',
@@ -162,7 +162,7 @@ fun main() {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Status & roadmap — current phase and next steps                  */
+  /*  Status & roadmap - current phase and next steps                  */
   /* ---------------------------------------------------------------- */
   status: {
     eyebrow: 'STATUS & NEXT',
@@ -195,7 +195,7 @@ fun main() {
   },
 
   /* ---------------------------------------------------------------- */
-  /*  Relations — where this project fits in the ecosystem             */
+  /*  Relations - where this project fits in the ecosystem             */
   /* ---------------------------------------------------------------- */
   relations: [
     {
@@ -219,7 +219,7 @@ fun main() {
   ],
 
   /* ---------------------------------------------------------------- */
-  /*  CTA — final call to action at page bottom                        */
+  /*  CTA - final call to action at page bottom                        */
   /* ---------------------------------------------------------------- */
   cta: {
     badge: 'TODO: BADGE TEXT',
