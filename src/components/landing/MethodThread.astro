@@ -49,7 +49,11 @@ const pathD = direction === 'ltr'
     position: relative;
     height: 112px;
     overflow: clip;
-    background: var(--surface-canvas);
+    background: linear-gradient(
+      to bottom,
+      var(--journey-surface-tint, var(--surface-subtle)) 0%,
+      var(--journey-surface-canvas, var(--surface-canvas)) 100%
+    );
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -59,7 +63,13 @@ const pathD = direction === 'ltr'
     }
   }
 
-  .dir-rtl { background: var(--surface-subtle); }
+  .dir-rtl {
+    background: linear-gradient(
+      to bottom,
+      var(--journey-surface-canvas, var(--surface-canvas)) 0%,
+      var(--journey-surface-tint, var(--surface-subtle)) 100%
+    );
+  }
 
   .thread-shell {
     position: relative;
@@ -149,7 +159,7 @@ const pathD = direction === 'ltr'
     width: min(620px, 90vw);
     margin: 0;
     padding: 0 12px;
-    background: color-mix(in srgb, var(--surface-canvas) 88%, transparent);
+    background: color-mix(in srgb, var(--journey-surface-canvas, var(--surface-canvas)) 88%, transparent);
     color: var(--ink-muted);
     font-size: var(--text-caption);
     line-height: 1.5;
@@ -157,7 +167,7 @@ const pathD = direction === 'ltr'
   }
 
   .dir-rtl .thread-sublabel {
-    background: color-mix(in srgb, var(--surface-subtle) 88%, transparent);
+    background: color-mix(in srgb, var(--journey-surface-tint, var(--surface-subtle)) 88%, transparent);
   }
 
   @media (max-width: 760px) {

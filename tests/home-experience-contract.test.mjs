@@ -45,6 +45,17 @@ test('homepage preserves the declared narrative order', () => {
   }
 });
 
+test('homepage section surfaces alternate through continuous gradients', () => {
+  const layout = read('src/styles/layout.css');
+  const plane = read('src/components/landing/PlaneTemplate.astro');
+  const thread = read('src/components/landing/MethodThread.astro');
+
+  assert.match(layout, /--journey-surface-tint:/);
+  assert.match(plane, /plane-section--subtle[\s\S]{0,420}radial-gradient/);
+  assert.match(thread, /var\(--journey-surface-tint[\s\S]{0,260}var\(--journey-surface-canvas/);
+  assert.match(thread, /dir-rtl[\s\S]{0,260}var\(--journey-surface-canvas[\s\S]{0,260}var\(--journey-surface-tint/);
+});
+
 test('homepage identity stays in the shared header without duplicating the hero', () => {
   const hero = read('src/components/landing/LandingHero.astro');
   const header = read('src/components/landing/LandingHeader.astro');

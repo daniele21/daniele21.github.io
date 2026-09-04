@@ -38,7 +38,13 @@ import EvidenceMatrix from './EvidenceMatrix.astro';
     position: relative;
     overflow: clip;
     padding: clamp(54px, 5.5vw, 76px) 0 clamp(72px, 7vw, 96px);
-    background: var(--surface-canvas);
+    background:
+      linear-gradient(
+        to bottom,
+        var(--journey-surface-canvas, var(--surface-canvas)) 0%,
+        var(--journey-surface-canvas, var(--surface-canvas)) calc(100% - var(--journey-transition-size, 120px)),
+        color-mix(in srgb, var(--accent-teal) 3%, var(--surface-canvas)) 100%
+      );
   }
 
   .evidence-shell {

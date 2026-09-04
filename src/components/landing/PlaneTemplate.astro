@@ -73,8 +73,19 @@ const titleId = `${id}-title`;
     padding: var(--plane-rail-inset) 0 clamp(68px, 8vw, 108px);
   }
 
-  .plane-section--canvas { background: var(--surface-canvas); }
-  .plane-section--subtle { background: var(--surface-subtle); }
+  .plane-section--canvas {
+    background: var(--journey-surface-canvas, var(--surface-canvas));
+  }
+
+  .plane-section--subtle {
+    background:
+      radial-gradient(
+        ellipse 72% 46% at 50% 48%,
+        color-mix(in srgb, var(--accent-blue) 3%, transparent),
+        transparent 76%
+      ),
+      var(--journey-surface-tint, var(--surface-subtle));
+  }
 
   .plane-shell { position: relative; }
 

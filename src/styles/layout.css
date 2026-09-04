@@ -172,8 +172,17 @@ main [data-project-page][data-project-archetype] .flow-step > span {
 /* Alternating landing method path. The stage rails and inter-stage curves share
    the same shell edge, so Decide -> Build -> Test -> Measure reads as one line. */
 .method-journey {
+  /* Homepage-only surfaces: stronger than the global neutrals, but still quiet
+     enough to keep the continuous method path as the primary visual signal. */
+  --journey-surface-canvas: var(--surface-canvas);
+  --journey-surface-tint: color-mix(in srgb, var(--accent-blue) 7%, var(--surface-canvas));
+  --journey-transition-size: clamp(88px, 10vw, 152px);
   position: relative;
   isolation: isolate;
+}
+
+html[data-theme='dark'] .method-journey {
+  --journey-surface-tint: color-mix(in srgb, var(--accent-blue) 11%, var(--surface-canvas));
 }
 
 html[data-method-path-ready='true'] .method-journey .rail-guide,

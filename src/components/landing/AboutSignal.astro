@@ -72,7 +72,12 @@ const focusAreas = [
 <style>
   .about-signal-section {
     padding: clamp(62px, 8vw, 104px) 0;
-    background: var(--surface-canvas);
+    background:
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--accent-teal) 3%, var(--surface-canvas)) 0%,
+        var(--surface-canvas) clamp(96px, 12vw, 176px)
+      );
     border-bottom: 1px solid var(--border-subtle);
   }
 

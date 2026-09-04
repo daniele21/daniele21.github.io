@@ -1,47 +1,53 @@
 ---
+interface BadgeItem {
+  text: string;
+  type: 'blue' | 'purple' | 'cyan' | 'neutral' | 'dashed';
+  icon: 'check' | 'dash';
+}
+
 interface CriterionRow {
   dimension: string;
   detail: string;
-  local: string;
-  hybrid: string;
-  cloud: string;
+  local: BadgeItem;
+  hybrid: BadgeItem;
+  cloud: BadgeItem;
 }
 
 const criteria: CriterionRow[] = [
   {
-    dimension: 'Sensitive data',
-    detail: 'Where data is allowed to go',
-    local: 'Strongest boundary',
-    hybrid: 'Split boundary',
-    cloud: 'External boundary',
+    dimension: 'Data Privacy',
+    detail: 'Data egress & telemetry',
+    local: { text: 'Full Boundary', type: 'blue', icon: 'check' },
+    hybrid: { text: 'Partitioned', type: 'neutral', icon: 'dash' },
+    cloud: { text: 'External VPC', type: 'dashed', icon: 'dash' },
   },
   {
-    dimension: 'Offline & latency',
-    detail: 'Network dependence',
-    local: 'No network needed',
-    hybrid: 'Local fallback',
-    cloud: 'Network dependent',
+    dimension: 'Offline & Latency',
+    detail: 'Network dependence & RTT',
+    local: { text: 'Zero Network (0ms)', type: 'blue', icon: 'check' },
+    hybrid: { text: 'Edge Fallback', type: 'neutral', icon: 'dash' },
+    cloud: { text: 'Network Bound', type: 'dashed', icon: 'dash' },
   },
   {
-    dimension: 'System control',
-    detail: 'Runtime, models and lifecycle',
-    local: 'Full control',
-    hybrid: 'Control where it matters',
-    cloud: 'Provider constraints',
+    dimension: 'Runtime Control',
+    detail: 'Model weights & lifecycle',
+    local: { text: 'Full Ownership', type: 'blue', icon: 'check' },
+    hybrid: { text: 'Shared Policy', type: 'neutral', icon: 'dash' },
+    cloud: { text: 'Provider API', type: 'dashed', icon: 'dash' },
   },
   {
-    dimension: 'Model capability',
-    detail: 'What the workload needs',
-    local: 'Hardware limited',
-    hybrid: 'Route when needed',
-    cloud: 'Frontier models',
+    dimension: 'Frontier Reasoning',
+    detail: 'Access to 400B+ models',
+    local: { text: 'Hardware Bound', type: 'dashed', icon: 'dash' },
+    hybrid: { text: 'Dynamic Route', type: 'purple', icon: 'check' },
+    cloud: { text: 'Frontier Scale', type: 'cyan', icon: 'check' },
   },
   {
-    dimension: 'Scale',
-    detail: 'How capacity changes',
-    local: 'Fixed capacity',
-    hybrid: 'Flexible',
-    cloud: 'Elastic',
+    dimension: 'Elastic Scale',
+    detail: 'Burst capacity on demand',
+    local: { text: 'Fixed Hardware', type: 'dashed', icon: 'dash' },
+    hybrid: { text: 'Tiered Offload', type: 'purple', icon: 'check' },
+    cloud: { text: 'Unlimited Burst', type: 'cyan', icon: 'check' },
   },
 ];
 ---
@@ -50,12 +56,34 @@ const criteria: CriterionRow[] = [
   <div class="matrix-card" aria-label="Local, Hybrid and Cloud workload decision matrix">
     <div class="matrix-scroll-wrap">
       <table class="matrix-table">
+        <colgroup>
+          <col class="col-criteria" />
+          <col class="col-local" />
+          <col class="col-hybrid" />
+          <col class="col-cloud" />
+        </colgroup>
         <thead>
           <tr>
-            <th scope="col" class="criterion-heading">What matters?</th>
-            <th scope="col"><span class="architecture-label architecture-label--local">Local</span></th>
-            <th scope="col"><span class="architecture-label architecture-label--hybrid">Hybrid</span></th>
-            <th scope="col"><span class="architecture-label architecture-label--cloud">Cloud</span></th>
+            <th scope="col" class="criterion-heading">DECISION CRITERIA</th>
+            <th scope="col">
+              <span class="header-pill header-pill--local">
+                <span class="header-dot" aria-hidden="true"></span>
+                <span>LOCAL</span>
+                <span class="header-focus-tag">FOCUS</span>
+              </span>
+            </th>
+            <th scope="col">
+              <span class="header-pill header-pill--hybrid">
+                <span class="header-dot" aria-hidden="true"></span>
+                <span>HYBRID</span>
+              </span>
+            </th>
+            <th scope="col">
+              <span class="header-pill header-pill--cloud">
+                <span class="header-dot" aria-hidden="true"></span>
+                <span>CLOUD</span>
+              </span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -65,23 +93,80 @@ const criteria: CriterionRow[] = [
                 <strong>{row.dimension}</strong>
                 <span>{row.detail}</span>
               </th>
-              <td class="local-cell">{row.local}</td>
-              <td>{row.hybrid}</td>
-              <td>{row.cloud}</td>
+
+              <!-- LOCAL -->
+              <td>
+                <span class={`pill-badge pill-badge--${row.local.type}`}>
+                  {row.local.icon === 'check' ? (
+                    <svg class="badge-icon badge-icon--check" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="3 8.5 6 11.5 13 4.5" />
+                    </svg>
+                  ) : (
+                    <svg class="badge-icon badge-icon--dash" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true">
+                      <line x1="4" y1="8" x2="12" y2="8" />
+                    </svg>
+                  )}
+                  <span>{row.local.text}</span>
+                </span>
+              </td>
+
+              <!-- HYBRID -->
+              <td>
+                <span class={`pill-badge pill-badge--${row.hybrid.type}`}>
+                  {row.hybrid.icon === 'check' ? (
+                    <svg class="badge-icon badge-icon--check" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="3 8.5 6 11.5 13 4.5" />
+                    </svg>
+                  ) : (
+                    <svg class="badge-icon badge-icon--dash" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true">
+                      <line x1="4" y1="8" x2="12" y2="8" />
+                    </svg>
+                  )}
+                  <span>{row.hybrid.text}</span>
+                </span>
+              </td>
+
+              <!-- CLOUD -->
+              <td>
+                <span class={`pill-badge pill-badge--${row.cloud.type}`}>
+                  {row.cloud.icon === 'check' ? (
+                    <svg class="badge-icon badge-icon--check" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="3 8.5 6 11.5 13 4.5" />
+                    </svg>
+                  ) : (
+                    <svg class="badge-icon badge-icon--dash" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true">
+                      <line x1="4" y1="8" x2="12" y2="8" />
+                    </svg>
+                  )}
+                  <span>{row.cloud.text}</span>
+                </span>
+              </td>
             </tr>
           ))}
+
+          <!-- BEST FOR ROW -->
+          <tr class="best-for-row">
+            <th scope="row" class="best-for-heading">
+              BEST FOR
+            </th>
+            <td>
+              <div class="best-for-box best-for-box--local">
+                Full privacy & on-device control
+              </div>
+            </td>
+            <td>
+              <div class="best-for-box best-for-box--hybrid">
+                Tiered triage & split routing
+              </div>
+            </td>
+            <td>
+              <div class="best-for-box best-for-box--cloud">
+                Frontier reasoning & elastic scale
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="matrix-outcome">
-      <span>The goal isn't to choose Local.</span>
-      <strong>It's to choose the right boundary.</strong>
-      <div class="outcome-options" aria-label="Possible architecture outcomes">
-        <span>Local</span>
-        <span>Hybrid</span>
-        <span>Cloud</span>
-      </div>
     </div>
   </div>
 
@@ -102,15 +187,17 @@ const criteria: CriterionRow[] = [
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 100%;
   }
 
+  /* Matrix Card Shell */
   .matrix-card {
     width: 100%;
     overflow: hidden;
-    background: var(--surface-card);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 5px 22px rgba(8, 19, 51, 0.045);
+    background: var(--surface-card, #ffffff);
+    border: 1px solid #d5deef;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
   }
 
   .matrix-scroll-wrap {
@@ -121,131 +208,256 @@ const criteria: CriterionRow[] = [
 
   .matrix-table {
     width: 100%;
-    min-width: 760px;
+    min-width: 800px;
     border-collapse: collapse;
     text-align: left;
+    background: var(--surface-card, #ffffff);
+    table-layout: fixed;
   }
+
+  .col-criteria { width: 28%; }
+  .col-local { width: 24%; }
+  .col-hybrid { width: 24%; }
+  .col-cloud { width: 24%; }
 
   .matrix-table th,
   .matrix-table td {
-    padding: 16px 18px;
-    border-bottom: 1px solid var(--border-subtle);
+    padding: 15px 22px;
+    border-bottom: 1px solid #edf2f7;
     vertical-align: middle;
   }
 
+  /* Thead Header */
   .matrix-table thead th {
-    background: var(--surface-subtle);
-    color: var(--ink-muted);
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 700;
+    background: #fbfcfe;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #d5deef;
   }
 
   .criterion-heading {
-    width: 31%;
-    color: var(--ink-display) !important;
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 780;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    text-transform: uppercase;
   }
 
-  .architecture-label {
+  /* Header Pills */
+  .header-pill {
     display: inline-flex;
     align-items: center;
-    min-height: 30px;
-    padding: 5px 11px;
-    border-radius: var(--radius-full);
-    font-weight: 780;
+    gap: 8px;
+    min-height: 34px;
+    padding: 5px 14px;
+    border-radius: 9999px;
+    font-family: var(--font-display);
+    font-size: 0.86rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
   }
 
-  .architecture-label--local {
-    color: var(--accent-blue-dark);
-    background: var(--surface-blue-subtle);
-    border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, var(--border-subtle));
+  .header-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
 
-  .architecture-label--hybrid {
-    color: #6d28d9;
-    background: color-mix(in srgb, #7c3aed 7%, var(--surface-card));
-    border: 1px solid color-mix(in srgb, #7c3aed 18%, var(--border-subtle));
+  .header-pill--local {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #145bff;
+  }
+  .header-pill--local .header-dot {
+    background: #145bff;
   }
 
-  .architecture-label--cloud {
-    color: #0369a1;
-    background: color-mix(in srgb, #0284c7 7%, var(--surface-card));
-    border: 1px solid color-mix(in srgb, #0284c7 18%, var(--border-subtle));
+  .header-focus-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+    margin-left: 2px;
+    border-radius: 9999px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 0.65rem;
+    font-weight: 820;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    text-transform: uppercase;
   }
 
+  .header-pill--hybrid {
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+    color: #7c3aed;
+  }
+  .header-pill--hybrid .header-dot {
+    background: #7c3aed;
+  }
+
+  .header-pill--cloud {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    color: #0284c7;
+  }
+  .header-pill--cloud .header-dot {
+    background: #0284c7;
+  }
+
+  /* Criterion Dimension & Detail */
   .criterion-cell {
-    width: 31%;
-    background: color-mix(in srgb, var(--surface-subtle) 45%, transparent);
+    background: transparent;
   }
 
   .criterion-cell strong {
     display: block;
     margin-bottom: 3px;
     font-family: var(--font-display);
-    font-size: 0.92rem;
-    font-weight: 760;
-    color: var(--ink-display);
+    font-size: 0.95rem;
+    font-weight: 780;
+    color: #0f172a;
+    letter-spacing: -0.015em;
   }
 
   .criterion-cell span {
     display: block;
-    font-size: 0.74rem;
+    font-size: 0.77rem;
     line-height: 1.35;
-    color: var(--ink-subtle);
+    color: #64748b;
+    font-weight: 480;
   }
 
-  .matrix-table td {
-    font-size: 0.88rem;
-    line-height: 1.4;
-    color: var(--ink-muted);
-  }
-
-  .local-cell {
-    font-weight: 680;
-    color: var(--ink-display) !important;
-    background: color-mix(in srgb, var(--surface-blue-subtle) 42%, transparent);
-  }
-
-  .matrix-table tbody tr:last-child th,
-  .matrix-table tbody tr:last-child td {
-    border-bottom: 0;
-  }
-
-  .matrix-outcome {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 7px 10px;
-    padding: 16px 18px;
-    border-top: 1px solid var(--border-medium);
-    background: color-mix(in srgb, var(--surface-subtle) 62%, var(--surface-card));
-    font-size: 0.9rem;
-    color: var(--ink-muted);
-  }
-
-  .matrix-outcome strong {
-    color: var(--ink-display);
-    font-weight: 760;
-  }
-
-  .outcome-options {
+  /* Badge Pills for Table Rows */
+  .pill-badge {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    margin-left: auto;
-  }
-
-  .outcome-options span {
-    padding: 4px 8px;
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-full);
-    background: var(--surface-card);
-    color: var(--ink);
+    gap: 8px;
+    height: 33px;
+    padding: 0 14px;
+    border-radius: 9999px;
     font-family: var(--font-display);
-    font-size: var(--text-badge);
-    font-weight: 740;
+    font-size: 0.84rem;
+    line-height: 1;
+    white-space: nowrap;
   }
 
+  .badge-icon {
+    flex-shrink: 0;
+  }
+
+  .badge-icon--dash {
+    display: inline-block;
+  }
+
+  /* Blue (Local) */
+  .pill-badge--blue {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-weight: 680;
+  }
+  .pill-badge--blue .badge-icon--check {
+    stroke: #145bff;
+  }
+
+  /* Purple (Hybrid) */
+  .pill-badge--purple {
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+    color: #6d28d9;
+    font-weight: 680;
+  }
+  .pill-badge--purple .badge-icon--check {
+    stroke: #7c3aed;
+  }
+
+  /* Cyan (Cloud) */
+  .pill-badge--cyan {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    color: #0369a1;
+    font-weight: 680;
+  }
+  .pill-badge--cyan .badge-icon--check {
+    stroke: #0284c7;
+  }
+
+  /* Neutral Grey */
+  .pill-badge--neutral {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    font-weight: 600;
+  }
+  .pill-badge--neutral .badge-icon--dash {
+    stroke: #64748b;
+  }
+
+  /* Dashed Outline */
+  .pill-badge--dashed {
+    background: var(--surface-card, #ffffff);
+    border: 1.5px dashed #cbd5e1;
+    color: #64748b;
+    font-weight: 560;
+  }
+  .pill-badge--dashed .badge-icon--dash {
+    stroke: #94a3b8;
+  }
+
+  /* Bottom Row: Best For */
+  .best-for-row th,
+  .best-for-row td {
+    padding-top: 18px;
+    padding-bottom: 20px;
+    border-top: 1px solid #d5deef;
+    border-bottom: none;
+  }
+
+  .best-for-heading {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 780;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    text-transform: uppercase;
+  }
+
+  .best-for-box {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-family: var(--font-display);
+    font-size: 0.88rem;
+    font-weight: 720;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    box-sizing: border-box;
+  }
+
+  .best-for-box--local {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+  }
+
+  .best-for-box--hybrid {
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+    color: #6d28d9;
+  }
+
+  .best-for-box--cloud {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    color: #0369a1;
+  }
+
+  /* Decision Hook (Call to Action below table) */
   .decision-hook {
     display: flex;
     align-items: center;
@@ -253,8 +465,8 @@ const criteria: CriterionRow[] = [
     gap: 24px;
     padding: 18px 20px;
     border: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-medium));
-    border-radius: var(--radius-lg);
-    background: color-mix(in srgb, var(--accent-blue) 3.5%, var(--surface-card));
+    border-radius: var(--radius-lg, 20px);
+    background: color-mix(in srgb, var(--accent-blue) 3.5%, var(--surface-card, #ffffff));
   }
 
   .decision-hook h3 {
@@ -276,9 +488,71 @@ const criteria: CriterionRow[] = [
   .decision-cta {
     flex-shrink: 0;
     min-height: 42px;
-    padding-inline: 15px;
+    padding-inline: 16px;
     cursor: pointer;
     white-space: nowrap;
+  }
+
+  /* Dark Theme Overrides */
+  :global(html[data-theme='dark']) .matrix-card {
+    background: var(--surface-card);
+    border-color: var(--border-medium);
+  }
+
+  :global(html[data-theme='dark']) .matrix-table {
+    background: var(--surface-card);
+  }
+
+  :global(html[data-theme='dark']) .matrix-table thead th {
+    background: var(--surface-card);
+  }
+
+  :global(html[data-theme='dark']) .pill-badge--dashed {
+    background: transparent;
+    border-color: #334155;
+    color: #94a3b8;
+  }
+
+  :global(html[data-theme='dark']) .pill-badge--neutral {
+    background: #1e293b;
+    border-color: #334155;
+    color: #cbd5e1;
+  }
+
+  :global(html[data-theme='dark']) .pill-badge--blue {
+    background: rgba(20, 91, 255, 0.16);
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #93c5fd;
+  }
+
+  :global(html[data-theme='dark']) .pill-badge--purple {
+    background: rgba(124, 58, 237, 0.16);
+    border-color: rgba(167, 139, 250, 0.4);
+    color: #c4b5fd;
+  }
+
+  :global(html[data-theme='dark']) .pill-badge--cyan {
+    background: rgba(2, 132, 199, 0.16);
+    border-color: rgba(56, 189, 248, 0.4);
+    color: #7dd3fc;
+  }
+
+  :global(html[data-theme='dark']) .best-for-box--local {
+    background: rgba(20, 91, 255, 0.14);
+    border-color: rgba(59, 130, 246, 0.35);
+    color: #93c5fd;
+  }
+
+  :global(html[data-theme='dark']) .best-for-box--hybrid {
+    background: rgba(124, 58, 237, 0.14);
+    border-color: rgba(167, 139, 250, 0.35);
+    color: #c4b5fd;
+  }
+
+  :global(html[data-theme='dark']) .best-for-box--cloud {
+    background: rgba(2, 132, 199, 0.14);
+    border-color: rgba(56, 189, 248, 0.35);
+    color: #7dd3fc;
   }
 
   @media (max-width: 760px) {

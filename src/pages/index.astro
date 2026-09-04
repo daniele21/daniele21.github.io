@@ -5,6 +5,7 @@
  * Narrative progression: Decide -> Build -> Test -> Measure -> Decide Again.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteMetadata } from '../content/site';
 import LandingHeader from '../components/landing/LandingHeader.astro';
 import LandingHero from '../components/landing/LandingHero.astro';
 import ContinuousJourneyPath from '../components/landing/ContinuousJourneyPath.astro';
@@ -20,6 +21,9 @@ import FinalCta from '../components/landing/FinalCta.astro';
 <BaseLayout
   title="Daniele Moltisanti"
   description="Explore how far AI can move from the cloud to systems we control. Decide where AI should run, build reusable inference infrastructure, test inside real products, and measure what actually works."
+  ogTitle={siteMetadata.socialTitle}
+  ogDescription={siteMetadata.socialDescription}
+  ogImageAlt="Daniele Moltisanti — Local AI first, not Local AI only"
 >
   <script is:inline>
     document.documentElement.dataset.methodPathReady = 'pending';

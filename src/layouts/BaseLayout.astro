@@ -26,6 +26,9 @@ interface Props {
   ogTitle?: string;
   ogDescription?: string;
   ogImage?: string;
+  ogImageAlt?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
   jsonLd?: Record<string, any> | Array<Record<string, any>>;
   favicon?: string | Partial<FaviconConfig>;
 }
@@ -37,6 +40,9 @@ const {
   ogTitle = title,
   ogDescription = description,
   ogImage = siteMetadata.ogImage,
+  ogImageAlt = ogTitle,
+  ogImageWidth = ogImage === siteMetadata.ogImage ? 1200 : undefined,
+  ogImageHeight = ogImage === siteMetadata.ogImage ? 630 : undefined,
   jsonLd,
   favicon,
 } = Astro.props;
@@ -49,6 +55,12 @@ const activeFavicon = resolveFavicon(Astro.url.pathname, favicon);
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
 const siteBase = siteMetadata.canonical.replace(/\/$/, '');
 const computedCanonical = canonical || `${siteBase}${currentPath || '/'}`;
+const computedOgImage = new URL(ogImage, `${siteBase}/`).href;
+const ogImageType = computedOgImage.toLowerCase().endsWith('.png')
+  ? 'image/png'
+  : computedOgImage.toLowerCase().match(/\.jpe?g(?:$|\?)/)
+    ? 'image/jpeg'
+    : undefined;
 
 /**
  * Preview environments (dev/, pr-preview/) set ASTRO_BASE environment variable.
@@ -123,8 +135,9 @@ const allSchemas = jsonLd
   <script is:inline>
     (function () {
       try {
+        const urlTheme = new URLSearchParams(window.location.search).get('theme');
         const storedTheme = localStorage.getItem('theme');
-        const theme = storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const theme = urlTheme || storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', theme);
       } catch (e) {}
     })();
@@ -135,11 +148,17 @@ const allSchemas = jsonLd
   <meta property="og:title" content={ogTitle}>
   <meta property="og:description" content={ogDescription}>
   <meta property="og:url" content={computedCanonical}>
-  <meta property="og:image" content={ogImage}>
+  <meta property="og:image" content={computedOgImage}>
+  <meta property="og:image:secure_url" content={computedOgImage}>
+  {ogImageType && <meta property="og:image:type" content={ogImageType}>}
+  {ogImageWidth && <meta property="og:image:width" content={ogImageWidth.toString()}>}
+  {ogImageHeight && <meta property="og:image:height" content={ogImageHeight.toString()}>}
+  <meta property="og:image:alt" content={ogImageAlt}>
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content={ogTitle}>
   <meta name="twitter:description" content={ogDescription}>
-  <meta name="twitter:image" content={ogImage}>
+  <meta name="twitter:image" content={computedOgImage}>
+  <meta name="twitter:image:alt" content={ogImageAlt}>
 
   <!-- Structured Data (JSON-LD for SEO & GEO) -->
   {allSchemas.map((schema) => (

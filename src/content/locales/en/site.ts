@@ -8,7 +8,7 @@ export const siteMetadata: SiteMetadata = {
   socialTitle: 'Local AI first ≠ Local AI only',
   socialDescription:
     'GenAI systems, Local AI and evidence-led architecture decisions across Local, Hybrid and Cloud.',
-  ogImage: 'https://daniele21.github.io/social-card.svg',
+  ogImage: 'https://daniele21.github.io/social-card.png',
 };
 
 export const navigation: NavItem[] = [
