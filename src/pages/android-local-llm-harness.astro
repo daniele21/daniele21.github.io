@@ -1,7 +1,8 @@
 ---
 /**
  * android-local-llm-harness.astro
- * Infrastructure deep-dive using the shared archetype-based project UX.
+ * Harnex infrastructure project page built from the canonical infrastructure archetype.
+ * Images are intentionally represented by explicit placeholders until the final visual assets are produced.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
@@ -9,23 +10,16 @@ import ProjectHero from '../components/project/ProjectHero.astro';
 import ProjectProof from '../components/project/ProjectProof.astro';
 import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
 import ProjectRelations from '../components/project/ProjectRelations.astro';
+import ProjectCta from '../components/project/ProjectCta.astro';
 
-import HarnessMission from '../components/harness/HarnessMission.astro';
-import HarnessProblems from '../components/harness/HarnessProblems.astro';
-import HarnessConcept from '../components/harness/HarnessConcept.astro';
-import HarnessSurfaces from '../components/harness/HarnessSurfaces.astro';
-import HarnessArchitecture from '../components/harness/HarnessArchitecture.astro';
-import HarnessValues from '../components/harness/HarnessValues.astro';
-import HarnessRoadmap from '../components/harness/HarnessRoadmap.astro';
-import HarnessCodePreview from '../components/harness/HarnessCodePreview.astro';
-import HarnessMaturity from '../components/harness/HarnessMaturity.astro';
-import HarnessCta from '../components/harness/HarnessCta.astro';
-
-import { harnessData } from '../content/harness';
-
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
-const { hero } = harnessData;
+import {
+  harnexArchitectureLayers,
+  harnexProductSurfaces,
+  harnexProjectData as data,
+  harnexRuntimeCapabilities,
+} from '../content/locales/en/harnexProject';
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
@@ -35,188 +29,622 @@ const subheaderLinks = [
   { label: 'Status', href: '#status' },
 ];
 
-const harnessSchema = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Android Local LLM Harness",
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Android",
-  "description": harnessData.meta.description,
-  "author": {
-    "@type": "Person",
-    "name": "Daniele Moltisanti",
-    "url": "https://daniele21.github.io/"
+const projectSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: data.hero.title,
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Android',
+  description: data.meta.description,
+  author: {
+    '@type': 'Person',
+    name: 'Daniele Moltisanti',
+    url: 'https://daniele21.github.io/',
   },
-  "codeRepository": "https://github.com/daniele21/android-local-llm-harness"
+  codeRepository: data.cta.primaryAction.href,
 };
 ---
 
 <BaseLayout
-  title={harnessData.meta.title}
-  description={harnessData.meta.description}
-  jsonLd={harnessSchema}
+  title={data.meta.title}
+  description={data.meta.description}
+  jsonLd={projectSchema}
 >
   <ProductSubHeader
-    title="Harnex"
-    badge="Spec & prototype"
-    logoPath="images/harness/harnex-symbol.png"
+    title={data.hero.title}
+    badge={data.hero.status.split('·')[0]?.trim()}
     links={subheaderLinks}
-    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness' }}
+    cta={{ label: 'GitHub ↗', href: data.cta.primaryAction.href }}
   />
 
   <div id="top" data-project-page data-project-archetype="infrastructure">
     <ProjectHero
-      eyebrow="INFRASTRUCTURE · ANDROID LOCAL AI"
-      title="Harnex"
-      lede="Your local AI harness for Android: one gateway, shared on-device LLM runtime, model plane, and control plane so Android teams can build local AI features without rebuilding infrastructure inside every app."
-      status="Spec & prototype · active validation"
-      logoPath="images/harness/harnex-symbol.png"
-      meta={['Android API 26+', 'GGUF + llama.cpp', 'Kotlin + JNI/C++', 'MIT']}
-      actions={[
-        { label: 'Explore architecture ↓', href: '#architecture' },
-        { label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness', variant: 'secondary' },
-      ]}
-      visualLabel="Harnex architecture & Local AI Gateway vision"
+      eyebrow={data.hero.eyebrow}
+      title={data.hero.title}
+      lede={data.hero.lede}
+      status={data.hero.status}
+      meta={data.hero.meta}
+      actions={data.hero.actions}
+      visualLabel={data.hero.visualLabel}
     >
-      <div class="harness-hero-visual">
-        <img
-          data-zoomable
-          src={`${baseUrl}/${hero.imageHero}`}
-          alt="Harnex architecture showing the app, gateway and local inference engine"
-          width="1400"
-          height="900"
-          loading="eager"
-        />
-        <div class="harness-hero-caption">
-          <span>{hero.imageNoteLeft}</span>
-          <span>{hero.imageNoteRight}</span>
+      <div
+        class="visual-placeholder visual-placeholder--hero"
+        role="img"
+        aria-label={data.hero.visualLabel}
+        data-visual-placeholder
+      >
+        <span class="placeholder-kicker">IMAGE PLACEHOLDER · HERO SYSTEM MAP</span>
+        <strong>Show the shared Android Local AI boundary at a glance.</strong>
+        <p>Future visual: consumer apps → Consumer SDK → Binder → Harnex host → llama.cpp / curated GGUF.</p>
+        <div class="placeholder-flow" aria-hidden="true">
+          <span>Android apps</span>
+          <i>→</i>
+          <span>Consumer SDK</span>
+          <i>→</i>
+          <span>Binder</span>
+          <i>→</i>
+          <span>Harnex Host</span>
+          <i>→</i>
+          <span>Local LLM</span>
+        </div>
+        <div class="placeholder-caption">
+          <span>{data.hero.imageCaptionLeft}</span>
+          <span>{data.hero.imageCaptionRight}</span>
         </div>
       </div>
     </ProjectHero>
 
     <ProjectProof
-      statement="On-device AI becomes reusable infrastructure only when model identity, lifecycle, memory ownership, client boundaries and diagnostics are explicit."
-      detail="Harnex is proving those foundations in one connected Android console before moving runtime ownership into the final cross-application Binder/AIDL gateway."
+      statement={data.proof.statement}
+      detail={data.proof.detail}
     />
 
-    <HarnessMission />
-    <HarnessProblems />
+    <ProjectSection
+      id="why"
+      eyebrow={data.why.eyebrow}
+      title={data.why.title}
+      description={data.why.description}
+      tone="canvas"
+    >
+      <div class="principle-strip" aria-label="Harnex design principles">
+        {data.why.principles.map((principle) => (
+          <article class={`principle-card principle-card--${principle.color || 'blue'}`}>
+            <strong>{principle.title}</strong>
+            <p>{principle.subtitle}</p>
+          </article>
+        ))}
+      </div>
+    </ProjectSection>
+
+    <ProjectSection
+      id="problems"
+      eyebrow={data.problems.eyebrow}
+      title={data.problems.title}
+      description={data.problems.description}
+      tone="subtle"
+    >
+      <div class="problem-grid" aria-label="Infrastructure problems addressed by Harnex">
+        {data.problems.items.map((item) => (
+          <article class="problem-card">
+            <div class={`problem-index problem-index--${item.color || 'blue'}`}>
+              {String(item.id).padStart(2, '0')}
+            </div>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </ProjectSection>
 
     <div id="architecture" class="project-anchor">
-      <HarnessConcept />
-      <HarnessArchitecture baseUrl={baseUrl} />
+      <ProjectSection
+        id="architecture-inner"
+        eyebrow={data.architecture.eyebrow}
+        title={data.architecture.title}
+        description={data.architecture.description}
+        tone="canvas"
+        width="wide"
+      >
+        <div
+          class="visual-placeholder visual-placeholder--architecture"
+          role="img"
+          aria-label={data.architecture.diagramAlt || 'Harnex architecture diagram placeholder'}
+          data-visual-placeholder
+        >
+          <span class="placeholder-kicker">IMAGE PLACEHOLDER · ARCHITECTURE</span>
+          <strong>Control plane + data plane + evidence plane.</strong>
+          <p>The final diagram should make ownership clearer than implementation detail: who owns the workflow, transport, policy, runtime, model bytes and telemetry.</p>
+        </div>
+
+        <div class="ownership-flow" aria-label="Harnex architecture ownership layers">
+          {harnexArchitectureLayers.map((layer, index) => (
+            <article class="ownership-card">
+              <div class="ownership-head">
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <small>{layer.label}</small>
+              </div>
+              <strong>{layer.title}</strong>
+              <p>{layer.description}</p>
+            </article>
+          ))}
+        </div>
+      </ProjectSection>
     </div>
 
     <div id="runtime" class="project-anchor">
-      <HarnessCodePreview />
-      <HarnessSurfaces baseUrl={baseUrl} />
-      <HarnessValues />
+      <ProjectSection
+        id="runtime-inner"
+        eyebrow={data.runtime.eyebrow}
+        title={data.runtime.title}
+        description={data.runtime.description}
+        tone="subtle"
+        width="wide"
+      >
+        {data.runtime.codePreview && (
+          <div class="code-preview">
+            <div class="code-preview-header">
+              <span class="code-preview-lang">{data.runtime.codePreview.language}</span>
+              <span class="code-preview-title">{data.runtime.codePreview.title}</span>
+            </div>
+            <pre tabindex="0" aria-label="Consumer Android SDK example; scroll horizontally to inspect code"><code set:text={data.runtime.codePreview.code} /></pre>
+            <p class="code-scroll-hint">Scroll to inspect code</p>
+          </div>
+        )}
+
+        <div class="runtime-grid" aria-label="Harnex runtime capabilities">
+          {harnexRuntimeCapabilities.map((capability) => (
+            <article class="runtime-card">
+              <strong>{capability.title}</strong>
+              <p>{capability.description}</p>
+            </article>
+          ))}
+        </div>
+
+        <div class="surface-band" aria-label="Current Harnex product surfaces">
+          <div>
+            <span class="surface-label">CURRENT CONTROL SURFACES</span>
+            <p>One engineering console exposes the shared host state without making each consumer app a runtime debugger.</p>
+          </div>
+          <ul>
+            {harnexProductSurfaces.map((surface) => <li>{surface}</li>)}
+          </ul>
+        </div>
+      </ProjectSection>
     </div>
 
     <ProjectSection
       id="evidence"
-      eyebrow="EVIDENCE & LIMITS"
-      title="The runtime foundation is integrated; the shared gateway is still the target architecture."
-      description="The page separates what exists in the connected console today from the physical-device and cross-application evidence still required before stronger platform claims are justified."
+      eyebrow={data.evidence.eyebrow}
+      title={data.evidence.title}
+      description={data.evidence.description}
       tone="subtle"
       width="wide"
     >
-      <HarnessMaturity />
       <ProjectEvidenceNote
-        title="Integrated capability is not yet production-readiness evidence."
-        body="Harnex currently integrates embedded GGUF inference, streaming, cancellation, model lifecycle and diagnostic surfaces. Representative device evidence and the shared Binder/AIDL host remain necessary before describing it as a production Android inference platform."
-        evidenced={[
-          'Embedded GGUF inference path is integrated',
-          'Streaming, cancellation and model lifecycle are implemented',
-          'Runtime health, resources and benchmark surfaces are connected',
-          'Client and backend boundaries are explicit in the current architecture',
-        ]}
-        missing={[
-          'Representative physical-device memory and thermal validation',
-          'Production packaging and reliability evidence',
-          'Cross-application Binder/AIDL host',
-        ]}
+        title={data.evidence.note.title}
+        body={data.evidence.note.body}
+        evidenced={data.evidence.note.evidenced}
+        missing={data.evidence.note.missing}
       />
     </ProjectSection>
 
     <ProjectSection
       id="status"
-      eyebrow="STATUS & NEXT"
-      title="Prove the data plane, stabilize the contract, then move ownership."
-      description="The roadmap deliberately validates the difficult runtime and model-management foundations before adding cross-application IPC and shared resource ownership."
+      eyebrow={data.status.eyebrow}
+      title={data.status.title}
+      description={data.status.description}
       tone="canvas"
       width="wide"
     >
-      <HarnessRoadmap />
+      {data.status.decision && (
+        <ProjectDecisionBand
+          title={data.status.decision.title}
+          body={data.status.decision.body}
+          signals={data.status.decision.signals}
+        />
+      )}
     </ProjectSection>
 
-    <ProjectRelations
-      title="How the Android local-AI layer is evaluated"
-      items={[
-        {
-          stage: 'BUILD · INFRASTRUCTURE',
-          title: 'Harnex',
-          current: true,
-          note: 'Runtime, models and diagnostics on-device',
-        },
-        {
-          stage: 'MEASURE · PERFORMANCE',
-          title: 'Performance Lab',
-          href: '/performance-lab',
-          note: 'Latency, throughput and resource-fit evidence',
-        },
-        {
-          stage: 'MEASURE · NETWORK',
-          title: 'Traffic Monitoring Android',
-          href: '/traffic-monitoring-android',
-          note: 'Network-boundary observability on Android',
-        },
-      ]}
-    />
+    <ProjectRelations items={data.relations} />
 
-    <HarnessCta baseUrl={baseUrl} />
+    <ProjectCta
+      badge={data.cta.badge}
+      title={data.cta.title}
+      description={data.cta.description}
+      primaryLabel={data.cta.primaryAction.label}
+      primaryHref={data.cta.primaryAction.href}
+      secondaryLabel={data.cta.secondaryAction?.label}
+      secondaryHref={data.cta.secondaryAction?.href}
+      variant="dark"
+    />
   </div>
 </BaseLayout>
 
 <style>
-  .harness-hero-visual {
-    overflow: hidden;
-    border: 1px solid var(--border-medium);
+  .visual-placeholder {
+    position: relative;
+    display: grid;
+    place-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    min-height: clamp(340px, 46vw, 620px);
+    padding: clamp(28px, 5vw, 64px);
+    border: 1px dashed var(--border-strong);
     border-radius: clamp(18px, 2.5vw, 28px);
-    background: var(--surface-subtle);
+    background:
+      linear-gradient(var(--border-subtle) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px),
+      var(--surface-subtle);
+    background-size: 32px 32px;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .visual-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--surface-card) 58%, transparent), transparent 46%, color-mix(in srgb, var(--surface-card) 72%, transparent));
+    pointer-events: none;
+  }
+
+  .visual-placeholder > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .visual-placeholder--architecture {
+    min-height: clamp(300px, 38vw, 500px);
+    margin-bottom: var(--space-5);
+  }
+
+  .placeholder-kicker,
+  .surface-label {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+
+  .visual-placeholder > strong {
+    max-width: 760px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.4vw, 2.1rem);
+    line-height: 1.15;
+  }
+
+  .visual-placeholder > p {
+    max-width: 720px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.65;
+  }
+
+  .placeholder-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: var(--space-3);
+  }
+
+  .placeholder-flow span {
+    padding: 9px 12px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .placeholder-flow i {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-style: normal;
+  }
+
+  .placeholder-caption {
+    position: absolute;
+    right: clamp(16px, 3vw, 28px);
+    bottom: clamp(14px, 2vw, 22px);
+    left: clamp(16px, 3vw, 28px);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    text-align: left;
+  }
+
+  .principle-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .principle-card {
+    padding: clamp(20px, 2.5vw, 28px);
+    border-top: 2px solid var(--accent-blue);
+    background: var(--surface-card);
+  }
+
+  .principle-card--teal { border-top-color: var(--accent-teal, #14b8a6); }
+  .principle-card--violet { border-top-color: var(--accent-violet, #8b5cf6); }
+
+  .principle-card strong,
+  .runtime-card strong,
+  .ownership-card > strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  }
+
+  .principle-card p,
+  .runtime-card p,
+  .ownership-card p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.6;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .problem-card {
+    padding: clamp(20px, 3vw, 28px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
+  }
+
+  .problem-card:hover {
+    transform: translateY(-3px);
     box-shadow: var(--shadow-md);
   }
 
-  .harness-hero-visual img {
-    display: block;
-    width: 100%;
-    height: auto;
-    max-height: 720px;
-    object-fit: contain;
+  .problem-index {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    margin-bottom: var(--space-3);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 0.85rem;
   }
 
-  .harness-hero-caption {
-    min-height: 48px;
+  .problem-index--blue { color: var(--accent-blue); background: var(--surface-blue-subtle); }
+  .problem-index--teal { color: var(--accent-teal, #14b8a6); background: color-mix(in srgb, var(--accent-teal, #14b8a6) 10%, var(--surface-card)); }
+  .problem-index--violet { color: var(--accent-violet, #8b5cf6); background: color-mix(in srgb, var(--accent-violet, #8b5cf6) 10%, var(--surface-card)); }
+
+  .problem-card h3 {
+    margin: 0 0 8px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .problem-card p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.6;
+  }
+
+  .ownership-flow {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .ownership-card {
+    min-width: 0;
+    padding: clamp(18px, 2vw, 24px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .ownership-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 10px;
+    margin-bottom: var(--space-3);
+  }
+
+  .ownership-head span,
+  .ownership-head small {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+  }
+
+  .code-preview {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(14px, 2vw, 22px);
+    background: #1e293b;
+    box-shadow: var(--shadow-md);
+  }
+
+  .code-preview-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     padding: 10px 16px;
-    border-top: 1px solid var(--border-subtle);
-    color: var(--ink-subtle);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .code-preview-lang {
+    padding: 2px 8px;
+    border-radius: var(--radius-sm, 4px);
+    background: rgba(96, 165, 250, 0.15);
+    color: #93c5fd;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .code-preview-title {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: var(--text-caption);
+    font-weight: 600;
+  }
+
+  .code-preview pre {
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+    outline-offset: -3px;
+  }
+
+  .code-preview code {
+    color: #e2e8f0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.65;
+    white-space: pre;
+  }
+
+  .code-scroll-hint {
+    display: none;
+    margin: 0;
+    padding: 0 16px 12px;
+    color: rgba(255, 255, 255, 0.66);
     font-family: var(--font-mono);
     font-size: var(--text-caption);
   }
 
-  .project-anchor {
-    scroll-margin-top: calc(var(--header-height) + 64px);
+  .runtime-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-5);
   }
 
-  @media (max-width: 640px) {
-    .harness-hero-caption {
-      align-items: flex-start;
+  .runtime-card {
+    padding: clamp(20px, 2.5vw, 26px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+
+  .surface-band {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+    margin-top: var(--space-5);
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+
+  .surface-band p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.6;
+  }
+
+  .surface-band ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .surface-band li {
+    padding: 7px 10px;
+    border: 1px solid var(--border-medium);
+    border-radius: 999px;
+    background: var(--surface-subtle);
+    color: var(--ink);
+    font-size: var(--text-caption);
+    font-weight: 700;
+  }
+
+  .project-anchor {
+    scroll-margin-top: calc(var(--header-height, 64px) + 64px);
+  }
+
+  @media (max-width: 1080px) {
+    .ownership-flow {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .principle-strip,
+    .problem-grid,
+    .runtime-grid,
+    .surface-band {
+      grid-template-columns: 1fr;
+    }
+
+    .placeholder-caption {
+      position: static;
       flex-direction: column;
       gap: 2px;
+      width: 100%;
+      margin-top: var(--space-3);
     }
+
+    .visual-placeholder {
+      min-height: 360px;
+    }
+
+    .code-scroll-hint {
+      display: block;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .ownership-flow {
+      grid-template-columns: 1fr;
+    }
+
+    .placeholder-flow {
+      align-items: stretch;
+      flex-direction: column;
+      width: min(100%, 300px);
+    }
+
+    .placeholder-flow i {
+      transform: rotate(90deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .problem-card { transition: none; }
   }
 </style>
