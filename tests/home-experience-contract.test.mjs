@@ -56,6 +56,18 @@ test('homepage section surfaces alternate through continuous gradients', () => {
   assert.match(thread, /dir-rtl[\s\S]{0,260}var\(--journey-surface-canvas[\s\S]{0,260}var\(--journey-surface-tint/);
 });
 
+test('decision matrix keeps a local-first hierarchy without losing comparison semantics', () => {
+  const matrix = read('src/components/landing/DecisionTable.astro');
+
+  assert.match(matrix, /Local-first lens/);
+  assert.match(matrix, /Where Local AI trades capacity for control/);
+  assert.match(matrix, /class="mobile-cell-label"/);
+  assert.match(matrix, /class="sr-only">Strength:/);
+  assert.match(matrix, /--cloud-ink:/);
+  assert.doesNotMatch(matrix, /\.hybrid-column\s*\{[\s\S]{0,120}background:/);
+  assert.doesNotMatch(matrix, /\.cloud-column\s*\{[\s\S]{0,120}background:/);
+});
+
 test('homepage identity stays in the shared header without duplicating the hero', () => {
   const hero = read('src/components/landing/LandingHero.astro');
   const header = read('src/components/landing/LandingHeader.astro');

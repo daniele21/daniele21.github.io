@@ -1,173 +1,158 @@
 ---
-interface BadgeItem {
+interface ComparisonItem {
   text: string;
-  type: 'blue' | 'purple' | 'cyan' | 'neutral' | 'dashed';
-  icon: 'check' | 'dash';
+  strength?: boolean;
 }
 
 interface CriterionRow {
   dimension: string;
   detail: string;
-  local: BadgeItem;
-  hybrid: BadgeItem;
-  cloud: BadgeItem;
+  local: ComparisonItem;
+  hybrid: ComparisonItem;
+  cloud: ComparisonItem;
 }
 
 const criteria: CriterionRow[] = [
   {
-    dimension: 'Data Privacy',
-    detail: 'Data egress & telemetry',
-    local: { text: 'Full Boundary', type: 'blue', icon: 'check' },
-    hybrid: { text: 'Partitioned', type: 'neutral', icon: 'dash' },
-    cloud: { text: 'External VPC', type: 'dashed', icon: 'dash' },
+    dimension: 'Privacy',
+    detail: 'Where data is processed',
+    local: { text: 'Stays on device', strength: true },
+    hybrid: { text: 'Split by policy' },
+    cloud: { text: 'Processed remotely' },
   },
   {
-    dimension: 'Offline & Latency',
-    detail: 'Network dependence & RTT',
-    local: { text: 'Zero Network (0ms)', type: 'blue', icon: 'check' },
-    hybrid: { text: 'Edge Fallback', type: 'neutral', icon: 'dash' },
-    cloud: { text: 'Network Bound', type: 'dashed', icon: 'dash' },
+    dimension: 'Network & latency',
+    detail: 'Connectivity dependency',
+    local: { text: 'Works without network', strength: true },
+    hybrid: { text: 'Local fallback' },
+    cloud: { text: 'Network required' },
   },
   {
-    dimension: 'Runtime Control',
-    detail: 'Model weights & lifecycle',
-    local: { text: 'Full Ownership', type: 'blue', icon: 'check' },
-    hybrid: { text: 'Shared Policy', type: 'neutral', icon: 'dash' },
-    cloud: { text: 'Provider API', type: 'dashed', icon: 'dash' },
+    dimension: 'Runtime control',
+    detail: 'Deployment & model lifecycle',
+    local: { text: 'You control the runtime', strength: true },
+    hybrid: { text: 'Shared control' },
+    cloud: { text: 'Provider managed' },
   },
   {
-    dimension: 'Frontier Reasoning',
-    detail: 'Access to 400B+ models',
-    local: { text: 'Hardware Bound', type: 'dashed', icon: 'dash' },
-    hybrid: { text: 'Dynamic Route', type: 'purple', icon: 'check' },
-    cloud: { text: 'Frontier Scale', type: 'cyan', icon: 'check' },
+    dimension: 'Model capability',
+    detail: 'Largest model available',
+    local: { text: 'Bound by device' },
+    hybrid: { text: 'Routes by workload', strength: true },
+    cloud: { text: 'Frontier models', strength: true },
   },
   {
-    dimension: 'Elastic Scale',
-    detail: 'Burst capacity on demand',
-    local: { text: 'Fixed Hardware', type: 'dashed', icon: 'dash' },
-    hybrid: { text: 'Tiered Offload', type: 'purple', icon: 'check' },
-    cloud: { text: 'Unlimited Burst', type: 'cyan', icon: 'check' },
+    dimension: 'Elastic scale',
+    detail: 'Burst capacity',
+    local: { text: 'Fixed by hardware' },
+    hybrid: { text: 'Cloud overflow', strength: true },
+    cloud: { text: 'Elastic', strength: true },
   },
 ];
 ---
 
 <div class="decision-surface">
-  <div class="matrix-card" aria-label="Local, Hybrid and Cloud workload decision matrix">
-    <div class="matrix-scroll-wrap">
-      <table class="matrix-table">
-        <colgroup>
-          <col class="col-criteria" />
-          <col class="col-local" />
-          <col class="col-hybrid" />
-          <col class="col-cloud" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th scope="col" class="criterion-heading">DECISION CRITERIA</th>
-            <th scope="col">
-              <span class="header-pill header-pill--local">
-                <span class="header-dot" aria-hidden="true"></span>
-                <span>LOCAL</span>
-                <span class="header-focus-tag">FOCUS</span>
-              </span>
-            </th>
-            <th scope="col">
-              <span class="header-pill header-pill--hybrid">
-                <span class="header-dot" aria-hidden="true"></span>
-                <span>HYBRID</span>
-              </span>
-            </th>
-            <th scope="col">
-              <span class="header-pill header-pill--cloud">
-                <span class="header-dot" aria-hidden="true"></span>
-                <span>CLOUD</span>
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {criteria.map((row) => (
-            <tr>
-              <th scope="row" class="criterion-cell">
-                <strong>{row.dimension}</strong>
-                <span>{row.detail}</span>
+  <div class="matrix-card">
+    <table class="matrix-table" aria-label="Local, Hybrid and Cloud workload decision matrix">
+      <colgroup>
+        <col class="col-criteria" />
+        <col class="col-local" />
+        <col class="col-secondary" />
+        <col class="col-secondary" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th scope="col" class="criterion-heading">Decision factor</th>
+          <th scope="col" class="local-column local-column--header">
+            <span class="local-heading">
+              <span class="local-dot" aria-hidden="true"></span>
+              <span>Local AI</span>
+              <span class="focus-label">Local-first lens</span>
+            </span>
+          </th>
+          <th scope="col" class="platform-heading platform-heading--hybrid">
+            <span class="platform-heading-label">
+              <span class="platform-dot" aria-hidden="true"></span>
+              <span>Hybrid</span>
+            </span>
+          </th>
+          <th scope="col" class="platform-heading platform-heading--cloud">
+            <span class="platform-heading-label">
+              <span class="platform-dot" aria-hidden="true"></span>
+              <span>Cloud</span>
+            </span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {criteria.map((row, index) => (
+          <>
+          {index === 3 && (
+            <tr class="group-divider-row">
+              <th colspan="4" class="group-divider-cell">
+                <span>Trade-offs</span>
+                <small>Where Local AI trades capacity for control</small>
               </th>
-
-              <!-- LOCAL -->
-              <td>
-                <span class={`pill-badge pill-badge--${row.local.type}`}>
-                  {row.local.icon === 'check' ? (
-                    <svg class="badge-icon badge-icon--check" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <polyline points="3 8.5 6 11.5 13 4.5" />
-                    </svg>
-                  ) : (
-                    <svg class="badge-icon badge-icon--dash" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true">
-                      <line x1="4" y1="8" x2="12" y2="8" />
-                    </svg>
-                  )}
-                  <span>{row.local.text}</span>
-                </span>
-              </td>
-
-              <!-- HYBRID -->
-              <td>
-                <span class={`pill-badge pill-badge--${row.hybrid.type}`}>
-                  {row.hybrid.icon === 'check' ? (
-                    <svg class="badge-icon badge-icon--check" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <polyline points="3 8.5 6 11.5 13 4.5" />
-                    </svg>
-                  ) : (
-                    <svg class="badge-icon badge-icon--dash" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true">
-                      <line x1="4" y1="8" x2="12" y2="8" />
-                    </svg>
-                  )}
-                  <span>{row.hybrid.text}</span>
-                </span>
-              </td>
-
-              <!-- CLOUD -->
-              <td>
-                <span class={`pill-badge pill-badge--${row.cloud.type}`}>
-                  {row.cloud.icon === 'check' ? (
-                    <svg class="badge-icon badge-icon--check" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <polyline points="3 8.5 6 11.5 13 4.5" />
-                    </svg>
-                  ) : (
-                    <svg class="badge-icon badge-icon--dash" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true">
-                      <line x1="4" y1="8" x2="12" y2="8" />
-                    </svg>
-                  )}
-                  <span>{row.cloud.text}</span>
-                </span>
-              </td>
             </tr>
-          ))}
+          )}
 
-          <!-- BEST FOR ROW -->
-          <tr class="best-for-row">
-            <th scope="row" class="best-for-heading">
-              BEST FOR
+          <tr>
+            <th scope="row" class="criterion-cell">
+              <strong>{row.dimension}</strong>
+              <span>{row.detail}</span>
             </th>
-            <td>
-              <div class="best-for-box best-for-box--local">
-                Full privacy & on-device control
-              </div>
+
+            <td class="comparison-cell local-column" data-label="Local AI">
+              <span class="mobile-cell-label">Local AI</span>
+              <span class:list={['comparison-value', row.local.strength && 'comparison-value--strength']}>
+                {row.local.strength && (
+                  <><span class="sr-only">Strength: </span><span class="status-check" aria-hidden="true">✓</span></>
+                )}
+                <span>{row.local.text}</span>
+              </span>
             </td>
-            <td>
-              <div class="best-for-box best-for-box--hybrid">
-                Tiered triage & split routing
-              </div>
+
+            <td class="comparison-cell secondary-column hybrid-column" data-label="Hybrid">
+              <span class="mobile-cell-label">Hybrid</span>
+              <span class:list={['comparison-value', row.hybrid.strength && 'comparison-value--secondary-strength']}>
+                {row.hybrid.strength && (
+                  <><span class="sr-only">Strength: </span><span class="status-check" aria-hidden="true">✓</span></>
+                )}
+                <span>{row.hybrid.text}</span>
+              </span>
             </td>
-            <td>
-              <div class="best-for-box best-for-box--cloud">
-                Frontier reasoning & elastic scale
-              </div>
+
+            <td class="comparison-cell secondary-column cloud-column" data-label="Cloud">
+              <span class="mobile-cell-label">Cloud</span>
+              <span class:list={['comparison-value', row.cloud.strength && 'comparison-value--secondary-strength']}>
+                {row.cloud.strength && (
+                  <><span class="sr-only">Strength: </span><span class="status-check" aria-hidden="true">✓</span></>
+                )}
+                <span>{row.cloud.text}</span>
+              </span>
             </td>
           </tr>
-        </tbody>
-      </table>
-    </div>
+          </>
+        ))}
+
+        <tr class="best-for-row">
+          <th scope="row" class="best-for-heading">Best fit</th>
+          <td class="local-column" data-label="Local AI">
+            <span class="mobile-cell-label">Local AI</span>
+            <strong>Privacy, latency & control</strong>
+          </td>
+          <td class="hybrid-column" data-label="Hybrid">
+            <span class="mobile-cell-label">Hybrid</span>
+            Variable workloads
+          </td>
+          <td class="cloud-column" data-label="Cloud">
+            <span class="mobile-cell-label">Cloud</span>
+            Maximum capability
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div class="decision-hook">
@@ -184,384 +169,433 @@ const criteria: CriterionRow[] = [
 
 <style>
   .decision-surface {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    width: 100%;
+    gap: 12px;
   }
 
-  /* Matrix Card Shell */
   .matrix-card {
+    --hybrid-ink: color-mix(in srgb, var(--accent-violet) 76%, var(--ink-display));
+    --cloud-ink: color-mix(in srgb, var(--accent-teal) 72%, var(--ink-display));
     width: 100%;
     overflow: hidden;
-    background: var(--surface-card, #ffffff);
-    border: 1px solid #d5deef;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
-  }
-
-  .matrix-scroll-wrap {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    background: var(--surface-card);
+    border: 1px solid color-mix(in srgb, var(--ink-display) 11%, transparent);
+    border-radius: 16px;
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--ink-display) 3%, transparent);
   }
 
   .matrix-table {
     width: 100%;
-    min-width: 800px;
     border-collapse: collapse;
-    text-align: left;
-    background: var(--surface-card, #ffffff);
     table-layout: fixed;
+    text-align: left;
   }
 
   .col-criteria { width: 28%; }
-  .col-local { width: 24%; }
-  .col-hybrid { width: 24%; }
-  .col-cloud { width: 24%; }
+  .col-local { width: 26%; }
+  .col-secondary { width: 23%; }
 
   .matrix-table th,
   .matrix-table td {
-    padding: 15px 22px;
-    border-bottom: 1px solid #edf2f7;
+    padding: 13px clamp(14px, 1.65vw, 20px);
+    border-bottom: 1px solid var(--border-subtle);
     vertical-align: middle;
   }
 
-  /* Thead Header */
   .matrix-table thead th {
-    background: #fbfcfe;
-    padding-top: 18px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #d5deef;
+    height: 54px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    background: color-mix(in srgb, var(--surface-subtle) 42%, var(--surface-card));
+    border-bottom-color: var(--border-medium);
   }
 
-  .criterion-heading {
+  .criterion-heading,
+  .best-for-heading {
     font-family: var(--font-display);
-    font-size: 0.78rem;
-    font-weight: 780;
-    letter-spacing: 0.05em;
-    color: #64748b;
+    font-size: 0.68rem;
+    font-weight: 720;
+    letter-spacing: 0.075em;
+    color: var(--ink-subtle);
     text-transform: uppercase;
   }
 
-  /* Header Pills */
-  .header-pill {
+  .platform-heading {
+    font-family: var(--font-display);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .platform-heading-label {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    min-height: 34px;
-    padding: 5px 14px;
-    border-radius: 9999px;
-    font-family: var(--font-display);
-    font-size: 0.86rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
   }
 
-  .header-dot {
-    width: 7px;
-    height: 7px;
+  .platform-dot {
+    width: 5px;
+    height: 5px;
+    flex: 0 0 auto;
     border-radius: 50%;
-    flex-shrink: 0;
   }
 
-  .header-pill--local {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    color: #145bff;
-  }
-  .header-pill--local .header-dot {
-    background: #145bff;
+  .matrix-table thead .platform-heading--hybrid {
+    color: var(--hybrid-ink);
   }
 
-  .header-focus-tag {
-    display: inline-flex;
+  .platform-heading--hybrid .platform-dot {
+    background: var(--accent-violet);
+  }
+
+  .matrix-table thead .platform-heading--cloud {
+    color: var(--cloud-ink);
+  }
+
+  .platform-heading--cloud .platform-dot {
+    background: var(--accent-teal);
+  }
+
+  .local-column {
+    background: color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card));
+    border-left: 1px solid color-mix(in srgb, var(--accent-blue) 13%, var(--border-subtle));
+    border-right: 1px solid color-mix(in srgb, var(--accent-blue) 13%, var(--border-subtle));
+  }
+
+  .matrix-table thead .local-column--header {
+    background: color-mix(in srgb, var(--accent-blue) 6%, var(--surface-card));
+    box-shadow: inset 0 2px 0 var(--accent-blue);
+  }
+
+  .local-heading {
+    display: flex;
     align-items: center;
-    padding: 2px 7px;
+    flex-wrap: wrap;
+    gap: 7px;
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    font-weight: 760;
+    letter-spacing: -0.015em;
+    color: var(--accent-blue-dark);
+  }
+
+  .local-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue) 10%, transparent);
+  }
+
+  .focus-label {
     margin-left: 2px;
-    border-radius: 9999px;
-    background: #dbeafe;
-    color: #1d4ed8;
-    font-size: 0.65rem;
-    font-weight: 820;
-    letter-spacing: 0.05em;
-    line-height: 1.2;
-    text-transform: uppercase;
-  }
-
-  .header-pill--hybrid {
-    background: #f5f3ff;
-    border: 1px solid #ddd6fe;
-    color: #7c3aed;
-  }
-  .header-pill--hybrid .header-dot {
-    background: #7c3aed;
-  }
-
-  .header-pill--cloud {
-    background: #f0f9ff;
-    border: 1px solid #bae6fd;
-    color: #0284c7;
-  }
-  .header-pill--cloud .header-dot {
-    background: #0284c7;
-  }
-
-  /* Criterion Dimension & Detail */
-  .criterion-cell {
-    background: transparent;
+    padding-left: 9px;
+    border-left: 1px solid color-mix(in srgb, var(--accent-blue) 23%, transparent);
+    font-size: 0.66rem;
+    line-height: 1.15;
+    font-weight: 620;
+    color: var(--ink-subtle);
   }
 
   .criterion-cell strong {
     display: block;
-    margin-bottom: 3px;
+    margin-bottom: 1px;
     font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-weight: 780;
-    color: #0f172a;
+    font-size: 0.91rem;
+    line-height: 1.25;
+    font-weight: 720;
     letter-spacing: -0.015em;
+    color: var(--ink-display);
   }
 
-  .criterion-cell span {
+  .criterion-cell > span {
     display: block;
-    font-size: 0.77rem;
-    line-height: 1.35;
-    color: #64748b;
-    font-weight: 480;
+    font-size: 0.72rem;
+    line-height: 1.3;
+    color: var(--ink-subtle);
+    font-weight: 450;
   }
 
-  /* Badge Pills for Table Rows */
-  .pill-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    height: 33px;
-    padding: 0 14px;
-    border-radius: 9999px;
+  .group-divider-cell {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    background: color-mix(in srgb, var(--surface-subtle) 48%, var(--surface-card));
+    border-top: 1px solid var(--border-medium);
+    border-bottom: 1px solid var(--border-medium) !important;
+  }
+
+  .group-divider-cell span,
+  .group-divider-cell small {
+    display: inline;
     font-family: var(--font-display);
-    font-size: 0.84rem;
-    line-height: 1;
-    white-space: nowrap;
+    font-size: 0.68rem;
+    line-height: 1.2;
   }
 
-  .badge-icon {
-    flex-shrink: 0;
-  }
-
-  .badge-icon--dash {
-    display: inline-block;
-  }
-
-  /* Blue (Local) */
-  .pill-badge--blue {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    color: #1d4ed8;
-    font-weight: 680;
-  }
-  .pill-badge--blue .badge-icon--check {
-    stroke: #145bff;
-  }
-
-  /* Purple (Hybrid) */
-  .pill-badge--purple {
-    background: #f5f3ff;
-    border: 1px solid #ddd6fe;
-    color: #6d28d9;
-    font-weight: 680;
-  }
-  .pill-badge--purple .badge-icon--check {
-    stroke: #7c3aed;
-  }
-
-  /* Cyan (Cloud) */
-  .pill-badge--cyan {
-    background: #f0f9ff;
-    border: 1px solid #bae6fd;
-    color: #0369a1;
-    font-weight: 680;
-  }
-  .pill-badge--cyan .badge-icon--check {
-    stroke: #0284c7;
-  }
-
-  /* Neutral Grey */
-  .pill-badge--neutral {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #334155;
-    font-weight: 600;
-  }
-  .pill-badge--neutral .badge-icon--dash {
-    stroke: #64748b;
-  }
-
-  /* Dashed Outline */
-  .pill-badge--dashed {
-    background: var(--surface-card, #ffffff);
-    border: 1.5px dashed #cbd5e1;
-    color: #64748b;
-    font-weight: 560;
-  }
-  .pill-badge--dashed .badge-icon--dash {
-    stroke: #94a3b8;
-  }
-
-  /* Bottom Row: Best For */
-  .best-for-row th,
-  .best-for-row td {
-    padding-top: 18px;
-    padding-bottom: 20px;
-    border-top: 1px solid #d5deef;
-    border-bottom: none;
-  }
-
-  .best-for-heading {
-    font-family: var(--font-display);
-    font-size: 0.78rem;
-    font-weight: 780;
-    letter-spacing: 0.05em;
-    color: #64748b;
+  .group-divider-cell span {
+    font-weight: 720;
+    letter-spacing: 0.075em;
+    color: var(--ink-subtle);
     text-transform: uppercase;
   }
 
-  .best-for-box {
-    display: flex;
+  .group-divider-cell small {
+    margin-left: 8px;
+    font-weight: 480;
+    color: var(--ink-subtle);
+  }
+
+  .comparison-value {
+    display: inline-flex;
     align-items: center;
-    min-height: 52px;
-    padding: 12px 18px;
-    border-radius: 12px;
-    font-family: var(--font-display);
-    font-size: 0.88rem;
-    font-weight: 720;
+    gap: 6px;
+    font-size: 0.82rem;
     line-height: 1.35;
-    letter-spacing: -0.01em;
-    box-sizing: border-box;
+    font-weight: 540;
+    color: var(--ink-muted);
   }
 
-  .best-for-box--local {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    color: #1d4ed8;
+  .comparison-value--strength {
+    font-family: var(--font-display);
+    font-weight: 680;
+    color: var(--accent-blue-dark);
   }
 
-  .best-for-box--hybrid {
-    background: #f5f3ff;
-    border: 1px solid #ddd6fe;
-    color: #6d28d9;
+  .comparison-value--secondary-strength {
+    padding: 4px 7px;
+    border-radius: 7px;
+    font-family: var(--font-display);
+    font-weight: 680;
   }
 
-  .best-for-box--cloud {
-    background: #f0f9ff;
-    border: 1px solid #bae6fd;
-    color: #0369a1;
+  .hybrid-column .comparison-value--secondary-strength,
+  .hybrid-column .comparison-value--secondary-strength .status-check {
+    color: var(--hybrid-ink);
   }
 
-  /* Decision Hook (Call to Action below table) */
+  .hybrid-column .comparison-value--secondary-strength {
+    background: color-mix(in srgb, var(--accent-violet) 7%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-violet) 14%, transparent);
+  }
+
+  .cloud-column .comparison-value--secondary-strength,
+  .cloud-column .comparison-value--secondary-strength .status-check {
+    color: var(--cloud-ink);
+  }
+
+  .cloud-column .comparison-value--secondary-strength {
+    background: color-mix(in srgb, var(--accent-teal) 7%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-teal) 14%, transparent);
+  }
+
+  .status-check {
+    flex: 0 0 auto;
+    color: var(--accent-blue);
+    font-size: 0.82rem;
+    font-weight: 760;
+  }
+
+  .best-for-row th,
+  .best-for-row td {
+    padding-top: 12px;
+    padding-bottom: 13px;
+    border-top: 1px solid var(--border-medium);
+    border-bottom: 0;
+  }
+
+  .best-for-row td {
+    font-size: 0.74rem;
+    line-height: 1.4;
+    color: var(--ink-muted);
+  }
+
+  .best-for-row .local-column {
+    color: var(--accent-blue-dark);
+  }
+
+  .best-for-row .hybrid-column {
+    color: var(--hybrid-ink);
+  }
+
+  .best-for-row .cloud-column {
+    color: var(--cloud-ink);
+  }
+
+  .best-for-row strong {
+    font-family: var(--font-display);
+    font-weight: 760;
+  }
+
   .decision-hook {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
-    padding: 18px 20px;
-    border: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-medium));
-    border-radius: var(--radius-lg, 20px);
-    background: color-mix(in srgb, var(--accent-blue) 3.5%, var(--surface-card, #ffffff));
+    gap: 20px;
+    padding: 14px 16px;
+    border: 1px solid color-mix(in srgb, var(--ink-display) 10%, transparent);
+    border-radius: 14px;
+    background: var(--surface-card);
   }
 
   .decision-hook h3 {
-    margin: 0 0 4px;
+    margin: 0 0 2px;
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: 0.88rem;
     line-height: 1.3;
-    font-weight: 780;
+    font-weight: 720;
     color: var(--ink-display);
   }
 
   .decision-hook p {
     margin: 0;
-    font-size: 0.86rem;
+    font-size: 0.74rem;
     line-height: 1.45;
     color: var(--ink-muted);
   }
 
   .decision-cta {
     flex-shrink: 0;
-    min-height: 42px;
-    padding-inline: 16px;
+    min-height: 38px;
+    padding-inline: 14px;
     cursor: pointer;
     white-space: nowrap;
   }
 
-  /* Dark Theme Overrides */
-  :global(html[data-theme='dark']) .matrix-card {
-    background: var(--surface-card);
-    border-color: var(--border-medium);
-  }
-
-  :global(html[data-theme='dark']) .matrix-table {
-    background: var(--surface-card);
-  }
-
-  :global(html[data-theme='dark']) .matrix-table thead th {
-    background: var(--surface-card);
-  }
-
-  :global(html[data-theme='dark']) .pill-badge--dashed {
-    background: transparent;
-    border-color: #334155;
-    color: #94a3b8;
-  }
-
-  :global(html[data-theme='dark']) .pill-badge--neutral {
-    background: #1e293b;
-    border-color: #334155;
-    color: #cbd5e1;
-  }
-
-  :global(html[data-theme='dark']) .pill-badge--blue {
-    background: rgba(20, 91, 255, 0.16);
-    border-color: rgba(59, 130, 246, 0.4);
-    color: #93c5fd;
-  }
-
-  :global(html[data-theme='dark']) .pill-badge--purple {
-    background: rgba(124, 58, 237, 0.16);
-    border-color: rgba(167, 139, 250, 0.4);
-    color: #c4b5fd;
-  }
-
-  :global(html[data-theme='dark']) .pill-badge--cyan {
-    background: rgba(2, 132, 199, 0.16);
-    border-color: rgba(56, 189, 248, 0.4);
-    color: #7dd3fc;
-  }
-
-  :global(html[data-theme='dark']) .best-for-box--local {
-    background: rgba(20, 91, 255, 0.14);
-    border-color: rgba(59, 130, 246, 0.35);
-    color: #93c5fd;
-  }
-
-  :global(html[data-theme='dark']) .best-for-box--hybrid {
-    background: rgba(124, 58, 237, 0.14);
-    border-color: rgba(167, 139, 250, 0.35);
-    color: #c4b5fd;
-  }
-
-  :global(html[data-theme='dark']) .best-for-box--cloud {
-    background: rgba(2, 132, 199, 0.14);
-    border-color: rgba(56, 189, 248, 0.35);
-    color: #7dd3fc;
+  .mobile-cell-label {
+    display: none;
   }
 
   @media (max-width: 760px) {
+    .matrix-card {
+      overflow: hidden;
+      border: 1px solid var(--border-medium);
+      border-radius: 14px;
+      background: var(--surface-card);
+    }
+
+    .matrix-table,
+    .matrix-table tbody {
+      display: block;
+      width: 100%;
+    }
+
+    .matrix-table colgroup,
+    .matrix-table thead {
+      display: none;
+    }
+
+    .matrix-table tbody tr {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0;
+      background: var(--surface-card);
+      border: 0;
+      border-bottom: 1px solid var(--border-medium);
+      border-radius: 0;
+    }
+
+    .matrix-table th,
+    .matrix-table td {
+      display: block;
+      min-width: 0;
+      padding: 12px 14px;
+      border: 0;
+    }
+
+    .criterion-cell {
+      grid-column: 1 / -1;
+      border-bottom: 1px solid var(--border-subtle) !important;
+    }
+
+    .mobile-cell-label {
+      display: block;
+      margin-bottom: 5px;
+      font-family: var(--font-display);
+      font-size: var(--text-caption);
+      line-height: 1.2;
+      font-weight: 720;
+      letter-spacing: 0.035em;
+      color: var(--ink-subtle);
+      text-transform: uppercase;
+    }
+
+    .comparison-cell.local-column {
+      grid-column: 1 / -1;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      border: 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-subtle));
+      box-shadow: inset 3px 0 0 var(--accent-blue);
+    }
+
+    .comparison-cell.local-column .mobile-cell-label,
+    .best-for-row .local-column .mobile-cell-label {
+      color: var(--accent-blue-dark);
+    }
+
+    .comparison-cell.hybrid-column .mobile-cell-label,
+    .best-for-row .hybrid-column .mobile-cell-label {
+      color: var(--hybrid-ink);
+    }
+
+    .comparison-cell.cloud-column .mobile-cell-label,
+    .best-for-row .cloud-column .mobile-cell-label {
+      color: var(--cloud-ink);
+    }
+
+    .secondary-column + .secondary-column {
+      border-left: 1px solid var(--border-subtle);
+    }
+
+    .group-divider-row {
+      display: block !important;
+    }
+
+    .group-divider-cell {
+      padding: 12px 14px !important;
+    }
+
+    .group-divider-cell span,
+    .group-divider-cell small {
+      display: block;
+    }
+
+    .group-divider-cell small {
+      margin: 4px 0 0;
+    }
+
+    .best-for-row .best-for-heading {
+      grid-column: 1 / -1;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .best-for-row .local-column {
+      grid-column: 1 / -1;
+      border: 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-subtle));
+      box-shadow: inset 3px 0 0 var(--accent-blue);
+    }
+
+    .best-for-row td:last-child {
+      border-left: 1px solid var(--border-subtle);
+    }
+
+    .matrix-table tbody .best-for-row {
+      border-bottom: 0;
+    }
+
     .decision-hook {
       align-items: flex-start;
       flex-direction: column;
       gap: 14px;
     }
 
-    .decision-cta { width: 100%; justify-content: center; }
+    .decision-cta {
+      width: 100%;
+      justify-content: center;
+    }
   }
 </style>
