@@ -3,7 +3,7 @@
 interface Props {
   fromStep: string;
   toStep: string;
-  sublabel: string;
+  sublabel?: string;
   direction?: 'ltr' | 'rtl';
 }
 
@@ -36,7 +36,7 @@ const pathD = direction === 'ltr'
         <span class="pill-signal" aria-hidden="true">◎</span>
         <span class="pill-label">{fromStep} <span aria-hidden="true">→</span> {toStep}</span>
       </div>
-      <p class="thread-sublabel">{sublabel}</p>
+      {sublabel && <p class="thread-sublabel">{sublabel}</p>}
     </div>
   </div>
 </div>

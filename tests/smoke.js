@@ -303,7 +303,11 @@ const publicImages = [
   'images/strategy/decision-framework.svg',
   'images/strategy/local-vs-hybrid-vs-cloud-native-final.svg',
   'images/strategy/tradeoff-guide.svg',
+  'images/harness/harness-app-icon-light.png',
+  'images/performance-lab/mark.svg',
+  'images/performance-lab/mark.png',
   'favicon.png',
+  'favicon.svg',
 ];
 
 for (const img of publicImages) {
@@ -313,6 +317,30 @@ for (const img of publicImages) {
     errors++;
   } else {
     console.log(`  ✓ Asset verified: ${img}`);
+  }
+}
+
+console.log('\n🔍 6. Verifying dynamic favicon resolution across routes...');
+const expectedFavicons = {
+  'android-local-llm-harness/index.html': 'images/harness/harness-app-icon-light.png',
+  'local-llm-server/index.html': 'images/local-llm-server/logo.png',
+  'performance-lab/index.html': 'images/performance-lab/mark.svg',
+  'redact-guard/index.html': 'images/redact-guard/logo.png',
+  'closedroom/index.html': 'images/closedroom/logo.png',
+  'aura-finance/index.html': 'images/aura/logo.png',
+  'index.html': 'favicon.png',
+  'about/index.html': 'favicon.png',
+};
+
+for (const [route, expectedIcon] of Object.entries(expectedFavicons)) {
+  const filePath = path.join(distDir, route);
+  if (!fs.existsSync(filePath)) continue;
+  const html = fs.readFileSync(filePath, 'utf-8');
+  if (!html.includes(expectedIcon)) {
+    console.error(`❌ Route ${route} does not contain expected favicon asset: ${expectedIcon}`);
+    errors++;
+  } else {
+    console.log(`  ✓ Favicon verified for ${route}: ${expectedIcon}`);
   }
 }
 

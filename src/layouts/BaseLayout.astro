@@ -13,6 +13,7 @@ import SiteFooter from '../components/layout/SiteFooter.astro';
 import ImageZoomModal from '../components/common/ImageZoomModal.astro';
 import ContactModal from '../components/common/ContactModal.astro';
 import { siteMetadata } from '../content/site';
+import { resolveFavicon, type FaviconConfig } from '../config/favicons';
 
 import '../styles/tokens.css';
 import '../styles/reset.css';
@@ -26,6 +27,7 @@ interface Props {
   ogDescription?: string;
   ogImage?: string;
   jsonLd?: Record<string, any> | Array<Record<string, any>>;
+  favicon?: string | Partial<FaviconConfig>;
 }
 
 const {
@@ -36,7 +38,10 @@ const {
   ogDescription = description,
   ogImage = siteMetadata.ogImage,
   jsonLd,
+  favicon,
 } = Astro.props;
+
+const activeFavicon = resolveFavicon(Astro.url.pathname, favicon);
 
 /**
  * Dynamically construct canonical URL for every page to avoid duplicate canonical issues.
@@ -100,9 +105,13 @@ const allSchemas = jsonLd
   <meta name="color-scheme" content="light dark">
   <meta name="robots" content={robotsContent}>
   <link rel="canonical" href={computedCanonical}>
-  <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.png`} type="image/png">
-  <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml">
-  <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}favicon.png`}>
+  <link rel="icon" href={`${import.meta.env.BASE_URL}${activeFavicon.href}`} type={activeFavicon.type}>
+  {activeFavicon.svgHref && activeFavicon.svgHref !== activeFavicon.href && (
+    <link rel="icon" href={`${import.meta.env.BASE_URL}${activeFavicon.svgHref}`} type="image/svg+xml">
+  )}
+  {activeFavicon.appleTouchIcon && (
+    <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}${activeFavicon.appleTouchIcon}`}>
+  )}
   <link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`}>
 
   <!-- Google Fonts: Plus Jakarta Sans & Inter (Modern Sans-Serif) -->
