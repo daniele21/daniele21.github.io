@@ -27,12 +27,6 @@ export const journeyLinks: JourneyLink[] = [
     iconType: 'github',
   },
   {
-    title: 'stAI tuned',
-    description: 'Long-form analysis, practical AI knowledge, model evals, and system design.',
-    url: 'https://staituned.com',
-    iconType: 'stai',
-  },
-  {
     title: 'LinkedIn',
     description: 'Ideas, architecture trade-offs, experiments, and engineering lessons in public.',
     url: 'https://www.linkedin.com/in/daniele-moltisanti/',

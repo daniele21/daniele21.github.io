@@ -31,7 +31,14 @@ import AdvisoryIcon from '../icons/AdvisoryIcon.astro';
     <div class="advisory-flow" aria-label="Advisory process">
       {advisoryData.areas.map((area, index) => (
         <>
-          <article class:list={['advisory-card', `advisory-card--${area.id}`, 'reveal']} style={`--reveal-delay: ${index * 110}ms`}>
+          <article
+            class:list={['advisory-card', `advisory-card--${area.id}`, 'reveal']}
+            style={`--reveal-delay: ${index * 110}ms`}
+            data-open-contact-modal
+            role="button"
+            tabindex="0"
+            aria-label={`${advisoryData.primaryCta.label}: ${area.phase} - ${area.title}`}
+          >
             <header class="card-header">
               <div class="card-step">
                 <span class="card-number">{area.number}</span>
@@ -281,6 +288,8 @@ import AdvisoryIcon from '../icons/AdvisoryIcon.astro';
     border: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-medium));
     border-radius: 14px;
     box-shadow: 0 12px 34px rgba(8, 19, 51, 0.04);
+    cursor: pointer;
+    text-align: left;
     transition:
       transform var(--duration-base) var(--ease-out-expo),
       border-color var(--duration-base) ease,
@@ -291,6 +300,17 @@ import AdvisoryIcon from '../icons/AdvisoryIcon.astro';
     transform: translateY(-4px);
     border-color: color-mix(in srgb, var(--accent-blue) 42%, var(--border-medium));
     box-shadow: 0 18px 46px rgba(8, 19, 51, 0.08);
+  }
+
+  .advisory-card:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 4px;
+    border-color: color-mix(in srgb, var(--accent-blue) 52%, var(--border-medium));
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-blue) 16%, transparent);
+  }
+
+  .advisory-card:active {
+    transform: translateY(-2px);
   }
 
   .card-header {
@@ -543,6 +563,16 @@ import AdvisoryIcon from '../icons/AdvisoryIcon.astro';
     padding: 14px 16px;
     border-radius: 12px;
     background: linear-gradient(135deg, color-mix(in srgb, var(--accent-blue) 5%, var(--surface-card)), color-mix(in srgb, var(--accent-blue) 2%, var(--surface-card)));
+    border: 1px solid transparent;
+    transition:
+      background var(--duration-base) ease,
+      border-color var(--duration-base) ease;
+  }
+
+  .advisory-card:hover .card-output,
+  .advisory-card:focus-visible .card-output {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent-blue) 9%, var(--surface-card)), color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card)));
+    border-color: color-mix(in srgb, var(--accent-blue) 22%, transparent);
   }
 
   .output-icon {
@@ -587,10 +617,16 @@ import AdvisoryIcon from '../icons/AdvisoryIcon.astro';
 
   .output-arrow {
     color: var(--ink-display);
-    transition: transform var(--duration-base) var(--ease-out-expo);
+    transition:
+      transform var(--duration-base) var(--ease-out-expo),
+      color var(--duration-base) ease;
   }
 
-  .advisory-card:hover .output-arrow { transform: translateX(4px); }
+  .advisory-card:hover .output-arrow,
+  .advisory-card:focus-visible .output-arrow {
+    transform: translateX(4px);
+    color: var(--accent-blue);
+  }
 
   .flow-arrow {
     position: relative;

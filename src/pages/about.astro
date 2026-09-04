@@ -48,7 +48,7 @@ const jsonLd = {
   worksFor: { '@type': 'Organization', name: profile.affiliation },
   alumniOf: { '@type': 'EducationalOrganization', name: 'Politecnico di Milano' },
   url: 'https://daniele21.github.io/about',
-  sameAs: [profile.socialLinks.linkedin, profile.socialLinks.github, profile.socialLinks.staituned],
+  sameAs: [profile.socialLinks.linkedin, profile.socialLinks.github],
   knowsAbout: ['Generative AI Systems', 'Local AI', 'On-device inference', 'AI Architecture', 'AI Strategy'],
 };
 ---
@@ -180,7 +180,6 @@ const jsonLd = {
           ))}
         </div>
         <div class="track-links">
-          <a href={profile.socialLinks.staituned} target="_blank" rel="noopener noreferrer">Technical writing on stAI tuned ↗</a>
           <div class="track-social-links" aria-label="Social profiles">
             <a
               href={profile.socialLinks.linkedin}
