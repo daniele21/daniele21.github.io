@@ -163,16 +163,21 @@ export const harnexProjectData: InfrastructureProjectData = {
     description: 'The supported direct dependency is the Consumer Android SDK. It owns public consumer contracts, Binder composition, typed transport failures, readiness inspection and durable logical jobs without exposing model-store or llama.cpp implementation types.',
     codePreview: {
       language: 'kotlin',
-      title: 'Consumer boundary · simplified',
+      title: 'Durable logical job · Consumer SDK',
       code: `implementation("io.github.daniele21.localllm:consumer-android:<version>")
 
-// Harnex resolves an allowed use case and exact execution identity.
-val prepared = consumer.prepare(/* host-approved use case */)
+val response = client.submitLogicalGeneration(
+    ConsumerLogicalJobSubmitRequest(
+        clientRequestId = ConsumerLogicalJobRequestId("analysis-42"),
+        useCaseId = prepared.useCaseId,
+        preparedId = prepared.preparedId,
+        expectedExecution = prepared.toExecutionIdentity(),
+        input = ConsumerGenerationInput.Text(input),
+        outputConstraint = ConsumerOutputConstraint.JsonSchema(schema),
+    ),
+)
 
-// Durable work keeps one logical identity across transient Binder/UI loss.
-val job = consumer.submitLogicalGeneration(
-    /* prepared identity + application-owned input */
-)`,
+// Reconnect with the returned stable job ID instead of resubmitting work.`,
     },
   },
 
