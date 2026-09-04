@@ -200,6 +200,17 @@ const projectSchema = {
           ))}
         </div>
 
+        <div
+          class="visual-placeholder visual-placeholder--surfaces"
+          role="img"
+          aria-label="Placeholder for Harnex control-plane product surfaces showing Overview, Playground, Applications, Performance, Models, Diagnostics and Settings"
+          data-visual-placeholder
+        >
+          <span class="placeholder-kicker">IMAGE PLACEHOLDER · CONTROL PLANE UI</span>
+          <strong>Show the host as an inspectable product, not a hidden background service.</strong>
+          <p>Future visual: a restrained collage or device sequence showing the most decision-relevant Harnex surfaces, with Overview / Applications / Performance taking visual priority.</p>
+        </div>
+
         <div class="surface-band" aria-label="Current Harnex product surfaces">
           <div>
             <span class="surface-label">CURRENT CONTROL SURFACES</span>
@@ -296,6 +307,11 @@ const projectSchema = {
   .visual-placeholder--architecture {
     min-height: clamp(300px, 38vw, 500px);
     margin-bottom: var(--space-5);
+  }
+
+  .visual-placeholder--surfaces {
+    min-height: clamp(260px, 32vw, 420px);
+    margin-top: var(--space-5);
   }
 
   .placeholder-kicker,
