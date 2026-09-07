@@ -1,14 +1,19 @@
 ---
-/**
- * RedactGuardArchitecture.astro
- * Technical architecture section matching prototype (2).
- */
-import { redactGuardData } from '../../content/redactGuard';
+/** Shared technical architecture section for RedactGuard platform variants. */
+import { redactGuardData, type RedactGuardData } from '../../content/redactGuard';
+
 interface Props {
   baseUrl: string;
+  data?: RedactGuardData;
+  repoUrl?: string;
 }
-const { baseUrl } = Astro.props;
-const { architecture } = redactGuardData;
+
+const {
+  baseUrl,
+  data = redactGuardData,
+  repoUrl = 'https://github.com/daniele21/redact-guard',
+} = Astro.props;
+const { architecture } = data;
 ---
 
 <section class="section alt" id="architecture">
@@ -24,7 +29,7 @@ const { architecture } = redactGuardData;
         <img
           data-zoomable
           src={`${baseUrl}/${architecture.image}`}
-          alt="RedactGuard local-first technical architecture"
+          alt={`${architecture.title} — RedactGuard architecture`}
         />
       </div>
 
@@ -36,7 +41,7 @@ const { architecture } = redactGuardData;
           </div>
         ))}
 
-        <a class="btn secondary-btn" href="https://github.com/daniele21/redact-guard" target="_blank" rel="noreferrer">
+        <a class="btn secondary-btn" href={repoUrl} target="_blank" rel="noreferrer">
           Explore the architecture on GitHub ↗
         </a>
       </div>
