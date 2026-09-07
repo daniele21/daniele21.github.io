@@ -122,6 +122,10 @@ export interface InfrastructureRuntime {
     title: string;
     code: string;
   };
+  /** Optional control surfaces preview image. */
+  surfacesImage?: string;
+  surfacesAlt?: string;
+  surfacesCaption?: string;
 }
 
 /** Evidence boundary section. */

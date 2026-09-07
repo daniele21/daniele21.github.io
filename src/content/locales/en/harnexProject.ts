@@ -91,9 +91,9 @@ export const harnexProjectData: InfrastructureProjectData = {
       { label: 'GitHub ↗', href: 'https://github.com/daniele21/harnex', variant: 'secondary' },
     ],
     visualLabel: 'Harnex system map from Android consumer applications through the shared runtime to local GGUF inference',
-    imageHero: '',
-    imageCaptionLeft: 'Planned visual · Android apps → Consumer SDK → Binder → Harnex Host',
-    imageCaptionRight: 'llama.cpp · curated GGUF',
+    imageHero: 'images/harness/harnex-hero.png',
+    imageCaptionLeft: 'System boundary · Android apps → Consumer SDK → Binder → Harnex Host',
+    imageCaptionRight: 'Runtime orchestration · llama.cpp · curated GGUF',
   },
 
   proof: {
@@ -154,6 +154,7 @@ export const harnexProjectData: InfrastructureProjectData = {
     eyebrow: 'ARCHITECTURE',
     title: 'One host boundary separates Android products from local inference infrastructure.',
     description: 'The execution path is Consumer app → Consumer Android SDK → signature-protected Binder → Harnex host/control plane → runtime orchestration → llama.cpp → curated GGUF. Model storage, observability and evaluation stay host-owned around that data plane.',
+    diagramImage: 'images/harness/harnex-architecture.png',
     diagramAlt: 'Harnex architecture showing consumer applications, Consumer Android SDK, Binder, host control plane, runtime orchestration, observability, llama.cpp and GGUF models',
   },
 
@@ -179,6 +180,9 @@ val response = client.submitLogicalGeneration(
 
 // Reconnect with the returned stable job ID instead of resubmitting work.`,
     },
+    surfacesImage: 'images/harness/harnex-control-plane.png',
+    surfacesAlt: 'Harnex Local AI Console control plane on Android showing App connections, Playground generation and GGUF model library',
+    surfacesCaption: 'Harnex Local AI Console · App connections, local playground and GGUF model management',
   },
 
   evidence: {
