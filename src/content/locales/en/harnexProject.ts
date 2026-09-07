@@ -13,54 +13,50 @@ export interface HarnexRuntimeCapability {
 
 export const harnexArchitectureLayers: HarnexArchitectureLayer[] = [
   {
-    label: 'PRODUCT',
-    title: 'Consumer Android app',
-    description: 'Owns the user workflow, product state and any sensitive input that should remain application-scoped.',
+    label: 'APP',
+    title: 'Consumer app',
+    description: 'Owns the product workflow, UI state and application data.',
   },
   {
-    label: 'BOUNDARY',
+    label: 'CONTRACT',
     title: 'Consumer SDK + Binder',
-    description: 'Provides a versioned, typed Android boundary without exposing Harnex model-store, runtime or llama.cpp internals.',
+    description: 'Owns the typed contract, transport and caller boundary between the app and Harnex.',
   },
   {
-    label: 'HOST',
-    title: 'Harnex control plane',
-    description: 'Authenticates consumers and resolves applications, use cases, presets, model identity and execution policy.',
+    label: 'HARNEX',
+    title: 'Control plane + runtime',
+    description: 'Owns identity, authorization, model policy, residency, lifecycle, scheduling and inference audit.',
   },
   {
-    label: 'RUNTIME',
-    title: 'Runtime orchestration',
-    description: 'Owns scheduling, sessions, cancellation, durable logical-job state, memory pressure and model residency.',
-  },
-  {
-    label: 'NATIVE',
-    title: 'llama.cpp + GGUF',
-    description: 'Keeps native handles and curated local model execution behind one host-owned backend boundary.',
+    label: 'EXECUTION',
+    title: 'Backend',
+    description: 'Owns local execution. llama.cpp is the current backend, not the architecture.',
   },
 ];
 
 export const harnexRuntimeCapabilities: HarnexRuntimeCapability[] = [
   {
     title: 'Shared runtime',
-    description: 'Authorized Android apps use the Consumer SDK and Binder instead of embedding the native inference stack themselves.',
+    description: 'Consumer apps use the versioned SDK and Binder instead of embedding the native inference stack themselves.',
   },
   {
-    title: 'Explicit policy',
-    description: 'Application, use-case, preset and execution identity are host-controlled. Harnex does not silently substitute models.',
+    title: 'Android-native trust',
+    description: 'Authorization starts from Binder UID, installed package and signer, then applies Harnex policy and enabled use cases.',
   },
   {
-    title: 'Durable jobs',
-    description: 'Long-running work can keep a stable logical job identity across transient Binder or UI observation loss.',
+    title: 'Local inference Activity',
+    description: 'Accepted inference can be inspected through a durable, encrypted local audit trail without leaking content into normal telemetry.',
   },
   {
-    title: 'Operational evidence',
-    description: 'Latency, throughput, memory, thermal state, health, logs and request timelines are observable without normal prompt/output telemetry.',
+    title: 'Control plane',
+    description: 'Models, applications, use cases, runtime state, performance, diagnostics and Activity stay visible in one engineering console.',
   },
 ];
 
 export const harnexProductSurfaces = [
   'Overview',
   'Playground',
+  'Activity',
   'Applications',
   'Performance',
   'Models',
@@ -71,13 +67,13 @@ export const harnexProductSurfaces = [
 export const harnexProjectData: InfrastructureProjectData = {
   meta: {
     title: 'Harnex - Your local AI harness for Android',
-    description: 'Harnex is a shared Android Local AI host and engineering control plane that owns models, runtime policy, lifecycle and evidence behind a versioned Consumer SDK and Binder boundary.',
+    description: 'Harnex is an Android local-AI control plane and shared runtime that lets apps use local LLMs through one governed Consumer SDK and Binder boundary.',
   },
 
   hero: {
     eyebrow: 'INFRASTRUCTURE · ANDROID LOCAL AI',
     title: 'Harnex',
-    lede: 'Your local AI harness for Android. Run and manage local LLMs once, then expose them to Android apps through one controlled boundary while Harnex owns models, runtime policy, lifecycle and evidence.',
+    lede: 'Your local AI harness for Android. Run and manage local LLMs once, then expose them to Android apps through one controlled boundary.',
     status: 'Active engineering · shared runtime integrated',
     meta: [
       'Android API 26+',
@@ -87,64 +83,64 @@ export const harnexProjectData: InfrastructureProjectData = {
       'MIT',
     ],
     actions: [
-      { label: 'Explore architecture ↓', href: '#architecture' },
+      { label: 'See how it works ↓', href: '#architecture' },
       { label: 'GitHub ↗', href: 'https://github.com/daniele21/harnex', variant: 'secondary' },
     ],
     visualLabel: 'Harnex system map from Android consumer applications through the shared runtime to local GGUF inference',
     imageHero: 'images/harness/harnex-hero.png',
-    imageCaptionLeft: 'System boundary · Android apps → Consumer SDK → Binder → Harnex Host',
-    imageCaptionRight: 'Runtime orchestration · llama.cpp · curated GGUF',
+    imageCaptionLeft: 'Android apps → Consumer SDK → Binder → Harnex',
+    imageCaptionRight: 'Runtime → backend → local GGUF',
   },
 
   proof: {
-    statement: 'Local AI becomes reusable Android infrastructure when applications depend on a stable consumer boundary instead of owning GGUF, JNI, model lifecycle and memory policy themselves.',
-    detail: 'Harnex already implements the shared runtime and Consumer SDK boundary; stronger production claims still depend on representative-device and lifecycle evidence.',
+    statement: 'Apps own the workflow. Harnex owns the models, runtime and lifecycle.',
+    detail: 'One shared Android boundary instead of one native inference stack rebuilt inside every app.',
   },
 
   why: {
-    eyebrow: 'WHY IT EXISTS',
-    title: 'A local model inside one app is a feature. A shared runtime is infrastructure.',
-    description: 'If every Android app owns model files, native bindings, lifecycle, memory policy and diagnostics, Local AI scales by duplication. Harnex moves those concerns behind one Android-owned host boundary.',
+    eyebrow: 'WHY HARNEX',
+    title: 'One app can embed a model. Harnex makes Local AI reusable across apps.',
+    description: 'The goal is not another llama.cpp wrapper. It is a governed Android runtime that keeps product code separate from model, trust and lifecycle concerns.',
     principles: [
       {
-        title: 'One owner for expensive state',
-        subtitle: 'The host owns model bytes, native runtime state, residency and scheduling instead of duplicating them across products.',
+        title: 'One governed runtime',
+        subtitle: 'Model selection, residency, sessions, generation and cleanup live in Harnex instead of being reimplemented per app.',
         color: 'blue',
       },
       {
-        title: 'Small consumer boundary',
-        subtitle: 'Applications keep their workflow and integrate through a typed SDK/Binder contract rather than inheriting runtime internals.',
+        title: 'Android-native trust',
+        subtitle: 'Access is authorized from caller UID, package and signing identity — not from what a client claims to be.',
         color: 'teal',
       },
       {
-        title: 'Evidence before platform claims',
-        subtitle: 'Automated and emulator evidence proves contracts; physical Android evidence remains a separate release boundary.',
+        title: 'Evidence built in',
+        subtitle: 'Latency, TTFT, throughput, memory, thermal state and inference Activity are part of the system, not an afterthought.',
         color: 'violet',
       },
     ],
   },
 
   problems: {
-    eyebrow: 'THE INFRASTRUCTURE GAP',
-    title: 'Without a host layer, every app rebuilds the hard parts.',
-    description: 'The difficult work begins after the first successful generation: ownership, policy, lifecycle and failure semantics all need one authoritative place.',
+    eyebrow: 'THE GAP',
+    title: 'Running one prompt is easy. Operating Local AI across apps is the hard part.',
+    description: 'Without a host layer, every product inherits model files, JNI, lifecycle, memory, cancellation, authorization and diagnostics.',
     items: [
       {
         id: 1,
-        title: 'Duplicate the native stack',
-        description: 'Each product otherwise carries GGUF handling, JNI, backend packaging and model lifecycle as application-specific infrastructure.',
+        title: 'Duplicate runtime infrastructure',
+        description: 'Every app otherwise owns the same GGUF, native backend and model-lifecycle plumbing.',
         color: 'blue',
       },
       {
         id: 2,
-        title: 'Couple product code to runtime policy',
-        description: 'Model choice, presets, context, residency and authorization become scattered product decisions instead of explicit host policy.',
+        title: 'Scatter runtime policy',
+        description: 'Model choice, presets, context and authorization become application-specific decisions.',
         color: 'teal',
       },
       {
         id: 3,
-        title: 'Turn lifecycle failures into app bugs',
-        description: 'Cancellation, Binder loss, process death, memory pressure and cleanup need durable semantics rather than ad-hoc recovery in every client.',
+        title: 'Repeat lifecycle bugs',
+        description: 'Cancellation, process death, Binder loss, memory pressure and cleanup get solved repeatedly in each client.',
         color: 'violet',
       },
     ],
@@ -152,72 +148,70 @@ export const harnexProjectData: InfrastructureProjectData = {
 
   architecture: {
     eyebrow: 'ARCHITECTURE',
-    title: 'One host boundary separates Android products from local inference infrastructure.',
-    description: 'The execution path is Consumer app → Consumer Android SDK → signature-protected Binder → Harnex host/control plane → runtime orchestration → llama.cpp → curated GGUF. Model storage, observability and evaluation stay host-owned around that data plane.',
+    title: 'One clear ownership boundary.',
+    description: 'Consumer app → Consumer Android SDK → Binder → Harnex control plane/runtime → backend-neutral SPI → llama.cpp → local GGUF. Model storage, observability, evaluation and inference Activity stay Harnex-owned around that execution path.',
     diagramImage: 'images/harness/harnex-architecture.png',
-    diagramAlt: 'Harnex architecture showing consumer applications, Consumer Android SDK, Binder, host control plane, runtime orchestration, observability, llama.cpp and GGUF models',
+    diagramAlt: 'Harnex architecture showing consumer applications, Consumer Android SDK, Binder, Harnex control plane, runtime orchestration, backend, observability and local GGUF models',
   },
 
   runtime: {
-    eyebrow: 'RUNTIME & API',
-    title: 'Consumer apps call a versioned SDK. Harnex keeps runtime ownership.',
-    description: 'The supported direct dependency is the Consumer Android SDK. It owns public consumer contracts, Binder composition, typed transport failures, readiness inspection and durable logical jobs without exposing model-store or llama.cpp implementation types.',
+    eyebrow: 'HOW APPS CONNECT',
+    title: 'Your app stays focused on the product.',
+    description: 'Add the Consumer Android SDK and call Harnex over Binder. The app owns the workflow; Harnex keeps model selection, residency and execution lifecycle behind the boundary.',
     codePreview: {
       language: 'kotlin',
-      title: 'Durable logical job · Consumer SDK',
+      title: 'Consumer Android SDK',
       code: `implementation("io.github.daniele21.localllm:consumer-android:<version>")
 
-val response = client.submitLogicalGeneration(
+val job = client.submitLogicalGeneration(
     ConsumerLogicalJobSubmitRequest(
         clientRequestId = ConsumerLogicalJobRequestId("analysis-42"),
         useCaseId = prepared.useCaseId,
         preparedId = prepared.preparedId,
         expectedExecution = prepared.toExecutionIdentity(),
         input = ConsumerGenerationInput.Text(input),
-        outputConstraint = ConsumerOutputConstraint.JsonSchema(schema),
     ),
-)
-
-// Reconnect with the returned stable job ID instead of resubmitting work.`,
+)`,
     },
     surfacesImage: 'images/harness/harnex-control-plane.png',
-    surfacesAlt: 'Harnex Local AI Console control plane on Android showing App connections, Playground generation and GGUF model library',
-    surfacesCaption: 'Harnex Local AI Console · App connections, local playground and GGUF model management',
+    surfacesAlt: 'Harnex Local AI Console showing App connections, local Playground, Activity and GGUF model management',
+    surfacesCaption: 'Real Harnex surfaces · apps, local inference, Activity and models',
   },
 
   evidence: {
-    eyebrow: 'EVIDENCE & LIMITS',
-    title: 'The shared runtime is implemented. Production readiness is not claimed.',
-    description: 'The current development line proves the architecture, Consumer boundary and host behavior in code and automated integration. Representative Android hardware remains the boundary for stronger performance, memory, thermal and release claims.',
+    eyebrow: 'EVIDENCE',
+    title: 'What is proven now — and what is still being validated.',
+    description: 'The shared runtime and cross-app boundary are real. Physical-device and release evidence remain separate gates for stronger production claims.',
     note: {
-      title: 'Implemented capability and release evidence are different things.',
-      body: 'Harnex is an active engineering baseline. Automated and emulator evidence can prove contracts, failure semantics and cross-application integration, but it is not promoted into physical-device or production evidence.',
+      title: 'Keep implementation and release evidence separate.',
+      body: 'Harnex already has meaningful cross-application evidence. The remaining gap is representative real-device and release validation, not the core architecture.',
       evidenced: [
-        'Consumer Android SDK and Binder shared-runtime boundary are integrated',
-        'Curated Qwen3.5 dense 0.8B / 2B model lifecycle and verified GGUF execution are implemented',
-        'Generation, streaming, cancellation, single-decode scheduling, memory-pressure handling and durable logical jobs are implemented',
-        'Host applications/use cases/presets/bindings plus Overview, Playground, Applications, Performance, Models, Diagnostics and Settings are integrated',
-        'Privacy-safe telemetry, health, performance and evaluation foundations are present',
+        'Shared runtime + Consumer Android SDK/Binder boundary integrated',
+        'API 35 cross-application lifecycle, fault and serialization matrix green',
+        'Independent-signer consumer path supported with Harnex-owned UID/package/signer authorization',
+        'Encrypted local inference Activity with verified caller attribution and restart-safe history implemented',
+        'Consumer Android SDK 0.1.0-alpha.11 published from the validated baseline',
       ],
       missing: [
-        'Representative physical-device Qwen3.5 tuning plus memory and thermal evidence',
-        'Final physical two-APK shared-runtime and release gates',
-        'Remaining cross-process lifecycle convergence before stronger reliability claims',
+        'Actual Play App Signing identity confirmation',
+        'Representative physical ARM64/JNI/GGUF execution evidence',
+        'Physical memory and thermal envelope across target devices',
+        'OEM/device coverage and selected real-environment release gates',
       ],
     },
   },
 
   status: {
-    eyebrow: 'STATUS & NEXT DECISION',
-    title: 'The next work is evidence hardening, not another architecture rewrite.',
-    description: 'Keep the shared host/Consumer boundary stable and close the physical-device and lifecycle gates that determine whether it deserves stronger platform-level claims.',
+    eyebrow: 'STATUS',
+    title: 'Working Android infrastructure. Real-device release validation is still in progress.',
+    description: 'The shared runtime, SDK, control plane and cross-app trust boundary are implemented. The next confidence step is representative hardware and release evidence.',
     decision: {
-      title: 'Treat Harnex as working infrastructure under validation, not as a production Android AI platform yet.',
-      body: 'The shared runtime, SDK, control plane and local inference stack exist. The next confidence step comes from representative Android hardware and end-to-end process/lifecycle evidence rather than adding more abstraction.',
+      title: 'Architecture stable. Evidence hardening next.',
+      body: 'Keep the host/Consumer boundary stable and close the remaining physical-device, Play identity, OEM and selected release gates.',
       signals: [
-        'Shared runtime + Consumer SDK already integrated',
-        'Physical memory, thermal and model-tuning evidence still required',
-        'Cross-process lifecycle and two-APK release evidence still being closed',
+        'Shared runtime + cross-app boundary implemented',
+        'Independent-signer path already exercised',
+        'Physical-device and release evidence still being expanded',
       ],
     },
   },
@@ -227,13 +221,13 @@ val response = client.submitLogicalGeneration(
       stage: 'BUILD · INFRASTRUCTURE',
       title: 'Harnex',
       current: true,
-      note: 'Shared Android Local AI host, model plane and runtime boundary',
+      note: 'Shared Android Local AI host, control plane and runtime boundary',
     },
     {
       stage: 'TEST · CONSUMER',
       title: 'RedactGuard',
       href: '/redact-guard',
-      note: 'Pure Consumer SDK client proving the cross-application boundary',
+      note: 'Consumer SDK client proving the cross-application boundary',
     },
     {
       stage: 'MEASURE · EVIDENCE',
@@ -245,8 +239,8 @@ val response = client.submitLogicalGeneration(
 
   cta: {
     badge: 'OPEN SOURCE · MIT',
-    title: 'Explore Harnex as Android Local AI infrastructure.',
-    description: 'Read the code, architecture and evidence if you are evaluating whether on-device inference should live once behind a controlled host instead of once inside every app.',
+    title: 'Explore the runtime, contracts and evidence.',
+    description: 'Harnex is the Android infrastructure experiment behind a simple question: can Local AI become a shared capability instead of a native stack rebuilt inside every app?',
     primaryAction: {
       label: 'Explore on GitHub ↗',
       href: 'https://github.com/daniele21/harnex',
