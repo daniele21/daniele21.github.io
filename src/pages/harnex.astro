@@ -22,6 +22,8 @@ import {
 } from '../content/locales/en/harnexProject';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const formatHighlight = (text: string) =>
+  text ? text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') : '';
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
@@ -103,7 +105,7 @@ const projectSchema = {
         {data.why.principles.map((principle) => (
           <article class={`signal-card signal-card--${principle.color || 'blue'}`}>
             <strong>{principle.title}</strong>
-            <p>{principle.subtitle}</p>
+            <p set:html={formatHighlight(principle.subtitle)} />
           </article>
         ))}
       </div>
@@ -121,7 +123,7 @@ const projectSchema = {
         {harnexRuntimeCapabilities.map((capability) => (
           <article class="capability-card">
             <strong>{capability.title}</strong>
-            <p>{capability.description}</p>
+            <p set:html={formatHighlight(capability.description)} />
           </article>
         ))}
       </div>
@@ -189,14 +191,14 @@ const projectSchema = {
                 <small>{layer.label}</small>
               </div>
               <strong>{layer.title}</strong>
-              <p>{layer.description}</p>
+              <p set:html={formatHighlight(layer.description)} />
             </article>
           ))}
         </div>
 
         <div class="architecture-callout">
           <strong>llama.cpp is the current backend, not the architecture.</strong>
-          <p>The runtime core keeps policy and lifecycle separate from the execution engine through a backend-neutral boundary.</p>
+          <p>The runtime core keeps <strong>policy and lifecycle separate from the execution engine</strong> through a backend-neutral boundary.</p>
         </div>
       </ProjectSection>
     </div>
@@ -216,21 +218,21 @@ const projectSchema = {
               <span>01</span>
               <div>
                 <strong>Keep the product workflow in your app</strong>
-                <p>The consumer owns UI, product state and application data.</p>
+                <p>The consumer owns <strong>UI, product state and application data</strong>.</p>
               </div>
             </div>
             <div class="integration-step">
               <span>02</span>
               <div>
                 <strong>Call the Consumer SDK</strong>
-                <p>Typed contracts cross the Binder boundary without exposing Harnex internals.</p>
+                <p><strong>Typed contracts</strong> cross the Binder boundary without exposing Harnex internals.</p>
               </div>
             </div>
             <div class="integration-step">
               <span>03</span>
               <div>
                 <strong>Let Harnex operate the runtime</strong>
-                <p>Authorization, model policy, residency, lifecycle and audit stay host-owned.</p>
+                <p><strong>Authorization, model policy, residency, lifecycle and audit</strong> stay host-owned.</p>
               </div>
             </div>
           </div>
@@ -371,18 +373,18 @@ const projectSchema = {
     border-top-color: var(--accent-violet, #8b5cf6);
   }
 
-  .signal-card strong,
-  .capability-card strong,
+  .signal-card > strong,
+  .capability-card > strong,
   .ownership-card > strong,
-  .integration-step strong,
-  .architecture-callout strong {
+  .integration-step > div > strong,
+  .architecture-callout > strong {
     color: var(--ink-display);
     font-family: var(--font-display);
     font-weight: 750;
   }
 
-  .signal-card strong,
-  .capability-card strong,
+  .signal-card > strong,
+  .capability-card > strong,
   .ownership-card > strong {
     font-size: clamp(1.03rem, 1.5vw, 1.22rem);
   }
@@ -396,6 +398,17 @@ const projectSchema = {
     color: var(--ink-muted);
     font-size: var(--text-body-sm);
     line-height: 1.6;
+  }
+
+  .signal-card p strong,
+  .capability-card p strong,
+  .ownership-card p strong,
+  .integration-step p strong,
+  .architecture-callout p strong {
+    color: var(--ink);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 700;
   }
 
   .capability-grid {
@@ -521,7 +534,7 @@ const projectSchema = {
     background: var(--surface-subtle);
   }
 
-  .architecture-callout strong {
+  .architecture-callout > strong {
     font-size: clamp(1.05rem, 1.6vw, 1.3rem);
   }
 
@@ -564,7 +577,7 @@ const projectSchema = {
     font-weight: 800;
   }
 
-  .integration-step strong {
+  .integration-step > div > strong {
     font-size: 1rem;
   }
 

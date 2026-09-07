@@ -15,41 +15,41 @@ export const harnexArchitectureLayers: HarnexArchitectureLayer[] = [
   {
     label: 'APP',
     title: 'Consumer app',
-    description: 'Owns the product workflow, UI state and application data.',
+    description: 'Owns the **product workflow, UI state and application data**.',
   },
   {
     label: 'CONTRACT',
     title: 'Consumer SDK + Binder',
-    description: 'Owns the typed contract, transport and caller boundary between the app and Harnex.',
+    description: 'Owns the **typed contract, transport and caller boundary** between the app and Harnex.',
   },
   {
     label: 'HARNEX',
     title: 'Control plane + runtime',
-    description: 'Owns identity, authorization, model policy, residency, lifecycle, scheduling and inference audit.',
+    description: 'Owns **identity, authorization, model policy, residency, lifecycle, scheduling and inference audit**.',
   },
   {
     label: 'EXECUTION',
     title: 'Backend',
-    description: 'Owns local execution. llama.cpp is the current backend, not the architecture.',
+    description: 'Owns local execution. **llama.cpp is the current backend**, not the architecture.',
   },
 ];
 
 export const harnexRuntimeCapabilities: HarnexRuntimeCapability[] = [
   {
     title: 'Shared runtime',
-    description: 'Consumer apps use the versioned SDK and Binder instead of embedding the native inference stack themselves.',
+    description: 'Consumer apps use the **versioned SDK and Binder** instead of embedding the native inference stack themselves.',
   },
   {
     title: 'Android-native trust',
-    description: 'Authorization starts from Binder UID, installed package and signer, then applies Harnex policy and enabled use cases.',
+    description: 'Authorization starts from **Binder UID, installed package and signer**, then applies Harnex policy and enabled use cases.',
   },
   {
     title: 'Local inference Activity',
-    description: 'Accepted inference can be inspected through a durable, encrypted local audit trail without leaking content into normal telemetry.',
+    description: 'Accepted inference can be inspected through a durable, **encrypted local audit trail** without leaking content into normal telemetry.',
   },
   {
     title: 'Control plane',
-    description: 'Models, applications, use cases, runtime state, performance, diagnostics and Activity stay visible in one engineering console.',
+    description: 'Models, applications, use cases, runtime state, performance, diagnostics and Activity stay visible in **one engineering console**.',
   },
 ];
 
@@ -104,17 +104,17 @@ export const harnexProjectData: InfrastructureProjectData = {
     principles: [
       {
         title: 'One governed runtime',
-        subtitle: 'Model selection, residency, sessions, generation and cleanup live in Harnex instead of being reimplemented per app.',
+        subtitle: '**Model selection, residency, sessions, generation and cleanup** live in Harnex instead of being reimplemented per app.',
         color: 'blue',
       },
       {
         title: 'Android-native trust',
-        subtitle: 'Access is authorized from caller UID, package and signing identity — not from what a client claims to be.',
+        subtitle: 'Access is authorized from **caller UID, package and signing identity**, not from what a client claims to be.',
         color: 'teal',
       },
       {
         title: 'Evidence built in',
-        subtitle: 'Latency, TTFT, throughput, memory, thermal state and inference Activity are part of the system, not an afterthought.',
+        subtitle: '**Latency, TTFT, throughput, memory, thermal state and inference Activity** are part of the system, not an afterthought.',
         color: 'violet',
       },
     ],
@@ -180,7 +180,7 @@ val job = client.submitLogicalGeneration(
 
   evidence: {
     eyebrow: 'EVIDENCE',
-    title: 'What is proven now — and what is still being validated.',
+    title: 'What is proven now and what is still being validated.',
     description: 'The shared runtime and cross-app boundary are real. Physical-device and release evidence remain separate gates for stronger production claims.',
     note: {
       title: 'Keep implementation and release evidence separate.',
