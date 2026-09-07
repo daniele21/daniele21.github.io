@@ -1,14 +1,14 @@
 ---
-/**
- * RedactGuardProduct.astro
- * Product screens section matching prototype (2).
- */
-import { redactGuardData } from '../../content/redactGuard';
+/** Shared product-workflow section for RedactGuard platform variants. */
+import { redactGuardData, type RedactGuardData } from '../../content/redactGuard';
+
 interface Props {
   baseUrl: string;
+  data?: RedactGuardData;
 }
-const { baseUrl } = Astro.props;
-const { product } = redactGuardData;
+
+const { baseUrl, data = redactGuardData } = Astro.props;
+const { product } = data;
 ---
 
 <section class="section" id="product">
@@ -26,7 +26,7 @@ const { product } = redactGuardData;
             <img
               data-zoomable
               src={`${baseUrl}/${screen.image}`}
-              alt={`RedactGuard ${screen.title} screen`}
+              alt={`RedactGuard — ${screen.title}`}
             />
           </div>
           <div class="screen-copy">
@@ -94,11 +94,22 @@ const { product } = redactGuardData;
     border-color: var(--border-strong);
   }
 
-  .screen-img-wrap img {
+  .screen-img-wrap {
+    min-height: 220px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-subtle);
+    background: var(--surface-muted);
+  }
+
+  .screen-img-wrap img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    min-height: 220px;
+    max-height: 420px;
+    object-fit: contain;
     cursor: zoom-in;
   }
 
