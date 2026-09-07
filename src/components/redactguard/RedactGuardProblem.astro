@@ -1,10 +1,13 @@
 ---
-/**
- * RedactGuardProblem.astro
- * Problem section matching prototype (2).
- */
-import { redactGuardData } from '../../content/redactGuard';
-const { problem } = redactGuardData;
+/** Shared problem section for RedactGuard platform variants. */
+import { redactGuardData, type RedactGuardData } from '../../content/redactGuard';
+
+interface Props {
+  data?: RedactGuardData;
+}
+
+const { data = redactGuardData } = Astro.props;
+const { problem } = data;
 ---
 
 <section class="section alt" id="problem">
