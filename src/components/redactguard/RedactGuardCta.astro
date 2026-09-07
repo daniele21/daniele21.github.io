@@ -1,10 +1,19 @@
 ---
-/**
- * RedactGuardCta.astro
- * CTA section matching prototype (2).
- */
-import { redactGuardData } from '../../content/redactGuard';
-const { cta } = redactGuardData;
+/** Shared CTA for RedactGuard platform variants. */
+import { redactGuardData, type RedactGuardData } from '../../content/redactGuard';
+
+interface Props {
+  data?: RedactGuardData;
+  repoUrl?: string;
+  buttonLabel?: string;
+}
+
+const {
+  data = redactGuardData,
+  repoUrl = 'https://github.com/daniele21/redact-guard',
+  buttonLabel = 'Explore RedactGuard',
+} = Astro.props;
+const { cta } = data;
 ---
 
 <section class="section">
@@ -17,8 +26,8 @@ const { cta } = redactGuardData;
       <p set:html={cta.sub.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}></p>
     </div>
 
-    <a class="btn primary-btn" href="https://github.com/daniele21/redact-guard" target="_blank" rel="noreferrer">
-      Explore RedactGuard ↗
+    <a class="btn primary-btn" href={repoUrl} target="_blank" rel="noreferrer">
+      {buttonLabel} ↗
     </a>
   </div>
 </section>
