@@ -18,6 +18,7 @@ const projectPages = [
   { path: 'src/pages/closedroom.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/aura-finance.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/redact-guard.astro', archetype: 'product', migrated: true },
+  { path: 'src/pages/redact-guard-android.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/performance-lab.astro', archetype: 'experiment', migrated: true },
   { path: 'src/pages/traffic-monitoring.astro', archetype: 'experiment', migrated: false },
   { path: 'src/pages/traffic-monitoring-android.astro', archetype: 'experiment', migrated: false },
@@ -91,6 +92,21 @@ test('shared project primitives preserve semantic structure and proof hierarchy'
   assert.match(relations, /aria-current/);
 });
 
+test('RedactGuard platform variants share one product-family switch and product IA', () => {
+  for (const path of [
+    'src/pages/redact-guard.astro',
+    'src/pages/redact-guard-android.astro',
+  ]) {
+    const source = read(path);
+    assert.match(source, /ProjectVariantSwitch/);
+    assert.match(source, /label: 'Desktop'/);
+    assert.match(source, /label: 'Android'/);
+    assert.match(source, /Powered by Korgis/);
+    assert.match(source, /Powered by Harnex/);
+    assert.doesNotMatch(source, /ProjectPhase/);
+  }
+});
+
 test('shared project subheader uses canonical tokens, accessible targets and adaptive section visibility', () => {
   const source = read('src/components/layout/ProductSubHeader.astro');
 
@@ -157,6 +173,7 @@ test('migrated product and infrastructure routes use the canonical global header
     'src/pages/closedroom.astro',
     'src/pages/aura-finance.astro',
     'src/pages/redact-guard.astro',
+    'src/pages/redact-guard-android.astro',
     'src/pages/korgis.astro',
   ]) {
     const source = read(path);
