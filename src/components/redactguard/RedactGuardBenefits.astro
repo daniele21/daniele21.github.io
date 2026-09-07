@@ -1,10 +1,13 @@
 ---
-/**
- * RedactGuardBenefits.astro
- * Benefits section matching prototype (2).
- */
-import { redactGuardData } from '../../content/redactGuard';
-const { benefits } = redactGuardData;
+/** Shared benefits section for RedactGuard platform variants. */
+import { redactGuardData, type RedactGuardData } from '../../content/redactGuard';
+
+interface Props {
+  data?: RedactGuardData;
+}
+
+const { data = redactGuardData } = Astro.props;
+const { benefits } = data;
 ---
 
 <section class="section alt" id="benefits">
