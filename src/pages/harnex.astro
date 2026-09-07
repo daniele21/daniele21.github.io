@@ -1,8 +1,8 @@
 ---
 /**
  * harnex.astro
- * Harnex infrastructure project page built from the canonical infrastructure archetype.
- * Visual assets integrated: Hero system map, architecture diagram and control plane UI console.
+ * Harnex infrastructure project page.
+ * Narrative: value → differentiators → real product → architecture → integration → evidence → status.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
@@ -69,7 +69,7 @@ const projectSchema = {
       actions={data.hero.actions}
       visualLabel={data.hero.visualLabel}
     >
-      <div class="infra-hero-visual">
+      <div class="media-frame media-frame--hero">
         <img
           data-zoomable
           src={`${baseUrl}/${data.hero.imageHero.replace(/^\//, '')}`}
@@ -79,7 +79,7 @@ const projectSchema = {
           loading="eager"
         />
         {(data.hero.imageCaptionLeft || data.hero.imageCaptionRight) && (
-          <div class="infra-hero-caption">
+          <div class="media-caption media-caption--split">
             <span>{data.hero.imageCaptionLeft}</span>
             <span>{data.hero.imageCaptionRight}</span>
           </div>
@@ -99,9 +99,9 @@ const projectSchema = {
       description={data.why.description}
       tone="canvas"
     >
-      <div class="principle-strip" aria-label="Harnex design principles">
+      <div class="principle-strip" aria-label="What makes Harnex different">
         {data.why.principles.map((principle) => (
-          <article class={`principle-card principle-card--${principle.color || 'blue'}`}>
+          <article class={`signal-card signal-card--${principle.color || 'blue'}`}>
             <strong>{principle.title}</strong>
             <p>{principle.subtitle}</p>
           </article>
@@ -110,22 +110,48 @@ const projectSchema = {
     </ProjectSection>
 
     <ProjectSection
-      id="problems"
-      eyebrow={data.problems.eyebrow}
-      title={data.problems.title}
-      description={data.problems.description}
+      id="today"
+      eyebrow="WHAT WORKS TODAY"
+      title="A real Android host, not just an architecture diagram."
+      description="The shared runtime, cross-app boundary and engineering control plane are already integrated on the current development line."
       tone="subtle"
+      width="wide"
     >
-      <div class="problem-grid" aria-label="Infrastructure problems addressed by Harnex">
-        {data.problems.items.map((item) => (
-          <article class="problem-card">
-            <div class={`problem-index problem-index--${item.color || 'blue'}`}>
-              {String(item.id).padStart(2, '0')}
-            </div>
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
+      <div class="capability-grid" aria-label="Current Harnex capabilities">
+        {harnexRuntimeCapabilities.map((capability) => (
+          <article class="capability-card">
+            <strong>{capability.title}</strong>
+            <p>{capability.description}</p>
           </article>
         ))}
+      </div>
+
+      {data.runtime.surfacesImage && (
+        <div class="media-frame product-visual">
+          <img
+            data-zoomable
+            src={`${baseUrl}/${data.runtime.surfacesImage.replace(/^\//, '')}`}
+            alt={data.runtime.surfacesAlt || 'Harnex control plane surfaces'}
+            width="1672"
+            height="941"
+            loading="lazy"
+          />
+          {data.runtime.surfacesCaption && (
+            <div class="media-caption">
+              <span>{data.runtime.surfacesCaption}</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div class="surface-band" aria-label="Current Harnex product surfaces">
+        <div class="surface-copy">
+          <span class="surface-label">CURRENT SURFACES</span>
+          <p>One console to operate and inspect the shared runtime.</p>
+        </div>
+        <ul>
+          {harnexProductSurfaces.map((surface) => <li>{surface}</li>)}
+        </ul>
       </div>
     </ProjectSection>
 
@@ -139,7 +165,7 @@ const projectSchema = {
         width="wide"
       >
         {data.architecture.diagramImage && (
-          <div class="architecture-diagram">
+          <div class="media-frame architecture-diagram">
             <img
               data-zoomable
               src={`${baseUrl}/${data.architecture.diagramImage.replace(/^\//, '')}`}
@@ -151,7 +177,11 @@ const projectSchema = {
           </div>
         )}
 
-        <div class="ownership-flow" aria-label="Harnex architecture ownership layers">
+        <div class="ownership-heading">
+          <span>WHO OWNS WHAT</span>
+          <p>Four boundaries are enough to understand the system.</p>
+        </div>
+        <div class="ownership-flow" aria-label="Harnex architecture ownership boundaries">
           {harnexArchitectureLayers.map((layer, index) => (
             <article class="ownership-card">
               <div class="ownership-head">
@@ -162,6 +192,11 @@ const projectSchema = {
               <p>{layer.description}</p>
             </article>
           ))}
+        </div>
+
+        <div class="architecture-callout">
+          <strong>llama.cpp is the current backend, not the architecture.</strong>
+          <p>The runtime core keeps policy and lifecycle separate from the execution engine through a backend-neutral boundary.</p>
         </div>
       </ProjectSection>
     </div>
@@ -175,52 +210,41 @@ const projectSchema = {
         tone="subtle"
         width="wide"
       >
-        {data.runtime.codePreview && (
-          <div class="code-preview">
-            <div class="code-preview-header">
-              <span class="code-preview-lang">{data.runtime.codePreview.language}</span>
-              <span class="code-preview-title">{data.runtime.codePreview.title}</span>
-            </div>
-            <pre tabindex="0" aria-label="Consumer Android SDK example; scroll horizontally to inspect code"><code set:text={data.runtime.codePreview.code} /></pre>
-            <p class="code-scroll-hint">Scroll to inspect code</p>
-          </div>
-        )}
-
-        <div class="runtime-grid" aria-label="Harnex runtime capabilities">
-          {harnexRuntimeCapabilities.map((capability) => (
-            <article class="runtime-card">
-              <strong>{capability.title}</strong>
-              <p>{capability.description}</p>
-            </article>
-          ))}
-        </div>
-
-        {data.runtime.surfacesImage && (
-          <div class="runtime-surfaces-visual">
-            <img
-              data-zoomable
-              src={`${baseUrl}/${data.runtime.surfacesImage.replace(/^\//, '')}`}
-              alt={data.runtime.surfacesAlt || 'Harnex control plane surfaces'}
-              width="1672"
-              height="941"
-              loading="lazy"
-            />
-            {data.runtime.surfacesCaption && (
-              <div class="runtime-surfaces-caption">
-                <span>{data.runtime.surfacesCaption}</span>
+        <div class="integration-layout">
+          <div class="integration-flow" aria-label="Consumer integration flow">
+            <div class="integration-step">
+              <span>01</span>
+              <div>
+                <strong>Keep the product workflow in your app</strong>
+                <p>The consumer owns UI, product state and application data.</p>
               </div>
-            )}
+            </div>
+            <div class="integration-step">
+              <span>02</span>
+              <div>
+                <strong>Call the Consumer SDK</strong>
+                <p>Typed contracts cross the Binder boundary without exposing Harnex internals.</p>
+              </div>
+            </div>
+            <div class="integration-step">
+              <span>03</span>
+              <div>
+                <strong>Let Harnex operate the runtime</strong>
+                <p>Authorization, model policy, residency, lifecycle and audit stay host-owned.</p>
+              </div>
+            </div>
           </div>
-        )}
 
-        <div class="surface-band" aria-label="Current Harnex product surfaces">
-          <div>
-            <span class="surface-label">CURRENT CONTROL SURFACES</span>
-            <p>One engineering console exposes the shared host state without making each consumer app a runtime debugger.</p>
-          </div>
-          <ul>
-            {harnexProductSurfaces.map((surface) => <li>{surface}</li>)}
-          </ul>
+          {data.runtime.codePreview && (
+            <div class="code-preview">
+              <div class="code-preview-header">
+                <span class="code-preview-lang">{data.runtime.codePreview.language}</span>
+                <span class="code-preview-title">{data.runtime.codePreview.title}</span>
+              </div>
+              <pre tabindex="0" aria-label="Consumer Android SDK example; scroll horizontally to inspect code"><code set:text={data.runtime.codePreview.code} /></pre>
+              <p class="code-scroll-hint">Scroll to inspect code</p>
+            </div>
+          )}
         </div>
       </ProjectSection>
     </div>
@@ -230,7 +254,7 @@ const projectSchema = {
       eyebrow={data.evidence.eyebrow}
       title={data.evidence.title}
       description={data.evidence.description}
-      tone="subtle"
+      tone="canvas"
       width="wide"
     >
       <ProjectEvidenceNote
@@ -246,7 +270,7 @@ const projectSchema = {
       eyebrow={data.status.eyebrow}
       title={data.status.title}
       description={data.status.description}
-      tone="canvas"
+      tone="subtle"
       width="wide"
     >
       {data.status.decision && (
@@ -274,107 +298,54 @@ const projectSchema = {
 </BaseLayout>
 
 <style>
-  .infra-hero-visual {
-    position: relative;
+  .project-anchor {
+    scroll-margin-top: 118px;
+  }
+
+  .media-frame {
     overflow: hidden;
     border: 1px solid var(--border-medium);
-    border-radius: clamp(18px, 2.5vw, 28px);
+    border-radius: clamp(16px, 2.2vw, 24px);
     background: var(--surface-card);
     box-shadow: var(--shadow-md);
   }
 
-  .infra-hero-visual img {
+  .media-frame img {
     display: block;
     width: 100%;
     height: auto;
-    max-height: 720px;
     object-fit: contain;
     cursor: zoom-in;
     transition: transform var(--duration-normal) ease;
   }
 
-  .infra-hero-visual:hover img {
-    transform: scale(1.006);
+  .media-frame:hover img {
+    transform: scale(1.004);
   }
 
-  .infra-hero-caption {
-    min-height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 12px 20px;
-    border-top: 1px solid var(--border-subtle);
-    background: var(--surface-card);
-    color: var(--ink-subtle);
-    font-family: var(--font-mono);
-    font-size: var(--text-caption);
-  }
-
-  .architecture-diagram {
-    overflow: hidden;
-    border: 1px solid var(--border-medium);
-    border-radius: clamp(14px, 2vw, 22px);
-    background: var(--surface-card);
-    box-shadow: var(--shadow-md);
-    margin-bottom: var(--space-5);
+  .media-frame--hero img,
+  .product-visual img {
+    max-height: 720px;
   }
 
   .architecture-diagram img {
-    display: block;
-    width: 100%;
-    height: auto;
     max-height: 700px;
-    object-fit: contain;
-    cursor: zoom-in;
-    transition: transform var(--duration-normal) ease;
   }
 
-  .architecture-diagram:hover img {
-    transform: scale(1.006);
-  }
-
-  .runtime-surfaces-visual {
-    overflow: hidden;
-    border: 1px solid var(--border-medium);
-    border-radius: clamp(14px, 2vw, 22px);
-    background: var(--surface-card);
-    box-shadow: var(--shadow-md);
-    margin-top: var(--space-5);
-  }
-
-  .runtime-surfaces-visual img {
-    display: block;
-    width: 100%;
-    height: auto;
-    max-height: 700px;
-    object-fit: contain;
-    cursor: zoom-in;
-    transition: transform var(--duration-normal) ease;
-  }
-
-  .runtime-surfaces-visual:hover img {
-    transform: scale(1.006);
-  }
-
-  .runtime-surfaces-caption {
+  .media-caption {
     min-height: 44px;
     display: flex;
     align-items: center;
+    gap: 16px;
     padding: 10px 18px;
     border-top: 1px solid var(--border-subtle);
-    background: var(--surface-card);
     color: var(--ink-subtle);
     font-family: var(--font-mono);
     font-size: var(--text-caption);
   }
 
-  .surface-label {
-    color: var(--accent-blue-dark);
-    font-family: var(--font-mono);
-    font-size: var(--text-caption);
-    font-weight: 800;
-    letter-spacing: 0.06em;
+  .media-caption--split {
+    justify-content: space-between;
   }
 
   .principle-strip {
@@ -383,88 +354,129 @@ const projectSchema = {
     gap: var(--space-3);
   }
 
-  .principle-card {
+  .signal-card {
+    min-height: 180px;
     padding: clamp(20px, 2.5vw, 28px);
-    border-top: 2px solid var(--accent-blue);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--accent-blue);
+    border-radius: var(--radius-lg);
     background: var(--surface-card);
   }
 
-  .principle-card--teal { border-top-color: var(--accent-teal, #14b8a6); }
-  .principle-card--violet { border-top-color: var(--accent-violet, #8b5cf6); }
-
-  .principle-card strong,
-  .runtime-card strong,
-  .ownership-card > strong {
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  .signal-card--teal {
+    border-top-color: var(--accent-teal, #14b8a6);
   }
 
-  .principle-card p,
-  .runtime-card p,
-  .ownership-card p {
+  .signal-card--violet {
+    border-top-color: var(--accent-violet, #8b5cf6);
+  }
+
+  .signal-card strong,
+  .capability-card strong,
+  .ownership-card > strong,
+  .integration-step strong,
+  .architecture-callout strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-weight: 750;
+  }
+
+  .signal-card strong,
+  .capability-card strong,
+  .ownership-card > strong {
+    font-size: clamp(1.03rem, 1.5vw, 1.22rem);
+  }
+
+  .signal-card p,
+  .capability-card p,
+  .ownership-card p,
+  .integration-step p,
+  .architecture-callout p {
     margin: 8px 0 0;
     color: var(--ink-muted);
     font-size: var(--text-body-sm);
     line-height: 1.6;
   }
 
-  .problem-grid {
+  .capability-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-4);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
   }
 
-  .problem-card {
-    padding: clamp(20px, 3vw, 28px);
+  .capability-card {
+    padding: clamp(18px, 2vw, 24px);
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
     background: var(--surface-card);
     box-shadow: var(--shadow-sm);
-    transition:
-      transform var(--duration-fast) ease,
-      box-shadow var(--duration-fast) ease;
   }
 
-  .problem-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+  .product-visual {
+    margin-top: var(--space-3);
   }
 
-  .problem-index {
-    width: 40px;
-    height: 40px;
+  .surface-band {
     display: grid;
-    place-items: center;
-    margin-bottom: var(--space-3);
-    border-radius: var(--radius-md);
-    font-family: var(--font-mono);
-    font-weight: 800;
-    font-size: 0.85rem;
+    grid-template-columns: minmax(240px, 0.65fr) minmax(0, 1.35fr);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+    padding: clamp(18px, 2.4vw, 26px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
   }
 
-  .problem-index--blue { color: var(--accent-blue); background: var(--surface-blue-subtle); }
-  .problem-index--teal { color: var(--accent-teal, #14b8a6); background: color-mix(in srgb, var(--accent-teal, #14b8a6) 10%, var(--surface-card)); }
-  .problem-index--violet { color: var(--accent-violet, #8b5cf6); background: color-mix(in srgb, var(--accent-violet, #8b5cf6) 10%, var(--surface-card)); }
+  .surface-label,
+  .ownership-heading span {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.07em;
+  }
 
-  .problem-card h3 {
-    margin: 0 0 8px;
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: 1.1rem;
+  .surface-copy p,
+  .ownership-heading p {
+    margin: 7px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.5;
+  }
+
+  .surface-band ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .surface-band li {
+    padding: 7px 11px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    background: var(--surface-subtle);
+    color: var(--ink);
+    font-size: var(--text-caption);
     font-weight: 700;
   }
 
-  .problem-card p {
-    margin: 0;
-    color: var(--ink-muted);
-    font-size: var(--text-body-sm);
-    line-height: 1.6;
+  .ownership-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin: var(--space-5) 0 var(--space-3);
   }
 
   .ownership-flow {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--space-3);
   }
 
@@ -482,150 +494,176 @@ const projectSchema = {
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    margin-bottom: var(--space-3);
+    margin-bottom: 14px;
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
   }
 
-  .ownership-head span,
-  .ownership-head small {
-    color: var(--accent-blue-dark);
-    font-family: var(--font-mono);
-    font-size: var(--text-caption);
+  .ownership-head span {
+    color: var(--accent-blue);
+    font-size: 0.78rem;
     font-weight: 800;
-    letter-spacing: 0.05em;
+  }
+
+  .ownership-head small {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+  }
+
+  .architecture-callout {
+    display: grid;
+    grid-template-columns: minmax(250px, 0.7fr) minmax(0, 1.3fr);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+    padding: clamp(18px, 2.5vw, 26px);
+    border-left: 3px solid var(--accent-teal, #14b8a6);
+    background: var(--surface-subtle);
+  }
+
+  .architecture-callout strong {
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  }
+
+  .architecture-callout p {
+    margin: 0;
+  }
+
+  .integration-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(24px, 4vw, 48px);
+    align-items: stretch;
+  }
+
+  .integration-flow {
+    display: grid;
+    align-content: start;
+    gap: 0;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    overflow: hidden;
+  }
+
+  .integration-step {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 14px;
+    padding: clamp(18px, 2.4vw, 24px);
+  }
+
+  .integration-step + .integration-step {
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .integration-step > span {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .integration-step strong {
+    font-size: 1rem;
   }
 
   .code-preview {
     position: relative;
     overflow: hidden;
     border: 1px solid var(--border-medium);
-    border-radius: clamp(14px, 2vw, 22px);
-    background: #1e293b;
+    border-radius: var(--radius-lg);
+    background: #0f172a;
     box-shadow: var(--shadow-md);
   }
 
   .code-preview-header {
+    min-height: 44px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: space-between;
+    gap: 16px;
     padding: 10px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgb(255 255 255 / 0.09);
   }
 
   .code-preview-lang {
-    padding: 2px 8px;
-    border-radius: var(--radius-sm, 4px);
-    background: rgba(96, 165, 250, 0.15);
-    color: #93c5fd;
+    color: #5eead4;
     font-family: var(--font-mono);
-    font-size: var(--text-caption);
-    font-weight: 700;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
   .code-preview-title {
-    color: rgba(255, 255, 255, 0.72);
+    color: #94a3b8;
     font-size: var(--text-caption);
-    font-weight: 600;
   }
 
   .code-preview pre {
+    max-width: 100%;
+    min-height: 280px;
     margin: 0;
-    padding: 20px;
-    overflow-x: auto;
-    outline-offset: -3px;
-  }
-
-  .code-preview code {
+    padding: clamp(18px, 2.5vw, 26px);
+    overflow: auto;
     color: #e2e8f0;
     font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: clamp(0.76rem, 1.1vw, 0.9rem);
     line-height: 1.65;
-    white-space: pre;
+    tab-size: 2;
+  }
+
+  .code-preview pre:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: -4px;
   }
 
   .code-scroll-hint {
     display: none;
     margin: 0;
-    padding: 0 16px 12px;
-    color: rgba(255, 255, 255, 0.66);
-    font-family: var(--font-mono);
-    font-size: var(--text-caption);
+    padding: 8px 16px;
+    border-top: 1px solid rgb(255 255 255 / 0.09);
+    color: #94a3b8;
+    font-size: 0.7rem;
   }
 
-  .runtime-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-3);
-    margin-top: var(--space-5);
-  }
-
-  .runtime-card {
-    padding: clamp(20px, 2.5vw, 26px);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    background: var(--surface-card);
-  }
-
-  .surface-band {
-    display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-    gap: clamp(24px, 4vw, 48px);
-    align-items: center;
-    margin-top: var(--space-5);
-    padding: clamp(22px, 3vw, 32px);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    background: var(--surface-card);
-  }
-
-  .surface-band p {
-    margin: 8px 0 0;
-    color: var(--ink-muted);
-    font-size: var(--text-body-sm);
-    line-height: 1.6;
-  }
-
-  .surface-band ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .surface-band li {
-    padding: 7px 10px;
-    border: 1px solid var(--border-medium);
-    border-radius: 999px;
-    background: var(--surface-subtle);
-    color: var(--ink);
-    font-size: var(--text-caption);
-    font-weight: 700;
-  }
-
-  .project-anchor {
-    scroll-margin-top: calc(var(--header-height, 64px) + 64px);
-  }
-
-  @media (max-width: 1080px) {
+  @media (max-width: 1050px) {
+    .capability-grid,
     .ownership-flow {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .integration-layout {
+      grid-template-columns: 1fr;
     }
   }
 
   @media (max-width: 760px) {
     .principle-strip,
-    .problem-grid,
-    .runtime-grid,
-    .surface-band {
+    .capability-grid,
+    .ownership-flow,
+    .surface-band,
+    .architecture-callout {
       grid-template-columns: 1fr;
     }
 
-    .infra-hero-caption {
-      flex-direction: column;
+    .signal-card {
+      min-height: 0;
+    }
+
+    .surface-band ul {
+      justify-content: flex-start;
+    }
+
+    .ownership-heading {
       align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .media-caption--split {
+      align-items: flex-start;
+      flex-direction: column;
       gap: 4px;
     }
 
@@ -634,19 +672,9 @@ const projectSchema = {
     }
   }
 
-  @media (max-width: 560px) {
-    .ownership-flow {
-      grid-template-columns: 1fr;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .problem-card { transition: none; }
-    .infra-hero-visual img,
-    .architecture-diagram img,
-    .runtime-surfaces-visual img {
+    .media-frame img {
       transition: none;
-      transform: none !important;
     }
   }
 </style>
