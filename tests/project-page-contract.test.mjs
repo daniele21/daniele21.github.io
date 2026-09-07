@@ -13,6 +13,7 @@ const projectPages = [
   { path: 'src/pages/closedroom.astro', archetype: 'product' },
   { path: 'src/pages/aura-finance.astro', archetype: 'product' },
   { path: 'src/pages/redact-guard.astro', archetype: 'product' },
+  { path: 'src/pages/redact-guard-android.astro', archetype: 'product' },
   { path: 'src/pages/performance-lab.astro', archetype: 'experiment' },
   { path: 'src/pages/traffic-monitoring.astro', archetype: 'experiment' },
   { path: 'src/pages/traffic-monitoring-android.astro', archetype: 'experiment' },
