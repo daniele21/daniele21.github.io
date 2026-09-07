@@ -1,14 +1,22 @@
 ---
 /**
  * RedactGuardHero.astro
- * Hero section for RedactGuard subpage with compact, elegant screenshot card.
+ * Shared hero for RedactGuard platform variants.
  */
-import { redactGuardData } from '../../content/redactGuard';
+import { redactGuardData, type RedactGuardData } from '../../content/redactGuard';
+
 interface Props {
   baseUrl: string;
+  data?: RedactGuardData;
+  repoUrl?: string;
 }
-const { baseUrl } = Astro.props;
-const { hero } = redactGuardData;
+
+const {
+  baseUrl,
+  data = redactGuardData,
+  repoUrl = 'https://github.com/daniele21/redact-guard',
+} = Astro.props;
+const { hero } = data;
 ---
 
 <section class="hero redactguard-hero" id="top">
@@ -20,12 +28,12 @@ const { hero } = redactGuardData;
 
       <div class="hero-actions" aria-label="Primary actions">
         <a class="button button-primary" href="#solution">See how it works <span aria-hidden="true">→</span></a>
-        <a class="button button-secondary" href="https://github.com/daniele21/redact-guard" target="_blank" rel="noreferrer">View source <span aria-hidden="true">↗</span></a>
+        <a class="button button-secondary" href={repoUrl} target="_blank" rel="noreferrer">View source <span aria-hidden="true">↗</span></a>
       </div>
 
       <div class="pills">
         {hero.pills.map((pill) => (
-          <span class="pill" set:html={pill.replace(/(Local|Custom|Human)/g, '<strong>$1</strong>')} />
+          <span class="pill">{pill}</span>
         ))}
       </div>
     </div>
@@ -34,7 +42,7 @@ const { hero } = redactGuardData;
       <img
         data-zoomable
         src={`${baseUrl}/${hero.imageHero}`}
-        alt="RedactGuard review screen with detected sensitive data and redaction controls"
+        alt={`${hero.eyebrow} — RedactGuard product view`}
       />
       <div class="visual-caption">
         <span>{hero.imageCaptionLeft}</span>
@@ -174,11 +182,7 @@ const { hero } = redactGuardData;
     background: var(--surface-card);
     color: var(--ink-muted);
     font-size: var(--text-xs);
-    font-weight: 600;
-  }
-
-  .pill strong {
-    color: var(--accent-blue);
+    font-weight: 650;
   }
 
   .hero-visual {
