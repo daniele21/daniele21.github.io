@@ -1,0 +1,181 @@
+---
+/**
+ * ProjectVariantSwitch.astro
+ * Shared product-family switch for sibling platform variants.
+ * Keeps multi-platform projects visually related while preserving dedicated URLs.
+ */
+export interface ProjectVariant {
+  label: string;
+  href: string;
+  backbone?: string;
+  active?: boolean;
+}
+
+export interface Props {
+  family: string;
+  description?: string;
+  variants: ProjectVariant[];
+}
+
+const { family, description, variants } = Astro.props;
+---
+
+<section class="variant-switch" aria-label={`${family} platform variants`}>
+  <div class="shell variant-inner">
+    <div class="variant-copy">
+      <span class="variant-kicker">Product family</span>
+      <div class="variant-family-row">
+        <strong>{family}</strong>
+        {description && <span>{description}</span>}
+      </div>
+    </div>
+
+    <nav class="variant-nav" aria-label={`${family} versions`}>
+      {variants.map((variant) => (
+        <a
+          class={`variant-tab ${variant.active ? 'is-active' : ''}`}
+          href={variant.href}
+          aria-current={variant.active ? 'page' : undefined}
+        >
+          <span class="variant-label">{variant.label}</span>
+          {variant.backbone && <span class="variant-backbone">{variant.backbone}</span>}
+        </a>
+      ))}
+    </nav>
+  </div>
+</section>
+
+<style>
+  .variant-switch {
+    border-bottom: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--surface-card) 86%, transparent);
+  }
+
+  .variant-inner {
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    padding-block: 10px;
+  }
+
+  .variant-copy {
+    min-width: 0;
+  }
+
+  .variant-kicker {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--ink-subtle);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .variant-family-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .variant-family-row strong {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    white-space: nowrap;
+  }
+
+  .variant-family-row span {
+    color: var(--ink-muted);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .variant-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(130px, 1fr));
+    gap: 6px;
+    padding: 4px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--surface-muted);
+    flex: 0 0 auto;
+  }
+
+  .variant-tab {
+    min-height: 46px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1px;
+    padding: 7px 13px;
+    border: 1px solid transparent;
+    border-radius: calc(var(--radius-lg) - 4px);
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: background-color var(--duration-fast) ease,
+                color var(--duration-fast) ease,
+                border-color var(--duration-fast) ease,
+                box-shadow var(--duration-fast) ease,
+                transform var(--duration-fast) ease;
+  }
+
+  .variant-tab:hover {
+    color: var(--ink);
+    transform: translateY(-1px);
+  }
+
+  .variant-tab.is-active {
+    color: var(--ink);
+    background: var(--surface-card);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .variant-label {
+    font-size: var(--text-xs);
+    font-weight: 800;
+  }
+
+  .variant-backbone {
+    color: var(--ink-subtle);
+    font-size: 0.66rem;
+    font-weight: 650;
+  }
+
+  .variant-tab.is-active .variant-backbone {
+    color: var(--accent-blue-dark);
+  }
+
+  @media (max-width: 760px) {
+    .variant-inner {
+      min-height: 0;
+      display: block;
+      padding-block: 10px;
+    }
+
+    .variant-copy {
+      display: none;
+    }
+
+    .variant-nav {
+      width: 100%;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .variant-tab {
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .variant-tab { transition: none; }
+  }
+</style>
