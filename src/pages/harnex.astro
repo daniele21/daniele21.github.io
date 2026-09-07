@@ -400,11 +400,11 @@ const projectSchema = {
     line-height: 1.6;
   }
 
-  .signal-card p strong,
-  .capability-card p strong,
-  .ownership-card p strong,
-  .integration-step p strong,
-  .architecture-callout p strong {
+  .signal-card p :global(strong),
+  .capability-card p :global(strong),
+  .ownership-card p :global(strong),
+  .integration-step p :global(strong),
+  .architecture-callout p :global(strong) {
     color: var(--ink);
     font-family: inherit;
     font-size: inherit;
