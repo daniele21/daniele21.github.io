@@ -1,10 +1,13 @@
 ---
-/**
- * RedactGuardSolution.astro
- * Solution section matching prototype (2).
- */
-import { redactGuardData } from '../../content/redactGuard';
-const { solution } = redactGuardData;
+/** Shared solution section for RedactGuard platform variants. */
+import { redactGuardData, type RedactGuardData } from '../../content/redactGuard';
+
+interface Props {
+  data?: RedactGuardData;
+}
+
+const { data = redactGuardData } = Astro.props;
+const { solution } = data;
 ---
 
 <section class="section" id="solution">
@@ -93,7 +96,6 @@ const { solution } = redactGuardData;
     color: #cbd5e1 !important;
     font-size: var(--text-body-lg);
     line-height: 1.6;
-
   }
 
   .solution-intro p {
