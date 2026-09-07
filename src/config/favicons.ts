@@ -31,6 +31,11 @@ export const defaultFavicon: FaviconConfig = {
  */
 export const projectFavicons: Record<string, FaviconConfig> = {
   // Harnex: Android Local LLM Harness
+  'harnex': {
+    href: 'images/harness/harness-app-icon-light.png',
+    type: 'image/png',
+    appleTouchIcon: 'images/harness/harness-app-icon-light.png',
+  },
   'android-local-llm-harness': {
     href: 'images/harness/harness-app-icon-light.png',
     type: 'image/png',

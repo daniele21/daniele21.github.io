@@ -4,7 +4,7 @@ This review is the manual evidence layer for the shared project-page UX contract
 
 ## Routes
 
-- `/android-local-llm-harness`
+- `/harnex`
 - `/local-llm-server`
 - `/local-asr-server`
 - `/closedroom`

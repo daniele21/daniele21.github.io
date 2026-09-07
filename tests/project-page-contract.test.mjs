@@ -12,7 +12,7 @@ const archetypeNavigation = {
 };
 
 const projectPages = [
-  { path: 'src/pages/android-local-llm-harness.astro', archetype: 'infrastructure', migrated: true },
+  { path: 'src/pages/harnex.astro', archetype: 'infrastructure', migrated: true },
   { path: 'src/pages/local-llm-server.astro', archetype: 'infrastructure', migrated: true },
   { path: 'src/pages/local-asr-server.astro', archetype: 'infrastructure', migrated: false },
   { path: 'src/pages/closedroom.astro', archetype: 'product', migrated: true },
@@ -153,7 +153,7 @@ test('project-page contract documents archetype consistency over methodology rep
 
 test('migrated product and infrastructure routes use the canonical global header shell', () => {
   for (const path of [
-    'src/pages/android-local-llm-harness.astro',
+    'src/pages/harnex.astro',
     'src/pages/closedroom.astro',
     'src/pages/aura-finance.astro',
     'src/pages/redact-guard.astro',

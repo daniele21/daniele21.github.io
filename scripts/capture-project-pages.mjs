@@ -6,7 +6,7 @@ const baseUrl = process.env.VISUAL_REVIEW_BASE_URL || 'http://127.0.0.1:4321';
 const outputDir = path.resolve(process.env.VISUAL_REVIEW_OUTPUT || 'visual-review');
 
 const routes = [
-  'android-local-llm-harness',
+  'harnex',
   'local-llm-server',
   'local-asr-server',
   'closedroom',

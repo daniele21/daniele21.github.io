@@ -206,7 +206,7 @@ export const landingData: LandingPageData = {
         title: 'Harnex',
         eyebrow: 'ON-DEVICE · ANDROID',
         summary: 'One shared on-device gateway and runtime across Android applications.',
-        href: '/android-local-llm-harness',
+        href: '/harnex',
         logoPath: 'images/harness/logo.png',
         logoAlt: 'Harnex logo',
         features: [
@@ -426,7 +426,7 @@ export const landingData: LandingPageData = {
         description:
           'Mobile runtime environment profiling memory pressure, thermal degradation, NPU acceleration, and cross-application AIDL boundaries.',
         technologies: ['Kotlin', 'Android NDK', 'llama.cpp', 'AIDL'],
-        href: '/android-local-llm-harness',
+        href: '/harnex',
         badge: 'Lab Prototype',
       },
       {

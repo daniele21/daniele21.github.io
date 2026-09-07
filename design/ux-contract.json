@@ -174,7 +174,7 @@
       "allowMixedStateDuringWorkstream": true
     },
     "routes": [
-      "/android-local-llm-harness",
+      "/harnex",
       "/local-llm-server",
       "/local-asr-server",
       "/closedroom",

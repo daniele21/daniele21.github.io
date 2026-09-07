@@ -131,7 +131,7 @@ export const heroData: HeroData = {
     tag: 'ANDROID · REAL RUN',
     image: 'images/harness/harness-playground-current.webp',
     alt: 'Harnex running Qwen locally on a physical device',
-    href: 'android-local-llm-harness',
+    href: 'harnex',
     metrics: [
       { value: '1318 ms', label: 'TTFT' },
       { value: '9.50', label: 'tok/s' },
@@ -150,7 +150,7 @@ export const featuredProjects: {
     eyebrow: 'ON-DEVICE AI · RUNTIME',
     question: 'Can Android become a reusable local AI runtime?',
     description: 'A shared local LLM runtime tested on real devices with resident model management, IPC and runtime metrics.',
-    href: 'android-local-llm-harness',
+    href: 'harnex',
     featured: true,
     splitImages: [
       {
@@ -211,7 +211,7 @@ export const latestLab: LabItem[] = [
     type: 'Experiment',
     title: 'Running one resident LLM across Android apps',
     tags: ['Android', 'llama.cpp'],
-    href: 'android-local-llm-harness',
+    href: 'harnex',
   },
   {
     date: '18 AUG',
@@ -246,7 +246,7 @@ export const evidenceSpotlight: EvidenceSpotlightData = {
   subtitle: 'Qwen3.5-2B · Q4_K_M · Android (Single observed run)',
   cta: {
     label: 'See the experiment →',
-    href: 'android-local-llm-harness',
+    href: 'harnex',
   },
   metrics: [
     {
@@ -286,7 +286,7 @@ export const writingData: {
     {
       title: 'Running LLMs on Android: what actually matters in practice',
       source: 'Research note',
-      href: 'android-local-llm-harness',
+      href: 'harnex',
       external: false,
     },
     {

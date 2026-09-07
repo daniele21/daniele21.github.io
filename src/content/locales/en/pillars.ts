@@ -49,7 +49,7 @@ export const pillars: Pillar[] = [
     accent: 'blue',
   },
   {
-    id: 'android-local-llm-harness',
+    id: 'harnex',
     label: 'ON-DEVICE MOBILE AI',
     name: 'Harnex',
     role: '<strong>Local AI Gateway for Android.</strong> Shared on-device LLM runtime, model plane, and control plane.',
@@ -68,8 +68,8 @@ export const pillars: Pillar[] = [
     status: 'experimental',
     statusLabel: 'IN PROGRESS',
     technologies: ['Kotlin', 'ML Runtime', 'Memory', 'Offline'],
-    repositoryUrl: 'https://github.com/daniele21/android-local-llm-harness',
-    pageUrl: '/android-local-llm-harness',
+    repositoryUrl: 'https://github.com/daniele21/harnex',
+    pageUrl: '/harnex',
     accent: 'violet',
   },
 ];

@@ -24,7 +24,7 @@ This repository generates the static website for Daniele Moltisanti (`daniele21.
 | `/aura-finance` | `src/pages/aura-finance.astro` | Deep-dive for Aura Finance (on-device transaction intelligence). | `src/content/locales/en/auraFinance.ts` |
 | `/closedroom` | `src/pages/closedroom.astro` | Deep-dive for ClosedRoom (local meeting intelligence). | `src/content/locales/en/closedRoom.ts` |
 | `/local-llm-server` | `src/pages/local-llm-server.astro` | Deep-dive for Local LLM Server (GGUF / MLX inference layer). | `src/content/locales/en/localLlmServer.ts` |
-| `/android-local-llm-harness` | `src/pages/android-local-llm-harness.astro` | Deep-dive for Android on-device inference harness. | `src/content/locales/en/harness.ts` |
+| `/harnex` | `src/pages/harnex.astro` | Deep-dive for Harnex (Android on-device inference harness). | `src/content/locales/en/harness.ts` |
 | `/local-asr-server` | `src/pages/local-asr-server.astro` | Deep-dive for Local ASR Server (private speech primitive). | `src/content/locales/en/pillars.ts` |
 | `/traffic-monitoring` | `src/pages/traffic-monitoring.astro` | Deep-dive for macOS Traffic Monitoring evidence platform. | `src/content/locales/en/trafficMonitoring.ts` |
 | `/traffic-monitoring-android` | `src/pages/traffic-monitoring-android.astro` | Deep-dive for Android Traffic Monitoring evidence platform. | `src/content/locales/en/trafficMonitoringAndroid.ts` |

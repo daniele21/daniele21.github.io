@@ -27,7 +27,7 @@ const expectedRoutes = [
   'aura-finance/index.html',
   'closedroom/index.html',
   'local-llm-server/index.html',
-  'android-local-llm-harness/index.html',
+  'harnex/index.html',
   'local-asr-server/index.html',
   'traffic-monitoring/index.html',
   'traffic-monitoring-android/index.html',
@@ -322,7 +322,7 @@ for (const img of publicImages) {
 
 console.log('\n🔍 6. Verifying dynamic favicon resolution across routes...');
 const expectedFavicons = {
-  'android-local-llm-harness/index.html': 'images/harness/harness-app-icon-light.png',
+  'harnex/index.html': 'images/harness/harness-app-icon-light.png',
   'local-llm-server/index.html': 'images/local-llm-server/logo.png',
   'performance-lab/index.html': 'images/performance-lab/mark.svg',
   'redact-guard/index.html': 'images/redact-guard/logo.png',

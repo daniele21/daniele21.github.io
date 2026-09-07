@@ -1,6 +1,6 @@
 ---
 /**
- * android-local-llm-harness.astro
+ * harnex.astro
  * Infrastructure deep-dive using the shared archetype-based project UX.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -38,7 +38,7 @@ const subheaderLinks = [
 const harnessSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "Android Local LLM Harness",
+  "name": "Harnex",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Android",
   "description": harnessData.meta.description,
@@ -47,7 +47,7 @@ const harnessSchema = {
     "name": "Daniele Moltisanti",
     "url": "https://daniele21.github.io/"
   },
-  "codeRepository": "https://github.com/daniele21/android-local-llm-harness"
+  "codeRepository": "https://github.com/daniele21/harnex"
 };
 ---
 
@@ -61,7 +61,7 @@ const harnessSchema = {
     badge="Spec & prototype"
     logoPath="images/harness/harnex-symbol.png"
     links={subheaderLinks}
-    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness' }}
+    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/harnex' }}
   />
 
   <div id="top" data-project-page data-project-archetype="infrastructure">
@@ -74,7 +74,7 @@ const harnessSchema = {
       meta={['Android API 26+', 'GGUF + llama.cpp', 'Kotlin + JNI/C++', 'MIT']}
       actions={[
         { label: 'Explore architecture ↓', href: '#architecture' },
-        { label: 'GitHub ↗', href: 'https://github.com/daniele21/android-local-llm-harness', variant: 'secondary' },
+        { label: 'GitHub ↗', href: 'https://github.com/daniele21/harnex', variant: 'secondary' },
       ]}
       visualLabel="Harnex architecture & Local AI Gateway vision"
     >
