@@ -1,6 +1,6 @@
 /**
  * redactGuard.ts
- * Structured data configuration for RedactGuard page matching prototype (2).
+ * Structured data configuration for the RedactGuard Desktop project page.
  */
 
 export interface RedactGuardProblem {
@@ -96,18 +96,18 @@ export interface RedactGuardData {
 
 export const redactGuardData: RedactGuardData = {
   meta: {
-    title: "RedactGuard, Local-first document anonymization",
-    description: "Detect sensitive data locally, review every finding, and share only what is needed.",
+    title: "RedactGuard Desktop, Local-first document anonymization",
+    description: "Desktop document redaction with configurable PII, human review and local AI execution through Korgis.",
   },
   hero: {
-    eyebrow: "Local-first document privacy",
+    eyebrow: "Desktop · Powered by Korgis",
     titleLine1: "Detect sensitive data.",
     titleLine2: "Share only what's needed.",
-    lede: "**RedactGuard** uses a **local LLM** to detect standard or **custom PII**, lets you review every finding, and creates a minimized document before sharing.",
-    pills: ["Local processing", "Custom PII", "Human review"],
+    lede: "**RedactGuard Desktop** turns local AI into a document-privacy workflow: define the PII you care about, detect it locally through the **Korgis** execution backbone, review every finding, then export only the minimized result.",
+    pills: ["Desktop workflow", "Korgis backbone", "Human review"],
     imageHero: "images/redact-guard/redactguard-review.jpg",
     imageCaptionLeft: "Detect locally → review → redact",
-    imageCaptionRight: "Nothing leaves automatically",
+    imageCaptionRight: "Desktop · Korgis",
   },
   problem: {
     kicker: "The problem",
@@ -136,11 +136,11 @@ export const redactGuardData: RedactGuardData = {
     painLine: "The hidden cost: **every change in what counts as sensitive can become a software change.**",
   },
   solution: {
-    kicker: "The solution",
-    titleLine1: "Define what is sensitive.",
-    titleLine2: "RedactGuard finds it locally.",
-    lede: "Standard identifiers or domain-specific information can be expressed through **profiles and custom PII instructions** used by the local LLM.",
-    sub: "For many taxonomy changes, you update the **definition** instead of building another hard-coded detector.",
+    kicker: "The desktop solution",
+    titleLine1: "Own the document workflow.",
+    titleLine2: "Delegate local execution to Korgis.",
+    lede: "RedactGuard owns the product problem — import, PII policy, review, redaction and export — while **Korgis provides the reusable local AI execution boundary** underneath it.",
+    sub: "The result is a clearer separation between **application workflow** and **local inference infrastructure**, without making cloud AI the default path for sensitive content.",
     steps: [
       {
         step: 1,
@@ -149,8 +149,8 @@ export const redactGuardData: RedactGuardData = {
       },
       {
         step: 2,
-        title: "Detect locally",
-        description: "The GGUF model analyzes the document on the machine.",
+        title: "Execute locally",
+        description: "Korgis owns the local model execution path.",
       },
       {
         step: 3,
@@ -166,7 +166,7 @@ export const redactGuardData: RedactGuardData = {
   },
   benefits: {
     kicker: "Why it matters",
-    title: "Privacy, adaptability and control.",
+    title: "Privacy, reusable infrastructure and control.",
     items: [
       {
         id: "01",
@@ -176,10 +176,10 @@ export const redactGuardData: RedactGuardData = {
       },
       {
         id: "02",
-        title: "Adaptable by configuration",
-        description: "New or changing PII can often be handled by updating the **profile or prompt**, instead of adding another detector.",
+        title: "App and runtime stay separate",
+        description: "RedactGuard focuses on the **document workflow** while Korgis provides the reusable local execution layer beneath it.",
         color: "blue",
-        quote: "Change the definition, not the software.",
+        quote: "One product problem. A reusable local backbone.",
         featured: true,
       },
       {
@@ -193,7 +193,7 @@ export const redactGuardData: RedactGuardData = {
   product: {
     kicker: "Product proof",
     title: "Load. Review. Export.",
-    sub: "The workflow stays visible and reversible until the user confirms the final redactions.",
+    sub: "The desktop workflow stays visible and reversible until the user confirms the final redactions.",
     screens: [
       {
         tag: "1 · LOAD",
@@ -217,29 +217,29 @@ export const redactGuardData: RedactGuardData = {
   },
   architecture: {
     kicker: "Under the hood",
-    title: "Local by architecture.",
-    sub: "Once the product idea is clear, the implementation is intentionally simple: UI, document processing, and local inference have separate responsibilities.",
+    title: "Same product problem. Desktop execution boundary.",
+    sub: "RedactGuard keeps document-specific responsibilities in the application and uses Korgis as the local AI backbone, so product logic and inference infrastructure do not collapse into one code path.",
     image: "images/redact-guard/redact-guard-architecture.png",
     points: [
       {
-        title: "React / Vite",
-        description: "Upload, profile selection, human review and export workflow.",
+        title: "RedactGuard Desktop",
+        description: "Owns import, document processing, PII policy, review, redaction and export.",
       },
       {
-        title: "FastAPI + Docling",
-        description: "Document conversion, sessions, PII orchestration, redaction and caching.",
+        title: "Korgis",
+        description: "Provides the reusable local AI execution boundary beneath the desktop workflow.",
       },
       {
-        title: "Local GGUF LLM",
-        description: "Contextual PII detection through llama-cpp-python, including profile and custom-type instructions.",
+        title: "Local model runtime",
+        description: "Runs the GGUF inference path on infrastructure controlled by the user.",
       },
     ],
     disclaimer: "RedactGuard is an experimental privacy tool, not a compliance guarantee. Local AI can miss, misclassify or over-detect sensitive information, so results still require human review.",
   },
   cta: {
-    kicker: "Local-first data minimization",
-    titleLine1: "Define what is sensitive.",
-    titleLine2: "Share less.",
-    sub: "RedactGuard turns local AI into a configurable privacy workflow: **define → detect → review → redact → export.**",
+    kicker: "RedactGuard · Desktop",
+    titleLine1: "Private document workflows.",
+    titleLine2: "Reusable local execution.",
+    sub: "The desktop variant separates the **RedactGuard product workflow** from the **Korgis execution backbone**, while keeping the final privacy decision with the user.",
   },
 };
