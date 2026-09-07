@@ -1,10 +1,11 @@
 ---
 /**
  * redact-guard.astro
- * Product / proving-ground pilot for the archetype-based project page UX.
+ * RedactGuard Desktop product page using the current archetype-based project UX.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectVariantSwitch from '../components/project/ProjectVariantSwitch.astro';
 import ProjectHero from '../components/project/ProjectHero.astro';
 import ProjectProof from '../components/project/ProjectProof.astro';
 import ProjectSection from '../components/project/ProjectSection.astro';
@@ -21,6 +22,7 @@ import { redactGuardData } from '../content/redactGuard';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 const { hero } = redactGuardData;
+const desktopRepo = 'https://github.com/daniele21/redact-guard';
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
@@ -30,19 +32,33 @@ const subheaderLinks = [
   { label: 'Evidence', href: '#evidence' },
 ];
 
+const variants = [
+  {
+    label: 'Desktop',
+    backbone: 'Powered by Korgis',
+    href: `${baseUrl}/redact-guard`,
+    active: true,
+  },
+  {
+    label: 'Android',
+    backbone: 'Powered by Harnex',
+    href: `${baseUrl}/redact-guard-android`,
+  },
+];
+
 const redactGuardSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "RedactGuard",
+  "name": "RedactGuard Desktop",
   "applicationCategory": "SecurityApplication",
-  "operatingSystem": "Cross-platform",
+  "operatingSystem": "Desktop",
   "description": redactGuardData.meta.description,
   "author": {
     "@type": "Person",
     "name": "Daniele Moltisanti",
     "url": "https://daniele21.github.io/"
   },
-  "codeRepository": "https://github.com/daniele21/redact-guard"
+  "codeRepository": desktopRepo
 };
 ---
 
@@ -53,31 +69,37 @@ const redactGuardSchema = {
 >
   <ProductSubHeader
     title="RedactGuard"
-    badge="v1.0"
+    badge="Desktop · Korgis"
     logoPath="images/redact-guard/logo.png"
     links={subheaderLinks}
-    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/redact-guard' }}
+    cta={{ label: 'GitHub ↗', href: desktopRepo }}
     underSiteHeader={true}
   />
 
-  <div id="top" data-project-page data-project-archetype="product">
+  <ProjectVariantSwitch
+    family="RedactGuard"
+    description="One privacy workflow. Two local execution boundaries."
+    variants={variants}
+  />
+
+  <div id="top" data-project-page data-project-archetype="product" data-project-variant="desktop">
     <ProjectHero
-      eyebrow="PRODUCT · PRIVACY-FIRST LOCAL AI"
-      title="RedactGuard"
-      lede="Detect sensitive information locally, review every finding, and move only the minimized document into the next workflow."
-      status="v1.0 · Experimental privacy tool"
-      meta={['Local processing', 'Custom PII', 'Human review']}
+      eyebrow="PRODUCT · DESKTOP · KORGIS"
+      title="RedactGuard Desktop"
+      lede="Detect configurable PII locally, review every finding, and export only the minimized document while keeping reusable local execution behind Korgis."
+      status="Experimental privacy tool"
+      meta={['Desktop workflow', 'Korgis backbone', 'Human review']}
       actions={[
         { label: 'See the workflow ↓', href: '#workflow' },
-        { label: 'GitHub ↗', href: 'https://github.com/daniele21/redact-guard', variant: 'secondary' },
+        { label: 'GitHub ↗', href: desktopRepo, variant: 'secondary' },
       ]}
-      visualLabel="RedactGuard review interface"
+      visualLabel="RedactGuard Desktop review interface"
     >
       <div class="product-hero-frame">
         <img
           data-zoomable
           src={`${baseUrl}/${hero.imageHero.replace(/^\//, '')}`}
-          alt="RedactGuard review screen showing detected sensitive data before redaction"
+          alt="RedactGuard Desktop review screen showing detected sensitive data before redaction"
           width="1440"
           height="900"
           loading="eager"
@@ -90,33 +112,41 @@ const redactGuardSchema = {
     </ProjectHero>
 
     <ProjectProof
-      statement="Sensitive-document workflows can use adaptable AI detection without making a cloud model the default privacy boundary."
-      detail="The model proposes findings locally; the user reviews what is actually removed before any minimized result is exported."
+      statement="A sensitive-document product can keep privacy policy and human decisions in the application while local AI execution remains a reusable infrastructure boundary."
+      detail="RedactGuard owns the document workflow. Korgis owns reusable local execution. The model proposes findings, but the user still decides what is actually removed."
     />
 
-    <RedactGuardProblem />
+    <RedactGuardProblem data={redactGuardData} />
 
     <div id="workflow" class="project-anchor">
-      <RedactGuardSolution />
+      <RedactGuardSolution data={redactGuardData} />
     </div>
 
-    <RedactGuardProduct baseUrl={baseUrl} />
+    <div id="product" class="project-anchor">
+      <RedactGuardProduct baseUrl={baseUrl} data={redactGuardData} />
+    </div>
 
-    <RedactGuardArchitecture baseUrl={baseUrl} />
+    <div id="architecture" class="project-anchor">
+      <RedactGuardArchitecture
+        baseUrl={baseUrl}
+        data={redactGuardData}
+        repoUrl={desktopRepo}
+      />
+    </div>
 
     <ProjectSection
       id="evidence"
       eyebrow="EVIDENCE & LIMITS"
-      title="The workflow is implemented. Detection is still fallible."
+      title="The desktop workflow is implemented. Detection is still fallible."
       description="RedactGuard treats reviewability as part of the product boundary: local inference can accelerate detection, but it does not turn the model into an autonomous privacy or compliance authority."
       tone="subtle"
       width="wide"
     >
       <ProjectEvidenceNote
         title="Local, configurable and reviewable does not mean perfect."
-        body="The current product supports local GGUF inference, configurable standard and custom PII definitions, reviewable findings and explicit export. The model can still miss, misclassify or over-detect sensitive information, so human review remains mandatory."
+        body="The current desktop product supports configurable PII definitions, local execution through the Korgis boundary, reviewable findings and explicit export. The model can still miss, misclassify or over-detect sensitive information, so human review remains mandatory."
         evidenced={[
-          'Document analysis can run through local GGUF inference',
+          'Document analysis can run through a local execution boundary',
           'Standard and custom PII definitions are configurable',
           'Every finding remains visible and reviewable before export',
           'The minimized result moves only after explicit user choices',
@@ -137,8 +167,8 @@ const redactGuardSchema = {
           note: 'Reusable local inference boundary',
         },
         {
-          stage: 'TEST · PRODUCT',
-          title: 'RedactGuard',
+          stage: 'PRODUCT · DESKTOP',
+          title: 'RedactGuard Desktop',
           current: true,
           note: 'Privacy-first proving ground',
         },
@@ -151,7 +181,11 @@ const redactGuardSchema = {
       ]}
     />
 
-    <RedactGuardCta />
+    <RedactGuardCta
+      data={redactGuardData}
+      repoUrl={desktopRepo}
+      buttonLabel="Explore Desktop"
+    />
   </div>
 </BaseLayout>
 
