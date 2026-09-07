@@ -14,9 +14,9 @@
 - Repository: https://github.com/daniele21/local-llm-server
 - Description: High-throughput local inference engine and studio interface designed for managing open-weight models (Llama, Gemma, Qwen) with customizable backends (Ollama, llama.cpp, vLLM).
 
-### 2. Android Local LLM Harness
-- URL: https://daniele21.github.io/android-local-llm-harness
-- Repository: https://github.com/daniele21/android-local-llm-harness
+### 2. Harnex
+- URL: https://daniele21.github.io/harnex
+- Repository: https://github.com/daniele21/harnex
 - Description: Modular benchmarking and execution harness for evaluated LLM runtimes on Android ARM hardware, optimizing NPU/GPU acceleration and thermal performance.
 
 ### 3. ClosedRoom
