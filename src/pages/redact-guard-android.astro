@@ -1,0 +1,177 @@
+---
+/**
+ * redact-guard-android.astro
+ * RedactGuard Android product deep-dive using the same shared project-page journey as Desktop.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RedactGuardHeader from '../components/redactguard/RedactGuardHeader.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectVariantSwitch from '../components/project/ProjectVariantSwitch.astro';
+import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
+import RedactGuardHero from '../components/redactguard/RedactGuardHero.astro';
+import RedactGuardProblem from '../components/redactguard/RedactGuardProblem.astro';
+import RedactGuardSolution from '../components/redactguard/RedactGuardSolution.astro';
+import RedactGuardBenefits from '../components/redactguard/RedactGuardBenefits.astro';
+import RedactGuardProduct from '../components/redactguard/RedactGuardProduct.astro';
+import RedactGuardArchitecture from '../components/redactguard/RedactGuardArchitecture.astro';
+import RedactGuardCta from '../components/redactguard/RedactGuardCta.astro';
+
+import { redactGuardAndroidData } from '../content/redactGuardAndroid';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const androidRepo = 'https://github.com/daniele21/redactguard-android';
+
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Decide', href: '#decide' },
+  { label: 'Build', href: '#build' },
+  { label: 'Test', href: '#test' },
+  { label: 'Measure', href: '#measure' },
+  { label: 'Decide again', href: '#decide-again' },
+];
+
+const variants = [
+  {
+    label: 'Desktop',
+    backbone: 'Powered by Korgis',
+    href: `${baseUrl}/redact-guard`,
+  },
+  {
+    label: 'Android',
+    backbone: 'Powered by Harnex',
+    href: `${baseUrl}/redact-guard-android`,
+    active: true,
+  },
+];
+
+const redactGuardAndroidSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "RedactGuard Android",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "Android",
+  "description": redactGuardAndroidData.meta.description,
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": "https://daniele21.github.io/"
+  },
+  "codeRepository": androidRepo
+};
+---
+
+<BaseLayout
+  title={redactGuardAndroidData.meta.title}
+  description={redactGuardAndroidData.meta.description}
+  jsonLd={redactGuardAndroidSchema}
+>
+  <RedactGuardHeader baseUrl={baseUrl} slot="header" />
+
+  <ProductSubHeader
+    title="RedactGuard"
+    badge="Android · Harnex"
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: androidRepo }}
+  />
+
+  <ProjectVariantSwitch
+    family="RedactGuard"
+    description="One privacy workflow. Two local execution boundaries."
+    variants={variants}
+  />
+
+  <div id="top" data-project-page data-project-archetype="product" data-project-variant="android">
+    <RedactGuardHero
+      baseUrl={baseUrl}
+      data={redactGuardAndroidData}
+      repoUrl={androidRepo}
+    />
+
+    <ProjectPhase
+      id="decide"
+      step="01"
+      label="DECIDE"
+      title="Can a real Android app process sensitive documents locally without owning the LLM runtime?"
+      description="The Android version tests a stricter product boundary: RedactGuard should own documents and privacy decisions, but should not have to package and manage models, llama.cpp and runtime lifecycle itself."
+    >
+      <RedactGuardProblem data={redactGuardAndroidData} />
+      <RedactGuardBenefits data={redactGuardAndroidData} />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="build"
+      step="02"
+      label="BUILD"
+      title="Give RedactGuard the workflow; give Harnex the runtime."
+      description="PDF or text ingestion, PII policy, review, redaction and export stay in RedactGuard. The Harnex Consumer Android SDK and Binder boundary connect that workflow to a separately owned on-device model runtime."
+      tone="subtle"
+    >
+      <RedactGuardSolution data={redactGuardAndroidData} />
+      <RedactGuardArchitecture
+        baseUrl={baseUrl}
+        data={redactGuardAndroidData}
+        repoUrl={androidRepo}
+      />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="test"
+      step="03"
+      label="TEST"
+      title="Prove the boundary in an end-to-end Android redaction journey."
+      description="The test is not whether an LLM can return PII. It is whether import, definition selection, local analysis, masked review, recovery and fail-closed export work as one understandable mobile product."
+    >
+      <RedactGuardProduct baseUrl={baseUrl} data={redactGuardAndroidData} />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="measure"
+      step="04"
+      label="MEASURE"
+      title="Separate product evidence, cross-app integration and device evidence."
+      description="The Android implementation already proves the consumer contract and core product journey. Stronger claims about representative hardware, OEM behavior, thermals and model performance remain separate evidence gates instead of being inferred from emulator success."
+      tone="subtle"
+    >
+      <ProjectEvidenceNote
+        title="The Harnex consumer path is implemented; device claims stay narrow."
+        body="RedactGuard Android implements PDF and text ingestion, configurable PII selection, local analysis through Harnex, masked review, fail-closed redaction/export and explicit local-AI recovery. The current API 35 Two-APK lifecycle, fault and serialization matrix is green, while broader representative-device evidence remains a separate gate."
+        evidenced={[
+          'PDF and pasted-text ingestion with built-in or custom PII selection',
+          'Harnex Consumer Android SDK and Binder integration',
+          'Masked human review and fail-closed redaction/export',
+          'API 35 Two-APK lifecycle, fault and serialization validation',
+        ]}
+        missing={[
+          'OCR or VLM document understanding',
+          'Universal production performance, thermal or OEM reliability claims',
+        ]}
+      />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="decide-again"
+      step="05"
+      label="DECIDE AGAIN"
+      title="Do not make the consumer app absorb Harnex responsibilities."
+      description="The current decision is to preserve an explicit ownership boundary: RedactGuard owns the user problem; Harnex owns model and runtime infrastructure; unavailable local AI becomes a visible recovery state rather than a silent cloud fallback."
+    >
+      <ProjectDecisionBand
+        title="The app owns the workflow. Harnex owns the local AI platform."
+        body="RedactGuard keeps documents, PII policy, review and export inside the consumer application. Harnex owns model selection, runtime lifecycle, scheduling and residency behind an explicit SDK/Binder contract. That separation is the architectural proof this Android variant is designed to provide."
+        signals={[
+          'RedactGuard owns documents, PII policy, review and export',
+          'Harnex owns model and runtime lifecycle responsibilities',
+          'Local-AI failure surfaces recovery instead of changing the trust boundary',
+        ]}
+      />
+    </ProjectPhase>
+
+    <RedactGuardCta
+      data={redactGuardAndroidData}
+      repoUrl={androidRepo}
+      buttonLabel="Explore Android"
+    />
+  </div>
+</BaseLayout>
