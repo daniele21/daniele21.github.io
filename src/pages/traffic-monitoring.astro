@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectVariantSwitch from '../components/project/ProjectVariantSwitch.astro';
 import ProjectPhase from '../components/project/ProjectPhase.astro';
 import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
 
@@ -32,6 +33,18 @@ const cta = {
   label: 'GitHub ↗',
   href: 'https://github.com/daniele21/traffic-monitoring',
 };
+
+const variants = [
+  {
+    label: 'macOS',
+    href: `${baseUrl}/traffic-monitoring`,
+    active: true,
+  },
+  {
+    label: 'Android',
+    href: `${baseUrl}/traffic-monitoring-android`,
+  },
+];
 ---
 
 <BaseLayout
@@ -43,14 +56,20 @@ const cta = {
   ogImage={`${baseUrl}/images/traffic-monitoring/overview.png`}
 >
   <ProductSubHeader
-    title="Traffic Monitoring for macOS"
-    badge="Active observability project"
+    title="Traffic Monitoring"
+    badge="macOS · Active observability project"
     logoPath="images/traffic-monitoring/shield.png"
     links={subHeaderLinks}
     cta={cta}
   />
 
-  <div id="top" data-project-page data-project-archetype="experiment">
+  <ProjectVariantSwitch
+    family="Traffic Monitoring"
+    description="One observability problem. Two platform-specific evidence models."
+    variants={variants}
+  />
+
+  <div id="top" data-project-page data-project-archetype="experiment" data-project-variant="macos">
     <TrafficMacHero />
 
     <ProjectPhase
