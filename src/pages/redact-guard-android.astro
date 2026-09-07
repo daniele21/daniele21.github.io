@@ -1,0 +1,240 @@
+---
+/**
+ * redact-guard-android.astro
+ * RedactGuard Android product page using the current archetype-based project UX.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectVariantSwitch from '../components/project/ProjectVariantSwitch.astro';
+import ProjectHero from '../components/project/ProjectHero.astro';
+import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectSection from '../components/project/ProjectSection.astro';
+import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
+import ProjectRelations from '../components/project/ProjectRelations.astro';
+
+import RedactGuardProblem from '../components/redactguard/RedactGuardProblem.astro';
+import RedactGuardSolution from '../components/redactguard/RedactGuardSolution.astro';
+import RedactGuardProduct from '../components/redactguard/RedactGuardProduct.astro';
+import RedactGuardArchitecture from '../components/redactguard/RedactGuardArchitecture.astro';
+import RedactGuardCta from '../components/redactguard/RedactGuardCta.astro';
+
+import { redactGuardAndroidData } from '../content/redactGuardAndroid';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const { hero } = redactGuardAndroidData;
+const androidRepo = 'https://github.com/daniele21/redactguard-android';
+
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Workflow', href: '#workflow' },
+  { label: 'Product', href: '#product' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Evidence', href: '#evidence' },
+];
+
+const variants = [
+  {
+    label: 'Desktop',
+    backbone: 'Powered by Korgis',
+    href: `${baseUrl}/redact-guard`,
+  },
+  {
+    label: 'Android',
+    backbone: 'Powered by Harnex',
+    href: `${baseUrl}/redact-guard-android`,
+    active: true,
+  },
+];
+
+const redactGuardAndroidSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "RedactGuard Android",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "Android",
+  "description": redactGuardAndroidData.meta.description,
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Moltisanti",
+    "url": "https://daniele21.github.io/"
+  },
+  "codeRepository": androidRepo
+};
+---
+
+<BaseLayout
+  title={redactGuardAndroidData.meta.title}
+  description={redactGuardAndroidData.meta.description}
+  jsonLd={redactGuardAndroidSchema}
+  favicon="images/redact-guard/logo.png"
+>
+  <ProductSubHeader
+    title="RedactGuard"
+    badge="Android · Harnex"
+    logoPath="images/redact-guard/logo.png"
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: androidRepo }}
+    underSiteHeader={true}
+  />
+
+  <ProjectVariantSwitch
+    family="RedactGuard"
+    description="One privacy workflow. Two local execution boundaries."
+    variants={variants}
+  />
+
+  <div id="top" data-project-page data-project-archetype="product" data-project-variant="android">
+    <ProjectHero
+      eyebrow="PRODUCT · ANDROID · HARNEX"
+      title="RedactGuard Android"
+      lede="Protect sensitive documents on Android while keeping the document workflow in the app and local AI runtime ownership behind Harnex."
+      status="Experimental Android consumer proof"
+      meta={['Android app', 'Harnex backbone', 'Fail-closed']}
+      actions={[
+        { label: 'See the workflow ↓', href: '#workflow' },
+        { label: 'GitHub ↗', href: androidRepo, variant: 'secondary' },
+      ]}
+      visualLabel="RedactGuard Android masked review workflow"
+    >
+      <div class="product-hero-frame product-hero-frame--android">
+        <img
+          data-zoomable
+          src={`${baseUrl}/${hero.imageHero.replace(/^\//, '')}`}
+          alt="RedactGuard Android review flow with masked findings and explicit redaction decisions"
+          width="780"
+          height="560"
+          loading="eager"
+        />
+        <div class="product-hero-caption">
+          <span>{hero.imageCaptionLeft}</span>
+          <span>{hero.imageCaptionRight}</span>
+        </div>
+      </div>
+    </ProjectHero>
+
+    <ProjectProof
+      statement="A real Android app can consume local AI without owning the model runtime or silently changing the trust boundary when that runtime is unavailable."
+      detail="RedactGuard owns documents, PII policy, review and export. Harnex owns models, runtime lifecycle and local inference behind an explicit Consumer SDK and Binder boundary."
+    />
+
+    <RedactGuardProblem data={redactGuardAndroidData} />
+
+    <div id="workflow" class="project-anchor">
+      <RedactGuardSolution data={redactGuardAndroidData} />
+    </div>
+
+    <div id="product" class="project-anchor">
+      <RedactGuardProduct baseUrl={baseUrl} data={redactGuardAndroidData} />
+    </div>
+
+    <div id="architecture" class="project-anchor">
+      <RedactGuardArchitecture
+        baseUrl={baseUrl}
+        data={redactGuardAndroidData}
+        repoUrl={androidRepo}
+      />
+    </div>
+
+    <ProjectSection
+      id="evidence"
+      eyebrow="EVIDENCE & LIMITS"
+      title="The consumer boundary is implemented. Broader device claims stay separate."
+      description="RedactGuard Android proves the product journey and the Harnex consumer contract. Emulator and integration evidence do not automatically become claims about every device, OEM, thermal condition or model-quality regime."
+      tone="subtle"
+      width="wide"
+    >
+      <ProjectEvidenceNote
+        title="The Harnex consumer path is implemented; device claims stay narrow."
+        body="The current Android product supports PDF and text ingestion, configurable PII selection, local analysis through Harnex, masked review, fail-closed redaction/export and explicit local-AI recovery. Broader representative-device evidence remains a separate gate."
+        evidenced={[
+          'PDF and pasted-text ingestion with built-in or custom PII selection',
+          'Harnex Consumer Android SDK and Binder integration',
+          'Masked human review and fail-closed redaction/export',
+          'Explicit recovery instead of silent cloud fallback',
+        ]}
+        missing={[
+          'OCR or VLM document understanding',
+          'Universal production performance, thermal or OEM reliability claims',
+        ]}
+      />
+    </ProjectSection>
+
+    <ProjectRelations
+      items={[
+        {
+          stage: 'BUILD · INFRASTRUCTURE',
+          title: 'Harnex',
+          href: '/harnex',
+          note: 'Reusable Android local AI platform',
+        },
+        {
+          stage: 'PRODUCT · ANDROID',
+          title: 'RedactGuard Android',
+          current: true,
+          note: 'Privacy-sensitive consumer proof',
+        },
+        {
+          stage: 'MEASURE · EVIDENCE',
+          title: 'Performance Lab',
+          href: '/performance-lab',
+          note: 'Runtime viability on real hardware',
+        },
+      ]}
+    />
+
+    <RedactGuardCta
+      data={redactGuardAndroidData}
+      repoUrl={androidRepo}
+      buttonLabel="Explore Android"
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .product-hero-frame {
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(18px, 2.5vw, 28px);
+    background: var(--surface-card);
+    box-shadow: 0 28px 72px rgba(8, 19, 51, 0.14);
+  }
+
+  .product-hero-frame--android {
+    padding-top: clamp(14px, 2vw, 24px);
+    background: var(--surface-subtle);
+  }
+
+  .product-hero-frame img {
+    display: block;
+    width: min(100%, 920px);
+    max-height: 680px;
+    margin-inline: auto;
+    object-fit: contain;
+  }
+
+  .product-hero-caption {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: 10px 16px;
+    border-top: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    font-weight: 650;
+  }
+
+  .project-anchor {
+    scroll-margin-top: calc(var(--header-height) + 64px);
+  }
+
+  @media (max-width: 640px) {
+    .product-hero-caption {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 2px;
+    }
+  }
+</style>
