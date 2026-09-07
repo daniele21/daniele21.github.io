@@ -1,0 +1,27 @@
+<svg width="780" height="560" viewBox="0 0 780 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="780" height="560" rx="28" fill="#F8FAFC"/>
+  <rect x="185" y="28" width="410" height="504" rx="34" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+  <rect x="319" y="42" width="142" height="18" rx="9" fill="#E2E8F0"/>
+
+  <circle cx="390" cy="137" r="46" fill="#ECFDF5"/>
+  <circle cx="390" cy="137" r="30" fill="#14B8A6"/>
+  <path d="M377 137L386 146L405 126" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="286" y="218" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="750">Ready to export</text>
+  <text x="256" y="248" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">All review decisions are complete.</text>
+
+  <rect x="220" y="282" width="340" height="106" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="242" y="304" width="50" height="60" rx="10" fill="#DBEAFE"/>
+  <path d="M255 316H274L282 324V352H255V316Z" stroke="#2563EB" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M274 316V324H282" stroke="#2563EB" stroke-width="2.2" stroke-linejoin="round"/>
+  <text x="310" y="322" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">protected-document.pdf</text>
+  <text x="310" y="348" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">2 values redacted · original unchanged</text>
+  <text x="310" y="369" fill="#0F766E" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">LOCAL OUTPUT</text>
+
+  <rect x="220" y="410" width="340" height="46" rx="14" fill="#F0FDFA" stroke="#99F6E4"/>
+  <circle cx="244" cy="433" r="7" fill="#14B8A6"/>
+  <text x="260" y="438" fill="#115E59" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="650">No source document sent to cloud AI</text>
+
+  <rect x="220" y="474" width="340" height="46" rx="14" fill="#2563EB"/>
+  <text x="315" y="503" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750">Save protected PDF</text>
+</svg>
