@@ -219,7 +219,7 @@ export const redactGuardData: RedactGuardData = {
     kicker: "Under the hood",
     title: "Same product problem. Desktop execution boundary.",
     sub: "RedactGuard keeps document-specific responsibilities in the application and uses Korgis as the local AI backbone, so product logic and inference infrastructure do not collapse into one code path.",
-    image: "images/redact-guard/redact-guard-architecture.png",
+    image: "images/redact-guard/redactguard-desktop-architecture.svg",
     points: [
       {
         title: "RedactGuard Desktop",
