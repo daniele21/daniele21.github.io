@@ -17,7 +17,7 @@ export type Locale = 'en' | 'it';
 
 /** Infrastructure pillar data */
 export interface Pillar {
-  id: 'local-llm-server' | 'local-asr-server' | 'android-local-llm-harness' | 'harnex';
+  id: 'local-llm-server' | 'local-asr-server' | 'android-local-llm-harness' | 'harnex' | 'korgis';
   label: string;
   name: string;
   role: string;

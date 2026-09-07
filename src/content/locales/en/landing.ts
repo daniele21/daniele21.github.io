@@ -185,11 +185,11 @@ export const landingData: LandingPageData = {
     ],
     projects: [
       {
-        id: 'local-llm-server',
+        id: 'korgis',
         title: 'Korgis',
         eyebrow: 'DESKTOP · SERVER',
         summary: 'Your AI. Local. Ready to use. Runtime control plane for reliable multi-model local AI applications.',
-        href: '/local-llm-server',
+        href: '/korgis',
         logoPath: 'images/local-llm-server/logo.png',
         logoAlt: 'Korgis logo',
         features: [
@@ -410,13 +410,13 @@ export const landingData: LandingPageData = {
       'Core repositories and runtimes built with operational discipline, explicit failure behavior, and clean API contracts.',
     systems: [
       {
-        id: 'local-llm-server',
-        title: 'Local LLM Server',
+        id: 'korgis',
+        title: 'Korgis',
         role: 'Reusable inference gateway for desktop, workstation and server',
         description:
           'OpenAI-compatible HTTP/WebSocket API supporting GGUF (llama.cpp) and MLX backends with dynamic model swapping, concurrent queues, and structured telemetry.',
         technologies: ['C++', 'Python', 'MLX', 'OpenAI API'],
-        href: '/local-llm-server',
+        href: '/korgis',
         badge: 'Active System',
       },
       {

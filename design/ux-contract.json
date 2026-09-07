@@ -175,7 +175,7 @@
     },
     "routes": [
       "/harnex",
-      "/local-llm-server",
+      "/korgis",
       "/local-asr-server",
       "/closedroom",
       "/aura-finance",

@@ -13,7 +13,7 @@ const archetypeNavigation = {
 
 const projectPages = [
   { path: 'src/pages/harnex.astro', archetype: 'infrastructure', migrated: true },
-  { path: 'src/pages/local-llm-server.astro', archetype: 'infrastructure', migrated: true },
+  { path: 'src/pages/korgis.astro', archetype: 'infrastructure', migrated: true },
   { path: 'src/pages/local-asr-server.astro', archetype: 'infrastructure', migrated: false },
   { path: 'src/pages/closedroom.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/aura-finance.astro', archetype: 'product', migrated: true },
@@ -157,7 +157,7 @@ test('migrated product and infrastructure routes use the canonical global header
     'src/pages/closedroom.astro',
     'src/pages/aura-finance.astro',
     'src/pages/redact-guard.astro',
-    'src/pages/local-llm-server.astro',
+    'src/pages/korgis.astro',
   ]) {
     const source = read(path);
     assert.doesNotMatch(source, /slot="header"/);

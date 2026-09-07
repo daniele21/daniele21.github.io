@@ -21,8 +21,8 @@ const iconClassMap = {
 
 <article class="project-card pillar-card reveal">
   <div class="project-card-top">
-    <span class={`project-icon ${pillar.id === 'local-llm-server' ? 'project-icon-local-llm' : iconClassMap[pillar.accent]}`} aria-hidden="true">
-      {pillar.id === 'local-llm-server' ? (
+    <span class={`project-icon ${pillar.id === 'local-llm-server' || pillar.id === 'korgis' ? 'project-icon-local-llm' : iconClassMap[pillar.accent]}`} aria-hidden="true">
+      {pillar.id === 'local-llm-server' || pillar.id === 'korgis' ? (
         <img
           src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/local-llm-server/logo.svg`}
           alt="Korgis logo"

@@ -2,7 +2,7 @@ import type { Pillar } from '../../../types/content';
 
 export const pillars: Pillar[] = [
   {
-    id: 'local-llm-server',
+    id: 'korgis',
     label: 'DESKTOP REASONING',
     name: 'Korgis',
     role: '<strong>Your AI. Local. Ready to use.</strong> Runtime control plane for reliable multi-model local AI applications.',
@@ -22,7 +22,7 @@ export const pillars: Pillar[] = [
     statusLabel: 'ACTIVE',
     technologies: ['Rust', 'gRPC', 'Quantization', 'Tooling'],
     repositoryUrl: 'https://github.com/daniele21/local-llm-server',
-    pageUrl: '/local-llm-server',
+    pageUrl: '/korgis',
     accent: 'teal',
   },
   {

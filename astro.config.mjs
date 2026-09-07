@@ -12,6 +12,7 @@ export default defineConfig({
   integrations: [sitemap()],
   redirects: {
     '/android-local-llm-harness': `${basePrefix}/harnex`,
+    '/local-llm-server': `${basePrefix}/korgis`,
   },
   build: {
     assets: 'assets',

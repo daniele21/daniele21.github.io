@@ -5,7 +5,7 @@ This review is the manual evidence layer for the shared project-page UX contract
 ## Routes
 
 - `/harnex`
-- `/local-llm-server`
+- `/korgis`
 - `/local-asr-server`
 - `/closedroom`
 - `/aura-finance`

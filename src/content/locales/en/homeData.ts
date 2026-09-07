@@ -171,7 +171,7 @@ export const featuredProjects: {
       eyebrow: 'LOCAL RUNTIME · DESKTOP',
       question: 'One inference layer. Multiple local products.',
       description: 'Reusable local inference across products with OpenAI-compatible API endpoints.',
-      href: 'local-llm-server',
+      href: 'korgis',
       image: 'images/local-llm-server/chat-studio.png',
       imageAlt: 'Korgis chat studio interface.',
     },
@@ -235,7 +235,7 @@ export const latestLab: LabItem[] = [
     type: 'Architecture',
     title: 'Separating inference runtimes from application state',
     tags: ['Local Server', 'IPC'],
-    href: 'local-llm-server',
+    href: 'korgis',
   },
 ];
 

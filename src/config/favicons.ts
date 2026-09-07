@@ -42,6 +42,11 @@ export const projectFavicons: Record<string, FaviconConfig> = {
     appleTouchIcon: 'images/harness/harness-app-icon-light.png',
   },
   // Korgis: Local LLM Server
+  'korgis': {
+    href: 'images/local-llm-server/logo.png',
+    type: 'image/png',
+    appleTouchIcon: 'images/local-llm-server/logo.png',
+  },
   'local-llm-server': {
     href: 'images/local-llm-server/logo.png',
     type: 'image/png',

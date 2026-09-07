@@ -7,7 +7,7 @@ const outputDir = path.resolve(process.env.VISUAL_REVIEW_OUTPUT || 'visual-revie
 
 const routes = [
   'harnex',
-  'local-llm-server',
+  'korgis',
   'local-asr-server',
   'closedroom',
   'aura-finance',
