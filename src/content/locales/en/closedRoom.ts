@@ -1,326 +1,247 @@
-/**
- * closedRoom.ts
- * Structured data configuration for ClosedRoom page matching prototype.
- */
+import type { AppProjectData } from '../../../types/projectApp';
 
-export interface ClosedRoomProblem {
-  id: string;
-  title: string;
-  description: string;
-  color: 'blue' | 'teal' | 'violet';
-}
-
-export interface ClosedRoomFlowStep {
-  step: number;
-  title: string;
-  description: string;
-}
-
-export interface ClosedRoomValue {
-  id: string;
-  title: string;
-  description: string;
-  color: 'teal' | 'blue' | 'violet' | 'amber';
-  quote?: string;
-  featured?: boolean;
-}
-
-export interface ClosedRoomScenario {
-  tag: string;
-  title: string;
-  description: string;
-  shots: Array<{
-    image: string;
-    label: string;
-    alt: string;
-  }>;
-  reverse?: boolean;
-}
-
-export interface ClosedRoomTechPoint {
-  title: string;
-  description: string;
-}
-
-export interface ClosedRoomData {
+export const closedRoomData: AppProjectData = {
   meta: {
-    title: string;
-    description: string;
-  };
-  hero: {
-    eyebrow: string;
-    titleLine1: string;
-    titleLine2: string;
-    lede: string;
-    pills: string[];
-    imageHome: string;
-    imageAnalysis: string;
-    visualNote: string;
-  };
-  problem: {
-    kicker: string;
-    titleLine1: string;
-    titleLine2: string;
-    lede: string;
-    items: ClosedRoomProblem[];
-    statement: string;
-  };
-  solution: {
-    kicker: string;
-    titleLine1: string;
-    titleLine2: string;
-    lede: string;
-    steps: ClosedRoomFlowStep[];
-  };
-  values: {
-    kicker: string;
-    titleLine1: string;
-    titleLine2: string;
-    items: ClosedRoomValue[];
-  };
-  product: {
-    kicker: string;
-    titleLine1: string;
-    titleLine2: string;
-    scenarios: ClosedRoomScenario[];
-  };
-  flow: {
-    kicker: string;
-    titleLine1: string;
-    titleLine2: string;
-    image: string;
-  };
-  architecture: {
-    kicker: string;
-    titleLine1: string;
-    titleLine2: string;
-    lede: string;
-    image: string;
-    points: ClosedRoomTechPoint[];
-  };
-  trust: {
-    kicker: string;
-    titleLine1: string;
-    titleLine2: string;
-    local: {
-      title: string;
-      description: string;
-      stack: string;
-    };
-    cloud: {
-      title: string;
-      description: string;
-      tagline: string;
-    };
-  };
-  cta: {
-    kicker: string;
-    titleLine1: string;
-    titleLine2: string;
-    lede: string;
-    githubUrl: string;
-  };
-}
-
-export const closedRoomData: ClosedRoomData = {
-  meta: {
-    title: 'ClosedRoom , Local-first Meeting Intelligence',
-    description: 'Record, transcribe, identify speakers, analyze, and remember meetings locally on macOS.',
+    title: 'ClosedRoom — Private meeting intelligence for macOS',
+    description:
+      'Record, transcribe, identify speakers, extract decisions and actions, and build project memory with Local AI as the default boundary.',
   },
   hero: {
-    eyebrow: 'Local-first meeting intelligence for macOS',
-    titleLine1: 'Remember the work.',
-    titleLine2: 'Not just the transcript.',
-    lede: '**ClosedRoom** records, transcribes, identifies speakers, analyzes, and remembers meetings locally , so decisions, actions, risks, and project context do not disappear after the call.',
-    pills: [
-      '**Local-first** by default',
-      '**Speaker-aware** transcripts',
-      '**Project memory**, not isolated notes',
+    eyebrow: 'PRODUCT · LOCAL-FIRST MEETING INTELLIGENCE',
+    title: 'ClosedRoom',
+    lede:
+      'Turn meetings into operational memory. Record, transcribe and understand conversations on your Mac, then carry decisions, actions, risks and context across the project.',
+    status: 'Active development · macOS',
+    logoPath: 'images/closedroom/logo.png',
+    meta: [
+      'Local-first by default',
+      'Speaker-aware transcripts',
+      'Cross-meeting project memory',
     ],
-    imageHome: 'images/closedroom/home.jpg',
-    imageAnalysis: 'images/closedroom/meeting-analysis.jpg',
-    visualNote: 'Meeting → actions → decisions → project memory',
+    actions: [
+      { label: 'See the workflow ↓', href: '#workflow' },
+      {
+        label: 'GitHub ↗',
+        href: 'https://github.com/daniele21/closedroom',
+        variant: 'secondary',
+      },
+    ],
+    visualLabel: 'ClosedRoom Today and meeting intelligence workspaces',
+    visuals: [
+      {
+        image: 'images/closedroom/home.jpg',
+        alt: 'ClosedRoom Today workspace with meetings and reusable project context',
+        caption: 'Today · meetings become reusable context',
+      },
+      {
+        image: 'images/closedroom/meeting-analysis.jpg',
+        alt: 'ClosedRoom meeting intelligence workspace with structured analysis',
+        caption: 'Meeting intelligence · transcript, speakers and structured outputs',
+      },
+    ],
+    visualNote: 'Record → Transcribe → Understand → Remember',
+  },
+  proof: {
+    statement:
+      'A meeting can become useful operational memory while the default trust boundary stays on the user’s Mac.',
+    detail:
+      'ClosedRoom keeps capture, transcription, structured intelligence and project memory local by default; cloud providers remain explicit choices, never silent fallbacks.',
   },
   problem: {
-    kicker: 'Why ClosedRoom exists',
+    kicker: 'THE PROBLEM',
     titleLine1: 'Meetings create knowledge.',
     titleLine2: 'Most tools leave it fragmented.',
-    lede: 'Raw transcripts are useful, but they are rarely the final thing people need. The value lives in what was decided, who committed to what, what changed, and what still needs attention.',
+    lede:
+      'The useful output is rarely the transcript itself. Teams need to recover what changed, what was decided, who owns what, which risks remain open and how the project evolved across several conversations.',
     items: [
       {
-        id: '01',
-        title: 'Context disappears',
-        description: 'Decisions, risks and commitments get buried inside long transcripts, notes and chat history.',
+        id: 1,
+        title: 'Transcripts are not operational memory',
+        description:
+          'Long transcripts preserve words, but decisions, commitments, risks and open questions still have to be recovered manually.',
         color: 'blue',
       },
       {
-        id: '02',
+        id: 2,
         title: 'Meetings stay isolated',
-        description: 'A transcript explains one call. It does not automatically show how a project changed across several meetings.',
+        description:
+          'One meeting can explain one call. It does not automatically preserve the project state across a sequence of conversations.',
         color: 'teal',
       },
       {
-        id: '03',
-        title: 'Cloud becomes the default boundary',
-        description: 'Many meeting assistants require sensitive audio and transcript data to leave the machine before intelligence becomes useful.',
+        id: 3,
+        title: 'Cloud often becomes the default boundary',
+        description:
+          'Sensitive audio and transcripts can leave the machine before the user receives any useful intelligence or project context.',
         color: 'violet',
       },
     ],
-    statement: 'ClosedRoom turns meetings into a **local operational memory** instead of another pile of transcripts.',
+    statement:
+      'ClosedRoom is designed around **meeting → intelligence → memory**, not around accumulating another archive of transcripts.',
   },
-  solution: {
-    kicker: 'The product idea',
-    titleLine1: 'Capture first.',
-    titleLine2: 'Build intelligence after.',
-    lede: 'ClosedRoom preserves the meeting locally, then adds ASR, speaker diarization, visual evidence, and structured analysis as separate layers.',
-    steps: [
-      { step: 1, title: 'Configure', description: 'Choose diarization, visual intelligence and provider options.' },
-      { step: 2, title: 'Record', description: 'Save microphone, system audio and recoverable artifacts locally.' },
-      { step: 3, title: 'Transcribe', description: 'Run local MLX / Nemotron ASR and persist timestamped text.' },
-      { step: 4, title: 'Enrich', description: 'Add speaker clusters, visual evidence and audio intelligence.' },
-      { step: 5, title: 'Analyze', description: 'Extract summaries, actions, decisions, risks and project updates.' },
-      { step: 6, title: 'Remember', description: 'Reuse the output across Today, Meeting and Project workspaces.' },
-    ],
-  },
-  values: {
-    kicker: 'What matters',
-    titleLine1: 'Useful intelligence with',
-    titleLine2: 'explicit boundaries.',
+  benefits: {
+    eyebrow: 'WHY CLOSEDROOM IS DIFFERENT',
+    title: 'Private by default. Useful beyond the transcript.',
+    description:
+      'The product focuses on three outcomes that matter in real meeting workflows.',
     items: [
       {
-        id: '01',
-        title: 'Local-first control',
-        description: 'Audio, transcripts, prompts, analysis outputs, diarization and visual artifacts stay on the Mac by default.',
-        color: 'teal',
-        quote: 'The local machine is the default trust boundary.',
-        featured: true,
+        icon: '⌁',
+        title: 'Private by default',
+        description:
+          'Sensitive meeting data stays on the Mac in the default path. External providers are explicit choices rather than hidden dependencies.',
       },
       {
-        id: '02',
-        title: 'Intelligence over transcription',
-        description: 'ClosedRoom is designed to surface actions, decisions, risks, minutes and project updates , not just text.',
-        color: 'blue',
+        icon: '◎',
+        title: 'Intelligence, not just transcripts',
+        description:
+          'ClosedRoom turns conversations into speaker-aware transcripts, actions, decisions, risks, questions and editable notes.',
       },
       {
-        id: '03',
-        title: 'Human-reviewable attribution',
-        description: 'Speaker clusters remain stable. Visual evidence can suggest names only when confidence rules are satisfied.',
-        color: 'violet',
+        icon: '↻',
+        title: 'Memory across meetings',
+        description:
+          'Outputs become reusable project context so commitments, risks and decisions do not disappear inside isolated meeting files.',
+      },
+    ],
+  },
+  workflow: {
+    eyebrow: 'HOW IT WORKS',
+    title: 'Record → Transcribe → Understand → Remember',
+    description:
+      'The user mental model stays simple even though capture, inference, enrichment and persistence remain separate engineering stages underneath.',
+    steps: [
+      {
+        step: 1,
+        title: 'Record',
+        description:
+          'Capture microphone and system audio locally and persist recoverable meeting artifacts before expensive inference begins.',
       },
       {
-        id: '04',
-        title: 'Fail-soft enrichment',
-        description: 'Optional diarization or visual intelligence can fail without invalidating a usable transcript.',
-        color: 'amber',
+        step: 2,
+        title: 'Transcribe',
+        description:
+          'Run the local ASR path as a persisted, observable job. Speaker diarization remains a separate enrichment instead of a prerequisite.',
+      },
+      {
+        step: 3,
+        title: 'Understand',
+        description:
+          'Turn the transcript into speaker-aware summaries, actions, decisions, risks, open questions and editable meeting notes.',
+      },
+      {
+        step: 4,
+        title: 'Remember',
+        description:
+          'Reuse meeting outputs inside Today and Project views so current status and historical context survive beyond a single call.',
       },
     ],
   },
   product: {
-    kicker: 'Product proof',
-    titleLine1: 'From a live meeting to',
-    titleLine2: 'something you can act on.',
-    scenarios: [
+    eyebrow: 'THE PRODUCT',
+    title: 'From live capture to cross-meeting project memory.',
+    description:
+      'The product surfaces the whole operational path instead of treating transcription as the final destination.',
+    screenshots: [
       {
-        tag: 'RECORD → TRANSCRIBE',
-        title: 'Preserve the meeting before inference starts.',
-        description: 'ClosedRoom records microphone and system audio locally, then runs transcription asynchronously. The meeting exists as a recoverable artifact before expensive processing begins.',
-        shots: [
-          {
-            image: 'images/closedroom/recording.jpg',
-            label: 'Configure the recording',
-            alt: 'ClosedRoom recording setup',
-          },
-          {
-            image: 'images/closedroom/recording-active.jpg',
-            label: 'Capture locally',
-            alt: 'ClosedRoom active recording',
-          },
-        ],
+        image: 'images/closedroom/recording.jpg',
+        alt: 'ClosedRoom recording setup',
+        caption: 'Recording · focused setup before capture',
       },
       {
-        tag: 'TRANSCRIPT → INTELLIGENCE',
-        title: 'See what matters without rereading everything.',
-        description: 'The Meeting workspace connects audio, transcript, speaker context and structured outputs , including actions, decisions, risks and deeper analysis.',
-        reverse: true,
-        shots: [
-          {
-            image: 'images/closedroom/meeting-analysis.jpg',
-            label: 'Meeting intelligence',
-            alt: 'ClosedRoom meeting analysis',
-          },
-          {
-            image: 'images/closedroom/deep-dive-actions.jpg',
-            label: 'Actions in detail',
-            alt: 'ClosedRoom deep-dive actions',
-          },
-        ],
+        image: 'images/closedroom/recording-active.jpg',
+        alt: 'ClosedRoom active local recording',
+        caption: 'Capture · the meeting is persisted before inference',
       },
       {
-        tag: 'MEETING → PROJECT MEMORY',
-        title: 'Carry context across multiple conversations.',
-        description: 'Project views reuse meeting-level intelligence so the product can show current status, open actions, decisions, risks and recent changes without starting from zero after every call.',
-        shots: [
-          {
-            image: 'images/closedroom/project-analysis.jpg',
-            label: 'Cross-meeting project view',
-            alt: 'ClosedRoom project analysis',
-          },
-          {
-            image: 'images/closedroom/project-details.jpg',
-            label: 'Operational project detail',
-            alt: 'ClosedRoom project details',
-          },
-        ],
+        image: 'images/closedroom/meeting-analysis.jpg',
+        alt: 'ClosedRoom meeting intelligence workspace',
+        caption: 'Meeting intelligence · transcript, speakers and structured outputs',
+      },
+      {
+        image: 'images/closedroom/deep-dive-actions.jpg',
+        alt: 'ClosedRoom deep-dive action items',
+        caption: 'Actions · operational detail extracted from the conversation',
+      },
+      {
+        image: 'images/closedroom/project-analysis.jpg',
+        alt: 'ClosedRoom cross-meeting project analysis',
+        caption: 'Project memory · status, decisions, risks and updates across meetings',
+      },
+      {
+        image: 'images/closedroom/project-details.jpg',
+        alt: 'ClosedRoom project detail workspace',
+        caption: 'Project detail · reusable context instead of isolated transcripts',
       },
     ],
-  },
-  flow: {
-    kicker: 'End-to-end flow',
-    titleLine1: 'The complete pipeline,',
-    titleLine2: 'without hiding the boundaries.',
-    image: 'images/closedroom/end-to-end-flow.png',
   },
   architecture: {
-    kicker: 'Architecture',
-    titleLine1: 'Local-first is a',
-    titleLine2: 'system design choice.',
-    lede: 'The UI talks to one local FastAPI boundary. Recording, jobs, ASR, diarization, local model runtimes, persistence and diagnostics are coordinated behind that boundary.',
-    image: 'images/closedroom/architecture.png',
-    points: [
-      {
-        title: 'Product surface',
-        description: 'React/TypeScript runs in the browser or native WKWebView shell.',
-      },
-      {
-        title: 'Local orchestration',
-        description: 'FastAPI + AppServices coordinate recording, transcription, analysis, runtime and workspace state.',
-      },
-      {
-        title: 'Replaceable execution',
-        description: 'MLX/Nemotron, FluidAudio, Qwen3-VL and local-llm-server remain isolated behind explicit service boundaries.',
-      },
-    ],
+    eyebrow: 'ARCHITECTURE',
+    title: 'ClosedRoom owns the meeting product. Korgis owns reusable Local AI runtime infrastructure.',
+    description:
+      'The macOS app and loopback FastAPI boundary coordinate recording, jobs, persistence, ASR, diarization and meeting state. Korgis provides the reusable LLM/VLM execution boundary underneath the product workflow.',
+    diagramImage: 'images/closedroom/closedroom-local-first-architecture.svg',
+    diagramAlt:
+      'ClosedRoom local-first architecture showing the macOS product boundary, local ASR and diarization, Korgis runtime, persistence and optional cloud providers outside the default trust boundary',
   },
-  trust: {
-    kicker: 'Privacy boundary',
-    titleLine1: 'Local by default.',
-    titleLine2: 'Cloud only when chosen.',
-    local: {
-      title: 'Default local path',
-      description: 'Audio, transcripts, diarization artifacts, visual observations, local prompts, analysis results and project state remain on the Mac.',
-      stack: 'MLX / Nemotron · FluidAudio · Qwen3-VL · local-llm-server',
-    },
-    cloud: {
-      title: 'Explicit opt-in path',
-      description: 'Speechmatics and Gemini sit outside the default trust boundary and are used only when the user intentionally selects those providers.',
-      tagline: 'No hidden cloud dependency in the default workflow.',
+  evidence: {
+    eyebrow: 'EVIDENCE & LIMITS',
+    title: 'Local-first is an explicit system boundary, not a blanket quality claim.',
+    description:
+      'ClosedRoom already implements the core meeting-intelligence workflow and makes provider boundaries visible. Model quality, hardware behavior and broader privacy guarantees remain separate evidence questions.',
+    note: {
+      title: 'The product workflow and trust boundary are implemented; model and hardware claims stay scoped.',
+      body:
+        'ClosedRoom persists meeting artifacts locally, supports local ASR and diarization paths, produces structured meeting intelligence, preserves user edits and carries outputs into project memory. Optional Speechmatics and Gemini paths are explicit opt-ins and can move selected meeting data outside the local boundary.',
+      evidenced: [
+        'Local meeting capture with recoverable persisted artifacts before expensive inference',
+        'Local transcription paths plus local FluidAudio diarization on supported Macs',
+        'Structured summaries, actions, decisions, risks, questions and editable notes',
+        'Cross-meeting Today and Project memory built from persisted meeting outputs',
+        'Explicit provider selection with no silent cloud fallback in the default workflow',
+        'Optional enrichment can degrade or abstain without invalidating a usable transcript',
+      ],
+      missing: [
+        'Public downloadable GitHub Release for the macOS application',
+        'Independent end-to-end privacy certification',
+        'Representative latency, memory and thermal benchmark across supported Macs',
+        'Guarantees of perfect transcription, speaker identity or meeting understanding',
+      ],
     },
   },
+  relations: [
+    {
+      stage: 'BUILD · INFRASTRUCTURE',
+      title: 'Korgis',
+      href: '/korgis',
+      note: 'Reusable Local AI runtime and execution boundary',
+    },
+    {
+      stage: 'PRODUCT · MEETING INTELLIGENCE',
+      title: 'ClosedRoom',
+      current: true,
+      note: 'Sensitive workflow proving ground and operational memory product',
+    },
+    {
+      stage: 'MEASURE · EVIDENCE',
+      title: 'Performance Lab',
+      href: '/performance-lab',
+      note: 'Representative runtime and hardware viability evidence',
+    },
+  ],
   cta: {
-    kicker: 'ClosedRoom',
+    kicker: 'CLOSEDROOM · MACOS',
     titleLine1: 'Turn meetings into',
     titleLine2: 'operational memory.',
-    lede: 'A local-first macOS workspace for recording, transcription, speaker context, structured analysis, and project memory.',
-    githubUrl: 'https://github.com/daniele21/local-asr-server/tree/speaker_detection',
+    lede:
+      'Explore the source-built macOS project, its Local AI boundaries and the engineering decisions behind the full meeting-to-memory workflow.',
+    primaryAction: {
+      label: 'Explore ClosedRoom ↗',
+      href: 'https://github.com/daniele21/closedroom',
+    },
+    secondaryAction: {
+      label: 'Explore Korgis ↗',
+      href: '/korgis',
+    },
   },
 };

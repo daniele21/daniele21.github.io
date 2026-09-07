@@ -1,7 +1,7 @@
 ---
 /**
  * closedroom.astro
- * Product / proving-ground page using the shared archetype-based project UX.
+ * ClosedRoom application page using the canonical App project template.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
@@ -10,20 +10,11 @@ import ProjectProof from '../components/project/ProjectProof.astro';
 import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
 import ProjectRelations from '../components/project/ProjectRelations.astro';
+import ProjectCta from '../components/project/ProjectCta.astro';
 
-import ClosedRoomProblem from '../components/closedroom/ClosedRoomProblem.astro';
-import ClosedRoomSolution from '../components/closedroom/ClosedRoomSolution.astro';
-import ClosedRoomValues from '../components/closedroom/ClosedRoomValues.astro';
-import ClosedRoomProduct from '../components/closedroom/ClosedRoomProduct.astro';
-import ClosedRoomFlow from '../components/closedroom/ClosedRoomFlow.astro';
-import ClosedRoomArchitecture from '../components/closedroom/ClosedRoomArchitecture.astro';
-import ClosedRoomTrust from '../components/closedroom/ClosedRoomTrust.astro';
-import ClosedRoomCta from '../components/closedroom/ClosedRoomCta.astro';
-
-import { closedRoomData } from '../content/closedRoom';
+import { closedRoomData as data } from '../content/closedRoom';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
-const { hero } = closedRoomData;
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
@@ -34,148 +25,283 @@ const subheaderLinks = [
 ];
 
 const closedRoomSchema = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "ClosedRoom",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "macOS",
-  "description": closedRoomData.meta.description,
-  "author": {
-    "@type": "Person",
-    "name": "Daniele Moltisanti",
-    "url": "https://daniele21.github.io/"
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: data.hero.title,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'macOS',
+  description: data.meta.description,
+  author: {
+    '@type': 'Person',
+    name: 'Daniele Moltisanti',
+    url: 'https://daniele21.github.io/',
   },
-  "codeRepository": "https://github.com/daniele21/local-asr-server/tree/speaker_detection"
+  codeRepository: data.cta.primaryAction.href,
 };
 ---
 
 <BaseLayout
-  title={closedRoomData.meta.title}
-  description={closedRoomData.meta.description}
+  title={data.meta.title}
+  description={data.meta.description}
   jsonLd={closedRoomSchema}
 >
   <ProductSubHeader
-    title="ClosedRoom"
-    badge="macOS app"
+    title={data.hero.title}
+    badge={data.hero.status.split('·')[0]?.trim()}
+    logoPath={data.hero.logoPath}
     links={subheaderLinks}
-    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/local-asr-server/tree/speaker_detection' }}
+    cta={{ label: 'GitHub ↗', href: data.cta.primaryAction.href }}
   />
 
   <div id="top" data-project-page data-project-archetype="product">
     <ProjectHero
-      eyebrow="PRODUCT · LOCAL-FIRST MEETING INTELLIGENCE"
-      title="ClosedRoom"
-      lede="Record, transcribe, identify speakers, analyze and remember meetings locally on macOS, so decisions and project context do not disappear after the call."
-      status="macOS app · active development"
-      meta={['Local-first by default', 'Speaker-aware transcripts', 'Cross-meeting project memory']}
-      actions={[
-        { label: 'See the workflow ↓', href: '#workflow' },
-        { label: 'GitHub ↗', href: 'https://github.com/daniele21/local-asr-server/tree/speaker_detection', variant: 'secondary' },
-      ]}
-      visualLabel="ClosedRoom meeting and project intelligence interfaces"
+      eyebrow={data.hero.eyebrow}
+      title={data.hero.title}
+      lede={data.hero.lede}
+      status={data.hero.status}
+      logoPath={data.hero.logoPath}
+      meta={data.hero.meta}
+      actions={data.hero.actions}
+      visualLabel={data.hero.visualLabel}
     >
-      <div class="closedroom-hero-visual">
-        <figure class="hero-shot hero-shot-main">
-          <img
-            data-zoomable
-            src={`${baseUrl}/${hero.imageHome}`}
-            alt="ClosedRoom home workspace"
-            width="1440"
-            height="900"
-            loading="eager"
-          />
-          <figcaption>Meeting workspace</figcaption>
-        </figure>
-        <figure class="hero-shot hero-shot-secondary">
-          <img
-            data-zoomable
-            src={`${baseUrl}/${hero.imageAnalysis}`}
-            alt="ClosedRoom structured meeting analysis"
-            width="1440"
-            height="900"
-            loading="eager"
-          />
-          <figcaption>Structured meeting intelligence</figcaption>
-        </figure>
-        <p class="hero-flow-note">{hero.visualNote}</p>
+      <div class="app-hero-visual">
+        {data.hero.visuals.map((visual, index) => (
+          <figure class:list={['hero-shot', index === 0 ? 'hero-shot-main' : 'hero-shot-secondary']}>
+            <img
+              data-zoomable
+              src={`${baseUrl}/${visual.image}`}
+              alt={visual.alt}
+              width="1440"
+              height="900"
+              loading="eager"
+            />
+            {visual.caption && <figcaption>{visual.caption}</figcaption>}
+          </figure>
+        ))}
+        {data.hero.visualNote && <p class="hero-flow-note">{data.hero.visualNote}</p>}
       </div>
     </ProjectHero>
 
-    <ProjectProof
-      statement="Meeting intelligence can keep the default trust boundary local while still producing actions, decisions, risks and reusable project memory."
-      detail="ClosedRoom separates capture, transcription, enrichment and analysis so optional cloud providers remain explicit choices rather than hidden dependencies."
-    />
+    <ProjectProof statement={data.proof.statement} detail={data.proof.detail} />
 
-    <ClosedRoomProblem />
-    <ClosedRoomValues />
+    <section class="section section-alt" id="why">
+      <div class="shell">
+        <div class="section-head">
+          <div class="kicker">{data.problem.kicker}</div>
+          <h2>
+            {data.problem.titleLine1}
+            {data.problem.titleLine2 && (
+              <>
+                <br />
+                <span class="accent-text">{data.problem.titleLine2}</span>
+              </>
+            )}
+          </h2>
+          <p class="lead">{data.problem.lede}</p>
+        </div>
+
+        <div class="problem-grid">
+          {data.problem.items.map((item) => (
+            <article class="card">
+              <div class={`icon icon--${item.color || 'blue'}`}>{item.id}</div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </article>
+          ))}
+        </div>
+
+        {data.problem.statement && (
+          <div
+            class="statement"
+            set:html={data.problem.statement.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+          />
+        )}
+      </div>
+    </section>
+
+    <ProjectSection
+      id="benefits"
+      eyebrow={data.benefits.eyebrow}
+      title={data.benefits.title}
+      description={data.benefits.description}
+      tone="canvas"
+    >
+      <div class="benefits-grid" aria-label="ClosedRoom benefits">
+        {data.benefits.items.map((item) => (
+          <article class="benefit-card">
+            {item.icon && <span class="benefit-icon" aria-hidden="true">{item.icon}</span>}
+            <strong>{item.title}</strong>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </ProjectSection>
 
     <div id="workflow" class="project-anchor">
-      <ClosedRoomSolution />
-      <ClosedRoomFlow baseUrl={baseUrl} />
+      <ProjectSection
+        id="workflow-inner"
+        eyebrow={data.workflow.eyebrow}
+        title={data.workflow.title}
+        description={data.workflow.description}
+        tone="subtle"
+        width="wide"
+      >
+        <div class="workflow-steps">
+          {data.workflow.steps.map((step) => (
+            <article class="workflow-step">
+              <div class="workflow-step-header">
+                <span class="step-number">{String(step.step).padStart(2, '0')}</span>
+                <div>
+                  <strong>{step.title}</strong>
+                  <p>{step.description}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <figure class="workflow-diagram">
+          <img
+            data-zoomable
+            src={`${baseUrl}/images/closedroom/closedroom-meeting-to-memory.svg`}
+            alt="ClosedRoom workflow from recording through transcription and understanding to reusable project memory"
+            width="1200"
+            height="520"
+            loading="lazy"
+          />
+          <figcaption>
+            The product keeps the user journey simple while capture, inference and persistence remain explicit engineering boundaries.
+          </figcaption>
+        </figure>
+      </ProjectSection>
     </div>
 
     <div id="product" class="project-anchor">
-      <ClosedRoomProduct baseUrl={baseUrl} />
+      <ProjectSection
+        id="product-inner"
+        eyebrow={data.product.eyebrow}
+        title={data.product.title}
+        description={data.product.description}
+        tone="canvas"
+        width="wide"
+      >
+        <div class="product-gallery">
+          {data.product.screenshots.map((shot) => (
+            <figure class="product-shot">
+              <img
+                data-zoomable
+                src={`${baseUrl}/${shot.image}`}
+                alt={shot.alt}
+                width="1440"
+                height="900"
+                loading="lazy"
+              />
+              {shot.caption && <figcaption>{shot.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      </ProjectSection>
     </div>
 
     <div id="architecture" class="project-anchor">
-      <ClosedRoomArchitecture baseUrl={baseUrl} />
+      <ProjectSection
+        id="architecture-inner"
+        eyebrow={data.architecture.eyebrow}
+        title={data.architecture.title}
+        description={data.architecture.description}
+        tone="subtle"
+        width="wide"
+      >
+        {data.architecture.diagramImage && (
+          <div class="architecture-diagram">
+            <img
+              data-zoomable
+              src={`${baseUrl}/${data.architecture.diagramImage}`}
+              alt={data.architecture.diagramAlt || 'ClosedRoom architecture diagram'}
+              width="1200"
+              height="760"
+              loading="lazy"
+            />
+          </div>
+        )}
+
+        <div class="ownership-grid" aria-label="ClosedRoom architecture ownership">
+          <article>
+            <span>CLOSEDROOM</span>
+            <strong>Owns the user problem</strong>
+            <p>Capture, meetings, transcripts, speaker state, structured notes, user edits, persistence and project memory.</p>
+          </article>
+          <article>
+            <span>KORGIS</span>
+            <strong>Owns reusable Local AI runtime concerns</strong>
+            <p>Model loading, backend selection, runtime lifecycle, text and vision inference, logs and diagnostics.</p>
+          </article>
+          <article>
+            <span>NATIVE HELPERS</span>
+            <strong>Own platform-specific execution</strong>
+            <p>macOS capture and local diarization stay behind explicit process boundaries instead of leaking into product logic.</p>
+          </article>
+        </div>
+      </ProjectSection>
     </div>
 
     <ProjectSection
       id="evidence"
-      eyebrow="EVIDENCE & TRUST BOUNDARY"
-      title="Local by default is implemented as a system boundary, not a marketing label."
-      description="The strongest current evidence is architectural and product-level: the default path keeps meeting artifacts and local analysis on the Mac, while external providers remain explicit opt-in paths."
+      eyebrow={data.evidence.eyebrow}
+      title={data.evidence.title}
+      description={data.evidence.description}
       tone="subtle"
       width="wide"
     >
-      <ClosedRoomTrust />
+      <div class="trust-grid" aria-label="ClosedRoom trust boundary">
+        <article class="trust-card trust-card-local">
+          <span>DEFAULT</span>
+          <strong>Local Mac boundary</strong>
+          <p>Recording, local ASR, diarization, meeting analysis state, edits and project memory stay on the Mac in the default path.</p>
+          <small>Local filesystem · SQLite · local inference · Korgis</small>
+        </article>
+        <article class="trust-card trust-card-cloud">
+          <span>EXPLICIT OPT-IN</span>
+          <strong>Cloud provider boundary</strong>
+          <p>Speechmatics and Gemini can be selected intentionally. They are outside the default trust boundary and are never silent fallbacks.</p>
+          <small>Provider choice changes the data boundary visibly.</small>
+        </article>
+      </div>
+
+      <div class="degrade-strip" aria-label="ClosedRoom graceful degradation model">
+        <strong>Designed to degrade usefully</strong>
+        <span>Recording finalized first</span>
+        <span>Transcript survives optional enrichment failures</span>
+        <span>Speaker identity may abstain</span>
+        <span>User edits remain explicit</span>
+      </div>
+
       <ProjectEvidenceNote
-        title="The trust boundary is explicit; broader privacy guarantees still require scoped validation."
-        body="ClosedRoom documents and implements a local default path for meeting artifacts and analysis state. Optional Speechmatics and Gemini integrations sit outside that boundary and are used only when selected."
-        evidenced={[
-          'Audio, transcripts and project state remain on the Mac in the default path',
-          'Local ASR and local model runtimes are available behind explicit service boundaries',
-          'Cloud providers remain explicit opt-in choices',
-          'Optional enrichment can fail without invalidating a usable transcript',
-        ]}
-        missing={[
-          'Independent end-to-end privacy certification',
-          'Published representative performance benchmark across supported Macs',
-        ]}
+        title={data.evidence.note.title}
+        body={data.evidence.note.body}
+        evidenced={data.evidence.note.evidenced}
+        missing={data.evidence.note.missing}
       />
     </ProjectSection>
 
-    <ProjectRelations
-      items={[
-        {
-          stage: 'BUILD · SPEECH INFRASTRUCTURE',
-          title: 'Local ASR Server',
-          href: '/local-asr-server',
-          note: 'Reusable local speech recognition layer',
-        },
-        {
-          stage: 'PRODUCT · MEETING INTELLIGENCE',
-          title: 'ClosedRoom',
-          current: true,
-          note: 'Local-first end-to-end proving ground',
-        },
-        {
-          stage: 'MEASURE · PERFORMANCE',
-          title: 'Performance Lab',
-          href: '/performance-lab',
-          note: 'Hardware and runtime viability evidence',
-        },
-      ]}
-    />
+    <ProjectRelations items={data.relations} />
 
-    <ClosedRoomCta />
+    <ProjectCta
+      kicker={data.cta.kicker}
+      title={data.cta.titleLine1}
+      titleAccent={data.cta.titleLine2}
+      description={data.cta.lede}
+      primaryLabel={data.cta.primaryAction.label}
+      primaryHref={data.cta.primaryAction.href}
+      secondaryLabel={data.cta.secondaryAction?.label}
+      secondaryHref={data.cta.secondaryAction?.href}
+      variant="teal"
+    />
   </div>
 </BaseLayout>
 
 <style>
-  .closedroom-hero-visual {
+  .app-hero-visual {
     position: relative;
     min-height: clamp(430px, 58vw, 680px);
     padding: clamp(24px, 4vw, 46px);
@@ -200,7 +326,9 @@ const closedRoomSchema = {
     height: auto;
   }
 
-  .hero-shot figcaption {
+  .hero-shot figcaption,
+  .workflow-diagram figcaption,
+  .product-shot figcaption {
     padding: 9px 12px;
     border-top: 1px solid var(--border-subtle);
     color: var(--ink-subtle);
@@ -228,12 +356,361 @@ const closedRoomSchema = {
     font-size: var(--text-caption);
   }
 
+  .section {
+    padding: clamp(60px, 7vw, 96px) 0;
+  }
+
+  .section-alt {
+    background: var(--surface-muted);
+    border-block: 1px solid var(--border-subtle);
+  }
+
+  .section-head {
+    max-width: 780px;
+    margin-bottom: var(--space-8);
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .section-head h2 {
+    margin: 0 0 var(--space-3);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .accent-text {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal, #14b8a6));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .lead {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-lg);
+    line-height: 1.65;
+  }
+
+  .problem-grid,
+  .benefits-grid,
+  .ownership-grid,
+  .trust-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .problem-grid,
+  .benefits-grid,
+  .ownership-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .card,
+  .benefit-card,
+  .ownership-grid article,
+  .trust-card {
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card,
+  .benefit-card {
+    padding: clamp(22px, 3vw, 32px);
+    transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  }
+
+  .card:hover,
+  .benefit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    margin-bottom: var(--space-4);
+    border-radius: var(--radius-md);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .icon--blue { color: var(--accent-blue); background: var(--surface-blue-subtle); }
+  .icon--teal { color: var(--accent-teal, #14b8a6); background: color-mix(in srgb, var(--accent-teal, #14b8a6) 10%, var(--surface-card)); }
+  .icon--violet { color: var(--accent-violet, #8b5cf6); background: color-mix(in srgb, var(--accent-violet, #8b5cf6) 10%, var(--surface-card)); }
+
+  .card h3,
+  .benefit-card strong,
+  .ownership-grid strong,
+  .trust-card strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+  }
+
+  .card h3 {
+    margin: 0 0 var(--space-2);
+    font-size: 1.1rem;
+  }
+
+  .card p,
+  .benefit-card p,
+  .ownership-grid p,
+  .trust-card p {
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+
+  .card p,
+  .benefit-card p {
+    margin: 0;
+    font-size: var(--text-body-sm);
+  }
+
+  .statement {
+    margin-top: var(--space-6);
+    padding: var(--space-5) var(--space-6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--surface-blue-subtle), var(--surface-card) 78%);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .benefit-icon {
+    display: block;
+    margin-bottom: var(--space-3);
+    color: var(--accent-blue-dark);
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+
+  .benefit-card strong {
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+  }
+
+  .benefit-card p {
+    margin-top: 8px;
+  }
+
+  .workflow-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .workflow-step {
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+
+  .workflow-step-header {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: var(--space-3);
+    padding: clamp(18px, 2.5vw, 24px);
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-full);
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 800;
+  }
+
+  .workflow-step strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+  }
+
+  .workflow-step p {
+    margin: 6px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.55;
+  }
+
+  .workflow-diagram,
+  .product-shot {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(14px, 2vw, 22px);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-md);
+  }
+
+  .workflow-diagram {
+    margin-top: var(--space-6);
+  }
+
+  .workflow-diagram img,
+  .product-shot img,
+  .architecture-diagram img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .product-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+    gap: var(--space-4);
+  }
+
+  .product-shot img {
+    max-height: 600px;
+    background: var(--surface-subtle);
+  }
+
+  .architecture-diagram {
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: clamp(14px, 2vw, 22px);
+    background: #07111f;
+    box-shadow: var(--shadow-md);
+  }
+
+  .architecture-diagram img {
+    max-height: 760px;
+  }
+
+  .ownership-grid {
+    margin-top: var(--space-5);
+  }
+
+  .ownership-grid article {
+    padding: var(--space-5);
+  }
+
+  .ownership-grid span,
+  .trust-card span {
+    display: inline-flex;
+    margin-bottom: var(--space-2);
+    color: var(--accent-blue-dark);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.07em;
+  }
+
+  .ownership-grid strong,
+  .trust-card strong {
+    display: block;
+    font-size: 1.05rem;
+  }
+
+  .ownership-grid p,
+  .trust-card p {
+    margin: 8px 0 0;
+    font-size: var(--text-body-sm);
+  }
+
+  .trust-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: var(--space-5);
+  }
+
+  .trust-card {
+    padding: clamp(22px, 3vw, 30px);
+  }
+
+  .trust-card-local {
+    border-color: color-mix(in srgb, var(--accent-teal, #14b8a6) 38%, var(--border-medium));
+    background: color-mix(in srgb, var(--accent-teal, #14b8a6) 7%, var(--surface-card));
+  }
+
+  .trust-card-cloud {
+    border-style: dashed;
+  }
+
+  .trust-card small {
+    display: block;
+    margin-top: var(--space-3);
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    font-weight: 650;
+  }
+
+  .degrade-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--space-5);
+    padding: var(--space-4);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+
+  .degrade-strip strong {
+    margin-right: 4px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-body-sm);
+  }
+
+  .degrade-strip span {
+    padding: 6px 9px;
+    border-radius: var(--radius-full);
+    background: var(--surface-muted);
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    font-weight: 650;
+  }
+
   .project-anchor {
-    scroll-margin-top: calc(var(--header-height) + 64px);
+    scroll-margin-top: calc(var(--header-height, 64px) + 64px);
+  }
+
+  @media (max-width: 980px) {
+    .problem-grid,
+    .ownership-grid,
+    .workflow-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .problem-grid,
+    .benefits-grid,
+    .ownership-grid,
+    .workflow-steps,
+    .trust-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 720px) {
-    .closedroom-hero-visual {
+    .app-hero-visual {
       min-height: 0;
       display: grid;
       gap: 16px;
@@ -247,6 +724,13 @@ const closedRoomSchema = {
 
     .hero-flow-note {
       position: static;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card,
+    .benefit-card {
+      transition: none;
     }
   }
 </style>
