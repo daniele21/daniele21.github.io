@@ -11,7 +11,6 @@
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import ImageZoomModal from '../components/common/ImageZoomModal.astro';
-import ContactModal from '../components/common/ContactModal.astro';
 import { siteMetadata } from '../content/site';
 import { resolveFavicon, type FaviconConfig } from '../config/favicons';
 
@@ -174,7 +173,6 @@ const allSchemas = jsonLd
     <SiteFooter />
   </slot>
   <ImageZoomModal />
-  <ContactModal />
   <script src="../scripts/site.ts"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 ---
 /** Canonical site navigation built around the questions visitors need answered. */
-import { navigation, getContent } from '../../content';
+import { navigation, getContent, socialLinks } from '../../content';
 import NavIcon from '../icons/NavIcon.astro';
 
 const { header: hdr } = getContent().common;
@@ -52,15 +52,16 @@ function getHref(href: string) {
     </nav>
 
     <div class="header-actions">
-      <button
-        type="button"
+      <a
         class="header-cta-btn primary-button"
-        data-open-contact-modal
-        aria-label="Discuss an AI workload"
+        href={socialLinks.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Connect on LinkedIn"
       >
-        <span>Discuss a workload</span>
-        <span aria-hidden="true">→</span>
-      </button>
+        <span>Connect</span>
+        <span aria-hidden="true">↗</span>
+      </a>
 
       <button class="theme-toggle" type="button" aria-label={hdr.themeToggleAriaLabel} data-theme-toggle>
         <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">

@@ -13,9 +13,9 @@ export const landingData: LandingPageData = {
       { label: 'About', href: '/about' },
     ],
     cta: {
-      label: 'Get in touch',
-      href: '#contact-modal',
-      external: false,
+      label: 'Connect',
+      href: 'https://www.linkedin.com/in/daniele-moltisanti/',
+      external: true,
     },
   },
 
@@ -33,7 +33,7 @@ export const landingData: LandingPageData = {
       focusBadges: [
         'Local AI & On-device LLMs',
         'Edge & Local AI Architecture',
-        'AI Strategy & Advisory',
+        'Inference Infrastructure',
       ],
       socials: [
         {
@@ -55,16 +55,16 @@ export const landingData: LandingPageData = {
       titleHighlight: 'Local AI only',
       challenge: 'Does every AI workload really need the cloud?',
       explanation:
-        'I experiment with real systems to find what should run <strong>Local</strong>, <strong>Hybrid</strong> or <strong>Cloud</strong>. I help teams make that decision with evidence.',
+        'I experiment with real systems to find what should run <strong>Local</strong>, <strong>Hybrid</strong> or <strong>Cloud</strong>, proving trade-offs with reproducible benchmarks and code.',
       position: '',
       proofLine: '',
       primaryCta: {
-        label: 'Discuss a workload',
-        href: '#contact-modal',
+        label: 'Connect on LinkedIn',
+        href: 'https://www.linkedin.com/in/daniele-moltisanti/',
       },
       secondaryCta: {
-        label: 'See how I work',
-        href: '#strategy',
+        label: 'Follow on GitHub',
+        href: 'https://github.com/daniele21',
       },
     },
   },

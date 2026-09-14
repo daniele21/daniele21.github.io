@@ -24,9 +24,9 @@
       "Understand the Local AI thesis and evidence-led method",
       "Enter concrete project proof",
       "Understand identity and track record",
-      "Reach advisory or collaboration CTA"
+      "Connect or get in touch"
     ],
-    "conflictRule": "When hierarchy conflicts arise, preserve thesis comprehension and evidence access before identity, promotion or advisory conversion."
+    "conflictRule": "When hierarchy conflicts arise, preserve thesis comprehension and evidence access before identity or contact conversion."
   },
   "viewports": {
     "desktop": {
@@ -81,9 +81,9 @@
     "actionHierarchy": {
       "primary": "Explore the work",
       "secondary": "Read my thinking",
-      "lateConversion": "Discuss an AI architecture"
+      "lateConversion": "Get in touch"
     },
-    "progressiveDisclosure": "thesis -> decision framework -> enabling infrastructure -> real product proof -> measured evidence -> identity/field notes -> advisory",
+    "progressiveDisclosure": "thesis -> decision framework -> enabling infrastructure -> real product proof -> measured evidence -> identity/background",
     "methodPath": {
       "purpose": "Narrative progress and spatial continuity between Decide, Build, Test and Measure.",
       "states": [

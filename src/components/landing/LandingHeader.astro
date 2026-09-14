@@ -70,15 +70,16 @@ const resolveHref = (href: string) => {
         </a>
       </div>
 
-      <button
-        type="button"
+      <a
         class="header-cta primary-button"
-        data-open-contact-modal
-        aria-label="Open contact inquiry form"
+        href={header.cta.href}
+        target={header.cta.external ? '_blank' : undefined}
+        rel={header.cta.external ? 'noopener noreferrer' : undefined}
+        aria-label="Connect on LinkedIn"
       >
         <span>{header.cta.label}</span>
-        <span class="cta-arrow" aria-hidden="true">→</span>
-      </button>
+        <span class="cta-arrow" aria-hidden="true">↗</span>
+      </a>
     </nav>
   </div>
 </header>

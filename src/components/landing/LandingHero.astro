@@ -15,6 +15,7 @@ const resolveHref = (href: string) => {
 };
 
 const githubUrl = hero.identity.socials?.find((link) => link.platform === 'github')?.href ?? 'https://github.com/daniele21';
+const linkedinUrl = hero.identity.socials?.find((link) => link.platform === 'linkedin')?.href ?? 'https://www.linkedin.com/in/daniele-moltisanti/';
 ---
 
 <section class="hero-section" aria-labelledby="hero-title">
@@ -35,27 +36,34 @@ const githubUrl = hero.identity.socials?.find((link) => link.platform === 'githu
       )}
 
       <div class="hero-actions">
-        <button
-          type="button"
+        <a
           class="primary-button hero-primary-cta"
-          data-open-contact-modal
-          aria-label="Discuss an AI workload"
+          href={hero.mission.primaryCta.href || linkedinUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Connect on LinkedIn"
         >
           <span>{hero.mission.primaryCta.label}</span>
-          <span aria-hidden="true">→</span>
-        </button>
+          <span aria-hidden="true">↗</span>
+        </a>
 
-        <a class="secondary-button hero-secondary-cta" href={resolveHref(hero.mission.secondaryCta.href)}>
+        <a
+          class="secondary-button hero-secondary-cta"
+          href={hero.mission.secondaryCta.href || githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Follow on GitHub"
+        >
           <span>{hero.mission.secondaryCta.label}</span>
-          <span aria-hidden="true">↓</span>
+          <span aria-hidden="true">↗</span>
         </a>
       </div>
     </div>
 
     <div class="hero-trust" aria-label="Professional proof">
       <span class="trust-role">{hero.identity.role}</span>
-      <a href={githubUrl} target="_blank" rel="noopener noreferrer">
-        Open-source systems <span aria-hidden="true">↗</span>
+      <a href={resolveHref('#strategy')}>
+        Explore method & systems <span aria-hidden="true">↓</span>
       </a>
     </div>
   </div>

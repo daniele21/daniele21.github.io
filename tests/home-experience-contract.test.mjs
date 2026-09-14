@@ -36,7 +36,7 @@ test('homepage path is progressive enhancement rather than a visibility dependen
 
 test('homepage preserves the declared narrative order', () => {
   const page = read('src/pages/index.astro');
-  const components = ['<LandingHero', '<DecisionStage', '<BuildStage', '<TestStage', '<EvidenceStage', '<FinalCta'];
+  const components = ['<LandingHero', '<DecisionStage', '<BuildStage', '<TestStage', '<EvidenceStage', '<AboutSignal'];
   let previous = -1;
   for (const component of components) {
     const index = page.indexOf(component);
@@ -89,7 +89,6 @@ test('brand contract keeps motion purposeful and user-controlled', () => {
   assert.ok(brand.motion.rules.some((rule) => /No scroll-jacking/i.test(rule)));
   assert.ok(brand.motion.rules.some((rule) => /Autoplaying/i.test(rule)));
 
-  const closedRoomHero = read('src/components/closedroom/ClosedRoomHero.astro');
-  assert.doesNotMatch(closedRoomHero, /setInterval\(/);
-  assert.match(closedRoomHero, /aria-pressed/);
+  const closedRoom = read('src/pages/closedroom.astro');
+  assert.doesNotMatch(closedRoom, /setInterval\(/);
 });

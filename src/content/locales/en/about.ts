@@ -11,7 +11,7 @@ export const aboutData: AboutContent = {
     subheadline: 'Data Scientist Manager at Sky Italia · Founder & Author at stAI tuned',
     tagline: 'Bridging experimental AI research, enterprise scale, and privacy-first on-device compute.',
     location: 'Milan, Italy',
-    locationStatus: 'Available for technical strategy & AI Advisory',
+    locationStatus: 'Researching & building Local AI systems',
     affiliation: 'Sky Italia',
     affiliationRole: 'Data Scientist Manager / Principal AI Engineer',
     portraitPath: 'images/profile-photo.jpg',
@@ -416,13 +416,13 @@ export const aboutData: AboutContent = {
   },
 
   cta: {
-    kicker: 'COLLABORATION & ADVISORY',
-    title: 'Facing decisions on where your AI workloads should run?',
+    kicker: 'CONNECT & FOLLOW',
+    title: 'Follow the research and systems',
     description:
-      'I work with CTOs, technical founders, and engineering teams evaluating Local vs Hybrid vs Cloud trade-offs, designing private AI architectures, or establishing enterprise AI governance.',
-    primaryActionLabel: 'Discuss an AI architecture →',
-    primaryActionHref: 'mailto:danielemoltisanti@gmail.com?subject=AI%20Architecture%20conversation',
-    secondaryActionLabel: 'Connect on LinkedIn ↗',
-    secondaryActionHref: 'https://www.linkedin.com/in/daniele-moltisanti/',
+      'I share reproducible benchmarks, architecture decisions, and open-source systems across LinkedIn and GitHub.',
+    primaryActionLabel: 'Follow on LinkedIn ↗',
+    primaryActionHref: 'https://www.linkedin.com/in/daniele-moltisanti/',
+    secondaryActionLabel: 'Follow on GitHub ↗',
+    secondaryActionHref: 'https://github.com/daniele21',
   },
 };
