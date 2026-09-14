@@ -9,8 +9,8 @@
 
 ## Key Projects & Infrastructure
 
-### 1. Local LLM Server
-- URL: https://daniele21.github.io/local-llm-server
+### 1. Korgis (Local LLM Server)
+- URL: https://daniele21.github.io/korgis
 - Repository: https://github.com/daniele21/local-llm-server
 - Description: High-throughput local inference engine and studio interface designed for managing open-weight models (Llama, Gemma, Qwen) with customizable backends (Ollama, llama.cpp, vLLM).
 

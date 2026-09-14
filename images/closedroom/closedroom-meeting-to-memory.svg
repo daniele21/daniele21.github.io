@@ -1,0 +1,55 @@
+<svg width="1200" height="520" viewBox="0 0 1200 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="520" rx="30" fill="#F8FAFC"/>
+  <text x="64" y="70" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="2">CLOSEDROOM · PRODUCT FLOW</text>
+  <text x="64" y="112" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="750">From a meeting to reusable operational memory</text>
+  <text x="64" y="145" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="17">A simple user journey over separate local capture, inference and persistence stages.</text>
+
+  <defs>
+    <linearGradient id="flow" x1="160" y1="280" x2="1040" y2="280" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#14B8A6"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M266 286H346M552 286H632M838 286H918" stroke="url(#flow)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M334 275L348 286L334 297" stroke="#3B82F6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M620 275L634 286L620 297" stroke="#2DD4BF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M906 275L920 286L906 297" stroke="#14B8A6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="64" y="204" width="202" height="164" rx="22" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <circle cx="101" cy="242" r="19" fill="#DBEAFE"/>
+  <circle cx="101" cy="242" r="7" fill="#2563EB"/>
+  <text x="128" y="247" fill="#1D4ED8" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">01 · RECORD</text>
+  <text x="84" y="292" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="750">Capture locally</text>
+  <text x="84" y="322" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Mic + system audio</text>
+  <text x="84" y="344" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Recoverable artifacts first</text>
+
+  <rect x="350" y="204" width="202" height="164" rx="22" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <circle cx="387" cy="242" r="19" fill="#E0F2FE"/>
+  <path d="M377 242H397M382 235V249M392 235V249" stroke="#0284C7" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="414" y="247" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">02 · TRANSCRIBE</text>
+  <text x="370" y="292" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="750">Persist the text</text>
+  <text x="370" y="322" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Local ASR job</text>
+  <text x="370" y="344" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Speaker enrichment separate</text>
+
+  <rect x="636" y="204" width="202" height="164" rx="22" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <circle cx="673" cy="242" r="19" fill="#EDE9FE"/>
+  <path d="M666 243L671 248L681 237" stroke="#7C3AED" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="700" y="247" fill="#6D28D9" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">03 · UNDERSTAND</text>
+  <text x="656" y="292" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="750">Extract what matters</text>
+  <text x="656" y="322" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Actions · decisions · risks</text>
+  <text x="656" y="344" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Editable structured notes</text>
+
+  <rect x="922" y="204" width="214" height="164" rx="22" fill="#FFFFFF" stroke="#99F6E4"/>
+  <circle cx="959" cy="242" r="19" fill="#CCFBF1"/>
+  <path d="M951 242H967M959 234V250" stroke="#0F766E" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="986" y="247" fill="#0F766E" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">04 · REMEMBER</text>
+  <text x="942" y="292" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="750">Build project memory</text>
+  <text x="942" y="322" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Today + Project context</text>
+  <text x="942" y="344" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Across multiple meetings</text>
+
+  <rect x="64" y="414" width="1072" height="58" rx="16" fill="#ECFDF5" stroke="#99F6E4"/>
+  <circle cx="94" cy="443" r="7" fill="#14B8A6"/>
+  <text x="116" y="438" fill="#115E59" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="750">DEFAULT TRUST BOUNDARY · LOCAL MAC</text>
+  <text x="116" y="459" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="14">Cloud providers are explicit opt-in alternatives, never silent fallbacks when a local stage is unavailable.</text>
+</svg>

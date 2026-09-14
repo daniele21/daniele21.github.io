@@ -1,0 +1,65 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="760" rx="32" fill="#07111F"/>
+  <defs>
+    <linearGradient id="line" x1="176" y1="382" x2="1026" y2="382" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#14B8A6"/>
+    </linearGradient>
+  </defs>
+
+  <text x="68" y="72" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="2">REDACTGUARD · ANDROID</text>
+  <text x="68" y="118" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">Who owns what</text>
+  <text x="68" y="152" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="18">The consumer app owns the privacy workflow. Harnex owns local AI infrastructure.</text>
+
+  <rect x="68" y="220" width="250" height="330" rx="24" fill="#0F1B2D" stroke="#334155" stroke-width="2"/>
+  <rect x="88" y="240" width="110" height="30" rx="15" fill="#172554"/>
+  <text x="106" y="261" fill="#93C5FD" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">CONSUMER</text>
+  <text x="92" y="316" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="700">RedactGuard</text>
+  <text x="92" y="348" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="700">Android</text>
+  <text x="92" y="392" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="17">PDF / text ingestion</text>
+  <text x="92" y="424" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="17">PII policy</text>
+  <text x="92" y="456" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="17">Human review</text>
+  <text x="92" y="488" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="17">Redaction / export</text>
+  <text x="92" y="526" fill="#5EEAD4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">OWNS USER WORKFLOW</text>
+
+  <path d="M338 384H394" stroke="url(#line)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M382 373L396 384L382 395" stroke="#38BDF8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="414" y="254" width="198" height="258" rx="22" fill="#0B2340" stroke="#2563EB" stroke-width="2"/>
+  <text x="447" y="303" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Contract</text>
+  <rect x="438" y="333" width="150" height="58" rx="14" fill="#172554" stroke="#1D4ED8"/>
+  <text x="464" y="360" fill="#BFDBFE" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Consumer SDK</text>
+  <text x="475" y="380" fill="#93C5FD" font-family="Inter, Arial, sans-serif" font-size="12">typed boundary</text>
+  <rect x="438" y="409" width="150" height="58" rx="14" fill="#0F172A" stroke="#334155"/>
+  <text x="487" y="437" fill="#E2E8F0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Binder</text>
+  <text x="468" y="457" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="12">process boundary</text>
+
+  <path d="M632 384H688" stroke="url(#line)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M676 373L690 384L676 395" stroke="#2DD4BF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="708" y="220" width="240" height="330" rx="24" fill="#0D292B" stroke="#0F766E" stroke-width="2"/>
+  <rect x="728" y="240" width="100" height="30" rx="15" fill="#134E4A"/>
+  <text x="750" y="261" fill="#99F6E4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">HOST</text>
+  <text x="732" y="316" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="29" font-weight="750">Harnex</text>
+  <text x="732" y="357" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="17">Model ownership</text>
+  <text x="732" y="389" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="17">Runtime lifecycle</text>
+  <text x="732" y="421" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="17">Scheduling</text>
+  <text x="732" y="453" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="17">Residency / policy</text>
+  <text x="732" y="492" fill="#5EEAD4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">OWNS LOCAL AI PLATFORM</text>
+
+  <path d="M968 384H1022" stroke="url(#line)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M1010 373L1024 384L1010 395" stroke="#2DD4BF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="1040" y="274" width="100" height="220" rx="22" fill="#0F172A" stroke="#334155" stroke-width="2"/>
+  <circle cx="1090" cy="326" r="22" fill="#134E4A"/>
+  <path d="M1080 326H1100M1090 316V336" stroke="#99F6E4" stroke-width="3" stroke-linecap="round"/>
+  <text x="1058" y="374" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Local</text>
+  <text x="1055" y="396" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">model</text>
+  <text x="1057" y="436" fill="#94A3B8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">llama.cpp</text>
+  <text x="1072" y="458" fill="#94A3B8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">GGUF</text>
+
+  <rect x="68" y="610" width="1072" height="88" rx="20" fill="#0F172A" stroke="#1E293B"/>
+  <circle cx="104" cy="654" r="8" fill="#14B8A6"/>
+  <text x="128" y="646" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Android proof</text>
+  <text x="128" y="674" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="16">No Harnex availability → visible recovery state. The consumer does not silently switch the document to cloud inference.</text>
+</svg>

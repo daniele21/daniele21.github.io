@@ -1,0 +1,29 @@
+<svg width="780" height="560" viewBox="0 0 780 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="780" height="560" rx="28" fill="#F8FAFC"/>
+  <rect x="185" y="28" width="410" height="504" rx="34" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+  <rect x="319" y="42" width="142" height="18" rx="9" fill="#E2E8F0"/>
+  <text x="220" y="104" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="750">Protect a document</text>
+  <text x="220" y="133" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Keep the source inside the local workflow.</text>
+
+  <rect x="220" y="164" width="340" height="112" rx="20" fill="#F8FAFC" stroke="#CBD5E1" stroke-dasharray="7 7"/>
+  <circle cx="272" cy="220" r="26" fill="#DBEAFE"/>
+  <path d="M264 208H276L284 216V233H264V208Z" stroke="#2563EB" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M276 208V216H284" stroke="#2563EB" stroke-width="2.5" stroke-linejoin="round"/>
+  <text x="315" y="211" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Import PDF</text>
+  <text x="315" y="235" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="13">or paste text instead</text>
+
+  <text x="220" y="316" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">What should be protected?</text>
+  <rect x="220" y="334" width="102" height="36" rx="18" fill="#DBEAFE" stroke="#93C5FD"/>
+  <text x="248" y="357" fill="#1D4ED8" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Names</text>
+  <rect x="332" y="334" width="104" height="36" rx="18" fill="#ECFDF5" stroke="#99F6E4"/>
+  <text x="355" y="357" fill="#0F766E" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Contacts</text>
+  <rect x="446" y="334" width="114" height="36" rx="18" fill="#F5F3FF" stroke="#DDD6FE"/>
+  <text x="466" y="357" fill="#6D28D9" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">Custom PII</text>
+
+  <rect x="220" y="398" width="340" height="46" rx="14" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <circle cx="243" cy="421" r="7" fill="#14B8A6"/>
+  <text x="260" y="426" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="650">Local AI ready through Harnex</text>
+
+  <rect x="220" y="464" width="340" height="46" rx="14" fill="#2563EB"/>
+  <text x="336" y="493" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750">Analyze locally</text>
+</svg>
