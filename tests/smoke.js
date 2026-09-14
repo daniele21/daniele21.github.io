@@ -24,9 +24,10 @@ const expectedRoutes = [
   'about/index.html',
   'insights/index.html',
   'redact-guard/index.html',
+  'redact-guard-android/index.html',
   'aura-finance/index.html',
   'closedroom/index.html',
-  'local-llm-server/index.html',
+  'korgis/index.html',
   'harnex/index.html',
   'local-asr-server/index.html',
   'traffic-monitoring/index.html',
@@ -309,6 +310,10 @@ const publicImages = [
   'images/harness/harness-app-icon-light.png',
   'images/performance-lab/mark.svg',
   'images/performance-lab/mark.png',
+  'images/redact-guard-android/redactguard-android-review.svg',
+  'images/redact-guard-android/redactguard-android-import.svg',
+  'images/redact-guard-android/redactguard-android-export.svg',
+  'images/redact-guard-android/redactguard-android-architecture.svg',
   'favicon.png',
   'favicon.svg',
 ];
@@ -326,9 +331,10 @@ for (const img of publicImages) {
 console.log('\n🔍 6. Verifying dynamic favicon resolution across routes...');
 const expectedFavicons = {
   'harnex/index.html': 'images/harness/harness-app-icon-light.png',
-  'local-llm-server/index.html': 'images/local-llm-server/logo.png',
+  'korgis/index.html': 'images/local-llm-server/logo.png',
   'performance-lab/index.html': 'images/performance-lab/mark.svg',
   'redact-guard/index.html': 'images/redact-guard/logo.png',
+  'redact-guard-android/index.html': 'images/redact-guard/logo.png',
   'closedroom/index.html': 'images/closedroom/logo.png',
   'aura-finance/index.html': 'images/aura/logo.png',
   'index.html': 'favicon.png',
@@ -344,6 +350,28 @@ for (const [route, expectedIcon] of Object.entries(expectedFavicons)) {
     errors++;
   } else {
     console.log(`  ✓ Favicon verified for ${route}: ${expectedIcon}`);
+  }
+}
+
+console.log('\n🔍 7. Verifying route redirects...');
+const expectedRedirects = [
+  { from: 'android-local-llm-harness/index.html', target: '/harnex' },
+  { from: 'local-llm-server/index.html', target: '/korgis' },
+];
+
+for (const { from, target } of expectedRedirects) {
+  const filePath = path.join(distDir, from);
+  if (!fs.existsSync(filePath)) {
+    console.error(`❌ Missing redirect stub: ${from}`);
+    errors++;
+  } else {
+    const html = fs.readFileSync(filePath, 'utf-8');
+    if (!html.includes(target)) {
+      console.error(`❌ Redirect ${from} does not target expected destination: ${target}`);
+      errors++;
+    } else {
+      console.log(`  ✓ Redirect verified: /${from.replace('/index.html', '')} -> ${target}`);
+    }
   }
 }
 
