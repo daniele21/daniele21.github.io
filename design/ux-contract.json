@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "name": "Personal Landing UX Contract",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "targetExperienceLevel": "L1",
   "baselineRepositoryLevel": "L0",
   "designSourceOfTruth": {
@@ -33,7 +33,7 @@
     "desktop": {
       "width": 1440,
       "maxWidth": 1280,
-      "layout": "wide editorial canvas with evidence-led visual hierarchy"
+      "layout": "progressive expansion of the mobile information hierarchy into a wider editorial canvas"
     },
     "tablet": {
       "width": 768,
@@ -42,7 +42,7 @@
     "mobile": {
       "width": 390,
       "minWidth": 320,
-      "layout": "linear vertical experience, full readability, zero horizontal page overflow"
+      "layout": "canonical single-column touch experience; 16px gutters, 48px touch targets, essential content first, zero horizontal page overflow"
     }
   },
   "typography": {
@@ -55,8 +55,8 @@
     "monoFont": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
   },
   "touchTargets": {
-    "minWidthPx": 44,
-    "minHeightPx": 44
+    "minWidthPx": 48,
+    "minHeightPx": 48
   },
   "accessibility": {
     "standard": "WCAG 2.2 AA",
@@ -96,7 +96,7 @@
       "scrollDirection": "reversible",
       "noScrollJacking": true,
       "desktop": "alternating left/right path with curved handoffs aligned to the current reading plane",
-      "mobile": "single vertical thread; readability has priority over preserving desktop curves",
+      "mobile": "single vertical thread; core copy and evidence remain immediately visible and do not depend on scroll-coupled entrance animation",
       "reducedMotion": "show a static guide and all content without scroll-coupled transforms",
       "javascriptFailure": "show all content and local stage rails; the path may disappear but comprehension must remain intact",
       "resize": "recalculate geometry after layout settles without losing narrative state"
@@ -231,5 +231,21 @@
       "flow": "Overview -> project-specific architecture/workflow/method -> technical depth -> evidence -> status/consequence -> related project or GitHub",
       "targetComprehensionSec": 120
     }
-  ]
+  ],
+  "mobileFirst": {
+    "canonicalSurface": "320px–430px touch viewport",
+    "rule": "Design and content hierarchy are resolved for phone first. Tablet and desktop expand density and spatial composition without introducing information required for comprehension.",
+    "primaryReviewWidths": [
+      320,
+      390
+    ],
+    "touchTargetPx": 48,
+    "principles": [
+      "Core content is visible without scroll-coupled entrance animation on mobile",
+      "One-column reading flow is canonical",
+      "Sticky chrome must preserve vertical reading space",
+      "Horizontal scrolling is reserved for compact secondary metadata/navigation, never primary prose",
+      "No mobile-only loss of mission, evidence, limitations or so-what"
+    ]
+  }
 }
