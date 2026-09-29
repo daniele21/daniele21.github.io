@@ -242,3 +242,12 @@ html[data-method-path-ready='true'] .method-journey .thread-curve {
 .secondary-button {
   min-height: var(--touch-target-min) !important;
 }
+
+
+/* Direct project text floor.
+   Legacy project components used unclassed <span> elements for step numbers,
+   notices and compact technical labels. Project content never renders those
+   text nodes below the 14px comprehension contract. */
+main [data-project-page][data-project-archetype] span:not(.sr-only) {
+  font-size: max(var(--text-caption), 1em) !important;
+}
