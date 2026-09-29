@@ -303,34 +303,31 @@ const isIconOnly = Boolean(isGitHub || isLinkedIn);
 
   @media (max-width: 768px) {
     .product-subheader {
-      min-height: 88px;
+      min-height: 52px;
     }
 
     .subheader-inner,
     .product-subheader.under-site-header .subheader-inner,
     .product-subheader:not(.under-site-header) .subheader-inner {
-      width: 100%;
-      min-height: 88px;
-      grid-template-columns: minmax(0, 1fr) auto;
-      grid-template-rows: 40px 48px;
-      column-gap: 8px;
-      row-gap: 0;
-      padding-inline: 14px;
+      width: min(calc(100% - 24px), var(--shell-max-width));
+      min-height: 52px;
+      grid-template-columns: minmax(72px, auto) minmax(0, 1fr);
+      grid-template-rows: 52px;
+      gap: 8px;
+      padding-inline: 0;
     }
 
-    .subheader-brand {
+    .subheader-brand,
+    .product-subheader.under-site-header .subheader-brand {
       grid-column: 1;
       grid-row: 1;
       min-width: 0;
     }
 
-    .product-subheader.under-site-header .subheader-brand {
-      grid-column: 1 / -1;
-    }
-
     .subheader-title-link {
-      width: 100%;
-      min-height: 40px;
+      max-width: 108px;
+      min-height: 48px;
+      gap: 6px;
     }
 
     .subheader-logo-img {
@@ -338,23 +335,24 @@ const isIconOnly = Boolean(isGitHub || isLinkedIn);
       height: 18px;
     }
 
+    .subheader-title {
+      max-width: 82px;
+    }
+
     .subheader-cta {
-      grid-column: 2;
-      grid-row: 1;
-      min-height: 36px;
-      padding-inline: 10px;
+      display: none;
     }
 
     .subheader-nav {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      width: calc(100% + 28px);
-      margin-inline: -14px;
+      grid-column: 2;
+      grid-row: 1;
+      width: 100%;
+      margin: 0;
       justify-content: flex-start;
       scroll-behavior: smooth;
-      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
-      mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
-      border-top: 1px solid color-mix(in srgb, var(--border-subtle) 72%, transparent);
+      -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 18px), transparent 100%);
+      mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 18px), transparent 100%);
+      border-top: 0;
     }
 
     .subheader-links {
