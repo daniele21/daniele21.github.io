@@ -31,10 +31,10 @@ const routeSpecs = [
 ];
 
 const viewports = [
-  { name: 'desktop-1440', width: 1440, height: 1100 },
-  { name: 'tablet-768', width: 768, height: 1024 },
-  { name: 'mobile-390', width: 390, height: 844 },
   { name: 'mobile-320', width: 320, height: 700 },
+  { name: 'mobile-390', width: 390, height: 844 },
+  { name: 'tablet-768', width: 768, height: 1024 },
+  { name: 'desktop-1440', width: 1440, height: 1100 },
 ];
 
 const warmRenderedPage = async (page) => {
