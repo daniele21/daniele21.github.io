@@ -408,4 +408,39 @@ const proofPoints = [
       transition: none;
     }
   }
+
+  /* MOBILE-FIRST ABOUT SIGNAL */
+  @media (max-width: 680px) {
+    .about-signal-section { padding: 48px 0; }
+    .about-shell { gap: 28px; }
+
+    .portrait-circle-wrapper {
+      order: -1;
+      justify-content: flex-start;
+    }
+
+    .about-content h2 {
+      margin-bottom: 12px;
+      font-size: clamp(1.65rem, 8vw, 2.15rem);
+    }
+
+    .about-summary { line-height: 1.58; }
+
+    .about-actions {
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .social-icon-btn {
+      width: 48px;
+      height: 48px;
+    }
+
+    .proof-item,
+    .proof-item:first-child {
+      padding: 16px 0;
+      gap: 10px;
+    }
+  }
+
 </style>
