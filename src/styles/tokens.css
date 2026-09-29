@@ -96,7 +96,7 @@
   --semantic-danger: var(--status-bad-text);
 
   /* Touch Target Constraint */
-  --touch-target-min: 44px;
+  --touch-target-min: 48px;
 
   /* Border Radius */
   --radius-sm: 8px;
@@ -126,7 +126,7 @@
 
   /* Layout Tokens */
   --shell-max-width: 1140px;
-  --header-height: 66px;
+  --header-height: 62px;
 }
 
 /* Canonical dark theme. Components consume semantic tokens rather than owning
@@ -189,5 +189,12 @@ html[data-theme='dark'] {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile-first layout contract: phone is the canonical reading surface. */
+@media (min-width: 641px) {
+  :root {
+    --header-height: 66px;
   }
 }
