@@ -221,6 +221,19 @@ export const landingData: LandingPageData = {
         imageAlt: 'Harnex overview',
       },
       {
+        id: 'decisio',
+        title: 'Decisio',
+        eyebrow: 'STATEFUL · DECISION RUNTIME',
+        summary: 'Reuse stable model context across changing application state and return bounded typed actions.',
+        href: '/decisio',
+        features: [
+          { label: 'State reuse' },
+          { label: 'Typed actions' },
+          { label: 'Fresh equivalence' },
+        ],
+        evidence: 'Makes optimization and decision-quality evidence separate, explicit claims.',
+      },
+      {
         id: 'local-asr-server',
         title: 'Local ASR Server',
         eyebrow: 'SPEECH · AUDIO',
@@ -271,22 +284,22 @@ export const landingData: LandingPageData = {
       },
       {
         name: 'Aura Finance',
-        tag: 'MOBILE · ON-DEVICE PARSING',
-        question: 'Can personal transactions be categorized on-device?',
+        tag: 'MOBILE · LOCAL-FIRST FINANCE',
+        question: 'Can a useful personal-finance product keep its canonical workspace on the device?',
         description:
-          'On-device semantic extraction coupled with deterministic financial math.',
+          'Deterministic financial rules, local persistence, human-reviewed payment candidates and optional encrypted continuity.',
         href: '/aura-finance',
         logoPath: 'images/aura/logo.png',
         features: [
-          { label: 'On-device parsing' },
-          { label: 'Deterministic math' },
-          { label: 'Zero telemetry' },
+          { label: 'Deterministic finance' },
+          { label: 'Human review' },
+          { label: 'Local-first data' },
         ],
-        evidence: 'Shows what on-device understanding can handle in a daily mobile workflow.',
+        evidence: 'Shows that AI should not replace deterministic product logic unless it earns its place.',
         imagePath: 'images/aura-finance/aura-categories-preview.png',
         colorClass: 'green',
-        linkLabel: 'See the test →',
-        whatItTests: 'Small local model handling recurring semantic tasks without cloud exposure.',
+        linkLabel: 'See the product →',
+        whatItTests: 'Local ownership, explainable rules and reversible automation without claiming AI categorization that is not implemented.',
       },
       {
         name: 'ClosedRoom',
@@ -323,47 +336,25 @@ export const landingData: LandingPageData = {
 
   measureStage: {
     kicker: '04 MEASURE',
-    title: 'Is it actually good enough?',
+    title: 'What actually works?',
     intro:
-      "Running locally isn't the goal, performing well is. I measure real numbers to shape the next architecture decision.",
+      'Capability, reliability, runtime behavior and end-to-end product effectiveness are measured under explicit evidence contracts before they become architecture claims.',
     systems: [
       {
-        id: 'performance-lab',
-        title: 'Performance Lab',
-        tag: 'OPTIMIZATION & BENCHMARKS',
-        question: 'Which configuration is good enough for this workload on this device?',
+        id: 'experiments',
+        title: 'Experiments',
+        tag: 'CAPABILITY · SYSTEM · E2E EVALUATION',
+        question: 'What actually works for this workload, under this exact model, runtime and product boundary?',
         metrics: [
-          { label: 'TTFT', value: '820', unit: 'ms', note: 'Time to first token' },
-          { label: 'Decode', value: '18.6', unit: 'tok/s', note: 'Generation speed' },
-          { label: 'Prefill', value: '72.4', unit: 'tok/s', note: 'Prompt processing' },
-          { label: 'Peak RAM', value: '3.4', unit: 'GB', note: 'Memory footprint' },
+          { label: 'Tracks', value: '5', note: 'Current experiment tracks in the repository' },
+          { label: 'Implemented', value: '3', note: 'Executable / implemented tracks today' },
+          { label: 'Execution', value: 'Local + API', note: 'Compared under explicit provider/runtime identity' },
+          { label: 'Evidence', value: 'Model + E2E', note: 'Capability and system-level evaluation' },
         ],
-        benchmarkProfiles: [
-          {
-            id: 'samsung-a56', device: 'Samsung Galaxy A56', platform: 'Android', deviceKind: 'mobile',
-            model: 'Qwen 3.5 2B', quantization: 'Q4_K_M', context: '4K context',
-            metrics: [
-              { label: 'TTFT', value: '820', unit: 'ms', note: 'Time to first token' },
-              { label: 'Decode', value: '18.6', unit: 'tok/s', note: 'Generation speed' },
-              { label: 'Prefill', value: '72.4', unit: 'tok/s', note: 'Prompt processing' },
-              { label: 'Peak RAM', value: '3.4', unit: 'GB', note: 'Memory footprint' },
-            ],
-          },
-          {
-            id: 'mac-pro-m3', device: 'Mac Pro M3', platform: 'macOS', deviceKind: 'desktop',
-            model: 'Qwen 3.5 2B', quantization: 'Q4_K_M', context: '4K context',
-            metrics: [
-              { label: 'TTFT', value: '240', unit: 'ms', note: 'Time to first token' },
-              { label: 'Decode', value: '54.8', unit: 'tok/s', note: 'Generation speed' },
-              { label: 'Prefill', value: '214', unit: 'tok/s', note: 'Prompt processing' },
-              { label: 'Peak RAM', value: '3.1', unit: 'GB', note: 'Memory footprint' },
-            ],
-          },
-        ],
-        statusNote: 'Illustrative benchmark values for the current UI. Replace after the validated device runs.',
-        statusType: 'planned',
-        href: '/performance-lab',
-        ctaLabel: 'Open benchmark lab',
+        statusNote: 'Experiments is the canonical evidence hub. Numeric benchmark results are published only when the experiment contract and provider terms allow it.',
+        statusType: 'authoritative',
+        href: '/experiments',
+        ctaLabel: 'Explore experiments',
       },
       {
         id: 'traffic-monitoring',
@@ -387,7 +378,7 @@ export const landingData: LandingPageData = {
     handoff: {
       output: 'Evidence changes the next decision',
       leadsTo: 'DECIDE AGAIN',
-      detailCta: { label: 'Open full benchmark lab', href: '/performance-lab' },
+      detailCta: { label: 'Open Experiments', href: '/experiments' },
     },
   },
 
@@ -430,6 +421,16 @@ export const landingData: LandingPageData = {
         technologies: ['Kotlin', 'Android NDK', 'llama.cpp', 'AIDL'],
         href: '/harnex',
         badge: 'Lab Prototype',
+      },
+      {
+        id: 'decisio',
+        title: 'Decisio',
+        role: 'Stateful bounded-decision runtime',
+        description:
+          'Reusable stable model context, deterministic constraints and direct typed action readout for repeated local decisions.',
+        technologies: ['Python', 'llama.cpp', 'GGUF', 'State reuse'],
+        href: '/decisio',
+        badge: 'Experimental System',
       },
       {
         id: 'traffic-monitoring',
