@@ -683,4 +683,130 @@ const jsonLd = {
     .portfolio-card { transition: none; }
     .portfolio-card:hover { transform: none; }
   }
+
+  /* MOBILE-FIRST ABOUT PAGE */
+  @media (max-width: 620px) {
+    .about-hero {
+      padding: 38px 0 48px;
+    }
+
+    .hero-grid {
+      gap: 24px;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.35rem, 11.8vw, 3.2rem);
+      line-height: 1;
+    }
+
+    .hero-lead {
+      margin-top: 16px;
+      font-size: 1rem;
+      line-height: 1.62;
+    }
+
+    .hero-capabilities {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin-top: 18px;
+      padding-bottom: 3px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .hero-capabilities::-webkit-scrollbar { display: none; }
+    .hero-capabilities span { flex: 0 0 auto; }
+
+    .hero-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .hero-actions .primary-button {
+      width: 100%;
+    }
+
+    .hero-actions .secondary-button {
+      min-width: 50px;
+      padding-inline: 14px;
+    }
+
+    .hero-meta {
+      display: grid;
+      gap: 5px;
+      margin-top: 18px;
+    }
+
+    .portrait-column {
+      order: 0;
+      max-width: 220px;
+    }
+
+    .portrait-frame {
+      border-radius: 20px;
+    }
+
+    .about-section {
+      padding: 48px 0;
+    }
+
+    .section-heading {
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .section-heading h2,
+    .about-cta h2 {
+      font-size: clamp(1.85rem, 9vw, 2.45rem);
+    }
+
+    .environment-grid,
+    .portfolio-grid {
+      gap: 10px;
+    }
+
+    .environment-card,
+    .portfolio-card {
+      padding: 16px;
+      border-radius: 14px;
+    }
+
+    .signal-list {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 3px;
+      scrollbar-width: none;
+    }
+
+    .signal-list::-webkit-scrollbar { display: none; }
+    .signal-list span { flex: 0 0 auto; }
+
+    .synthesis {
+      justify-content: flex-start;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+    }
+
+    .synthesis::-webkit-scrollbar { display: none; }
+    .synthesis span,
+    .synthesis strong,
+    .synthesis b { flex: 0 0 auto; }
+
+    .practice-list article {
+      padding: 15px;
+    }
+
+    .current-row,
+    .experience-row {
+      padding: 16px 0;
+    }
+
+    .about-cta {
+      padding: 48px 0;
+    }
+  }
+
 </style>
