@@ -79,7 +79,7 @@ When a real relationship exists, show where the artifact sits relative to upstre
 
 ### Infrastructure
 
-Examples: Local LLM Server, Local ASR Server, Android Local LLM Harness.
+Examples: Korgis, Harnex, Decisio, Local ASR Server.
 
 Canonical navigation:
 
@@ -119,7 +119,7 @@ Typical composition:
 
 ### Experiment / measurement
 
-Examples: Performance Lab, Traffic Monitoring, Traffic Monitoring Android.
+Examples: individual evidence routes such as Traffic Monitoring and Traffic Monitoring Android. The consolidated `/experiments` route is a cross-project research hub rather than a single experiment page.
 
 Canonical navigation:
 
@@ -137,7 +137,21 @@ Typical composition:
 6. Limits and missing validation.
 7. Architectural consequence: Local, Hybrid or Cloud where relevant.
 
-Android Local LLM Harness currently behaves as an infrastructure/experiment hybrid. Its final classification should follow whichever reader mental model wins after the three-pilot review; do not force the page into a category merely for taxonomy purity.
+Harnex is treated as infrastructure because the primary reader mental model is the shared Android runtime/control-plane boundary. Evaluation remains evidence attached to that system, not a reason to redefine the whole page as an experiment.
+
+## Experiments research hub
+
+The consolidated `/experiments` route is intentionally broader than a single project deep-dive. It replaces the old Performance Lab destination as the public evidence layer across the portfolio.
+
+Every experiment section must answer, in this order:
+
+```text
+Question -> Method -> Results / Evidence -> So what -> What it changed
+```
+
+The homepage may surface aggregate repository scope and selected findings, but it must not fabricate run counts or publish restricted numeric evidence. Visual placeholders are acceptable only when they explicitly state what verified artifact should replace them.
+
+`/performance-lab` remains a compatibility route that explains the consolidation and points to `/experiments`; it is not part of the canonical experiment navigation.
 
 ## Shared components
 
