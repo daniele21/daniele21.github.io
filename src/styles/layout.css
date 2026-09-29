@@ -214,3 +214,16 @@ html[data-method-path-ready='true'] .method-journey .thread-curve {
     will-change: transform, opacity;
   }
 }
+
+
+/* Mobile-first method path: content stays immediately readable.
+   The path may still communicate progress, but copy and proof do not depend on
+   scroll-coupled entrance animation on touch-sized viewports. */
+@media (max-width: 760px) {
+  html[data-method-path-ready='true'] .method-stage .stage-copy,
+  html[data-method-path-ready='true'] .method-stage .stage-visual {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
