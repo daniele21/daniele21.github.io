@@ -10,16 +10,16 @@ const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
 
 const proofPoints = [
   {
-    title: 'Enterprise AI',
-    detail: 'Leadership, architecture and delivery at organisational scale.',
+    title: 'Research foundations',
+    detail: 'Computer engineering and applied research built the habit of testing assumptions against evidence.',
   },
   {
-    title: 'Hands-on engineering',
-    detail: 'AI systems built and tested on Mac, Android and local infrastructure.',
+    title: 'Enterprise AI @ Sky',
+    detail: 'Architecture, delivery, governance, cost and stakeholder constraints shape what works beyond a prototype.',
   },
   {
-    title: 'Public work',
-    detail: 'Open-source systems and technical writing through GitHub and stAI tuned.',
+    title: 'Independent ownership',
+    detail: 'Systems, products and experiments built end to end—from problem framing and UX to runtime and evaluation.',
   },
 ];
 ---
@@ -30,11 +30,11 @@ const proofPoints = [
       <div class="about-content">
         <p class="section-kicker">Who I am</p>
         <h2 id="about-title">
-          AI strategy. Hands-on engineering. <span>Local AI.</span>
+          Research rigor. Enterprise constraints. <span>End-to-end ownership.</span>
         </h2>
         <p class="about-summary">
-          I lead enterprise AI systems and build AI on real devices to understand what should run{' '}
-          <strong>Local, Hybrid</strong> or <strong>Cloud.</strong>
+          My perspective comes from <strong>computer engineering and research</strong>, enterprise AI work at <strong>Sky Italia</strong>,
+          and independently building complete systems where I own the path from <strong>problem to product to evidence.</strong>
         </p>
 
         <div class="about-actions">
@@ -408,4 +408,39 @@ const proofPoints = [
       transition: none;
     }
   }
+
+  /* MOBILE-FIRST ABOUT SIGNAL */
+  @media (max-width: 680px) {
+    .about-signal-section { padding: 48px 0; }
+    .about-shell { gap: 28px; }
+
+    .portrait-circle-wrapper {
+      order: -1;
+      justify-content: flex-start;
+    }
+
+    .about-content h2 {
+      margin-bottom: 12px;
+      font-size: clamp(1.65rem, 8vw, 2.15rem);
+    }
+
+    .about-summary { line-height: 1.58; }
+
+    .about-actions {
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .social-icon-btn {
+      width: 48px;
+      height: 48px;
+    }
+
+    .proof-item,
+    .proof-item:first-child {
+      padding: 16px 0;
+      gap: 10px;
+    }
+  }
+
 </style>

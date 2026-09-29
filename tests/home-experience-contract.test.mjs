@@ -11,7 +11,7 @@ test('homepage UX contract makes outcome hierarchy and path semantics explicit',
   assert.equal(contract.experiencePriorities.audienceOrder[0], 'Technical Decision Maker');
   assert.match(contract.experiencePriorities.conflictRule, /thesis comprehension and evidence access/i);
   assert.deepEqual(contract.home.primaryJourney.slice(0, 6), [
-    'Hero / thesis',
+    'Hero / end-to-end thesis',
     'Decide',
     'Build',
     'Test',
@@ -68,18 +68,21 @@ test('decision matrix keeps a local-first hierarchy without losing comparison se
   assert.doesNotMatch(matrix, /\.cloud-column\s*\{[\s\S]{0,120}background:/);
 });
 
-test('homepage identity stays in the shared header without duplicating the hero', () => {
+test('homepage uses the canonical global header and keeps the hero focused on the thesis', () => {
+  const page = read('src/pages/index.astro');
   const hero = read('src/components/landing/LandingHero.astro');
-  const header = read('src/components/landing/LandingHeader.astro');
+  const layout = read('src/layouts/BaseLayout.astro');
+  const header = read('src/components/layout/SiteHeader.astro');
   const heroShellRule = hero.match(/\.hero-shell\s*\{([^}]*)\}/)?.[1] ?? '';
 
   assert.match(hero, /class="shell hero-shell"/);
   assert.doesNotMatch(heroShellRule, /width:\s*100%/);
-  assert.doesNotMatch(hero, /identity-strip|identity-avatar/);
-  assert.match(header, /class="brand-avatar"/);
-  assert.match(header, /src=\{resolveHref\(hero\.identity\.portraitPath\)\}/);
+  assert.doesNotMatch(hero, /identity-strip|identity-avatar|brand-avatar/);
+  assert.doesNotMatch(page, /LandingHeader/);
+  assert.match(layout, /import SiteHeader/);
+  assert.match(layout, /<SiteHeader \/>/);
   assert.match(header, /class="brand-name"/);
-  assert.match(header, /class="brand-role"/);
+  assert.match(header, /brandRole/);
 });
 
 test('brand contract keeps motion purposeful and user-controlled', () => {
@@ -91,4 +94,25 @@ test('brand contract keeps motion purposeful and user-controlled', () => {
 
   const closedRoom = read('src/pages/closedroom.astro');
   assert.doesNotMatch(closedRoom, /setInterval\(/);
+});
+
+
+test('mobile-first contract keeps phone as the canonical surface', () => {
+  const contract = JSON.parse(read('design/ux-contract.json'));
+  const tokens = read('src/styles/tokens.css');
+  const layout = read('src/styles/layout.css');
+  const plane = read('src/components/landing/PlaneTemplate.astro');
+  const subheader = read('src/components/layout/ProductSubHeader.astro');
+
+  assert.match(contract.mobileFirst.canonicalSurface, /320px.*430px/i);
+  assert.deepEqual(contract.mobileFirst.primaryReviewWidths, [320, 390]);
+  assert.equal(contract.mobileFirst.touchTargetPx, 48);
+  assert.equal(contract.touchTargets.minWidthPx, 48);
+  assert.equal(contract.touchTargets.minHeightPx, 48);
+
+  assert.match(tokens, /--touch-target-min:\s*48px/);
+  assert.match(layout, /Mobile-first method path/);
+  assert.match(layout, /max-width:\s*760px[\s\S]*stage-copy[\s\S]*opacity:\s*1/);
+  assert.match(plane, /padding-left:\s*34px/);
+  assert.match(subheader, /min-height:\s*52px/);
 });

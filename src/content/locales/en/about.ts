@@ -7,9 +7,9 @@ export const aboutData: AboutContent = {
 
   profile: {
     name: 'Daniele Moltisanti',
-    headline: 'Principal AI Engineer & AI Strategy Lead · Local AI & On-device LLMs',
+    headline: 'Principal AI Engineer & AI Strategy Lead · AI Systems & Product',
     subheadline: 'Data Scientist Manager at Sky Italia · Founder & Author at stAI tuned',
-    tagline: 'Bridging experimental AI research, enterprise scale, and privacy-first on-device compute.',
+    tagline: 'From problem framing and architecture to product, engineering and evidence.',
     location: 'Milan, Italy',
     locationStatus: 'Researching & building Local AI systems',
     affiliation: 'Sky Italia',
@@ -17,7 +17,7 @@ export const aboutData: AboutContent = {
     portraitPath: 'images/profile-photo.jpg',
     portraitAlt: 'Daniele Moltisanti portrait',
     leadParagraph:
-      'I am an AI technical leader, systems engineer, and writer based in Milan. Over the last decade, I have operated at the intersection of deep engineering and executive AI strategy: turning cutting-edge machine learning into governed enterprise platforms reaching millions of users, while independently researching how far open-weight AI can run on devices we actually control.',
+      'I am an AI technical leader and hands-on systems builder based in Milan. My perspective comes from three complementary environments: computer-engineering and research foundations, enterprise AI work at Sky Italia where architecture must coexist with product, governance, cost and organizational constraints, and independent projects where I own the full path from problem framing to implementation, UX and evaluation.',
     badges: [
       'Enterprise AI Leadership',
       'Local & On-Device AI',
@@ -62,41 +62,41 @@ export const aboutData: AboutContent = {
 
   now: {
     kicker: 'CURRENT FOCUS · NOW',
-    title: 'What I’m Building & Researching Now',
-    subtitle: 'A real-time snapshot of my active technical investigations, benchmark targets, and writing.',
-    lastUpdated: 'August 2026',
+    title: 'What I’m Building & Testing Now',
+    subtitle: 'The current questions pushing my end-to-end AI systems practice forward.',
+    lastUpdated: 'September 2026',
     items: [
       {
-        id: 'mlx-inference',
-        tag: 'Apple Silicon MLX',
-        title: 'Unified Memory Latency & Quantization Limits',
+        id: 'decisio',
+        tag: 'Stateful local decisions',
+        title: 'Decisio · Reuse model context without hiding decision quality',
         description:
-          'Benchmarking 70B parameter models on M-series unified memory to determine the exact boundary where quantized open-weight inference matches frontier API responsiveness under sustained load.',
-        status: 'Active Benchmarking',
+          'Rerunning the remediated direct-choice path on the pinned reference identity after preserving failed semantic-scorer gates, fresh-path equivalence and state-reuse evidence as separate claims.',
+        status: 'Active',
       },
       {
-        id: 'android-npu',
-        tag: 'On-Device AI',
-        title: 'Android NPU Acceleration & Cross-App IPC',
+        id: 'experiments',
+        tag: 'Evaluation systems',
+        title: 'Experiments · From one-off benchmarks to reusable evidence',
         description:
-          'Prototyping system-level AIDL inference services on Android to enable lightweight local models to serve multiple applications without redundant RAM consumption.',
-        status: 'Prototype Stage',
+          'Consolidating bounded-decision, model-capability and RedactGuard end-to-end evaluation under shared reproducible contracts, while preparing VLM and image-generation tracks.',
+        status: 'Active',
       },
       {
-        id: 'mcp-protocols',
-        tag: 'Agentic Architectures',
-        title: 'Model Context Protocol (MCP) in Local Environments',
+        id: 'korgis-multimodal',
+        tag: 'Local AI runtime',
+        title: 'Korgis · Multimodal local execution with explicit evidence boundaries',
         description:
-          'Designing composable agent workflows where local models interact securely with private file systems and developer databases via standardized protocols without data leakage.',
-        status: 'Architectural Design',
+          'Extending the runtime control plane across text, VLM, transcription and image generation while keeping hardware, memory, latency and support claims tied to exact tested identities.',
+        status: 'Active',
       },
       {
-        id: 'stai-tuned-series',
-        tag: 'Technical Writing',
-        title: 'Zero-Hype Guide to Inference Economics & TCO',
+        id: 'harnex-shared-runtime',
+        tag: 'Android systems',
+        title: 'Harnex · Shared on-device AI across applications',
         description:
-          'Authoring a comprehensive comparative guide on stAI tuned detailing when self-hosted and on-device inference becomes more cost-effective than frontier API calls.',
-        status: 'Publishing Soon',
+          'Hardening the Consumer SDK, authorization and cross-app lifecycle while keeping broader physical-device memory, thermal and release-readiness claims explicitly evidence-gated.',
+        status: 'Active · pre-stable',
       },
     ],
   },
@@ -152,10 +152,10 @@ export const aboutData: AboutContent = {
         timeframe: 'Independent Applied AI Stack · 2024 - Present',
         paragraphs: [
           'Over the last two years, I noticed an unexamined assumption taking hold across the industry: the belief that all AI workloads must live in centralized hyperscaler clouds.',
-          'I began building an independent, open-weight Local AI stack across macOS and Android (Korgis / Local LLM Server, Android Local LLM Harness, Local ASR, RedactGuard, ClosedRoom, Aura Finance, and Traffic Monitoring). The goal is not to eliminate the cloud, but to prove where private, on-device compute creates genuine privacy and operational superiority.',
+          'I began building an independent AI systems stack across macOS and Android: Korgis and Harnex for reusable execution, Decisio for stateful bounded decisions, RedactGuard, ClosedRoom and Aura Finance as product proving grounds, and Experiments as the evidence layer. Local and on-device AI are a major area of depth, but the goal is broader: understand which architecture turns a workload into a useful, controllable and measurable product.',
         ],
         pullQuote: 'Local AI first ≠ Local AI only. Find the boundary with evidence, not ideology.',
-        keyTakeaway: 'Proving that open-weight local execution is a viable architectural tier for modern products.',
+        keyTakeaway: 'Learning the full product-to-runtime-to-evidence loop by owning complete AI systems independently.',
         tags: ['Korgis (Local LLM Server)', 'Android Local LLM Harness', 'Apple Silicon MLX', 'llama.cpp', 'Private AI'],
       },
     ],
@@ -273,7 +273,7 @@ export const aboutData: AboutContent = {
         location: 'Milan, Italy',
         badge: 'Enterprise Leadership',
         description:
-          'Directing enterprise AI and data science initiatives across subscriber platforms, content intelligence, and generative AI platforms serving millions of active users.',
+          'Leading AI and data science initiatives in an enterprise environment where technical architecture must coexist with product goals, governance, cost, reliability and cross-functional decision making.',
         responsibilities: [
           'Architecting and scaling production AI systems with high availability SLAs, latency budgets, and rigorous governance.',
           'Defining the company-wide Generative AI roadmap, model evaluation standards, and LLM adoption strategies.',

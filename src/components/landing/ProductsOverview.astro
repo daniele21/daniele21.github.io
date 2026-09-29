@@ -1,0 +1,359 @@
+---
+import { portfolioNarrative } from '../../content/portfolio';
+
+const { products } = portfolioNarrative;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
+const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
+
+const visuals: Record<string, { path: string; alt: string; tone: string }> = {
+  redactguard: {
+    path: 'images/redact-guard/redactguard-doc-preview.jpg',
+    alt: 'RedactGuard review interface',
+    tone: 'blue',
+  },
+  aura: {
+    path: 'images/aura-finance/aura-categories-preview.png',
+    alt: 'Aura Finance mobile interface',
+    tone: 'green',
+  },
+  closedroom: {
+    path: 'images/closedroom/recording-preview.jpg',
+    alt: 'ClosedRoom meeting workspace',
+    tone: 'purple',
+  },
+};
+---
+
+<div class="products-overview">
+  <div class="product-principle">
+    <span>PRODUCT OWNERSHIP</span>
+    <strong>Infrastructure only matters when a real workflow can depend on it.</strong>
+    <p>Each product forces architecture, UX, failure behavior and user-control decisions that a benchmark or isolated model demo can hide.</p>
+  </div>
+
+  <div class="product-grid">
+    {products.map((product) => {
+      const visual = visuals[product.id];
+      return (
+        <article class:list={['product-card', `product-card--${visual?.tone ?? 'blue'}`]}>
+          <a class="product-card__main" href={resolveHref(product.href)}>
+            <div class="product-card__head">
+              <div>
+                <span class="product-status">{product.status}</span>
+                <h3>{product.name}</h3>
+              </div>
+              <span aria-hidden="true">↗</span>
+            </div>
+
+            <p class="product-question">{product.question}</p>
+
+            {visual ? (
+              <div class="product-visual">
+                <img src={asset(visual.path)} alt={visual.alt} loading="lazy" />
+              </div>
+            ) : (
+              <div class="visual-placeholder">
+                <strong>VISUAL PLACEHOLDER</strong>
+                <p>{product.visualPlaceholder}</p>
+              </div>
+            )}
+
+            <div class="product-system-line">
+              <span>BUILT ACROSS</span>
+              <strong>{product.systemLinks.join(' · ')}</strong>
+            </div>
+
+            <div class="product-so-what">
+              <span>SO WHAT</span>
+              <p>{product.soWhat}</p>
+            </div>
+          </a>
+
+          {product.evidenceLink && (
+            <a class="evidence-link" href={resolveHref(product.evidenceLink)}>
+              Evidence: {product.evidenceLabel} <span aria-hidden="true">→</span>
+            </a>
+          )}
+        </article>
+      );
+    })}
+  </div>
+
+  <div class="product-capabilities">
+    <span>Problem framing</span>
+    <span>UX / UI</span>
+    <span>Domain modeling</span>
+    <span>AI integration</span>
+    <span>Failure behavior</span>
+    <span>Privacy boundaries</span>
+  </div>
+</div>
+
+<style>
+  .products-overview { display: flex; flex-direction: column; gap: 18px; }
+
+  .product-principle {
+    display: grid;
+    grid-template-columns: minmax(140px, .35fr) minmax(260px, .9fr) minmax(280px, 1fr);
+    gap: 18px;
+    align-items: start;
+    padding: 18px 20px;
+    border: 1px solid var(--border-medium);
+    border-radius: 16px;
+    background: var(--surface-card);
+  }
+
+  .product-principle > span {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 820;
+    letter-spacing: .08em;
+  }
+
+  .product-principle strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .product-principle p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .product-card {
+    --product-accent: var(--accent-blue);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--product-accent) 24%, var(--border-medium));
+    border-radius: 18px;
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .product-card--green { --product-accent: #059669; }
+  .product-card--purple { --product-accent: #7c3aed; }
+
+  .product-card__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    padding: 20px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .product-card__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    color: var(--product-accent);
+  }
+
+  .product-status {
+    display: inline-flex;
+    margin-bottom: 7px;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    font-weight: 720;
+  }
+
+  .product-card h3 {
+    margin: 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    letter-spacing: -.04em;
+  }
+
+  .product-question {
+    min-height: 64px;
+    margin: 0;
+    color: var(--ink);
+    font-size: .9rem;
+    font-weight: 620;
+    line-height: 1.5;
+  }
+
+  .product-visual {
+    height: 180px;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: var(--surface-subtle);
+  }
+
+  .product-visual img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform var(--duration-base) ease;
+  }
+
+  .product-card:hover .product-visual img { transform: scale(1.025); }
+
+  .visual-placeholder {
+    min-height: 180px;
+    display: grid;
+    place-content: center;
+    gap: 8px;
+    padding: 18px;
+    border: 1px dashed color-mix(in srgb, var(--product-accent) 45%, var(--border-medium));
+    border-radius: 12px;
+    background: var(--surface-subtle);
+    text-align: center;
+  }
+
+  .visual-placeholder strong {
+    color: var(--product-accent);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: .08em;
+  }
+
+  .visual-placeholder p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .product-system-line {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--surface-subtle);
+  }
+
+  .product-system-line span,
+  .product-so-what > span {
+    color: var(--product-accent);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 850;
+    letter-spacing: .08em;
+  }
+
+  .product-system-line strong {
+    color: var(--ink-display);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .product-so-what {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .product-so-what p {
+    margin: 6px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .evidence-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--product-accent) 5%, var(--surface-card));
+    color: var(--product-accent);
+    font-size: 0.875rem;
+    font-weight: 760;
+    text-decoration: none;
+  }
+
+  .product-capabilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .product-capabilities span {
+    padding: 6px 10px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    font-weight: 670;
+  }
+
+  @media (max-width: 980px) {
+    .product-grid { grid-template-columns: 1fr; }
+    .product-principle { grid-template-columns: 1fr; gap: 8px; }
+    .product-question { min-height: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-visual img { transition: none; }
+  }
+
+  /* MOBILE-FIRST PRODUCTS */
+  @media (max-width: 600px) {
+    .products-overview { gap: 12px; }
+
+    .product-principle {
+      gap: 7px;
+      padding: 14px;
+      border-radius: 14px;
+    }
+
+    .product-grid { gap: 10px; }
+
+    .product-card { border-radius: 15px; }
+
+    .product-card__main {
+      gap: 11px;
+      padding: 16px;
+    }
+
+    .product-question { min-height: 0; }
+
+    .product-visual,
+    .visual-placeholder {
+      height: 148px;
+      min-height: 148px;
+    }
+
+    .evidence-link {
+      min-height: 50px;
+      padding: 11px 16px;
+    }
+
+    .product-capabilities {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .product-capabilities::-webkit-scrollbar { display: none; }
+    .product-capabilities span { flex: 0 0 auto; }
+  }
+
+</style>

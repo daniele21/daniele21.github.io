@@ -29,6 +29,8 @@ const expectedRoutes = [
   'closedroom/index.html',
   'korgis/index.html',
   'harnex/index.html',
+  'decisio/index.html',
+  'experiments/index.html',
   'local-asr-server/index.html',
   'traffic-monitoring/index.html',
   'traffic-monitoring-android/index.html',
@@ -78,8 +80,8 @@ if (methodStageCount !== 4) {
 }
 
 const planeSectionCount = (landingHtml.match(/class="[^"]*\bplane-section\b[^"]*"/g) || []).length;
-if (planeSectionCount !== 3) {
-  console.error(`❌ Landing has ${planeSectionCount} shared plane sections (expected 3 plus the dedicated Evidence stage).`);
+if (planeSectionCount !== 4) {
+  console.error(`❌ Landing has ${planeSectionCount} shared plane sections (expected 4: Decide, Build, Test and Measure).`);
   errors++;
 }
 
@@ -93,20 +95,13 @@ const planeConsumers = [
   'src/components/landing/DecisionStage.astro',
   'src/components/landing/BuildStage.astro',
   'src/components/landing/TestStage.astro',
+  'src/components/landing/EvidenceStage.astro',
 ];
 
 for (const sourcePath of planeConsumers) {
   const source = fs.readFileSync(path.resolve(sourcePath), 'utf-8');
   if (!source.includes("import PlaneTemplate from './PlaneTemplate.astro'") || !source.includes('<PlaneTemplate')) {
     console.error(`❌ ${sourcePath} does not use the shared centered plane template.`);
-    errors++;
-  }
-}
-
-const evidenceStageSource = fs.readFileSync(path.resolve('src/components/landing/EvidenceStage.astro'), 'utf-8');
-for (const fragment of ['method-stage evidence-stage', '<StageRail number={4}', '<EvidenceMatrix />']) {
-  if (!evidenceStageSource.includes(fragment)) {
-    console.error(`❌ EvidenceStage is missing its dedicated Measure-stage contract fragment: ${fragment}`);
     errors++;
   }
 }
@@ -126,12 +121,13 @@ for (const fragment of ['plane-card__header', 'plane-card__body', 'plane-card__f
 }
 
 for (const [sourcePath, fragment] of [
-  ['src/components/landing/TestStage.astro', '<PlaneCardGrid'],
-  ['src/components/landing/ProjectProofCard.astro', '<PlaneCard'],
+  ['src/components/landing/BuildStage.astro', '<SystemsOverview'],
+  ['src/components/landing/TestStage.astro', '<ProductsOverview'],
+  ['src/components/landing/EvidenceStage.astro', '<ExperimentsOverview'],
 ]) {
   const source = fs.readFileSync(path.resolve(sourcePath), 'utf-8');
   if (!source.includes(fragment)) {
-    console.error(`❌ ${sourcePath} is missing shared primitive usage: ${fragment}`);
+    console.error(`❌ ${sourcePath} is missing its canonical stage overview: ${fragment}`);
     errors++;
   }
 }

@@ -8,6 +8,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import ProjectHero from '../components/project/ProjectHero.astro';
 import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectImpactStrip from '../components/project/ProjectImpactStrip.astro';
+import { portfolioNarrative } from '../content/portfolio';
 import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
 import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
@@ -47,6 +49,7 @@ const projectSchema = {
   },
   codeRepository: data.cta.primaryAction.href,
 };
+const portfolioProject = portfolioNarrative.systems.find((item) => item.id === 'harnex')!;
 ---
 
 <BaseLayout
@@ -92,6 +95,14 @@ const projectSchema = {
     <ProjectProof
       statement={data.proof.statement}
       detail={data.proof.detail}
+    />
+
+    <ProjectImpactStrip
+      mission={portfolioProject.question}
+      role="Independent end-to-end ownership across Android architecture, Binder/SDK contracts, native runtime integration, product UX, authorization, lifecycle testing and release evidence."
+      evidence={portfolioProject.proof.slice(0, 3).join(' · ')}
+      soWhat={portfolioProject.soWhat}
+      source="Portfolio narrative verified against the current repository state on 2026-09-29."
     />
 
     <ProjectSection

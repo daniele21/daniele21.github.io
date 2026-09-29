@@ -1,0 +1,452 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectHero from '../components/project/ProjectHero.astro';
+import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectImpactStrip from '../components/project/ProjectImpactStrip.astro';
+import ProjectSection from '../components/project/ProjectSection.astro';
+import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
+import ProjectRelations from '../components/project/ProjectRelations.astro';
+import { portfolioNarrative } from '../content/portfolio';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+const data = portfolioNarrative.systems.find((item) => item.id === 'decisio')!;
+const repoUrl = data.repo;
+
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Architecture', href: '#architecture' },
+  { label: 'Runtime', href: '#runtime' },
+  { label: 'Evidence', href: '#evidence' },
+  { label: 'Status', href: '#status' },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Decisio',
+  applicationCategory: 'DeveloperApplication',
+  description: data.summary,
+  author: {
+    '@type': 'Person',
+    name: 'Daniele Moltisanti',
+    url: 'https://daniele21.github.io/',
+  },
+  codeRepository: repoUrl,
+};
+---
+
+<BaseLayout
+  title="Decisio — Stateful local-LLM decision runtime"
+  description="Stateful local-LLM decisions with reusable model context: keep stable task context warm, send only changing state, and return bounded typed actions."
+  jsonLd={schema}
+>
+  <ProductSubHeader
+    title="Decisio"
+    badge="Active · experimental"
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: repoUrl }}
+  />
+
+  <div id="top" data-project-page data-project-archetype="infrastructure">
+    <ProjectHero
+      eyebrow="SYSTEM · STATEFUL LOCAL DECISIONS"
+      title="Decisio"
+      lede={data.summary}
+      status={data.status}
+      meta={['llama.cpp', 'GGUF', 'Reusable model state', 'Typed actions']}
+      actions={[
+        { label: 'See how it works ↓', href: '#runtime' },
+        { label: 'GitHub ↗', href: repoUrl, variant: 'secondary' },
+      ]}
+      visualLabel="Decisio stateful decision runtime concept"
+    >
+      <div class="decisio-hero-visual" aria-label="Stable context reused across changing state">
+        <div class="stable-box">
+          <span>STABLE</span>
+          <strong>Task + policy + decision contract</strong>
+          <small>prefill once</small>
+        </div>
+        <div class="hero-arrow">→</div>
+        <div class="state-box">
+          <span>REUSABLE MODEL STATE</span>
+          <strong>prefix-safe snapshot / restore</strong>
+        </div>
+        <div class="fanout">
+          <div><span>STATE 1</span><strong>typed action</strong></div>
+          <div><span>STATE 2</span><strong>typed action</strong></div>
+          <div><span>STATE 3</span><strong>typed action</strong></div>
+        </div>
+      </div>
+    </ProjectHero>
+
+    <ProjectProof
+      statement="Repeated bounded AI decisions can treat stable model context as a reusable runtime resource instead of recomputing the same prefix for every changing state."
+      detail="The product claim is deliberately narrower than generic LLM acceleration: deterministic constraints first, prefix-safe reuse, direct typed choice and exact comparison against a fresh path."
+    />
+
+    <ProjectImpactStrip
+      mission={data.question}
+      role="Independent end-to-end ownership across product thesis, prompt/compiler boundary, llama.cpp runtime integration, cache correctness, benchmark design, API surface and documentation."
+      evidence={data.proof.slice(0, 3).join(' · ')}
+      soWhat={data.soWhat}
+      source={data.sourceLabel}
+    />
+
+    <ProjectSection
+      id="architecture"
+      eyebrow="WHY IT EXISTS"
+      title="Repeated bounded decisions do not need to pay the full stateless cost every time."
+      description="Decisio explores a narrower problem than chat: the application asks the same kind of bounded question repeatedly while only the world state changes."
+      tone="canvas"
+      width="wide"
+    >
+      <div class="why-grid">
+        <article>
+          <span>01 · REPEATED PREFILL</span>
+          <h3>Stable policy is recomputed in a normal stateless loop.</h3>
+          <p>The task, policy and decision semantics may stay identical while only the current state changes. Reprocessing that stable prefix is avoidable work.</p>
+        </article>
+        <article>
+          <span>02 · BOUNDED OUTPUT</span>
+          <h3>A typed action does not require free-form answer generation.</h3>
+          <p>For a small valid candidate set, deterministic constraints can run first and the model can score the remaining options directly.</p>
+        </article>
+      </div>
+    </ProjectSection>
+
+    <ProjectSection
+      id="runtime"
+      eyebrow="RUNTIME BOUNDARY"
+      title="Keep the stable context warm. Send only what changed."
+      description="The promoted direction is one-pass direct choice with deterministic candidate ordering, prefix-safe state reuse and a fresh-path oracle for correctness."
+      tone="subtle"
+      width="wide"
+    >
+      <div class="runtime-flow">
+        <div class="flow-step">
+          <span>01</span>
+          <strong>Stable context</strong>
+          <p>Task, policy, sensor meanings and decision priorities.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <span>02</span>
+          <strong>Reusable state</strong>
+          <p>Exact single-sequence llama.cpp snapshot / restore under explicit rules.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <span>03</span>
+          <strong>Current state</strong>
+          <p>Only changing application state plus already-filtered valid candidates.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <span>04</span>
+          <strong>Typed action</strong>
+          <p>Direct option-logit readout with zero generated answer tokens.</p>
+        </div>
+      </div>
+
+      <div class="visual-placeholder">
+        <strong>VISUAL PLACEHOLDER · LIVE DEMO</strong>
+        <p>
+          Replace this block with the current Snake demo animation from the Decisio repository
+          (<code>brand/assets/decisio.gif</code>) once copied into the site with the exact commit/model identity in the caption.
+          The visual should show stable context reuse, changing board state, valid actions, selected action and runtime metrics.
+        </p>
+      </div>
+    </ProjectSection>
+
+    <ProjectSection
+      id="evidence"
+      eyebrow="EVIDENCE & FAILED GATES"
+      title="Reuse works mechanically. Promotion still depends on decision quality."
+      description="The repository deliberately keeps failed gates visible: execution optimization is not treated as proof that the decision policy is good enough."
+      tone="canvas"
+      width="wide"
+    >
+      <div class="evidence-grid">
+        <article class="evidence-card evidence-card--good">
+          <span>MECHANICS</span>
+          <strong>Shared-state reuse demonstrated</strong>
+          <p>The repeated-state gate recorded 8 misses, 40 hits and roughly 8.9% physical versus logical token evaluation while preserving cache behavior.</p>
+        </article>
+        <article class="evidence-card evidence-card--warn">
+          <span>SEMANTIC-V2</span>
+          <strong>Promotion gate failed</strong>
+          <p>Semantic-v2 quality underperformed the generated-JSON baseline and the precommitted global p95 target was not met. It remains experimental.</p>
+        </article>
+        <article class="evidence-card evidence-card--warn">
+          <span>DIRECT V1</span>
+          <strong>Fresh equivalence passed; quality did not</strong>
+          <p>Stateful and fresh execution matched exactly, but Snake screening quality was not sufficient to freeze a holdout.</p>
+        </article>
+        <article class="evidence-card">
+          <span>NEXT</span>
+          <strong>Direct-v2 rerun pending</strong>
+          <p>Canonical candidate ordering and reduced snapshot overhead are implemented; the unchanged pinned-2B screening still needs to be rerun.</p>
+        </article>
+      </div>
+
+      <ProjectEvidenceNote
+        title="Optimization evidence is not decision-quality evidence."
+        body="Decisio keeps cache correctness, physical-work reduction, latency and decision quality as separate claims. A faster stateful path is useful only when it preserves the fresh decision contract and the underlying policy is good enough for the workload."
+        evidenced={[
+          'Reference llama.cpp GGUF runtime and exact provenance',
+          'Prefix-safe reusable state and bounded cache',
+          'Fresh-path equivalence checks',
+          'Failed promotion gates retained in the public evidence record',
+        ]}
+        missing={[
+          'Accepted direct-v2 screening on the pinned 2B identity',
+          'Frozen holdout evidence for the remediated direct policy',
+          'Answerability / abstention contract',
+          'Calibration artifacts',
+        ]}
+      />
+    </ProjectSection>
+
+    <ProjectSection
+      id="status"
+      eyebrow="CURRENT DIRECTION"
+      title="Stateful direct choice is the promoted product hypothesis."
+      description="Deterministic constraints first, canonical candidate ordering, one direct option readout, stable-context reuse and exact fresh equivalence."
+      tone="subtle"
+      width="wide"
+    >
+      <ProjectDecisionBand
+        title="Keep the optimization only if the decision contract survives it."
+        body="The next step is not adding more features. It is rerunning the unchanged Snake screening on the pinned reference identity and deciding from that evidence whether the remediated direct path deserves a holdout."
+        signals={[
+          'Reuse remains prefix-safe and observable',
+          'Failed semantic-v2 promotion stays failed',
+          'Direct-v2 quality rerun is the immediate evidence gate',
+        ]}
+      />
+    </ProjectSection>
+
+    <ProjectRelations
+      items={[
+        {
+          stage: 'SYSTEM · DECISION RUNTIME',
+          title: 'Decisio',
+          current: true,
+          note: 'Stateful bounded local decisions',
+        },
+        {
+          stage: 'MEASURE · DECISION ARCHITECTURES',
+          title: 'Jev vs LLM',
+          href: '/experiments#jev-vs-llm',
+          note: 'Comparative decision-system evidence',
+        },
+        {
+          stage: 'SYSTEM · LOCAL RUNTIME',
+          title: 'Korgis',
+          href: '/korgis',
+          note: 'Broader reusable local AI runtime layer',
+        },
+      ]}
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .decisio-hero-visual {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) auto minmax(190px, 1fr);
+    grid-template-areas:
+      "stable arrow state"
+      "fanout fanout fanout";
+    gap: 18px;
+    align-items: center;
+    padding: clamp(24px, 4vw, 48px);
+    border: 1px solid var(--border-medium);
+    border-radius: 22px;
+    background:
+      radial-gradient(circle at 20% 20%, color-mix(in srgb, #7c3aed 9%, transparent), transparent 34%),
+      radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--accent-blue) 10%, transparent), transparent 36%),
+      var(--surface-subtle);
+  }
+
+  .stable-box, .state-box {
+    min-height: 128px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+    padding: 20px;
+    border: 1px solid var(--border-medium);
+    border-radius: 16px;
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .stable-box { grid-area: stable; }
+  .state-box { grid-area: state; }
+
+  .stable-box span, .state-box span, .fanout span,
+  .why-grid span, .flow-step span, .evidence-card span {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 850;
+    letter-spacing: .07em;
+  }
+
+  .stable-box strong, .state-box strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1rem;
+  }
+
+  .stable-box small { color: var(--ink-subtle); font-size: 0.875rem; }
+
+  .hero-arrow {
+    grid-area: arrow;
+    color: var(--accent-blue);
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+
+  .fanout {
+    grid-area: fanout;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .fanout > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: var(--surface-card);
+  }
+
+  .fanout strong {
+    color: var(--ink-display);
+    font-size: 0.875rem;
+  }
+
+  .why-grid,
+  .evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .why-grid article,
+  .evidence-card {
+    padding: 22px;
+    border: 1px solid var(--border-medium);
+    border-radius: 16px;
+    background: var(--surface-card);
+  }
+
+  .why-grid h3,
+  .evidence-card strong {
+    display: block;
+    margin: 8px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+
+  .why-grid p,
+  .evidence-card p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .runtime-flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .flow-step {
+    min-width: 0;
+    padding: 18px;
+    border: 1px solid var(--border-medium);
+    border-radius: 14px;
+    background: var(--surface-card);
+  }
+
+  .flow-step strong {
+    display: block;
+    margin-top: 8px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: .9rem;
+  }
+
+  .flow-step p {
+    margin: 6px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.48;
+  }
+
+  .flow-arrow {
+    display: grid;
+    place-items: center;
+    color: var(--accent-blue);
+    font-weight: 850;
+  }
+
+  .visual-placeholder {
+    margin-top: 18px;
+    padding: 22px;
+    border: 1.5px dashed color-mix(in srgb, var(--accent-blue) 48%, var(--border-medium));
+    border-radius: 16px;
+    background: var(--surface-subtle);
+  }
+
+  .visual-placeholder > strong {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: .08em;
+  }
+
+  .visual-placeholder p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .visual-placeholder code {
+    color: var(--ink-display);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+
+  .evidence-card--good { border-top: 3px solid #16a34a; }
+  .evidence-card--warn { border-top: 3px solid #d97706; }
+
+  @media (max-width: 900px) {
+    .decisio-hero-visual {
+      grid-template-columns: 1fr;
+      grid-template-areas: "stable" "arrow" "state" "fanout";
+    }
+    .hero-arrow { transform: rotate(90deg); justify-self: center; }
+    .fanout { grid-template-columns: 1fr; }
+    .runtime-flow { grid-template-columns: 1fr; }
+    .flow-arrow { transform: rotate(90deg); min-height: 22px; }
+  }
+
+  @media (max-width: 700px) {
+    .why-grid, .evidence-grid { grid-template-columns: 1fr; }
+  }
+</style>

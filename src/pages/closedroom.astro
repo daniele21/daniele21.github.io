@@ -7,6 +7,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import ProjectHero from '../components/project/ProjectHero.astro';
 import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectImpactStrip from '../components/project/ProjectImpactStrip.astro';
+import { portfolioNarrative } from '../content/portfolio';
 import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
 import ProjectRelations from '../components/project/ProjectRelations.astro';
@@ -38,6 +40,7 @@ const closedRoomSchema = {
   },
   codeRepository: data.cta.primaryAction.href,
 };
+const portfolioProject = portfolioNarrative.products.find((item) => item.id === 'closedroom')!;
 ---
 
 <BaseLayout
@@ -83,6 +86,14 @@ const closedRoomSchema = {
     </ProjectHero>
 
     <ProjectProof statement={data.proof.statement} detail={data.proof.detail} />
+
+    <ProjectImpactStrip
+      mission={portfolioProject.question}
+      role="Independent end-to-end ownership across product concept, macOS capture, ASR/diarization, local LLM orchestration, persistence, project-memory UX, failure handling and packaging."
+      evidence={'Working local-first macOS application spanning recording, local transcription, speaker enrichment, structured analysis and persistent cross-meeting project memory.'}
+      soWhat={portfolioProject.soWhat}
+      source="Portfolio narrative verified against the current repository state on 2026-09-29."
+    />
 
     <section class="section section-alt" id="why">
       <div class="shell">

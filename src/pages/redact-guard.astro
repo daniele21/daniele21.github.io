@@ -8,6 +8,8 @@ import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import ProjectVariantSwitch from '../components/project/ProjectVariantSwitch.astro';
 import ProjectHero from '../components/project/ProjectHero.astro';
 import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectImpactStrip from '../components/project/ProjectImpactStrip.astro';
+import { portfolioNarrative } from '../content/portfolio';
 import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
 import ProjectRelations from '../components/project/ProjectRelations.astro';
@@ -60,6 +62,7 @@ const redactGuardSchema = {
   },
   "codeRepository": desktopRepo
 };
+const portfolioProject = portfolioNarrative.products.find((item) => item.id === 'redactguard')!;
 ---
 
 <BaseLayout
@@ -114,6 +117,14 @@ const redactGuardSchema = {
     <ProjectProof
       statement="A sensitive-document product can keep privacy policy and human decisions in the application while local AI execution remains a reusable infrastructure boundary."
       detail="RedactGuard owns the document workflow. Korgis owns reusable local execution. The model proposes findings, but the user still decides what is actually removed."
+    />
+
+    <ProjectImpactStrip
+      mission={portfolioProject.question}
+      role="Independent end-to-end ownership across product framing, configurable privacy policy, document pipeline, local-AI integration, review UX, deterministic redaction and evaluation design."
+      evidence={'Working desktop product plus a dedicated Experiments benchmark that separates model quality from end-to-end privacy-system effectiveness.'}
+      soWhat={portfolioProject.soWhat}
+      source="Portfolio narrative verified against the current repository state on 2026-09-29."
     />
 
     <RedactGuardProblem data={redactGuardData} />
@@ -174,9 +185,9 @@ const redactGuardSchema = {
         },
         {
           stage: 'MEASURE · EVIDENCE',
-          title: 'Performance Lab',
-          href: '/performance-lab',
-          note: 'Runtime viability on real hardware',
+          title: 'Experiments',
+          href: '/experiments#redactguard-local-anonymization',
+          note: 'Model + end-to-end privacy evaluation',
         },
       ]}
     />

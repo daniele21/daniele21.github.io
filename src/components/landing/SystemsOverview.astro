@@ -1,0 +1,306 @@
+---
+import { portfolioNarrative } from '../../content/portfolio';
+
+const { systems } = portfolioNarrative;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
+---
+
+<div class="systems-overview">
+  <div class="systems-principle">
+    <span class="principle-kicker">SYSTEMS THINKING</span>
+    <strong>I don't just call models. I build the boundaries products need around them.</strong>
+    <p>Runtime ownership, lifecycle, policy, state reuse, APIs and evidence are first-class parts of the system.</p>
+  </div>
+
+  <div class="systems-grid">
+    {systems.map((system) => (
+      <a class="system-card" href={resolveHref(system.href)}>
+        <div class="system-card__top">
+          <span class="system-card__status">{system.status}</span>
+          <span aria-hidden="true">↗</span>
+        </div>
+        <p class="system-card__role">{system.role}</p>
+        <h3>{system.name}</h3>
+        <p class="system-card__question">{system.question}</p>
+
+        {system.id === 'decisio' ? (
+          <div class="decisio-mini" aria-label="Decisio state reuse concept">
+            <span>Stable context</span>
+            <span class="mini-arrow">→</span>
+            <span>Changing state</span>
+            <span class="mini-arrow">→</span>
+            <span>Typed action</span>
+          </div>
+        ) : (
+          <div class="system-card__boundary" aria-hidden="true">
+            <span>{system.id === 'korgis' ? 'APPLICATION' : 'ANDROID APP'}</span>
+            <b>↓</b>
+            <strong>{system.name.toUpperCase()}</strong>
+            <b>↓</b>
+            <span>{system.id === 'korgis' ? 'LOCAL RUNTIMES' : 'LOCAL MODEL'}</span>
+          </div>
+        )}
+
+        <div class="system-card__takeaway">
+          <span>SO WHAT</span>
+          <p>{system.soWhat}</p>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <div class="systems-capabilities" aria-label="Engineering capabilities demonstrated">
+    <span>Inference infrastructure</span>
+    <span>Runtime lifecycle</span>
+    <span>APIs & contracts</span>
+    <span>Mobile systems</span>
+    <span>Resource policy</span>
+    <span>Evaluation hooks</span>
+  </div>
+</div>
+
+<style>
+  .systems-overview { display: flex; flex-direction: column; gap: 18px; }
+
+  .systems-principle {
+    display: grid;
+    grid-template-columns: minmax(130px, .35fr) minmax(260px, .9fr) minmax(280px, 1fr);
+    gap: 18px;
+    align-items: start;
+    padding: 18px 20px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-medium));
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--surface-blue-subtle) 28%, var(--surface-card));
+  }
+
+  .principle-kicker {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 820;
+    letter-spacing: .08em;
+  }
+
+  .systems-principle strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .systems-principle p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .systems-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .system-card {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid var(--border-medium);
+    border-radius: 18px;
+    background: var(--surface-card);
+    color: inherit;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  }
+
+  .system-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent-blue) 42%, var(--border-medium));
+    box-shadow: var(--shadow-md);
+  }
+
+  .system-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--accent-blue);
+    font-size: 0.875rem;
+    font-weight: 760;
+  }
+
+  .system-card__status {
+    padding: 4px 7px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-subtle);
+    color: var(--ink-muted);
+  }
+
+  .system-card__role {
+    margin: 2px 0 -2px;
+    color: var(--accent-blue-dark);
+    font-size: 0.875rem;
+    font-weight: 800;
+    letter-spacing: .055em;
+    text-transform: uppercase;
+  }
+
+  .system-card h3 {
+    margin: 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 2vw, 1.9rem);
+    letter-spacing: -.04em;
+  }
+
+  .system-card__question {
+    min-height: 64px;
+    margin: 0;
+    color: var(--ink);
+    font-size: .9rem;
+    line-height: 1.5;
+    font-weight: 620;
+  }
+
+  .system-card__boundary,
+  .decisio-mini {
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: var(--surface-subtle);
+    text-align: center;
+  }
+
+  .system-card__boundary {
+    flex-direction: column;
+  }
+
+  .system-card__boundary span,
+  .decisio-mini span {
+    color: var(--ink-muted);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 760;
+    letter-spacing: .04em;
+  }
+
+  .system-card__boundary strong {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+  }
+
+  .system-card__boundary b,
+  .mini-arrow { color: var(--accent-blue); }
+
+  .decisio-mini {
+    flex-wrap: wrap;
+  }
+
+  .decisio-mini span:nth-child(1) { color: #7c3aed; }
+  .decisio-mini span:nth-child(3) { color: #059669; }
+  .decisio-mini span:nth-child(5) { color: var(--accent-blue-dark); }
+
+  .system-card__takeaway {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .system-card__takeaway > span {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 850;
+    letter-spacing: .08em;
+  }
+
+  .system-card__takeaway p {
+    margin: 6px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .systems-capabilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .systems-capabilities span {
+    padding: 6px 10px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    font-weight: 670;
+  }
+
+  @media (max-width: 980px) {
+    .systems-grid { grid-template-columns: 1fr; }
+    .systems-principle { grid-template-columns: 1fr; gap: 8px; }
+    .system-card__question { min-height: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .system-card { transition: none; }
+    .system-card:hover { transform: none; }
+  }
+
+  /* MOBILE-FIRST SYSTEMS */
+  @media (max-width: 600px) {
+    .systems-overview { gap: 12px; }
+
+    .systems-principle {
+      gap: 7px;
+      padding: 14px;
+      border-radius: 14px;
+    }
+
+    .systems-principle p { line-height: 1.5; }
+
+    .systems-grid { gap: 10px; }
+
+    .system-card {
+      gap: 9px;
+      padding: 16px;
+      border-radius: 15px;
+    }
+
+    .system-card__question { min-height: 0; }
+
+    .system-card__boundary,
+    .decisio-mini {
+      min-height: 72px;
+      padding: 11px;
+    }
+
+    .system-card__takeaway {
+      padding-top: 10px;
+    }
+
+    .systems-capabilities {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .systems-capabilities::-webkit-scrollbar { display: none; }
+    .systems-capabilities span { flex: 0 0 auto; }
+  }
+
+</style>

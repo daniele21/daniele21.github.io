@@ -1,5 +1,4 @@
 ---
-/** Plane 01: decide where the workload should run. */
 import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
 import DecisionTable from './DecisionTable.astro';
@@ -13,8 +12,8 @@ const { decisionStage } = landingData;
   side="left"
   surface="subtle"
   kicker=""
-  title="Where should AI run?"
-  intro="Start with the workload, not the model. Privacy, latency, control, capability and scale tell you whether Local, Hybrid or Cloud makes sense."
+  title="Start from the problem, not the model."
+  intro="Translate product goals, data boundaries, latency, reliability, governance and scale into an architecture. Where AI should run—Local, Hybrid or Cloud—is one explicit decision, not the mission itself."
   handoff={decisionStage.handoff}
   nextLabel="BUILD"
   visualLabel="Local, Hybrid and Cloud workload decision matrix"

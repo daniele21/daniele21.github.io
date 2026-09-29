@@ -1,42 +1,69 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { aboutData } from '../content/locales/en/about';
+import { portfolioNarrative } from '../content/portfolio';
 import LinkedInIcon from '../components/icons/LinkedInIcon.astro';
 import GitHubIcon from '../components/icons/GitHubIcon.astro';
 
-const { profile, now, experience, cta } = aboutData;
+const { profile, now, story, experience, cta } = aboutData;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
 const selectedRoles = experience.roles.slice(0, 3);
-const currentFocus = now.items.slice(0, 3);
+const formativeChapters = [story.chapters[0], story.chapters[1], story.chapters[3]];
 
-const workAreas = [
+const environments = [
   {
-    title: 'GenAI systems',
-    body: 'LLM evaluation, retrieval, integration and production architecture - starting from the product problem rather than a model catalogue.',
+    label: '01 · FOUNDATIONS',
+    title: 'Computer engineering & research',
+    context: formativeChapters[0]?.timeframe,
+    description:
+      'Learn the fundamentals, separate assumptions from evidence, and treat reproducibility and real-world behavior as part of the technical result.',
+    signals: ['Fundamentals', 'Scientific method', 'Statistical thinking', 'Empirical verification'],
   },
   {
-    title: 'Local & on-device AI',
-    body: 'Understanding what can move from cloud APIs to infrastructure and devices we control, and where that trade-off actually creates value.',
+    label: '02 · ENTERPRISE',
+    title: 'AI at Sky Italia',
+    context: formativeChapters[1]?.timeframe,
+    description:
+      'Build inside real product and organizational constraints: reliability, governance, cost, stakeholders, delivery, maintainability and strategic trade-offs.',
+    signals: ['Production constraints', 'Strategy', 'Governance', 'Stakeholder alignment'],
   },
   {
-    title: 'AI engineering & strategy',
-    body: 'Connecting technical choices with privacy, performance, operating constraints and the decisions teams need to make.',
+    label: '03 · INDEPENDENT BUILDING',
+    title: 'Own the whole system',
+    context: formativeChapters[2]?.timeframe,
+    description:
+      'Take a problem from idea to product myself: frame it, design the architecture, build the runtime and UX, test failure modes, evaluate it and document what did not work.',
+    signals: ['Product ownership', 'Systems engineering', 'UX', 'Evaluation'],
   },
 ];
 
-const proofPoints = [
+const practice = [
+  ['FRAME', 'Start from the product problem and the decision that needs to improve.'],
+  ['ARCHITECT', 'Make data, runtime, Local / Hybrid / Cloud, reliability and failure boundaries explicit.'],
+  ['BUILD', 'Own enough of the stack to make the architecture real: APIs, runtimes, model integration, UI and tooling.'],
+  ['SHIP', 'Put the capability inside a workflow where users, lifecycle and failure behavior matter.'],
+  ['MEASURE', 'Use reproducible evidence to decide what survives, what changes and what should be abandoned.'],
+];
+
+const portfolioLinks = [
   {
-    title: 'Enterprise AI delivery',
-    body: `I lead and design AI initiatives in complex production environments at ${profile.affiliation}.`,
+    label: 'SYSTEMS',
+    title: 'Build the infrastructure around the model',
+    description: 'Korgis, Harnex and Decisio make runtime, policy, lifecycle and state explicit.',
+    href: '/#infrastructure',
   },
   {
-    title: 'Hands-on systems',
-    body: 'I build the infrastructure and proving grounds myself: local inference, Android runtimes, speech, product applications and measurement tooling.',
+    label: 'PRODUCTS',
+    title: 'Turn architecture into a usable workflow',
+    description: 'RedactGuard, Aura Finance and ClosedRoom expose product, UX and integration constraints.',
+    href: '/#applications',
   },
   {
-    title: 'Public technical work',
-    body: 'I use stAI tuned, GitHub and LinkedIn to document architecture trade-offs, experiments and what survives contact with real systems.',
+    label: 'EXPERIMENTS',
+    title: 'Prove what actually works',
+    description: 'Capability, decision-system and end-to-end evaluation feed evidence back into the next architecture decision.',
+    href: '/experiments',
   },
 ];
 
@@ -49,133 +76,197 @@ const jsonLd = {
   alumniOf: { '@type': 'EducationalOrganization', name: 'Politecnico di Milano' },
   url: 'https://daniele21.github.io/about',
   sameAs: [profile.socialLinks.linkedin, profile.socialLinks.github],
-  knowsAbout: ['Generative AI Systems', 'Local AI', 'On-device inference', 'AI Architecture', 'AI Strategy'],
+  knowsAbout: ['AI Systems', 'Generative AI', 'AI Product Engineering', 'Local AI', 'On-device inference', 'AI Evaluation', 'AI Architecture', 'AI Strategy'],
 };
 ---
 
 <BaseLayout
-  title="About Daniele Moltisanti - GenAI, Local AI & AI Architecture"
-  description="AI engineer and strategy lead working on GenAI systems, Local AI and evidence-led architecture decisions across Local, Hybrid and Cloud."
+  title="About Daniele Moltisanti — AI systems from idea to evidence"
+  description="Principal AI Engineer and AI Strategy Lead combining engineering and research foundations, enterprise AI experience at Sky Italia, and independent end-to-end AI systems building."
   jsonLd={jsonLd}
 >
   <div class="about-page">
-    <div class="about-shell">
-      <section class="about-hero" aria-labelledby="about-title">
+    <section class="about-hero">
+      <div class="shell hero-grid">
         <div class="hero-copy">
-          <h1 id="about-title">I work where GenAI architecture, product constraints and hands-on engineering meet.</h1>
-          <p class="hero-lead">
-            I'm <strong>{profile.name}</strong>, an AI engineer and strategy lead based in {profile.location}. I work on GenAI systems broadly, with a particular focus on Local and on-device AI - and on deciding what should run Local, Hybrid or Cloud.
-          </p>
-          <div class="hero-meta">
-            <span>{profile.headline}</span>
-            <span aria-hidden="true">·</span>
-            <span>{profile.affiliation}</span>
+          <p class="eyebrow">ABOUT · AI SYSTEMS END TO END</p>
+          <h1>I build AI systems from idea to evidence.</h1>
+          <p class="hero-lead">{profile.leadParagraph}</p>
+
+          <div class="hero-capabilities" aria-label="Core working range">
+            <span>Strategy</span>
+            <span>Product</span>
+            <span>Architecture</span>
+            <span>Engineering</span>
+            <span>Evaluation</span>
           </div>
+
           <div class="hero-actions">
-            <a
-              href={profile.socialLinks.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="primary-button"
-            >
+            <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" class="primary-button">
               Connect on LinkedIn <span aria-hidden="true">↗</span>
             </a>
-            <div class="hero-social-links" aria-label="Social profiles">
-              <a
-                href={profile.socialLinks.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="hero-social-btn"
-                aria-label="LinkedIn profile"
-                title="LinkedIn"
-              >
-                <LinkedInIcon size={18} />
-              </a>
-              <a
-                href={profile.socialLinks.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="hero-social-btn"
-                aria-label="GitHub profile"
-                title="GitHub"
-              >
-                <GitHubIcon size={18} />
-              </a>
-            </div>
+            <a href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer" class="secondary-button">
+              GitHub <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <div class="hero-meta">
+            <strong>{profile.headline}</strong>
+            <span>{profile.affiliation}</span>
+            <span>{profile.location}</span>
           </div>
         </div>
 
-        <div class="hero-portrait-wrap">
-          <img
-            src={asset(profile.portraitPath)}
-            alt={profile.portraitAlt}
-            width="300"
-            height="360"
-            loading="eager"
-            decoding="async"
-          />
+        <div class="portrait-column">
+          <div class="portrait-frame">
+            <img
+              src={asset(profile.portraitPath)}
+              alt={profile.portraitAlt}
+              width="420"
+              height="520"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+          <p>
+            Local and on-device AI are a major area of depth.
+            The broader practice is end-to-end AI systems and product engineering.
+          </p>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="about-section" aria-labelledby="work-title">
+    <section class="about-section environments-section">
+      <div class="shell">
         <header class="section-heading">
-          <h2 id="work-title">What I work on</h2>
-          <p>Three areas, one recurring question: what architecture makes this AI workload useful, controllable and sustainable?</p>
+          <div>
+            <p class="eyebrow">HOW THE PERSPECTIVE WAS BUILT</p>
+            <h2>Three environments shaped how I work.</h2>
+          </div>
+          <p>
+            They teach different things. Research gives rigor. Enterprise work gives scale and organizational constraints.
+            Independent building gives full ownership. My current way of working comes from combining all three.
+          </p>
         </header>
-        <div class="row-list">
-          {workAreas.map((area) => (
-            <article class="info-row">
-              <h3>{area.title}</h3>
-              <p>{area.body}</p>
+
+        <div class="environment-grid">
+          {environments.map((environment) => (
+            <article class="environment-card">
+              <span class="environment-label">{environment.label}</span>
+              <h3>{environment.title}</h3>
+              <small>{environment.context}</small>
+              <p>{environment.description}</p>
+              <div class="signal-list">
+                {environment.signals.map((signal) => <span>{signal}</span>)}
+              </div>
             </article>
           ))}
         </div>
-      </section>
 
-      <section class="about-section proof-section" aria-labelledby="proof-title">
+        <div class="synthesis">
+          <span>FOUNDATIONS</span><b>+</b>
+          <span>ENTERPRISE</span><b>+</b>
+          <span>INDEPENDENT OWNERSHIP</span><b>→</b>
+          <strong>END-TO-END AI SYSTEMS THINKING</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section practice-section">
+      <div class="shell">
         <header class="section-heading">
-          <h2 id="proof-title">Why my perspective may be useful</h2>
-          <p>The architectural point of view comes from building systems, operating inside enterprise constraints and documenting the trade-offs in public.</p>
+          <div>
+            <p class="eyebrow">HOW I WORK TODAY</p>
+            <h2>One problem, one loop, multiple disciplines.</h2>
+          </div>
+          <p>
+            I do not separate “strategy” from implementation too early. The architecture becomes more credible when the same decision can survive product, runtime and evaluation constraints.
+          </p>
         </header>
-        <div class="proof-grid">
-          {proofPoints.map((point) => (
-            <article class="proof-card">
-              <h3>{point.title}</h3>
-              <p>{point.body}</p>
+
+        <div class="practice-list">
+          {practice.map(([label, description], index) => (
+            <article>
+              <span>0{index + 1}</span>
+              <strong>{label}</strong>
+              <p>{description}</p>
             </article>
           ))}
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="about-section" aria-labelledby="now-title">
+    <section class="about-section portfolio-section">
+      <div class="shell">
         <header class="section-heading">
-          <h2 id="now-title">What I'm exploring now</h2>
-          <p>Current technical questions I’m using to push the Local / Hybrid / Cloud boundary.</p>
+          <div>
+            <p class="eyebrow">THE PORTFOLIO AS PROOF</p>
+            <h2>Systems, products and experiments are one connected body of work.</h2>
+          </div>
+          <p>
+            The personal projects are not intended as isolated demos. They let me practice the entire lifecycle, expose assumptions and create reusable evidence that feeds the next project.
+          </p>
         </header>
+
+        <div class="portfolio-grid">
+          {portfolioLinks.map((item) => (
+            <a href={`${baseUrl}${item.href}`} class="portfolio-card">
+              <span>{item.label}</span>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <strong>Explore <span aria-hidden="true">→</span></strong>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section now-section">
+      <div class="shell">
+        <header class="section-heading">
+          <div>
+            <p class="eyebrow">NOW · {now.lastUpdated}</p>
+            <h2>{now.title}</h2>
+          </div>
+          <p>{now.subtitle}</p>
+        </header>
+
         <div class="current-list">
-          {currentFocus.map((item) => (
+          {now.items.map((item) => (
             <article class="current-row">
+              <div class="current-meta">
+                <span>{item.tag}</span>
+                <strong>{item.status}</strong>
+              </div>
               <div>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
               </div>
-              <span>{item.status}</span>
             </article>
           ))}
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="about-section" aria-labelledby="track-title">
+    <section class="about-section track-section">
+      <div class="shell">
         <header class="section-heading">
-          <h2 id="track-title">Selected track record</h2>
-          <p>Enough context to understand where the perspective comes from. LinkedIn has the full chronology.</p>
+          <div>
+            <p class="eyebrow">SELECTED TRACK RECORD</p>
+            <h2>Where the perspective comes from professionally.</h2>
+          </div>
+          <p>
+            This is intentionally a short context layer, not a duplicate CV. LinkedIn has the full chronology.
+          </p>
         </header>
+
         <div class="experience-list">
           {selectedRoles.map((role) => (
             <article class="experience-row">
               <div class="experience-meta">
                 <strong>{role.company}</strong>
                 <span>{role.period}</span>
+                {role.badge && <small>{role.badge}</small>}
               </div>
               <div>
                 <h3>{role.role}</h3>
@@ -184,361 +275,538 @@ const jsonLd = {
             </article>
           ))}
         </div>
-        <div class="track-links">
-          <div class="track-social-links" aria-label="Social profiles">
-            <a
-              href={profile.socialLinks.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="track-social-btn"
-              aria-label="LinkedIn profile"
-              title="LinkedIn"
-            >
-              <LinkedInIcon size={18} />
-            </a>
-            <a
-              href={profile.socialLinks.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="track-social-btn"
-              aria-label="GitHub profile"
-              title="GitHub"
-            >
-              <GitHubIcon size={18} />
-            </a>
-          </div>
-        </div>
-      </section>
 
-      <section class="about-cta" aria-labelledby="about-cta-title">
+        <div class="track-links">
+          <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+            <LinkedInIcon size={18} /> LinkedIn
+          </a>
+          <a href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+            <GitHubIcon size={18} /> GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-cta">
+      <div class="shell cta-inner">
         <div>
-          <h2 id="about-cta-title">{cta.title}</h2>
+          <p class="eyebrow">CONNECT</p>
+          <h2>{cta.title}</h2>
           <p>{cta.description}</p>
         </div>
-        <div class="about-cta-actions">
-          <a
-            href={cta.primaryActionHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="primary-button"
-          >
-            {cta.primaryActionLabel}
-          </a>
-          <a
-            href={cta.secondaryActionHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="secondary-button"
-          >
-            {cta.secondaryActionLabel}
-          </a>
+        <div class="cta-actions">
+          <a href={cta.primaryActionHref} target="_blank" rel="noopener noreferrer" class="primary-button">{cta.primaryActionLabel}</a>
+          <a href={`${baseUrl}/experiments`} class="secondary-button">Explore Experiments</a>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </div>
 </BaseLayout>
 
 <style>
-  .about-page {
-    background: var(--surface-canvas);
-    padding: clamp(28px, 4vw, 48px) 0 clamp(72px, 9vw, 118px);
-  }
-
-  .about-shell {
-    width: min(calc(100% - clamp(28px, 5vw, 64px)), 1100px);
-    margin-inline: auto;
-  }
+  .about-page { background: var(--surface-canvas); }
 
   .about-hero {
-    min-height: min(680px, calc(100svh - var(--header-height) - 28px));
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(230px, 300px);
-    gap: clamp(44px, 7vw, 90px);
-    align-items: center;
-    padding: clamp(54px, 7vw, 88px) 0;
+    padding: clamp(58px, 8vw, 108px) 0;
+    background:
+      radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--accent-blue) 10%, transparent), transparent 42%),
+      linear-gradient(180deg, var(--surface-canvas), var(--surface-subtle));
     border-bottom: 1px solid var(--border-medium);
   }
 
-  .hero-copy h1 {
-    max-width: 790px;
-    margin: 0 0 22px;
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 5vw, 4.4rem);
-    line-height: 1.04;
-    letter-spacing: -0.055em;
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+    gap: clamp(44px, 7vw, 90px);
+    align-items: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 12px;
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
     font-weight: 850;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+  }
+
+  .hero-copy h1 {
+    max-width: 900px;
+    margin: 0;
     color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6.5vw, 6rem);
+    line-height: .98;
+    letter-spacing: -.064em;
     text-wrap: balance;
   }
 
   .hero-lead {
-    max-width: 720px;
-    margin: 0;
-    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
-    line-height: 1.68;
+    max-width: 800px;
+    margin: 24px 0 0;
     color: var(--ink-muted);
+    font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+    line-height: 1.72;
   }
 
-  .hero-lead strong {
-    color: var(--ink-display);
-    font-weight: 720;
-  }
-
-  .hero-meta {
+  .hero-capabilities,
+  .signal-list {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
     gap: 7px;
-    margin-top: 18px;
-    font-size: 0.8rem;
-    color: var(--ink-subtle);
+  }
+
+  .hero-capabilities { margin-top: 24px; }
+
+  .hero-capabilities span,
+  .signal-list span {
+    padding: 6px 10px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    font-weight: 680;
   }
 
   .hero-actions {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 10px;
     margin-top: 28px;
   }
 
-  .hero-actions button,
-  .about-cta button { cursor: pointer; }
-
-  .secondary-link,
-  .track-links a {
-    color: var(--ink-muted);
-    text-decoration: none;
-    font-size: 0.84rem;
-    font-weight: 680;
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-top: 24px;
+    color: var(--ink-subtle);
+    font-size: 0.875rem;
   }
 
-  .secondary-link:hover,
-  .track-links a:hover { color: var(--accent-blue-dark); }
+  .hero-meta strong { color: var(--ink-display); }
 
-  .hero-portrait-wrap {
+  .portrait-frame {
     overflow: hidden;
     border: 1px solid var(--border-medium);
-    border-radius: clamp(24px, 3vw, 34px);
-    background: var(--surface-subtle);
-    box-shadow: var(--shadow-card);
+    border-radius: 28px;
+    background: var(--surface-card);
+    box-shadow: var(--shadow-lg);
   }
 
-  .hero-portrait-wrap img {
+  .portrait-frame img {
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 5 / 6;
+    aspect-ratio: 4 / 5;
     object-fit: cover;
   }
 
+  .portrait-column > p {
+    margin: 13px 4px 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
   .about-section {
-    padding: clamp(64px, 8vw, 100px) 0;
+    padding: clamp(68px, 9vw, 116px) 0;
     border-bottom: 1px solid var(--border-medium);
   }
 
   .section-heading {
     display: grid;
-    grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1fr);
-    gap: clamp(26px, 5vw, 64px);
-    align-items: start;
-    margin-bottom: clamp(30px, 4vw, 46px);
+    grid-template-columns: minmax(0, .95fr) minmax(300px, 1.05fr);
+    gap: clamp(30px, 6vw, 76px);
+    align-items: end;
+    margin-bottom: 34px;
   }
 
-  .section-heading h2 {
+  .section-heading h2,
+  .about-cta h2 {
     margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.8rem, 3vw, 2.65rem);
-    line-height: 1.1;
-    letter-spacing: -0.04em;
-    font-weight: 820;
     color: var(--ink-display);
-  }
-
-  .section-heading > p {
-    max-width: 620px;
-    margin: 3px 0 0;
-    font-size: 0.96rem;
-    line-height: 1.65;
-    color: var(--ink-muted);
-  }
-
-  .row-list,
-  .current-list,
-  .experience-list { border-top: 1px solid var(--border-medium); }
-
-  .info-row,
-  .current-row,
-  .experience-row {
-    display: grid;
-    grid-template-columns: minmax(180px, 0.48fr) minmax(0, 1fr);
-    gap: clamp(22px, 4vw, 54px);
-    padding: 21px 0;
-    border-bottom: 1px solid var(--border-subtle);
-  }
-
-  .info-row h3,
-  .current-row h3,
-  .experience-row h3,
-  .proof-card h3 {
-    margin: 0;
     font-family: var(--font-display);
-    font-size: 1rem;
-    line-height: 1.4;
-    font-weight: 780;
-    color: var(--ink-display);
+    font-size: clamp(2rem, 4vw, 3.8rem);
+    line-height: 1.04;
+    letter-spacing: -.05em;
   }
 
-  .info-row p,
-  .current-row p,
-  .experience-row p,
-  .proof-card p {
+  .section-heading > p,
+  .about-cta p {
     margin: 0;
-    font-size: 0.88rem;
-    line-height: 1.62;
     color: var(--ink-muted);
+    font-size: .95rem;
+    line-height: 1.68;
   }
 
-  .proof-grid {
+  .environment-grid,
+  .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
   }
 
-  .proof-card {
+  .environment-card,
+  .portfolio-card {
     padding: 22px;
     border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
+    border-radius: 18px;
     background: var(--surface-card);
-  }
-
-  .proof-card h3 { margin-bottom: 8px; }
-
-  .current-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-  }
-
-  .current-row h3 { margin-bottom: 5px; }
-
-  .current-row > span {
-    padding: 5px 9px;
-    border-radius: var(--radius-full);
-    background: var(--surface-subtle);
-    border: 1px solid var(--border-subtle);
-    font-size: 0.72rem;
-    color: var(--ink-muted);
-    white-space: nowrap;
-  }
-
-  .experience-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .experience-meta strong {
-    font-family: var(--font-display);
-    font-size: 0.92rem;
-    color: var(--ink-display);
-  }
-
-  .experience-meta span {
-    font-size: 0.76rem;
-    color: var(--ink-subtle);
-  }
-
-  .experience-row h3 { margin-bottom: 5px; }
-
-  .track-links {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 16px 24px;
-    margin-top: 22px;
-  }
-
-  .hero-social-links,
-  .track-social-links {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .hero-social-btn,
-  .track-social-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--surface-card);
-    border: 1px solid var(--border-medium);
-    color: var(--ink-muted);
-    text-decoration: none;
-    transition: all var(--duration-fast) ease;
     box-shadow: var(--shadow-sm);
   }
 
-  .hero-social-btn:hover,
-  .hero-social-btn:focus-visible,
-  .track-social-btn:hover,
-  .track-social-btn:focus-visible {
+  .environment-label,
+  .portfolio-card > span,
+  .practice-list article > span {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 850;
+    letter-spacing: .08em;
+  }
+
+  .environment-card h3,
+  .portfolio-card h3,
+  .current-row h3,
+  .experience-row h3 {
+    margin: 9px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    line-height: 1.35;
+  }
+
+  .environment-card small {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink-subtle);
+    font-size: 0.875rem;
+  }
+
+  .environment-card p,
+  .portfolio-card p,
+  .current-row p,
+  .experience-row p {
+    margin: 10px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.62;
+  }
+
+  .environment-card .signal-list { margin-top: 18px; }
+
+  .synthesis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin-top: 18px;
+    padding: 14px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--border-medium));
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--surface-blue-subtle) 26%, var(--surface-card));
+  }
+
+  .synthesis span,
+  .synthesis strong {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 850;
+    letter-spacing: .05em;
+  }
+
+  .synthesis span { color: var(--ink-muted); }
+  .synthesis b { color: var(--accent-blue); }
+  .synthesis strong { color: var(--ink-display); }
+
+  .practice-section { background: var(--surface-subtle); }
+
+  .practice-list {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: 18px;
+    background: var(--surface-card);
+  }
+
+  .practice-list article {
+    min-width: 0;
+    padding: 18px;
+  }
+
+  .practice-list article + article { border-left: 1px solid var(--border-subtle); }
+
+  .practice-list strong {
+    display: block;
+    margin-top: 8px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+  }
+
+  .practice-list p {
+    margin: 7px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .portfolio-card {
+    color: inherit;
+    text-decoration: none;
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .portfolio-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent-blue) 40%, var(--border-medium));
+  }
+
+  .portfolio-card > strong {
+    display: block;
+    margin-top: 18px;
     color: var(--accent-blue-dark);
-    border-color: var(--accent-blue);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    font-size: 0.875rem;
+  }
+
+  .now-section { background: var(--surface-subtle); }
+
+  .current-list,
+  .experience-list {
+    border-top: 1px solid var(--border-medium);
+  }
+
+  .current-row,
+  .experience-row {
+    display: grid;
+    grid-template-columns: minmax(190px, .42fr) minmax(0, 1fr);
+    gap: clamp(24px, 5vw, 64px);
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .current-meta,
+  .experience-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .current-meta span,
+  .experience-meta span,
+  .experience-meta small {
+    color: var(--ink-subtle);
+    font-size: 0.875rem;
+  }
+
+  .current-meta strong,
+  .experience-meta strong {
+    color: var(--ink-display);
+    font-size: 0.875rem;
+  }
+
+  .experience-meta small {
+    width: fit-content;
+    padding: 3px 7px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-subtle);
+  }
+
+  .track-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  .track-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--accent-blue-dark);
+    font-size: 0.875rem;
+    font-weight: 730;
+    text-decoration: none;
   }
 
   .about-cta {
+    padding: clamp(68px, 9vw, 110px) 0;
+    background:
+      radial-gradient(circle at 85% 10%, color-mix(in srgb, var(--accent-blue) 10%, transparent), transparent 42%),
+      var(--surface-canvas);
+  }
+
+  .cta-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 30px;
-    margin-top: clamp(62px, 8vw, 100px);
-    padding: clamp(26px, 4vw, 40px);
-    border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, var(--border-medium));
-    border-radius: var(--radius-lg);
-    background: color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card));
+    gap: 34px;
   }
 
-  .about-cta h2 {
-    margin: 0 0 6px;
-    font-family: var(--font-display);
-    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
-    color: var(--ink-display);
-  }
+  .cta-inner > div:first-child { max-width: 720px; }
+  .about-cta p { margin-top: 10px; }
 
-  .about-cta p {
-    max-width: 650px;
-    margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.55;
-    color: var(--ink-muted);
-  }
-
-  .about-cta-actions {
+  .cta-actions {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
     flex-shrink: 0;
   }
 
-  @media (max-width: 820px) {
-    .about-hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-portrait-wrap { max-width: 280px; order: -1; }
-    .section-heading { grid-template-columns: 1fr; gap: 10px; }
-    .proof-grid { grid-template-columns: 1fr; }
+  @media (max-width: 980px) {
+    .hero-grid,
+    .section-heading { grid-template-columns: 1fr; }
+    .portrait-column { max-width: 320px; order: -1; }
+    .environment-grid,
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .practice-list { grid-template-columns: 1fr; }
+    .practice-list article + article { border-left: 0; border-top: 1px solid var(--border-subtle); }
+    .cta-inner { align-items: flex-start; flex-direction: column; }
   }
 
   @media (max-width: 620px) {
-    .info-row,
-    .experience-row { grid-template-columns: 1fr; gap: 7px; }
-    .current-row { grid-template-columns: 1fr; gap: 12px; }
-    .current-row > span { width: fit-content; }
-    .about-cta { align-items: flex-start; flex-direction: column; }
-    .about-cta-actions { width: 100%; flex-direction: column; }
-    .about-cta-actions a { width: 100%; justify-content: center; }
+    .hero-copy h1 { font-size: clamp(2.8rem, 14vw, 4rem); }
+    .current-row,
+    .experience-row { grid-template-columns: 1fr; gap: 8px; }
+    .hero-actions,
+    .cta-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions a,
+    .cta-actions a { justify-content: center; }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .portfolio-card { transition: none; }
+    .portfolio-card:hover { transform: none; }
+  }
+
+  /* MOBILE-FIRST ABOUT PAGE */
+  @media (max-width: 620px) {
+    .about-hero {
+      padding: 38px 0 48px;
+    }
+
+    .hero-grid {
+      gap: 24px;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.35rem, 11.8vw, 3.2rem);
+      line-height: 1;
+    }
+
+    .hero-lead {
+      margin-top: 16px;
+      font-size: 1rem;
+      line-height: 1.62;
+    }
+
+    .hero-capabilities {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin-top: 18px;
+      padding-bottom: 3px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .hero-capabilities::-webkit-scrollbar { display: none; }
+    .hero-capabilities span { flex: 0 0 auto; }
+
+    .hero-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .hero-actions .primary-button {
+      width: 100%;
+    }
+
+    .hero-actions .secondary-button {
+      min-width: 50px;
+      padding-inline: 14px;
+    }
+
+    .hero-meta {
+      display: grid;
+      gap: 5px;
+      margin-top: 18px;
+    }
+
+    .portrait-column {
+      order: 0;
+      max-width: 220px;
+    }
+
+    .portrait-frame {
+      border-radius: 20px;
+    }
+
+    .about-section {
+      padding: 48px 0;
+    }
+
+    .section-heading {
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .section-heading h2,
+    .about-cta h2 {
+      font-size: clamp(1.85rem, 9vw, 2.45rem);
+    }
+
+    .environment-grid,
+    .portfolio-grid {
+      gap: 10px;
+    }
+
+    .environment-card,
+    .portfolio-card {
+      padding: 16px;
+      border-radius: 14px;
+    }
+
+    .signal-list {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 3px;
+      scrollbar-width: none;
+    }
+
+    .signal-list::-webkit-scrollbar { display: none; }
+    .signal-list span { flex: 0 0 auto; }
+
+    .synthesis {
+      justify-content: flex-start;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+    }
+
+    .synthesis::-webkit-scrollbar { display: none; }
+    .synthesis span,
+    .synthesis strong,
+    .synthesis b { flex: 0 0 auto; }
+
+    .practice-list article {
+      padding: 15px;
+    }
+
+    .current-row,
+    .experience-row {
+      padding: 16px 0;
+    }
+
+    .about-cta {
+      padding: 48px 0;
+    }
+  }
+
 </style>
