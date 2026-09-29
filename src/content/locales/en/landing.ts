@@ -9,7 +9,9 @@ export const landingData: LandingPageData = {
     brandName: 'Daniele Moltisanti',
     links: [
       { label: 'Method', href: '/#strategy' },
-      { label: 'Projects', href: '/#infrastructure' },
+      { label: 'Systems', href: '/#infrastructure' },
+      { label: 'Products', href: '/#applications' },
+      { label: 'Experiments', href: '/experiments' },
       { label: 'About', href: '/about' },
     ],
     cta: {
@@ -23,13 +25,13 @@ export const landingData: LandingPageData = {
     identity: {
       name: 'Daniele Moltisanti',
       role: 'Principal AI Engineer & AI Strategy Lead',
-      specialization: 'Local AI & On-device LLMs · Edge & Local AI Architecture',
+      specialization: 'AI Systems · Product · Architecture · Evaluation',
       affiliation: 'Sky Italia',
       education: 'Politecnico di Milano',
       location: 'Milan, Italy',
       portraitPath: 'images/profile-photo.jpg',
       portraitAlt: 'Daniele Moltisanti - Principal AI Engineer & AI Strategy Lead',
-      bio: 'I experiment with AI systems to understand where local execution creates real value.',
+      bio: 'I build AI systems end to end: from problem framing and architecture to product, engineering and evidence.',
       focusBadges: [
         'Local AI & On-device LLMs',
         'Edge & Local AI Architecture',
