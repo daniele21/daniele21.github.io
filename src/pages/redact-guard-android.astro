@@ -8,6 +8,7 @@ import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import ProjectVariantSwitch from '../components/project/ProjectVariantSwitch.astro';
 import ProjectHero from '../components/project/ProjectHero.astro';
 import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectImpactStrip from '../components/project/ProjectImpactStrip.astro';
 import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
 import ProjectRelations from '../components/project/ProjectRelations.astro';
@@ -19,10 +20,12 @@ import RedactGuardArchitecture from '../components/redactguard/RedactGuardArchit
 import RedactGuardCta from '../components/redactguard/RedactGuardCta.astro';
 
 import { redactGuardAndroidData } from '../content/redactGuardAndroid';
+import { portfolioNarrative } from '../content/portfolio';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 const { hero } = redactGuardAndroidData;
 const androidRepo = 'https://github.com/daniele21/redactguard-android';
+const portfolioProject = portfolioNarrative.products.find((item) => item.id === 'redactguard')!;
 
 const subheaderLinks = [
   { label: 'Overview', href: '#top' },
@@ -115,6 +118,14 @@ const redactGuardAndroidSchema = {
     <ProjectProof
       statement="A real Android app can consume local AI without owning the model runtime or silently changing the trust boundary when that runtime is unavailable."
       detail="RedactGuard owns documents, PII policy, review and export. Harnex owns models, runtime lifecycle and local inference behind an explicit Consumer SDK and Binder boundary."
+    />
+
+    <ProjectImpactStrip
+      mission="Can a privacy-sensitive Android product depend on a shared local-AI runtime without giving up explicit user and failure control?"
+      role="Independent end-to-end ownership across Android product UX, PII workflow, Harnex Consumer SDK integration, Binder/runtime failure handling, review boundaries and evaluation linkage."
+      evidence="Working PDF/text ingestion, configurable PII selection, Harnex-backed local analysis, masked review and fail-closed export; broader representative-device claims remain gated."
+      soWhat={portfolioProject.soWhat}
+      source="RedactGuard Android + Harnex repository state verified 2026-09-29."
     />
 
     <RedactGuardProblem data={redactGuardAndroidData} />
