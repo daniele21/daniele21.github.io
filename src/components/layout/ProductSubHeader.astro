@@ -410,7 +410,7 @@ const isIconOnly = Boolean(isGitHub || isLinkedIn);
 
       const navRect = nav.getBoundingClientRect();
       const linkRect = activeLink.getBoundingClientRect();
-      const behavior = reduceMotion.matches ? 'auto' : 'smooth';
+      const behavior: ScrollBehavior = 'auto';
 
       if (mobileNavigation.matches) {
         const currentRelativeLeft = linkRect.left - navRect.left + nav.scrollLeft;
@@ -447,6 +447,13 @@ const isIconOnly = Boolean(isGitHub || isLinkedIn);
     const updateFromScroll = () => {
       if (!sectionLinks.length) {
         setActive(overviewLink);
+        return;
+      }
+
+      const pageBottom = window.scrollY + window.innerHeight;
+      const documentBottom = document.documentElement.scrollHeight;
+      if (pageBottom >= documentBottom - 4) {
+        setActive(sectionLinks.at(-1)?.link ?? overviewLink);
         return;
       }
 
