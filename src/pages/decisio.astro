@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import ProjectHero from '../components/project/ProjectHero.astro';
+import ProjectProof from '../components/project/ProjectProof.astro';
 import ProjectImpactStrip from '../components/project/ProjectImpactStrip.astro';
 import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
@@ -79,6 +80,11 @@ const schema = {
         </div>
       </div>
     </ProjectHero>
+
+    <ProjectProof
+      statement="Repeated bounded AI decisions can treat stable model context as a reusable runtime resource instead of recomputing the same prefix for every changing state."
+      detail="The product claim is deliberately narrower than generic LLM acceleration: deterministic constraints first, prefix-safe reuse, direct typed choice and exact comparison against a fresh path."
+    />
 
     <ProjectImpactStrip
       mission={data.question}
