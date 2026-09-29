@@ -1,11 +1,11 @@
 .shell {
-  width: min(calc(100% - clamp(32px, 5vw, 64px)), var(--shell-max-width));
+  width: min(calc(100% - 32px), var(--shell-max-width));
   margin-inline: auto;
 }
 
-@media (max-width: 640px) {
+@media (min-width: 641px) {
   .shell {
-    width: min(calc(100% - 28px), var(--shell-max-width));
+    width: min(calc(100% - clamp(40px, 5vw, 64px)), var(--shell-max-width));
   }
 }
 
