@@ -244,8 +244,8 @@ function getHref(href: string) {
   }
 
   .header-cta-btn {
-    min-height: 36px;
-    padding: 6px 13px;
+    min-height: var(--touch-target-min);
+    padding: 8px 14px;
     border-radius: var(--radius-full);
     font-size: var(--text-caption);
     font-weight: 670;
@@ -259,8 +259,8 @@ function getHref(href: string) {
   .theme-toggle {
     display: grid;
     place-items: center;
-    width: 36px;
-    height: 36px;
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
     padding: 0;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-full);
@@ -293,8 +293,8 @@ function getHref(href: string) {
 
   .menu-toggle {
     display: none;
-    width: 38px;
-    height: 38px;
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
     padding: 9px;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-full);
@@ -368,8 +368,23 @@ function getHref(href: string) {
   }
 
   @media (max-width: 620px) {
+    .header-inner { gap: 8px; }
     .header-cta-btn { display: none; }
-    .brand-signature { width: 34px; }
+    .brand-signature { width: 32px; }
     .brand-name { font-size: 0.875rem; }
+    .theme-toggle,
+    .menu-toggle {
+      width: 44px;
+      height: 44px;
+    }
+    .site-nav {
+      padding: 8px 16px 14px;
+      max-height: calc(100dvh - var(--header-height));
+      overflow-y: auto;
+    }
+    .nav-link {
+      min-height: 52px;
+      padding-inline: 4px;
+    }
   }
 </style>
