@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "name": "Personal Landing UX Contract",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "targetExperienceLevel": "L1",
   "baselineRepositoryLevel": "L0",
   "designSourceOfTruth": {
@@ -21,8 +21,9 @@
       "Leadership / Talent / Collaborator"
     ],
     "outcomeOrder": [
-      "Understand the Local AI thesis and evidence-led method",
-      "Enter concrete project proof",
+      "Understand the end-to-end AI systems thesis and evidence-led method",
+      "See reusable systems and real product proof",
+      "Understand how Experiments turns results into architecture decisions",
       "Understand identity and track record",
       "Connect or get in touch"
     ],
@@ -70,20 +71,20 @@
   },
   "home": {
     "primaryJourney": [
-      "Hero / thesis",
+      "Hero / end-to-end thesis",
       "Decide",
       "Build",
       "Test",
       "Measure",
       "Decide again",
-      "Project proof or next step"
+      "About / track record"
     ],
     "actionHierarchy": {
       "primary": "Explore the work",
       "secondary": "Read my thinking",
       "lateConversion": "Get in touch"
     },
-    "progressiveDisclosure": "thesis -> decision framework -> enabling infrastructure -> real product proof -> measured evidence -> identity/background",
+    "progressiveDisclosure": "end-to-end thesis -> architecture decision -> reusable systems -> real product proof -> experiments/evidence -> identity/background",
     "methodPath": {
       "purpose": "Narrative progress and spatial continuity between Decide, Build, Test and Measure.",
       "states": [
@@ -176,33 +177,46 @@
     "routes": [
       "/harnex",
       "/korgis",
+      "/decisio",
       "/local-asr-server",
       "/closedroom",
       "/aura-finance",
       "/redact-guard",
       "/redact-guard-android",
-      "/performance-lab",
       "/traffic-monitoring",
       "/traffic-monitoring-android"
-    ]
+    ],
+    "researchHub": {
+      "route": "/experiments",
+      "role": "Cross-project evidence hub with one section per experiment.",
+      "requiredSequence": [
+        "Question",
+        "Method",
+        "Results / Evidence",
+        "So what",
+        "What it changed"
+      ],
+      "aggregateHomeSummary": true,
+      "legacyCompatibilityRoute": "/performance-lab"
+    }
   },
   "criticalJourneys": [
     {
       "id": "J1",
       "persona": "Technical Decision Maker (CTO, CAIO, Head of AI)",
-      "flow": "Hero (thesis & positioning) -> Decide (framework) -> Build (architecture) -> Measure (evidence) -> Discuss an AI architecture",
+      "flow": "Hero (end-to-end thesis) -> Decide (architecture framing) -> Systems -> Experiments (evidence) -> About / Connect",
       "targetComprehensionSec": 60
     },
     {
       "id": "J2",
       "persona": "Technical Peer / AI Engineer",
-      "flow": "Hero -> Applications (test beds) -> Observability (real run) -> Deep Dive Project Route / GitHub",
+      "flow": "Hero -> Products (real proving grounds) -> related system/evidence -> Deep Dive Project Route / GitHub",
       "targetComprehensionSec": 60
     },
     {
       "id": "J3",
       "persona": "Leadership / Talent / Collaborator",
-      "flow": "Hero -> Systems -> About / Track Record -> LinkedIn / Get in touch",
+      "flow": "Hero -> Systems / Products -> About (Foundations + Sky + Independent ownership) -> LinkedIn / Connect",
       "targetComprehensionSec": 45
     },
     {
