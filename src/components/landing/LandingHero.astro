@@ -284,4 +284,101 @@ const githubUrl = hero.identity.socials?.find((link) => link.platform === 'githu
   @media (prefers-reduced-motion: reduce) {
     .loop-step { transition: none; }
   }
+
+  /* MOBILE-FIRST HERO */
+  @media (max-width: 560px) {
+    .hero-section {
+      padding: 18px 0 34px;
+      min-height: auto;
+    }
+
+    .hero-main {
+      padding: 30px 0 22px;
+    }
+
+    .hero-eyebrow {
+      margin-bottom: 11px;
+      line-height: 1.35;
+    }
+
+    .hero-heading {
+      max-width: 100%;
+      font-size: clamp(2.15rem, 11.4vw, 3rem);
+      line-height: 1.01;
+      letter-spacing: -0.055em;
+    }
+
+    .hero-lead {
+      margin-top: 18px;
+      gap: 3px 7px;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .hero-explanation {
+      margin-top: 14px;
+      font-size: 1rem;
+      line-height: 1.58;
+    }
+
+    .hero-specialization {
+      margin-top: 12px;
+      padding-left: 11px;
+      font-size: 0.875rem;
+    }
+
+    .hero-actions {
+      gap: 8px;
+      margin-top: 22px;
+    }
+
+    .hero-actions a {
+      width: 100%;
+      min-height: 50px;
+      justify-content: center;
+    }
+
+    .hero-context {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      margin-top: 20px;
+    }
+
+    .hero-context span {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+
+    .hero-loop {
+      grid-template-columns: 1fr;
+      border-radius: 14px;
+    }
+
+    .loop-step {
+      min-height: 62px;
+      padding: 11px 12px;
+      gap: 9px;
+    }
+
+    .loop-step + .loop-step {
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .loop-arrow {
+      transform: rotate(90deg);
+    }
+
+    .hero-trust {
+      gap: 8px 16px;
+      padding-top: 14px;
+    }
+
+    .hero-trust span {
+      flex-basis: 100%;
+    }
+  }
+
 </style>
