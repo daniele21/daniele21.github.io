@@ -104,4 +104,32 @@ const items = [
     .impact-grid { grid-template-columns: 1fr; }
     .impact-item + .impact-item { border-left: 0; border-top: 1px solid var(--border-subtle); }
   }
+
+  /* MOBILE-FIRST IMPACT */
+  @media (max-width: 620px) {
+    .project-impact-strip {
+      padding: 18px 0;
+    }
+
+    .impact-grid {
+      border-radius: 14px;
+    }
+
+    .impact-item {
+      grid-template-columns: 24px minmax(0, 1fr);
+      gap: 8px;
+      padding: 14px;
+    }
+
+    .impact-item p {
+      margin-top: 5px;
+      line-height: 1.48;
+    }
+
+    .impact-source {
+      margin-top: 7px;
+      text-align: left;
+    }
+  }
+
 </style>
