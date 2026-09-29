@@ -40,12 +40,20 @@ const readDiagnostics = async (page) => page.evaluate(() => {
   const actionTargets = Array.from(document.querySelectorAll('.hero-actions a, .primary-button, .secondary-button'))
     .map((node) => {
       const rect = node.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      if (
+        rect.width <= 1 ||
+        rect.height <= 1 ||
+        style.display === 'none' ||
+        style.visibility === 'hidden'
+      ) return null;
       return {
         label: node.textContent?.replace(/\s+/g, ' ').trim() || '',
         width: Math.round(rect.width),
         height: Math.round(rect.height),
       };
     })
+    .filter(Boolean)
     .filter((item) => item.width < 44 || item.height < 44);
 
   const smallText = Array.from(body.querySelectorAll('*'))
