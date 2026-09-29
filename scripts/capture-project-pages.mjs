@@ -5,19 +5,31 @@ import { chromium } from 'playwright';
 const baseUrl = process.env.VISUAL_REVIEW_BASE_URL || 'http://127.0.0.1:4321';
 const outputDir = path.resolve(process.env.VISUAL_REVIEW_OUTPUT || 'visual-review');
 
-const routes = [
-  'harnex',
-  'korgis',
-  'local-asr-server',
-  'closedroom',
-  'aura-finance',
-  'redact-guard',
-  'performance-lab',
-  'traffic-monitoring',
-  'traffic-monitoring-android',
+const legacyPhases = ['decide', 'build', 'test', 'measure', 'decide-again'];
+const routeSpecs = [
+  { route: 'harnex', anchors: ['top', 'architecture', 'runtime', 'evidence', 'status'], subheader: true },
+  { route: 'korgis', anchors: ['top', 'architecture', 'runtime-boundary', 'evidence', 'status'], subheader: true, hrefs: ['#top', '#architecture', '#runtime-boundary', '#evidence', '#status'] },
+  { route: 'decisio', anchors: ['top', 'architecture', 'runtime', 'evidence', 'status'], subheader: true },
+  { route: 'local-asr-server', anchors: legacyPhases, subheader: true },
+  { route: 'closedroom', anchors: ['top', 'workflow', 'product', 'architecture', 'evidence'], subheader: true },
+  { route: 'aura-finance', anchors: ['top', 'workflow', 'product', 'architecture', 'evidence'], subheader: true },
+  { route: 'redact-guard', anchors: ['top', 'workflow', 'product', 'architecture', 'evidence'], subheader: true },
+  { route: 'redact-guard-android', anchors: ['top', 'workflow', 'product', 'architecture', 'evidence'], subheader: true },
+  { route: 'traffic-monitoring', anchors: legacyPhases, subheader: true },
+  { route: 'traffic-monitoring-android', anchors: legacyPhases, subheader: true },
+  {
+    route: 'experiments',
+    anchors: [
+      'jev-vs-llm',
+      'model-capability-benchmark',
+      'redactguard-local-anonymization',
+      'vlm-capability-benchmark',
+      'image-generation-benchmark',
+    ],
+    subheader: false,
+  },
 ];
 
-const phaseIds = ['decide', 'build', 'test', 'measure', 'decide-again'];
 const viewports = [
   { name: 'desktop-1440', width: 1440, height: 1100 },
   { name: 'tablet-768', width: 768, height: 1024 },
@@ -52,7 +64,7 @@ try {
       reducedMotion: 'no-preference',
     });
 
-    for (const route of routes) {
+    for (const spec of routeSpecs) {
       const page = await context.newPage();
       const consoleErrors = [];
       const pageErrors = [];
@@ -62,16 +74,19 @@ try {
       });
       page.on('pageerror', (error) => pageErrors.push(error.message));
 
-      const url = `${baseUrl}/${route}/`;
+      const url = `${baseUrl}/${spec.route}/`;
       const response = await page.goto(url, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts?.ready);
       await warmRenderedPage(page);
 
-      const diagnostics = await page.evaluate((expectedPhaseIds) => {
+      const diagnostics = await page.evaluate(({ expectedAnchors, requiresSubheader }) => {
         const root = document.documentElement;
         const body = document.body;
-        const missingPhases = expectedPhaseIds.filter((id) => !document.getElementById(id));
-        const links = Array.from(document.querySelectorAll('[data-product-subheader] [data-sublink]'));
+        const missingAnchors = expectedAnchors.filter((id) => !document.getElementById(id));
+        const links = requiresSubheader
+          ? Array.from(document.querySelectorAll('[data-product-subheader] [data-sublink]'))
+          : [];
+
         const smallTargets = links
           .map((node) => {
             const rect = node.getBoundingClientRect();
@@ -153,71 +168,74 @@ try {
           horizontalOverflowPx: Math.max(0, Math.max(root.scrollWidth, body.scrollWidth) - window.innerWidth),
           h1Count: document.querySelectorAll('h1').length,
           mainCount: document.querySelectorAll('main').length,
-          missingPhases,
+          missingAnchors,
           subheaderLinkCount: links.length,
           smallTargets,
           overflowingElements,
           smallText,
         };
-      }, phaseIds);
+      }, { expectedAnchors: spec.anchors, requiresSubheader: spec.subheader });
 
-      const screenshotPath = path.join(outputDir, `${route}__${viewport.name}.png`);
+      const screenshotPath = path.join(outputDir, `${spec.route}__${viewport.name}.png`);
       await page.screenshot({ path: screenshotPath, fullPage: true });
 
-      // The production UI intentionally uses global smooth scrolling. For this
-      // state assertion we temporarily force instant scrolling so the test
-      // measures the final section/scroll-spy relationship rather than a
-      // transient animation frame.
-      await page.evaluate(() => {
-        document.documentElement.dataset.visualReviewScrollBehavior = document.documentElement.style.scrollBehavior;
-        document.documentElement.style.scrollBehavior = 'auto';
-      });
+      const sectionNavigation = [];
+      if (spec.subheader) {
+        await page.evaluate(() => {
+          document.documentElement.dataset.visualReviewScrollBehavior = document.documentElement.style.scrollBehavior;
+          document.documentElement.style.scrollBehavior = 'auto';
+        });
 
-      const phaseNavigation = [];
-      for (const phaseId of phaseIds) {
-        await page.evaluate((id) => {
-          document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: 'auto' });
-        }, phaseId);
+        const hrefs = spec.hrefs || spec.anchors.map((id) => `#${id}`);
+        for (let index = 0; index < spec.anchors.length; index += 1) {
+          const anchorId = spec.anchors[index];
+          const expectedHref = hrefs[index];
 
-        await page.waitForFunction(
-          (id) => document
-            .querySelector('[data-product-subheader] [aria-current="location"]')
-            ?.getAttribute('href') === `#${id}`,
-          phaseId,
-          { timeout: 1500 },
-        ).catch(() => null);
+          await page.evaluate((id) => {
+            document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: 'auto' });
+          }, anchorId);
 
-        await page.waitForTimeout(80);
-        phaseNavigation.push(await page.evaluate((id) => {
-          const nav = document.querySelector('[data-product-subheader] .subheader-nav');
-          const active = document.querySelector(`[data-product-subheader] [href="#${id}"]`);
-          const navRect = nav?.getBoundingClientRect();
-          const activeRect = active?.getBoundingClientRect();
-          const activeVisible = Boolean(navRect && activeRect &&
-            activeRect.left >= navRect.left - 1 &&
-            activeRect.right <= navRect.right + 1);
-          return {
-            phaseId: id,
-            activeHref: document
+          await page.waitForFunction(
+            (href) => document
               .querySelector('[data-product-subheader] [aria-current="location"]')
-              ?.getAttribute('href') || null,
-            activeVisible,
-          };
-        }, phaseId));
+              ?.getAttribute('href') === href,
+            expectedHref,
+            { timeout: 1500 },
+          ).catch(() => null);
+
+          await page.waitForTimeout(80);
+          sectionNavigation.push(await page.evaluate(({ href, anchorId }) => {
+            const nav = document.querySelector('[data-product-subheader] .subheader-nav');
+            const active = document.querySelector(`[data-product-subheader] [href="${href}"]`);
+            const navRect = nav?.getBoundingClientRect();
+            const activeRect = active?.getBoundingClientRect();
+            const activeVisible = Boolean(navRect && activeRect &&
+              activeRect.left >= navRect.left - 1 &&
+              activeRect.right <= navRect.right + 1);
+            return {
+              anchorId,
+              expectedHref: href,
+              activeHref: document
+                .querySelector('[data-product-subheader] [aria-current="location"]')
+                ?.getAttribute('href') || null,
+              activeVisible,
+            };
+          }, { href: expectedHref, anchorId }));
+        }
+
+        await page.evaluate(() => {
+          const previous = document.documentElement.dataset.visualReviewScrollBehavior || '';
+          document.documentElement.style.scrollBehavior = previous;
+          delete document.documentElement.dataset.visualReviewScrollBehavior;
+        });
       }
 
-      await page.evaluate(() => {
-        const previous = document.documentElement.dataset.visualReviewScrollBehavior || '';
-        document.documentElement.style.scrollBehavior = previous;
-        delete document.documentElement.dataset.visualReviewScrollBehavior;
-      });
-
       report.push({
-        route,
+        route: spec.route,
         viewport,
         status: response?.status() ?? null,
         ...diagnostics,
-        phaseNavigation,
+        sectionNavigation,
         consoleErrors,
         pageErrors,
         screenshot: path.basename(screenshotPath),
@@ -239,10 +257,10 @@ const failures = report.filter((item) =>
   item.horizontalOverflowPx > 0 ||
   item.h1Count !== 1 ||
   item.mainCount !== 1 ||
-  item.missingPhases.length > 0 ||
+  item.missingAnchors.length > 0 ||
   item.smallTargets.length > 0 ||
   item.smallText.length > 0 ||
-  item.phaseNavigation.some((state) => state.activeHref !== `#${state.phaseId}` || !state.activeVisible) ||
+  item.sectionNavigation.some((state) => state.activeHref !== state.expectedHref || !state.activeVisible) ||
   item.consoleErrors.length > 0 ||
   item.pageErrors.length > 0
 );
