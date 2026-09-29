@@ -158,15 +158,21 @@ main [data-project-page][data-project-archetype] :is(
   .step-indicator,
   .shot-label,
   .shot-caption,
-  .visual-note
+  .visual-note,
+  .variant-kicker,
+  .variant-backbone,
+  .cta-kicker,
+  .code-preview-lang,
+  .code-scroll-hint
 ) {
-  font-size: var(--text-caption);
+  font-size: var(--text-caption) !important;
 }
 
 main [data-project-page][data-project-archetype] small,
+main [data-project-page][data-project-archetype] code,
 main [data-project-page][data-project-archetype] .step-body p,
 main [data-project-page][data-project-archetype] .flow-step > span {
-  font-size: var(--text-caption);
+  font-size: max(var(--text-caption), 1em) !important;
 }
 
 /* Alternating landing method path. The stage rails and inter-stage curves share
