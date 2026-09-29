@@ -75,3 +75,25 @@ Refreshing the date means re-checking the source repositories above. Do not bump
 5. Add Mission / My Role / Evidence / So What context to project pages and add Decisio.
 6. Rebuild About around research foundations + enterprise constraints + independent ownership.
 7. Update UX contracts and CI freshness checks.
+
+
+## Mobile-first rule
+
+The canonical design surface is a 320–430px touch viewport.
+
+Review order is:
+1. 320px phone
+2. 390px phone
+3. 768px tablet
+4. 1440px desktop
+
+The phone experience owns information hierarchy. Wider layouts may add spatial density, columns and decorative continuity, but they must not introduce information required to understand the mission, project state, evidence boundary or so-what.
+
+Mobile requirements:
+- 16px page gutters;
+- 48px primary touch targets;
+- one-column primary reading flow;
+- compact sticky chrome;
+- no core content hidden behind scroll animation;
+- horizontal scrolling only for compact navigation or metadata;
+- zero page-level horizontal overflow.
