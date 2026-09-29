@@ -1,0 +1,107 @@
+---
+interface Props {
+  mission: string;
+  role: string;
+  evidence: string;
+  soWhat: string;
+  source?: string;
+}
+
+const { mission, role, evidence, soWhat, source } = Astro.props;
+const items = [
+  { label: 'MISSION', value: mission },
+  { label: 'MY ROLE', value: role },
+  { label: 'EVIDENCE', value: evidence },
+  { label: 'SO WHAT', value: soWhat },
+];
+---
+
+<section class="project-impact-strip" aria-label="Project mission, role, evidence and takeaway">
+  <div class="shell impact-shell">
+    <div class="impact-grid">
+      {items.map((item, index) => (
+        <article class="impact-item">
+          <div class="impact-index">0{index + 1}</div>
+          <div>
+            <span>{item.label}</span>
+            <p>{item.value}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+    {source && <p class="impact-source">{source}</p>}
+  </div>
+</section>
+
+<style>
+  .project-impact-strip {
+    padding: clamp(24px, 4vw, 42px) 0;
+    border-top: 1px solid var(--border-medium);
+    border-bottom: 1px solid var(--border-medium);
+    background:
+      radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent-blue) 7%, transparent), transparent 36%),
+      var(--surface-subtle);
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: 16px;
+    background: var(--surface-card);
+  }
+
+  .impact-item {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 10px;
+    padding: 18px;
+  }
+
+  .impact-item + .impact-item { border-left: 1px solid var(--border-subtle); }
+
+  .impact-index {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: .66rem;
+    font-weight: 850;
+    padding-top: 2px;
+  }
+
+  .impact-item span {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: .64rem;
+    font-weight: 850;
+    letter-spacing: .08em;
+  }
+
+  .impact-item p {
+    margin: 7px 0 0;
+    color: var(--ink-muted);
+    font-size: .78rem;
+    line-height: 1.5;
+  }
+
+  .impact-source {
+    margin: 9px 2px 0;
+    color: var(--ink-subtle);
+    font-size: .68rem;
+    line-height: 1.4;
+    text-align: right;
+  }
+
+  @media (max-width: 980px) {
+    .impact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .impact-item:nth-child(3) { border-left: 0; border-top: 1px solid var(--border-subtle); }
+    .impact-item:nth-child(4) { border-top: 1px solid var(--border-subtle); }
+  }
+
+  @media (max-width: 620px) {
+    .impact-grid { grid-template-columns: 1fr; }
+    .impact-item + .impact-item { border-left: 0; border-top: 1px solid var(--border-subtle); }
+  }
+</style>
