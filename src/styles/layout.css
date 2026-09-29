@@ -227,3 +227,12 @@ html[data-method-path-ready='true'] .method-journey .thread-curve {
     will-change: auto;
   }
 }
+
+
+/* Canonical interactive target floor.
+   Component-specific styles may change shape/padding, but never reduce the
+   usable touch/click height below the mobile-first contract. */
+.primary-button,
+.secondary-button {
+  min-height: var(--touch-target-min) !important;
+}
