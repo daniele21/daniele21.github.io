@@ -11,7 +11,7 @@ test('homepage UX contract makes outcome hierarchy and path semantics explicit',
   assert.equal(contract.experiencePriorities.audienceOrder[0], 'Technical Decision Maker');
   assert.match(contract.experiencePriorities.conflictRule, /thesis comprehension and evidence access/i);
   assert.deepEqual(contract.home.primaryJourney.slice(0, 6), [
-    'Hero / thesis',
+    'Hero / end-to-end thesis',
     'Decide',
     'Build',
     'Test',
@@ -68,18 +68,21 @@ test('decision matrix keeps a local-first hierarchy without losing comparison se
   assert.doesNotMatch(matrix, /\.cloud-column\s*\{[\s\S]{0,120}background:/);
 });
 
-test('homepage identity stays in the shared header without duplicating the hero', () => {
+test('homepage uses the canonical global header and keeps the hero focused on the thesis', () => {
+  const page = read('src/pages/index.astro');
   const hero = read('src/components/landing/LandingHero.astro');
-  const header = read('src/components/landing/LandingHeader.astro');
+  const layout = read('src/layouts/BaseLayout.astro');
+  const header = read('src/components/layout/SiteHeader.astro');
   const heroShellRule = hero.match(/\.hero-shell\s*\{([^}]*)\}/)?.[1] ?? '';
 
   assert.match(hero, /class="shell hero-shell"/);
   assert.doesNotMatch(heroShellRule, /width:\s*100%/);
-  assert.doesNotMatch(hero, /identity-strip|identity-avatar/);
-  assert.match(header, /class="brand-avatar"/);
-  assert.match(header, /src=\{resolveHref\(hero\.identity\.portraitPath\)\}/);
+  assert.doesNotMatch(hero, /identity-strip|identity-avatar|brand-avatar/);
+  assert.doesNotMatch(page, /LandingHeader/);
+  assert.match(layout, /import SiteHeader/);
+  assert.match(layout, /<SiteHeader \/>/);
   assert.match(header, /class="brand-name"/);
-  assert.match(header, /class="brand-role"/);
+  assert.match(header, /brandRole/);
 });
 
 test('brand contract keeps motion purposeful and user-controlled', () => {
