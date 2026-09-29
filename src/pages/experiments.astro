@@ -693,4 +693,46 @@ const experimentSchema = {
     .feedback-loop b { flex: 0 0 auto; }
   }
 
+
+  /* MOBILE OVERFLOW CONTAINMENT */
+  @media (max-width: 640px) {
+    .section-intro,
+    .section-intro > *,
+    .close-grid,
+    .close-grid > *,
+    .experiment-story,
+    .experiment-story > *,
+    .experiment-visual-column {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .track-nav {
+      display: flex;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      grid-template-columns: none;
+      grid-auto-flow: initial;
+      grid-auto-columns: initial;
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-inline: contain;
+    }
+
+    .track-nav a {
+      flex: 0 0 min(78vw, 240px);
+      min-width: 0;
+    }
+
+    .hero-loop,
+    .feedback-loop {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-inline: contain;
+    }
+  }
 </style>
