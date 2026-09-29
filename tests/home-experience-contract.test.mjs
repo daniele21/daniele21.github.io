@@ -95,3 +95,24 @@ test('brand contract keeps motion purposeful and user-controlled', () => {
   const closedRoom = read('src/pages/closedroom.astro');
   assert.doesNotMatch(closedRoom, /setInterval\(/);
 });
+
+
+test('mobile-first contract keeps phone as the canonical surface', () => {
+  const contract = JSON.parse(read('design/ux-contract.json'));
+  const tokens = read('src/styles/tokens.css');
+  const layout = read('src/styles/layout.css');
+  const plane = read('src/components/landing/PlaneTemplate.astro');
+  const subheader = read('src/components/layout/ProductSubHeader.astro');
+
+  assert.match(contract.mobileFirst.canonicalSurface, /320px.*430px/i);
+  assert.deepEqual(contract.mobileFirst.primaryReviewWidths, [320, 390]);
+  assert.equal(contract.mobileFirst.touchTargetPx, 48);
+  assert.equal(contract.touchTargets.minWidthPx, 48);
+  assert.equal(contract.touchTargets.minHeightPx, 48);
+
+  assert.match(tokens, /--touch-target-min:\s*48px/);
+  assert.match(layout, /Mobile-first method path/);
+  assert.match(layout, /max-width:\s*760px[\s\S]*stage-copy[\s\S]*opacity:\s*1/);
+  assert.match(plane, /padding-left:\s*34px/);
+  assert.match(subheader, /min-height:\s*52px/);
+});
