@@ -14,12 +14,12 @@ const archetypeNavigation = {
 const projectPages = [
   { path: 'src/pages/harnex.astro', archetype: 'infrastructure', migrated: true },
   { path: 'src/pages/korgis.astro', archetype: 'infrastructure', migrated: true },
+  { path: 'src/pages/decisio.astro', archetype: 'infrastructure', migrated: true },
   { path: 'src/pages/local-asr-server.astro', archetype: 'infrastructure', migrated: false },
   { path: 'src/pages/closedroom.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/aura-finance.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/redact-guard.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/redact-guard-android.astro', archetype: 'product', migrated: true },
-  { path: 'src/pages/performance-lab.astro', archetype: 'experiment', migrated: true },
   { path: 'src/pages/traffic-monitoring.astro', archetype: 'experiment', migrated: false },
   { path: 'src/pages/traffic-monitoring-android.astro', archetype: 'experiment', migrated: false },
 ];
@@ -180,4 +180,22 @@ test('migrated product and infrastructure routes use the canonical global header
     assert.doesNotMatch(source, /slot="header"/);
     assert.match(source, /ProductSubHeader/);
   }
+});
+
+
+test('Experiments is the canonical cross-project evidence hub', () => {
+  const source = read('src/pages/experiments.astro');
+  const compatibility = read('src/pages/performance-lab.astro');
+
+  assert.match(source, /Evidence before architecture decisions/);
+  assert.match(source, /QUESTION/);
+  assert.match(source, /METHOD/);
+  assert.match(source, /RESULTS \/ EVIDENCE/);
+  assert.match(source, /SO WHAT/);
+  assert.match(source, /WHAT IT CHANGED/);
+  assert.match(source, /VISUAL PLACEHOLDER/);
+
+  assert.match(compatibility, /Performance Lab has moved into Experiments/);
+  assert.match(compatibility, /canonical="https:\/\/daniele21\.github\.io\/experiments"/);
+  assert.match(compatibility, /Open Experiments/);
 });
