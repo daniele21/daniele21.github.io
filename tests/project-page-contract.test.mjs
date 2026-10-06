@@ -15,6 +15,7 @@ const projectPages = [
   { path: 'src/pages/harnex.astro', archetype: 'infrastructure', migrated: true },
   { path: 'src/pages/korgis.astro', archetype: 'infrastructure', migrated: true },
   { path: 'src/pages/local-asr-server.astro', archetype: 'infrastructure', migrated: false },
+  { path: 'src/pages/decisio.astro', archetype: 'infrastructure', migrated: false },
   { path: 'src/pages/closedroom.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/aura-finance.astro', archetype: 'product', migrated: true },
   { path: 'src/pages/redact-guard.astro', archetype: 'product', migrated: true },
