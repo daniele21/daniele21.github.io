@@ -162,7 +162,7 @@ export const landingData: LandingPageData = {
     kicker: '02 BUILD',
     title: 'Build the reusable AI layer once.',
     intro:
-      'When Local or Hybrid makes sense, I build reusable infrastructure for reasoning, mobile inference, repeated decisions and private speech.'
+      'When Local or Hybrid makes sense, I build reusable infrastructure for reasoning, mobile inference, repeated decisions and private speech.',
     proofLine: 'Same question across every device: what can realistically run locally?',
     ecosystemImage: 'images/ecosystem.png',
     ecosystemAlt: 'Connected Local AI architecture across desktop, Android, local server and cloud fallback',
