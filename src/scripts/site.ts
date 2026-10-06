@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
     menuToggle.addEventListener('click', () => {
       const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
       menuToggle.setAttribute('aria-expanded', String(!isExpanded));
+      menuToggle.setAttribute('aria-label', isExpanded ? 'Open navigation' : 'Close navigation');
+      menuToggle.setAttribute('title', isExpanded ? 'Open navigation' : 'Close navigation');
       navigation.classList.toggle('is-open');
 
       if (!isExpanded) {
@@ -58,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && navigation.classList.contains('is-open')) {
         menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Open navigation');
+        menuToggle.setAttribute('title', 'Open navigation');
         navigation.classList.remove('is-open');
         (menuToggle as HTMLButtonElement).focus();
       }
@@ -66,6 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
     navigation.querySelectorAll('a:not(.dropdown-toggle)').forEach((link) => {
       link.addEventListener('click', () => {
         menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Open navigation');
+        menuToggle.setAttribute('title', 'Open navigation');
         navigation.classList.remove('is-open');
       });
     });
@@ -142,4 +148,3 @@ document.addEventListener('DOMContentLoaded', () => {
     revealElements.forEach((el) => el.classList.add('is-visible'));
   }
 });
-

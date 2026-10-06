@@ -1,10 +1,6 @@
 ---
-/** Plane 02: Architecture & Infrastructure / BUILD. The graphic is managed independently. */
-import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
-import EcosystemDiagram from './EcosystemDiagram.astro';
-
-const { buildStage } = landingData;
+import SystemsOverview from './SystemsOverview.astro';
 ---
 
 <PlaneTemplate
@@ -13,11 +9,10 @@ const { buildStage } = landingData;
   side="right"
   surface="canvas"
   kicker=""
-  title={buildStage.title}
-  intro={buildStage.intro}
-  handoff={buildStage.handoff}
+  title="Build the systems around the model."
+  intro="Once the architecture is clear, I build the reusable runtime, policy and integration layers a real AI product needs—not just the model call."
   nextLabel="TEST"
-  visualLabel="Local AI Execution Layer Ecosystem Diagram"
+  visualLabel="Reusable AI systems built across desktop, Android and stateful decision workloads"
 >
-  <EcosystemDiagram />
+  <SystemsOverview />
 </PlaneTemplate>

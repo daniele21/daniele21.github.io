@@ -1,11 +1,11 @@
 .shell {
-  width: min(calc(100% - clamp(32px, 5vw, 64px)), var(--shell-max-width));
+  width: min(calc(100% - 32px), var(--shell-max-width));
   margin-inline: auto;
 }
 
-@media (max-width: 640px) {
+@media (min-width: 641px) {
   .shell {
-    width: min(calc(100% - 28px), var(--shell-max-width));
+    width: min(calc(100% - clamp(40px, 5vw, 64px)), var(--shell-max-width));
   }
 }
 
@@ -158,15 +158,21 @@ main [data-project-page][data-project-archetype] :is(
   .step-indicator,
   .shot-label,
   .shot-caption,
-  .visual-note
+  .visual-note,
+  .variant-kicker,
+  .variant-backbone,
+  .cta-kicker,
+  .code-preview-lang,
+  .code-scroll-hint
 ) {
-  font-size: var(--text-caption);
+  font-size: var(--text-caption) !important;
 }
 
 main [data-project-page][data-project-archetype] small,
+main [data-project-page][data-project-archetype] code,
 main [data-project-page][data-project-archetype] .step-body p,
 main [data-project-page][data-project-archetype] .flow-step > span {
-  font-size: var(--text-caption);
+  font-size: max(var(--text-caption), 1em) !important;
 }
 
 /* Alternating landing method path. The stage rails and inter-stage curves share
@@ -213,4 +219,35 @@ html[data-method-path-ready='true'] .method-journey .thread-curve {
     transform-origin: center;
     will-change: transform, opacity;
   }
+}
+
+
+/* Mobile-first method path: content stays immediately readable.
+   The path may still communicate progress, but copy and proof do not depend on
+   scroll-coupled entrance animation on touch-sized viewports. */
+@media (max-width: 760px) {
+  html[data-method-path-ready='true'] .method-stage .stage-copy,
+  html[data-method-path-ready='true'] .method-stage .stage-visual {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
+
+
+/* Canonical interactive target floor.
+   Component-specific styles may change shape/padding, but never reduce the
+   usable touch/click height below the mobile-first contract. */
+.primary-button,
+.secondary-button {
+  min-height: var(--touch-target-min) !important;
+}
+
+
+/* Direct project text floor.
+   Legacy project components used unclassed <span> elements for step numbers,
+   notices and compact technical labels. Project content never renders those
+   text nodes below the 14px comprehension contract. */
+main [data-project-page][data-project-archetype] span:not(.sr-only) {
+  font-size: max(var(--text-caption), 1em) !important;
 }

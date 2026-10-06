@@ -47,10 +47,10 @@ jobs:
           cat /tmp/product-experience-http.log
           exit 1
 
-      - name: Capture home across 4 viewports plus reduced motion
+      - name: Capture home across 5 viewports plus reduced motion and dark mode
         run: node scripts/capture-home.mjs
 
-      - name: Capture 9 project routes across 4 viewports
+      - name: Capture About, Experiments and project routes across 5 viewports
         run: node scripts/capture-project-pages.mjs
 
       - name: Upload rendered review artifact

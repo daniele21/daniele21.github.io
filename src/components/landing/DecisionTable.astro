@@ -1,4 +1,15 @@
 ---
+/**
+ * DecisionTable.astro
+ * Comparison matrix: Local AI vs Hybrid vs Cloud.
+ *
+ * Renders two responsive views:
+ *   • Desktop (>760px)  → Classic 4-column side-by-side matrix
+ *   • Mobile  (≤760px)  → Comparative Factor Cards with Local-First lens
+ *                         and transparent trade-off architecture.
+ */
+
+/* ── Data types ── */
 interface ComparisonItem {
   text: string;
   strength?: boolean;
@@ -12,6 +23,7 @@ interface CriterionRow {
   cloud: ComparisonItem;
 }
 
+/* ── Comparison data ── */
 const criteria: CriterionRow[] = [
   {
     dimension: 'Privacy',
@@ -49,10 +61,27 @@ const criteria: CriterionRow[] = [
     cloud: { text: 'Elastic', strength: true },
   },
 ];
+
+/** Core strengths where Local AI excels */
+const coreCriteria = criteria.slice(0, 3);
+
+/** Architectural trade-offs where Hybrid / Cloud provide capacity */
+const tradeoffCriteria = criteria.slice(3);
+
+/** Best-fit heuristics for each deployment model */
+const bestFit = {
+  local: 'Privacy, latency & control',
+  hybrid: 'Variable workloads',
+  cloud: 'Maximum capability',
+};
 ---
 
 <div class="decision-surface">
-  <div class="matrix-card">
+
+  {/* ════════════════════════════════════════════════════
+      DESKTOP: Classic 4-column table (hidden on mobile)
+      ════════════════════════════════════════════════════ */}
+  <div class="matrix-card matrix-card--desktop">
     <table class="matrix-table" aria-label="Local, Hybrid and Cloud workload decision matrix">
       <colgroup>
         <col class="col-criteria" />
@@ -104,7 +133,6 @@ const criteria: CriterionRow[] = [
             </th>
 
             <td class="comparison-cell local-column" data-label="Local AI">
-              <span class="mobile-cell-label">Local AI</span>
               <span class:list={['comparison-value', row.local.strength && 'comparison-value--strength']}>
                 {row.local.strength && (
                   <><span class="sr-only">Strength: </span><span class="status-check" aria-hidden="true">✓</span></>
@@ -114,7 +142,6 @@ const criteria: CriterionRow[] = [
             </td>
 
             <td class="comparison-cell secondary-column hybrid-column" data-label="Hybrid">
-              <span class="mobile-cell-label">Hybrid</span>
               <span class:list={['comparison-value', row.hybrid.strength && 'comparison-value--secondary-strength']}>
                 {row.hybrid.strength && (
                   <><span class="sr-only">Strength: </span><span class="status-check" aria-hidden="true">✓</span></>
@@ -124,7 +151,6 @@ const criteria: CriterionRow[] = [
             </td>
 
             <td class="comparison-cell secondary-column cloud-column" data-label="Cloud">
-              <span class="mobile-cell-label">Cloud</span>
               <span class:list={['comparison-value', row.cloud.strength && 'comparison-value--secondary-strength']}>
                 {row.cloud.strength && (
                   <><span class="sr-only">Strength: </span><span class="status-check" aria-hidden="true">✓</span></>
@@ -139,15 +165,12 @@ const criteria: CriterionRow[] = [
         <tr class="best-for-row">
           <th scope="row" class="best-for-heading">Best fit</th>
           <td class="local-column" data-label="Local AI">
-            <span class="mobile-cell-label">Local AI</span>
             <strong>Privacy, latency & control</strong>
           </td>
           <td class="hybrid-column" data-label="Hybrid">
-            <span class="mobile-cell-label">Hybrid</span>
             Variable workloads
           </td>
           <td class="cloud-column" data-label="Cloud">
-            <span class="mobile-cell-label">Cloud</span>
             Maximum capability
           </td>
         </tr>
@@ -155,6 +178,191 @@ const criteria: CriterionRow[] = [
     </table>
   </div>
 
+
+  {/* ════════════════════════════════════════════════════
+      MOBILE: Comparative Factor Cards (hidden on desktop)
+      ════════════════════════════════════════════════════ */}
+  <div class="mobile-matrix" aria-label="Deployment model decision cards">
+
+    {/* ── Section 1: Core Strengths ── */}
+    <div class="mobile-section">
+      <div class="section-badge-bar">
+        <span class="section-tag section-tag--primary">
+          <span class="section-dot" aria-hidden="true"></span>
+          <span>Core Strengths</span>
+        </span>
+        <span class="section-subtext">Where Local-first deployment excels</span>
+      </div>
+
+      <div class="factor-cards-list">
+        {coreCriteria.map((row) => (
+          <article class="factor-card factor-card--strength">
+            <header class="factor-header">
+              <span class="factor-dimension">{row.dimension}</span>
+              <span class="factor-detail">{row.detail}</span>
+            </header>
+
+            <div class="factor-body">
+              {/* Local AI Hero Box */}
+              <div class="model-box model-box--local model-box--hero">
+                <div class="model-meta">
+                  <span class="model-pill model-pill--local">
+                    <span class="model-dot dot--blue" aria-hidden="true"></span>
+                    <span>Local AI</span>
+                  </span>
+                  <span class="hero-badge">
+                    <span class="badge-icon" aria-hidden="true">✓</span>
+                    <span>Focus strength</span>
+                  </span>
+                </div>
+                <div class="model-value model-value--hero">
+                  <strong>{row.local.text}</strong>
+                </div>
+              </div>
+
+              {/* Alternatives comparison: Hybrid & Cloud */}
+              <div class="alternatives-grid">
+                <div class="model-box model-box--secondary model-box--hybrid">
+                  <div class="model-meta">
+                    <span class="model-pill model-pill--hybrid">
+                      <span class="model-dot dot--violet" aria-hidden="true"></span>
+                      <span>Hybrid</span>
+                    </span>
+                  </div>
+                  <div class="model-value">
+                    <span>{row.hybrid.text}</span>
+                  </div>
+                </div>
+
+                <div class="model-box model-box--secondary model-box--cloud">
+                  <div class="model-meta">
+                    <span class="model-pill model-pill--cloud">
+                      <span class="model-dot dot--teal" aria-hidden="true"></span>
+                      <span>Cloud</span>
+                    </span>
+                  </div>
+                  <div class="model-value">
+                    <span>{row.cloud.text}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+
+
+    {/* ── Section 2: Architectural Trade-offs ── */}
+    <div class="mobile-section mobile-section--tradeoffs">
+      <div class="section-badge-bar section-badge-bar--tradeoffs">
+        <span class="section-tag section-tag--tradeoff">
+          <span class="section-dot dot--amber" aria-hidden="true"></span>
+          <span>Trade-offs</span>
+        </span>
+        <span class="section-subtext">Where Local AI trades capacity for control</span>
+      </div>
+
+      <div class="factor-cards-list">
+        {tradeoffCriteria.map((row) => (
+          <article class="factor-card factor-card--tradeoff">
+            <header class="factor-header">
+              <span class="factor-dimension">{row.dimension}</span>
+              <span class="factor-detail">{row.detail}</span>
+            </header>
+
+            <div class="factor-body">
+              {/* Local AI constraint */}
+              <div class="model-box model-box--local model-box--bound">
+                <div class="model-meta">
+                  <span class="model-pill model-pill--local">
+                    <span class="model-dot dot--blue" aria-hidden="true"></span>
+                    <span>Local AI</span>
+                  </span>
+                  <span class="bound-tag">Device bound</span>
+                </div>
+                <div class="model-value model-value--neutral">
+                  <span>{row.local.text}</span>
+                </div>
+              </div>
+
+              {/* Hybrid & Cloud advantages for this trade-off */}
+              <div class="alternatives-grid">
+                <div class:list={['model-box', 'model-box--secondary', 'model-box--hybrid', row.hybrid.strength && 'model-box--advantage']}>
+                  <div class="model-meta">
+                    <span class="model-pill model-pill--hybrid">
+                      <span class="model-dot dot--violet" aria-hidden="true"></span>
+                      <span>Hybrid</span>
+                    </span>
+                    {row.hybrid.strength && (
+                      <span class="advantage-badge advantage-badge--violet" aria-label="Advantage">✓</span>
+                    )}
+                  </div>
+                  <div class="model-value">
+                    <strong>{row.hybrid.text}</strong>
+                  </div>
+                </div>
+
+                <div class:list={['model-box', 'model-box--secondary', 'model-box--cloud', row.cloud.strength && 'model-box--advantage']}>
+                  <div class="model-meta">
+                    <span class="model-pill model-pill--cloud">
+                      <span class="model-dot dot--teal" aria-hidden="true"></span>
+                      <span>Cloud</span>
+                    </span>
+                    {row.cloud.strength && (
+                      <span class="advantage-badge advantage-badge--teal" aria-label="Advantage">✓</span>
+                    )}
+                  </div>
+                  <div class="model-value">
+                    <strong>{row.cloud.text}</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+
+
+    {/* ── Best Fit Decision Heuristic Summary ── */}
+    <div class="mobile-best-fit">
+      <div class="best-fit-header">
+        <span class="best-fit-tag">Decision Heuristic</span>
+        <h4 class="best-fit-title">Best fit by workload</h4>
+      </div>
+
+      <div class="best-fit-grid">
+        <div class="best-fit-card best-fit-card--local">
+          <div class="best-fit-platform">
+            <span class="model-dot dot--blue" aria-hidden="true"></span>
+            <strong>Local AI</strong>
+          </div>
+          <p class="best-fit-text">{bestFit.local}</p>
+        </div>
+
+        <div class="best-fit-card best-fit-card--hybrid">
+          <div class="best-fit-platform">
+            <span class="model-dot dot--violet" aria-hidden="true"></span>
+            <strong>Hybrid</strong>
+          </div>
+          <p class="best-fit-text">{bestFit.hybrid}</p>
+        </div>
+
+        <div class="best-fit-card best-fit-card--cloud">
+          <div class="best-fit-platform">
+            <span class="model-dot dot--teal" aria-hidden="true"></span>
+            <strong>Cloud</strong>
+          </div>
+          <p class="best-fit-text">{bestFit.cloud}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  {/* ── CTA hook (shared desktop & mobile) ── */}
   <div class="decision-hook">
     <div>
       <h3>Analyzing an AI workload?</h3>
@@ -170,19 +378,56 @@ const criteria: CriterionRow[] = [
       <span aria-hidden="true">↗</span>
     </a>
   </div>
+
 </div>
 
+
 <style>
+  /* ================================================================
+     SHARED FOUNDATION
+     ================================================================ */
   .decision-surface {
+    --hybrid-ink: color-mix(in srgb, var(--accent-violet) 76%, var(--ink-display));
+    --cloud-ink: color-mix(in srgb, var(--accent-teal) 72%, var(--ink-display));
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
   }
 
+  /* Dot indicators */
+  .model-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+  }
+
+  .dot--blue {
+    background: var(--accent-blue);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-blue) 16%, transparent);
+  }
+
+  .dot--violet {
+    background: var(--accent-violet);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-violet) 16%, transparent);
+  }
+
+  .dot--teal {
+    background: var(--accent-teal);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-teal) 16%, transparent);
+  }
+
+  .dot--amber {
+    background: var(--accent-amber);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-amber) 16%, transparent);
+  }
+
+
+  /* ================================================================
+     DESKTOP TABLE (>760px)
+     ================================================================ */
   .matrix-card {
-    --hybrid-ink: color-mix(in srgb, var(--accent-violet) 76%, var(--ink-display));
-    --cloud-ink: color-mix(in srgb, var(--accent-teal) 72%, var(--ink-display));
     width: 100%;
     overflow: hidden;
     background: var(--surface-card);
@@ -220,7 +465,7 @@ const criteria: CriterionRow[] = [
   .criterion-heading,
   .best-for-heading {
     font-family: var(--font-display);
-    font-size: 0.68rem;
+    font-size: 0.875rem;
     font-weight: 720;
     letter-spacing: 0.075em;
     color: var(--ink-subtle);
@@ -299,7 +544,7 @@ const criteria: CriterionRow[] = [
     margin-left: 2px;
     padding-left: 9px;
     border-left: 1px solid color-mix(in srgb, var(--accent-blue) 23%, transparent);
-    font-size: 0.66rem;
+    font-size: 0.875rem;
     line-height: 1.15;
     font-weight: 620;
     color: var(--ink-subtle);
@@ -318,7 +563,7 @@ const criteria: CriterionRow[] = [
 
   .criterion-cell > span {
     display: block;
-    font-size: 0.72rem;
+    font-size: 0.875rem;
     line-height: 1.3;
     color: var(--ink-subtle);
     font-weight: 450;
@@ -336,7 +581,7 @@ const criteria: CriterionRow[] = [
   .group-divider-cell small {
     display: inline;
     font-family: var(--font-display);
-    font-size: 0.68rem;
+    font-size: 0.875rem;
     line-height: 1.2;
   }
 
@@ -357,7 +602,7 @@ const criteria: CriterionRow[] = [
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.82rem;
+    font-size: 0.875rem;
     line-height: 1.35;
     font-weight: 540;
     color: var(--ink-muted);
@@ -399,7 +644,7 @@ const criteria: CriterionRow[] = [
   .status-check {
     flex: 0 0 auto;
     color: var(--accent-blue);
-    font-size: 0.82rem;
+    font-size: 0.875rem;
     font-weight: 760;
   }
 
@@ -412,7 +657,7 @@ const criteria: CriterionRow[] = [
   }
 
   .best-for-row td {
-    font-size: 0.74rem;
+    font-size: 0.875rem;
     line-height: 1.4;
     color: var(--ink-muted);
   }
@@ -434,6 +679,368 @@ const criteria: CriterionRow[] = [
     font-weight: 760;
   }
 
+
+  /* ================================================================
+     MOBILE COMPARATIVE CARDS (≤760px)
+     ================================================================ */
+  .mobile-matrix {
+    display: none;
+  }
+
+  @media (max-width: 760px) {
+    .matrix-card--desktop {
+      display: none;
+    }
+
+    .mobile-matrix {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+  }
+
+  .mobile-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* ── Section Header Bar ── */
+  .section-badge-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-inline: 2px;
+  }
+
+  .section-tag {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .section-tag--primary {
+    background: color-mix(in srgb, var(--accent-blue) 10%, var(--surface-card));
+    color: var(--accent-blue-dark);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, transparent);
+  }
+
+  .section-tag--tradeoff {
+    background: color-mix(in srgb, var(--accent-amber) 10%, var(--surface-card));
+    color: var(--accent-amber);
+    border: 1px solid color-mix(in srgb, var(--accent-amber) 22%, transparent);
+  }
+
+  .section-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+  }
+
+  .section-subtext {
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--ink-subtle);
+    font-weight: 500;
+  }
+
+  /* ── Factor Cards List ── */
+  .factor-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .factor-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--ink-display) 3%, transparent);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .factor-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .factor-dimension {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 750;
+    letter-spacing: -0.015em;
+    color: var(--ink-display);
+  }
+
+  .factor-detail {
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--ink-subtle);
+    font-weight: 480;
+  }
+
+  /* ── Factor Body & Model Boxes ── */
+  .factor-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .model-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 12px;
+    border-radius: 11px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .model-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .model-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .model-pill--local { color: var(--accent-blue-dark); }
+  .model-pill--hybrid { color: var(--hybrid-ink); }
+  .model-pill--cloud { color: var(--cloud-ink); }
+
+  .model-value {
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+
+  .model-value strong {
+    font-weight: 650;
+  }
+
+  /* Local Hero Card (Core Strengths) */
+  .model-box--hero {
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent-blue) 7%, var(--surface-card)),
+        color-mix(in srgb, var(--accent-blue) 3%, var(--surface-card))
+      );
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 25%, transparent);
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--accent-blue) 8%, transparent);
+    padding: 12px 14px;
+  }
+
+  .model-value--hero {
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    color: var(--accent-blue-dark);
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.875rem;
+    font-weight: 750;
+    letter-spacing: 0.02em;
+    color: var(--accent-blue-dark);
+    background: color-mix(in srgb, var(--accent-blue) 12%, transparent);
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+
+  .badge-icon {
+    font-weight: 850;
+  }
+
+  /* Local Box in Trade-off section */
+  .model-box--bound {
+    background: color-mix(in srgb, var(--surface-muted) 50%, var(--surface-card));
+    border: 1px dashed var(--border-medium);
+  }
+
+  .bound-tag {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink-subtle);
+    background: color-mix(in srgb, var(--ink-subtle) 10%, transparent);
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+
+  .model-value--neutral {
+    color: var(--ink-muted);
+  }
+
+  /* Alternatives Grid (Hybrid & Cloud) */
+  .alternatives-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  @media (max-width: 360px) {
+    .alternatives-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .model-box--secondary {
+    background: color-mix(in srgb, var(--surface-subtle) 70%, var(--surface-card));
+  }
+
+  /* Advantage badges in Trade-offs */
+  .model-box--advantage {
+    background: var(--surface-card);
+  }
+
+  .model-box--hybrid.model-box--advantage {
+    border-color: color-mix(in srgb, var(--accent-violet) 26%, transparent);
+    background: color-mix(in srgb, var(--accent-violet) 4%, var(--surface-card));
+  }
+
+  .model-box--cloud.model-box--advantage {
+    border-color: color-mix(in srgb, var(--accent-teal) 26%, transparent);
+    background: color-mix(in srgb, var(--accent-teal) 4%, var(--surface-card));
+  }
+
+  .advantage-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .advantage-badge--violet { background: var(--accent-violet); }
+  .advantage-badge--teal { background: var(--accent-teal); }
+
+
+  /* ── Mobile Best-fit Summary Card ── */
+  .mobile-best-fit {
+    background: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--ink-display) 3%, transparent);
+  }
+
+  .best-fit-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .best-fit-tag {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    color: var(--ink-subtle);
+    text-transform: uppercase;
+  }
+
+  .best-fit-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 780;
+    letter-spacing: -0.015em;
+    color: var(--ink-display);
+  }
+
+  .best-fit-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .best-fit-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 11px 13px;
+    border-radius: 11px;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-subtle);
+  }
+
+  .best-fit-card--local {
+    background: color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card));
+    border-color: color-mix(in srgb, var(--accent-blue) 20%, transparent);
+  }
+
+  .best-fit-card--hybrid {
+    background: color-mix(in srgb, var(--accent-violet) 4%, var(--surface-card));
+    border-color: color-mix(in srgb, var(--accent-violet) 20%, transparent);
+  }
+
+  .best-fit-card--cloud {
+    background: color-mix(in srgb, var(--accent-teal) 4%, var(--surface-card));
+    border-color: color-mix(in srgb, var(--accent-teal) 20%, transparent);
+  }
+
+  .best-fit-platform {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 750;
+  }
+
+  .best-fit-card--local .best-fit-platform { color: var(--accent-blue-dark); }
+  .best-fit-card--hybrid .best-fit-platform { color: var(--hybrid-ink); }
+  .best-fit-card--cloud .best-fit-platform { color: var(--cloud-ink); }
+
+  .best-fit-text {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--ink);
+    font-weight: 550;
+  }
+
+
+  /* ================================================================
+     CTA HOOK (shared desktop & mobile)
+     ================================================================ */
   .decision-hook {
     display: flex;
     align-items: center;
@@ -456,142 +1063,20 @@ const criteria: CriterionRow[] = [
 
   .decision-hook p {
     margin: 0;
-    font-size: 0.74rem;
+    font-size: 0.875rem;
     line-height: 1.45;
     color: var(--ink-muted);
   }
 
   .decision-cta {
     flex-shrink: 0;
-    min-height: 38px;
-    padding-inline: 14px;
+    min-height: 48px;
+    padding-inline: 18px;
     cursor: pointer;
     white-space: nowrap;
   }
 
-  .mobile-cell-label {
-    display: none;
-  }
-
   @media (max-width: 760px) {
-    .matrix-card {
-      overflow: hidden;
-      border: 1px solid var(--border-medium);
-      border-radius: 14px;
-      background: var(--surface-card);
-    }
-
-    .matrix-table,
-    .matrix-table tbody {
-      display: block;
-      width: 100%;
-    }
-
-    .matrix-table colgroup,
-    .matrix-table thead {
-      display: none;
-    }
-
-    .matrix-table tbody tr {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin: 0;
-      background: var(--surface-card);
-      border: 0;
-      border-bottom: 1px solid var(--border-medium);
-      border-radius: 0;
-    }
-
-    .matrix-table th,
-    .matrix-table td {
-      display: block;
-      min-width: 0;
-      padding: 12px 14px;
-      border: 0;
-    }
-
-    .criterion-cell {
-      grid-column: 1 / -1;
-      border-bottom: 1px solid var(--border-subtle) !important;
-    }
-
-    .mobile-cell-label {
-      display: block;
-      margin-bottom: 5px;
-      font-family: var(--font-display);
-      font-size: var(--text-caption);
-      line-height: 1.2;
-      font-weight: 720;
-      letter-spacing: 0.035em;
-      color: var(--ink-subtle);
-      text-transform: uppercase;
-    }
-
-    .comparison-cell.local-column {
-      grid-column: 1 / -1;
-      padding-top: 12px;
-      padding-bottom: 12px;
-      border: 0;
-      border-bottom: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-subtle));
-      box-shadow: inset 3px 0 0 var(--accent-blue);
-    }
-
-    .comparison-cell.local-column .mobile-cell-label,
-    .best-for-row .local-column .mobile-cell-label {
-      color: var(--accent-blue-dark);
-    }
-
-    .comparison-cell.hybrid-column .mobile-cell-label,
-    .best-for-row .hybrid-column .mobile-cell-label {
-      color: var(--hybrid-ink);
-    }
-
-    .comparison-cell.cloud-column .mobile-cell-label,
-    .best-for-row .cloud-column .mobile-cell-label {
-      color: var(--cloud-ink);
-    }
-
-    .secondary-column + .secondary-column {
-      border-left: 1px solid var(--border-subtle);
-    }
-
-    .group-divider-row {
-      display: block !important;
-    }
-
-    .group-divider-cell {
-      padding: 12px 14px !important;
-    }
-
-    .group-divider-cell span,
-    .group-divider-cell small {
-      display: block;
-    }
-
-    .group-divider-cell small {
-      margin: 4px 0 0;
-    }
-
-    .best-for-row .best-for-heading {
-      grid-column: 1 / -1;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .best-for-row .local-column {
-      grid-column: 1 / -1;
-      border: 0;
-      border-bottom: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-subtle));
-      box-shadow: inset 3px 0 0 var(--accent-blue);
-    }
-
-    .best-for-row td:last-child {
-      border-left: 1px solid var(--border-subtle);
-    }
-
-    .matrix-table tbody .best-for-row {
-      border-bottom: 0;
-    }
-
     .decision-hook {
       align-items: flex-start;
       flex-direction: column;

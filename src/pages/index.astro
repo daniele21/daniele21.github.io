@@ -6,7 +6,6 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { siteMetadata } from '../content/site';
-import LandingHeader from '../components/landing/LandingHeader.astro';
 import LandingHero from '../components/landing/LandingHero.astro';
 import ContinuousJourneyPath from '../components/landing/ContinuousJourneyPath.astro';
 import DecisionStage from '../components/landing/DecisionStage.astro';
@@ -19,16 +18,15 @@ import AboutSignal from '../components/landing/AboutSignal.astro';
 
 <BaseLayout
   title="Daniele Moltisanti"
-  description="Explore how far AI can move from the cloud to systems we control. Decide where AI should run, build reusable inference infrastructure, test inside real products, and measure what actually works."
+  description="I build AI systems end to end: frame the problem, design the architecture, build reusable systems, ship real products and use reproducible evidence to decide what works."
   ogTitle={siteMetadata.socialTitle}
   ogDescription={siteMetadata.socialDescription}
-  ogImageAlt="Daniele Moltisanti - Local AI first, not Local AI only"
+  ogImageAlt="Daniele Moltisanti - AI systems from problem to evidence"
 >
   <script is:inline>
     document.documentElement.dataset.methodPathReady = 'pending';
   </script>
 
-  <LandingHeader slot="header" />
 
   <LandingHero />
 

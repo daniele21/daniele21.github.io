@@ -1,22 +1,22 @@
 import type { SiteMetadata, NavItem } from '../../../types/content';
 
 export const siteMetadata: SiteMetadata = {
-  title: 'Daniele Moltisanti - GenAI, Local AI & AI Architecture',
+  title: 'Daniele Moltisanti - AI Systems, Product, Architecture & Evaluation',
   description:
-    'I help teams decide where AI should run and prove it works across Local, Hybrid and Cloud, based on privacy, control, performance and real product constraints.',
+    'I build AI systems end to end: from problem framing and architecture to reusable infrastructure, real products and reproducible evidence.',
   canonical: 'https://daniele21.github.io/',
-  socialTitle: 'Local AI first ≠ Local AI only',
+  socialTitle: 'AI systems from problem to evidence',
   socialDescription:
-    'GenAI systems, Local AI and evidence-led architecture decisions across Local, Hybrid and Cloud.',
+    'Strategy, product, architecture, engineering and evaluation across Local, Hybrid and Cloud AI systems.',
   ogImage: 'https://daniele21.github.io/social-card.png',
 };
 
 export const navigation: NavItem[] = [
-  { label: 'Where should AI run?', href: '#strategy', icon: 'compass' },
-  { label: 'What does it take?', href: '#infrastructure', icon: 'cpu' },
-  { label: 'Does it work?', href: '#applications', icon: 'apps' },
-  { label: 'Is it good enough?', href: '#evidence', icon: 'chart' },
-  { label: 'Who am I?', href: 'about', icon: 'user' },
+  { label: 'Method', href: '#strategy', icon: 'compass' },
+  { label: 'Systems', href: '#infrastructure', icon: 'cpu' },
+  { label: 'Products', href: '#applications', icon: 'apps' },
+  { label: 'Experiments', href: 'experiments', icon: 'chart' },
+  { label: 'About', href: 'about', icon: 'user' },
 ];
 
 export const socialLinks = {

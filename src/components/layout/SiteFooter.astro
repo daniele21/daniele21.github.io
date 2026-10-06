@@ -213,6 +213,39 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
       gap: 14px;
     }
   }
+
+  /* MOBILE-FIRST FOOTER */
+  .footer-brand,
+  .footer-text-link,
+  .footer-icon-link {
+    min-height: 48px;
+  }
+
+  .footer-icon-link {
+    width: 48px;
+    height: 48px;
+  }
+
+  @media (max-width: 720px) {
+    .site-footer { padding: 16px 0 24px; }
+
+    .footer-inner {
+      align-items: stretch;
+      gap: 10px;
+      padding-top: 16px;
+      text-align: left;
+    }
+
+    .footer-left {
+      justify-content: flex-start;
+    }
+
+    .footer-links {
+      justify-content: space-between;
+      gap: 10px;
+    }
+  }
+
 </style>
 
 

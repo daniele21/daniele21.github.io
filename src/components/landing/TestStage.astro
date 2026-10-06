@@ -1,13 +1,6 @@
 ---
-/** Plane 03: use real products as proving grounds. */
-import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
-import PlaneCardGrid from './PlaneCardGrid.astro';
-import ProjectProofCard from './ProjectProofCard.astro';
-
-const { testStage } = landingData;
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
+import ProductsOverview from './ProductsOverview.astro';
 ---
 
 <PlaneTemplate
@@ -16,27 +9,10 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
   side="left"
   surface="subtle"
   kicker=""
-  title="Does it work in a real product?"
-  intro="Infrastructure only matters when a real application can depend on it."
-  handoff={testStage.handoff}
+  title="Turn the system into a product people can actually use."
+  intro="Real products expose the hard parts: user control, domain rules, integration boundaries, failure behavior and the places where AI should not be used at all."
   nextLabel="MEASURE"
-  visualLabel="Applications used as empirical proving grounds"
+  visualLabel="AI products used as end-to-end proving grounds"
 >
-  <PlaneCardGrid layout="grid">
-    {testStage.applications.map((app) => (
-      <ProjectProofCard
-        variant="compact"
-        title={app.name}
-        description={app.question}
-        href={resolveHref(app.href)}
-        logoPath={app.logoPath}
-        logoAlt={`${app.name} logo`}
-        imagePath={app.imagePath}
-        imageAlt={`${app.name} product interface`}
-        tone={app.colorClass as 'blue' | 'green' | 'purple' | 'red'}
-        features={app.features}
-        ctaLabel={`See the proof`}
-      />
-    ))}
-  </PlaneCardGrid>
+  <ProductsOverview />
 </PlaneTemplate>

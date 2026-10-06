@@ -274,4 +274,72 @@ const resolveHref = (href: string) => {
   @media (prefers-reduced-motion: reduce) {
     .project-hero-action { transition: none; }
   }
+
+  /* MOBILE-FIRST PROJECT HERO */
+  @media (max-width: 640px) {
+    .project-hero {
+      padding: 32px 0 40px;
+    }
+
+    .project-hero-shell {
+      gap: 24px;
+    }
+
+    .project-hero-meta-row {
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .project-hero-logo {
+      width: 30px;
+      height: 30px;
+    }
+
+    .project-hero-status {
+      min-height: 28px;
+      padding-inline: 8px;
+    }
+
+    h1 {
+      font-size: clamp(2.25rem, 11.5vw, 3.1rem);
+      line-height: 1;
+      letter-spacing: -0.055em;
+    }
+
+    .project-hero-lede {
+      margin-top: 14px;
+      font-size: 1rem;
+      line-height: 1.58;
+    }
+
+    .project-hero-meta {
+      gap: 6px 10px;
+      margin-top: 14px;
+    }
+
+    .project-hero-meta span::after {
+      display: none;
+    }
+
+    .project-hero-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .project-hero-action {
+      min-height: 50px;
+    }
+
+    .project-hero-action.is-primary {
+      width: 100%;
+    }
+
+    .project-hero-action.is-icon-only {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
 </style>

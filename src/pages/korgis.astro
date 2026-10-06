@@ -8,6 +8,8 @@ import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
 import ProjectHero from '../components/project/ProjectHero.astro';
 import ProjectSection from '../components/project/ProjectSection.astro';
 import ProjectProof from '../components/project/ProjectProof.astro';
+import ProjectImpactStrip from '../components/project/ProjectImpactStrip.astro';
+import { portfolioNarrative } from '../content/portfolio';
 import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
 import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
 import ProjectRelations from '../components/project/ProjectRelations.astro';
@@ -48,6 +50,7 @@ const localLlmSchema = {
   },
   "codeRepository": "https://github.com/daniele21/local-llm-server"
 };
+const portfolioProject = portfolioNarrative.systems.find((item) => item.id === 'korgis')!;
 ---
 
 <BaseLayout
@@ -96,6 +99,14 @@ const localLlmSchema = {
     <ProjectProof
       statement="Applications can depend on one local API while model backends, routing and lifecycle change underneath."
       detail="The project is not just a model runner: it makes local inference reusable and inspectable as product infrastructure."
+    />
+
+    <ProjectImpactStrip
+      mission={portfolioProject.question}
+      role="Independent end-to-end ownership across architecture, runtime policy, backend integration, API design, product control plane, evaluation and documentation."
+      evidence={portfolioProject.proof.slice(0, 3).join(' · ')}
+      soWhat={portfolioProject.soWhat}
+      source="Portfolio narrative verified against the current repository state on 2026-09-29."
     />
 
     <ProjectSection
@@ -179,8 +190,8 @@ const localLlmSchema = {
         },
         {
           stage: 'MEASURE · EVIDENCE',
-          title: 'Performance Lab',
-          href: '/performance-lab',
+          title: 'Experiments',
+          href: '/experiments#model-capability-benchmark',
           note: 'Hardware and runtime viability',
         },
       ]}
