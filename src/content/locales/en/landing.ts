@@ -225,8 +225,7 @@ export const landingData: LandingPageData = {
         layer: 'Stateful local-LLM decision runtime',
         status: 'EXPERIMENTAL',
         summary: 'Prefill stable context once, send only changing state and return a typed action.',
-        href: 'https://github.com/daniele21/decisio',
-        external: true,
+        href: '/decisio',
         logoPath: 'images/decisio/decisio-mark-512.png',
         logoAlt: 'Decisio logo',
         features: [
