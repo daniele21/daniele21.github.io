@@ -6,7 +6,7 @@ interface Track {
   status: string;
   resultUrl?: string;
   sourceUrl?: string;
-  resultKind?: 'jev-routing';
+  resultKind?: 'jev-routing' | 'mcb-overview';
 }
 
 interface Props {
@@ -319,6 +319,232 @@ const selectorLabelFor = (track: Track) => {
         });
       };
 
+      const plotMcbOverview = (data) => {
+        const svg = root.querySelector('[data-performance-plot]');
+        if (!(svg instanceof SVGElement)) return [];
+
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+        const points = Array.isArray(data?.frontier?.points)
+          ? data.frontier.points
+              .map((point) => ({
+                ...point,
+                qualityNumber: Number(point.quality),
+                latencyNumber: Number(point.latency_p50_ms),
+              }))
+              .filter(
+                (point) =>
+                  Number.isFinite(point.qualityNumber) &&
+                  Number.isFinite(point.latencyNumber),
+              )
+          : [];
+
+        if (!points.length) return [];
+
+        const W = 620;
+        const H = 250;
+        const pad = { left: 48, right: 24, top: 22, bottom: 42 };
+        const innerW = W - pad.left - pad.right;
+        const innerH = H - pad.top - pad.bottom;
+
+        const maxLatency = Math.max(...points.map((point) => point.latencyNumber)) * 1.06;
+        const minQuality = Math.max(
+          0,
+          Math.floor(Math.min(...points.map((point) => point.qualityNumber)) / 10) * 10 - 10,
+        );
+        const maxQuality = Math.min(
+          100,
+          Math.ceil(Math.max(...points.map((point) => point.qualityNumber)) / 10) * 10 + 5,
+        );
+        const qualitySpan = Math.max(10, maxQuality - minQuality);
+
+        const x = (latency) => pad.left + (latency / maxLatency) * innerW;
+        const y = (quality) =>
+          pad.top + innerH - ((quality - minQuality) / qualitySpan) * innerH;
+
+        const grid = createSvg('g', { class: 'plot-grid' });
+        [0, 0.5, 1].forEach((fraction) => {
+          const gy = pad.top + innerH * fraction;
+          grid.appendChild(
+            createSvg('line', {
+              x1: pad.left,
+              y1: gy,
+              x2: W - pad.right,
+              y2: gy,
+            }),
+          );
+        });
+        svg.appendChild(grid);
+
+        const axisLabels = createSvg('g', { class: 'plot-axis-labels' });
+        const yTop = createSvg('text', { x: 5, y: pad.top + 4 });
+        yTop.textContent = `${Math.round(maxQuality)}`;
+        axisLabels.appendChild(yTop);
+
+        const yBottom = createSvg('text', { x: 5, y: pad.top + innerH + 4 });
+        yBottom.textContent = `${Math.round(minQuality)}`;
+        axisLabels.appendChild(yBottom);
+
+        const xLeft = createSvg('text', { x: pad.left, y: H - 10 });
+        xLeft.textContent = '0s';
+        axisLabels.appendChild(xLeft);
+
+        const xRight = createSvg('text', { x: W - pad.right - 32, y: H - 10 });
+        xRight.textContent = `${Math.ceil(maxLatency / 1000)}s`;
+        axisLabels.appendChild(xRight);
+        svg.appendChild(axisLabels);
+
+        const sorted = [...points].sort((a, b) => a.latencyNumber - b.latencyNumber);
+        let bestQuality = -Infinity;
+        const frontier = sorted.filter((point) => {
+          if (point.qualityNumber > bestQuality) {
+            bestQuality = point.qualityNumber;
+            return true;
+          }
+          return false;
+        });
+
+        if (frontier.length > 1) {
+          svg.appendChild(
+            createSvg('polyline', {
+              class: 'plot-frontier',
+              points: frontier
+                .map((point) => `${x(point.latencyNumber)},${y(point.qualityNumber)}`)
+                .join(' '),
+            }),
+          );
+        }
+
+        points.forEach((point, index) => {
+          const group = createSvg('g', { class: 'plot-point' });
+          const isApi = point.deployment === 'api';
+          const isFrontier = frontier.includes(point);
+
+          const circle = createSvg('circle', {
+            cx: x(point.latencyNumber),
+            cy: y(point.qualityNumber),
+            r: isFrontier ? 7 : 5.5,
+            class: [
+              isFrontier ? 'is-frontier' : '',
+              isApi ? 'is-api' : 'is-local',
+            ]
+              .filter(Boolean)
+              .join(' '),
+          });
+
+          const title = createSvg('title');
+          title.textContent = `${shortModel(point.model_key)} · ${point.qualityNumber.toFixed(1)} quality · ${formatSeconds(point.latencyNumber)} p50 · ${point.deployment}`;
+          circle.appendChild(title);
+          group.appendChild(circle);
+
+          const label = createSvg('text', {
+            x: x(point.latencyNumber) + 9,
+            y: y(point.qualityNumber) + (index % 2 === 0 ? -8 : 16),
+          });
+          label.textContent = shortModel(point.model_key);
+          group.appendChild(label);
+          svg.appendChild(group);
+        });
+
+        return points;
+      };
+
+      const renderMcbOverview = (data, tab) => {
+        const points = plotMcbOverview(data);
+        if (!points.length) throw new Error('No published MCB frontier points');
+
+        const models = Array.isArray(data?.models) ? data.models : [];
+        const capabilities = Array.isArray(data?.capabilities) ? data.capabilities : [];
+        const cells = Array.isArray(data?.cells) ? data.cells : [];
+
+        const overallBest = [...points].sort(
+          (a, b) => Number(b.quality) - Number(a.quality),
+        )[0];
+
+        const localPoints = points.filter((point) => point.deployment === 'local');
+        const bestLocal = [...localPoints].sort(
+          (a, b) => Number(b.quality) - Number(a.quality),
+        )[0];
+        const fastestLocal = [...localPoints].sort(
+          (a, b) => Number(a.latency_p50_ms) - Number(b.latency_p50_ms),
+        )[0];
+
+        setText('[data-result-title]', tab.dataset.title || 'Model Capability Benchmark');
+        setText('[data-result-question]', tab.dataset.question || '');
+        setText('[data-model-count]', String(models.length || points.length));
+        setText('[data-request-count]', String(cells.length || '—'));
+        setText(
+          '[data-dataset]',
+          capabilities.length ? `${capabilities.length} capabilities` : 'multi-capability',
+        );
+        setText('[data-runtime]', 'Local + API');
+
+        setText('[data-best-quality]', `${Number(overallBest.quality).toFixed(1)}`);
+        setText('[data-best-quality-model]', shortModel(overallBest.model_key));
+
+        setText(
+          '[data-balance]',
+          bestLocal
+            ? `${Number(bestLocal.quality).toFixed(1)} · ${formatSeconds(bestLocal.latency_p50_ms)}`
+            : '—',
+        );
+        setText(
+          '[data-balance-model]',
+          bestLocal ? `${shortModel(bestLocal.model_key)} · best local quality` : '',
+        );
+
+        setText(
+          '[data-fastest]',
+          fastestLocal ? formatSeconds(fastestLocal.latency_p50_ms) : '—',
+        );
+        setText(
+          '[data-fastest-model]',
+          fastestLocal
+            ? `${shortModel(fastestLocal.model_key)} · ${Number(fastestLocal.quality).toFixed(1)} quality`
+            : '',
+        );
+
+        if (bestLocal && overallBest) {
+          const qualityGap = Number(overallBest.quality) - Number(bestLocal.quality);
+          const speedRatio =
+            Number(bestLocal.latency_p50_ms) / Number(overallBest.latency_p50_ms);
+
+          setText(
+            '[data-readout-title]',
+            `${shortModel(bestLocal.model_key)} is the strongest local point in the published snapshot.`,
+          );
+          setText(
+            '[data-readout]',
+            `${Number(bestLocal.quality).toFixed(1)} aggregate quality at ${formatSeconds(bestLocal.latency_p50_ms)} p50. The top overall point is ${shortModel(overallBest.model_key)} at ${Number(overallBest.quality).toFixed(1)}, a ${qualityGap.toFixed(1)}-point gap${Number.isFinite(speedRatio) ? ` while the local point is ${speedRatio.toFixed(1)}× slower` : ''}.`,
+          );
+        }
+
+        const source = root.querySelector('[data-result-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        }
+
+        const heading = root.querySelector('.plot-heading__eyebrow');
+        if (heading) heading.textContent = 'MODEL CAPABILITY × LATENCY';
+
+        const plotTitle = root.querySelector('.plot-heading strong');
+        if (plotTitle) plotTitle.textContent = 'Published model frontier';
+
+        const plotNote = root.querySelector('.plot-heading__note');
+        if (plotNote) plotNote.textContent = 'Aggregate quality vs p50 latency';
+
+        const legend = root.querySelector('.plot-legend');
+        if (legend) {
+          legend.innerHTML =
+            '<span><i class="legend-dot legend-dot--local"></i>Local</span><span><i class="legend-dot legend-dot--api"></i>API</span><span><i class="legend-line"></i>Pareto frontier</span>';
+        }
+
+        const highlightLabels = root.querySelectorAll('.highlight > span');
+        if (highlightLabels[0]) highlightLabels[0].textContent = 'BEST OVERALL';
+        if (highlightLabels[1]) highlightLabels[1].textContent = 'BEST LOCAL';
+        if (highlightLabels[2]) highlightLabels[2].textContent = 'FASTEST LOCAL';
+      };
+
       const renderJevRouting = (data, tab) => {
         const rows = Array.isArray(data?.overview) ? data.overview : [];
         if (!rows.length) throw new Error('No published routing rows');
@@ -415,6 +641,7 @@ const selectorLabelFor = (track: Track) => {
           if (currentRequest !== requestId) return;
 
           if (tab.dataset.resultKind === 'jev-routing') renderJevRouting(data, tab);
+          else if (tab.dataset.resultKind === 'mcb-overview') renderMcbOverview(data, tab);
           else throw new Error('Unsupported result adapter');
 
           showOnly('result');
@@ -771,6 +998,14 @@ const selectorLabelFor = (track: Track) => {
     stroke-width: 3;
   }
 
+  .plot-svg :global(.plot-point circle.is-local) {
+    fill: var(--accent-blue);
+  }
+
+  .plot-svg :global(.plot-point circle.is-api) {
+    fill: var(--accent-violet);
+  }
+
   .plot-svg :global(.plot-point circle.is-frontier) {
     fill: var(--accent-blue);
   }
@@ -801,6 +1036,14 @@ const selectorLabelFor = (track: Track) => {
     height: 8px;
     border-radius: 50%;
     background: color-mix(in srgb, var(--accent-violet) 62%, var(--accent-blue));
+  }
+
+  .legend-dot--local {
+    background: var(--accent-blue);
+  }
+
+  .legend-dot--api {
+    background: var(--accent-violet);
   }
 
   .legend-line {
