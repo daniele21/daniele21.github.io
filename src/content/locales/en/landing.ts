@@ -347,7 +347,7 @@ export const landingData: LandingPageData = {
         id: 'experiments',
         title: 'Experiments',
         tag: 'REPRODUCIBLE EVALUATION',
-        question: 'Which model, architecture or execution strategy is actually good enough for the task?',
+        question: 'Select a benchmark. Inspect the latest evidence.',
         metrics: [],
         tracks: [
           {
