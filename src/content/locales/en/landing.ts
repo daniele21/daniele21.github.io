@@ -356,17 +356,17 @@ export const landingData: LandingPageData = {
             id: 'model-capability',
             title: 'Model Capability Benchmark',
             question: 'How much model do you actually need for a task?',
-            status: 'NO PUBLISHED RUN',
+            status: 'NO PUBLISHED SNAPSHOT',
           },
           {
             id: 'jev-vs-llm-routing',
             title: 'JEV vs LLM · Routing',
-            question: 'Can a compact specialised model handle a 77-way routing task efficiently?',
+            question: 'How do local models trade routing quality for latency?',
             status: 'PUBLISHED',
             resultUrl:
-              'https://raw.githubusercontent.com/daniele21/experiments/main/experiments/jev-vs-llm/results/benchmark_data.json',
+              'https://raw.githubusercontent.com/daniele21/experiments/feature/clm-autonomous-runner/experiments/jev-vs-llm/results/benchmark_data.json',
             sourceUrl:
-              'https://github.com/daniele21/experiments/blob/main/experiments/jev-vs-llm/results/benchmark_data.json',
+              'https://github.com/daniele21/experiments/blob/feature/clm-autonomous-runner/experiments/jev-vs-llm/results/benchmark_data.json',
             resultKind: 'jev-routing',
           },
           {
