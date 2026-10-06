@@ -17,114 +17,120 @@ const { tracks } = Astro.props;
 ---
 
 <div class="experiment-explorer" data-experiment-explorer>
-  <div class="experiment-selector" role="tablist" aria-label="Select experiment">
-    {tracks.map((track, index) => (
-      <button
-        type="button"
-        class:list={['experiment-tab', { 'is-active': index === 0 }]}
-        role="tab"
-        aria-selected={index === 0 ? 'true' : 'false'}
-        tabindex={index === 0 ? '0' : '-1'}
-        data-experiment-tab
-        data-track-id={track.id || ''}
-        data-title={track.title}
-        data-question={track.question}
-        data-status={track.status}
-        data-result-url={track.resultUrl || ''}
-        data-source-url={track.sourceUrl || ''}
-        data-result-kind={track.resultKind || ''}
-      >
-        <span class="experiment-tab__status">
-          <span class:list={['status-dot', { 'status-dot--live': Boolean(track.resultUrl) }]} aria-hidden="true"></span>
-          {track.resultUrl ? 'Published evidence' : track.status}
-        </span>
-        <strong>{track.title}</strong>
-        <span class="experiment-tab__question">{track.question}</span>
-      </button>
-    ))}
+  <div class="experiment-selector-wrap">
+    <div class="experiment-selector" role="tablist" aria-label="Select experiment">
+      {tracks.map((track, index) => (
+        <button
+          type="button"
+          class:list={['experiment-tab', { 'is-active': index === 0 }]}
+          role="tab"
+          aria-selected={index === 0 ? 'true' : 'false'}
+          tabindex={index === 0 ? '0' : '-1'}
+          data-experiment-tab
+          data-track-id={track.id || ''}
+          data-title={track.title}
+          data-question={track.question}
+          data-status={track.status}
+          data-result-url={track.resultUrl || ''}
+          data-source-url={track.sourceUrl || ''}
+          data-result-kind={track.resultKind || ''}
+        >
+          <span class="experiment-tab__title">{track.title}</span>
+          <span class:list={['experiment-tab__state', { 'is-live': Boolean(track.resultUrl) }]}>
+            <span class="status-dot" aria-hidden="true"></span>
+            {track.resultUrl ? 'Published' : 'No run'}
+          </span>
+        </button>
+      ))}
+    </div>
   </div>
 
   <section class="evidence-panel" aria-live="polite" aria-label="Selected experiment evidence">
     <div class="evidence-panel__loading" data-evidence-loading hidden>
-      Loading published evidence from GitHub…
+      Loading published evidence…
     </div>
 
     <div class="evidence-panel__empty" data-evidence-empty hidden>
-      <span class="evidence-panel__eyebrow">NO PUBLISHED RUN YET</span>
+      <span class="evidence-panel__eyebrow">NO PUBLISHED RUN</span>
       <h3 data-empty-title></h3>
       <p data-empty-question></p>
       <p class="evidence-panel__empty-note">
-        The benchmark exists in the Experiments repository, but there is no versioned result artifact
-        available to surface here yet. No placeholder metrics are shown.
+        The benchmark is defined in Experiments, but no versioned result artifact is published yet.
       </p>
     </div>
 
     <div class="evidence-panel__result" data-evidence-result hidden>
       <div class="evidence-panel__header">
-        <div>
-          <span class="evidence-panel__eyebrow">LIVE FROM EXPERIMENTS / MAIN</span>
+        <div class="evidence-panel__heading">
+          <span class="evidence-panel__eyebrow">
+            <span class="live-dot" aria-hidden="true"></span>
+            LATEST PUBLISHED RUN
+          </span>
           <h3 data-result-title></h3>
           <p data-result-question></p>
         </div>
-        <a data-result-source href="#" target="_blank" rel="noopener noreferrer">
-          View source <span aria-hidden="true">↗</span>
+
+        <a class="source-link" data-result-source href="#" target="_blank" rel="noopener noreferrer">
+          Source <span aria-hidden="true">↗</span>
         </a>
       </div>
 
-      <div class="evidence-context">
-        <div>
-          <span>MODEL</span>
+      <div class="evidence-meta" aria-label="Run context">
+        <span class="evidence-meta__item">
+          <span class="evidence-meta__label">Model</span>
           <strong data-model>—</strong>
           <small data-quant></small>
-        </div>
-        <div>
-          <span>DATASET</span>
+        </span>
+        <span class="evidence-meta__separator" aria-hidden="true"></span>
+        <span class="evidence-meta__item">
+          <span class="evidence-meta__label">Dataset</span>
           <strong data-dataset>—</strong>
           <small data-cases></small>
-        </div>
-        <div>
-          <span>LAST RUN</span>
+        </span>
+        <span class="evidence-meta__separator" aria-hidden="true"></span>
+        <span class="evidence-meta__item">
+          <span class="evidence-meta__label">Run</span>
           <strong data-last-run>—</strong>
           <small data-hardware></small>
+        </span>
+      </div>
+
+      <div class="metric-row" aria-label="Key performance metrics">
+        <div class="metric">
+          <span>Accuracy</span>
+          <strong data-accuracy>—</strong>
+          <small>Top-1</small>
+        </div>
+        <div class="metric">
+          <span>Latency p50</span>
+          <strong data-p50>—</strong>
+          <small>Median</small>
+        </div>
+        <div class="metric">
+          <span>Latency p95</span>
+          <strong data-p95>—</strong>
+          <small>Tail</small>
+        </div>
+        <div class="metric">
+          <span>Valid rate</span>
+          <strong data-valid-rate>—</strong>
+          <small>Responses</small>
         </div>
       </div>
 
-      <div class="metric-grid">
-        <article>
-          <span>ACCURACY</span>
-          <strong data-accuracy>—</strong>
-          <small>top-1 categorical</small>
-        </article>
-        <article>
-          <span>LATENCY P50</span>
-          <strong data-p50>—</strong>
-          <small>median request</small>
-        </article>
-        <article>
-          <span>LATENCY P95</span>
-          <strong data-p95>—</strong>
-          <small>tail latency</small>
-        </article>
-        <article>
-          <span>VALID RATE</span>
-          <strong data-valid-rate>—</strong>
-          <small>valid responses</small>
-        </article>
-      </div>
-
-      <div class="evidence-readout">
-        <span>OBSERVED TRADE-OFF</span>
-        <p data-readout></p>
+      <div class="evidence-takeaway">
+        <span class="evidence-takeaway__label">TAKEAWAY</span>
+        <div>
+          <strong data-readout-title></strong>
+          <p data-readout></p>
+        </div>
       </div>
     </div>
 
     <div class="evidence-panel__error" data-evidence-error hidden>
-      <span class="evidence-panel__eyebrow">SOURCE TEMPORARILY UNAVAILABLE</span>
+      <span class="evidence-panel__eyebrow">SOURCE UNAVAILABLE</span>
       <h3>Published evidence could not be loaded.</h3>
-      <p>
-        The portfolio never substitutes cached-looking or invented performance values when the
-        source artifact cannot be read.
-      </p>
+      <p>No fallback or invented performance values are shown.</p>
     </div>
   </section>
 </div>
@@ -187,7 +193,7 @@ const { tracks } = Astro.props;
         const validPct = Number.isFinite(validRate) ? `${(validRate * 100).toFixed(1)}%` : '—';
         const cases = Number(row.requests ?? data?.kpi_cards?.total_requests ?? 0);
         const model = row.model ?? leader?.model ?? 'Unknown model';
-        const quant = leader?.quant_label ? `Quantization: ${leader.quant_label}` : '';
+        const quant = leader?.quant_label ? `Q: ${leader.quant_label}` : '';
         const dataset = row.dataset_label ?? leader?.dataset_label ?? row.dataset ?? 'Unknown';
         const hardware = metadata?.hardware
           ? `${metadata.hardware.device || ''} · ${metadata.hardware.chip || ''}`.replace(/^ · | · $/g, '')
@@ -198,17 +204,24 @@ const { tracks } = Astro.props;
         setText('[data-model]', model);
         setText('[data-quant]', quant);
         setText('[data-dataset]', dataset);
-        setText('[data-cases]', cases ? `${cases} evaluated cases` : '');
+        setText('[data-cases]', cases ? `${cases} cases` : '');
         setText('[data-last-run]', formatDate(row.latest_run_at ?? leader?.latest_run_at));
         setText('[data-hardware]', hardware);
         setText('[data-accuracy]', accuracyPct);
         setText('[data-p50]', formatMs(row.latency_p50_ms));
         setText('[data-p95]', formatMs(row.latency_p95_ms));
         setText('[data-valid-rate]', validPct);
-        setText(
-          '[data-readout]',
-          `Observed on the published run: ${accuracyPct} accuracy with ${formatMs(row.latency_p50_ms)} median latency across ${cases || 'the published'} cases. The evidence is fast to execute, but the measured task quality is currently low.`,
-        );
+
+        const viabilityTitle = Number.isFinite(accuracy) && accuracy < 0.5
+          ? 'Fast enough. Not accurate enough.'
+          : 'Performance is viable on this run.';
+
+        const viabilityCopy = Number.isFinite(accuracy) && accuracy < 0.5
+          ? `${accuracyPct} accuracy across ${cases || 'the published'} cases makes this model unsuitable for the routing task, despite ${formatMs(row.latency_p50_ms)} median latency.`
+          : `${accuracyPct} accuracy with ${formatMs(row.latency_p50_ms)} median latency across ${cases || 'the published'} cases.`;
+
+        setText('[data-readout-title]', viabilityTitle);
+        setText('[data-readout]', viabilityCopy);
 
         const source = root.querySelector('[data-result-source]');
         if (source instanceof HTMLAnchorElement) source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
@@ -252,21 +265,24 @@ const { tracks } = Astro.props;
 
       tabs.forEach((tab, index) => {
         if (!(tab instanceof HTMLButtonElement)) return;
+
         tab.addEventListener('click', () => selectTab(tab));
         tab.addEventListener('keydown', (event) => {
-          if (!['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+          if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
           event.preventDefault();
-          const delta = ['ArrowDown', 'ArrowRight'].includes(event.key) ? 1 : -1;
+          const delta = event.key === 'ArrowRight' ? 1 : -1;
           const nextIndex = (index + delta + tabs.length) % tabs.length;
           const next = tabs[nextIndex];
           if (next instanceof HTMLButtonElement) {
             next.focus();
+            next.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
             selectTab(next);
           }
         });
       });
 
-      const initial = tabs.find((tab) => tab instanceof HTMLButtonElement && Boolean(tab.dataset.resultUrl)) ?? tabs[0];
+      const initial =
+        tabs.find((tab) => tab instanceof HTMLButtonElement && Boolean(tab.dataset.resultUrl)) ?? tabs[0];
       if (initial instanceof HTMLButtonElement) selectTab(initial);
     });
   };
@@ -277,296 +293,412 @@ const { tracks } = Astro.props;
 
 <style>
   .experiment-explorer {
-    display: grid;
-    grid-template-columns: minmax(230px, 0.72fr) minmax(0, 1.6fr);
-    gap: clamp(14px, 2vw, 22px);
-    align-items: stretch;
+    min-width: 0;
+  }
+
+  .experiment-selector-wrap {
+    position: relative;
+    margin-bottom: 14px;
+  }
+
+  .experiment-selector-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 34px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--journey-surface-tint, var(--surface-subtle)));
+    pointer-events: none;
   }
 
   .experiment-selector {
     display: flex;
-    flex-direction: column;
     gap: 8px;
+    overflow-x: auto;
+    padding: 2px 36px 6px 2px;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+
+  .experiment-selector::-webkit-scrollbar {
+    display: none;
   }
 
   .experiment-tab {
-    width: 100%;
+    flex: 0 0 auto;
     min-height: var(--touch-target-min);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 7px;
-    padding: 15px 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 13px;
     border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    background: color-mix(in srgb, var(--surface-card) 78%, var(--surface-subtle));
-    color: inherit;
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--surface-card) 82%, var(--surface-subtle));
+    color: var(--ink-muted);
     text-align: left;
     cursor: pointer;
+    scroll-snap-align: start;
     transition:
       border-color var(--duration-fast) ease,
       background-color var(--duration-fast) ease,
-      transform var(--duration-fast) ease;
+      color var(--duration-fast) ease;
   }
 
   .experiment-tab:hover,
   .experiment-tab:focus-visible {
-    border-color: color-mix(in srgb, var(--accent-blue) 40%, var(--border-medium));
-    transform: translateX(2px);
+    border-color: color-mix(in srgb, var(--accent-blue) 36%, var(--border-medium));
+    color: var(--ink-display);
   }
 
   .experiment-tab.is-active {
-    border-color: color-mix(in srgb, var(--accent-blue) 58%, var(--border-medium));
+    border-color: color-mix(in srgb, var(--accent-blue) 50%, var(--border-medium));
     background: var(--surface-blue-subtle);
-    box-shadow: inset 3px 0 0 var(--accent-blue);
+    color: var(--ink-display);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--accent-blue) 7%, transparent);
   }
 
-  .experiment-tab__status {
+  .experiment-tab__title {
+    color: inherit;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 720;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .experiment-tab__state {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    color: var(--ink-muted);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 750;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    gap: 5px;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    line-height: 1;
+    white-space: nowrap;
   }
 
-  .status-dot {
+  .experiment-tab__state.is-live {
+    color: var(--accent-blue-dark);
+  }
+
+  .status-dot,
+  .live-dot {
     width: 7px;
     height: 7px;
+    flex: 0 0 auto;
     border-radius: 50%;
-    background: var(--ink-subtle);
+    background: currentColor;
   }
 
-  .status-dot--live {
-    background: var(--accent-blue);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue) 12%, transparent);
-  }
-
-  .experiment-tab strong {
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: 0.94rem;
-    line-height: 1.3;
-  }
-
-  .experiment-tab__question {
-    color: var(--ink-muted);
-    font-size: 0.8rem;
-    line-height: 1.4;
+  .experiment-tab__state.is-live .status-dot,
+  .live-dot {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue) 10%, transparent);
   }
 
   .evidence-panel {
     min-width: 0;
-    min-height: 390px;
-    padding: clamp(20px, 2.8vw, 30px);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 16%, var(--border-medium));
+    border-radius: var(--radius-xl);
     background:
-      radial-gradient(circle at 92% 7%, color-mix(in srgb, var(--accent-blue) 8%, transparent), transparent 35%),
+      radial-gradient(circle at 96% 0%, color-mix(in srgb, var(--accent-blue) 8%, transparent), transparent 30%),
       var(--surface-card);
-    box-shadow: var(--shadow-xs);
+    box-shadow: 0 14px 36px rgba(8, 19, 51, 0.04);
+  }
+
+  [hidden] {
+    display: none !important;
   }
 
   .evidence-panel__loading,
   .evidence-panel__empty,
   .evidence-panel__error {
-    height: 100%;
-    min-height: 330px;
+    min-height: 230px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: clamp(24px, 3.2vw, 36px);
   }
 
-  [hidden] { display: none !important; }
+  .evidence-panel__result {
+    padding: clamp(24px, 3.2vw, 36px);
+  }
 
   .evidence-panel__eyebrow {
-    color: var(--accent-blue-dark);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-  }
-
-  .evidence-panel__empty h3,
-  .evidence-panel__error h3 {
-    margin: 10px 0 7px;
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: clamp(1.2rem, 2vw, 1.55rem);
-  }
-
-  .evidence-panel__empty p,
-  .evidence-panel__error p {
-    max-width: 640px;
-    margin: 0;
-    color: var(--ink-muted);
-    font-size: 0.9rem;
-    line-height: 1.55;
-  }
-
-  .evidence-panel__empty-note {
-    margin-top: 16px !important;
-    padding-top: 16px;
-    border-top: 1px solid var(--border-subtle);
-  }
-
-  .evidence-panel__header {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    align-items: flex-start;
-  }
-
-  .evidence-panel__header h3 {
-    margin: 8px 0 4px;
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: clamp(1.25rem, 2vw, 1.65rem);
-    letter-spacing: -0.025em;
-  }
-
-  .evidence-panel__header p {
-    max-width: 620px;
-    margin: 0;
-    color: var(--ink-muted);
-    font-size: 0.88rem;
-    line-height: 1.5;
-  }
-
-  .evidence-panel__header a {
-    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     color: var(--accent-blue-dark);
     font-family: var(--font-display);
-    font-size: 0.84rem;
-    font-weight: 760;
-    text-decoration: none;
-  }
-
-  .evidence-context {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1px;
-    margin-top: 22px;
-    overflow: hidden;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    background: var(--border-subtle);
-  }
-
-  .evidence-context > div {
-    min-width: 0;
-    padding: 13px 14px;
-    background: var(--surface-subtle);
-  }
-
-  .evidence-context span,
-  .metric-grid span,
-  .evidence-readout span {
-    display: block;
-    color: var(--ink-muted);
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: var(--text-caption);
     font-weight: 780;
     letter-spacing: 0.055em;
   }
 
-  .evidence-context strong {
-    display: block;
-    margin-top: 5px;
+  .evidence-panel__empty h3,
+  .evidence-panel__error h3 {
+    margin: 9px 0 5px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    letter-spacing: -0.025em;
+  }
+
+  .evidence-panel__empty p,
+  .evidence-panel__error p {
+    max-width: 620px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  .evidence-panel__empty-note {
+    margin-top: 10px !important;
+  }
+
+  .evidence-panel__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .evidence-panel__heading {
+    min-width: 0;
+  }
+
+  .evidence-panel__header h3 {
+    margin: 10px 0 5px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 2.3vw, 2rem);
+    font-weight: 820;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+  }
+
+  .evidence-panel__header p {
+    max-width: 700px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .source-link {
+    flex: 0 0 auto;
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 760;
+    text-decoration: none;
+  }
+
+  .source-link:hover,
+  .source-link:focus-visible {
+    color: var(--accent-blue);
+  }
+
+  .evidence-meta {
+    min-width: 0;
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+    margin-top: 24px;
+    padding: 14px 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .evidence-meta__item {
+    min-width: 0;
+    flex: 1 1 0;
+    display: grid;
+    gap: 3px;
+  }
+
+  .evidence-meta__label,
+  .metric > span,
+  .evidence-takeaway__label {
+    color: var(--ink-subtle);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 720;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+  }
+
+  .evidence-meta__item strong {
+    min-width: 0;
     overflow: hidden;
     color: var(--ink-display);
     font-family: var(--font-display);
-    font-size: 0.88rem;
+    font-size: var(--text-caption);
+    font-weight: 720;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .evidence-context small {
-    display: block;
-    margin-top: 3px;
+  .evidence-meta__item small {
+    min-width: 0;
+    overflow: hidden;
     color: var(--ink-muted);
-    font-size: 0.72rem;
+    font-size: var(--text-caption);
     line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .metric-grid {
+  .evidence-meta__separator {
+    width: 1px;
+    flex: 0 0 1px;
+    background: var(--border-subtle);
+  }
+
+  .metric-row {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
-    margin-top: 14px;
+    margin-top: 26px;
   }
 
-  .metric-grid article {
+  .metric {
     min-width: 0;
-    padding: 17px 15px;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    background: var(--surface-canvas);
+    padding: 0 clamp(14px, 2vw, 22px);
   }
 
-  .metric-grid strong {
+  .metric:first-child {
+    padding-left: 0;
+  }
+
+  .metric + .metric {
+    border-left: 1px solid var(--border-subtle);
+  }
+
+  .metric strong {
     display: block;
-    margin-top: 8px;
+    margin-top: 6px;
     color: var(--ink-display);
     font-family: var(--font-display);
-    font-size: clamp(1.28rem, 2vw, 1.7rem);
-    letter-spacing: -0.035em;
+    font-size: clamp(1.65rem, 3vw, 2.25rem);
+    font-weight: 820;
+    letter-spacing: -0.05em;
+    line-height: 1;
   }
 
-  .metric-grid small {
+  .metric small {
     display: block;
-    margin-top: 3px;
+    margin-top: 6px;
     color: var(--ink-muted);
-    font-size: 0.72rem;
+    font-size: var(--text-caption);
   }
 
-  .evidence-readout {
-    margin-top: 14px;
-    padding: 14px 16px;
-    border-left: 3px solid var(--accent-blue);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    background: var(--surface-blue-subtle);
+  .evidence-takeaway {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-subtle);
   }
 
-  .evidence-readout p {
-    margin: 7px 0 0;
-    color: var(--ink);
-    font-size: 0.87rem;
-    line-height: 1.5;
+  .evidence-takeaway > div {
+    min-width: 0;
   }
 
-  @media (max-width: 900px) {
-    .experiment-explorer { grid-template-columns: 1fr; }
+  .evidence-takeaway strong {
+    display: block;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 760;
+    line-height: 1.4;
+  }
 
+  .evidence-takeaway p {
+    max-width: 720px;
+    margin: 4px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  @media (max-width: 760px) {
     .experiment-selector {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 680px) {
-    .experiment-selector,
-    .metric-grid,
-    .evidence-context {
-      grid-template-columns: 1fr;
+      padding-right: 28px;
     }
 
-    .evidence-panel { min-height: 0; }
+    .experiment-tab__state {
+      display: none;
+    }
 
     .evidence-panel__header {
       flex-direction: column;
+      gap: 8px;
     }
 
-    .experiment-tab:hover,
-    .experiment-tab:focus-visible {
-      transform: none;
+    .source-link {
+      min-height: auto;
+    }
+
+    .evidence-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 18px;
+    }
+
+    .evidence-meta__separator {
+      display: none;
+    }
+
+    .evidence-meta__item:last-child {
+      grid-column: 1 / -1;
+    }
+
+    .metric-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 0;
+    }
+
+    .metric:nth-child(3) {
+      border-left: 0;
+      padding-left: 0;
+    }
+
+    .evidence-takeaway {
+      grid-template-columns: 1fr;
+      gap: 7px;
+    }
+  }
+
+  @media (max-width: 430px) {
+    .evidence-panel__result,
+    .evidence-panel__loading,
+    .evidence-panel__empty,
+    .evidence-panel__error {
+      padding: 20px;
+    }
+
+    .evidence-meta {
+      grid-template-columns: 1fr;
+    }
+
+    .evidence-meta__item:last-child {
+      grid-column: auto;
+    }
+
+    .metric {
+      padding-inline: 12px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .experiment-tab { transition: none; }
+    .experiment-tab {
+      transition: none;
+    }
   }
 </style>
