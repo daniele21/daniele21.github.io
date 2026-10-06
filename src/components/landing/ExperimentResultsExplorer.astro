@@ -16,6 +16,18 @@ interface Props {
 const { tracks } = Astro.props;
 const sortedTracks = [...tracks].sort((a, b) => Number(Boolean(b.resultUrl)) - Number(Boolean(a.resultUrl)));
 const initialIndex = Math.max(0, sortedTracks.findIndex((track) => Boolean(track.resultUrl)));
+
+const selectorLabelFor = (track: Track) => {
+  const labels: Record<string, string> = {
+    'jev-vs-llm-routing': 'JEV vs LLM',
+    'model-capability': 'Model Capability',
+    'redactguard-local-anonymization': 'RedactGuard',
+    'vlm-capability': 'VLM',
+    'image-generation': 'Image Gen',
+    diarization: 'Diarization',
+  };
+  return labels[track.id || ''] || track.title;
+};
 ---
 
 <div class="experiment-explorer" data-experiment-explorer>
@@ -41,7 +53,7 @@ const initialIndex = Math.max(0, sortedTracks.findIndex((track) => Boolean(track
             class:list={['status-dot', { 'status-dot--live': Boolean(track.resultUrl) }]}
             aria-hidden="true"
           ></span>
-          <span class="experiment-tab__title">{track.title}</span>
+          <span class="experiment-tab__title">{selectorLabelFor(track)}</span>
         </button>
       ))}
     </div>
