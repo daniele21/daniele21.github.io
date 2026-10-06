@@ -26,11 +26,10 @@ const experiments = measureStage.systems[0];
 
       <div class="experiments-surface">
         <div class="experiments-toolbar">
-          <div>
-            <span class="experiments-toolbar__eyebrow">
-              {experiments.title} · {experiments.tag}
-            </span>
-            <h3>{experiments.question}</h3>
+          <div class="experiments-toolbar__context">
+            <span class="experiments-toolbar__eyebrow">{experiments.title}</span>
+            <span class="experiments-toolbar__divider" aria-hidden="true"></span>
+            <span class="experiments-toolbar__meta">{experiments.tag}</span>
           </div>
 
           <a href={experiments.href} target="_blank" rel="noopener noreferrer">
@@ -40,8 +39,6 @@ const experiments = measureStage.systems[0];
 
         <ExperimentResultsExplorer tracks={experiments.tracks || []} />
       </div>
-
-      <p class="evidence-closing">{measureStage.closingMessage}</p>
     </div>
   </div>
 </section>
@@ -54,9 +51,9 @@ const experiments = measureStage.systems[0];
     padding: clamp(54px, 5.5vw, 76px) 0 clamp(72px, 7vw, 96px);
     background:
       radial-gradient(
-        ellipse 66% 42% at 72% 34%,
+        ellipse 62% 38% at 74% 30%,
         color-mix(in srgb, var(--accent-blue) 4%, transparent),
-        transparent 76%
+        transparent 74%
       ),
       var(--journey-surface-tint, var(--surface-subtle));
   }
@@ -70,7 +67,7 @@ const experiments = measureStage.systems[0];
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: clamp(22px, 3vw, 32px);
+    gap: clamp(28px, 3.4vw, 40px);
     padding-inline: clamp(64px, 7vw, 96px);
   }
 
@@ -100,11 +97,11 @@ const experiments = measureStage.systems[0];
   }
 
   .evidence-intro {
-    max-width: 720px;
+    max-width: 700px;
     margin: 12px 0 0;
     color: var(--ink-muted);
-    font-size: clamp(1rem, 1.1vw, 1.1rem);
-    line-height: 1.56;
+    font-size: clamp(1rem, 1.1vw, 1.08rem);
+    line-height: 1.55;
   }
 
   .experiments-surface {
@@ -114,29 +111,35 @@ const experiments = measureStage.systems[0];
 
   .experiments-toolbar {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 14px;
+    gap: 20px;
+    margin-bottom: 12px;
+  }
+
+  .experiments-toolbar__context {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
   }
 
   .experiments-toolbar__eyebrow {
-    color: var(--accent-blue-dark);
+    color: var(--ink-display);
     font-family: var(--font-display);
     font-size: var(--text-caption);
     font-weight: 780;
-    letter-spacing: 0.055em;
-    text-transform: uppercase;
   }
 
-  .experiments-toolbar h3 {
-    max-width: 680px;
-    margin: 6px 0 0;
-    color: var(--ink-display);
-    font-family: var(--font-display);
-    font-size: clamp(1.15rem, 1.8vw, 1.45rem);
-    font-weight: 760;
-    letter-spacing: -0.025em;
+  .experiments-toolbar__divider {
+    width: 18px;
+    height: 1px;
+    background: var(--border-medium);
+  }
+
+  .experiments-toolbar__meta {
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
     line-height: 1.3;
   }
 
@@ -148,23 +151,13 @@ const experiments = measureStage.systems[0];
     color: var(--accent-blue-dark);
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 760;
+    font-weight: 740;
     text-decoration: none;
   }
 
   .experiments-toolbar a:hover,
   .experiments-toolbar a:focus-visible {
     color: var(--accent-blue);
-  }
-
-  .evidence-closing {
-    max-width: 720px;
-    margin: 0;
-    color: var(--ink-muted);
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 650;
-    line-height: 1.55;
   }
 
   @media (max-width: 760px) {
@@ -176,10 +169,6 @@ const experiments = measureStage.systems[0];
     .evidence-hero {
       align-self: flex-start;
     }
-
-    .experiments-toolbar {
-      align-items: flex-start;
-    }
   }
 
   @media (max-width: 540px) {
@@ -189,8 +178,12 @@ const experiments = measureStage.systems[0];
     }
 
     .experiments-toolbar {
-      flex-direction: column;
-      gap: 4px;
+      align-items: flex-start;
+    }
+
+    .experiments-toolbar__meta,
+    .experiments-toolbar__divider {
+      display: none;
     }
 
     .experiments-toolbar a {
