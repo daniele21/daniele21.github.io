@@ -503,9 +503,7 @@ const initialIndex = Math.max(0, sortedTracks.findIndex((track) => Boolean(track
     background:
       linear-gradient(135deg, color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card)), var(--surface-card));
     color: var(--ink-display);
-    box-shadow:
-      0 0 0 3px color-mix(in srgb, var(--accent-blue) 10%, transparent),
-      0 7px 18px color-mix(in srgb, var(--accent-blue) 7%, transparent);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--accent-blue) 7%, transparent);
   }
 
   .experiment-tab__title {
@@ -543,18 +541,6 @@ const initialIndex = Math.max(0, sortedTracks.findIndex((track) => Boolean(track
     box-shadow:
       0 24px 60px rgba(8, 19, 51, 0.07),
       inset 0 1px 0 color-mix(in srgb, white 64%, transparent);
-  }
-
-  .evidence-panel::before {
-    content: '';
-    position: absolute;
-    width: 240px;
-    height: 240px;
-    top: -150px;
-    right: 5%;
-    border: 1px solid color-mix(in srgb, var(--accent-blue) 12%, transparent);
-    border-radius: 50%;
-    pointer-events: none;
   }
 
   [hidden] { display: none !important; }
