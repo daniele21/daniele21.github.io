@@ -104,7 +104,7 @@ for (const sourcePath of planeConsumers) {
 }
 
 const evidenceStageSource = fs.readFileSync(path.resolve('src/components/landing/EvidenceStage.astro'), 'utf-8');
-for (const fragment of ['method-stage evidence-stage', '<StageRail number={4}', '<EvidenceMatrix />']) {
+for (const fragment of ['method-stage evidence-stage', '<StageRail number={4}', 'experiments.tracks?.map', 'VISUAL PLACEHOLDER · EXPERIMENT EVIDENCE']) {
   if (!evidenceStageSource.includes(fragment)) {
     console.error(`❌ EvidenceStage is missing its dedicated Measure-stage contract fragment: ${fragment}`);
     errors++;
