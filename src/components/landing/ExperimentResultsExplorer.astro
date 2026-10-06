@@ -323,7 +323,9 @@ const { tracks } = Astro.props;
         const speedup = Number(best.latency_p50_ms) / Number(balanced.latency_p50_ms);
         const qualityDelta = (Number(best.accuracy) - Number(balanced.accuracy)) * 100;
         const requestCount = validRows.reduce((sum, row) => sum + Number(row.requests || 0), 0);
-        const datasets = [...new Set(validRows.map((row) => row.dataset_label || row.dataset).filter(Boolean))];
+        const rowDatasets = validRows.map((row) => row.dataset_label || row.dataset).filter(Boolean);
+        const projectedDatasets = Object.keys(data?.dataset_views || {});
+        const datasets = [...new Set(rowDatasets.length ? rowDatasets : projectedDatasets)];
         const runtimes = [...new Set(validRows.map((row) => row.provider).filter(Boolean))];
 
         setText('[data-result-title]', tab.dataset.title || 'Experiment');
