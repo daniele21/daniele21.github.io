@@ -94,9 +94,9 @@ const selectorLabelFor = (track: Track) => {
 
       <div class="run-summary" aria-label="Benchmark scope">
         <span><strong data-model-count>—</strong> models</span>
-        <span><strong data-request-count>—</strong> requests</span>
-        <span><strong data-dataset>—</strong> dataset</span>
-        <span><strong data-runtime>—</strong> runtime</span>
+        <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
+        <span><strong data-dataset>—</strong> <span data-scope-label>dataset</span></span>
+        <span><strong data-runtime>—</strong> <span data-runtime-label>runtime</span></span>
       </div>
 
       <div class="benchmark-story">
@@ -473,11 +473,11 @@ const selectorLabelFor = (track: Track) => {
         setText('[data-result-question]', tab.dataset.question || '');
         setText('[data-model-count]', String(models.length || points.length));
         setText('[data-request-count]', String(cells.length || '—'));
-        setText(
-          '[data-dataset]',
-          capabilities.length ? `${capabilities.length} capabilities` : 'multi-capability',
-        );
-        setText('[data-runtime]', 'Local + API');
+        setText('[data-count-label]', 'published cells');
+        setText('[data-dataset]', String(capabilities.length || '—'));
+        setText('[data-scope-label]', 'capabilities');
+        setText('[data-runtime]', '2');
+        setText('[data-runtime-label]', 'execution modes');
 
         setText('[data-best-quality]', `${Number(overallBest.quality).toFixed(1)}`);
         setText('[data-best-quality-model]', shortModel(overallBest.model_key));
@@ -575,8 +575,11 @@ const selectorLabelFor = (track: Track) => {
         setText('[data-result-question]', tab.dataset.question || '');
         setText('[data-model-count]', String(validRows.length));
         setText('[data-request-count]', String(requestCount || data?.metadata?.total_rows || '—'));
+        setText('[data-count-label]', 'requests');
         setText('[data-dataset]', datasets.join(', ') || 'routing');
-        setText('[data-runtime]', runtimes.length === 1 ? runtimes[0] : `${runtimes.length} runtimes`);
+        setText('[data-scope-label]', 'dataset');
+        setText('[data-runtime]', runtimes.length === 1 ? runtimes[0] : String(runtimes.length));
+        setText('[data-runtime-label]', runtimes.length === 1 ? 'runtime' : 'runtimes');
 
         setText('[data-best-quality]', formatPct(best.accuracy));
         setText('[data-best-quality-model]', shortModel(best.model));
@@ -611,6 +614,26 @@ const selectorLabelFor = (track: Track) => {
         if (source instanceof HTMLAnchorElement) {
           source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
         }
+
+        const heading = root.querySelector('.plot-heading__eyebrow');
+        if (heading) heading.textContent = 'QUALITY × LATENCY';
+
+        const plotTitle = root.querySelector('.plot-heading strong');
+        if (plotTitle) plotTitle.textContent = 'Local routing frontier';
+
+        const plotNote = root.querySelector('.plot-heading__note');
+        if (plotNote) plotNote.textContent = 'Accuracy vs p50 latency';
+
+        const legend = root.querySelector('.plot-legend');
+        if (legend) {
+          legend.innerHTML =
+            '<span><i class="legend-dot legend-dot--all"></i>Measured model</span><span><i class="legend-line"></i>Pareto frontier</span>';
+        }
+
+        const highlightLabels = root.querySelectorAll('.highlight > span');
+        if (highlightLabels[0]) highlightLabels[0].textContent = 'BEST QUALITY';
+        if (highlightLabels[1]) highlightLabels[1].textContent = 'BALANCE POINT';
+        if (highlightLabels[2]) highlightLabels[2].textContent = 'FASTEST';
 
         plotRouting(validRows);
       };
