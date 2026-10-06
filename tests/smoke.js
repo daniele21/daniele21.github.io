@@ -30,6 +30,7 @@ const expectedRoutes = [
   'korgis/index.html',
   'harnex/index.html',
   'local-asr-server/index.html',
+  'decisio/index.html',
   'thank-you/index.html',
   'privacy/index.html',
 ];
@@ -287,6 +288,7 @@ const publicImages = [
   'images/local-llm-server/logo.svg',
   'images/harness/logo.png',
   'images/harness/logo.svg',
+  'images/decisio/logo.png',
   'images/local-llm-server/overview.png',
   'images/harness/architecture-hero.png',
   'images/harness/harness-overview.png',
