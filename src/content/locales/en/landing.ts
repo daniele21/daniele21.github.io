@@ -354,8 +354,13 @@ export const landingData: LandingPageData = {
           {
             id: 'model-capability',
             title: 'Model Capability Benchmark',
-            question: 'How much model do you actually need for a task?',
-            status: 'NO PUBLISHED SNAPSHOT',
+            question: 'How do model capability and latency trade off across local and API runtimes?',
+            status: 'PUBLISHED',
+            resultUrl:
+              'https://raw.githubusercontent.com/daniele21/experiments/main/experiments/model-capability-benchmark/results/published/models-overview.json',
+            sourceUrl:
+              'https://github.com/daniele21/experiments/blob/main/experiments/model-capability-benchmark/results/published/models-overview.json',
+            resultKind: 'mcb-overview',
           },
           {
             id: 'jev-vs-llm-routing',
