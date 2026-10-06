@@ -38,7 +38,7 @@ const { tracks } = Astro.props;
           <span class="experiment-tab__title">{track.title}</span>
           <span class:list={['experiment-tab__state', { 'is-live': Boolean(track.resultUrl) }]}>
             <span class="status-dot" aria-hidden="true"></span>
-            {track.resultUrl ? 'Published' : 'No run'}
+            {track.resultUrl ? 'Published' : 'No snapshot'}
           </span>
         </button>
       ))}
@@ -51,75 +51,82 @@ const { tracks } = Astro.props;
     </div>
 
     <div class="evidence-panel__empty" data-evidence-empty hidden>
-      <span class="evidence-panel__eyebrow">NO PUBLISHED RUN</span>
+      <span class="evidence-panel__eyebrow">NO PUBLISHED SNAPSHOT</span>
       <h3 data-empty-title></h3>
       <p data-empty-question></p>
       <p class="evidence-panel__empty-note">
-        The benchmark is defined in Experiments, but no versioned result artifact is published yet.
+        The benchmark is implemented, but its real run artifacts are not versioned in the repository yet.
+        The landing does not substitute fixture data for benchmark evidence.
       </p>
     </div>
 
     <div class="evidence-panel__result" data-evidence-result hidden>
       <div class="evidence-panel__header">
-        <div class="evidence-panel__heading">
+        <div>
           <span class="evidence-panel__eyebrow">
             <span class="live-dot" aria-hidden="true"></span>
-            LATEST PUBLISHED RUN
+            PUBLISHED BENCHMARK SNAPSHOT
           </span>
           <h3 data-result-title></h3>
           <p data-result-question></p>
         </div>
-
         <a class="source-link" data-result-source href="#" target="_blank" rel="noopener noreferrer">
           Source <span aria-hidden="true">↗</span>
         </a>
       </div>
 
-      <div class="evidence-meta" aria-label="Run context">
-        <span class="evidence-meta__item">
-          <span class="evidence-meta__label">Model</span>
-          <strong data-model>—</strong>
-          <small data-quant></small>
-        </span>
-        <span class="evidence-meta__separator" aria-hidden="true"></span>
-        <span class="evidence-meta__item">
-          <span class="evidence-meta__label">Dataset</span>
-          <strong data-dataset>—</strong>
-          <small data-cases></small>
-        </span>
-        <span class="evidence-meta__separator" aria-hidden="true"></span>
-        <span class="evidence-meta__item">
-          <span class="evidence-meta__label">Run</span>
-          <strong data-last-run>—</strong>
-          <small data-hardware></small>
-        </span>
+      <div class="run-summary" aria-label="Benchmark scope">
+        <span><strong data-model-count>—</strong> models</span>
+        <span><strong data-request-count>—</strong> requests</span>
+        <span><strong data-dataset>—</strong> dataset</span>
+        <span><strong data-runtime>—</strong> runtime</span>
       </div>
 
-      <div class="metric-row" aria-label="Key performance metrics">
-        <div class="metric">
-          <span>Accuracy</span>
-          <strong data-accuracy>—</strong>
-          <small>Top-1</small>
+      <div class="benchmark-story">
+        <div class="performance-plot">
+          <div class="plot-heading">
+            <div>
+              <span class="plot-heading__eyebrow">QUALITY × LATENCY</span>
+              <strong>Local routing frontier</strong>
+            </div>
+            <span class="plot-heading__note">Accuracy vs p50 latency</span>
+          </div>
+
+          <svg
+            class="plot-svg"
+            data-performance-plot
+            viewBox="0 0 620 250"
+            role="img"
+            aria-label="Accuracy versus median latency by model"
+          ></svg>
+
+          <div class="plot-legend">
+            <span><i class="legend-dot legend-dot--all"></i>Measured model</span>
+            <span><i class="legend-line"></i>Pareto frontier</span>
+          </div>
         </div>
-        <div class="metric">
-          <span>Latency p50</span>
-          <strong data-p50>—</strong>
-          <small>Median</small>
-        </div>
-        <div class="metric">
-          <span>Latency p95</span>
-          <strong data-p95>—</strong>
-          <small>Tail</small>
-        </div>
-        <div class="metric">
-          <span>Valid rate</span>
-          <strong data-valid-rate>—</strong>
-          <small>Responses</small>
+
+        <div class="benchmark-highlights" aria-label="Benchmark highlights">
+          <div class="highlight">
+            <span>BEST QUALITY</span>
+            <strong data-best-quality>—</strong>
+            <small data-best-quality-model></small>
+          </div>
+          <div class="highlight highlight--accent">
+            <span>BALANCE POINT</span>
+            <strong data-balance>—</strong>
+            <small data-balance-model></small>
+          </div>
+          <div class="highlight">
+            <span>FASTEST</span>
+            <strong data-fastest>—</strong>
+            <small data-fastest-model></small>
+          </div>
         </div>
       </div>
 
       <div class="evidence-takeaway">
-        <span class="evidence-takeaway__label">TAKEAWAY</span>
+        <span>TAKEAWAY</span>
         <div>
           <strong data-readout-title></strong>
           <p data-readout></p>
@@ -136,6 +143,8 @@ const { tracks } = Astro.props;
 </div>
 
 <script>
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+
   const initExperimentExplorer = () => {
     document.querySelectorAll('[data-experiment-explorer]').forEach((root) => {
       if (!(root instanceof HTMLElement) || root.dataset.ready === 'true') return;
@@ -165,66 +174,200 @@ const { tracks } = Astro.props;
         setHidden(error, target !== 'error');
       };
 
-      const formatDate = (value) => {
-        if (!value) return 'Unknown';
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) return String(value);
-        return new Intl.DateTimeFormat('en', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        }).format(date);
+      const shortModel = (value) => {
+        const model = String(value || '');
+        return model
+          .replace(/^qwen3\.5-/i, 'Qwen 3.5 ')
+          .replace(/^nemotron-nano-/i, 'Nemotron ')
+          .replace(/-q4km$/i, ' Q4')
+          .replace(/-q8$/i, ' Q8')
+          .replace(/-/g, ' ');
       };
 
-      const formatMs = (value) => {
+      const formatPct = (value) => {
         const number = Number(value);
-        return Number.isFinite(number) ? `${Math.round(number)} ms` : '—';
+        return Number.isFinite(number) ? `${(number * 100).toFixed(1)}%` : '—';
+      };
+
+      const formatSeconds = (value) => {
+        const number = Number(value);
+        if (!Number.isFinite(number)) return '—';
+        if (number < 1000) return `${Math.round(number)} ms`;
+        return `${(number / 1000).toFixed(1)} s`;
+      };
+
+      const createSvg = (tag, attrs = {}) => {
+        const node = document.createElementNS(SVG_NS, tag);
+        Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value)));
+        return node;
+      };
+
+      const plotRouting = (rows) => {
+        const svg = root.querySelector('[data-performance-plot]');
+        if (!(svg instanceof SVGElement)) return;
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+        const validRows = rows
+          .map((row) => ({
+            ...row,
+            accuracyNumber: Number(row.accuracy),
+            latencyNumber: Number(row.latency_p50_ms),
+          }))
+          .filter((row) => Number.isFinite(row.accuracyNumber) && Number.isFinite(row.latencyNumber))
+          .sort((a, b) => a.latencyNumber - b.latencyNumber);
+
+        if (!validRows.length) return;
+
+        const W = 620;
+        const H = 250;
+        const pad = { left: 48, right: 24, top: 22, bottom: 42 };
+        const innerW = W - pad.left - pad.right;
+        const innerH = H - pad.top - pad.bottom;
+
+        const maxLatency = Math.max(...validRows.map((row) => row.latencyNumber)) * 1.08;
+        const maxAccuracy = Math.min(
+          1,
+          Math.max(0.4, Math.ceil(Math.max(...validRows.map((row) => row.accuracyNumber)) * 10 + 1) / 10),
+        );
+
+        const x = (latency) => pad.left + (latency / maxLatency) * innerW;
+        const y = (accuracy) => pad.top + innerH - (accuracy / maxAccuracy) * innerH;
+
+        const grid = createSvg('g', { class: 'plot-grid' });
+        [0, 0.5, 1].forEach((fraction) => {
+          const gy = pad.top + innerH * fraction;
+          grid.appendChild(createSvg('line', {
+            x1: pad.left,
+            y1: gy,
+            x2: W - pad.right,
+            y2: gy,
+          }));
+        });
+        svg.appendChild(grid);
+
+        const axisLabels = createSvg('g', { class: 'plot-axis-labels' });
+        const yTop = createSvg('text', { x: 8, y: pad.top + 4 });
+        yTop.textContent = `${Math.round(maxAccuracy * 100)}%`;
+        axisLabels.appendChild(yTop);
+        const yBottom = createSvg('text', { x: 14, y: pad.top + innerH + 4 });
+        yBottom.textContent = '0%';
+        axisLabels.appendChild(yBottom);
+        const xLeft = createSvg('text', { x: pad.left, y: H - 10 });
+        xLeft.textContent = '0s';
+        axisLabels.appendChild(xLeft);
+        const xRight = createSvg('text', { x: W - pad.right - 28, y: H - 10 });
+        xRight.textContent = `${(maxLatency / 1000).toFixed(0)}s`;
+        axisLabels.appendChild(xRight);
+        svg.appendChild(axisLabels);
+
+        let bestSoFar = -Infinity;
+        const frontier = validRows.filter((row) => {
+          if (row.accuracyNumber > bestSoFar) {
+            bestSoFar = row.accuracyNumber;
+            return true;
+          }
+          return false;
+        });
+
+        if (frontier.length > 1) {
+          const polyline = createSvg('polyline', {
+            class: 'plot-frontier',
+            points: frontier.map((row) => `${x(row.latencyNumber)},${y(row.accuracyNumber)}`).join(' '),
+          });
+          svg.appendChild(polyline);
+        }
+
+        validRows.forEach((row, index) => {
+          const point = createSvg('g', { class: 'plot-point' });
+          const isFrontier = frontier.includes(row);
+          const circle = createSvg('circle', {
+            cx: x(row.latencyNumber),
+            cy: y(row.accuracyNumber),
+            r: isFrontier ? 7 : 5.5,
+            class: isFrontier ? 'is-frontier' : '',
+          });
+
+          const title = createSvg('title');
+          title.textContent = `${shortModel(row.model)} · ${formatPct(row.accuracyNumber)} · ${formatSeconds(row.latencyNumber)} p50`;
+          circle.appendChild(title);
+          point.appendChild(circle);
+
+          const label = createSvg('text', {
+            x: x(row.latencyNumber) + 9,
+            y: y(row.accuracyNumber) + (index % 2 === 0 ? -8 : 16),
+          });
+          label.textContent = shortModel(row.model);
+          point.appendChild(label);
+          svg.appendChild(point);
+        });
       };
 
       const renderJevRouting = (data, tab) => {
-        const row = data?.overview?.[0] ?? data?.routing?.summary?.[0];
-        const leader = data?.leaderboard?.[0];
-        const metadata = data?.metadata ?? {};
-        if (!row) throw new Error('No published routing row');
+        const rows = Array.isArray(data?.overview) ? data.overview : [];
+        if (!rows.length) throw new Error('No published routing rows');
 
-        const accuracy = Number(row.accuracy);
-        const validRate = Number(row.valid_rate ?? 0);
-        const accuracyPct = Number.isFinite(accuracy) ? `${(accuracy * 100).toFixed(1)}%` : '—';
-        const validPct = Number.isFinite(validRate) ? `${(validRate * 100).toFixed(1)}%` : '—';
-        const cases = Number(row.requests ?? data?.kpi_cards?.total_requests ?? 0);
-        const model = row.model ?? leader?.model ?? 'Unknown model';
-        const quant = leader?.quant_label ? `Q: ${leader.quant_label}` : '';
-        const dataset = row.dataset_label ?? leader?.dataset_label ?? row.dataset ?? 'Unknown';
-        const hardware = metadata?.hardware
-          ? `${metadata.hardware.device || ''} · ${metadata.hardware.chip || ''}`.replace(/^ · | · $/g, '')
-          : '';
+        const validRows = rows.filter(
+          (row) => Number.isFinite(Number(row.accuracy)) && Number.isFinite(Number(row.latency_p50_ms)),
+        );
+        if (!validRows.length) throw new Error('No comparable routing rows');
+
+        const byQuality = [...validRows].sort((a, b) => Number(b.accuracy) - Number(a.accuracy));
+        const byLatency = [...validRows].sort((a, b) => Number(a.latency_p50_ms) - Number(b.latency_p50_ms));
+        const best = byQuality[0];
+        const fastest = byLatency[0];
+
+        const qualityFloor = Number(best.accuracy) * 0.85;
+        const balanced =
+          byLatency.find((row) => Number(row.accuracy) >= qualityFloor) ?? best;
+
+        const speedup = Number(best.latency_p50_ms) / Number(balanced.latency_p50_ms);
+        const qualityDelta = (Number(best.accuracy) - Number(balanced.accuracy)) * 100;
+        const requestCount = validRows.reduce((sum, row) => sum + Number(row.requests || 0), 0);
+        const datasets = [...new Set(validRows.map((row) => row.dataset_label || row.dataset).filter(Boolean))];
+        const runtimes = [...new Set(validRows.map((row) => row.provider).filter(Boolean))];
 
         setText('[data-result-title]', tab.dataset.title || 'Experiment');
         setText('[data-result-question]', tab.dataset.question || '');
-        setText('[data-model]', model);
-        setText('[data-quant]', quant);
-        setText('[data-dataset]', dataset);
-        setText('[data-cases]', cases ? `${cases} cases` : '');
-        setText('[data-last-run]', formatDate(row.latest_run_at ?? leader?.latest_run_at));
-        setText('[data-hardware]', hardware);
-        setText('[data-accuracy]', accuracyPct);
-        setText('[data-p50]', formatMs(row.latency_p50_ms));
-        setText('[data-p95]', formatMs(row.latency_p95_ms));
-        setText('[data-valid-rate]', validPct);
+        setText('[data-model-count]', String(validRows.length));
+        setText('[data-request-count]', String(requestCount || data?.metadata?.total_rows || '—'));
+        setText('[data-dataset]', datasets.join(', ') || 'routing');
+        setText('[data-runtime]', runtimes.length === 1 ? runtimes[0] : `${runtimes.length} runtimes`);
 
-        const viabilityTitle = Number.isFinite(accuracy) && accuracy < 0.5
-          ? 'Fast enough. Not accurate enough.'
-          : 'Performance is viable on this run.';
+        setText('[data-best-quality]', formatPct(best.accuracy));
+        setText('[data-best-quality-model]', shortModel(best.model));
 
-        const viabilityCopy = Number.isFinite(accuracy) && accuracy < 0.5
-          ? `${accuracyPct} accuracy across ${cases || 'the published'} cases makes this model unsuitable for the routing task, despite ${formatMs(row.latency_p50_ms)} median latency.`
-          : `${accuracyPct} accuracy with ${formatMs(row.latency_p50_ms)} median latency across ${cases || 'the published'} cases.`;
+        setText(
+          '[data-balance]',
+          `${formatPct(balanced.accuracy)} · ${formatSeconds(balanced.latency_p50_ms)}`,
+        );
+        setText('[data-balance-model]', shortModel(balanced.model));
 
-        setText('[data-readout-title]', viabilityTitle);
-        setText('[data-readout]', viabilityCopy);
+        setText('[data-fastest]', formatSeconds(fastest.latency_p50_ms));
+        setText(
+          '[data-fastest-model]',
+          `${shortModel(fastest.model)} · ${formatPct(fastest.accuracy)}`,
+        );
+
+        if (balanced !== best && Number.isFinite(speedup) && Number.isFinite(qualityDelta)) {
+          setText('[data-readout-title]', `${shortModel(balanced.model)} sits at the practical knee.`);
+          setText(
+            '[data-readout]',
+            `${formatPct(balanced.accuracy)} accuracy at ${formatSeconds(balanced.latency_p50_ms)} p50: ${speedup.toFixed(1)}× faster than the highest-accuracy model for only ${qualityDelta.toFixed(1)} percentage points less quality in this snapshot.`,
+          );
+        } else {
+          setText('[data-readout-title]', `${shortModel(best.model)} leads this snapshot.`);
+          setText(
+            '[data-readout]',
+            `${formatPct(best.accuracy)} accuracy at ${formatSeconds(best.latency_p50_ms)} median latency across the published routing evidence.`,
+          );
+        }
 
         const source = root.querySelector('[data-result-source]');
-        if (source instanceof HTMLAnchorElement) source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        }
+
+        plotRouting(validRows);
       };
 
       const selectTab = async (tab) => {
@@ -292,9 +435,7 @@ const { tracks } = Astro.props;
 </script>
 
 <style>
-  .experiment-explorer {
-    min-width: 0;
-  }
+  .experiment-explorer { min-width: 0; }
 
   .experiment-selector-wrap {
     position: relative;
@@ -321,9 +462,7 @@ const { tracks } = Astro.props;
     scroll-snap-type: x proximity;
   }
 
-  .experiment-selector::-webkit-scrollbar {
-    display: none;
-  }
+  .experiment-selector::-webkit-scrollbar { display: none; }
 
   .experiment-tab {
     flex: 0 0 auto;
@@ -336,13 +475,12 @@ const { tracks } = Astro.props;
     border-radius: var(--radius-full);
     background: color-mix(in srgb, var(--surface-card) 82%, var(--surface-subtle));
     color: var(--ink-muted);
-    text-align: left;
     cursor: pointer;
     scroll-snap-align: start;
     transition:
       border-color var(--duration-fast) ease,
       background-color var(--duration-fast) ease,
-      color var(--duration-fast) ease;
+      box-shadow var(--duration-fast) ease;
   }
 
   .experiment-tab:hover,
@@ -352,18 +490,19 @@ const { tracks } = Astro.props;
   }
 
   .experiment-tab.is-active {
-    border-color: color-mix(in srgb, var(--accent-blue) 50%, var(--border-medium));
-    background: var(--surface-blue-subtle);
+    border-color: color-mix(in srgb, var(--accent-blue) 52%, var(--border-medium));
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card)), var(--surface-card));
     color: var(--ink-display);
-    box-shadow: 0 4px 14px color-mix(in srgb, var(--accent-blue) 7%, transparent);
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--accent-blue) 10%, transparent),
+      0 7px 18px color-mix(in srgb, var(--accent-blue) 7%, transparent);
   }
 
   .experiment-tab__title {
-    color: inherit;
     font-family: var(--font-display);
     font-size: var(--text-caption);
     font-weight: 720;
-    line-height: 1.2;
     white-space: nowrap;
   }
 
@@ -373,13 +512,10 @@ const { tracks } = Astro.props;
     gap: 5px;
     color: var(--ink-subtle);
     font-size: var(--text-caption);
-    line-height: 1;
     white-space: nowrap;
   }
 
-  .experiment-tab__state.is-live {
-    color: var(--accent-blue-dark);
-  }
+  .experiment-tab__state.is-live { color: var(--accent-blue-dark); }
 
   .status-dot,
   .live-dot {
@@ -390,25 +526,38 @@ const { tracks } = Astro.props;
     background: currentColor;
   }
 
-  .experiment-tab__state.is-live .status-dot,
   .live-dot {
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue) 10%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-blue) 10%, transparent);
   }
 
   .evidence-panel {
+    position: relative;
     min-width: 0;
     overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--accent-blue) 16%, var(--border-medium));
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 24%, var(--border-medium));
     border-radius: var(--radius-xl);
     background:
-      radial-gradient(circle at 96% 0%, color-mix(in srgb, var(--accent-blue) 8%, transparent), transparent 30%),
-      var(--surface-card);
-    box-shadow: 0 14px 36px rgba(8, 19, 51, 0.04);
+      radial-gradient(circle at 92% 3%, color-mix(in srgb, var(--accent-blue) 13%, transparent), transparent 31%),
+      radial-gradient(circle at 5% 100%, color-mix(in srgb, var(--accent-violet) 7%, transparent), transparent 34%),
+      linear-gradient(145deg, color-mix(in srgb, var(--surface-card) 96%, var(--accent-blue) 4%), var(--surface-card));
+    box-shadow:
+      0 24px 60px rgba(8, 19, 51, 0.07),
+      inset 0 1px 0 color-mix(in srgb, white 64%, transparent);
   }
 
-  [hidden] {
-    display: none !important;
+  .evidence-panel::before {
+    content: '';
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    top: -150px;
+    right: 5%;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 12%, transparent);
+    border-radius: 50%;
+    pointer-events: none;
   }
+
+  [hidden] { display: none !important; }
 
   .evidence-panel__loading,
   .evidence-panel__empty,
@@ -417,21 +566,23 @@ const { tracks } = Astro.props;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: clamp(24px, 3.2vw, 36px);
+    padding: clamp(24px, 3.2vw, 38px);
   }
 
   .evidence-panel__result {
-    padding: clamp(24px, 3.2vw, 36px);
+    position: relative;
+    z-index: 1;
+    padding: clamp(24px, 3.2vw, 38px);
   }
 
   .evidence-panel__eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
     color: var(--accent-blue-dark);
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 780;
+    font-weight: 800;
     letter-spacing: 0.055em;
   }
 
@@ -441,21 +592,18 @@ const { tracks } = Astro.props;
     color: var(--ink-display);
     font-family: var(--font-display);
     font-size: clamp(1.2rem, 2vw, 1.5rem);
-    letter-spacing: -0.025em;
   }
 
   .evidence-panel__empty p,
   .evidence-panel__error p {
-    max-width: 620px;
+    max-width: 680px;
     margin: 0;
     color: var(--ink-muted);
     font-size: var(--text-caption);
     line-height: 1.55;
   }
 
-  .evidence-panel__empty-note {
-    margin-top: 10px !important;
-  }
+  .evidence-panel__empty-note { margin-top: 12px !important; }
 
   .evidence-panel__header {
     display: flex;
@@ -464,22 +612,18 @@ const { tracks } = Astro.props;
     gap: 24px;
   }
 
-  .evidence-panel__heading {
-    min-width: 0;
-  }
-
   .evidence-panel__header h3 {
     margin: 10px 0 5px;
     color: var(--ink-display);
     font-family: var(--font-display);
-    font-size: clamp(1.45rem, 2.3vw, 2rem);
-    font-weight: 820;
-    letter-spacing: -0.04em;
-    line-height: 1.08;
+    font-size: clamp(1.55rem, 2.5vw, 2.15rem);
+    font-weight: 840;
+    letter-spacing: -0.045em;
+    line-height: 1.06;
   }
 
   .evidence-panel__header p {
-    max-width: 700px;
+    max-width: 720px;
     margin: 0;
     color: var(--ink-muted);
     font-size: 0.95rem;
@@ -498,116 +642,212 @@ const { tracks } = Astro.props;
     text-decoration: none;
   }
 
-  .source-link:hover,
-  .source-link:focus-visible {
-    color: var(--accent-blue);
-  }
-
-  .evidence-meta {
-    min-width: 0;
+  .run-summary {
     display: flex;
-    align-items: stretch;
-    gap: 16px;
-    margin-top: 24px;
-    padding: 14px 0;
-    border-top: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+    gap: 9px 18px;
+    margin-top: 18px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
   }
 
-  .evidence-meta__item {
-    min-width: 0;
-    flex: 1 1 0;
+  .run-summary span {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .run-summary strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-weight: 760;
+  }
+
+  .benchmark-story {
     display: grid;
-    gap: 3px;
+    grid-template-columns: minmax(0, 1.65fr) minmax(200px, 0.72fr);
+    gap: clamp(20px, 3vw, 34px);
+    align-items: stretch;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-subtle);
   }
 
-  .evidence-meta__label,
-  .metric > span,
-  .evidence-takeaway__label {
+  .performance-plot {
+    min-width: 0;
+    padding: 18px 18px 12px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 16%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card)), var(--surface-card));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 60%, transparent);
+  }
+
+  .plot-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .plot-heading__eyebrow,
+  .highlight > span,
+  .evidence-takeaway > span {
+    display: block;
     color: var(--ink-subtle);
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 720;
-    letter-spacing: 0.035em;
-    text-transform: uppercase;
+    font-weight: 760;
+    letter-spacing: 0.045em;
   }
 
-  .evidence-meta__item strong {
-    min-width: 0;
-    overflow: hidden;
+  .plot-heading strong {
+    display: block;
+    margin-top: 4px;
     color: var(--ink-display);
     font-family: var(--font-display);
-    font-size: var(--text-caption);
-    font-weight: 720;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 1rem;
   }
 
-  .evidence-meta__item small {
-    min-width: 0;
-    overflow: hidden;
+  .plot-heading__note {
     color: var(--ink-muted);
     font-size: var(--text-caption);
-    line-height: 1.35;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
-  .evidence-meta__separator {
-    width: 1px;
-    flex: 0 0 1px;
-    background: var(--border-subtle);
+  .plot-svg {
+    width: 100%;
+    height: auto;
+    min-height: 210px;
+    margin-top: 6px;
+    overflow: visible;
   }
 
-  .metric-row {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin-top: 26px;
+  .plot-svg :global(.plot-grid line) {
+    stroke: color-mix(in srgb, var(--ink-subtle) 16%, transparent);
+    stroke-width: 1;
   }
 
-  .metric {
-    min-width: 0;
-    padding: 0 clamp(14px, 2vw, 22px);
+  .plot-svg :global(.plot-axis-labels text) {
+    fill: var(--ink-subtle);
+    font-family: var(--font-body);
+    font-size: 11px;
   }
 
-  .metric:first-child {
-    padding-left: 0;
+  .plot-svg :global(.plot-frontier) {
+    fill: none;
+    stroke: var(--accent-blue);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--accent-blue) 18%, transparent));
   }
 
-  .metric + .metric {
+  .plot-svg :global(.plot-point circle) {
+    fill: color-mix(in srgb, var(--accent-violet) 62%, var(--accent-blue));
+    stroke: var(--surface-card);
+    stroke-width: 3;
+  }
+
+  .plot-svg :global(.plot-point circle.is-frontier) {
+    fill: var(--accent-blue);
+  }
+
+  .plot-svg :global(.plot-point text) {
+    fill: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .plot-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .plot-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent-violet) 62%, var(--accent-blue));
+  }
+
+  .legend-line {
+    width: 18px;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: var(--accent-blue);
+  }
+
+  .benchmark-highlights {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
     border-left: 1px solid var(--border-subtle);
+    padding-left: clamp(18px, 2.4vw, 26px);
   }
 
-  .metric strong {
+  .highlight {
+    flex: 1 1 0;
+    padding: 14px 0;
+  }
+
+  .highlight + .highlight {
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .highlight--accent {
+    position: relative;
+  }
+
+  .highlight--accent::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 15px;
+    bottom: 15px;
+    width: 3px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(180deg, var(--accent-blue), var(--accent-violet));
+  }
+
+  .highlight strong {
     display: block;
     margin-top: 6px;
     color: var(--ink-display);
     font-family: var(--font-display);
-    font-size: clamp(1.65rem, 3vw, 2.25rem);
-    font-weight: 820;
-    letter-spacing: -0.05em;
-    line-height: 1;
+    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    font-weight: 830;
+    letter-spacing: -0.04em;
   }
 
-  .metric small {
+  .highlight small {
     display: block;
-    margin-top: 6px;
+    margin-top: 4px;
     color: var(--ink-muted);
     font-size: var(--text-caption);
+    line-height: 1.4;
   }
 
   .evidence-takeaway {
     display: grid;
     grid-template-columns: 110px minmax(0, 1fr);
-    gap: 18px;
+    gap: 20px;
     align-items: start;
-    margin-top: 28px;
-    padding-top: 18px;
-    border-top: 1px solid var(--border-subtle);
-  }
-
-  .evidence-takeaway > div {
-    min-width: 0;
+    margin-top: 24px;
+    padding: 18px 20px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 13%, var(--border-subtle));
+    border-radius: var(--radius-md);
+    background:
+      linear-gradient(100deg, color-mix(in srgb, var(--accent-blue) 7%, var(--surface-card)), color-mix(in srgb, var(--accent-violet) 3%, var(--surface-card)));
   }
 
   .evidence-takeaway strong {
@@ -615,59 +855,58 @@ const { tracks } = Astro.props;
     color: var(--ink-display);
     font-family: var(--font-display);
     font-size: 1rem;
-    font-weight: 760;
+    font-weight: 780;
     line-height: 1.4;
   }
 
   .evidence-takeaway p {
-    max-width: 720px;
+    max-width: 760px;
     margin: 4px 0 0;
     color: var(--ink-muted);
     font-size: var(--text-caption);
     line-height: 1.55;
   }
 
-  @media (max-width: 760px) {
-    .experiment-selector {
-      padding-right: 28px;
+  html[data-theme='dark'] .evidence-panel {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+  }
+
+  @media (max-width: 900px) {
+    .benchmark-story {
+      grid-template-columns: 1fr;
     }
 
-    .experiment-tab__state {
+    .benchmark-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+      padding: 12px 0 0;
+    }
+
+    .highlight {
+      padding: 12px 14px;
+    }
+
+    .highlight + .highlight {
+      border-top: 0;
+      border-left: 1px solid var(--border-subtle);
+    }
+
+    .highlight--accent::before {
       display: none;
     }
+  }
+
+  @media (max-width: 760px) {
+    .experiment-tab__state { display: none; }
 
     .evidence-panel__header {
       flex-direction: column;
       gap: 8px;
     }
 
-    .source-link {
-      min-height: auto;
-    }
-
-    .evidence-meta {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px 18px;
-    }
-
-    .evidence-meta__separator {
-      display: none;
-    }
-
-    .evidence-meta__item:last-child {
-      grid-column: 1 / -1;
-    }
-
-    .metric-row {
-      grid-template-columns: 1fr 1fr;
-      gap: 20px 0;
-    }
-
-    .metric:nth-child(3) {
-      border-left: 0;
-      padding-left: 0;
-    }
+    .source-link { min-height: auto; }
 
     .evidence-takeaway {
       grid-template-columns: 1fr;
@@ -675,30 +914,27 @@ const { tracks } = Astro.props;
     }
   }
 
-  @media (max-width: 430px) {
-    .evidence-panel__result,
-    .evidence-panel__loading,
-    .evidence-panel__empty,
-    .evidence-panel__error {
-      padding: 20px;
-    }
-
-    .evidence-meta {
+  @media (max-width: 620px) {
+    .benchmark-highlights {
       grid-template-columns: 1fr;
     }
 
-    .evidence-meta__item:last-child {
-      grid-column: auto;
+    .highlight + .highlight {
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
     }
 
-    .metric {
-      padding-inline: 12px;
+    .plot-heading {
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .plot-svg {
+      min-height: 180px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .experiment-tab {
-      transition: none;
-    }
+    .experiment-tab { transition: none; }
   }
 </style>
