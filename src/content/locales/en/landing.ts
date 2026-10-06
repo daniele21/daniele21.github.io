@@ -343,7 +343,7 @@ export const landingData: LandingPageData = {
     kicker: '04 MEASURE',
     title: 'Test the assumptions, not just the demo.',
     intro:
-      'Experiments turns model, architecture and product questions into reproducible evidence: capability, quality, latency, resources, cost and robustness.',
+      'Reproducible benchmarks turn architecture choices into evidence: what works, how well, and at what cost.',
     systems: [
       {
         id: 'experiments',
@@ -373,25 +373,25 @@ export const landingData: LandingPageData = {
             id: 'redactguard-local-anonymization',
             title: 'RedactGuard Local Anonymization',
             question: 'How reliable are local models on a real privacy workload?',
-            status: 'NO PUBLISHED RUN',
+            status: 'NO PUBLISHED SNAPSHOT',
           },
           {
             id: 'vlm-capability',
             title: 'VLM Capability Benchmark',
             question: 'Which visual tasks can realistically move local?',
-            status: 'NO PUBLISHED RUN',
+            status: 'NO PUBLISHED SNAPSHOT',
           },
           {
             id: 'image-generation',
             title: 'Image Generation Benchmark',
             question: 'How should image models be compared beyond subjective demos?',
-            status: 'NO PUBLISHED RUN',
+            status: 'NO PUBLISHED SNAPSHOT',
           },
           {
             id: 'diarization',
             title: 'Diarization Benchmark',
             question: 'Which open diarization pipeline best balances speaker accuracy and runtime cost?',
-            status: 'NO PUBLISHED RUN',
+            status: 'NO PUBLISHED SNAPSHOT',
           },
         ],
         statusNote: 'One repository, multiple reproducible research tracks.',
