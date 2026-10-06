@@ -1,0 +1,464 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductSubHeader from '../components/layout/ProductSubHeader.astro';
+import ProjectPhase from '../components/project/ProjectPhase.astro';
+import ProjectEvidenceNote from '../components/project/ProjectEvidenceNote.astro';
+import ProjectDecisionBand from '../components/project/ProjectDecisionBand.astro';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const subheaderLinks = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Decide', href: '#decide' },
+  { label: 'Build', href: '#build' },
+  { label: 'Test', href: '#test' },
+  { label: 'Measure', href: '#measure' },
+  { label: 'Decide again', href: '#decide-again' },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Decisio',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'macOS, Linux',
+  description:
+    'Stateful local-LLM decision runtime that reuses stable model context, sends only changing state and returns typed actions.',
+  author: {
+    '@type': 'Person',
+    name: 'Daniele Moltisanti',
+    url: 'https://daniele21.github.io/',
+  },
+  codeRepository: 'https://github.com/daniele21/decisio',
+};
+---
+
+<BaseLayout
+  title="Decisio - Daniele Moltisanti"
+  description="Stateful local-LLM decision runtime for repeated bounded decisions with reusable model context."
+  jsonLd={schema}
+>
+  <ProductSubHeader
+    title="Decisio"
+    badge="Experimental"
+    logoPath="images/decisio/logo.png"
+    links={subheaderLinks}
+    cta={{ label: 'GitHub ↗', href: 'https://github.com/daniele21/decisio' }}
+  />
+
+  <div id="top" data-project-page data-project-archetype="infrastructure">
+    <section class="project-hero">
+      <div class="shell project-shell">
+        <a class="back" href={`${baseUrl}/#infrastructure`}>← Architecture & Infrastructure</a>
+
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow">STATEFUL DECISIONS · LOCAL LLM</p>
+            <h1>Decisio</h1>
+            <p class="lede">
+              Make repeated local-LLM decisions without re-prefilling the same stable context every time.
+            </p>
+
+            <div class="hero-meta" aria-label="Decisio technology">
+              <span>llama.cpp</span>
+              <span>GGUF</span>
+              <span>Python ≥ 3.11</span>
+              <span>Typed actions</span>
+            </div>
+
+            <div class="hero-actions">
+              <a href="#build">See how it works ↓</a>
+              <a class="secondary" href="https://github.com/daniele21/decisio" target="_blank" rel="noopener noreferrer">
+                GitHub ↗
+              </a>
+            </div>
+          </div>
+
+          <div class="hero-visual" aria-label="Stable context reused across changing decisions">
+            <div class="stable-block">
+              <span>STABLE CONTEXT</span>
+              <strong>Task + policy + constraints</strong>
+              <small>Prefill once</small>
+            </div>
+            <div class="reuse-line" aria-hidden="true"></div>
+            <div class="state-row">
+              <span>State 1 → action</span>
+              <span>State 2 → action</span>
+              <span>State 3 → action</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <ProjectPhase
+      id="decide"
+      step="01"
+      label="DECIDE"
+      title="Repeated decisions should not pay for the same long prefix every time."
+      description="Decisio targets bounded decision loops where the task, policy and part of the prompt stay stable while only the current state changes."
+    >
+      <div class="shell principle-grid">
+        <article>
+          <span>01</span>
+          <h2>Stable context is a runtime resource</h2>
+          <p>Compile the reusable decision prefix once instead of re-evaluating it for every state transition.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h2>Constraints stay deterministic</h2>
+          <p>Impossible actions and known rules are filtered in software before the model is asked to choose.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h2>The output is an action</h2>
+          <p>For bounded choices, read candidate logits directly and return a typed decision instead of generating prose.</p>
+        </article>
+      </div>
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="build"
+      step="02"
+      label="BUILD"
+      title="Split what stays stable from what changes."
+      description="The runtime keeps prefix-safe model state reusable, appends only the current-state suffix and scores the currently valid candidates."
+      tone="subtle"
+    >
+      <div class="shell flow">
+        <div class="flow-step">
+          <span>STABLE</span>
+          <strong>Task + policy</strong>
+          <small>Reusable model state</small>
+        </div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-step">
+          <span>DYNAMIC</span>
+          <strong>Current state</strong>
+          <small>Only what changed</small>
+        </div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-step">
+          <span>CONSTRAIN</span>
+          <strong>Valid candidates</strong>
+          <small>Deterministic filtering</small>
+        </div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-step accent">
+          <span>READOUT</span>
+          <strong>Typed action</strong>
+          <small>Zero answer tokens</small>
+        </div>
+      </div>
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="test"
+      step="03"
+      label="TEST"
+      title="Use workloads where repeated state actually matters."
+      description="Snake is the visual reference loop, while routing, triage and policy gates represent the broader class of bounded decisions Decisio is designed for."
+    >
+      <div class="shell use-case-grid">
+        <article>
+          <span>SNAKE</span>
+          <h2>Control loop</h2>
+          <p>Stable objective and sensor semantics; changing board state; typed move as output.</p>
+        </article>
+        <article>
+          <span>ROUTING</span>
+          <h2>Support queue</h2>
+          <p>Stable routing policy and queue meanings; new ticket state; queue ID as the action.</p>
+        </article>
+        <article>
+          <span>POLICY</span>
+          <h2>Decision gate</h2>
+          <p>Stable policy semantics; changing request; allow, deny or escalate as the typed result.</p>
+        </article>
+      </div>
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="measure"
+      step="04"
+      label="MEASURE"
+      title="Reuse only matters if it preserves the fresh decision."
+      description="The benchmark contract measures both efficiency and correctness: less physical model work is only valuable when the reused path stays equivalent to the fresh path."
+      tone="subtle"
+    >
+      <ProjectEvidenceNote
+        title="The evidence contract compares state reuse against a fresh oracle."
+        body="Decisio records choice equivalence, score deltas, logical versus physically evaluated tokens, reused prefix tokens, cache hits and misses, latency and bounded context-state bytes."
+        evidenced={[
+          'Stable-context model-state reuse is implemented',
+          'Fresh-path correctness checks are part of the runtime contract',
+          'Direct A/B/C choice readout generates zero answer tokens on the native path',
+          'Exact model/runtime provenance is recorded',
+        ]}
+        missing={[
+          'Representative release-grade evidence across a broader workload set',
+          'Calibrated confidence / answerability contract',
+        ]}
+      />
+    </ProjectPhase>
+
+    <ProjectPhase
+      id="decide-again"
+      step="05"
+      label="DECIDE AGAIN"
+      title="Use Decisio only where the repeated-state structure is real."
+      description="The architecture is useful when a meaningful prefix can be reused and the output is a bounded action. It is not intended for unrelated requests or free-form generation."
+    >
+      <ProjectDecisionBand
+        title="Keep the stable decision contract warm. Recompute only what changed."
+        body="The product thesis is not generic caching. It is a stateful decision boundary with explicit constraints, prefix-safe reuse and typed outputs."
+        signals={[
+          'Good fit: repeated bounded decisions with stable policy/context',
+          'Good fit: local GGUF workloads where repeated prefill is material',
+          'Poor fit: unrelated prompts or genuinely free-form output',
+        ]}
+      />
+    </ProjectPhase>
+  </div>
+</BaseLayout>
+
+<style>
+  .project-hero {
+    min-height: 76vh;
+    padding: clamp(5rem, 10vh, 8rem) 0;
+    background:
+      radial-gradient(circle at 88% 12%, color-mix(in srgb, #8b5cf6 13%, transparent), transparent 30%),
+      radial-gradient(circle at 8% 88%, color-mix(in srgb, #4f46e5 8%, transparent), transparent 32%),
+      var(--surface-canvas);
+  }
+
+  .project-shell {
+    max-width: 1120px;
+  }
+
+  .back {
+    color: var(--ink-subtle);
+    text-decoration: none;
+    font-size: var(--text-caption);
+    font-weight: 700;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, .8fr);
+    gap: clamp(36px, 6vw, 80px);
+    align-items: center;
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .eyebrow {
+    margin: 0;
+    color: #4f46e5;
+    font-size: var(--text-caption);
+    font-weight: 850;
+    letter-spacing: .12em;
+  }
+
+  h1 {
+    margin: .75rem 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(3.4rem, 7vw, 6.6rem);
+    line-height: .95;
+    letter-spacing: -.06em;
+  }
+
+  .lede {
+    max-width: 700px;
+    margin: 1.3rem 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-lead);
+    line-height: 1.65;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 1.6rem;
+  }
+
+  .hero-meta span {
+    padding: 6px 10px;
+    border: 1px solid color-mix(in srgb, #4f46e5 18%, var(--border-subtle));
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, #4f46e5 5%, var(--surface-card));
+    color: var(--ink);
+    font-size: var(--text-caption);
+    font-weight: 700;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 1.7rem;
+  }
+
+  .hero-actions a {
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    padding: 0 16px;
+    border-radius: var(--radius-full);
+    background: #4f46e5;
+    color: white;
+    font-size: var(--text-caption);
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .hero-actions a.secondary {
+    border: 1px solid var(--border-medium);
+    background: var(--surface-card);
+    color: var(--ink-display);
+  }
+
+  .hero-visual {
+    padding: clamp(24px, 4vw, 38px);
+    border: 1px solid color-mix(in srgb, #4f46e5 24%, var(--border-medium));
+    border-radius: var(--radius-xl);
+    background:
+      linear-gradient(145deg, color-mix(in srgb, #4f46e5 8%, var(--surface-card)), var(--surface-card));
+    box-shadow: var(--shadow-lg);
+  }
+
+  .stable-block {
+    display: grid;
+    gap: 6px;
+    padding: 18px;
+    border: 1px solid color-mix(in srgb, #4f46e5 22%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+
+  .stable-block span,
+  .flow-step span,
+  .principle-grid > article > span,
+  .use-case-grid > article > span {
+    color: #4f46e5;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: .07em;
+  }
+
+  .stable-block strong,
+  .flow-step strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+  }
+
+  .stable-block small,
+  .flow-step small {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .reuse-line {
+    width: 2px;
+    height: 38px;
+    margin: 0 auto;
+    background: linear-gradient(#4f46e5, #8b5cf6);
+  }
+
+  .state-row {
+    display: grid;
+    gap: 8px;
+  }
+
+  .state-row span {
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, #8b5cf6 6%, var(--surface-subtle));
+    color: var(--ink);
+    font-size: var(--text-caption);
+    font-weight: 700;
+  }
+
+  .principle-grid,
+  .use-case-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+    padding-bottom: clamp(48px, 7vw, 80px);
+  }
+
+  .principle-grid article,
+  .use-case-grid article {
+    padding: clamp(20px, 3vw, 28px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+
+  .principle-grid h2,
+  .use-case-grid h2 {
+    margin: 8px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+  }
+
+  .principle-grid p,
+  .use-case-grid p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.6;
+  }
+
+  .flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    gap: 10px;
+    align-items: center;
+    padding-bottom: clamp(48px, 7vw, 80px);
+  }
+
+  .flow-step {
+    min-width: 0;
+    display: grid;
+    gap: 6px;
+    padding: 18px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+
+  .flow-step.accent {
+    border-color: color-mix(in srgb, #4f46e5 36%, var(--border-medium));
+    background: color-mix(in srgb, #4f46e5 7%, var(--surface-card));
+  }
+
+  .flow-arrow {
+    color: var(--ink-subtle);
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 920px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .flow {
+      grid-template-columns: 1fr;
+    }
+
+    .flow-arrow {
+      transform: rotate(90deg);
+      justify-self: center;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .principle-grid,
+    .use-case-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
