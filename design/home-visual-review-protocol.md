@@ -2,11 +2,14 @@
 
 This review is the rendered evidence layer for the homepage experience contract in `design/ux-contract.json`.
 
+Open mobile findings and implementation order: [`docs/workstreams/mobile-first-audit.md`](../docs/workstreams/mobile-first-audit.md).
+
 ## Required viewports
 
 - 1440px desktop
 - 768px tablet
 - 390px mobile
+- 430px large phone
 - 320px minimum-width edge case
 
 ## Review questions
@@ -18,8 +21,8 @@ At every viewport verify:
 3. The blue method path reinforces progress and continuity without scroll-jacking or obscuring content.
 4. Reversing scroll reverses the progress state naturally; resize/reflow does not leave progress detached from the visible reading plane.
 5. Reduced-motion mode keeps every stage visible and understandable without scroll-coupled transforms.
-6. No meaningful rendered text falls below 14px and interaction targets remain at least 44×44px where applicable.
-7. No page-level horizontal overflow appears at 320, 390, 768 or 1440px.
+6. No meaningful rendered text falls below 14px and interaction targets remain at least 48×48px where applicable.
+7. No page-level horizontal overflow appears at 320, 390, 430, 768 or 1440px. Also check that headings, prose, proof blocks and links stay inside any section that clips overflow: a clipped descendant can leave the document scroll width unchanged while hiding content.
 8. Visuals remain subordinate to the current question: Decide, Build, Test and Measure must not compete equally at the same moment.
 9. Advisory/conversion content remains late in the journey and does not displace project proof or the primary exploration CTA.
 10. Browser console/page errors are treated as experience defects.

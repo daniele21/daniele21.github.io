@@ -73,7 +73,7 @@ function getHref(href: string) {
         </svg>
       </button>
 
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle>
+      <button class="menu-toggle" type="button" aria-label={hdr.menuToggleAriaLabel} title={hdr.menuToggleAriaLabel} aria-expanded="false" aria-controls="site-navigation" data-menu-toggle>
         <span class="sr-only">{hdr.menuToggleAriaLabel}</span>
         <span></span><span></span><span></span>
       </button>
@@ -374,8 +374,8 @@ function getHref(href: string) {
     .brand-name { font-size: 0.875rem; }
     .theme-toggle,
     .menu-toggle {
-      width: 44px;
-      height: 44px;
+      width: var(--touch-target-min);
+      height: var(--touch-target-min);
     }
     .site-nav {
       padding: 8px 16px 14px;

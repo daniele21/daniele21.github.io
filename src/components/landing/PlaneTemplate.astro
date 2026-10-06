@@ -68,6 +68,7 @@ const titleId = `${id}-title`;
     position: relative;
     min-height: auto;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     align-items: start;
     overflow: clip;
     padding: 42px 0 56px;
@@ -87,7 +88,10 @@ const titleId = `${id}-title`;
       var(--journey-surface-tint, var(--surface-subtle));
   }
 
-  .plane-shell { position: relative; }
+  .plane-shell {
+    position: relative;
+    min-width: 0;
+  }
 
   .plane-layout {
     width: 100%;

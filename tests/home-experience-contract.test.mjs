@@ -61,7 +61,8 @@ test('decision matrix keeps a local-first hierarchy without losing comparison se
 
   assert.match(matrix, /Local-first lens/);
   assert.match(matrix, /Where Local AI trades capacity for control/);
-  assert.match(matrix, /class="mobile-cell-label"/);
+  assert.match(matrix, /class="mobile-matrix"/);
+  assert.match(matrix, /class="factor-card factor-card--strength"/);
   assert.match(matrix, /class="sr-only">Strength:/);
   assert.match(matrix, /--cloud-ink:/);
   assert.doesNotMatch(matrix, /\.hybrid-column\s*\{[\s\S]{0,120}background:/);

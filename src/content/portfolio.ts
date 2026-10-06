@@ -12,9 +12,9 @@ export const portfolioNarrative = {
     eyebrow: 'AI SYSTEMS · PRODUCT · EVIDENCE',
     title: 'I build AI systems from problem to evidence.',
     lede:
-      'I work across strategy, product, architecture, engineering and evaluation: frame the workload, build the system, put it inside a real product, measure what actually works, and use that evidence to make the next decision.',
+      'I frame the workload, build the system and product, then measure what works to guide the next decision.',
     specialization:
-      'Local and on-device AI are a major area of depth—not the boundary of the work. The broader goal is to understand how AI becomes a useful, controllable and measurable product capability.',
+      'Local and on-device AI are a major area of depth. The broader goal is useful, controllable and measurable AI products.',
   },
   capabilities: [
     {

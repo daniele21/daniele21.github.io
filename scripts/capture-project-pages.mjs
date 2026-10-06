@@ -6,7 +6,8 @@ const baseUrl = process.env.VISUAL_REVIEW_BASE_URL || 'http://127.0.0.1:4321';
 const outputDir = path.resolve(process.env.VISUAL_REVIEW_OUTPUT || 'visual-review');
 
 const legacyPhases = ['decide', 'build', 'test', 'measure', 'decide-again'];
-const routeSpecs = [
+const allRouteSpecs = [
+  { route: 'about', anchors: [], subheader: false },
   { route: 'harnex', anchors: ['top', 'architecture', 'runtime', 'evidence', 'status'], subheader: true },
   { route: 'korgis', anchors: ['top', 'architecture', 'runtime-boundary', 'evidence', 'status'], subheader: true, hrefs: ['#top', '#architecture', '#runtime-boundary', '#evidence', '#status'] },
   { route: 'decisio', anchors: ['top', 'architecture', 'runtime', 'evidence', 'status'], subheader: true },
@@ -30,12 +31,26 @@ const routeSpecs = [
   },
 ];
 
-const viewports = [
+const allViewports = [
   { name: 'mobile-320', width: 320, height: 700 },
   { name: 'mobile-390', width: 390, height: 844 },
+  { name: 'mobile-430', width: 430, height: 932 },
   { name: 'tablet-768', width: 768, height: 1024 },
   { name: 'desktop-1440', width: 1440, height: 1100 },
 ];
+
+const selectedNames = (value) => new Set((value || '').split(',').map((name) => name.trim()).filter(Boolean));
+const selectedRoutes = selectedNames(process.env.VISUAL_REVIEW_ROUTES);
+const selectedViewports = selectedNames(process.env.VISUAL_REVIEW_VIEWPORTS);
+const routeSpecs = selectedRoutes.size
+  ? allRouteSpecs.filter((spec) => selectedRoutes.has(spec.route))
+  : allRouteSpecs;
+const viewports = selectedViewports.size
+  ? allViewports.filter((viewport) => selectedViewports.has(viewport.name))
+  : allViewports;
+if (!routeSpecs.length || !viewports.length) {
+  throw new Error('Visual review selection matched no routes or viewports.');
+}
 
 const warmRenderedPage = async (page) => {
   const metrics = await page.evaluate(() => ({
@@ -54,7 +69,12 @@ const warmRenderedPage = async (page) => {
 await fs.rm(outputDir, { recursive: true, force: true });
 await fs.mkdir(outputDir, { recursive: true });
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({
+  headless: true,
+  ...(process.env.CHROMIUM_EXECUTABLE_PATH
+    ? { executablePath: process.env.CHROMIUM_EXECUTABLE_PATH }
+    : {}),
+});
 const report = [];
 
 try {
@@ -96,7 +116,7 @@ try {
               height: Math.round(rect.height),
             };
           })
-          .filter((item) => item.width < 44 || item.height < 44);
+          .filter((item) => item.width < 48 || item.height < 48);
 
         const selectorFor = (element) => {
           const tag = element.tagName.toLowerCase();
@@ -116,7 +136,7 @@ try {
               style.visibility === 'hidden'
             ) return null;
 
-            const overflowRight = Math.max(0, Math.ceil(rect.right - window.innerWidth));
+            const overflowRight = Math.max(0, Math.ceil(rect.right - root.clientWidth));
             const overflowLeft = Math.max(0, Math.ceil(-rect.left));
             if (overflowRight <= 1 && overflowLeft <= 1) return null;
 
@@ -164,8 +184,9 @@ try {
 
         return {
           innerWidth: window.innerWidth,
+          layoutWidth: root.clientWidth,
           scrollWidth: Math.max(root.scrollWidth, body.scrollWidth),
-          horizontalOverflowPx: Math.max(0, Math.max(root.scrollWidth, body.scrollWidth) - window.innerWidth),
+          horizontalOverflowPx: Math.max(0, Math.max(root.scrollWidth, body.scrollWidth) - root.clientWidth),
           h1Count: document.querySelectorAll('h1').length,
           mainCount: document.querySelectorAll('main').length,
           missingAnchors,
@@ -206,7 +227,7 @@ try {
           await page.waitForTimeout(80);
           sectionNavigation.push(await page.evaluate(({ href, anchorId }) => {
             const nav = document.querySelector('[data-product-subheader] .subheader-nav');
-            const active = document.querySelector(`[data-product-subheader] [href="${href}"]`);
+            const active = document.querySelector(`[data-product-subheader] [data-sublink][href="${href}"]`);
             const navRect = nav?.getBoundingClientRect();
             const activeRect = active?.getBoundingClientRect();
             const activeVisible = Boolean(navRect && activeRect &&

@@ -374,16 +374,9 @@ const featured = experiments.tracks.filter((track) => track.status !== 'Planned'
     .evidence-changes { padding: 16px; }
 
     .evidence-loop {
-      justify-content: flex-start;
-      overflow-x: auto;
-      flex-wrap: nowrap;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
+      justify-content: center;
+      flex-wrap: wrap;
     }
-
-    .evidence-loop::-webkit-scrollbar { display: none; }
-    .evidence-loop span,
-    .evidence-loop b { flex: 0 0 auto; }
 
     .experiments-cta {
       display: flex;
