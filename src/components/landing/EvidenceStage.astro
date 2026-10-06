@@ -1,7 +1,10 @@
 ---
-/** Dedicated Measure stage tuned to the approved Performance Lab reference. */
+/** Plane 04: reproducible experiments / MEASURE. */
+import { landingData } from '../../content/locales/en/landing';
 import StageRail from './StageRail.astro';
-import EvidenceMatrix from './EvidenceMatrix.astro';
+
+const { measureStage } = landingData;
+const experiments = measureStage.systems[0];
 ---
 
 <section
@@ -15,19 +18,53 @@ import EvidenceMatrix from './EvidenceMatrix.astro';
 
     <div class="stage-layout evidence-layout">
       <header class="stage-copy evidence-hero">
-        <div class="evidence-copy">
-          <p class="stage-kicker evidence-kicker">Performance Lab</p>
-          <h2 id="evidence-title" class="stage-heading evidence-heading">Can this workload run locally?</h2>
-          <p class="stage-intro evidence-intro">
-            Performance Lab benchmarks the <strong>real model</strong> on <strong>real devices</strong>
-            to turn <strong>evidence</strong> into a <strong>Local, Hybrid or Cloud</strong> decision.
-          </p>
-        </div>
+        <p class="stage-kicker evidence-kicker">{experiments.title}</p>
+        <h2 id="evidence-title" class="stage-heading evidence-heading">{measureStage.title}</h2>
+        <p class="stage-intro evidence-intro">{measureStage.intro}</p>
       </header>
 
-      <div class="stage-visual evidence-visual" aria-label="Performance Lab benchmark evidence matrix">
-        <EvidenceMatrix />
+      <div class="experiments-layout">
+        <article class="experiments-card">
+          <div class="experiments-card__header">
+            <div>
+              <span class="experiments-card__tag">{experiments.tag}</span>
+              <h3>{experiments.question}</h3>
+            </div>
+            <a href={experiments.href} target="_blank" rel="noopener noreferrer">
+              Open repository <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <div class="track-grid" aria-label="Experiment tracks">
+            {experiments.tracks?.map((track) => (
+              <div class="track-card">
+                <div class="track-card__topline">
+                  <span>{track.status}</span>
+                </div>
+                <h4>{track.title}</h4>
+                <p>{track.question}</p>
+              </div>
+            ))}
+          </div>
+        </article>
+
+        <div
+          class="visual-placeholder"
+          role="img"
+          aria-label="Placeholder for a representative Experiments evidence visual"
+        >
+          <div class="visual-placeholder__label">VISUAL PLACEHOLDER · EXPERIMENT EVIDENCE</div>
+          <strong>Show the output of the research, not another dashboard.</strong>
+          <p>
+            Final graphic expected here: one compact evidence composition combining a task-level
+            model comparison, a quality-vs-efficiency Pareto frontier and a clear winner / trade-off
+            callout. It should communicate how an experiment changes an architecture decision in a
+            few seconds, using real benchmark outputs from the Experiments repository.
+          </p>
+        </div>
       </div>
+
+      <p class="evidence-closing">{measureStage.closingMessage}</p>
     </div>
   </div>
 </section>
@@ -39,121 +76,204 @@ import EvidenceMatrix from './EvidenceMatrix.astro';
     overflow: clip;
     padding: clamp(54px, 5.5vw, 76px) 0 clamp(72px, 7vw, 96px);
     background:
-      linear-gradient(
-        to bottom,
-        var(--journey-surface-canvas, var(--surface-canvas)) 0%,
-        var(--journey-surface-canvas, var(--surface-canvas)) calc(100% - var(--journey-transition-size, 120px)),
-        color-mix(in srgb, var(--accent-teal) 3%, var(--surface-canvas)) 100%
-      );
+      radial-gradient(ellipse 66% 42% at 72% 34%, color-mix(in srgb, var(--accent-blue) 4%, transparent), transparent 76%),
+      var(--journey-surface-tint, var(--surface-subtle));
   }
 
-  .evidence-shell {
-    position: relative;
-  }
+  .evidence-shell { position: relative; }
 
   .evidence-layout {
     width: 100%;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: clamp(24px, 3.5vw, 36px);
+    gap: clamp(26px, 3.5vw, 40px);
     padding-inline: clamp(64px, 7vw, 96px);
   }
 
   .evidence-hero {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .evidence-copy {
-    min-width: 0;
-    max-width: 720px;
+    width: min(100%, 820px);
+    align-self: flex-end;
   }
 
   .evidence-kicker {
     margin: 0 0 10px;
+    color: var(--accent-blue-dark);
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    line-height: 1.2;
     font-weight: 820;
     letter-spacing: 0.075em;
     text-transform: uppercase;
-    color: var(--accent-blue);
-  }
-
-  @media (max-width: 640px) {
-    .stage-wip-ribbon-wrap {
-      width: 145px;
-      height: 145px;
-    }
-
-    .stage-wip-ribbon {
-      top: 28px;
-      right: -38px;
-      width: 190px;
-      padding: 6px 0;
-      font-size: 0.62rem;
-      gap: 5px;
-      letter-spacing: 0.05em;
-    }
-
-    .stage-wip-icon {
-      width: 12px;
-      height: 12px;
-    }
   }
 
   .evidence-heading {
     margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(2.1rem, 2.9vw, 3.1rem);
-    line-height: 1.05;
-    letter-spacing: -0.048em;
-    font-weight: 850;
     color: var(--ink-display);
-    text-wrap: pretty;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 2.9vw, 3rem);
+    font-weight: 850;
+    letter-spacing: -0.048em;
+    line-height: 1.05;
   }
 
   .evidence-intro {
-    max-width: 680px;
+    max-width: 760px;
     margin: 14px 0 0;
-    font-size: clamp(1rem, 1.1vw, 1.12rem);
-    line-height: 1.55;
     color: var(--ink-muted);
-    text-wrap: pretty;
+    font-size: clamp(1rem, 1.1vw, 1.12rem);
+    line-height: 1.58;
   }
 
-  .evidence-intro strong {
+  .experiments-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+    gap: clamp(16px, 2vw, 24px);
+    align-items: stretch;
+  }
+
+  .experiments-card {
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .experiments-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .experiments-card__tag {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-badge);
+    font-weight: 820;
+    letter-spacing: 0.075em;
+  }
+
+  .experiments-card h3 {
+    max-width: 720px;
+    margin: 8px 0 0;
     color: var(--ink-display);
-    font-weight: 740;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2vw, 1.65rem);
+    line-height: 1.28;
+    letter-spacing: -0.025em;
   }
 
-  .evidence-visual {
-    width: 100%;
+  .experiments-card__header a {
+    flex: 0 0 auto;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: 0.88rem;
+    font-weight: 760;
+    text-decoration: none;
+  }
+
+  .track-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .track-card {
     min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+  }
+
+  .track-card__topline span {
+    color: var(--ink-muted);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 760;
+    letter-spacing: 0.055em;
+  }
+
+  .track-card h4 {
+    margin: 9px 0 6px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    line-height: 1.3;
+  }
+
+  .track-card p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .visual-placeholder {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(22px, 3vw, 32px);
+    border: 1.5px dashed color-mix(in srgb, var(--accent-blue) 38%, var(--border-medium));
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--accent-blue) 5%, transparent), transparent 62%),
+      var(--surface-canvas);
+  }
+
+  .visual-placeholder__label {
+    margin-bottom: 12px;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 750;
+    letter-spacing: 0.05em;
+  }
+
+  .visual-placeholder strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.08rem, 1.7vw, 1.35rem);
+    line-height: 1.34;
+  }
+
+  .visual-placeholder p {
+    margin: 10px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+
+  .evidence-closing {
+    max-width: 760px;
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 980px) {
+    .experiments-layout { grid-template-columns: 1fr; }
+    .visual-placeholder { min-height: 220px; }
   }
 
   @media (max-width: 760px) {
-    .evidence-stage {
-      padding: 50px 0 68px;
-    }
-
     .evidence-layout {
       padding-left: 48px;
       padding-right: 12px;
     }
 
-    .evidence-heading {
-      font-size: clamp(1.85rem, 8vw, 2.5rem);
-    }
+    .evidence-hero { align-self: flex-start; }
+    .track-grid { grid-template-columns: 1fr; }
+    .experiments-card__header { flex-direction: column; }
   }
 
   @media (max-width: 540px) {
-    .evidence-stage {
-      padding: 44px 0 60px;
-    }
-
     .evidence-layout {
       padding-left: 42px;
       padding-right: 4px;
