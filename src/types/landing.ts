@@ -216,7 +216,7 @@ export interface MeasureSystemCard {
     status: string;
     resultUrl?: string;
     sourceUrl?: string;
-    resultKind?: 'jev-routing';
+    resultKind?: 'jev-routing' | 'mcb-overview';
   }[];
 }
 
