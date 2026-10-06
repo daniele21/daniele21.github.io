@@ -351,29 +351,45 @@ export const landingData: LandingPageData = {
         metrics: [],
         tracks: [
           {
+            id: 'model-capability',
             title: 'Model Capability Benchmark',
             question: 'How much model do you actually need for a task?',
-            status: 'ACTIVE',
+            status: 'NO PUBLISHED RUN',
           },
           {
-            title: 'JEV vs LLM',
-            question: 'When does a specialised decision model beat an LLM?',
-            status: 'ACTIVE',
+            id: 'jev-vs-llm-routing',
+            title: 'JEV vs LLM · Routing',
+            question: 'Can a compact specialised model handle a 77-way routing task efficiently?',
+            status: 'PUBLISHED',
+            resultUrl:
+              'https://raw.githubusercontent.com/daniele21/experiments/main/experiments/jev-vs-llm/results/benchmark_data.json',
+            sourceUrl:
+              'https://github.com/daniele21/experiments/blob/main/experiments/jev-vs-llm/results/benchmark_data.json',
+            resultKind: 'jev-routing',
           },
           {
+            id: 'redactguard-local-anonymization',
             title: 'RedactGuard Local Anonymization',
             question: 'How reliable are local models on a real privacy workload?',
-            status: 'ACTIVE',
+            status: 'NO PUBLISHED RUN',
           },
           {
+            id: 'vlm-capability',
             title: 'VLM Capability Benchmark',
             question: 'Which visual tasks can realistically move local?',
-            status: 'PLANNED',
+            status: 'NO PUBLISHED RUN',
           },
           {
+            id: 'image-generation',
             title: 'Image Generation Benchmark',
             question: 'How should image models be compared beyond subjective demos?',
-            status: 'PLANNED',
+            status: 'NO PUBLISHED RUN',
+          },
+          {
+            id: 'diarization',
+            title: 'Diarization Benchmark',
+            question: 'Which open diarization pipeline best balances speaker accuracy and runtime cost?',
+            status: 'NO PUBLISHED RUN',
           },
         ],
         statusNote: 'One repository, multiple reproducible research tracks.',
