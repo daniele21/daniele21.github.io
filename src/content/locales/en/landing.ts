@@ -164,8 +164,8 @@ export const landingData: LandingPageData = {
     intro:
       'When Local or Hybrid makes sense, I build reusable infrastructure for reasoning, mobile inference, repeated decisions and private speech.',
     proofLine: 'Same question across every device: what can realistically run locally?',
-    ecosystemImage: 'images/ecosystem.png',
-    ecosystemAlt: 'Connected Local AI architecture across desktop, Android, local server and cloud fallback',
+    ecosystemImage: 'images/ecosystem-map.png',
+    ecosystemAlt: 'Ecosystem map showing how reusable primitives (Korgis, Harnex, Decisio, Local ASR) connect to real products (ClosedRoom, RedactGuard, Aura Finance) across Local, Hybrid, and Cloud boundaries.',
     areas: [
       {
         icon: '▱',
