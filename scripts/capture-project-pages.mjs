@@ -12,9 +12,6 @@ const routes = [
   'closedroom',
   'aura-finance',
   'redact-guard',
-  'performance-lab',
-  'traffic-monitoring',
-  'traffic-monitoring-android',
 ];
 
 const phaseIds = ['decide', 'build', 'test', 'measure', 'decide-again'];
