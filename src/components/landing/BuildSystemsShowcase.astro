@@ -20,7 +20,12 @@ const metaIconFor = (id: string) => {
 <div class="systems-showcase">
   <div class="systems-grid" aria-label="Reusable AI infrastructure">
     {buildStage.projects.map((project) => (
-      <article class="system-card" data-project={project.id}>
+      <a
+        class="system-card"
+        data-project={project.id}
+        href={hrefFor(project.href, project.external)}
+        aria-label={`Explore ${project.title}`}
+      >
         <div class="system-card__topline">
           <span class="system-card__eyebrow">
             <span class="system-card__meta-icon" aria-hidden="true">{metaIconFor(project.id)}</span>
@@ -70,16 +75,11 @@ const metaIconFor = (id: string) => {
         </div>
 
         <div class="system-card__footer">
-          <a
-            class="system-card__link"
-            href={hrefFor(project.href, project.external)}
-            target={project.external ? '_blank' : undefined}
-            rel={project.external ? 'noopener noreferrer' : undefined}
-          >
+          <span class="system-card__link">
             Explore system <span aria-hidden="true">→</span>
-          </a>
+          </span>
         </div>
-      </article>
+      </a>
     ))}
   </div>
 
@@ -141,6 +141,9 @@ const metaIconFor = (id: string) => {
     box-shadow:
       0 14px 34px color-mix(in srgb, var(--card-accent) 8%, transparent),
       var(--shadow-xs);
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
     transition:
       transform var(--duration-base) var(--ease-out-expo),
       border-color var(--duration-base) ease,
@@ -165,12 +168,18 @@ const metaIconFor = (id: string) => {
     pointer-events: none;
   }
 
-  .system-card:hover {
+  .system-card:hover,
+  .system-card:focus-visible {
     transform: translateY(-3px);
     border-color: color-mix(in srgb, var(--card-accent) 50%, var(--border-medium));
     box-shadow:
       0 18px 40px color-mix(in srgb, var(--card-accent) 11%, transparent),
       var(--shadow-sm);
+  }
+
+  .system-card:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--card-accent) 28%, transparent);
+    outline-offset: 3px;
   }
 
   .system-card[data-project='korgis'] {
@@ -391,8 +400,8 @@ const metaIconFor = (id: string) => {
     transition: transform var(--duration-fast) ease;
   }
 
-  .system-card__link:hover span,
-  .system-card__link:focus-visible span {
+  .system-card:hover .system-card__link span,
+  .system-card:focus-visible .system-card__link span {
     transform: translateX(3px);
   }
 
