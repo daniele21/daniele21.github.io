@@ -120,6 +120,9 @@ export interface BuildProject {
   evidence: string;
   imagePath?: string;
   imageAlt?: string;
+  layer?: string;
+  status?: string;
+  external?: boolean;
 }
 
 export interface BuildStageContent {
@@ -148,6 +151,7 @@ export interface ApplicationCard {
   colorClass: string;
   linkLabel: string;
   whatItTests: string;
+  relationship?: string;
 }
 
 export interface TestStageContent {
@@ -205,6 +209,15 @@ export interface MeasureSystemCard {
   statusType: 'planned' | 'verified' | 'authoritative';
   href: string;
   ctaLabel: string;
+  tracks?: {
+    id?: string;
+    title: string;
+    question: string;
+    status: string;
+    resultUrl?: string;
+    sourceUrl?: string;
+    resultKind?: 'jev-routing' | 'mcb-overview';
+  }[];
 }
 
 export interface MeasureStageContent {

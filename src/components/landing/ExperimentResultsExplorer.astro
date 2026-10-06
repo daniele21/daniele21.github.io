@@ -1,0 +1,1227 @@
+---
+interface Track {
+  id?: string;
+  title: string;
+  question: string;
+  status: string;
+  resultUrl?: string;
+  sourceUrl?: string;
+  resultKind?: 'jev-routing' | 'mcb-overview';
+}
+
+interface Props {
+  tracks: Track[];
+}
+
+const { tracks } = Astro.props;
+const sortedTracks = [...tracks].sort((a, b) => Number(Boolean(b.resultUrl)) - Number(Boolean(a.resultUrl)));
+const initialIndex = Math.max(0, sortedTracks.findIndex((track) => Boolean(track.resultUrl)));
+
+const selectorLabelFor = (track: Track) => {
+  const labels: Record<string, string> = {
+    'jev-vs-llm-routing': 'JEV vs LLM',
+    'model-capability': 'Model Capability',
+    'redactguard-local-anonymization': 'RedactGuard',
+    'vlm-capability': 'VLM',
+    'image-generation': 'Image Gen',
+    diarization: 'Diarization',
+  };
+  return labels[track.id || ''] || track.title;
+};
+---
+
+<div class="experiment-explorer" data-experiment-explorer>
+  <div class="experiment-selector-wrap">
+    <div class="experiment-selector" role="tablist" aria-label="Select experiment">
+      {sortedTracks.map((track, index) => (
+        <button
+          type="button"
+          class:list={['experiment-tab', { 'is-active': index === initialIndex }]}
+          role="tab"
+          aria-selected={index === initialIndex ? 'true' : 'false'}
+          tabindex={index === initialIndex ? '0' : '-1'}
+          data-experiment-tab
+          data-track-id={track.id || ''}
+          data-title={track.title}
+          data-question={track.question}
+          data-status={track.status}
+          data-result-url={track.resultUrl || ''}
+          data-source-url={track.sourceUrl || ''}
+          data-result-kind={track.resultKind || ''}
+        >
+          <span
+            class:list={['status-dot', { 'status-dot--live': Boolean(track.resultUrl) }]}
+            aria-hidden="true"
+          ></span>
+          <span class="experiment-tab__title">{selectorLabelFor(track)}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <section class="evidence-panel" aria-live="polite" aria-label="Selected experiment evidence">
+    <div class="evidence-panel__loading" data-evidence-loading hidden>
+      Loading published evidence…
+    </div>
+
+    <div class="evidence-panel__empty" data-evidence-empty hidden>
+      <div class="evidence-panel__empty-icon" aria-hidden="true">↗</div>
+      <div>
+        <span class="evidence-panel__eyebrow">NO PUBLIC SNAPSHOT YET</span>
+        <h3 data-empty-title></h3>
+        <p data-empty-question></p>
+        <p class="evidence-panel__empty-note">
+          Real runs exist outside the published repository snapshot. This view stays empty until a
+          versioned evidence artifact is available.
+        </p>
+      </div>
+    </div>
+
+    <div class="evidence-panel__result" data-evidence-result hidden>
+      <div class="evidence-panel__header">
+        <div>
+          <span class="evidence-panel__eyebrow">
+            <span class="live-dot" aria-hidden="true"></span>
+            PUBLISHED BENCHMARK SNAPSHOT
+          </span>
+          <h3 data-result-title></h3>
+          <p data-result-question></p>
+        </div>
+        <a class="source-link" data-result-source href="#" target="_blank" rel="noopener noreferrer">
+          Source <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <div class="run-summary" aria-label="Benchmark scope">
+        <span><strong data-model-count>—</strong> models</span>
+        <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
+        <span><strong data-dataset>—</strong> <span data-scope-label>dataset</span></span>
+        <span><strong data-runtime>—</strong> <span data-runtime-label>runtime</span></span>
+      </div>
+
+      <div class="benchmark-story">
+        <div class="performance-plot">
+          <div class="plot-heading">
+            <div>
+              <span class="plot-heading__eyebrow">QUALITY × LATENCY</span>
+              <strong>Local routing frontier</strong>
+            </div>
+            <span class="plot-heading__note">Accuracy vs p50 latency</span>
+          </div>
+
+          <svg
+            class="plot-svg"
+            data-performance-plot
+            viewBox="0 0 620 250"
+            role="img"
+            aria-label="Accuracy versus median latency by model"
+          ></svg>
+
+          <div class="plot-legend">
+            <span><i class="legend-dot legend-dot--all"></i>Measured model</span>
+            <span><i class="legend-line"></i>Pareto frontier</span>
+          </div>
+        </div>
+
+        <div class="benchmark-highlights" aria-label="Benchmark highlights">
+          <div class="highlight">
+            <span>BEST QUALITY</span>
+            <strong data-best-quality>—</strong>
+            <small data-best-quality-model></small>
+          </div>
+          <div class="highlight highlight--accent">
+            <span>BALANCE POINT</span>
+            <strong data-balance>—</strong>
+            <small data-balance-model></small>
+          </div>
+          <div class="highlight">
+            <span>FASTEST</span>
+            <strong data-fastest>—</strong>
+            <small data-fastest-model></small>
+          </div>
+        </div>
+      </div>
+
+      <div class="evidence-takeaway">
+        <span>TAKEAWAY</span>
+        <div>
+          <strong data-readout-title></strong>
+          <p data-readout></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-panel__error" data-evidence-error hidden>
+      <span class="evidence-panel__eyebrow">SOURCE UNAVAILABLE</span>
+      <h3>Published evidence could not be loaded.</h3>
+      <p>No fallback or invented performance values are shown.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+
+  const initExperimentExplorer = () => {
+    document.querySelectorAll('[data-experiment-explorer]').forEach((root) => {
+      if (!(root instanceof HTMLElement) || root.dataset.ready === 'true') return;
+      root.dataset.ready = 'true';
+
+      const tabs = Array.from(root.querySelectorAll('[data-experiment-tab]'));
+      const loading = root.querySelector('[data-evidence-loading]');
+      const empty = root.querySelector('[data-evidence-empty]');
+      const result = root.querySelector('[data-evidence-result]');
+      const error = root.querySelector('[data-evidence-error]');
+
+      let requestId = 0;
+
+      const setHidden = (node, hidden) => {
+        if (node instanceof HTMLElement) node.hidden = hidden;
+      };
+
+      const setText = (selector, value) => {
+        const node = root.querySelector(selector);
+        if (node) node.textContent = value ?? '';
+      };
+
+      const showOnly = (target) => {
+        setHidden(loading, target !== 'loading');
+        setHidden(empty, target !== 'empty');
+        setHidden(result, target !== 'result');
+        setHidden(error, target !== 'error');
+      };
+
+      const shortModel = (value) => {
+        const model = String(value || '');
+        return model
+          .replace(/^qwen3\.5-/i, 'Qwen 3.5 ')
+          .replace(/^nemotron-nano-/i, 'Nemotron ')
+          .replace(/-q4km$/i, ' Q4')
+          .replace(/-q8$/i, ' Q8')
+          .replace(/-/g, ' ');
+      };
+
+      const formatPct = (value) => {
+        const number = Number(value);
+        return Number.isFinite(number) ? `${(number * 100).toFixed(1)}%` : '—';
+      };
+
+      const formatSeconds = (value) => {
+        const number = Number(value);
+        if (!Number.isFinite(number)) return '—';
+        if (number < 1000) return `${Math.round(number)} ms`;
+        return `${(number / 1000).toFixed(1)} s`;
+      };
+
+      const createSvg = (tag, attrs = {}) => {
+        const node = document.createElementNS(SVG_NS, tag);
+        Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value)));
+        return node;
+      };
+
+      const plotRouting = (rows) => {
+        const svg = root.querySelector('[data-performance-plot]');
+        if (!(svg instanceof SVGElement)) return;
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+        const validRows = rows
+          .map((row) => ({
+            ...row,
+            accuracyNumber: Number(row.accuracy),
+            latencyNumber: Number(row.latency_p50_ms),
+          }))
+          .filter((row) => Number.isFinite(row.accuracyNumber) && Number.isFinite(row.latencyNumber))
+          .sort((a, b) => a.latencyNumber - b.latencyNumber);
+
+        if (!validRows.length) return;
+
+        const W = 620;
+        const H = 250;
+        const pad = { left: 48, right: 24, top: 22, bottom: 42 };
+        const innerW = W - pad.left - pad.right;
+        const innerH = H - pad.top - pad.bottom;
+
+        const maxLatency = Math.max(...validRows.map((row) => row.latencyNumber)) * 1.08;
+        const maxAccuracy = Math.min(
+          1,
+          Math.max(0.4, Math.ceil(Math.max(...validRows.map((row) => row.accuracyNumber)) * 10 + 1) / 10),
+        );
+
+        const x = (latency) => pad.left + (latency / maxLatency) * innerW;
+        const y = (accuracy) => pad.top + innerH - (accuracy / maxAccuracy) * innerH;
+
+        const grid = createSvg('g', { class: 'plot-grid' });
+        [0, 0.5, 1].forEach((fraction) => {
+          const gy = pad.top + innerH * fraction;
+          grid.appendChild(createSvg('line', {
+            x1: pad.left,
+            y1: gy,
+            x2: W - pad.right,
+            y2: gy,
+          }));
+        });
+        svg.appendChild(grid);
+
+        const axisLabels = createSvg('g', { class: 'plot-axis-labels' });
+        const yTop = createSvg('text', { x: 8, y: pad.top + 4 });
+        yTop.textContent = `${Math.round(maxAccuracy * 100)}%`;
+        axisLabels.appendChild(yTop);
+        const yBottom = createSvg('text', { x: 14, y: pad.top + innerH + 4 });
+        yBottom.textContent = '0%';
+        axisLabels.appendChild(yBottom);
+        const xLeft = createSvg('text', { x: pad.left, y: H - 10 });
+        xLeft.textContent = '0s';
+        axisLabels.appendChild(xLeft);
+        const xRight = createSvg('text', { x: W - pad.right - 28, y: H - 10 });
+        xRight.textContent = `${(maxLatency / 1000).toFixed(0)}s`;
+        axisLabels.appendChild(xRight);
+        svg.appendChild(axisLabels);
+
+        let bestSoFar = -Infinity;
+        const frontier = validRows.filter((row) => {
+          if (row.accuracyNumber > bestSoFar) {
+            bestSoFar = row.accuracyNumber;
+            return true;
+          }
+          return false;
+        });
+
+        if (frontier.length > 1) {
+          const polyline = createSvg('polyline', {
+            class: 'plot-frontier',
+            points: frontier.map((row) => `${x(row.latencyNumber)},${y(row.accuracyNumber)}`).join(' '),
+          });
+          svg.appendChild(polyline);
+        }
+
+        validRows.forEach((row, index) => {
+          const point = createSvg('g', { class: 'plot-point' });
+          const isFrontier = frontier.includes(row);
+          const circle = createSvg('circle', {
+            cx: x(row.latencyNumber),
+            cy: y(row.accuracyNumber),
+            r: isFrontier ? 7 : 5.5,
+            class: isFrontier ? 'is-frontier' : '',
+          });
+
+          const title = createSvg('title');
+          title.textContent = `${shortModel(row.model)} · ${formatPct(row.accuracyNumber)} · ${formatSeconds(row.latencyNumber)} p50`;
+          circle.appendChild(title);
+          point.appendChild(circle);
+
+          const label = createSvg('text', {
+            x: x(row.latencyNumber) + 9,
+            y: y(row.accuracyNumber) + (index % 2 === 0 ? -8 : 16),
+          });
+          label.textContent = shortModel(row.model);
+          point.appendChild(label);
+          svg.appendChild(point);
+        });
+      };
+
+      const plotMcbOverview = (data) => {
+        const svg = root.querySelector('[data-performance-plot]');
+        if (!(svg instanceof SVGElement)) return [];
+
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+        const points = Array.isArray(data?.frontier?.points)
+          ? data.frontier.points
+              .map((point) => ({
+                ...point,
+                qualityNumber: Number(point.quality),
+                latencyNumber: Number(point.latency_p50_ms),
+              }))
+              .filter(
+                (point) =>
+                  Number.isFinite(point.qualityNumber) &&
+                  Number.isFinite(point.latencyNumber),
+              )
+          : [];
+
+        if (!points.length) return [];
+
+        const W = 620;
+        const H = 250;
+        const pad = { left: 48, right: 24, top: 22, bottom: 42 };
+        const innerW = W - pad.left - pad.right;
+        const innerH = H - pad.top - pad.bottom;
+
+        const maxLatency = Math.max(...points.map((point) => point.latencyNumber)) * 1.06;
+        const minQuality = Math.max(
+          0,
+          Math.floor(Math.min(...points.map((point) => point.qualityNumber)) / 10) * 10 - 10,
+        );
+        const maxQuality = Math.min(
+          100,
+          Math.ceil(Math.max(...points.map((point) => point.qualityNumber)) / 10) * 10 + 5,
+        );
+        const qualitySpan = Math.max(10, maxQuality - minQuality);
+
+        const x = (latency) => pad.left + (latency / maxLatency) * innerW;
+        const y = (quality) =>
+          pad.top + innerH - ((quality - minQuality) / qualitySpan) * innerH;
+
+        const grid = createSvg('g', { class: 'plot-grid' });
+        [0, 0.5, 1].forEach((fraction) => {
+          const gy = pad.top + innerH * fraction;
+          grid.appendChild(
+            createSvg('line', {
+              x1: pad.left,
+              y1: gy,
+              x2: W - pad.right,
+              y2: gy,
+            }),
+          );
+        });
+        svg.appendChild(grid);
+
+        const axisLabels = createSvg('g', { class: 'plot-axis-labels' });
+        const yTop = createSvg('text', { x: 5, y: pad.top + 4 });
+        yTop.textContent = `${Math.round(maxQuality)}`;
+        axisLabels.appendChild(yTop);
+
+        const yBottom = createSvg('text', { x: 5, y: pad.top + innerH + 4 });
+        yBottom.textContent = `${Math.round(minQuality)}`;
+        axisLabels.appendChild(yBottom);
+
+        const xLeft = createSvg('text', { x: pad.left, y: H - 10 });
+        xLeft.textContent = '0s';
+        axisLabels.appendChild(xLeft);
+
+        const xRight = createSvg('text', { x: W - pad.right - 32, y: H - 10 });
+        xRight.textContent = `${Math.ceil(maxLatency / 1000)}s`;
+        axisLabels.appendChild(xRight);
+        svg.appendChild(axisLabels);
+
+        const sorted = [...points].sort((a, b) => a.latencyNumber - b.latencyNumber);
+        let bestQuality = -Infinity;
+        const frontier = sorted.filter((point) => {
+          if (point.qualityNumber > bestQuality) {
+            bestQuality = point.qualityNumber;
+            return true;
+          }
+          return false;
+        });
+
+        if (frontier.length > 1) {
+          svg.appendChild(
+            createSvg('polyline', {
+              class: 'plot-frontier',
+              points: frontier
+                .map((point) => `${x(point.latencyNumber)},${y(point.qualityNumber)}`)
+                .join(' '),
+            }),
+          );
+        }
+
+        points.forEach((point, index) => {
+          const group = createSvg('g', { class: 'plot-point' });
+          const isApi = point.deployment === 'api';
+          const isFrontier = frontier.includes(point);
+
+          const circle = createSvg('circle', {
+            cx: x(point.latencyNumber),
+            cy: y(point.qualityNumber),
+            r: isFrontier ? 7 : 5.5,
+            class: [
+              isFrontier ? 'is-frontier' : '',
+              isApi ? 'is-api' : 'is-local',
+            ]
+              .filter(Boolean)
+              .join(' '),
+          });
+
+          const title = createSvg('title');
+          title.textContent = `${shortModel(point.model_key)} · ${point.qualityNumber.toFixed(1)} quality · ${formatSeconds(point.latencyNumber)} p50 · ${point.deployment}`;
+          circle.appendChild(title);
+          group.appendChild(circle);
+
+          const label = createSvg('text', {
+            x: x(point.latencyNumber) + 9,
+            y: y(point.qualityNumber) + (index % 2 === 0 ? -8 : 16),
+          });
+          label.textContent = shortModel(point.model_key);
+          group.appendChild(label);
+          svg.appendChild(group);
+        });
+
+        return points;
+      };
+
+      const renderMcbOverview = (data, tab) => {
+        const points = plotMcbOverview(data);
+        if (!points.length) throw new Error('No published MCB frontier points');
+
+        const models = Array.isArray(data?.models) ? data.models : [];
+        const capabilities = Array.isArray(data?.capabilities) ? data.capabilities : [];
+        const cells = Array.isArray(data?.cells) ? data.cells : [];
+
+        const overallBest = [...points].sort(
+          (a, b) => Number(b.quality) - Number(a.quality),
+        )[0];
+
+        const localPoints = points.filter((point) => point.deployment === 'local');
+        const bestLocal = [...localPoints].sort(
+          (a, b) => Number(b.quality) - Number(a.quality),
+        )[0];
+        const fastestLocal = [...localPoints].sort(
+          (a, b) => Number(a.latency_p50_ms) - Number(b.latency_p50_ms),
+        )[0];
+
+        setText('[data-result-title]', tab.dataset.title || 'Model Capability Benchmark');
+        setText('[data-result-question]', tab.dataset.question || '');
+        setText('[data-model-count]', String(models.length || points.length));
+        setText('[data-request-count]', String(cells.length || '—'));
+        setText('[data-count-label]', 'published cells');
+        setText('[data-dataset]', String(capabilities.length || '—'));
+        setText('[data-scope-label]', 'capabilities');
+        setText('[data-runtime]', '2');
+        setText('[data-runtime-label]', 'execution modes');
+
+        setText('[data-best-quality]', `${Number(overallBest.quality).toFixed(1)}`);
+        setText('[data-best-quality-model]', shortModel(overallBest.model_key));
+
+        setText(
+          '[data-balance]',
+          bestLocal
+            ? `${Number(bestLocal.quality).toFixed(1)} · ${formatSeconds(bestLocal.latency_p50_ms)}`
+            : '—',
+        );
+        setText(
+          '[data-balance-model]',
+          bestLocal ? `${shortModel(bestLocal.model_key)} · best local quality` : '',
+        );
+
+        setText(
+          '[data-fastest]',
+          fastestLocal ? formatSeconds(fastestLocal.latency_p50_ms) : '—',
+        );
+        setText(
+          '[data-fastest-model]',
+          fastestLocal
+            ? `${shortModel(fastestLocal.model_key)} · ${Number(fastestLocal.quality).toFixed(1)} quality`
+            : '',
+        );
+
+        if (bestLocal && overallBest) {
+          const qualityGap = Number(overallBest.quality) - Number(bestLocal.quality);
+          const speedRatio =
+            Number(bestLocal.latency_p50_ms) / Number(overallBest.latency_p50_ms);
+
+          setText(
+            '[data-readout-title]',
+            `${shortModel(bestLocal.model_key)} is the strongest local point in the published snapshot.`,
+          );
+          setText(
+            '[data-readout]',
+            `${Number(bestLocal.quality).toFixed(1)} aggregate quality at ${formatSeconds(bestLocal.latency_p50_ms)} p50. The top overall point is ${shortModel(overallBest.model_key)} at ${Number(overallBest.quality).toFixed(1)}, a ${qualityGap.toFixed(1)}-point gap${Number.isFinite(speedRatio) ? ` while the local point is ${speedRatio.toFixed(1)}× slower` : ''}.`,
+          );
+        }
+
+        const source = root.querySelector('[data-result-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        }
+
+        const heading = root.querySelector('.plot-heading__eyebrow');
+        if (heading) heading.textContent = 'MODEL CAPABILITY × LATENCY';
+
+        const plotTitle = root.querySelector('.plot-heading strong');
+        if (plotTitle) plotTitle.textContent = 'Published model frontier';
+
+        const plotNote = root.querySelector('.plot-heading__note');
+        if (plotNote) plotNote.textContent = 'Aggregate quality vs p50 latency';
+
+        const legend = root.querySelector('.plot-legend');
+        if (legend) {
+          legend.innerHTML =
+            '<span><i class="legend-dot legend-dot--local"></i>Local</span><span><i class="legend-dot legend-dot--api"></i>API</span><span><i class="legend-line"></i>Pareto frontier</span>';
+        }
+
+        const highlightLabels = root.querySelectorAll('.highlight > span');
+        if (highlightLabels[0]) highlightLabels[0].textContent = 'BEST OVERALL';
+        if (highlightLabels[1]) highlightLabels[1].textContent = 'BEST LOCAL';
+        if (highlightLabels[2]) highlightLabels[2].textContent = 'FASTEST LOCAL';
+      };
+
+      const renderJevRouting = (data, tab) => {
+        const rows = Array.isArray(data?.overview) ? data.overview : [];
+        if (!rows.length) throw new Error('No published routing rows');
+
+        const validRows = rows.filter(
+          (row) => Number.isFinite(Number(row.accuracy)) && Number.isFinite(Number(row.latency_p50_ms)),
+        );
+        if (!validRows.length) throw new Error('No comparable routing rows');
+
+        const byQuality = [...validRows].sort((a, b) => Number(b.accuracy) - Number(a.accuracy));
+        const byLatency = [...validRows].sort((a, b) => Number(a.latency_p50_ms) - Number(b.latency_p50_ms));
+        const best = byQuality[0];
+        const fastest = byLatency[0];
+
+        const qualityFloor = Number(best.accuracy) * 0.85;
+        const balanced =
+          byLatency.find((row) => Number(row.accuracy) >= qualityFloor) ?? best;
+
+        const speedup = Number(best.latency_p50_ms) / Number(balanced.latency_p50_ms);
+        const qualityDelta = (Number(best.accuracy) - Number(balanced.accuracy)) * 100;
+        const requestCount = validRows.reduce((sum, row) => sum + Number(row.requests || 0), 0);
+        const rowDatasets = validRows.map((row) => row.dataset_label || row.dataset).filter(Boolean);
+        const projectedDatasets = Object.keys(data?.dataset_views || {});
+        const datasets = [...new Set(rowDatasets.length ? rowDatasets : projectedDatasets)];
+        const runtimes = [...new Set(validRows.map((row) => row.provider).filter(Boolean))];
+
+        setText('[data-result-title]', tab.dataset.title || 'Experiment');
+        setText('[data-result-question]', tab.dataset.question || '');
+        setText('[data-model-count]', String(validRows.length));
+        setText('[data-request-count]', String(requestCount || data?.metadata?.total_rows || '—'));
+        setText('[data-count-label]', 'requests');
+        setText('[data-dataset]', datasets.join(', ') || 'routing');
+        setText('[data-scope-label]', 'dataset');
+        setText('[data-runtime]', runtimes.length === 1 ? runtimes[0] : String(runtimes.length));
+        setText('[data-runtime-label]', runtimes.length === 1 ? 'runtime' : 'runtimes');
+
+        setText('[data-best-quality]', formatPct(best.accuracy));
+        setText('[data-best-quality-model]', shortModel(best.model));
+
+        setText(
+          '[data-balance]',
+          `${formatPct(balanced.accuracy)} · ${formatSeconds(balanced.latency_p50_ms)}`,
+        );
+        setText('[data-balance-model]', shortModel(balanced.model));
+
+        setText('[data-fastest]', formatSeconds(fastest.latency_p50_ms));
+        setText(
+          '[data-fastest-model]',
+          `${shortModel(fastest.model)} · ${formatPct(fastest.accuracy)}`,
+        );
+
+        if (balanced !== best && Number.isFinite(speedup) && Number.isFinite(qualityDelta)) {
+          setText('[data-readout-title]', `${shortModel(balanced.model)} sits at the practical knee.`);
+          setText(
+            '[data-readout]',
+            `${formatPct(balanced.accuracy)} accuracy at ${formatSeconds(balanced.latency_p50_ms)} p50: ${speedup.toFixed(1)}× faster than the highest-accuracy model for only ${qualityDelta.toFixed(1)} percentage points less quality in this snapshot.`,
+          );
+        } else {
+          setText('[data-readout-title]', `${shortModel(best.model)} leads this snapshot.`);
+          setText(
+            '[data-readout]',
+            `${formatPct(best.accuracy)} accuracy at ${formatSeconds(best.latency_p50_ms)} median latency across the published routing evidence.`,
+          );
+        }
+
+        const source = root.querySelector('[data-result-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        }
+
+        const heading = root.querySelector('.plot-heading__eyebrow');
+        if (heading) heading.textContent = 'QUALITY × LATENCY';
+
+        const plotTitle = root.querySelector('.plot-heading strong');
+        if (plotTitle) plotTitle.textContent = 'Local routing frontier';
+
+        const plotNote = root.querySelector('.plot-heading__note');
+        if (plotNote) plotNote.textContent = 'Accuracy vs p50 latency';
+
+        const legend = root.querySelector('.plot-legend');
+        if (legend) {
+          legend.innerHTML =
+            '<span><i class="legend-dot legend-dot--all"></i>Measured model</span><span><i class="legend-line"></i>Pareto frontier</span>';
+        }
+
+        const highlightLabels = root.querySelectorAll('.highlight > span');
+        if (highlightLabels[0]) highlightLabels[0].textContent = 'BEST QUALITY';
+        if (highlightLabels[1]) highlightLabels[1].textContent = 'BALANCE POINT';
+        if (highlightLabels[2]) highlightLabels[2].textContent = 'FASTEST';
+
+        plotRouting(validRows);
+      };
+
+      const selectTab = async (tab) => {
+        tabs.forEach((candidate) => {
+          const active = candidate === tab;
+          candidate.classList.toggle('is-active', active);
+          candidate.setAttribute('aria-selected', active ? 'true' : 'false');
+          candidate.setAttribute('tabindex', active ? '0' : '-1');
+        });
+
+        const resultUrl = tab.dataset.resultUrl || '';
+        if (!resultUrl) {
+          setText('[data-empty-title]', tab.dataset.title || 'Experiment');
+          setText('[data-empty-question]', tab.dataset.question || '');
+          showOnly('empty');
+          return;
+        }
+
+        const currentRequest = ++requestId;
+        showOnly('loading');
+
+        try {
+          const response = await fetch(resultUrl, { cache: 'no-store' });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const data = await response.json();
+          if (currentRequest !== requestId) return;
+
+          if (tab.dataset.resultKind === 'jev-routing') renderJevRouting(data, tab);
+          else if (tab.dataset.resultKind === 'mcb-overview') renderMcbOverview(data, tab);
+          else throw new Error('Unsupported result adapter');
+
+          showOnly('result');
+        } catch (cause) {
+          if (currentRequest !== requestId) return;
+          console.warn('Experiment evidence unavailable', cause);
+          showOnly('error');
+        }
+      };
+
+      tabs.forEach((tab, index) => {
+        if (!(tab instanceof HTMLButtonElement)) return;
+
+        tab.addEventListener('click', () => selectTab(tab));
+        tab.addEventListener('keydown', (event) => {
+          if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+          event.preventDefault();
+          const delta = event.key === 'ArrowRight' ? 1 : -1;
+          const nextIndex = (index + delta + tabs.length) % tabs.length;
+          const next = tabs[nextIndex];
+          if (next instanceof HTMLButtonElement) {
+            next.focus();
+            next.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+            selectTab(next);
+          }
+        });
+      });
+
+      const initial =
+        tabs.find((tab) => tab instanceof HTMLButtonElement && tab.getAttribute('aria-selected') === 'true') ??
+        tabs.find((tab) => tab instanceof HTMLButtonElement && Boolean(tab.dataset.resultUrl)) ??
+        tabs[0];
+      if (initial instanceof HTMLButtonElement) selectTab(initial);
+    });
+  };
+
+  initExperimentExplorer();
+  document.addEventListener('astro:page-load', initExperimentExplorer);
+</script>
+
+<style>
+  .experiment-explorer { min-width: 0; }
+
+  .experiment-selector-wrap {
+    position: relative;
+    margin-bottom: 14px;
+  }
+
+  .experiment-selector-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 34px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--journey-surface-tint, var(--surface-subtle)));
+    pointer-events: none;
+  }
+
+  .experiment-selector {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px 36px 6px 2px;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+
+  .experiment-selector::-webkit-scrollbar { display: none; }
+
+  .experiment-tab {
+    flex: 0 0 auto;
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 13px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--surface-card) 82%, var(--surface-subtle));
+    color: var(--ink-muted);
+    cursor: pointer;
+    scroll-snap-align: start;
+    transition:
+      border-color var(--duration-fast) ease,
+      background-color var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
+  }
+
+  .experiment-tab:hover,
+  .experiment-tab:focus-visible {
+    border-color: color-mix(in srgb, var(--accent-blue) 36%, var(--border-medium));
+    color: var(--ink-display);
+  }
+
+  .experiment-tab.is-active {
+    border-color: color-mix(in srgb, var(--accent-blue) 52%, var(--border-medium));
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card)), var(--surface-card));
+    color: var(--ink-display);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--accent-blue) 7%, transparent);
+  }
+
+  .experiment-tab__title {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 720;
+    white-space: nowrap;
+  }
+
+  .status-dot,
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--ink-subtle);
+  }
+
+  .status-dot--live,
+  .live-dot {
+    background: var(--accent-blue);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-blue) 10%, transparent);
+  }
+
+  .evidence-panel {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 24%, var(--border-medium));
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(circle at 92% 3%, color-mix(in srgb, var(--accent-blue) 13%, transparent), transparent 31%),
+      radial-gradient(circle at 5% 100%, color-mix(in srgb, var(--accent-violet) 7%, transparent), transparent 34%),
+      linear-gradient(145deg, color-mix(in srgb, var(--surface-card) 96%, var(--accent-blue) 4%), var(--surface-card));
+    box-shadow:
+      0 24px 60px rgba(8, 19, 51, 0.07),
+      inset 0 1px 0 color-mix(in srgb, white 64%, transparent);
+  }
+
+  [hidden] { display: none !important; }
+
+  .evidence-panel__loading,
+  .evidence-panel__error {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(22px, 3vw, 32px);
+  }
+
+  .evidence-panel__empty {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+    padding: 22px 24px;
+  }
+
+  .evidence-panel__empty-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card));
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .evidence-panel__result {
+    position: relative;
+    z-index: 1;
+    padding: clamp(24px, 3.2vw, 38px);
+  }
+
+  .evidence-panel__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.055em;
+  }
+
+  .evidence-panel__empty h3,
+  .evidence-panel__error h3 {
+    margin: 6px 0 4px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+  }
+
+  .evidence-panel__empty p,
+  .evidence-panel__error p {
+    max-width: 680px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  .evidence-panel__empty-note {
+    max-width: 640px !important;
+    margin-top: 8px !important;
+    color: var(--ink-subtle) !important;
+  }
+
+  .evidence-panel__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .evidence-panel__header h3 {
+    margin: 10px 0 5px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.55rem, 2.5vw, 2.15rem);
+    font-weight: 840;
+    letter-spacing: -0.045em;
+    line-height: 1.06;
+  }
+
+  .evidence-panel__header p {
+    max-width: 720px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .source-link {
+    flex: 0 0 auto;
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 760;
+    text-decoration: none;
+  }
+
+  .run-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px 18px;
+    margin-top: 18px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .run-summary span {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .run-summary strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-weight: 760;
+  }
+
+  .benchmark-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(200px, 0.72fr);
+    gap: clamp(20px, 3vw, 34px);
+    align-items: stretch;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .performance-plot {
+    min-width: 0;
+    padding: 18px 18px 12px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 16%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card)), var(--surface-card));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 60%, transparent);
+  }
+
+  .plot-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .plot-heading__eyebrow,
+  .highlight > span,
+  .evidence-takeaway > span {
+    display: block;
+    color: var(--ink-subtle);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 760;
+    letter-spacing: 0.045em;
+  }
+
+  .plot-heading strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1rem;
+  }
+
+  .plot-heading__note {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .plot-svg {
+    width: 100%;
+    height: auto;
+    min-height: 210px;
+    margin-top: 6px;
+    overflow: visible;
+  }
+
+  .plot-svg :global(.plot-grid line) {
+    stroke: color-mix(in srgb, var(--ink-subtle) 16%, transparent);
+    stroke-width: 1;
+  }
+
+  .plot-svg :global(.plot-axis-labels text) {
+    fill: var(--ink-subtle);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+
+  .plot-svg :global(.plot-frontier) {
+    fill: none;
+    stroke: var(--accent-blue);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--accent-blue) 18%, transparent));
+  }
+
+  .plot-svg :global(.plot-point circle) {
+    fill: color-mix(in srgb, var(--accent-violet) 62%, var(--accent-blue));
+    stroke: var(--surface-card);
+    stroke-width: 3;
+  }
+
+  .plot-svg :global(.plot-point circle.is-local) {
+    fill: var(--accent-blue);
+  }
+
+  .plot-svg :global(.plot-point circle.is-api) {
+    fill: var(--accent-violet);
+  }
+
+  .plot-svg :global(.plot-point circle.is-frontier) {
+    fill: var(--accent-blue);
+  }
+
+  .plot-svg :global(.plot-point text) {
+    fill: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .plot-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .plot-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent-violet) 62%, var(--accent-blue));
+  }
+
+  .legend-dot--local {
+    background: var(--accent-blue);
+  }
+
+  .legend-dot--api {
+    background: var(--accent-violet);
+  }
+
+  .legend-line {
+    width: 18px;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: var(--accent-blue);
+  }
+
+  .benchmark-highlights {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    border-left: 1px solid var(--border-subtle);
+    padding-left: clamp(18px, 2.4vw, 26px);
+  }
+
+  .highlight {
+    flex: 1 1 0;
+    padding: 14px 0;
+  }
+
+  .highlight + .highlight {
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .highlight--accent {
+    position: relative;
+  }
+
+  .highlight--accent::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 15px;
+    bottom: 15px;
+    width: 3px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(180deg, var(--accent-blue), var(--accent-violet));
+  }
+
+  .highlight strong {
+    display: block;
+    margin-top: 6px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    font-weight: 830;
+    letter-spacing: -0.04em;
+  }
+
+  .highlight small {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+
+  .evidence-takeaway {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+    margin-top: 24px;
+    padding: 18px 20px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 13%, var(--border-subtle));
+    border-radius: var(--radius-md);
+    background:
+      linear-gradient(100deg, color-mix(in srgb, var(--accent-blue) 7%, var(--surface-card)), color-mix(in srgb, var(--accent-violet) 3%, var(--surface-card)));
+  }
+
+  .evidence-takeaway strong {
+    display: block;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 780;
+    line-height: 1.4;
+  }
+
+  .evidence-takeaway p {
+    max-width: 760px;
+    margin: 4px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  html[data-theme='dark'] .evidence-panel {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+  }
+
+  @media (max-width: 900px) {
+    .benchmark-story {
+      grid-template-columns: 1fr;
+    }
+
+    .benchmark-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+      padding: 12px 0 0;
+    }
+
+    .highlight {
+      padding: 12px 14px;
+    }
+
+    .highlight + .highlight {
+      border-top: 0;
+      border-left: 1px solid var(--border-subtle);
+    }
+
+    .highlight--accent::before {
+      display: none;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .evidence-panel__header {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .source-link { min-height: auto; }
+
+    .evidence-takeaway {
+      grid-template-columns: 1fr;
+      gap: 7px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .benchmark-highlights {
+      grid-template-columns: 1fr;
+    }
+
+    .highlight + .highlight {
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .plot-heading {
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .plot-svg {
+      min-height: 180px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .experiment-tab { transition: none; }
+  }
+</style>

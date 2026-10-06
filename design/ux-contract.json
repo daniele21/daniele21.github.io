@@ -177,13 +177,11 @@
       "/harnex",
       "/korgis",
       "/local-asr-server",
+      "/decisio",
       "/closedroom",
       "/aura-finance",
       "/redact-guard",
-      "/redact-guard-android",
-      "/performance-lab",
-      "/traffic-monitoring",
-      "/traffic-monitoring-android"
+      "/redact-guard-android"
     ]
   },
   "criticalJourneys": [
@@ -196,7 +194,7 @@
     {
       "id": "J2",
       "persona": "Technical Peer / AI Engineer",
-      "flow": "Hero -> Applications (test beds) -> Observability (real run) -> Deep Dive Project Route / GitHub",
+      "flow": "Hero -> Applications (test beds) -> Experiments (reproducible evidence) -> Deep Dive Project Route / GitHub",
       "targetComprehensionSec": 60
     },
     {
