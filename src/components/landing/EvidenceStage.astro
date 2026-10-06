@@ -19,19 +19,22 @@ const experiments = measureStage.systems[0];
 
     <div class="stage-layout evidence-layout">
       <header class="stage-copy evidence-hero">
-        <p class="stage-kicker evidence-kicker">{experiments.title}</p>
+        <p class="stage-kicker evidence-kicker">{measureStage.kicker}</p>
         <h2 id="evidence-title" class="stage-heading evidence-heading">{measureStage.title}</h2>
         <p class="stage-intro evidence-intro">{measureStage.intro}</p>
       </header>
 
-      <div class="experiments-card">
-        <div class="experiments-card__header">
+      <div class="experiments-surface">
+        <div class="experiments-toolbar">
           <div>
-            <span class="experiments-card__tag">{experiments.tag}</span>
+            <span class="experiments-toolbar__eyebrow">
+              {experiments.title} · {experiments.tag}
+            </span>
             <h3>{experiments.question}</h3>
           </div>
+
           <a href={experiments.href} target="_blank" rel="noopener noreferrer">
-            Open repository <span aria-hidden="true">↗</span>
+            GitHub <span aria-hidden="true">↗</span>
           </a>
         </div>
 
@@ -58,19 +61,21 @@ const experiments = measureStage.systems[0];
       var(--journey-surface-tint, var(--surface-subtle));
   }
 
-  .evidence-shell { position: relative; }
+  .evidence-shell {
+    position: relative;
+  }
 
   .evidence-layout {
     width: 100%;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: clamp(26px, 3.5vw, 40px);
+    gap: clamp(22px, 3vw, 32px);
     padding-inline: clamp(64px, 7vw, 96px);
   }
 
   .evidence-hero {
-    width: min(100%, 820px);
+    width: min(100%, 760px);
     align-self: flex-end;
   }
 
@@ -95,63 +100,69 @@ const experiments = measureStage.systems[0];
   }
 
   .evidence-intro {
-    max-width: 760px;
-    margin: 14px 0 0;
+    max-width: 720px;
+    margin: 12px 0 0;
     color: var(--ink-muted);
-    font-size: clamp(1rem, 1.1vw, 1.12rem);
-    line-height: 1.58;
+    font-size: clamp(1rem, 1.1vw, 1.1rem);
+    line-height: 1.56;
   }
 
-  .experiments-card {
+  .experiments-surface {
     width: 100%;
-    padding: clamp(22px, 3vw, 32px);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    background: var(--surface-card);
-    box-shadow: var(--shadow-xs);
+    min-width: 0;
   }
 
-  .experiments-card__header {
+  .experiments-toolbar {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
     gap: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 14px;
   }
 
-  .experiments-card__tag {
+  .experiments-toolbar__eyebrow {
     color: var(--accent-blue-dark);
     font-family: var(--font-display);
-    font-size: var(--text-badge);
-    font-weight: 820;
-    letter-spacing: 0.075em;
+    font-size: var(--text-caption);
+    font-weight: 780;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
   }
 
-  .experiments-card h3 {
-    max-width: 760px;
-    margin: 8px 0 0;
+  .experiments-toolbar h3 {
+    max-width: 680px;
+    margin: 6px 0 0;
     color: var(--ink-display);
     font-family: var(--font-display);
-    font-size: clamp(1.25rem, 2vw, 1.65rem);
-    line-height: 1.28;
+    font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+    font-weight: 760;
     letter-spacing: -0.025em;
+    line-height: 1.3;
   }
 
-  .experiments-card__header a {
+  .experiments-toolbar a {
     flex: 0 0 auto;
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
     color: var(--accent-blue-dark);
     font-family: var(--font-display);
-    font-size: 0.88rem;
+    font-size: var(--text-caption);
     font-weight: 760;
     text-decoration: none;
   }
 
+  .experiments-toolbar a:hover,
+  .experiments-toolbar a:focus-visible {
+    color: var(--accent-blue);
+  }
+
   .evidence-closing {
-    max-width: 760px;
+    max-width: 720px;
     margin: 0;
-    color: var(--ink);
+    color: var(--ink-muted);
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: var(--text-caption);
     font-weight: 650;
     line-height: 1.55;
   }
@@ -162,14 +173,28 @@ const experiments = measureStage.systems[0];
       padding-right: 12px;
     }
 
-    .evidence-hero { align-self: flex-start; }
-    .experiments-card__header { flex-direction: column; }
+    .evidence-hero {
+      align-self: flex-start;
+    }
+
+    .experiments-toolbar {
+      align-items: flex-start;
+    }
   }
 
   @media (max-width: 540px) {
     .evidence-layout {
       padding-left: 42px;
       padding-right: 4px;
+    }
+
+    .experiments-toolbar {
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .experiments-toolbar a {
+      min-height: auto;
     }
   }
 </style>
