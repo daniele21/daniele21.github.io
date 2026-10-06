@@ -227,6 +227,8 @@ export const landingData: LandingPageData = {
         summary: 'Prefill stable context once, send only changing state and return a typed action.',
         href: 'https://github.com/daniele21/decisio',
         external: true,
+        logoPath: 'images/decisio/decisio-mark-512.png',
+        logoAlt: 'Decisio logo',
         features: [
           { label: 'Context reuse' },
           { label: 'Typed actions' },
