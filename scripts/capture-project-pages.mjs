@@ -9,6 +9,7 @@ const routes = [
   'harnex',
   'korgis',
   'local-asr-server',
+  'decisio',
   'closedroom',
   'aura-finance',
   'redact-guard',
