@@ -14,18 +14,20 @@ interface Props {
 }
 
 const { tracks } = Astro.props;
+const sortedTracks = [...tracks].sort((a, b) => Number(Boolean(b.resultUrl)) - Number(Boolean(a.resultUrl)));
+const initialIndex = Math.max(0, sortedTracks.findIndex((track) => Boolean(track.resultUrl)));
 ---
 
 <div class="experiment-explorer" data-experiment-explorer>
   <div class="experiment-selector-wrap">
     <div class="experiment-selector" role="tablist" aria-label="Select experiment">
-      {tracks.map((track, index) => (
+      {sortedTracks.map((track, index) => (
         <button
           type="button"
-          class:list={['experiment-tab', { 'is-active': index === 0 }]}
+          class:list={['experiment-tab', { 'is-active': index === initialIndex }]}
           role="tab"
-          aria-selected={index === 0 ? 'true' : 'false'}
-          tabindex={index === 0 ? '0' : '-1'}
+          aria-selected={index === initialIndex ? 'true' : 'false'}
+          tabindex={index === initialIndex ? '0' : '-1'}
           data-experiment-tab
           data-track-id={track.id || ''}
           data-title={track.title}
@@ -35,11 +37,11 @@ const { tracks } = Astro.props;
           data-source-url={track.sourceUrl || ''}
           data-result-kind={track.resultKind || ''}
         >
+          <span
+            class:list={['status-dot', { 'status-dot--live': Boolean(track.resultUrl) }]}
+            aria-hidden="true"
+          ></span>
           <span class="experiment-tab__title">{track.title}</span>
-          <span class:list={['experiment-tab__state', { 'is-live': Boolean(track.resultUrl) }]}>
-            <span class="status-dot" aria-hidden="true"></span>
-            {track.resultUrl ? 'Published' : 'No snapshot'}
-          </span>
         </button>
       ))}
     </div>
@@ -51,13 +53,16 @@ const { tracks } = Astro.props;
     </div>
 
     <div class="evidence-panel__empty" data-evidence-empty hidden>
-      <span class="evidence-panel__eyebrow">NO PUBLISHED SNAPSHOT</span>
-      <h3 data-empty-title></h3>
-      <p data-empty-question></p>
-      <p class="evidence-panel__empty-note">
-        The benchmark is implemented, but its real run artifacts are not versioned in the repository yet.
-        The landing does not substitute fixture data for benchmark evidence.
-      </p>
+      <div class="evidence-panel__empty-icon" aria-hidden="true">↗</div>
+      <div>
+        <span class="evidence-panel__eyebrow">NO PUBLIC SNAPSHOT YET</span>
+        <h3 data-empty-title></h3>
+        <p data-empty-question></p>
+        <p class="evidence-panel__empty-note">
+          Real runs exist outside the published repository snapshot. This view stays empty until a
+          versioned evidence artifact is available.
+        </p>
+      </div>
     </div>
 
     <div class="evidence-panel__result" data-evidence-result hidden>
@@ -427,7 +432,9 @@ const { tracks } = Astro.props;
       });
 
       const initial =
-        tabs.find((tab) => tab instanceof HTMLButtonElement && Boolean(tab.dataset.resultUrl)) ?? tabs[0];
+        tabs.find((tab) => tab instanceof HTMLButtonElement && tab.getAttribute('aria-selected') === 'true') ??
+        tabs.find((tab) => tab instanceof HTMLButtonElement && Boolean(tab.dataset.resultUrl)) ??
+        tabs[0];
       if (initial instanceof HTMLButtonElement) selectTab(initial);
     });
   };
@@ -508,27 +515,18 @@ const { tracks } = Astro.props;
     white-space: nowrap;
   }
 
-  .experiment-tab__state {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    color: var(--ink-subtle);
-    font-size: var(--text-caption);
-    white-space: nowrap;
-  }
-
-  .experiment-tab__state.is-live { color: var(--accent-blue-dark); }
-
   .status-dot,
   .live-dot {
     width: 7px;
     height: 7px;
     flex: 0 0 auto;
     border-radius: 50%;
-    background: currentColor;
+    background: var(--ink-subtle);
   }
 
+  .status-dot--live,
   .live-dot {
+    background: var(--accent-blue);
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-blue) 10%, transparent);
   }
 
@@ -562,13 +560,34 @@ const { tracks } = Astro.props;
   [hidden] { display: none !important; }
 
   .evidence-panel__loading,
-  .evidence-panel__empty,
   .evidence-panel__error {
-    min-height: 230px;
+    min-height: 180px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: clamp(24px, 3.2vw, 38px);
+    padding: clamp(22px, 3vw, 32px);
+  }
+
+  .evidence-panel__empty {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+    padding: 22px 24px;
+  }
+
+  .evidence-panel__empty-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card));
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 800;
   }
 
   .evidence-panel__result {
@@ -590,7 +609,7 @@ const { tracks } = Astro.props;
 
   .evidence-panel__empty h3,
   .evidence-panel__error h3 {
-    margin: 9px 0 5px;
+    margin: 6px 0 4px;
     color: var(--ink-display);
     font-family: var(--font-display);
     font-size: clamp(1.2rem, 2vw, 1.5rem);
@@ -605,7 +624,11 @@ const { tracks } = Astro.props;
     line-height: 1.55;
   }
 
-  .evidence-panel__empty-note { margin-top: 12px !important; }
+  .evidence-panel__empty-note {
+    max-width: 640px !important;
+    margin-top: 8px !important;
+    color: var(--ink-subtle) !important;
+  }
 
   .evidence-panel__header {
     display: flex;
@@ -901,8 +924,6 @@ const { tracks } = Astro.props;
   }
 
   @media (max-width: 760px) {
-    .experiment-tab__state { display: none; }
-
     .evidence-panel__header {
       flex-direction: column;
       gap: 8px;
