@@ -209,7 +209,15 @@ export interface MeasureSystemCard {
   statusType: 'planned' | 'verified' | 'authoritative';
   href: string;
   ctaLabel: string;
-  tracks?: { title: string; question: string; status: string }[];
+  tracks?: {
+    id?: string;
+    title: string;
+    question: string;
+    status: string;
+    resultUrl?: string;
+    sourceUrl?: string;
+    resultKind?: 'jev-routing';
+  }[];
 }
 
 export interface MeasureStageContent {
