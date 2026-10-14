@@ -172,6 +172,95 @@ try {
 
   await reducedPage.close();
   await reducedContext.close();
+
+  // Regression: JEV rows are created at runtime. Astro's scoped CSS does not
+  // automatically apply to these elements, so check actual computed layout.
+  const jevEvidence = {
+    overview: [
+      { model: 'qwen3.5-9b-q4km', provider: 'local-korgis', accuracy: 0.64, latency_p50_ms: 8300, requests: 77 },
+      { model: 'qwen3.5-2b-q4km', provider: 'local-korgis', accuracy: 0.567, latency_p50_ms: 2000, requests: 77 },
+      { model: 'nemotron-nano-4b', provider: 'local-korgis', accuracy: 0.5, latency_p50_ms: 6000, requests: 77 },
+      { model: 'nemotron-nano-4b-q8', provider: 'local-korgis', accuracy: 0.521, latency_p50_ms: 6100, requests: 77 },
+      { model: 'qwen3.5-0.8b-q4km', provider: 'local-korgis', accuracy: 0.25, latency_p50_ms: 704, requests: 24 },
+    ],
+  };
+  const jevLayouts = [];
+  for (const viewport of [
+    { name: 'desktop', width: 1440, height: 1000, expectedColumns: 3 },
+    { name: 'mobile', width: 390, height: 844, expectedColumns: 2 },
+  ]) {
+    const context = await browser.newContext({
+      viewport: { width: viewport.width, height: viewport.height },
+      reducedMotion: 'reduce',
+    });
+    const page = await context.newPage();
+    await page.route('**/experiments/jev-vs-llm/results/benchmark_data.json', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify(jevEvidence),
+      }),
+    );
+    await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
+    await page.locator('[data-track-id="jev-vs-llm-routing"]').click();
+    await page.locator('[data-jev-rows] .jev-model-row').first().waitFor({ state: 'visible' });
+
+    const diagnostics = await page.evaluate(() => {
+      const row = document.querySelector('[data-jev-rows] .jev-model-row');
+      const track = row?.querySelector('.jev-model-row__track');
+      const fill = row?.querySelector('.jev-model-row__fill');
+      const name = row?.querySelector('.jev-model-row__name');
+      const accuracy = row?.querySelector('.jev-model-row__accuracy');
+      const latency = row?.querySelector('.jev-model-row__latency');
+      const css = row ? getComputedStyle(row) : null;
+      const rowChildren = [name, accuracy, latency].map((node) =>
+        node?.getBoundingClientRect() || null,
+      );
+      const mobile = window.innerWidth <= 520;
+      return {
+        rowCount: document.querySelectorAll('[data-jev-rows] .jev-model-row').length,
+        display: css?.display || null,
+        renderedColumns: css?.gridTemplateColumns?.split(' ').length ?? 0,
+        trackHeight: track?.getBoundingClientRect().height || 0,
+        fillWidth: fill?.getBoundingClientRect().width || 0,
+        columnsHaveWidth: rowChildren.every((rect) => rect && rect.width > 20),
+        columnsAligned: mobile
+          ? Boolean(rowChildren[0] && rowChildren[1] && rowChildren[2] &&
+              rowChildren[0].bottom <= rowChildren[1].top + 3)
+          : Boolean(rowChildren[0] && rowChildren[1] && rowChildren[2] &&
+              rowChildren[0].left < rowChildren[1].left &&
+              rowChildren[1].left < rowChildren[2].left),
+        takeaway: document.querySelector('[data-jev-takeaway-headline]')?.textContent?.trim(),
+        horizontalOverflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+      };
+    });
+    jevLayouts.push({ viewport: viewport.name, ...diagnostics });
+
+    await page.locator('[data-jev-summary]').screenshot({
+      path: path.join(outputDir, `jev-comparison__${viewport.name}.png`),
+    });
+    await page.close();
+    await context.close();
+
+    if (
+      diagnostics.rowCount !== 4 ||
+      diagnostics.display !== 'grid' ||
+      diagnostics.renderedColumns !== viewport.expectedColumns ||
+      diagnostics.trackHeight < 5 ||
+      diagnostics.fillWidth < 5 ||
+      !diagnostics.columnsHaveWidth ||
+      !diagnostics.columnsAligned ||
+      !diagnostics.takeaway ||
+      diagnostics.horizontalOverflowPx > 0
+    ) {
+      throw new Error(`JEV visual regression in ${viewport.name}: ${JSON.stringify(diagnostics)}`);
+    }
+  }
+  await fs.writeFile(
+    path.join(outputDir, 'jev-layout-check.json'),
+    JSON.stringify(jevLayouts, null, 2),
+  );
 } finally {
   await browser.close();
 }
