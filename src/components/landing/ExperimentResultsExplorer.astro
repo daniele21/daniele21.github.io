@@ -870,7 +870,7 @@ const selectorLabelFor = (track: Track) => {
   }
 
   .jev-ranking__columns,
-  .jev-model-row {
+  :global(.jev-model-row) {
     display: grid;
     grid-template-columns: minmax(170px, 1.1fr) minmax(180px, 1.45fr) minmax(120px, 0.65fr);
     align-items: center;
@@ -900,21 +900,21 @@ const selectorLabelFor = (track: Track) => {
     gap: 7px;
   }
 
-  .jev-model-row {
+  :global(.jev-model-row) {
     padding: 14px 16px;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     background: color-mix(in srgb, var(--surface-card) 90%, var(--surface-subtle));
   }
 
-  .jev-model-row.is-alternative {
+  :global(.jev-model-row.is-alternative) {
     border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border-subtle));
     background: color-mix(in srgb, var(--accent-blue) 5%, var(--surface-card));
   }
 
-  .jev-model-row__name strong,
-  .jev-model-row__latency strong,
-  .jev-model-row__accuracy strong {
+  :global(.jev-model-row__name strong),
+  :global(.jev-model-row__latency strong),
+  :global(.jev-model-row__accuracy strong) {
     color: var(--ink-display);
     font-family: var(--font-display);
     font-size: 0.94rem;
@@ -922,8 +922,8 @@ const selectorLabelFor = (track: Track) => {
     line-height: 1.3;
   }
 
-  .jev-model-row__name small,
-  .jev-model-row__latency small {
+  :global(.jev-model-row__name small),
+  :global(.jev-model-row__latency small) {
     display: block;
     margin-top: 3px;
     color: var(--ink-muted);
@@ -931,27 +931,27 @@ const selectorLabelFor = (track: Track) => {
     line-height: 1.3;
   }
 
-  .jev-model-row__accuracy-head {
+  :global(.jev-model-row__accuracy-head) {
     display: flex;
     justify-content: space-between;
     margin-bottom: 7px;
   }
 
-  .jev-model-row__track {
+  :global(.jev-model-row__track) {
     height: 7px;
     overflow: hidden;
     border-radius: 999px;
     background: color-mix(in srgb, var(--accent-blue) 11%, var(--surface-subtle));
   }
 
-  .jev-model-row__fill {
+  :global(.jev-model-row__fill) {
     display: block;
     height: 100%;
     border-radius: inherit;
     background: linear-gradient(90deg, var(--accent-blue), color-mix(in srgb, var(--accent-blue) 70%, var(--accent-violet)));
   }
 
-  .jev-model-row__latency {
+  :global(.jev-model-row__latency) {
     text-align: right;
   }
   
@@ -959,7 +959,7 @@ const selectorLabelFor = (track: Track) => {
     display: none;
   }
 
-  .jev-model-row__mobile-label {
+  :global(.jev-model-row__mobile-label) {
     display: none;
     margin: 2px 0 7px;
     color: var(--ink-muted);
@@ -976,7 +976,7 @@ const selectorLabelFor = (track: Track) => {
     line-height: 1.5;
   }
 
-  .jev-ranking__note strong {
+  .jev-ranking__note :global(strong) {
     color: var(--ink-display);
   }
 
@@ -1000,7 +1000,7 @@ const selectorLabelFor = (track: Track) => {
     }
 
     .jev-ranking__columns,
-    .jev-model-row {
+    :global(.jev-model-row) {
       grid-template-columns: minmax(120px, 1.2fr) minmax(120px, 1fr) minmax(76px, 0.6fr);
       gap: 12px;
     }
@@ -1011,25 +1011,25 @@ const selectorLabelFor = (track: Track) => {
       display: none;
     }
 
-    .jev-model-row {
+    :global(.jev-model-row) {
       grid-template-columns: minmax(0, 1fr) minmax(86px, 0.55fr);
       gap: 12px;
       padding: 14px;
     }
 
-    .jev-model-row__name {
+    :global(.jev-model-row__name) {
       grid-column: 1 / -1;
     }
 
-    .jev-model-row__accuracy {
+    :global(.jev-model-row__accuracy) {
       grid-column: 1;
     }
 
-    .jev-model-row__latency {
+    :global(.jev-model-row__latency) {
       grid-column: 2;
     }
 
-    .jev-model-row__mobile-label {
+    :global(.jev-model-row__mobile-label) {
       display: block;
     }
 
