@@ -100,6 +100,14 @@ const selectorLabelFor = (track: Track) => {
       </div>
 
       <div class="jev-summary" data-jev-summary hidden>
+        <div class="jev-coverage-banner" role="note">
+          <div>
+            <span class="jev-eyebrow">EVIDENCE AVAILABLE</span>
+            <strong data-jev-published-scope>—</strong>
+            <p data-jev-scope-note></p>
+          </div>
+          <span class="jev-coverage-banner__count" data-jev-experiment-count>—</span>
+        </div>
         <div class="jev-tradeoff">
           <div class="jev-tradeoff__main">
             <span class="jev-eyebrow">WHAT THE RESULTS SHOW</span>
@@ -595,8 +603,41 @@ const selectorLabelFor = (track: Track) => {
         const accuracyLoss = (bestQuality.accuracyValue - alternative.accuracyValue) * 100;
         const sameModel = bestQuality.model === alternative.model;
 
-        setText('[data-result-title]', tab.dataset.title || 'JEV vs LLM · Routing');
-        setText('[data-result-question]', 'Compare routing accuracy with typical response time.');
+        const experimentItems = Object.entries(data?.experiments || {});
+        const publishedExperiments = experimentItems
+          .filter(([, experiment]) => experiment?.has_data && Number(experiment.count) > 0)
+          .map(([name]) => name);
+        const providers = [...new Set(validRows.map((row) => String(row.provider || 'unknown')))];
+        const hasJev = providers.some((provider) => /^(jev|typesafe)(-|$)/i.test(provider));
+        const hasLlm = providers.some((provider) =>
+          /^(gpt|openai|local-korgis|minicpm|clm)(-|$)/i.test(provider),
+        );
+        const isDirectComparison = hasJev && hasLlm;
+        setText(
+          '[data-result-title]',
+          isDirectComparison ? 'Jev vs LLM · Routing' : 'Routing · Local-model subset',
+        );
+        setText(
+          '[data-result-question]',
+          isDirectComparison
+            ? 'Compare the published decision-model and LLM routing runs.'
+            : 'Routing accuracy and response time for the published local-model runs.',
+        );
+        setText(
+          '[data-jev-published-scope]',
+          isDirectComparison ? 'Direct comparison available' : 'Direct Jev vs LLM results not included',
+        );
+        setText(
+          '[data-jev-experiment-count]',
+          publishedExperiments.length + '/' + (experimentItems.length || 5) + ' experiment types',
+        );
+        setText(
+          '[data-jev-scope-note]',
+          isDirectComparison
+            ? 'The published snapshot contains multiple provider architectures.'
+            : 'This snapshot includes ' + providers.join(', ') +
+                ' routing runs only. Jev/GPT comparisons and the calibration, scaling, workflow and agent experiments are not published in this artifact.',
+        );
         setText('[data-model-count]', String(validRows.length));
         setText('[data-request-count]', String(
           validRows.reduce((sum, row) => sum + row.cases, 0),
@@ -784,6 +825,52 @@ const selectorLabelFor = (track: Track) => {
     font-size: 0.72rem;
     font-weight: 780;
     letter-spacing: 0.07em;
+  }
+
+  .jev-coverage-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 15px 18px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+  }
+
+  .jev-coverage-banner strong {
+    display: block;
+    margin-top: 5px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    font-weight: 750;
+  }
+
+  .jev-coverage-banner p {
+    max-width: 790px;
+    margin: 5px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  .jev-coverage-banner__count {
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 620px) {
+    .jev-coverage-banner {
+      flex-direction: column;
+      gap: 10px;
+    }
   }
 
   .jev-tradeoff {
