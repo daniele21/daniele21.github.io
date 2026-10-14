@@ -610,16 +610,16 @@ const selectorLabelFor = (track: Track) => {
         setText(
           '[data-jev-takeaway-headline]',
           sameModel
-            ? shortModel(bestQuality.model) + ' leads on both quality and speed.'
-            : shortModel(alternative.model) + ' responds ' + speedup.toFixed(1) + '× faster.',
+            ? 'Best accuracy and speed in one model.'
+            : speedup.toFixed(1) + '× faster.',
         );
         setText(
           '[data-jev-takeaway-description]',
           sameModel
             ? 'In this published comparison it has both the highest accuracy and the shortest median response time.'
-            : 'Compared with ' + shortModel(bestQuality.model) + ', it gives up ' +
-                accuracyLoss.toFixed(1) + ' percentage points of accuracy. ' +
-                'Which trade-off is acceptable depends on the application.',
+            : shortModel(alternative.model) + ' vs ' + shortModel(bestQuality.model) +
+                ': ' + accuracyLoss.toFixed(1) +
+                ' fewer accuracy points with a much shorter median response time.',
         );
         setText(
           '[data-jev-quality-gap]',
