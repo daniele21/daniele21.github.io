@@ -646,6 +646,9 @@ const selectorLabelFor = (track: Track) => {
       });
 
       const renderMcbOverview = (data, tab) => {
+        setHidden(root.querySelector('[data-jev-toolbar]'), true);
+        setHidden(root.querySelector('[data-jev-detail]'), true);
+        setHidden(root.querySelector('[data-jev-evidence-note]'), true);
         const points = plotMcbOverview(data);
         if (!points.length) throw new Error('No published MCB frontier points');
 
@@ -748,14 +751,29 @@ const selectorLabelFor = (track: Track) => {
         if (!rows.length) throw new Error('No published routing rows');
 
         const validRows = rows.filter(
-          (row) => Number.isFinite(Number(row.accuracy)) && Number.isFinite(Number(row.latency_p50_ms)),
+          (row) =>
+            Number.isFinite(Number(row.accuracy)) &&
+            Number.isFinite(Number(row.latency_p50_ms)) &&
+            Number(row.latency_p50_ms) > 0 &&
+            Number(row.requests) > 0,
         );
-        if (!validRows.length) throw new Error('No comparable routing rows');
+        if (!validRows.length) throw new Error('No routing evidence with latency and case counts');
 
-        const byQuality = [...validRows].sort((a, b) => Number(b.accuracy) - Number(a.accuracy));
-        const byLatency = [...validRows].sort((a, b) => Number(a.latency_p50_ms) - Number(b.latency_p50_ms));
+        const coverage = new Map();
+        validRows.forEach((row) => coverage.set(
+          Number(row.requests),
+          (coverage.get(Number(row.requests)) || 0) + 1,
+        ));
+        const coreCases = [...coverage.keys()].sort(
+          (a, b) => coverage.get(b) - coverage.get(a) || b - a,
+        )[0];
+        const comparableRows = validRows.filter((row) => Number(row.requests) === coreCases);
+        const byQuality = [...comparableRows].sort((a, b) => Number(b.accuracy) - Number(a.accuracy));
+        const byLatency = [...comparableRows].sort((a, b) => Number(a.latency_p50_ms) - Number(b.latency_p50_ms));
         const best = byQuality[0];
         const fastest = byLatency[0];
+        const coreFilter = root.querySelector('[data-jev-filter="core"]');
+        if (coreFilter) coreFilter.textContent = coreCases + '-case';
 
         const qualityFloor = Number(best.accuracy) * 0.85;
         const balanced =
@@ -817,21 +835,23 @@ const selectorLabelFor = (track: Track) => {
         if (heading) heading.textContent = 'QUALITY × LATENCY';
 
         const plotTitle = root.querySelector('.plot-heading strong');
-        if (plotTitle) plotTitle.textContent = 'Local routing frontier';
+        if (plotTitle) plotTitle.textContent = 'Routing performance map';
 
         const plotNote = root.querySelector('.plot-heading__note');
-        if (plotNote) plotNote.textContent = 'Accuracy vs p50 latency';
+        if (plotNote) plotNote.textContent = 'Accuracy % · Log-scale p50';
 
         const legend = root.querySelector('.plot-legend');
         if (legend) {
           legend.innerHTML =
-            '<span><i class="legend-dot legend-dot--all"></i>Measured model</span><span><i class="legend-line"></i>Pareto frontier</span>';
+            '<span><i class="legend-dot legend-dot--local"></i>77-case group</span>' +
+            '<span><i class="legend-dot legend-dot--pilot"></i>Partial run</span>' +
+            '<span><i class="legend-line"></i>Pareto within 77-case group</span>';
         }
 
         const highlightLabels = root.querySelectorAll('.highlight > span');
-        if (highlightLabels[0]) highlightLabels[0].textContent = 'BEST QUALITY';
+        if (highlightLabels[0]) highlightLabels[0].textContent = 'BEST ACCURACY';
         if (highlightLabels[1]) highlightLabels[1].textContent = 'BALANCE POINT';
-        if (highlightLabels[2]) highlightLabels[2].textContent = 'FASTEST';
+        if (highlightLabels[2]) highlightLabels[2].textContent = 'FASTEST · 77 CASES';
 
         plotRouting(validRows);
       };
@@ -1368,6 +1388,24 @@ const selectorLabelFor = (track: Track) => {
 
   .legend-dot--api {
     background: var(--accent-violet);
+  }
+
+  .legend-dot--pilot {
+    border: 2px solid var(--accent-violet);
+    background: var(--surface-card);
+  }
+
+  .plot-svg :global(.plot-point circle.is-pilot) {
+    fill: var(--surface-card);
+    stroke: var(--accent-violet);
+    stroke-width: 3;
+  }
+
+  .plot-evidence-note {
+    margin: 6px 0 10px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.45;
   }
 
   .legend-line {
