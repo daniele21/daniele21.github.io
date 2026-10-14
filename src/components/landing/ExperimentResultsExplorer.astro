@@ -99,7 +99,45 @@ const selectorLabelFor = (track: Track) => {
         <span><strong data-runtime>—</strong> <span data-runtime-label>runtime</span></span>
       </div>
 
-      <div class="benchmark-story">
+      <div class="jev-summary" data-jev-summary hidden>
+        <div class="jev-tradeoff">
+          <div class="jev-tradeoff__main">
+            <span class="jev-eyebrow">WHAT THE RESULTS SHOW</span>
+            <strong data-jev-takeaway-headline>—</strong>
+            <p data-jev-takeaway-description></p>
+          </div>
+          <div class="jev-tradeoff__numbers">
+            <div>
+              <span>Accuracy difference</span>
+              <strong data-jev-quality-gap>—</strong>
+            </div>
+            <div>
+              <span>Median response time</span>
+              <strong data-jev-speed-comparison>—</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="jev-ranking">
+          <div class="jev-ranking__header">
+            <div>
+              <span class="jev-eyebrow">SAME TEST, FAIR COMPARISON</span>
+              <h4>How the models compare</h4>
+            </div>
+            <span data-jev-coverage>—</span>
+          </div>
+          <div class="jev-ranking__columns" aria-hidden="true">
+            <span>Model</span>
+            <span>Accuracy <small>Higher is better ↑</small></span>
+            <span>Median latency <small>Lower is better ↓</small></span>
+          </div>
+          <div class="jev-ranking__rows" data-jev-rows role="list"></div>
+          <div class="jev-ranking__note" data-jev-partial hidden></div>
+        </div>
+        <p class="jev-method-note">Accuracy is measured on the same routing cases. Latency is the median response time for each model. A faster model is not necessarily suitable for every use case.</p>
+      </div>
+
+      <div class="benchmark-story" data-mcb-story>
         <div class="performance-plot">
           <div class="plot-heading">
             <div>
@@ -107,15 +145,6 @@ const selectorLabelFor = (track: Track) => {
               <strong>Local routing frontier</strong>
             </div>
             <span class="plot-heading__note">Accuracy vs p50 latency</span>
-          </div>
-
-          <div class="plot-toolbar" data-jev-toolbar hidden>
-            <span>Accuracy <span aria-hidden="true">↑</span> &nbsp;·&nbsp; Median latency <span aria-hidden="true">→</span></span>
-            <div class="plot-filters" role="group" aria-label="Filter routing models by test coverage">
-              <button type="button" data-jev-filter="all" aria-pressed="true">All</button>
-              <button type="button" data-jev-filter="core" aria-pressed="false">77-case</button>
-              <button type="button" data-jev-filter="pilot" aria-pressed="false">Partial</button>
-            </div>
           </div>
 
           <div class="plot-toolbar" data-mcb-toolbar hidden>
@@ -135,14 +164,6 @@ const selectorLabelFor = (track: Track) => {
             aria-label="Quality versus median latency; focus or select a model point for details"
           ></svg>
 
-          <div class="plot-selection" data-jev-detail hidden aria-live="polite">
-            <div>
-              <span class="plot-selection__eyebrow">INSPECT MODEL</span>
-              <strong data-jev-selected-name>—</strong>
-            </div>
-            <span data-jev-selected-metrics>—</span>
-          </div>
-
           <div class="plot-selection" data-mcb-detail hidden aria-live="polite">
             <div>
               <span class="plot-selection__eyebrow">INSPECT MODEL</span>
@@ -150,8 +171,6 @@ const selectorLabelFor = (track: Track) => {
             </div>
             <span data-mcb-selected-metrics>—</span>
           </div>
-
-          <p class="plot-evidence-note" data-jev-evidence-note hidden></p>
 
           <div class="plot-legend">
             <span><i class="legend-dot legend-dot--all"></i>Measured model</span>
@@ -178,7 +197,7 @@ const selectorLabelFor = (track: Track) => {
         </div>
       </div>
 
-      <div class="evidence-takeaway">
+      <div class="evidence-takeaway" data-mcb-takeaway>
         <span>TAKEAWAY</span>
         <div>
           <strong data-readout-title></strong>
@@ -255,31 +274,6 @@ const selectorLabelFor = (track: Track) => {
         return node;
       };
 
-      const jevState = {
-        rows: [],
-        filter: 'all',
-        selected: null,
-        coreCases: 0,
-      };
-
-      const focusJevPoint = (row) => {
-        if (!row) return;
-        jevState.selected = String(row.model);
-        setText('[data-jev-selected-name]', shortModel(row.model));
-        setText(
-          '[data-jev-selected-metrics]',
-          formatPct(row.accuracyNumber) + ' accuracy · ' +
-            formatSeconds(row.latencyNumber) + ' p50 · ' +
-            row.requests + ' cases' +
-            (row.requests !== jevState.coreCases ? ' (partial)' : ''),
-        );
-        root.querySelectorAll('[data-jev-point]').forEach((group) => {
-          const selected = group.getAttribute('data-jev-point') === jevState.selected;
-          group.classList.toggle('is-selected', selected);
-          group.setAttribute('aria-pressed', selected ? 'true' : 'false');
-        });
-      };
-
       const mcbState = {
         points: [],
         filter: 'all',
@@ -302,193 +296,6 @@ const selectorLabelFor = (track: Track) => {
           group.setAttribute('aria-pressed', selected ? 'true' : 'false');
         });
       };
-
-      const plotRouting = (rows) => {
-        const svg = root.querySelector('[data-performance-plot]');
-        if (!(svg instanceof SVGElement)) return;
-
-        const validRows = rows
-          .map((row) => ({
-            ...row,
-            accuracyNumber: Number(row.accuracy),
-            latencyNumber: Number(row.latency_p50_ms),
-            requests: Number(row.requests || 0),
-          }))
-          .filter((row) =>
-            Number.isFinite(row.accuracyNumber) &&
-            Number.isFinite(row.latencyNumber) &&
-            row.latencyNumber > 0 &&
-            row.requests > 0,
-          );
-        if (!validRows.length) return;
-
-        // Compare model rankings only within the most widely represented case count.
-        // In the published snapshot four models have 77 cases; one pilot has 24.
-        const frequencies = new Map();
-        validRows.forEach((row) =>
-          frequencies.set(row.requests, (frequencies.get(row.requests) || 0) + 1),
-        );
-        const coreCases = [...frequencies.keys()].sort(
-          (a, b) => frequencies.get(b) - frequencies.get(a) || b - a,
-        )[0];
-        jevState.rows = validRows;
-        jevState.coreCases = coreCases;
-
-        const redraw = () => {
-          while (svg.firstChild) svg.removeChild(svg.firstChild);
-          const visible = validRows
-            .filter((row) =>
-              jevState.filter === 'all' ||
-              (jevState.filter === 'core' && row.requests === coreCases) ||
-              (jevState.filter === 'pilot' && row.requests !== coreCases),
-            )
-            .sort((a, b) => a.latencyNumber - b.latencyNumber);
-          if (!visible.length) return;
-
-          const W = 620;
-          const H = 250;
-          const pad = { left: 46, right: 22, top: 16, bottom: 38 };
-          const innerW = W - pad.left - pad.right;
-          const innerH = H - pad.top - pad.bottom;
-          const minLatency = Math.min(...visible.map((row) => row.latencyNumber)) / 1.25;
-          const maxLatency = Math.max(...visible.map((row) => row.latencyNumber)) * 1.3;
-          const logMin = Math.log10(minLatency);
-          const logSpan = Math.max(0.01, Math.log10(maxLatency) - logMin);
-          const x = (value) => pad.left + (Math.log10(value) - logMin) / logSpan * innerW;
-          const y = (value) => pad.top + (1 - value) * innerH;
-
-          const grid = createSvg('g', { class: 'plot-grid' });
-          const labels = createSvg('g', { class: 'plot-axis-labels' });
-          [0, 25, 50, 75, 100].forEach((tick) => {
-            const yy = y(tick / 100);
-            grid.appendChild(createSvg('line', {
-              x1: pad.left, y1: yy, x2: W - pad.right, y2: yy,
-            }));
-            const label = createSvg('text', {
-              x: pad.left - 10, y: yy + 4, 'text-anchor': 'end',
-            });
-            label.textContent = tick + '%';
-            labels.appendChild(label);
-          });
-          [250, 500, 1000, 2000, 5000, 10000, 20000]
-            .filter((tick) => tick >= minLatency && tick <= maxLatency)
-            .forEach((tick) => {
-              const xx = x(tick);
-              grid.appendChild(createSvg('line', {
-                x1: xx, x2: xx, y1: pad.top, y2: H - pad.bottom,
-              }));
-              const label = createSvg('text', {
-                x: xx, y: H - 12, 'text-anchor': 'middle',
-              });
-              label.textContent = formatSeconds(tick);
-              labels.appendChild(label);
-            });
-          svg.appendChild(grid);
-          svg.appendChild(labels);
-
-          // The Pareto line uses only comparable runs with the same case count.
-          const comparable = visible.filter((row) => row.requests === coreCases);
-          let bestSoFar = -Infinity;
-          const frontier = comparable.filter((row) => {
-            if (row.accuracyNumber > bestSoFar) {
-              bestSoFar = row.accuracyNumber;
-              return true;
-            }
-            return false;
-          });
-          if (frontier.length > 1) {
-            svg.appendChild(createSvg('polyline', {
-              class: 'plot-frontier',
-              points: frontier.map((row) =>
-                x(row.latencyNumber) + ',' + y(row.accuracyNumber),
-              ).join(' '),
-            }));
-          }
-
-          visible.forEach((row) => {
-            const isPartial = row.requests !== coreCases;
-            const group = createSvg('g', {
-              class: 'plot-point plot-interactive' + (isPartial ? ' is-partial' : ''),
-              role: 'button',
-              tabindex: '0',
-              'aria-pressed': 'false',
-              'aria-label': shortModel(row.model) + ', ' +
-                formatPct(row.accuracyNumber) + ' accuracy, p50 ' +
-                formatSeconds(row.latencyNumber) + ', ' + row.requests +
-                ' cases' + (isPartial ? ', partial evidence' : ''),
-              'data-jev-point': String(row.model),
-            });
-            const circle = createSvg('circle', {
-              cx: x(row.latencyNumber),
-              cy: y(row.accuracyNumber),
-              r: frontier.includes(row) ? 7 : 6,
-              class: (frontier.includes(row) ? 'is-frontier ' : '') +
-                (isPartial ? 'is-pilot' : 'is-local'),
-            });
-            const hit = createSvg('circle', {
-              cx: x(row.latencyNumber),
-              cy: y(row.accuracyNumber),
-              r: 16,
-              class: 'plot-hit-area',
-            });
-            const title = createSvg('title');
-            title.textContent = group.getAttribute('aria-label') || '';
-            group.appendChild(circle);
-            group.appendChild(hit);
-            group.appendChild(title);
-            group.addEventListener('click', () => focusJevPoint(row));
-            group.addEventListener('mouseenter', () => focusJevPoint(row));
-            group.addEventListener('focus', () => focusJevPoint(row));
-            group.addEventListener('keydown', (event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                focusJevPoint(row);
-              }
-            });
-            svg.appendChild(group);
-          });
-
-          const selected = visible.find((row) => String(row.model) === jevState.selected);
-          const defaultCore = comparable.find((row) => row.model === 'qwen3.5-2b-q4km');
-          focusJevPoint(selected || defaultCore || comparable[0] || visible[0]);
-        };
-        jevState.redraw = redraw;
-        setHidden(root.querySelector('[data-jev-toolbar]'), false);
-        setHidden(root.querySelector('[data-jev-detail]'), false);
-        root.querySelectorAll('[data-jev-filter]').forEach((button) => {
-          button.setAttribute(
-            'aria-pressed',
-            button.getAttribute('data-jev-filter') === jevState.filter ? 'true' : 'false',
-          );
-        });
-
-        const pilot = validRows.filter((row) => row.requests !== coreCases);
-        setText(
-          '[data-jev-evidence-note]',
-          pilot.length
-            ? validRows.filter((row) => row.requests === coreCases).length +
-              ' comparable models (' + coreCases + ' cases each) · ' +
-              pilot.length + ' partial run (' +
-              pilot.map((row) => row.requests + ' cases').join(', ') +
-              '). Highlights use comparable runs.'
-            : validRows.length + ' models evaluated on ' + coreCases + ' cases each.',
-        );
-        setHidden(root.querySelector('[data-jev-evidence-note]'), false);
-        redraw();
-      };
-
-      root.querySelectorAll('[data-jev-filter]').forEach((button) => {
-        button.addEventListener('click', () => {
-          const filter = button.getAttribute('data-jev-filter');
-          if (!['all', 'core', 'pilot'].includes(filter)) return;
-          jevState.filter = filter;
-          root.querySelectorAll('[data-jev-filter]').forEach((option) => {
-            option.setAttribute('aria-pressed',
-              option.getAttribute('data-jev-filter') === filter ? 'true' : 'false');
-          });
-          if (typeof jevState.redraw === 'function') jevState.redraw();
-        });
-      });
 
       const plotMcbOverview = (data) => {
         const svg = root.querySelector('[data-performance-plot]');
@@ -646,6 +453,9 @@ const selectorLabelFor = (track: Track) => {
       });
 
       const renderMcbOverview = (data, tab) => {
+        setHidden(root.querySelector('[data-jev-summary]'), true);
+        setHidden(root.querySelector('[data-mcb-story]'), false);
+        setHidden(root.querySelector('[data-mcb-takeaway]'), false);
         setHidden(root.querySelector('[data-jev-toolbar]'), true);
         setHidden(root.querySelector('[data-jev-detail]'), true);
         setHidden(root.querySelector('[data-jev-evidence-note]'), true);
@@ -745,115 +555,150 @@ const selectorLabelFor = (track: Track) => {
       };
 
       const renderJevRouting = (data, tab) => {
-        setHidden(root.querySelector('[data-mcb-toolbar]'), true);
-        setHidden(root.querySelector('[data-mcb-detail]'), true);
         const rows = Array.isArray(data?.overview) ? data.overview : [];
-        if (!rows.length) throw new Error('No published routing rows');
+        const validRows = rows
+          .map((row) => ({
+            ...row,
+            accuracyValue: Number(row.accuracy),
+            latencyValue: Number(row.latency_p50_ms),
+            cases: Number(row.requests),
+          }))
+          .filter((row) =>
+            Number.isFinite(row.accuracyValue) &&
+            Number.isFinite(row.latencyValue) && row.latencyValue > 0 &&
+            Number.isFinite(row.cases) && row.cases > 0,
+          );
+        if (!validRows.length) throw new Error('No comparable routing evidence');
 
-        const validRows = rows.filter(
-          (row) =>
-            Number.isFinite(Number(row.accuracy)) &&
-            Number.isFinite(Number(row.latency_p50_ms)) &&
-            Number(row.latency_p50_ms) > 0 &&
-            Number(row.requests) > 0,
-        );
-        if (!validRows.length) throw new Error('No routing evidence with latency and case counts');
-
+        // Equal dataset size is necessary before presenting model rankings.
         const coverage = new Map();
-        validRows.forEach((row) => coverage.set(
-          Number(row.requests),
-          (coverage.get(Number(row.requests)) || 0) + 1,
-        ));
-        const coreCases = [...coverage.keys()].sort(
+        validRows.forEach((row) =>
+          coverage.set(row.cases, (coverage.get(row.cases) || 0) + 1),
+        );
+        const commonCaseCount = [...coverage.keys()].sort(
           (a, b) => coverage.get(b) - coverage.get(a) || b - a,
         )[0];
-        const comparableRows = validRows.filter((row) => Number(row.requests) === coreCases);
-        const byQuality = [...comparableRows].sort((a, b) => Number(b.accuracy) - Number(a.accuracy));
-        const byLatency = [...comparableRows].sort((a, b) => Number(a.latency_p50_ms) - Number(b.latency_p50_ms));
-        const best = byQuality[0];
-        const fastest = byLatency[0];
-        const coreFilter = root.querySelector('[data-jev-filter="core"]');
-        if (coreFilter) coreFilter.textContent = coreCases + '-case';
+        const comparable = validRows
+          .filter((row) => row.cases === commonCaseCount)
+          .sort((a, b) => b.accuracyValue - a.accuracyValue);
+        const partial = validRows.filter((row) => row.cases !== commonCaseCount);
+        if (comparable.length < 2) throw new Error('Insufficient matched routing runs');
 
-        const qualityFloor = Number(best.accuracy) * 0.85;
-        const balanced =
-          byLatency.find((row) => Number(row.accuracy) >= qualityFloor) ?? best;
+        const bestQuality = comparable[0];
+        // Compare the highest-accuracy model against the quickest model
+        // retaining at least 85% of the leading accuracy (explicit heuristic).
+        const threshold = bestQuality.accuracyValue * 0.85;
+        const alternative = [...comparable]
+          .filter((row) => row.accuracyValue >= threshold)
+          .sort((a, b) => a.latencyValue - b.latencyValue)[0];
+        const speedup = bestQuality.latencyValue / alternative.latencyValue;
+        const accuracyLoss = (bestQuality.accuracyValue - alternative.accuracyValue) * 100;
+        const sameModel = bestQuality.model === alternative.model;
 
-        const speedup = Number(best.latency_p50_ms) / Number(balanced.latency_p50_ms);
-        const qualityDelta = (Number(best.accuracy) - Number(balanced.accuracy)) * 100;
-        const requestCount = validRows.reduce((sum, row) => sum + Number(row.requests || 0), 0);
-        const rowDatasets = validRows.map((row) => row.dataset_label || row.dataset).filter(Boolean);
-        const projectedDatasets = Object.keys(data?.dataset_views || {});
-        const datasets = [...new Set(rowDatasets.length ? rowDatasets : projectedDatasets)];
-        const runtimes = [...new Set(validRows.map((row) => row.provider).filter(Boolean))];
-
-        setText('[data-result-title]', tab.dataset.title || 'Experiment');
-        setText('[data-result-question]', tab.dataset.question || '');
+        setText('[data-result-title]', tab.dataset.title || 'JEV vs LLM · Routing');
+        setText('[data-result-question]', 'Which model is worth the extra response time?');
         setText('[data-model-count]', String(validRows.length));
-        setText('[data-request-count]', String(requestCount || data?.metadata?.total_rows || '—'));
-        setText('[data-count-label]', 'requests');
-        setText('[data-dataset]', datasets.join(', ') || 'routing');
-        setText('[data-scope-label]', 'dataset');
-        setText('[data-runtime]', runtimes.length === 1 ? runtimes[0] : String(runtimes.length));
-        setText('[data-runtime-label]', runtimes.length === 1 ? 'runtime' : 'runtimes');
-
-        setText('[data-best-quality]', formatPct(best.accuracy));
-        setText('[data-best-quality-model]', shortModel(best.model));
+        setText('[data-request-count]', String(
+          validRows.reduce((sum, row) => sum + row.cases, 0),
+        ));
+        setText('[data-count-label]', 'model-requests');
+        setText('[data-dataset]', String(commonCaseCount));
+        setText('[data-scope-label]', 'cases per comparable model');
+        setText('[data-runtime]', 'Local');
+        setText('[data-runtime-label]', 'execution');
 
         setText(
-          '[data-balance]',
-          `${formatPct(balanced.accuracy)} · ${formatSeconds(balanced.latency_p50_ms)}`,
+          '[data-jev-takeaway-headline]',
+          sameModel
+            ? shortModel(bestQuality.model) + ' leads on both quality and speed.'
+            : shortModel(alternative.model) + ' responds ' + speedup.toFixed(1) + '× faster.',
         );
-        setText('[data-balance-model]', shortModel(balanced.model));
-
-        setText('[data-fastest]', formatSeconds(fastest.latency_p50_ms));
         setText(
-          '[data-fastest-model]',
-          `${shortModel(fastest.model)} · ${formatPct(fastest.accuracy)}`,
+          '[data-jev-takeaway-description]',
+          sameModel
+            ? 'In this published comparison it has both the highest accuracy and the shortest median response time.'
+            : 'Compared with ' + shortModel(bestQuality.model) + ', it gives up ' +
+                accuracyLoss.toFixed(1) + ' percentage points of accuracy. ' +
+                'That may be a worthwhile trade-off depending on the task.',
+        );
+        setText(
+          '[data-jev-quality-gap]',
+          sameModel ? 'No trade-off' : '−' + accuracyLoss.toFixed(1) + ' pts',
+        );
+        setText(
+          '[data-jev-speed-comparison]',
+          formatSeconds(alternative.latencyValue) + ' vs ' +
+            formatSeconds(bestQuality.latencyValue),
+        );
+        setText(
+          '[data-jev-coverage]',
+          comparable.length + ' models · ' + commonCaseCount + ' cases each',
         );
 
-        if (balanced !== best && Number.isFinite(speedup) && Number.isFinite(qualityDelta)) {
-          setText('[data-readout-title]', `${shortModel(balanced.model)} sits at the practical knee.`);
-          setText(
-            '[data-readout]',
-            `${formatPct(balanced.accuracy)} accuracy at ${formatSeconds(balanced.latency_p50_ms)} p50: ${speedup.toFixed(1)}× faster than the highest-accuracy model for only ${qualityDelta.toFixed(1)} percentage points less quality in this snapshot.`,
-          );
-        } else {
-          setText('[data-readout-title]', `${shortModel(best.model)} leads this snapshot.`);
-          setText(
-            '[data-readout]',
-            `${formatPct(best.accuracy)} accuracy at ${formatSeconds(best.latency_p50_ms)} median latency across the published routing evidence.`,
-          );
+        const container = root.querySelector('[data-jev-rows]');
+        if (!(container instanceof HTMLElement)) throw new Error('Missing JEV comparison list');
+        container.replaceChildren();
+
+        const make = (tag, cls, value) => {
+          const node = document.createElement(tag);
+          if (cls) node.className = cls;
+          if (value != null) node.textContent = String(value);
+          return node;
+        };
+        comparable.forEach((row) => {
+          const isQuality = row.model === bestQuality.model;
+          const isAlternative = !sameModel && row.model === alternative.model;
+          const item = make('div', 'jev-model-row' + (isAlternative ? ' is-alternative' : ''), null);
+          item.setAttribute('role', 'listitem');
+
+          const nameCell = make('div', 'jev-model-row__name', null);
+          nameCell.appendChild(make('strong', '', shortModel(row.model)));
+          if (isQuality) nameCell.appendChild(make('small', '', 'Highest accuracy'));
+          else if (isAlternative) nameCell.appendChild(make('small', '', 'Faster alternative'));
+
+          const accuracyCell = make('div', 'jev-model-row__accuracy', null);
+          const accuracyTop = make('div', 'jev-model-row__accuracy-head', null);
+          accuracyTop.appendChild(make('strong', '', formatPct(row.accuracyValue)));
+          accuracyCell.appendChild(accuracyTop);
+          const bar = make('div', 'jev-model-row__track', null);
+          bar.setAttribute('aria-hidden', 'true');
+          const fill = make('span', 'jev-model-row__fill', null);
+          fill.style.width = Math.max(0, Math.min(100, row.accuracyValue * 100)).toFixed(1) + '%';
+          bar.appendChild(fill);
+          accuracyCell.appendChild(bar);
+
+          const latencyCell = make('div', 'jev-model-row__latency', null);
+          latencyCell.appendChild(make('strong', '', formatSeconds(row.latencyValue)));
+          latencyCell.appendChild(make('small', '', 'p50'));
+          item.appendChild(nameCell);
+          item.appendChild(accuracyCell);
+          item.appendChild(latencyCell);
+          container.appendChild(item);
+        });
+
+        const partialNotice = root.querySelector('[data-jev-partial]');
+        if (partial.length && partialNotice instanceof HTMLElement) {
+          partialNotice.replaceChildren();
+          const label = make('strong', '', 'Other, non-comparable run: ');
+          partialNotice.appendChild(label);
+          partialNotice.appendChild(document.createTextNode(
+            partial.map((row) =>
+              shortModel(row.model) + ' · ' + row.cases + ' cases · ' +
+              formatPct(row.accuracyValue) + ' accuracy · ' +
+              formatSeconds(row.latencyValue) + ' p50',
+            ).join('; ') + '. Excluded from the ranking.',
+          ));
         }
+        setHidden(partialNotice, !partial.length);
 
         const source = root.querySelector('[data-result-source]');
         if (source instanceof HTMLAnchorElement) {
           source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
         }
 
-        const heading = root.querySelector('.plot-heading__eyebrow');
-        if (heading) heading.textContent = 'QUALITY × LATENCY';
-
-        const plotTitle = root.querySelector('.plot-heading strong');
-        if (plotTitle) plotTitle.textContent = 'Routing performance map';
-
-        const plotNote = root.querySelector('.plot-heading__note');
-        if (plotNote) plotNote.textContent = 'Accuracy % · Log-scale p50';
-
-        const legend = root.querySelector('.plot-legend');
-        if (legend) {
-          legend.innerHTML =
-            '<span><i class="legend-dot legend-dot--local"></i>77-case group</span>' +
-            '<span><i class="legend-dot legend-dot--pilot"></i>Partial run</span>' +
-            '<span><i class="legend-line"></i>Pareto within 77-case group</span>';
-        }
-
-        const highlightLabels = root.querySelectorAll('.highlight > span');
-        if (highlightLabels[0]) highlightLabels[0].textContent = 'BEST ACCURACY';
-        if (highlightLabels[1]) highlightLabels[1].textContent = 'BALANCE POINT';
-        if (highlightLabels[2]) highlightLabels[2].textContent = 'FASTEST · 77 CASES';
-
-        plotRouting(validRows);
+        setHidden(root.querySelector('[data-jev-summary]'), false);
+        setHidden(root.querySelector('[data-mcb-story]'), true);
+        setHidden(root.querySelector('[data-mcb-takeaway]'), true);
       };
 
       const selectTab = async (tab) => {
@@ -924,6 +769,263 @@ const selectorLabelFor = (track: Track) => {
 </script>
 
 <style>
+
+  /* Homepage-sized routing comparison: the numbers are the visual, not a scatter plot. */
+  .jev-summary {
+    margin-top: clamp(22px, 3vw, 30px);
+  }
+
+  .jev-eyebrow {
+    display: block;
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 780;
+    letter-spacing: 0.07em;
+  }
+
+  .jev-tradeoff {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(230px, 0.72fr);
+    gap: clamp(18px, 3vw, 36px);
+    align-items: center;
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--accent-violet) 11%, transparent), transparent 55%),
+      linear-gradient(110deg, color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card)), var(--surface-card));
+  }
+
+  .jev-tradeoff__main > strong {
+    display: block;
+    margin-top: 10px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.7vw, 2.15rem);
+    font-weight: 830;
+    line-height: 1.13;
+    letter-spacing: -0.045em;
+  }
+
+  .jev-tradeoff__main p {
+    max-width: 610px;
+    margin: 10px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.94rem;
+    line-height: 1.58;
+  }
+
+  .jev-tradeoff__numbers {
+    display: grid;
+    gap: 14px;
+    padding-left: clamp(12px, 2vw, 24px);
+    border-left: 1px solid var(--border-medium);
+  }
+
+  .jev-tradeoff__numbers > div {
+    display: grid;
+    gap: 4px;
+  }
+
+  .jev-tradeoff__numbers span {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .jev-tradeoff__numbers strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+
+  .jev-ranking {
+    margin-top: clamp(22px, 3vw, 30px);
+  }
+
+  .jev-ranking__header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .jev-ranking__header h4 {
+    margin: 5px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.12rem, 1.8vw, 1.4rem);
+    letter-spacing: -0.03em;
+  }
+
+  .jev-ranking__header > span {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .jev-ranking__columns,
+  .jev-model-row {
+    display: grid;
+    grid-template-columns: minmax(170px, 1.1fr) minmax(180px, 1.45fr) minmax(120px, 0.65fr);
+    align-items: center;
+    gap: 20px;
+  }
+
+  .jev-ranking__columns {
+    padding: 0 16px 10px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    font-weight: 720;
+  }
+
+  .jev-ranking__columns > span:last-child {
+    text-align: right;
+  }
+
+  .jev-ranking__columns small {
+    display: block;
+    color: var(--ink-subtle);
+    font-size: 0.71rem;
+    font-weight: 500;
+  }
+
+  .jev-ranking__rows {
+    display: grid;
+    gap: 7px;
+  }
+
+  .jev-model-row {
+    padding: 14px 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--surface-card) 90%, var(--surface-subtle));
+  }
+
+  .jev-model-row.is-alternative {
+    border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border-subtle));
+    background: color-mix(in srgb, var(--accent-blue) 5%, var(--surface-card));
+  }
+
+  .jev-model-row__name strong,
+  .jev-model-row__latency strong,
+  .jev-model-row__accuracy strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.94rem;
+    font-weight: 780;
+    line-height: 1.3;
+  }
+
+  .jev-model-row__name small,
+  .jev-model-row__latency small {
+    display: block;
+    margin-top: 3px;
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+    line-height: 1.3;
+  }
+
+  .jev-model-row__accuracy-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+  }
+
+  .jev-model-row__track {
+    height: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-blue) 11%, var(--surface-subtle));
+  }
+
+  .jev-model-row__fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--accent-blue), color-mix(in srgb, var(--accent-blue) 70%, var(--accent-violet)));
+  }
+
+  .jev-model-row__latency {
+    text-align: right;
+  }
+
+  .jev-ranking__note {
+    margin-top: 14px;
+    padding: 12px 15px;
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  .jev-ranking__note strong {
+    color: var(--ink-display);
+  }
+
+  .jev-method-note {
+    margin: 16px 0 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 790px) {
+    .jev-tradeoff {
+      grid-template-columns: 1fr;
+    }
+
+    .jev-tradeoff__numbers {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+      padding: 16px 0 0;
+    }
+
+    .jev-ranking__columns,
+    .jev-model-row {
+      grid-template-columns: minmax(120px, 1.2fr) minmax(120px, 1fr) minmax(76px, 0.6fr);
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .jev-ranking__columns {
+      display: none;
+    }
+
+    .jev-model-row {
+      grid-template-columns: minmax(0, 1fr) minmax(86px, 0.55fr);
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .jev-model-row__name {
+      grid-column: 1 / -1;
+    }
+
+    .jev-model-row__accuracy {
+      grid-column: 1;
+    }
+
+    .jev-model-row__latency {
+      grid-column: 2;
+    }
+
+    .jev-model-row__latency strong::before {
+      content: '';
+    }
+
+    .jev-tradeoff__numbers {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+
   .experiment-explorer { min-width: 0; }
 
   .experiment-selector-wrap {
