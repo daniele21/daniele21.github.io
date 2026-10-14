@@ -109,6 +109,15 @@ const selectorLabelFor = (track: Track) => {
             <span class="plot-heading__note">Accuracy vs p50 latency</span>
           </div>
 
+          <div class="plot-toolbar" data-jev-toolbar hidden>
+            <span>Accuracy <span aria-hidden="true">↑</span> &nbsp;·&nbsp; Median latency <span aria-hidden="true">→</span></span>
+            <div class="plot-filters" role="group" aria-label="Filter routing models by test coverage">
+              <button type="button" data-jev-filter="all" aria-pressed="true">All</button>
+              <button type="button" data-jev-filter="core" aria-pressed="false">77-case</button>
+              <button type="button" data-jev-filter="pilot" aria-pressed="false">Partial</button>
+            </div>
+          </div>
+
           <div class="plot-toolbar" data-mcb-toolbar hidden>
             <span>Quality <span aria-hidden="true">↑</span> &nbsp;·&nbsp; Median latency <span aria-hidden="true">→</span></span>
             <div class="plot-filters" role="group" aria-label="Filter models by deployment">
@@ -126,6 +135,14 @@ const selectorLabelFor = (track: Track) => {
             aria-label="Quality versus median latency; focus or select a model point for details"
           ></svg>
 
+          <div class="plot-selection" data-jev-detail hidden aria-live="polite">
+            <div>
+              <span class="plot-selection__eyebrow">INSPECT MODEL</span>
+              <strong data-jev-selected-name>—</strong>
+            </div>
+            <span data-jev-selected-metrics>—</span>
+          </div>
+
           <div class="plot-selection" data-mcb-detail hidden aria-live="polite">
             <div>
               <span class="plot-selection__eyebrow">INSPECT MODEL</span>
@@ -133,6 +150,8 @@ const selectorLabelFor = (track: Track) => {
             </div>
             <span data-mcb-selected-metrics>—</span>
           </div>
+
+          <p class="plot-evidence-note" data-jev-evidence-note hidden></p>
 
           <div class="plot-legend">
             <span><i class="legend-dot legend-dot--all"></i>Measured model</span>
@@ -236,6 +255,31 @@ const selectorLabelFor = (track: Track) => {
         return node;
       };
 
+      const jevState = {
+        rows: [],
+        filter: 'all',
+        selected: null,
+        coreCases: 0,
+      };
+
+      const focusJevPoint = (row) => {
+        if (!row) return;
+        jevState.selected = String(row.model);
+        setText('[data-jev-selected-name]', shortModel(row.model));
+        setText(
+          '[data-jev-selected-metrics]',
+          formatPct(row.accuracyNumber) + ' accuracy · ' +
+            formatSeconds(row.latencyNumber) + ' p50 · ' +
+            row.requests + ' cases' +
+            (row.requests !== jevState.coreCases ? ' (partial)' : ''),
+        );
+        root.querySelectorAll('[data-jev-point]').forEach((group) => {
+          const selected = group.getAttribute('data-jev-point') === jevState.selected;
+          group.classList.toggle('is-selected', selected);
+          group.setAttribute('aria-pressed', selected ? 'true' : 'false');
+        });
+      };
+
       const mcbState = {
         points: [],
         filter: 'all',
@@ -262,102 +306,189 @@ const selectorLabelFor = (track: Track) => {
       const plotRouting = (rows) => {
         const svg = root.querySelector('[data-performance-plot]');
         if (!(svg instanceof SVGElement)) return;
-        while (svg.firstChild) svg.removeChild(svg.firstChild);
 
         const validRows = rows
           .map((row) => ({
             ...row,
             accuracyNumber: Number(row.accuracy),
             latencyNumber: Number(row.latency_p50_ms),
+            requests: Number(row.requests || 0),
           }))
-          .filter((row) => Number.isFinite(row.accuracyNumber) && Number.isFinite(row.latencyNumber))
-          .sort((a, b) => a.latencyNumber - b.latencyNumber);
-
+          .filter((row) =>
+            Number.isFinite(row.accuracyNumber) &&
+            Number.isFinite(row.latencyNumber) &&
+            row.latencyNumber > 0 &&
+            row.requests > 0,
+          );
         if (!validRows.length) return;
 
-        const W = 620;
-        const H = 250;
-        const pad = { left: 48, right: 24, top: 22, bottom: 42 };
-        const innerW = W - pad.left - pad.right;
-        const innerH = H - pad.top - pad.bottom;
-
-        const maxLatency = Math.max(...validRows.map((row) => row.latencyNumber)) * 1.08;
-        const maxAccuracy = Math.min(
-          1,
-          Math.max(0.4, Math.ceil(Math.max(...validRows.map((row) => row.accuracyNumber)) * 10 + 1) / 10),
+        // Compare model rankings only within the most widely represented case count.
+        // In the published snapshot four models have 77 cases; one pilot has 24.
+        const frequencies = new Map();
+        validRows.forEach((row) =>
+          frequencies.set(row.requests, (frequencies.get(row.requests) || 0) + 1),
         );
+        const coreCases = [...frequencies.keys()].sort(
+          (a, b) => frequencies.get(b) - frequencies.get(a) || b - a,
+        )[0];
+        jevState.rows = validRows;
+        jevState.coreCases = coreCases;
 
-        const x = (latency) => pad.left + (latency / maxLatency) * innerW;
-        const y = (accuracy) => pad.top + innerH - (accuracy / maxAccuracy) * innerH;
+        const redraw = () => {
+          while (svg.firstChild) svg.removeChild(svg.firstChild);
+          const visible = validRows
+            .filter((row) =>
+              jevState.filter === 'all' ||
+              (jevState.filter === 'core' && row.requests === coreCases) ||
+              (jevState.filter === 'pilot' && row.requests !== coreCases),
+            )
+            .sort((a, b) => a.latencyNumber - b.latencyNumber);
+          if (!visible.length) return;
 
-        const grid = createSvg('g', { class: 'plot-grid' });
-        [0, 0.5, 1].forEach((fraction) => {
-          const gy = pad.top + innerH * fraction;
-          grid.appendChild(createSvg('line', {
-            x1: pad.left,
-            y1: gy,
-            x2: W - pad.right,
-            y2: gy,
-          }));
-        });
-        svg.appendChild(grid);
+          const W = 620;
+          const H = 250;
+          const pad = { left: 46, right: 22, top: 16, bottom: 38 };
+          const innerW = W - pad.left - pad.right;
+          const innerH = H - pad.top - pad.bottom;
+          const minLatency = Math.min(...visible.map((row) => row.latencyNumber)) / 1.25;
+          const maxLatency = Math.max(...visible.map((row) => row.latencyNumber)) * 1.3;
+          const logMin = Math.log10(minLatency);
+          const logSpan = Math.max(0.01, Math.log10(maxLatency) - logMin);
+          const x = (value) => pad.left + (Math.log10(value) - logMin) / logSpan * innerW;
+          const y = (value) => pad.top + (1 - value) * innerH;
 
-        const axisLabels = createSvg('g', { class: 'plot-axis-labels' });
-        const yTop = createSvg('text', { x: 8, y: pad.top + 4 });
-        yTop.textContent = `${Math.round(maxAccuracy * 100)}%`;
-        axisLabels.appendChild(yTop);
-        const yBottom = createSvg('text', { x: 14, y: pad.top + innerH + 4 });
-        yBottom.textContent = '0%';
-        axisLabels.appendChild(yBottom);
-        const xLeft = createSvg('text', { x: pad.left, y: H - 10 });
-        xLeft.textContent = '0s';
-        axisLabels.appendChild(xLeft);
-        const xRight = createSvg('text', { x: W - pad.right - 28, y: H - 10 });
-        xRight.textContent = `${(maxLatency / 1000).toFixed(0)}s`;
-        axisLabels.appendChild(xRight);
-        svg.appendChild(axisLabels);
+          const grid = createSvg('g', { class: 'plot-grid' });
+          const labels = createSvg('g', { class: 'plot-axis-labels' });
+          [0, 25, 50, 75, 100].forEach((tick) => {
+            const yy = y(tick / 100);
+            grid.appendChild(createSvg('line', {
+              x1: pad.left, y1: yy, x2: W - pad.right, y2: yy,
+            }));
+            const label = createSvg('text', {
+              x: pad.left - 10, y: yy + 4, 'text-anchor': 'end',
+            });
+            label.textContent = tick + '%';
+            labels.appendChild(label);
+          });
+          [250, 500, 1000, 2000, 5000, 10000, 20000]
+            .filter((tick) => tick >= minLatency && tick <= maxLatency)
+            .forEach((tick) => {
+              const xx = x(tick);
+              grid.appendChild(createSvg('line', {
+                x1: xx, x2: xx, y1: pad.top, y2: H - pad.bottom,
+              }));
+              const label = createSvg('text', {
+                x: xx, y: H - 12, 'text-anchor': 'middle',
+              });
+              label.textContent = formatSeconds(tick);
+              labels.appendChild(label);
+            });
+          svg.appendChild(grid);
+          svg.appendChild(labels);
 
-        let bestSoFar = -Infinity;
-        const frontier = validRows.filter((row) => {
-          if (row.accuracyNumber > bestSoFar) {
-            bestSoFar = row.accuracyNumber;
-            return true;
+          // The Pareto line uses only comparable runs with the same case count.
+          const comparable = visible.filter((row) => row.requests === coreCases);
+          let bestSoFar = -Infinity;
+          const frontier = comparable.filter((row) => {
+            if (row.accuracyNumber > bestSoFar) {
+              bestSoFar = row.accuracyNumber;
+              return true;
+            }
+            return false;
+          });
+          if (frontier.length > 1) {
+            svg.appendChild(createSvg('polyline', {
+              class: 'plot-frontier',
+              points: frontier.map((row) =>
+                x(row.latencyNumber) + ',' + y(row.accuracyNumber),
+              ).join(' '),
+            }));
           }
-          return false;
+
+          visible.forEach((row) => {
+            const isPartial = row.requests !== coreCases;
+            const group = createSvg('g', {
+              class: 'plot-point plot-interactive' + (isPartial ? ' is-partial' : ''),
+              role: 'button',
+              tabindex: '0',
+              'aria-pressed': 'false',
+              'aria-label': shortModel(row.model) + ', ' +
+                formatPct(row.accuracyNumber) + ' accuracy, p50 ' +
+                formatSeconds(row.latencyNumber) + ', ' + row.requests +
+                ' cases' + (isPartial ? ', partial evidence' : ''),
+              'data-jev-point': String(row.model),
+            });
+            const circle = createSvg('circle', {
+              cx: x(row.latencyNumber),
+              cy: y(row.accuracyNumber),
+              r: frontier.includes(row) ? 7 : 6,
+              class: (frontier.includes(row) ? 'is-frontier ' : '') +
+                (isPartial ? 'is-pilot' : 'is-local'),
+            });
+            const hit = createSvg('circle', {
+              cx: x(row.latencyNumber),
+              cy: y(row.accuracyNumber),
+              r: 16,
+              class: 'plot-hit-area',
+            });
+            const title = createSvg('title');
+            title.textContent = group.getAttribute('aria-label') || '';
+            group.appendChild(circle);
+            group.appendChild(hit);
+            group.appendChild(title);
+            group.addEventListener('click', () => focusJevPoint(row));
+            group.addEventListener('mouseenter', () => focusJevPoint(row));
+            group.addEventListener('focus', () => focusJevPoint(row));
+            group.addEventListener('keydown', (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                focusJevPoint(row);
+              }
+            });
+            svg.appendChild(group);
+          });
+
+          const selected = visible.find((row) => String(row.model) === jevState.selected);
+          const defaultCore = comparable.find((row) => row.model === 'qwen3.5-2b-q4km');
+          focusJevPoint(selected || defaultCore || comparable[0] || visible[0]);
+        };
+        jevState.redraw = redraw;
+        setHidden(root.querySelector('[data-jev-toolbar]'), false);
+        setHidden(root.querySelector('[data-jev-detail]'), false);
+        root.querySelectorAll('[data-jev-filter]').forEach((button) => {
+          button.setAttribute(
+            'aria-pressed',
+            button.getAttribute('data-jev-filter') === jevState.filter ? 'true' : 'false',
+          );
         });
 
-        if (frontier.length > 1) {
-          const polyline = createSvg('polyline', {
-            class: 'plot-frontier',
-            points: frontier.map((row) => `${x(row.latencyNumber)},${y(row.accuracyNumber)}`).join(' '),
-          });
-          svg.appendChild(polyline);
-        }
-
-        validRows.forEach((row, index) => {
-          const point = createSvg('g', { class: 'plot-point' });
-          const isFrontier = frontier.includes(row);
-          const circle = createSvg('circle', {
-            cx: x(row.latencyNumber),
-            cy: y(row.accuracyNumber),
-            r: isFrontier ? 7 : 5.5,
-            class: isFrontier ? 'is-frontier' : '',
-          });
-
-          const title = createSvg('title');
-          title.textContent = `${shortModel(row.model)} · ${formatPct(row.accuracyNumber)} · ${formatSeconds(row.latencyNumber)} p50`;
-          circle.appendChild(title);
-          point.appendChild(circle);
-
-          const label = createSvg('text', {
-            x: x(row.latencyNumber) + 9,
-            y: y(row.accuracyNumber) + (index % 2 === 0 ? -8 : 16),
-          });
-          label.textContent = shortModel(row.model);
-          point.appendChild(label);
-          svg.appendChild(point);
-        });
+        const pilot = validRows.filter((row) => row.requests !== coreCases);
+        setText(
+          '[data-jev-evidence-note]',
+          pilot.length
+            ? validRows.filter((row) => row.requests === coreCases).length +
+              ' comparable models (' + coreCases + ' cases each) · ' +
+              pilot.length + ' partial run (' +
+              pilot.map((row) => row.requests + ' cases').join(', ') +
+              '). Highlights use comparable runs.'
+            : validRows.length + ' models evaluated on ' + coreCases + ' cases each.',
+        );
+        setHidden(root.querySelector('[data-jev-evidence-note]'), false);
+        redraw();
       };
+
+      root.querySelectorAll('[data-jev-filter]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const filter = button.getAttribute('data-jev-filter');
+          if (!['all', 'core', 'pilot'].includes(filter)) return;
+          jevState.filter = filter;
+          root.querySelectorAll('[data-jev-filter]').forEach((option) => {
+            option.setAttribute('aria-pressed',
+              option.getAttribute('data-jev-filter') === filter ? 'true' : 'false');
+          });
+          if (typeof jevState.redraw === 'function') jevState.redraw();
+        });
+      });
 
       const plotMcbOverview = (data) => {
         const svg = root.querySelector('[data-performance-plot]');
