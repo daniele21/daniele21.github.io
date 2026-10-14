@@ -108,6 +108,9 @@ for (const fragment of [
   'data-jev-rows',
   'data-jev-quality-gap',
   'data-jev-partial',
+  'data-jev-published-scope',
+  'data-jev-experiment-count',
+  'Direct Jev vs LLM results not included',
   'data-mcb-story',
   'data-mcb-scope',
 ]) {
