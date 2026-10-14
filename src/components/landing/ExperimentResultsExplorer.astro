@@ -713,6 +713,7 @@ const selectorLabelFor = (track: Track) => {
           candidate.setAttribute('tabindex', active ? '0' : '-1');
         });
 
+        const currentRequest = ++requestId;
         const resultUrl = tab.dataset.resultUrl || '';
         if (!resultUrl) {
           setText('[data-empty-title]', tab.dataset.title || 'Experiment');
@@ -721,7 +722,6 @@ const selectorLabelFor = (track: Track) => {
           return;
         }
 
-        const currentRequest = ++requestId;
         showOnly('loading');
 
         try {
