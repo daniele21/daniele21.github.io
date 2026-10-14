@@ -368,7 +368,7 @@ export const landingData: LandingPageData = {
             question: 'What published evidence is available across decision workloads?',
             status: 'PARTIAL PUBLIC EVIDENCE',
             resultUrl:
-              'https://raw.githubusercontent.com/daniele21/experiments/feature/public-jev-benchmark-evidence/experiments/jev-vs-llm/results/published/portfolio-summary.json',
+              'https://raw.githubusercontent.com/daniele21/experiments/dev/experiments/jev-vs-llm/results/published/portfolio-summary.json',
             sourceUrl:
               'https://github.com/daniele21/experiments/blob/feature/public-jev-benchmark-evidence/experiments/jev-vs-llm/results/published/portfolio-summary.json',
             resultKind: 'jev-public-summary',
