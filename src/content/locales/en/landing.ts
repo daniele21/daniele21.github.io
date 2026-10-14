@@ -364,14 +364,14 @@ export const landingData: LandingPageData = {
           },
           {
             id: 'jev-vs-llm-routing',
-            title: 'JEV vs LLM · Routing',
-            question: 'How do local models trade routing quality for latency?',
-            status: 'PUBLISHED',
+            title: 'JEV vs LLM · Decision Benchmarks',
+            question: 'What published evidence is available across decision workloads?',
+            status: 'PARTIAL PUBLIC EVIDENCE',
             resultUrl:
-              'https://raw.githubusercontent.com/daniele21/experiments/feature/clm-autonomous-runner/experiments/jev-vs-llm/results/benchmark_data.json',
+              'https://raw.githubusercontent.com/daniele21/experiments/feature/public-jev-benchmark-evidence/experiments/jev-vs-llm/results/published/portfolio-summary.json',
             sourceUrl:
-              'https://github.com/daniele21/experiments/blob/feature/clm-autonomous-runner/experiments/jev-vs-llm/results/benchmark_data.json',
-            resultKind: 'jev-routing',
+              'https://github.com/daniele21/experiments/blob/feature/public-jev-benchmark-evidence/experiments/jev-vs-llm/results/published/portfolio-summary.json',
+            resultKind: 'jev-public-summary',
           },
           {
             id: 'redactguard-local-anonymization',
