@@ -176,13 +176,27 @@ try {
   // Regression: JEV rows are created at runtime. Astro's scoped CSS does not
   // automatically apply to these elements, so check actual computed layout.
   const jevEvidence = {
-    overview: [
-      { model: 'qwen3.5-9b-q4km', provider: 'local-korgis', accuracy: 0.64, latency_p50_ms: 8300, requests: 77 },
-      { model: 'qwen3.5-2b-q4km', provider: 'local-korgis', accuracy: 0.567, latency_p50_ms: 2000, requests: 77 },
-      { model: 'nemotron-nano-4b', provider: 'local-korgis', accuracy: 0.5, latency_p50_ms: 6000, requests: 77 },
-      { model: 'nemotron-nano-4b-q8', provider: 'local-korgis', accuracy: 0.521, latency_p50_ms: 6100, requests: 77 },
-      { model: 'qwen3.5-0.8b-q4km', provider: 'local-korgis', accuracy: 0.25, latency_p50_ms: 704, requests: 24 },
-    ],
+    schema_version: 1,
+    benchmark: 'jev-vs-llm',
+    publication: {
+      scope: 'non_restricted_aggregates_only',
+      restricted_jev_typesafe_clm_metrics_included: false,
+      comparison_status: 'partial_provider_subset',
+    },
+    experiments: ['routing', 'calibration', 'scaling', 'workflow', 'agent'].map((id) => ({
+      id, status: id === 'routing' ? 'published_subset' : 'not_published',
+    })),
+    routing: {
+      status: 'published_subset',
+      providers: ['local-korgis'],
+      models: [
+        { model: 'qwen3.5-9b-q4km', provider: 'local-korgis', accuracy: 0.64, latency_p50_ms: 8300, requests: 77 },
+        { model: 'qwen3.5-2b-q4km', provider: 'local-korgis', accuracy: 0.567, latency_p50_ms: 2000, requests: 77 },
+        { model: 'nemotron-nano-4b', provider: 'local-korgis', accuracy: 0.5, latency_p50_ms: 6000, requests: 77 },
+        { model: 'nemotron-nano-4b-q8', provider: 'local-korgis', accuracy: 0.521, latency_p50_ms: 6100, requests: 77 },
+        { model: 'qwen3.5-0.8b-q4km', provider: 'local-korgis', accuracy: 0.25, latency_p50_ms: 704, requests: 24 },
+      ],
+    },
   };
   const jevLayouts = [];
   for (const viewport of [
@@ -194,7 +208,7 @@ try {
       reducedMotion: 'reduce',
     });
     const page = await context.newPage();
-    await page.route('**/experiments/jev-vs-llm/results/benchmark_data.json', (route) =>
+    await page.route('**/experiments/jev-vs-llm/results/published/portfolio-summary.json', (route) =>
       route.fulfill({
         status: 200,
         contentType: 'application/json',
