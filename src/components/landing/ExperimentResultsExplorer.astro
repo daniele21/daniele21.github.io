@@ -647,9 +647,9 @@ const selectorLabelFor = (track: Track) => {
                 ' routing only. Jev/TypeSafe/CLM numerical results are excluded pending publication clearance.',
         );
 
-        const coverage = root.querySelector('[data-jev-stage-coverage]');
-        if (coverage instanceof HTMLElement) {
-          coverage.replaceChildren();
+        const coverageStrip = root.querySelector('[data-jev-stage-coverage]');
+        if (coverageStrip instanceof HTMLElement) {
+          coverageStrip.replaceChildren();
           const names = {
             routing: 'Routing', calibration: 'Calibration', scaling: 'Scaling',
             workflow: 'Workflow', agent: 'Hybrid agent',
@@ -662,7 +662,7 @@ const selectorLabelFor = (track: Track) => {
             node.textContent = (published ? '● ' : '○ ') +
               (names[item.id] || item.id) +
               (published ? ' · subset' : ' · unpublished');
-            coverage.appendChild(node);
+            coverageStrip.appendChild(node);
           });
         }
         setText('[data-model-count]', String(validRows.length));
