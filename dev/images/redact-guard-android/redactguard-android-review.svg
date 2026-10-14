@@ -1,0 +1,37 @@
+<svg width="780" height="560" viewBox="0 0 780 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="780" height="560" rx="28" fill="#F8FAFC"/>
+  <rect x="185" y="28" width="410" height="504" rx="34" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+  <rect x="319" y="42" width="142" height="18" rx="9" fill="#E2E8F0"/>
+  <text x="220" y="100" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="750">Review findings</text>
+  <text x="220" y="129" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="14">Sensitive values stay hidden until you choose to reveal them.</text>
+
+  <rect x="220" y="158" width="340" height="62" rx="16" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="238" y="174" width="70" height="28" rx="14" fill="#DBEAFE"/>
+  <text x="254" y="193" fill="#1D4ED8" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">NAME</text>
+  <rect x="324" y="177" width="106" height="22" rx="8" fill="#CBD5E1"/>
+  <circle cx="522" cy="189" r="14" fill="#DCFCE7"/>
+  <path d="M516 189L520 193L528 184" stroke="#15803D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="220" y="232" width="340" height="62" rx="16" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="238" y="248" width="78" height="28" rx="14" fill="#ECFDF5"/>
+  <text x="253" y="267" fill="#0F766E" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">EMAIL</text>
+  <rect x="332" y="251" width="124" height="22" rx="8" fill="#CBD5E1"/>
+  <circle cx="522" cy="263" r="14" fill="#DCFCE7"/>
+  <path d="M516 263L520 267L528 258" stroke="#15803D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="220" y="306" width="340" height="62" rx="16" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="238" y="322" width="92" height="28" rx="14" fill="#F5F3FF"/>
+  <text x="250" y="341" fill="#6D28D9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700">ACCOUNT</text>
+  <rect x="346" y="325" width="94" height="22" rx="8" fill="#CBD5E1"/>
+  <circle cx="522" cy="337" r="14" fill="#FEF2F2"/>
+  <path d="M517 332L527 342M527 332L517 342" stroke="#B91C1C" stroke-width="2.2" stroke-linecap="round"/>
+
+  <rect x="220" y="392" width="340" height="44" rx="13" fill="#F0FDFA" stroke="#99F6E4"/>
+  <circle cx="243" cy="414" r="7" fill="#14B8A6"/>
+  <text x="260" y="419" fill="#115E59" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="650">3 findings · 2 selected for redaction</text>
+
+  <rect x="220" y="458" width="164" height="46" rx="14" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <text x="269" y="487" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Back</text>
+  <rect x="396" y="458" width="164" height="46" rx="14" fill="#2563EB"/>
+  <text x="431" y="487" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750">Apply choices</text>
+</svg>

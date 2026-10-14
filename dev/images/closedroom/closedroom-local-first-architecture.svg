@@ -1,0 +1,61 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="760" rx="30" fill="#07111F"/>
+  <text x="62" y="66" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="2">CLOSEDROOM · LOCAL-FIRST ARCHITECTURE</text>
+  <text x="62" y="108" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="750">Product ownership stays separate from reusable Local AI runtime infrastructure</text>
+
+  <rect x="50" y="142" width="898" height="548" rx="26" fill="#0B1626" stroke="#14B8A6" stroke-width="2" stroke-dasharray="8 8"/>
+  <rect x="72" y="160" width="238" height="34" rx="17" fill="#134E4A"/>
+  <text x="92" y="183" fill="#99F6E4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">DEFAULT TRUST BOUNDARY · MAC</text>
+
+  <rect x="118" y="222" width="380" height="90" rx="20" fill="#0F1B2D" stroke="#334155"/>
+  <text x="144" y="258" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="750">ClosedRoom macOS app / React workspace</text>
+  <text x="144" y="286" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="14">Meeting UX · Today · Project memory · user edits</text>
+
+  <path d="M308 312V352" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"/>
+  <path d="M298 341L308 353L318 341" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="118" y="354" width="380" height="74" rx="18" fill="#0B2340" stroke="#2563EB"/>
+  <text x="144" y="385" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="750">Loopback FastAPI boundary</text>
+  <text x="144" y="409" fill="#93C5FD" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">composition · jobs · lifecycle · diagnostics</text>
+
+  <path d="M202 428V472M308 428V472M414 428V472" stroke="#64748B" stroke-width="2.5" stroke-linecap="round"/>
+
+  <rect x="84" y="474" width="236" height="146" rx="20" fill="#0F1B2D" stroke="#334155"/>
+  <text x="106" y="510" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="750">Capture &amp; persistence</text>
+  <text x="106" y="541" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">Mic + system audio</text>
+  <text x="106" y="565" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">SQLite + local filesystem</text>
+  <text x="106" y="589" fill="#5EEAD4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">CLOSEDROOM OWNS STATE</text>
+
+  <rect x="336" y="474" width="236" height="146" rx="20" fill="#0F1B2D" stroke="#334155"/>
+  <text x="358" y="510" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="750">ASR &amp; diarization</text>
+  <text x="358" y="541" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">MLX Whisper / Nemotron</text>
+  <text x="358" y="565" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14">FluidAudio helper</text>
+  <text x="358" y="589" fill="#93C5FD" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">NATIVE / LOCAL HELPERS</text>
+
+  <rect x="588" y="354" width="306" height="266" rx="22" fill="#0D292B" stroke="#0F766E" stroke-width="2"/>
+  <rect x="610" y="376" width="92" height="28" rx="14" fill="#134E4A"/>
+  <text x="628" y="395" fill="#99F6E4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">RUNTIME</text>
+  <text x="610" y="446" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800">Korgis</text>
+  <text x="610" y="476" fill="#5EEAD4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">REUSABLE LOCAL AI INFRASTRUCTURE</text>
+  <text x="610" y="516" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="15">Model loading &amp; backend selection</text>
+  <text x="610" y="542" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="15">Runtime lifecycle · text / vision inference</text>
+  <text x="610" y="568" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="15">Logs · diagnostics · local models</text>
+
+  <path d="M498 391H586" stroke="#2DD4BF" stroke-width="3" stroke-linecap="round"/>
+  <path d="M574 380L588 391L574 402" stroke="#2DD4BF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="994" y="218" width="158" height="262" rx="22" fill="#1B1520" stroke="#7C3AED" stroke-dasharray="7 7"/>
+  <text x="1018" y="253" fill="#C4B5FD" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">EXPLICIT OPT-IN</text>
+  <text x="1018" y="302" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="750">Cloud providers</text>
+  <rect x="1018" y="330" width="110" height="42" rx="12" fill="#241B32"/>
+  <text x="1032" y="356" fill="#DDD6FE" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Speechmatics</text>
+  <rect x="1018" y="386" width="110" height="42" rx="12" fill="#241B32"/>
+  <text x="1049" y="412" fill="#DDD6FE" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Gemini</text>
+  <text x="1018" y="454" fill="#A78BFA" font-family="Inter, Arial, sans-serif" font-size="14">Outside local boundary</text>
+
+  <path d="M948 340H992" stroke="#A78BFA" stroke-width="2.5" stroke-dasharray="6 6"/>
+  <path d="M980 329L994 340L980 351" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="118" y="646" width="776" height="32" rx="16" fill="#0F172A"/>
+  <text x="142" y="667" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="14">ClosedRoom owns capture, meetings, transcripts, structured notes, edits and project memory · Korgis owns reusable LLM/VLM runtime concerns.</text>
+</svg>
