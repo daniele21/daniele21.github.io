@@ -65,6 +65,11 @@ export const projectFavicons: Record<string, FaviconConfig> = {
     type: 'image/png',
     appleTouchIcon: 'images/redact-guard/logo.png',
   },
+  'redact-guard-android': {
+    href: 'images/redact-guard/logo.png',
+    type: 'image/png',
+    appleTouchIcon: 'images/redact-guard/logo.png',
+  },
   // ClosedRoom
   'closedroom': {
     href: 'images/closedroom/logo.png',

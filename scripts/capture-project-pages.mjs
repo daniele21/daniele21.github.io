@@ -9,12 +9,10 @@ const routes = [
   'harnex',
   'korgis',
   'local-asr-server',
+  'decisio',
   'closedroom',
   'aura-finance',
   'redact-guard',
-  'performance-lab',
-  'traffic-monitoring',
-  'traffic-monitoring-android',
 ];
 
 const phaseIds = ['decide', 'build', 'test', 'measure', 'decide-again'];

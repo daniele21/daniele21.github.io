@@ -96,6 +96,13 @@ const isMobile = Boolean(
         </div>
       )}
 
+      {whatItTests && (
+        <div class="proof-vertical-card__relationship">
+          <span>HOW IT CONNECTS</span>
+          <p>{whatItTests}</p>
+        </div>
+      )}
+
       <!-- Bottom Body: Validation Section with Chips -->
       {features && features.length > 0 && (
         <div class="proof-vertical-card__validation">
@@ -552,6 +559,31 @@ const isMobile = Boolean(
     text-transform: uppercase;
   }
 
+  .proof-vertical-card__relationship {
+    margin: 0 20px 14px;
+    padding: 12px 14px;
+    border-left: 2px solid color-mix(in srgb, var(--product-accent) 58%, var(--border-medium));
+    background: color-mix(in srgb, var(--product-accent) 4%, var(--surface-subtle));
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .proof-vertical-card__relationship span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--product-accent);
+    font-family: var(--font-display);
+    font-size: 0.69rem;
+    font-weight: 820;
+    letter-spacing: 0.07em;
+  }
+
+  .proof-vertical-card__relationship p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
   .proof-vertical-card__validation-chips {
     display: flex;
     flex-wrap: wrap;
@@ -631,6 +663,10 @@ const isMobile = Boolean(
 
     .proof-vertical-card__screen {
       height: 175px;
+    }
+
+    .proof-vertical-card__relationship {
+      margin: 0 16px 12px;
     }
 
     .proof-vertical-card__validation {

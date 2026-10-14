@@ -1,0 +1,1822 @@
+---
+interface Track {
+  id?: string;
+  title: string;
+  question: string;
+  status: string;
+  resultUrl?: string;
+  sourceUrl?: string;
+  resultKind?: 'jev-public-summary' | 'mcb-overview';
+}
+
+interface Props {
+  tracks: Track[];
+}
+
+const { tracks } = Astro.props;
+const sortedTracks = [...tracks].sort((a, b) => Number(Boolean(b.resultUrl)) - Number(Boolean(a.resultUrl)));
+const initialIndex = Math.max(0, sortedTracks.findIndex((track) => Boolean(track.resultUrl)));
+
+const selectorLabelFor = (track: Track) => {
+  const labels: Record<string, string> = {
+    'jev-vs-llm-routing': 'JEV vs LLM',
+    'model-capability': 'Model Capability',
+    'redactguard-local-anonymization': 'RedactGuard',
+    'vlm-capability': 'VLM',
+    'image-generation': 'Image Gen',
+    diarization: 'Diarization',
+  };
+  return labels[track.id || ''] || track.title;
+};
+---
+
+<div class="experiment-explorer" data-experiment-explorer>
+  <div class="experiment-selector-wrap">
+    <div class="experiment-selector" role="tablist" aria-label="Select experiment">
+      {sortedTracks.map((track, index) => (
+        <button
+          type="button"
+          class:list={['experiment-tab', { 'is-active': index === initialIndex }]}
+          role="tab"
+          aria-selected={index === initialIndex ? 'true' : 'false'}
+          tabindex={index === initialIndex ? '0' : '-1'}
+          data-experiment-tab
+          data-track-id={track.id || ''}
+          data-title={track.title}
+          data-question={track.question}
+          data-status={track.status}
+          data-result-url={track.resultUrl || ''}
+          data-source-url={track.sourceUrl || ''}
+          data-result-kind={track.resultKind || ''}
+        >
+          <span
+            class:list={['status-dot', { 'status-dot--live': Boolean(track.resultUrl) }]}
+            aria-hidden="true"
+          ></span>
+          <span class="experiment-tab__title">{selectorLabelFor(track)}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <section class="evidence-panel" aria-live="polite" aria-label="Selected experiment evidence">
+    <div class="evidence-panel__loading" data-evidence-loading hidden>
+      Loading published evidence…
+    </div>
+
+    <div class="evidence-panel__empty" data-evidence-empty hidden>
+      <div class="evidence-panel__empty-icon" aria-hidden="true">↗</div>
+      <div>
+        <span class="evidence-panel__eyebrow">NO PUBLIC SNAPSHOT YET</span>
+        <h3 data-empty-title></h3>
+        <p data-empty-question></p>
+        <p class="evidence-panel__empty-note">
+          Real runs exist outside the published repository snapshot. This view stays empty until a
+          versioned evidence artifact is available.
+        </p>
+      </div>
+    </div>
+
+    <div class="evidence-panel__result" data-evidence-result hidden>
+      <div class="evidence-panel__header">
+        <div>
+          <span class="evidence-panel__eyebrow">
+            <span class="live-dot" aria-hidden="true"></span>
+            PUBLISHED BENCHMARK SNAPSHOT
+          </span>
+          <h3 data-result-title></h3>
+          <p data-result-question></p>
+        </div>
+        <a class="source-link" data-result-source href="#" target="_blank" rel="noopener noreferrer">
+          Source <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <div class="run-summary" data-mcb-scope aria-label="Benchmark scope">
+        <span><strong data-model-count>—</strong> models</span>
+        <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
+        <span><strong data-dataset>—</strong> <span data-scope-label>dataset</span></span>
+        <span><strong data-runtime>—</strong> <span data-runtime-label>runtime</span></span>
+      </div>
+
+      <div class="jev-summary" data-jev-summary hidden>
+        <div class="jev-coverage-banner" role="note">
+          <div>
+            <span class="jev-eyebrow">EVIDENCE AVAILABLE</span>
+            <strong data-jev-published-scope>—</strong>
+            <p data-jev-scope-note></p>
+          </div>
+          <span class="jev-coverage-banner__count" data-jev-experiment-count>—</span>
+          <div class="jev-stage-coverage" data-jev-stage-coverage aria-label="Public evidence by experiment type"></div>
+        </div>
+        <div class="jev-tradeoff">
+          <div class="jev-tradeoff__main">
+            <span class="jev-eyebrow">WHAT THE RESULTS SHOW</span>
+            <strong data-jev-takeaway-headline>—</strong>
+            <p data-jev-takeaway-description></p>
+          </div>
+          <div class="jev-tradeoff__numbers">
+            <div>
+              <span>Accuracy difference</span>
+              <strong data-jev-quality-gap>—</strong>
+            </div>
+            <div>
+              <span>Median response time</span>
+              <strong data-jev-speed-comparison>—</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="jev-ranking">
+          <div class="jev-ranking__header">
+            <div>
+              <span class="jev-eyebrow">ROUTING · EQUAL REQUEST COUNT</span>
+              <h4>How local models compare</h4>
+            </div>
+            <span data-jev-coverage>—</span>
+          </div>
+          <div class="jev-ranking__columns" aria-hidden="true">
+            <span>Model</span>
+            <span>Accuracy <small>Higher is better ↑</small></span>
+            <span>Median latency <small>Lower is better ↓</small></span>
+          </div>
+          <div class="jev-ranking__rows" data-jev-rows role="list"></div>
+          <div class="jev-ranking__note" data-jev-partial hidden></div>
+        </div>
+        <p class="jev-method-note" data-jev-method-note>Runs with the same request count are shown together; identical samples and configurations have not been independently verified.</p>
+      </div>
+
+      <div class="benchmark-story" data-mcb-story>
+        <div class="performance-plot">
+          <div class="plot-heading">
+            <div>
+              <span class="plot-heading__eyebrow">QUALITY × LATENCY</span>
+              <strong>Local routing frontier</strong>
+            </div>
+            <span class="plot-heading__note">Accuracy vs p50 latency</span>
+          </div>
+
+          <div class="plot-toolbar" data-mcb-toolbar hidden>
+            <span>Quality <span aria-hidden="true">↑</span> &nbsp;·&nbsp; Median latency <span aria-hidden="true">→</span></span>
+            <div class="plot-filters" role="group" aria-label="Filter models by deployment">
+              <button type="button" data-mcb-filter="all" aria-pressed="true">All</button>
+              <button type="button" data-mcb-filter="local" aria-pressed="false">Local</button>
+              <button type="button" data-mcb-filter="api" aria-pressed="false">API</button>
+            </div>
+          </div>
+
+          <svg
+            class="plot-svg"
+            data-performance-plot
+            viewBox="0 0 620 250"
+            role="img"
+            aria-label="Quality versus median latency; focus or select a model point for details"
+          ></svg>
+
+          <div class="plot-selection" data-mcb-detail hidden aria-live="polite">
+            <div>
+              <span class="plot-selection__eyebrow">INSPECT MODEL</span>
+              <strong data-mcb-selected-name>—</strong>
+            </div>
+            <span data-mcb-selected-metrics>—</span>
+          </div>
+
+          <div class="plot-legend">
+            <span><i class="legend-dot legend-dot--all"></i>Measured model</span>
+            <span><i class="legend-line"></i>Pareto frontier</span>
+          </div>
+        </div>
+
+        <div class="benchmark-highlights" aria-label="Benchmark highlights">
+          <div class="highlight">
+            <span>BEST QUALITY</span>
+            <strong data-best-quality>—</strong>
+            <small data-best-quality-model></small>
+          </div>
+          <div class="highlight highlight--accent">
+            <span>BALANCE POINT</span>
+            <strong data-balance>—</strong>
+            <small data-balance-model></small>
+          </div>
+          <div class="highlight">
+            <span>FASTEST</span>
+            <strong data-fastest>—</strong>
+            <small data-fastest-model></small>
+          </div>
+        </div>
+      </div>
+
+      <div class="evidence-takeaway" data-mcb-takeaway>
+        <span>TAKEAWAY</span>
+        <div>
+          <strong data-readout-title></strong>
+          <p data-readout></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-panel__error" data-evidence-error hidden>
+      <span class="evidence-panel__eyebrow">SOURCE UNAVAILABLE</span>
+      <h3>Published evidence could not be loaded.</h3>
+      <p>No fallback or invented performance values are shown.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+
+  const initExperimentExplorer = () => {
+    document.querySelectorAll('[data-experiment-explorer]').forEach((root) => {
+      if (!(root instanceof HTMLElement) || root.dataset.ready === 'true') return;
+      root.dataset.ready = 'true';
+
+      const tabs = Array.from(root.querySelectorAll('[data-experiment-tab]'));
+      const loading = root.querySelector('[data-evidence-loading]');
+      const empty = root.querySelector('[data-evidence-empty]');
+      const result = root.querySelector('[data-evidence-result]');
+      const error = root.querySelector('[data-evidence-error]');
+
+      let requestId = 0;
+
+      const setHidden = (node, hidden) => {
+        if (node instanceof HTMLElement) node.hidden = hidden;
+      };
+
+      const setText = (selector, value) => {
+        const node = root.querySelector(selector);
+        if (node) node.textContent = value ?? '';
+      };
+
+      const showOnly = (target) => {
+        setHidden(loading, target !== 'loading');
+        setHidden(empty, target !== 'empty');
+        setHidden(result, target !== 'result');
+        setHidden(error, target !== 'error');
+      };
+
+      const shortModel = (value) => {
+        const model = String(value || '');
+        return model
+          .replace(/^qwen3\.5-/i, 'Qwen 3.5 ')
+          .replace(/^nemotron-nano-/i, 'Nemotron ')
+          .replace(/-q4km$/i, ' Q4')
+          .replace(/-q8$/i, ' Q8')
+          .replace(/-/g, ' ')
+          .replace(/\b(\d+(?:\.\d+)?)b\b/gi, '$1B');
+      };
+
+      const formatPct = (value) => {
+        const number = Number(value);
+        return Number.isFinite(number) ? `${(number * 100).toFixed(1)}%` : '—';
+      };
+
+      const formatSeconds = (value) => {
+        const number = Number(value);
+        if (!Number.isFinite(number)) return '—';
+        if (number < 1000) return `${Math.round(number)} ms`;
+        return `${(number / 1000).toFixed(1)} s`;
+      };
+
+      const createSvg = (tag, attrs = {}) => {
+        const node = document.createElementNS(SVG_NS, tag);
+        Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value)));
+        return node;
+      };
+
+      const mcbState = {
+        points: [],
+        filter: 'all',
+        selected: null,
+      };
+
+      const focusMcbPoint = (point) => {
+        if (!point) return;
+        mcbState.selected = point.model_signature || point.model_key;
+        setText('[data-mcb-selected-name]', shortModel(point.model_key));
+        setText(
+          '[data-mcb-selected-metrics]',
+          point.qualityNumber.toFixed(1) + ' / 100 quality · ' +
+            formatSeconds(point.latencyNumber) + ' p50 · ' +
+            (point.deployment === 'api' ? 'API' : 'Local'),
+        );
+        root.querySelectorAll('[data-mcb-point]').forEach((group) => {
+          const selected = group.getAttribute('data-mcb-point') === mcbState.selected;
+          group.classList.toggle('is-selected', selected);
+          group.setAttribute('aria-pressed', selected ? 'true' : 'false');
+        });
+      };
+
+      const plotMcbOverview = (data) => {
+        const svg = root.querySelector('[data-performance-plot]');
+        if (!(svg instanceof SVGElement)) return [];
+
+        const points = Array.isArray(data?.frontier?.points)
+          ? data.frontier.points
+              .map((point) => ({
+                ...point,
+                qualityNumber: Number(point.quality),
+                latencyNumber: Number(point.latency_p50_ms),
+              }))
+              .filter(
+                (point) =>
+                  Number.isFinite(point.qualityNumber) &&
+                  Number.isFinite(point.latencyNumber) &&
+                  point.latencyNumber > 0,
+              )
+          : [];
+        mcbState.points = points;
+
+        const redraw = () => {
+          while (svg.firstChild) svg.removeChild(svg.firstChild);
+          const visible = points
+            .filter((point) => mcbState.filter === 'all' || point.deployment === mcbState.filter)
+            .sort((a, b) => a.latencyNumber - b.latencyNumber);
+          if (!visible.length) return;
+
+          const W = 620;
+          const H = 250;
+          const pad = { left: 46, right: 22, top: 16, bottom: 38 };
+          const innerW = W - pad.left - pad.right;
+          const innerH = H - pad.top - pad.bottom;
+          const minLatency = Math.min(...visible.map((point) => point.latencyNumber)) / 1.25;
+          const maxLatency = Math.max(...visible.map((point) => point.latencyNumber)) * 1.3;
+          const logMin = Math.log10(minLatency);
+          const logSpan = Math.max(0.01, Math.log10(maxLatency) - logMin);
+          const x = (value) => pad.left + (Math.log10(value) - logMin) / logSpan * innerW;
+          const y = (value) => pad.top + (100 - value) / 100 * innerH;
+
+          const grid = createSvg('g', { class: 'plot-grid' });
+          const labels = createSvg('g', { class: 'plot-axis-labels' });
+          [0, 25, 50, 75, 100].forEach((tick) => {
+            const yy = y(tick);
+            grid.appendChild(createSvg('line', {
+              x1: pad.left, y1: yy, x2: W - pad.right, y2: yy,
+            }));
+            const text = createSvg('text', { x: pad.left - 10, y: yy + 4, 'text-anchor': 'end' });
+            text.textContent = String(tick);
+            labels.appendChild(text);
+          });
+
+          [250, 500, 1000, 2000, 5000, 10000, 20000]
+            .filter((tick) => tick >= minLatency && tick <= maxLatency)
+            .forEach((tick) => {
+              const xx = x(tick);
+              grid.appendChild(createSvg('line', {
+                x1: xx, x2: xx, y1: pad.top, y2: H - pad.bottom,
+              }));
+              const text = createSvg('text', {
+                x: xx, y: H - 12, 'text-anchor': 'middle',
+              });
+              text.textContent = formatSeconds(tick);
+              labels.appendChild(text);
+            });
+          svg.appendChild(grid);
+          svg.appendChild(labels);
+
+          // The projected artifact carries the comparability-aware Pareto flags.
+          // Do not reconstruct a mixed local/API Pareto from visual positions.
+          const frontier = visible
+            .filter((point) => point.pareto_latency === true)
+            .sort((a, b) => a.latencyNumber - b.latencyNumber);
+          if (frontier.length > 1) {
+            svg.appendChild(createSvg('polyline', {
+              class: 'plot-frontier',
+              points: frontier.map((point) => x(point.latencyNumber) + ',' + y(point.qualityNumber)).join(' '),
+            }));
+          }
+
+          visible.forEach((point) => {
+            const key = point.model_signature || point.model_key;
+            const group = createSvg('g', {
+              class: 'plot-point plot-interactive',
+              role: 'button',
+              tabindex: '0',
+              'aria-pressed': 'false',
+              'aria-label': shortModel(point.model_key) + ', quality ' +
+                point.qualityNumber.toFixed(1) + '/100, p50 ' +
+                formatSeconds(point.latencyNumber) + ', ' + point.deployment,
+              'data-mcb-point': key,
+            });
+            const isApi = point.deployment === 'api';
+            const circle = createSvg('circle', {
+              cx: x(point.latencyNumber),
+              cy: y(point.qualityNumber),
+              r: point.pareto_latency ? 7 : 6,
+              class: (isApi ? 'is-api' : 'is-local') +
+                (point.pareto_latency ? ' is-frontier' : ''),
+            });
+            const hit = createSvg('circle', {
+              cx: x(point.latencyNumber),
+              cy: y(point.qualityNumber),
+              r: 16,
+              class: 'plot-hit-area',
+            });
+            const title = createSvg('title');
+            title.textContent = group.getAttribute('aria-label') || '';
+            group.appendChild(circle);
+            group.appendChild(hit);
+            group.appendChild(title);
+            group.addEventListener('click', () => focusMcbPoint(point));
+            group.addEventListener('focus', () => focusMcbPoint(point));
+            group.addEventListener('mouseenter', () => focusMcbPoint(point));
+            group.addEventListener('keydown', (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                focusMcbPoint(point);
+              }
+            });
+            svg.appendChild(group);
+          });
+
+          const selectedPoint = visible.find(
+            (point) => (point.model_signature || point.model_key) === mcbState.selected,
+          );
+          focusMcbPoint(selectedPoint || [...visible].sort(
+            (a, b) => b.qualityNumber - a.qualityNumber,
+          )[0]);
+        };
+
+        const toolbar = root.querySelector('[data-mcb-toolbar]');
+        setHidden(toolbar, false);
+        setHidden(root.querySelector('[data-mcb-detail]'), false);
+        root.querySelectorAll('[data-mcb-filter]').forEach((button) => {
+          button.setAttribute('aria-pressed',
+            button.getAttribute('data-mcb-filter') === mcbState.filter ? 'true' : 'false');
+        });
+        mcbState.redraw = redraw;
+        redraw();
+        return points;
+      };
+
+      root.querySelectorAll('[data-mcb-filter]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const filter = button.getAttribute('data-mcb-filter');
+          if (!['all', 'local', 'api'].includes(filter)) return;
+          mcbState.filter = filter;
+          root.querySelectorAll('[data-mcb-filter]').forEach((option) => {
+            option.setAttribute('aria-pressed',
+              option.getAttribute('data-mcb-filter') === filter ? 'true' : 'false');
+          });
+          if (typeof mcbState.redraw === 'function') mcbState.redraw();
+        });
+      });
+
+      const renderMcbOverview = (data, tab) => {
+        setHidden(root.querySelector('[data-jev-summary]'), true);
+        setHidden(root.querySelector('[data-mcb-scope]'), false);
+        setHidden(root.querySelector('[data-mcb-story]'), false);
+        setHidden(root.querySelector('[data-mcb-takeaway]'), false);
+        setHidden(root.querySelector('[data-jev-toolbar]'), true);
+        setHidden(root.querySelector('[data-jev-detail]'), true);
+        setHidden(root.querySelector('[data-jev-evidence-note]'), true);
+        const points = plotMcbOverview(data);
+        if (!points.length) throw new Error('No published MCB frontier points');
+
+        const models = Array.isArray(data?.models) ? data.models : [];
+        const capabilities = Array.isArray(data?.capabilities) ? data.capabilities : [];
+        const cells = Array.isArray(data?.cells) ? data.cells : [];
+
+        const overallBest = [...points].sort(
+          (a, b) => Number(b.quality) - Number(a.quality),
+        )[0];
+
+        const localPoints = points.filter((point) => point.deployment === 'local');
+        const bestLocal = [...localPoints].sort(
+          (a, b) => Number(b.quality) - Number(a.quality),
+        )[0];
+        const fastestLocal = [...localPoints].sort(
+          (a, b) => Number(a.latency_p50_ms) - Number(b.latency_p50_ms),
+        )[0];
+
+        setText('[data-result-title]', tab.dataset.title || 'Model Capability Benchmark');
+        setText('[data-result-question]', tab.dataset.question || '');
+        setText('[data-model-count]', String(models.length || points.length));
+        setText('[data-request-count]', String(cells.length || '—'));
+        setText('[data-count-label]', 'published cells');
+        setText('[data-dataset]', String(capabilities.length || '—'));
+        setText('[data-scope-label]', 'capabilities');
+        setText('[data-runtime]', '2');
+        setText('[data-runtime-label]', 'execution modes');
+
+        setText('[data-best-quality]', `${Number(overallBest.quality).toFixed(1)}`);
+        setText('[data-best-quality-model]', shortModel(overallBest.model_key));
+
+        setText(
+          '[data-balance]',
+          bestLocal
+            ? `${Number(bestLocal.quality).toFixed(1)} · ${formatSeconds(bestLocal.latency_p50_ms)}`
+            : '—',
+        );
+        setText(
+          '[data-balance-model]',
+          bestLocal ? `${shortModel(bestLocal.model_key)} · best local quality` : '',
+        );
+
+        setText(
+          '[data-fastest]',
+          fastestLocal ? formatSeconds(fastestLocal.latency_p50_ms) : '—',
+        );
+        setText(
+          '[data-fastest-model]',
+          fastestLocal
+            ? `${shortModel(fastestLocal.model_key)} · ${Number(fastestLocal.quality).toFixed(1)} quality`
+            : '',
+        );
+
+        if (bestLocal && overallBest) {
+          const qualityGap = Number(overallBest.quality) - Number(bestLocal.quality);
+          const speedRatio =
+            Number(bestLocal.latency_p50_ms) / Number(overallBest.latency_p50_ms);
+
+          setText(
+            '[data-readout-title]',
+            `${shortModel(bestLocal.model_key)} is the strongest local point in the published snapshot.`,
+          );
+          setText(
+            '[data-readout]',
+            `${Number(bestLocal.quality).toFixed(1)} aggregate quality at ${formatSeconds(bestLocal.latency_p50_ms)} p50. The top overall point is ${shortModel(overallBest.model_key)} at ${Number(overallBest.quality).toFixed(1)}, a ${qualityGap.toFixed(1)}-point gap${Number.isFinite(speedRatio) ? ` while the local point is ${speedRatio.toFixed(1)}× slower` : ''}.`,
+          );
+        }
+
+        const source = root.querySelector('[data-result-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        }
+
+        const heading = root.querySelector('.plot-heading__eyebrow');
+        if (heading) heading.textContent = 'MODEL CAPABILITY × LATENCY';
+
+        const plotTitle = root.querySelector('.plot-heading strong');
+        if (plotTitle) plotTitle.textContent = 'Model performance map';
+
+        const plotNote = root.querySelector('.plot-heading__note');
+        if (plotNote) plotNote.textContent = 'Quality / 100 · Log-scale p50';
+
+        const legend = root.querySelector('.plot-legend');
+        if (legend) {
+          legend.innerHTML =
+            '<span><i class="legend-dot legend-dot--local"></i>Local</span><span><i class="legend-dot legend-dot--api"></i>API</span><span>Different runtime environments</span>';
+        }
+
+        const highlightLabels = root.querySelectorAll('.highlight > span');
+        if (highlightLabels[0]) highlightLabels[0].textContent = 'BEST OVERALL';
+        if (highlightLabels[1]) highlightLabels[1].textContent = 'BEST LOCAL';
+        if (highlightLabels[2]) highlightLabels[2].textContent = 'FASTEST LOCAL';
+      };
+
+      const renderJevRouting = (data, tab) => {
+        if (
+          data?.schema_version !== 1 ||
+          data?.benchmark !== 'jev-vs-llm' ||
+          data?.publication?.restricted_jev_typesafe_clm_metrics_included !== false ||
+          !Array.isArray(data?.experiments)
+        ) {
+          throw new Error('Invalid or unreviewed Jev public evidence manifest');
+        }
+        const rows = Array.isArray(data?.routing?.models) ? data.routing.models : [];
+        const validRows = rows
+          .map((row) => ({
+            ...row,
+            accuracyValue: Number(row.accuracy),
+            latencyValue: Number(row.latency_p50_ms),
+            cases: Number(row.requests),
+          }))
+          .filter((row) =>
+            Number.isFinite(row.accuracyValue) &&
+            Number.isFinite(row.latencyValue) && row.latencyValue > 0 &&
+            Number.isFinite(row.cases) && row.cases > 0,
+          );
+        if (!validRows.length) throw new Error('No comparable routing evidence');
+
+        // Equal dataset size is necessary before presenting model rankings.
+        const coverage = new Map();
+        validRows.forEach((row) =>
+          coverage.set(row.cases, (coverage.get(row.cases) || 0) + 1),
+        );
+        const commonCaseCount = [...coverage.keys()].sort(
+          (a, b) => coverage.get(b) - coverage.get(a) || b - a,
+        )[0];
+        const comparable = validRows
+          .filter((row) => row.cases === commonCaseCount)
+          .sort((a, b) => b.accuracyValue - a.accuracyValue);
+        const partial = validRows.filter((row) => row.cases !== commonCaseCount);
+        if (comparable.length < 2) throw new Error('Insufficient matched routing runs');
+
+        const bestQuality = comparable[0];
+        // Compare the two independently observable endpoints on matched cases:
+        // highest accuracy versus lowest median latency. No subjective threshold.
+        const alternative = [...comparable]
+          .sort((a, b) => a.latencyValue - b.latencyValue)[0];
+        const speedup = bestQuality.latencyValue / alternative.latencyValue;
+        const accuracyLoss = (bestQuality.accuracyValue - alternative.accuracyValue) * 100;
+        const sameModel = bestQuality.model === alternative.model;
+
+        const experimentItems = data.experiments;
+        const publishedExperiments = experimentItems.filter(
+          (item) => item.status === 'published_subset' || item.status === 'published',
+        );
+        const providers = Array.isArray(data?.routing?.providers)
+          ? data.routing.providers
+          : [...new Set(validRows.map((row) => String(row.provider || 'unknown')))];
+        const isDirectComparison =
+          data.publication.comparison_status === 'complete_provider_comparison';
+        setText(
+          '[data-result-title]',
+          isDirectComparison ? 'Jev vs LLM · Decision Benchmarks' : 'Routing · Published local baselines',
+        );
+        setText(
+          '[data-result-question]',
+          isDirectComparison
+            ? 'Published head-to-head decision model and LLM evidence.'
+            : 'The suite contains five experiment types; only a local routing subset is public.',
+        );
+        setText(
+          '[data-jev-published-scope]',
+          isDirectComparison ? 'Direct Jev vs LLM comparison published' : 'Jev vs LLM head-to-head not yet published',
+        );
+        setText(
+          '[data-jev-experiment-count]',
+          publishedExperiments.length + '/' + experimentItems.length + ' experiments',
+        );
+        setText(
+          '[data-jev-scope-note]',
+          isDirectComparison
+            ? 'A reviewed and authorized public comparison is available.'
+            : 'Public figures currently cover ' + providers.join(', ') +
+                ' routing only. Jev/TypeSafe/CLM numerical results are excluded pending publication clearance.',
+        );
+
+        const coverageStrip = root.querySelector('[data-jev-stage-coverage]');
+        if (coverageStrip instanceof HTMLElement) {
+          coverageStrip.replaceChildren();
+          const names = {
+            routing: 'Routing', calibration: 'Calibration', scaling: 'Scaling',
+            workflow: 'Workflow', agent: 'Hybrid agent',
+          };
+          experimentItems.forEach((item) => {
+            const published = item.status === 'published_subset' || item.status === 'published';
+            const node = document.createElement('span');
+            node.className = 'jev-stage-coverage__item' +
+              (published ? ' is-published' : '');
+            node.textContent = (published ? '● ' : '○ ') +
+              (names[item.id] || item.id) +
+              (published ? ' · subset' : ' · unpublished');
+            coverageStrip.appendChild(node);
+          });
+        }
+        setText('[data-model-count]', String(validRows.length));
+        setText('[data-request-count]', String(
+          validRows.reduce((sum, row) => sum + row.cases, 0),
+        ));
+        setText('[data-count-label]', 'model-requests');
+        setText('[data-dataset]', String(commonCaseCount));
+        setText('[data-scope-label]', 'requests per grouped model');
+        setText('[data-runtime]', 'Local');
+        setText('[data-runtime-label]', 'execution');
+
+        setText(
+          '[data-jev-takeaway-headline]',
+          sameModel
+            ? 'Best accuracy and speed in one model.'
+            : speedup.toFixed(1) + '× faster.',
+        );
+        setText(
+          '[data-jev-takeaway-description]',
+          sameModel
+            ? 'In this published comparison it has both the highest accuracy and the shortest median response time.'
+            : shortModel(alternative.model) + ' vs ' + shortModel(bestQuality.model) +
+                ': ' + accuracyLoss.toFixed(1) +
+                ' fewer accuracy points with a much shorter median response time.',
+        );
+        setText(
+          '[data-jev-quality-gap]',
+          sameModel ? 'No trade-off' : '−' + accuracyLoss.toFixed(1) + ' pts',
+        );
+        setText(
+          '[data-jev-speed-comparison]',
+          formatSeconds(alternative.latencyValue) + ' vs ' +
+            formatSeconds(bestQuality.latencyValue),
+        );
+        setText(
+          '[data-jev-coverage]',
+          comparable.length + ' models · ' + commonCaseCount + ' requests each',
+        );
+        setText(
+          '[data-jev-method-note]',
+          'Grouping uses equal request counts, not verified identical test cases. ' +
+          'Results are descriptive local baselines, not a controlled Jev-vs-LLM comparison.',
+        );
+
+        const container = root.querySelector('[data-jev-rows]');
+        if (!(container instanceof HTMLElement)) throw new Error('Missing JEV comparison list');
+        container.replaceChildren();
+
+        const make = (tag, cls, value) => {
+          const node = document.createElement(tag);
+          if (cls) node.className = cls;
+          if (value != null) node.textContent = String(value);
+          return node;
+        };
+        comparable.forEach((row) => {
+          const isQuality = row.model === bestQuality.model;
+          const isAlternative = !sameModel && row.model === alternative.model;
+          const item = make('div', 'jev-model-row' + (isAlternative ? ' is-alternative' : ''), null);
+          item.setAttribute('role', 'listitem');
+
+          const nameCell = make('div', 'jev-model-row__name', null);
+          nameCell.appendChild(make('strong', '', shortModel(row.model)));
+          if (isQuality) nameCell.appendChild(make('small', '', 'Most accurate'));
+          else if (isAlternative) nameCell.appendChild(make('small', '', 'Fastest response'));
+
+          const accuracyCell = make('div', 'jev-model-row__accuracy', null);
+          const accuracyTop = make('div', 'jev-model-row__accuracy-head', null);
+          accuracyTop.appendChild(make('strong', '', formatPct(row.accuracyValue)));
+          accuracyCell.appendChild(accuracyTop);
+          accuracyCell.appendChild(make('small', 'jev-model-row__mobile-label', 'Accuracy'));
+          const bar = make('div', 'jev-model-row__track', null);
+          bar.setAttribute('aria-hidden', 'true');
+          const fill = make('span', 'jev-model-row__fill', null);
+          fill.style.width = Math.max(0, Math.min(100, row.accuracyValue * 100)).toFixed(1) + '%';
+          bar.appendChild(fill);
+          accuracyCell.appendChild(bar);
+
+          const latencyCell = make('div', 'jev-model-row__latency', null);
+          latencyCell.appendChild(make('strong', '', formatSeconds(row.latencyValue)));
+          latencyCell.appendChild(make('small', '', 'Median response'));
+          item.appendChild(nameCell);
+          item.appendChild(accuracyCell);
+          item.appendChild(latencyCell);
+          container.appendChild(item);
+        });
+
+        const partialNotice = root.querySelector('[data-jev-partial]');
+        if (partial.length && partialNotice instanceof HTMLElement) {
+          partialNotice.replaceChildren();
+          const label = make('strong', '', 'Separate shorter run: ');
+          partialNotice.appendChild(label);
+          partialNotice.appendChild(document.createTextNode(
+            partial.map((row) =>
+              shortModel(row.model) + ' · ' + row.cases + ' cases · ' +
+              formatPct(row.accuracyValue) + ' accuracy · ' +
+              formatSeconds(row.latencyValue) + ' p50',
+            ).join('; ') + '. Excluded from the ranking.',
+          ));
+        }
+        setHidden(partialNotice, !partial.length);
+
+        const source = root.querySelector('[data-result-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        }
+
+        setHidden(root.querySelector('[data-jev-summary]'), false);
+        setHidden(root.querySelector('[data-mcb-scope]'), true);
+        setHidden(root.querySelector('[data-mcb-story]'), true);
+        setHidden(root.querySelector('[data-mcb-takeaway]'), true);
+      };
+
+      const selectTab = async (tab) => {
+        tabs.forEach((candidate) => {
+          const active = candidate === tab;
+          candidate.classList.toggle('is-active', active);
+          candidate.setAttribute('aria-selected', active ? 'true' : 'false');
+          candidate.setAttribute('tabindex', active ? '0' : '-1');
+        });
+
+        const currentRequest = ++requestId;
+        const resultUrl = tab.dataset.resultUrl || '';
+        if (!resultUrl) {
+          setText('[data-empty-title]', tab.dataset.title || 'Experiment');
+          setText('[data-empty-question]', tab.dataset.question || '');
+          showOnly('empty');
+          return;
+        }
+
+        showOnly('loading');
+
+        try {
+          const response = await fetch(resultUrl, { cache: 'no-store' });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const data = await response.json();
+          if (currentRequest !== requestId) return;
+
+          if (tab.dataset.resultKind === 'jev-public-summary') renderJevRouting(data, tab);
+          else if (tab.dataset.resultKind === 'mcb-overview') renderMcbOverview(data, tab);
+          else throw new Error('Unsupported result adapter');
+
+          showOnly('result');
+        } catch (cause) {
+          if (currentRequest !== requestId) return;
+          console.warn('Experiment evidence unavailable', cause);
+          showOnly('error');
+        }
+      };
+
+      tabs.forEach((tab, index) => {
+        if (!(tab instanceof HTMLButtonElement)) return;
+
+        tab.addEventListener('click', () => selectTab(tab));
+        tab.addEventListener('keydown', (event) => {
+          if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+          event.preventDefault();
+          const delta = event.key === 'ArrowRight' ? 1 : -1;
+          const nextIndex = (index + delta + tabs.length) % tabs.length;
+          const next = tabs[nextIndex];
+          if (next instanceof HTMLButtonElement) {
+            next.focus();
+            next.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+            selectTab(next);
+          }
+        });
+      });
+
+      const initial =
+        tabs.find((tab) => tab instanceof HTMLButtonElement && tab.getAttribute('aria-selected') === 'true') ??
+        tabs.find((tab) => tab instanceof HTMLButtonElement && Boolean(tab.dataset.resultUrl)) ??
+        tabs[0];
+      if (initial instanceof HTMLButtonElement) selectTab(initial);
+    });
+  };
+
+  initExperimentExplorer();
+  document.addEventListener('astro:page-load', initExperimentExplorer);
+</script>
+
+<style>
+
+  /* Homepage-sized routing comparison: the numbers are the visual, not a scatter plot. */
+  .jev-summary {
+    margin-top: clamp(22px, 3vw, 30px);
+  }
+
+  .jev-eyebrow {
+    display: block;
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 780;
+    letter-spacing: 0.07em;
+  }
+
+  .jev-coverage-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 15px 18px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+  }
+
+  .jev-coverage-banner strong {
+    display: block;
+    margin-top: 5px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    font-weight: 750;
+  }
+
+  .jev-coverage-banner p {
+    max-width: 790px;
+    margin: 5px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  .jev-stage-coverage {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .jev-stage-coverage :global(.jev-stage-coverage__item) {
+    padding: 4px 8px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+    color: var(--ink-muted);
+    font-size: 0.7rem;
+  }
+
+  .jev-stage-coverage :global(.jev-stage-coverage__item.is-published) {
+    border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border-subtle));
+    color: var(--accent-blue-dark);
+    background: color-mix(in srgb, var(--accent-blue) 6%, var(--surface-card));
+  }
+
+  .jev-coverage-banner__count {
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 620px) {
+    .jev-coverage-banner {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  .jev-tradeoff {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(230px, 0.72fr);
+    gap: clamp(18px, 3vw, 36px);
+    align-items: center;
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--accent-violet) 11%, transparent), transparent 55%),
+      linear-gradient(110deg, color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card)), var(--surface-card));
+  }
+
+  .jev-tradeoff__main > strong {
+    display: block;
+    margin-top: 10px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.7vw, 2.15rem);
+    font-weight: 830;
+    line-height: 1.13;
+    letter-spacing: -0.045em;
+  }
+
+  .jev-tradeoff__main p {
+    max-width: 610px;
+    margin: 10px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.94rem;
+    line-height: 1.58;
+  }
+
+  .jev-tradeoff__numbers {
+    display: grid;
+    gap: 14px;
+    padding-left: clamp(12px, 2vw, 24px);
+    border-left: 1px solid var(--border-medium);
+  }
+
+  .jev-tradeoff__numbers > div {
+    display: grid;
+    gap: 4px;
+  }
+
+  .jev-tradeoff__numbers span {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .jev-tradeoff__numbers strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+
+  .jev-ranking {
+    margin-top: clamp(22px, 3vw, 30px);
+  }
+
+  .jev-ranking__header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .jev-ranking__header h4 {
+    margin: 5px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.12rem, 1.8vw, 1.4rem);
+    letter-spacing: -0.03em;
+  }
+
+  .jev-ranking__header > span {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .jev-ranking__columns,
+  :global(.jev-model-row) {
+    display: grid;
+    grid-template-columns: minmax(170px, 1.1fr) minmax(180px, 1.45fr) minmax(120px, 0.65fr);
+    align-items: center;
+    gap: 20px;
+  }
+
+  .jev-ranking__columns {
+    padding: 0 16px 10px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    font-weight: 720;
+  }
+
+  .jev-ranking__columns > span:last-child {
+    text-align: right;
+  }
+
+  .jev-ranking__columns small {
+    display: block;
+    color: var(--ink-subtle);
+    font-size: 0.71rem;
+    font-weight: 500;
+  }
+
+  .jev-ranking__rows {
+    display: grid;
+    gap: 7px;
+  }
+
+  :global(.jev-model-row) {
+    padding: 14px 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--surface-card) 90%, var(--surface-subtle));
+  }
+
+  :global(.jev-model-row.is-alternative) {
+    border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border-subtle));
+    background: color-mix(in srgb, var(--accent-blue) 5%, var(--surface-card));
+  }
+
+  :global(.jev-model-row__name strong),
+  :global(.jev-model-row__latency strong),
+  :global(.jev-model-row__accuracy strong) {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.94rem;
+    font-weight: 780;
+    line-height: 1.3;
+  }
+
+  :global(.jev-model-row__name small),
+  :global(.jev-model-row__latency small) {
+    display: block;
+    margin-top: 3px;
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+    line-height: 1.3;
+  }
+
+  :global(.jev-model-row__accuracy-head) {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+  }
+
+  :global(.jev-model-row__track) {
+    height: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-blue) 11%, var(--surface-subtle));
+  }
+
+  :global(.jev-model-row__fill) {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--accent-blue), color-mix(in srgb, var(--accent-blue) 70%, var(--accent-violet)));
+  }
+
+  :global(.jev-model-row__latency) {
+    text-align: right;
+  }
+  
+  .jev-ranking__note:empty {
+    display: none;
+  }
+
+  :global(.jev-model-row__mobile-label) {
+    display: none;
+    margin: 2px 0 7px;
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+  }
+
+  .jev-ranking__note {
+    margin-top: 14px;
+    padding: 12px 15px;
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  .jev-ranking__note :global(strong) {
+    color: var(--ink-display);
+  }
+
+  .jev-method-note {
+    margin: 16px 0 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 790px) {
+    .jev-tradeoff {
+      grid-template-columns: 1fr;
+    }
+
+    .jev-tradeoff__numbers {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+      padding: 16px 0 0;
+    }
+
+    .jev-ranking__columns,
+    :global(.jev-model-row) {
+      grid-template-columns: minmax(120px, 1.2fr) minmax(120px, 1fr) minmax(76px, 0.6fr);
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .jev-ranking__columns {
+      display: none;
+    }
+
+    :global(.jev-model-row) {
+      grid-template-columns: minmax(0, 1fr) minmax(86px, 0.55fr);
+      gap: 12px;
+      padding: 14px;
+    }
+
+    :global(.jev-model-row__name) {
+      grid-column: 1 / -1;
+    }
+
+    :global(.jev-model-row__accuracy) {
+      grid-column: 1;
+    }
+
+    :global(.jev-model-row__latency) {
+      grid-column: 2;
+    }
+
+    :global(.jev-model-row__mobile-label) {
+      display: block;
+    }
+
+    .jev-tradeoff__numbers {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+
+  .experiment-explorer { min-width: 0; }
+
+  .experiment-selector-wrap {
+    position: relative;
+    margin-bottom: 14px;
+  }
+
+  .experiment-selector-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 34px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--journey-surface-tint, var(--surface-subtle)));
+    pointer-events: none;
+  }
+
+  .experiment-selector {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px 36px 6px 2px;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+
+  .experiment-selector::-webkit-scrollbar { display: none; }
+
+  .experiment-tab {
+    flex: 0 0 auto;
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 13px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--surface-card) 82%, var(--surface-subtle));
+    color: var(--ink-muted);
+    cursor: pointer;
+    scroll-snap-align: start;
+    transition:
+      border-color var(--duration-fast) ease,
+      background-color var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
+  }
+
+  .experiment-tab:hover,
+  .experiment-tab:focus-visible {
+    border-color: color-mix(in srgb, var(--accent-blue) 36%, var(--border-medium));
+    color: var(--ink-display);
+  }
+
+  .experiment-tab.is-active {
+    border-color: color-mix(in srgb, var(--accent-blue) 52%, var(--border-medium));
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card)), var(--surface-card));
+    color: var(--ink-display);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--accent-blue) 7%, transparent);
+  }
+
+  .experiment-tab__title {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 720;
+    white-space: nowrap;
+  }
+
+  .status-dot,
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--ink-subtle);
+  }
+
+  .status-dot--live,
+  .live-dot {
+    background: var(--accent-blue);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-blue) 10%, transparent);
+  }
+
+  .evidence-panel {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 24%, var(--border-medium));
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(circle at 92% 3%, color-mix(in srgb, var(--accent-blue) 13%, transparent), transparent 31%),
+      radial-gradient(circle at 5% 100%, color-mix(in srgb, var(--accent-violet) 7%, transparent), transparent 34%),
+      linear-gradient(145deg, color-mix(in srgb, var(--surface-card) 96%, var(--accent-blue) 4%), var(--surface-card));
+    box-shadow:
+      0 24px 60px rgba(8, 19, 51, 0.07),
+      inset 0 1px 0 color-mix(in srgb, white 64%, transparent);
+  }
+
+  [hidden] { display: none !important; }
+
+  .evidence-panel__loading,
+  .evidence-panel__error {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(22px, 3vw, 32px);
+  }
+
+  .evidence-panel__empty {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+    padding: 22px 24px;
+  }
+
+  .evidence-panel__empty-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card));
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .evidence-panel__result {
+    position: relative;
+    z-index: 1;
+    padding: clamp(24px, 3.2vw, 38px);
+  }
+
+  .evidence-panel__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.055em;
+  }
+
+  .evidence-panel__empty h3,
+  .evidence-panel__error h3 {
+    margin: 6px 0 4px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+  }
+
+  .evidence-panel__empty p,
+  .evidence-panel__error p {
+    max-width: 680px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  .evidence-panel__empty-note {
+    max-width: 640px !important;
+    margin-top: 8px !important;
+    color: var(--ink-subtle) !important;
+  }
+
+  .evidence-panel__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .evidence-panel__header h3 {
+    margin: 10px 0 5px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.55rem, 2.5vw, 2.15rem);
+    font-weight: 840;
+    letter-spacing: -0.045em;
+    line-height: 1.06;
+  }
+
+  .evidence-panel__header p {
+    max-width: 720px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .source-link {
+    flex: 0 0 auto;
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 760;
+    text-decoration: none;
+  }
+
+  .run-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px 18px;
+    margin-top: 18px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .run-summary span {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .run-summary strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-weight: 760;
+  }
+
+  .benchmark-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(200px, 0.72fr);
+    gap: clamp(20px, 3vw, 34px);
+    align-items: stretch;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .performance-plot {
+    min-width: 0;
+    padding: 18px 18px 12px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 16%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card)), var(--surface-card));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 60%, transparent);
+  }
+
+  .plot-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .plot-heading__eyebrow,
+  .highlight > span,
+  .evidence-takeaway > span {
+    display: block;
+    color: var(--ink-subtle);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 760;
+    letter-spacing: 0.045em;
+  }
+
+  .plot-heading strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1rem;
+  }
+
+  .plot-heading__note {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .plot-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .plot-filters {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-subtle);
+  }
+
+  .plot-filters button {
+    min-height: 32px;
+    padding: 5px 11px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .plot-filters button[aria-pressed='true'] {
+    background: var(--surface-card);
+    color: var(--accent-blue-dark);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .plot-svg :global(.plot-interactive) {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .plot-svg :global(.plot-interactive .plot-hit-area) {
+    fill: transparent;
+    stroke: none;
+  }
+
+  .plot-svg :global(.plot-interactive.is-selected circle:not(.plot-hit-area)),
+  .plot-svg :global(.plot-interactive:focus-visible circle:not(.plot-hit-area)) {
+    stroke: var(--ink-display);
+    stroke-width: 3.2px;
+    filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent-blue) 36%, transparent));
+  }
+
+  .plot-selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-top: 6px;
+    padding: 11px 12px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card));
+  }
+
+  .plot-selection > div {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+  }
+
+  .plot-selection__eyebrow {
+    color: var(--ink-subtle);
+    font-size: 0.65rem;
+    font-weight: 760;
+    letter-spacing: 0.06em;
+  }
+
+  .plot-selection strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.84rem;
+  }
+
+  .plot-selection > span {
+    flex: 0 0 auto;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    text-align: right;
+  }
+
+  @media (max-width: 600px) {
+    .plot-selection {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .plot-selection > span { text-align: left; }
+  }
+
+  .plot-svg {
+    width: 100%;
+    height: auto;
+    min-height: 210px;
+    margin-top: 6px;
+    overflow: visible;
+  }
+
+  .plot-svg :global(.plot-grid line) {
+    stroke: color-mix(in srgb, var(--ink-subtle) 16%, transparent);
+    stroke-width: 1;
+  }
+
+  .plot-svg :global(.plot-axis-labels text) {
+    fill: var(--ink-subtle);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+
+  .plot-svg :global(.plot-frontier) {
+    fill: none;
+    stroke: var(--accent-blue);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--accent-blue) 18%, transparent));
+  }
+
+  .plot-svg :global(.plot-point circle) {
+    fill: color-mix(in srgb, var(--accent-violet) 62%, var(--accent-blue));
+    stroke: var(--surface-card);
+    stroke-width: 3;
+  }
+
+  .plot-svg :global(.plot-point circle.is-local) {
+    fill: var(--accent-blue);
+  }
+
+  .plot-svg :global(.plot-point circle.is-api) {
+    fill: var(--accent-violet);
+  }
+
+  .plot-svg :global(.plot-point circle.is-frontier) {
+    stroke-width: 3.5;
+    filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent-blue) 26%, transparent));
+  }
+
+  .plot-svg :global(.plot-point text) {
+    fill: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .plot-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .plot-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent-violet) 62%, var(--accent-blue));
+  }
+
+  .legend-dot--local {
+    background: var(--accent-blue);
+  }
+
+  .legend-dot--api {
+    background: var(--accent-violet);
+  }
+
+  .legend-dot--pilot {
+    border: 2px solid var(--accent-violet);
+    background: var(--surface-card);
+  }
+
+  .plot-svg :global(.plot-point circle.is-pilot) {
+    fill: var(--surface-card);
+    stroke: var(--accent-violet);
+    stroke-width: 3;
+  }
+
+  .plot-evidence-note {
+    margin: 6px 0 10px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.45;
+  }
+
+  .legend-line {
+    width: 18px;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: var(--accent-blue);
+  }
+
+  .benchmark-highlights {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    border-left: 1px solid var(--border-subtle);
+    padding-left: clamp(18px, 2.4vw, 26px);
+  }
+
+  .highlight {
+    flex: 1 1 0;
+    padding: 14px 0;
+  }
+
+  .highlight + .highlight {
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .highlight--accent {
+    position: relative;
+  }
+
+  .highlight--accent::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 15px;
+    bottom: 15px;
+    width: 3px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(180deg, var(--accent-blue), var(--accent-violet));
+  }
+
+  .highlight strong {
+    display: block;
+    margin-top: 6px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    font-weight: 830;
+    letter-spacing: -0.04em;
+  }
+
+  .highlight small {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+
+  .evidence-takeaway {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+    margin-top: 24px;
+    padding: 18px 20px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 13%, var(--border-subtle));
+    border-radius: var(--radius-md);
+    background:
+      linear-gradient(100deg, color-mix(in srgb, var(--accent-blue) 7%, var(--surface-card)), color-mix(in srgb, var(--accent-violet) 3%, var(--surface-card)));
+  }
+
+  .evidence-takeaway strong {
+    display: block;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 780;
+    line-height: 1.4;
+  }
+
+  .evidence-takeaway p {
+    max-width: 760px;
+    margin: 4px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  html[data-theme='dark'] .evidence-panel {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+  }
+
+  @media (max-width: 900px) {
+    .benchmark-story {
+      grid-template-columns: 1fr;
+    }
+
+    .benchmark-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+      padding: 12px 0 0;
+    }
+
+    .highlight {
+      padding: 12px 14px;
+    }
+
+    .highlight + .highlight {
+      border-top: 0;
+      border-left: 1px solid var(--border-subtle);
+    }
+
+    .highlight--accent::before {
+      display: none;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .evidence-panel__header {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .source-link { min-height: auto; }
+
+    .evidence-takeaway {
+      grid-template-columns: 1fr;
+      gap: 7px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .benchmark-highlights {
+      grid-template-columns: 1fr;
+    }
+
+    .highlight + .highlight {
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .plot-heading {
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .plot-svg {
+      min-height: 180px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .experiment-tab { transition: none; }
+  }
+</style>

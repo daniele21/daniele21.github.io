@@ -1,8 +1,8 @@
 ---
-/** Plane 02: Architecture & Infrastructure / BUILD. The graphic is managed independently. */
+/** Plane 02: reusable infrastructure / BUILD. */
 import { landingData } from '../../content/locales/en/landing';
 import PlaneTemplate from './PlaneTemplate.astro';
-import EcosystemDiagram from './EcosystemDiagram.astro';
+import BuildSystemsShowcase from './BuildSystemsShowcase.astro';
 
 const { buildStage } = landingData;
 ---
@@ -17,7 +17,7 @@ const { buildStage } = landingData;
   intro={buildStage.intro}
   handoff={buildStage.handoff}
   nextLabel="TEST"
-  visualLabel="Local AI Execution Layer Ecosystem Diagram"
+  visualLabel="Reusable AI infrastructure systems"
 >
-  <EcosystemDiagram />
+  <BuildSystemsShowcase />
 </PlaneTemplate>

@@ -16,8 +16,8 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
   side="left"
   surface="subtle"
   kicker=""
-  title="Does it work in a real product?"
-  intro="Infrastructure only matters when a real application can depend on it."
+  title="Does it survive a real product?"
+  intro="Reusable infrastructure only matters when a real product can depend on it under real privacy, UX and integration constraints."
   handoff={testStage.handoff}
   nextLabel="MEASURE"
   visualLabel="Applications used as empirical proving grounds"
@@ -26,6 +26,7 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
     {testStage.applications.map((app) => (
       <ProjectProofCard
         variant="compact"
+        tag={app.tag}
         title={app.name}
         description={app.question}
         href={resolveHref(app.href)}
@@ -36,6 +37,7 @@ const resolveHref = (href: string) => `${baseUrl}/${href.replace(/^\//, '')}`;
         tone={app.colorClass as 'blue' | 'green' | 'purple' | 'red'}
         features={app.features}
         ctaLabel={`See the proof`}
+        whatItTests={app.whatItTests}
       />
     ))}
   </PlaneCardGrid>
