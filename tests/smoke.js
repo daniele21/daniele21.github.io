@@ -102,6 +102,25 @@ for (const sourcePath of planeConsumers) {
 }
 
 const evidenceStageSource = fs.readFileSync(path.resolve('src/components/landing/EvidenceStage.astro'), 'utf-8');
+const explorerSource = fs.readFileSync(path.resolve('src/components/landing/ExperimentResultsExplorer.astro'), 'utf-8');
+for (const fragment of [
+  'data-jev-summary',
+  'data-jev-rows',
+  'data-jev-quality-gap',
+  'data-jev-partial',
+  'data-mcb-story',
+  'data-mcb-scope',
+]) {
+  if (!explorerSource.includes(fragment)) {
+    console.error(`❌ Experiment explorer is missing the JEV/MCB progressive disclosure contract: ${fragment}`);
+    errors++;
+  }
+}
+if (explorerSource.includes('const plotRouting =')) {
+  console.error('❌ JEV should not render the technical scatter chart on the homepage.');
+  errors++;
+}
+
 for (const fragment of ['method-stage evidence-stage', '<StageRail number={4}', '<ExperimentResultsExplorer', 'tracks={experiments.tracks || []}']) {
   if (!evidenceStageSource.includes(fragment)) {
     console.error(`❌ EvidenceStage is missing its dedicated Measure-stage contract fragment: ${fragment}`);
