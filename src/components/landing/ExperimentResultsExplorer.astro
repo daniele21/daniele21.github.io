@@ -121,7 +121,7 @@ const selectorLabelFor = (track: Track) => {
         <div class="jev-ranking">
           <div class="jev-ranking__header">
             <div>
-              <span class="jev-eyebrow">SAME TEST, FAIR COMPARISON</span>
+              <span class="jev-eyebrow">ROUTING RESULTS · MATCHED RUN SIZE</span>
               <h4>How the models compare</h4>
             </div>
             <span data-jev-coverage>—</span>
@@ -134,7 +134,7 @@ const selectorLabelFor = (track: Track) => {
           <div class="jev-ranking__rows" data-jev-rows role="list"></div>
           <div class="jev-ranking__note" data-jev-partial hidden></div>
         </div>
-        <p class="jev-method-note">Accuracy is measured on the same routing cases. Latency is the median response time for each model. A faster model is not necessarily suitable for every use case.</p>
+        <p class="jev-method-note">The main ranking compares runs with 77 requests per model. The shorter run stays separate. Response time is the median (p50); suitability depends on the task.</p>
       </div>
 
       <div class="benchmark-story" data-mcb-story>
@@ -653,8 +653,8 @@ const selectorLabelFor = (track: Track) => {
 
           const nameCell = make('div', 'jev-model-row__name', null);
           nameCell.appendChild(make('strong', '', shortModel(row.model)));
-          if (isQuality) nameCell.appendChild(make('small', '', 'Highest accuracy'));
-          else if (isAlternative) nameCell.appendChild(make('small', '', 'Faster alternative'));
+          if (isQuality) nameCell.appendChild(make('small', '', 'Most accurate'));
+          else if (isAlternative) nameCell.appendChild(make('small', '', 'Fastest response'));
 
           const accuracyCell = make('div', 'jev-model-row__accuracy', null);
           const accuracyTop = make('div', 'jev-model-row__accuracy-head', null);
@@ -680,7 +680,7 @@ const selectorLabelFor = (track: Track) => {
         const partialNotice = root.querySelector('[data-jev-partial]');
         if (partial.length && partialNotice instanceof HTMLElement) {
           partialNotice.replaceChildren();
-          const label = make('strong', '', 'Other, non-comparable run: ');
+          const label = make('strong', '', 'Separate shorter run: ');
           partialNotice.appendChild(label);
           partialNotice.appendChild(document.createTextNode(
             partial.map((row) =>
