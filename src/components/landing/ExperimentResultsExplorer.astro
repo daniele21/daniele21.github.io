@@ -92,7 +92,7 @@ const selectorLabelFor = (track: Track) => {
         </a>
       </div>
 
-      <div class="run-summary" aria-label="Benchmark scope">
+      <div class="run-summary" data-mcb-scope aria-label="Benchmark scope">
         <span><strong data-model-count>—</strong> models</span>
         <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
         <span><strong data-dataset>—</strong> <span data-scope-label>dataset</span></span>
@@ -253,7 +253,8 @@ const selectorLabelFor = (track: Track) => {
           .replace(/^nemotron-nano-/i, 'Nemotron ')
           .replace(/-q4km$/i, ' Q4')
           .replace(/-q8$/i, ' Q8')
-          .replace(/-/g, ' ');
+          .replace(/-/g, ' ')
+          .replace(/\b(\d+(?:\.\d+)?)b\b/gi, '$1B');
       };
 
       const formatPct = (value) => {
@@ -454,6 +455,7 @@ const selectorLabelFor = (track: Track) => {
 
       const renderMcbOverview = (data, tab) => {
         setHidden(root.querySelector('[data-jev-summary]'), true);
+        setHidden(root.querySelector('[data-mcb-scope]'), false);
         setHidden(root.querySelector('[data-mcb-story]'), false);
         setHidden(root.querySelector('[data-mcb-takeaway]'), false);
         setHidden(root.querySelector('[data-jev-toolbar]'), true);
@@ -585,18 +587,16 @@ const selectorLabelFor = (track: Track) => {
         if (comparable.length < 2) throw new Error('Insufficient matched routing runs');
 
         const bestQuality = comparable[0];
-        // Compare the highest-accuracy model against the quickest model
-        // retaining at least 85% of the leading accuracy (explicit heuristic).
-        const threshold = bestQuality.accuracyValue * 0.85;
+        // Compare the two independently observable endpoints on matched cases:
+        // highest accuracy versus lowest median latency. No subjective threshold.
         const alternative = [...comparable]
-          .filter((row) => row.accuracyValue >= threshold)
           .sort((a, b) => a.latencyValue - b.latencyValue)[0];
         const speedup = bestQuality.latencyValue / alternative.latencyValue;
         const accuracyLoss = (bestQuality.accuracyValue - alternative.accuracyValue) * 100;
         const sameModel = bestQuality.model === alternative.model;
 
         setText('[data-result-title]', tab.dataset.title || 'JEV vs LLM · Routing');
-        setText('[data-result-question]', 'Which model is worth the extra response time?');
+        setText('[data-result-question]', 'Compare routing accuracy with typical response time.');
         setText('[data-model-count]', String(validRows.length));
         setText('[data-request-count]', String(
           validRows.reduce((sum, row) => sum + row.cases, 0),
@@ -619,7 +619,7 @@ const selectorLabelFor = (track: Track) => {
             ? 'In this published comparison it has both the highest accuracy and the shortest median response time.'
             : 'Compared with ' + shortModel(bestQuality.model) + ', it gives up ' +
                 accuracyLoss.toFixed(1) + ' percentage points of accuracy. ' +
-                'That may be a worthwhile trade-off depending on the task.',
+                'Which trade-off is acceptable depends on the application.',
         );
         setText(
           '[data-jev-quality-gap]',
@@ -660,6 +660,7 @@ const selectorLabelFor = (track: Track) => {
           const accuracyTop = make('div', 'jev-model-row__accuracy-head', null);
           accuracyTop.appendChild(make('strong', '', formatPct(row.accuracyValue)));
           accuracyCell.appendChild(accuracyTop);
+          accuracyCell.appendChild(make('small', 'jev-model-row__mobile-label', 'Accuracy'));
           const bar = make('div', 'jev-model-row__track', null);
           bar.setAttribute('aria-hidden', 'true');
           const fill = make('span', 'jev-model-row__fill', null);
@@ -669,7 +670,7 @@ const selectorLabelFor = (track: Track) => {
 
           const latencyCell = make('div', 'jev-model-row__latency', null);
           latencyCell.appendChild(make('strong', '', formatSeconds(row.latencyValue)));
-          latencyCell.appendChild(make('small', '', 'p50'));
+          latencyCell.appendChild(make('small', '', 'Median response'));
           item.appendChild(nameCell);
           item.appendChild(accuracyCell);
           item.appendChild(latencyCell);
@@ -697,6 +698,7 @@ const selectorLabelFor = (track: Track) => {
         }
 
         setHidden(root.querySelector('[data-jev-summary]'), false);
+        setHidden(root.querySelector('[data-mcb-scope]'), true);
         setHidden(root.querySelector('[data-mcb-story]'), true);
         setHidden(root.querySelector('[data-mcb-takeaway]'), true);
       };
@@ -952,6 +954,17 @@ const selectorLabelFor = (track: Track) => {
   .jev-model-row__latency {
     text-align: right;
   }
+  
+  .jev-ranking__note:empty {
+    display: none;
+  }
+
+  .jev-model-row__mobile-label {
+    display: none;
+    margin: 2px 0 7px;
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+  }
 
   .jev-ranking__note {
     margin-top: 14px;
@@ -1016,8 +1029,8 @@ const selectorLabelFor = (track: Track) => {
       grid-column: 2;
     }
 
-    .jev-model-row__latency strong::before {
-      content: '';
+    .jev-model-row__mobile-label {
+      display: block;
     }
 
     .jev-tradeoff__numbers {
