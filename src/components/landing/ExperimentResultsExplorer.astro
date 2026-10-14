@@ -593,15 +593,15 @@ const selectorLabelFor = (track: Track) => {
         if (heading) heading.textContent = 'MODEL CAPABILITY × LATENCY';
 
         const plotTitle = root.querySelector('.plot-heading strong');
-        if (plotTitle) plotTitle.textContent = 'Published model frontier';
+        if (plotTitle) plotTitle.textContent = 'Model performance map';
 
         const plotNote = root.querySelector('.plot-heading__note');
-        if (plotNote) plotNote.textContent = 'Aggregate quality vs p50 latency';
+        if (plotNote) plotNote.textContent = 'Quality / 100 · Log-scale p50';
 
         const legend = root.querySelector('.plot-legend');
         if (legend) {
           legend.innerHTML =
-            '<span><i class="legend-dot legend-dot--local"></i>Local</span><span><i class="legend-dot legend-dot--api"></i>API</span><span>Source-provided Pareto indicators</span>';
+            '<span><i class="legend-dot legend-dot--local"></i>Local</span><span><i class="legend-dot legend-dot--api"></i>API</span><span>Different runtime environments</span>';
         }
 
         const highlightLabels = root.querySelectorAll('.highlight > span');
@@ -1199,7 +1199,8 @@ const selectorLabelFor = (track: Track) => {
   }
 
   .plot-svg :global(.plot-point circle.is-frontier) {
-    fill: var(--accent-blue);
+    stroke-width: 3.5;
+    filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent-blue) 26%, transparent));
   }
 
   .plot-svg :global(.plot-point text) {
