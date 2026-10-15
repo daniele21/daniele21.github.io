@@ -71,6 +71,6 @@ test('reject bogus zero/null/invalid latency and mismatched case counts', () => 
   payload.models[0].latency_p95_ms = 0;
   payload.models[1].cases = 12;
   payload.models[2].pii_recall = null;
-  assert.equal(redactguardRows(payload, 'healthcare').length, 2);
+  assert.equal(redactguardRows(payload, 'healthcare').length, 1);
   assert.equal(redactguardPareto(payload, 'healthcare').valid, false);
 });
