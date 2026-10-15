@@ -114,6 +114,11 @@ for (const fragment of [
   'data-jev-stage-coverage',
   'data-mcb-story',
   'data-mcb-scope',
+  'data-rg-summary',
+  'data-rg-datasets',
+  'data-rg-model-rows',
+  'data-rg-no-models',
+  'redactguard-public-summary',
 ]) {
   if (!explorerSource.includes(fragment)) {
     console.error(`❌ Experiment explorer is missing the JEV/MCB progressive disclosure contract: ${fragment}`);
