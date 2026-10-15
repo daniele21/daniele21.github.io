@@ -15,6 +15,8 @@ interface Props {
   tracks: Track[];
 }
 
+import '../../styles/redactguardInsights.css';
+
 const { tracks } = Astro.props;
 const sortedTracks = [...tracks].sort((a, b) => Number(Boolean(b.resultUrl)) - Number(Boolean(a.resultUrl)));
 const initialIndex = Math.max(0, sortedTracks.findIndex((track) => Boolean(track.resultUrl)));
@@ -359,7 +361,7 @@ const selectorLabelFor = (track: Track) => {
 
 <script>
   import { redactguardRows } from '../../scripts/redactguardEvidence.js';
-  import { redactguardSummary, prettyRedactguardModel } from '../../scripts/redactguardSummary.js';
+  import { renderRedactguardOverview } from '../../scripts/redactguardOverview.js';
   import { initializeRedactguardAnalytics } from '../../scripts/redactguardPresentation.js';
 
   const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -1104,40 +1106,16 @@ const selectorLabelFor = (track: Track) => {
             link.href = 'https://github.com/daniele21/experiments/blob/dev/' + dataset.source_path;
           }
 
-          resultRows.replaceChildren();
           updateAnalytics(dataset.id);
-          const models = redactguardRows(data, dataset.id);
-          if (!data.publication.has_published_model_metrics || !models.length) {
-            setText('[data-rg-run-status]', 'No published model run');
-            setHidden(resultRows, true);
-            setHidden(root.querySelector('[data-rg-no-models]'), false);
-            return;
-          }
-          setText('[data-rg-run-status]', models.length + ' measured model(s)');
-          setHidden(root.querySelector('[data-rg-no-models]'), true);
-          setHidden(resultRows, false);
-
-          models.sort((a, b) => b.system_pii_recall - a.system_pii_recall);
-          models.forEach((entry) => {
-            const row = document.createElement('div');
-            row.className = 'rg-model-row';
-            row.setAttribute('role', 'listitem');
-            const name = document.createElement('strong');
-            name.textContent = entry.model;
-            const metrics = document.createElement('span');
-            const parts = [
-              'System recall ' + formatPct(entry.system_pii_recall),
-              'Leakage ' + formatPct(entry.system_leakage_rate),
-            ];
-            if (Number.isFinite(entry.precision)) parts.push('Precision ' + formatPct(entry.precision));
-            if (Number.isFinite(entry.inference_success_rate)) parts.push('Run success ' + formatPct(entry.inference_success_rate));
-            if (Number.isFinite(entry.latency_p95_ms)) {
-              parts.push('Observed p95 ' + formatSeconds(entry.latency_p95_ms));
-            }
-            metrics.textContent = parts.join(' · ');
-            row.append(name, metrics);
-            resultRows.appendChild(row);
+          const summary = renderRedactguardOverview(root, data, dataset.id, {
+            formatPct, formatSeconds, setHidden,
           });
+          const count = summary.rows.length;
+          setText(
+            '[data-rg-run-status]',
+            count ? count + ' measured model' + (count === 1 ? '' : 's') : 'No published model run',
+          );
+          setHidden(root.querySelector('[data-rg-no-models]'), count > 0);
         };
 
         datasets.forEach((dataset) => {
