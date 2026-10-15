@@ -768,7 +768,9 @@ const selectorLabelFor = (track: Track) => {
         );
         setText(
           '[data-jev-published-scope]',
-          isDirectComparison ? 'Direct Jev vs LLM comparison published' : 'Jev vs LLM head-to-head not yet published',
+          isDirectComparison
+            ? 'Standalone Jev suite: direct comparison published'
+            : 'Standalone Jev suite: head-to-head not published',
         );
         setText(
           '[data-jev-experiment-count]',
@@ -778,8 +780,9 @@ const selectorLabelFor = (track: Track) => {
           '[data-jev-scope-note]',
           isDirectComparison
             ? 'A reviewed and authorized public comparison is available.'
-            : 'Public figures currently cover ' + providers.join(', ') +
-                ' routing only. Jev/TypeSafe/CLM numerical results are excluded pending publication clearance.',
+            : 'This standalone suite currently publishes ' + providers.join(', ') +
+                ' routing aggregates only. Jev/TypeSafe/CLM metrics remain excluded here ' +
+                'pending publication clearance. The JEV and GPT Luna results above come from MCB.',
         );
 
         const coverageStrip = root.querySelector('[data-jev-stage-coverage]');
