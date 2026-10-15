@@ -380,8 +380,13 @@ export const landingData: LandingPageData = {
           {
             id: 'redactguard-local-anonymization',
             title: 'RedactGuard Local Anonymization',
-            question: 'How reliable are local models on a real privacy workload?',
-            status: 'NO PUBLISHED SNAPSHOT',
+            question: 'How do we test private-data detection before deployment?',
+            status: 'DATASET EVIDENCE PUBLISHED',
+            resultUrl:
+              'https://raw.githubusercontent.com/daniele21/experiments/feature/redactguard-public-benchmark-evidence/experiments/redactguard-local-anonymization/results/published/portfolio-summary.json',
+            sourceUrl:
+              'https://github.com/daniele21/experiments/blob/feature/redactguard-public-benchmark-evidence/experiments/redactguard-local-anonymization/results/published/portfolio-summary.json',
+            resultKind: 'redactguard-public-summary',
           },
           {
             id: 'vlm-capability',
