@@ -332,7 +332,8 @@ const selectorLabelFor = (track: Track) => {
 </div>
 
 <script>
-  import { redactguardRows, redactguardMatrix, redactguardPareto } from '../../scripts/redactguardEvidence.js';
+  import { redactguardRows } from '../../scripts/redactguardEvidence.js';
+  import { initializeRedactguardAnalytics } from '../../scripts/redactguardPresentation.js';
 
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -1039,6 +1040,9 @@ const selectorLabelFor = (track: Track) => {
         const resultRows = root.querySelector('[data-rg-model-rows]');
         if (!(picker instanceof HTMLElement) || !(resultRows instanceof HTMLElement)) return;
         picker.replaceChildren();
+        const updateAnalytics = initializeRedactguardAnalytics(root, data, {
+          formatPct, formatSeconds, shortModel, createSvg, setHidden,
+        });
 
         const setDataset = (dataset) => {
           picker.querySelectorAll('button[data-rg-dataset]').forEach((button) => {
@@ -1063,12 +1067,8 @@ const selectorLabelFor = (track: Track) => {
           }
 
           resultRows.replaceChildren();
-          const models = data.models.filter((row) =>
-            row.dataset === dataset.id &&
-            typeof row.model === 'string' &&
-            Number.isFinite(row.pii_recall) &&
-            Number.isFinite(row.system_leakage_rate),
-          );
+          updateAnalytics(dataset.id);
+          const models = redactguardRows(data, dataset.id);
           if (!data.publication.has_published_model_metrics || !models.length) {
             setText('[data-rg-run-status]', 'No published model run');
             setHidden(resultRows, true);
