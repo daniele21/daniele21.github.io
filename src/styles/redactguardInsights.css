@@ -6,6 +6,7 @@
 .experiment-explorer .rg-summary {
   margin-top: 22px;
 }
+.experiment-explorer .rg-summary .rg-label { font-size: 0.875rem; }
 .experiment-explorer .rg-topline {
   display: flex;
   align-items: flex-start;
@@ -24,7 +25,7 @@
   max-width: 740px;
 }
 .experiment-explorer .rg-topline .rg-status {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
 }
 .experiment-explorer .rg-dataset-picker {
   gap: 7px;
@@ -32,7 +33,7 @@
 .experiment-explorer .rg-dataset-picker .rg-dataset-pill {
   padding: 9px 13px;
   min-height: 44px;
-  font-size: 0.83rem;
+  font-size: 0.875rem;
 }
 .experiment-explorer .rg-summary .rg-detail {
   display: grid;
@@ -51,7 +52,7 @@
 }
 .experiment-explorer .rg-summary .rg-detail__main p {
   margin: 0;
-  font-size: 0.87rem;
+  font-size: 0.875rem;
 }
 .experiment-explorer .rg-summary .rg-detail__count {
   display: flex;
@@ -67,7 +68,7 @@
 .experiment-explorer .rg-summary .rg-detail__count span,
 .experiment-explorer .rg-summary .rg-detail__count small {
   margin-top: 3px;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
 }
 .experiment-explorer .rg-detail__link {
   display: inline-flex;
@@ -119,7 +120,7 @@
   background: linear-gradient(130deg, color-mix(in srgb, #21bba3 8%, var(--surface-card)), var(--surface-card));
 }
 .experiment-explorer .rg-insight-card__label {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 700;
   color: var(--ink-muted);
 }
@@ -136,7 +137,7 @@
 .experiment-explorer .rg-insight-card__detail {
   margin-top: auto;
   padding-top: 10px;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   line-height: 1.45;
   color: var(--ink-muted);
   overflow-wrap: anywhere;
@@ -176,14 +177,14 @@
 }
 .experiment-explorer .rg-comparison__heading p {
   color: var(--ink-muted);
-  font-size: 0.79rem;
+  font-size: 0.875rem;
   margin: 5px 0 0;
 }
 .experiment-explorer .rg-legend {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-  font-size: 0.76rem;
+  font-size: 0.875rem;
   color: var(--ink-muted);
 }
 .experiment-explorer .rg-legend > span {
@@ -213,7 +214,7 @@
   font-weight: 740;
 }
 .experiment-explorer .rg-model-group small {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--ink-muted);
 }
@@ -243,12 +244,12 @@
 }
 .experiment-explorer .rg-model-row__identity small {
   color: var(--ink-muted);
-  font-size: 0.72rem;
+  font-size: 0.875rem;
 }
 .experiment-explorer .rg-model-row__highlight {
   display: inline-flex;
   margin-top: 6px;
-  font-size: 0.71rem;
+  font-size: 0.875rem;
   font-weight: 700;
   color: var(--accent-blue-dark);
 }
@@ -264,7 +265,7 @@
   justify-content: space-between;
   gap: 9px;
   min-width: 0;
-  font-size: 0.74rem;
+  font-size: 0.875rem;
   color: var(--ink-muted);
 }
 .experiment-explorer .rg-measure__head strong {
@@ -297,7 +298,7 @@
 }
 .experiment-explorer .rg-model-row__runtime-label {
   color: var(--ink-muted);
-  font-size: 0.74rem;
+  font-size: 0.875rem;
 }
 .experiment-explorer .rg-model-row__runtime-value {
   font-family: var(--font-display);
@@ -308,12 +309,12 @@
 }
 .experiment-explorer .rg-model-row__runtime-detail {
   color: var(--ink-muted);
-  font-size: 0.69rem;
+  font-size: 0.875rem;
   line-height: 1.3;
 }
 .experiment-explorer .rg-comparison__footnote {
   margin: 11px 0 0;
-  font-size: 0.77rem;
+  font-size: 0.875rem;
   color: var(--ink-muted);
   line-height: 1.5;
 }
@@ -348,7 +349,7 @@
   display: block;
   margin-top: 3px;
   color: var(--ink-muted);
-  font-size: 0.76rem;
+  font-size: 0.875rem;
 }
 .experiment-explorer .rg-advanced__chevron {
   color: var(--accent-blue-dark);
@@ -360,7 +361,7 @@
 .experiment-explorer .rg-advanced .rg-matrix { margin-top: 22px; }
 .experiment-explorer .rg-advanced .rg-disclosure {
   margin: 15px 0 0;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 @media (max-width: 980px) {
   .experiment-explorer .rg-summary .rg-detail {
