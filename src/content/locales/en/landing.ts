@@ -381,7 +381,7 @@ export const landingData: LandingPageData = {
             id: 'redactguard-local-anonymization',
             title: 'RedactGuard Local Anonymization',
             question: 'How do we test private-data detection before deployment?',
-            status: 'DATASET EVIDENCE PUBLISHED',
+            status: 'MEASURED RESULTS PUBLISHED',
             resultUrl:
               'https://raw.githubusercontent.com/daniele21/experiments/dev/experiments/redactguard-local-anonymization/results/published/portfolio-summary.json',
             sourceUrl:
