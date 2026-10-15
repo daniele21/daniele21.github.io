@@ -392,7 +392,7 @@ try {
         body: JSON.stringify(redactionEvidence),
       }),
     );
-    await page.goto(\`\${baseUrl}/\`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
     await page.locator('[data-track-id="redactguard-local-anonymization"]').click();
     await page.locator('[data-rg-dataset="realistic"]').waitFor({ state: 'visible' });
 
@@ -426,11 +426,11 @@ try {
       after.title !== 'Healthcare' ||
       after.active !== 'true'
     ) {
-      throw new Error(\`RedactGuard public evidence visual regression: \${JSON.stringify({ viewport, before, after })}\`);
+      throw new Error(`RedactGuard public evidence visual regression: ${JSON.stringify({ viewport, before, after })}`);
     }
 
     await page.locator('[data-rg-summary]').screenshot({
-      path: path.join(outputDir, \`redactguard-evidence__\${viewport.name}.png\`),
+      path: path.join(outputDir, `redactguard-evidence__${viewport.name}.png`),
     });
     await page.close();
     await context.close();
