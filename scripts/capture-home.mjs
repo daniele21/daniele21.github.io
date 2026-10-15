@@ -384,13 +384,13 @@ try {
       reducedMotion: 'reduce',
     });
     const page = await context.newPage();
-    let activeRedactionEvidence = redactionEvidence;
+
     await page.route('**/redactguard-local-anonymization/results/published/portfolio-summary.json',
       (route) => route.fulfill({
         status: 200,
         contentType: 'application/json',
         headers: { 'access-control-allow-origin': '*' },
-        body: JSON.stringify(activeRedactionEvidence),
+        body: JSON.stringify(redactionEvidence),
       }),
     );
     await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
@@ -448,7 +448,8 @@ try {
         comparison_scope: 'same_run_exploratory',
       },
     });
-    activeRedactionEvidence = {
+    await page.close();
+    const measuredEvidence = {
       ...redactionEvidence,
       publication: {
         ...redactionEvidence.publication,
@@ -461,16 +462,24 @@ try {
         row('test-qwen', 'ambiguous', 'amb-one', 0.66, 0.34, 900),
       ],
     };
-    // Re-open the homepage so the second, measured fixture cannot reuse
-    // the previously selected dataset-only client state.
-    await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.locator('[data-track-id="redactguard-local-anonymization"]').click();
-    await page.locator('[data-rg-insights] .rg-insight-card').first().waitFor({ state: 'visible', timeout: 12000 });
-    await page.locator('[data-rg-advanced] summary').click();
-    await page.locator('[data-rg-matrix-scroll] table').waitFor({ state: 'visible' });
-    await page.locator('[data-rg-dataset="healthcare"]').click();
+    // Independent browser page: fixture modes must not share UI state.
+    const measuredPage = await context.newPage();
+    await measuredPage.route('**/redactguard-local-anonymization/results/published/portfolio-summary.json',
+      (route) => route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify(measuredEvidence),
+      }),
+    );
+    await measuredPage.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
+    await measuredPage.locator('[data-track-id="redactguard-local-anonymization"]').click();
+    await measuredPage.locator('[data-rg-insights] .rg-insight-card').first().waitFor({ state: 'visible', timeout: 12000 });
+    await measuredPage.locator('[data-rg-advanced] summary').click();
+    await measuredPage.locator('[data-rg-matrix-scroll] table').waitFor({ state: 'visible' });
+    await measuredPage.locator('[data-rg-dataset="healthcare"]').click();
 
-    const modelPreview = await page.evaluate(() => ({
+    const modelPreview = await measuredPage.evaluate(() => ({
       insightCards: document.querySelectorAll('[data-rg-insights] .rg-insight-card').length,
       comparisonRows: document.querySelectorAll('[data-rg-model-rows] .rg-model-row').length,
       recallTracks: document.querySelectorAll('[data-rg-model-rows] .rg-measure--recall .rg-measure__track').length,
@@ -481,7 +490,7 @@ try {
         modelPreview.recallTracks !== 2 || modelPreview.visibleGrid !== 'grid') {
       throw new Error('RedactGuard insight-first model rows regressed: ' + JSON.stringify(modelPreview));
     }
-    const measured = await page.evaluate(() => ({
+    const measured = await measuredPage.evaluate(() => ({
       matrixVisible: !document.querySelector('[data-rg-matrix]').hidden,
       rows: document.querySelectorAll('[data-rg-matrix-scroll] tbody tr').length,
       cells: document.querySelector('[data-rg-matrix-scroll]')?.textContent,
@@ -496,16 +505,16 @@ try {
       throw new Error('Measured RedactGuard UI regression in ' +
         viewport.name + ': ' + JSON.stringify(measured));
     }
-    await page.locator('[data-rg-metric="system_leakage_rate"]').click();
-    const leakage = await page.locator('[data-rg-matrix-scroll]').textContent();
+    await measuredPage.locator('[data-rg-metric="system_leakage_rate"]').click();
+    const leakage = await measuredPage.locator('[data-rg-matrix-scroll]').textContent();
     if (!leakage.includes('16.0%') || !leakage.includes('9.0%')) {
       throw new Error('RedactGuard metric toggle failed in ' + viewport.name);
     }
-    await page.locator('[data-rg-summary]').screenshot({
+    await measuredPage.locator('[data-rg-summary]').screenshot({
       path: path.join(outputDir, 'redactguard-measured-fixture__' + viewport.name + '.png'),
     });
-    await page.locator('[data-rg-dataset="ambiguous"]').click();
-    const crossRun = await page.evaluate(() => ({
+    await measuredPage.locator('[data-rg-dataset="ambiguous"]').click();
+    const crossRun = await measuredPage.evaluate(() => ({
       paretoHidden: document.querySelector('[data-rg-pareto]').hidden,
       pendingVisible: !document.querySelector('[data-rg-pareto-missing]').hidden,
     }));
@@ -513,7 +522,7 @@ try {
       throw new Error('RedactGuard incorrectly drew an unpaired Pareto: ' +
         JSON.stringify(crossRun));
     }
-    await page.close();
+    await measuredPage.close();
     await context.close();
   }
   await fs.writeFile(
