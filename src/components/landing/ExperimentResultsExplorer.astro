@@ -6,7 +6,7 @@ interface Track {
   status: string;
   resultUrl?: string;
   sourceUrl?: string;
-  resultKind?: 'jev-public-summary' | 'mcb-overview';
+  resultKind?: 'jev-public-summary' | 'mcb-overview' | 'redactguard-public-summary';
   relatedResultUrl?: string;
   relatedSourceUrl?: string;
 }
@@ -86,7 +86,7 @@ const selectorLabelFor = (track: Track) => {
         <div>
           <span class="evidence-panel__eyebrow">
             <span class="live-dot" aria-hidden="true"></span>
-            PUBLISHED BENCHMARK SNAPSHOT
+            <span data-result-eyebrow>PUBLISHED BENCHMARK SNAPSHOT</span>
           </span>
           <h3 data-result-title></h3>
           <p data-result-question></p>
@@ -172,6 +172,56 @@ const selectorLabelFor = (track: Track) => {
         </div>
         <p class="jev-method-note" data-jev-method-note>Runs with the same request count are shown together; identical samples and configurations have not been independently verified.</p>
         </details>
+      </div>
+
+      <div class="rg-summary" data-rg-summary hidden>
+        <div class="rg-introduction">
+          <div>
+            <span class="rg-label">THE BENCHMARK</span>
+            <h4>Can a model detect sensitive data without leaking it?</h4>
+            <p>Six evaluation datasets cover ambiguous PII, healthcare, hard cases and realistic documents. Choose a dataset to explore what is actually tested.</p>
+          </div>
+          <span class="rg-status">Dataset coverage published</span>
+        </div>
+
+        <div class="rg-dataset-picker" data-rg-datasets role="group" aria-label="Select RedactGuard test dataset"></div>
+
+        <div class="rg-detail" aria-live="polite">
+          <div class="rg-detail__main">
+            <span class="rg-label" data-rg-kind>DATASET COVERAGE</span>
+            <h4 data-rg-dataset-name>—</h4>
+            <p data-rg-focus></p>
+            <a data-rg-dataset-source href="#" target="_blank" rel="noopener noreferrer">
+              Inspect dataset evidence ↗
+            </a>
+          </div>
+          <div class="rg-detail__count">
+            <strong data-rg-count>—</strong>
+            <span data-rg-count-unit>test cases</span>
+            <small data-rg-extra hidden></small>
+          </div>
+        </div>
+
+        <div class="rg-performance">
+          <div class="rg-performance__heading">
+            <div>
+              <span class="rg-label">MODEL PERFORMANCE</span>
+              <h4>Privacy effectiveness, not just model accuracy</h4>
+            </div>
+            <span data-rg-run-status>Awaiting published runs</span>
+          </div>
+          <div data-rg-model-rows class="rg-model-rows" role="list" hidden></div>
+          <p data-rg-no-models class="rg-performance__pending">
+            No published model inference scores for this dataset yet. The repository contains the test suite, but the private local runs have not been released as comparable public evidence.
+          </p>
+          <div class="rg-metric-guide">
+            <span>PII recall <small>detect sensitive data</small></span>
+            <span>System leakage <small>data left exposed</small></span>
+            <span>Precision <small>avoid false positives</small></span>
+            <span>p95 latency <small>response-time tail</small></span>
+          </div>
+        </div>
+        <p class="rg-disclosure">Dataset counts are real, versioned test coverage—not benchmark performance. Smoke tests are limited; realistic gold spans have not been independently human-reviewed.</p>
       </div>
 
       <div class="benchmark-story" data-mcb-story>
@@ -491,6 +541,8 @@ const selectorLabelFor = (track: Track) => {
       });
 
       const renderMcbOverview = (data, tab) => {
+        setHidden(root.querySelector('[data-rg-summary]'), true);
+        setText('[data-result-eyebrow]', 'PUBLISHED BENCHMARK SNAPSHOT');
         setHidden(root.querySelector('[data-jev-summary]'), true);
         setHidden(root.querySelector('[data-mcb-scope]'), false);
         setHidden(root.querySelector('[data-mcb-story]'), false);
@@ -687,6 +739,8 @@ const selectorLabelFor = (track: Track) => {
       };
 
       const renderJevRouting = (data, tab, relatedMcb) => {
+        setHidden(root.querySelector('[data-rg-summary]'), true);
+        setText('[data-result-eyebrow]', 'PUBLISHED BENCHMARK EVIDENCE · MIXED SOURCES');
         const sourceHeading = root.querySelector('[data-jev-mcb-meta]');
         if (relatedMcb) {
           try {
@@ -914,6 +968,119 @@ const selectorLabelFor = (track: Track) => {
         setHidden(root.querySelector('[data-mcb-takeaway]'), true);
       };
 
+      const renderRedactGuard = (data, tab) => {
+        if (
+          data?.schema_version !== 1 ||
+          data?.benchmark !== 'redactguard-local-anonymization' ||
+          !Array.isArray(data?.datasets) ||
+          !Array.isArray(data?.models) ||
+          typeof data?.publication?.has_published_model_metrics !== 'boolean' ||
+          data?.publication?.contains_raw_pii !== false
+        ) {
+          throw new Error('Invalid RedactGuard public evidence');
+        }
+
+        const datasets = data.datasets.filter((item) =>
+          item && typeof item.id === 'string' &&
+          Number.isInteger(item.cases ?? item.documents) &&
+          (item.cases ?? item.documents) > 0,
+        );
+        if (!datasets.length) throw new Error('No published RedactGuard datasets');
+        setHidden(root.querySelector('[data-jev-summary]'), true);
+        setHidden(root.querySelector('[data-mcb-scope]'), true);
+        setHidden(root.querySelector('[data-mcb-story]'), true);
+        setHidden(root.querySelector('[data-mcb-takeaway]'), true);
+        setHidden(root.querySelector('[data-rg-summary]'), false);
+
+        setText('[data-result-eyebrow]', 'PUBLISHED TEST COVERAGE · MODEL SCORES PENDING');
+        setText('[data-result-title]', 'RedactGuard · Privacy evaluation');
+        setText(
+          '[data-result-question]',
+          'How well can sensitive data be identified across difficult contexts and document types?',
+        );
+        const source = root.querySelector('[data-result-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        }
+
+        const picker = root.querySelector('[data-rg-datasets]');
+        const resultRows = root.querySelector('[data-rg-model-rows]');
+        if (!(picker instanceof HTMLElement) || !(resultRows instanceof HTMLElement)) return;
+        picker.replaceChildren();
+
+        const setDataset = (dataset) => {
+          picker.querySelectorAll('button[data-rg-dataset]').forEach((button) => {
+            const active = button.dataset.rgDataset === dataset.id;
+            button.classList.toggle('is-selected', active);
+            button.setAttribute('aria-pressed', active ? 'true' : 'false');
+          });
+          const isDocuments = Number.isInteger(dataset.documents);
+          const count = isDocuments ? dataset.documents : dataset.cases;
+          setText('[data-rg-kind]', (dataset.kind || 'test suite').toUpperCase() + ' · SOURCE-VERIFIED');
+          setText('[data-rg-dataset-name]', dataset.title);
+          setText('[data-rg-focus]', dataset.focus);
+          setText('[data-rg-count]', String(count));
+          setText('[data-rg-count-unit]', isDocuments ? 'annotated documents' : 'test cases');
+          setText('[data-rg-extra]',
+            Number.isInteger(dataset.gold_spans) ? dataset.gold_spans.toLocaleString('en-US') + ' gold PII spans' : '',
+          );
+          setHidden(root.querySelector('[data-rg-extra]'), !Number.isInteger(dataset.gold_spans));
+          const link = root.querySelector('[data-rg-dataset-source]');
+          if (link instanceof HTMLAnchorElement) {
+            link.href = 'https://github.com/daniele21/experiments/blob/dev/' + dataset.source_path;
+          }
+
+          resultRows.replaceChildren();
+          const models = data.models.filter((row) =>
+            row.dataset === dataset.id &&
+            typeof row.model === 'string' &&
+            Number.isFinite(row.pii_recall) &&
+            Number.isFinite(row.system_leakage_rate),
+          );
+          if (!data.publication.has_published_model_metrics || !models.length) {
+            setText('[data-rg-run-status]', 'No published model run');
+            setHidden(resultRows, true);
+            setHidden(root.querySelector('[data-rg-no-models]'), false);
+            return;
+          }
+          setText('[data-rg-run-status]', models.length + ' measured model(s)');
+          setHidden(root.querySelector('[data-rg-no-models]'), true);
+          setHidden(resultRows, false);
+
+          models.sort((a, b) => b.pii_recall - a.pii_recall);
+          models.forEach((entry) => {
+            const row = document.createElement('div');
+            row.className = 'rg-model-row';
+            row.setAttribute('role', 'listitem');
+            const name = document.createElement('strong');
+            name.textContent = entry.model;
+            const metrics = document.createElement('span');
+            const parts = [
+              'Recall ' + formatPct(entry.pii_recall),
+              'Leakage ' + formatPct(entry.system_leakage_rate),
+            ];
+            if (Number.isFinite(entry.precision)) parts.push('Precision ' + formatPct(entry.precision));
+            if (Number.isFinite(entry.latency_p95_ms)) parts.push('p95 ' + formatSeconds(entry.latency_p95_ms));
+            metrics.textContent = parts.join(' · ');
+            row.append(name, metrics);
+            resultRows.appendChild(row);
+          });
+        };
+
+        datasets.forEach((dataset) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'rg-dataset-pill';
+          button.dataset.rgDataset = dataset.id;
+          const count = dataset.documents ?? dataset.cases;
+          button.textContent = dataset.title + ' · ' + count;
+          button.setAttribute('aria-pressed', 'false');
+          button.addEventListener('click', () => setDataset(dataset));
+          picker.appendChild(button);
+        });
+        setDataset(datasets.find((item) => item.id === 'realistic') || datasets[0]);
+      };
+
       const selectTab = async (tab) => {
         tabs.forEach((candidate) => {
           const active = candidate === tab;
@@ -954,6 +1121,7 @@ const selectorLabelFor = (track: Track) => {
             renderJevRouting(data, tab, relatedMcb);
           }
           else if (tab.dataset.resultKind === 'mcb-overview') renderMcbOverview(data, tab);
+          else if (tab.dataset.resultKind === 'redactguard-public-summary') renderRedactGuard(data, tab);
           else throw new Error('Unsupported result adapter');
 
           showOnly('result');
@@ -995,6 +1163,253 @@ const selectorLabelFor = (track: Track) => {
 </script>
 
 <style>
+
+  .rg-summary {
+    margin-top: 22px;
+  }
+
+  .rg-label {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 0.065em;
+  }
+
+  .rg-introduction {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 18px;
+  }
+
+  .rg-introduction h4,
+  .rg-performance__heading h4 {
+    margin: 6px 0;
+    font-family: var(--font-display);
+    color: var(--ink-display);
+    font-size: clamp(1.1rem, 1.8vw, 1.45rem);
+    letter-spacing: -0.025em;
+  }
+
+  .rg-introduction p {
+    max-width: 680px;
+    margin: 0;
+    font-size: 0.94rem;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  .rg-status,
+  .rg-performance__heading > span {
+    color: var(--accent-blue-dark);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, var(--border-medium));
+    background: color-mix(in srgb, var(--accent-blue) 5%, var(--surface-card));
+    border-radius: var(--radius-full);
+    padding: 6px 10px;
+    white-space: nowrap;
+    font-size: var(--text-caption);
+    font-weight: 720;
+  }
+
+  .rg-dataset-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .rg-dataset-picker :global(.rg-dataset-pill) {
+    min-height: var(--touch-target-min);
+    padding: 8px 13px;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-medium);
+    background: var(--surface-card);
+    color: var(--ink-muted);
+  }
+
+  .rg-dataset-picker :global(.rg-dataset-pill.is-selected) {
+    border-color: color-mix(in srgb, var(--accent-blue) 50%, var(--border-medium));
+    background: color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card));
+    color: var(--accent-blue-dark);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--accent-blue) 7%, transparent);
+  }
+
+  .rg-dataset-picker :global(.rg-dataset-pill:focus-visible) {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+  }
+
+  .rg-detail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(160px, 0.32fr);
+    gap: 22px;
+    margin-top: 18px;
+    padding: clamp(20px, 2.8vw, 28px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-medium));
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent-violet) 12%, transparent), transparent 42%),
+      linear-gradient(130deg, color-mix(in srgb, var(--accent-blue) 6%, var(--surface-card)), var(--surface-card));
+  }
+
+  .rg-detail__main h4 {
+    margin: 7px 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2vw, 1.65rem);
+    letter-spacing: -0.035em;
+    color: var(--ink-display);
+  }
+
+  .rg-detail__main p {
+    margin: 0 0 14px;
+    color: var(--ink-muted);
+    font-size: 0.93rem;
+    line-height: 1.5;
+  }
+
+  .rg-detail__main a {
+    display: inline-flex;
+    min-height: var(--touch-target-min);
+    align-items: center;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 760;
+    text-decoration: none;
+  }
+
+  .rg-detail__count {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 18px;
+    border-left: 1px solid var(--border-medium);
+  }
+
+  .rg-detail__count strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 4vw, 3.2rem);
+    font-weight: 820;
+    letter-spacing: -0.06em;
+    line-height: 1;
+  }
+
+  .rg-detail__count span,
+  .rg-detail__count small {
+    margin-top: 6px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .rg-performance {
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .rg-performance__heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .rg-performance__pending {
+    margin: 12px 0;
+    max-width: 730px;
+    color: var(--ink-muted);
+    font-size: 0.93rem;
+    line-height: 1.6;
+  }
+
+  .rg-metric-guide {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .rg-metric-guide > span {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    border-top: 2px solid color-mix(in srgb, var(--accent-blue) 32%, var(--border-subtle));
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-weight: 760;
+    font-size: var(--text-caption);
+  }
+
+  .rg-metric-guide small {
+    color: var(--ink-muted);
+    margin-top: 4px;
+    font-weight: 450;
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .rg-model-rows {
+    display: grid;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .rg-model-rows :global(.rg-model-row) {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+  }
+
+  .rg-model-rows :global(.rg-model-row strong) {
+    font-family: var(--font-display);
+    color: var(--ink-display);
+    font-size: 0.9rem;
+  }
+
+  .rg-model-rows :global(.rg-model-row span) {
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+  }
+
+  .rg-disclosure {
+    margin: 18px 0 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 730px) {
+    .rg-introduction,
+    .rg-performance__heading {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .rg-detail {
+      grid-template-columns: 1fr;
+    }
+    .rg-detail__count {
+      border-left: 0;
+      padding-left: 0;
+      border-top: 1px solid var(--border-medium);
+      padding-top: 15px;
+    }
+    .rg-metric-guide {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+
 
   /* Homepage-sized routing comparison: the numbers are the visual, not a scatter plot. */
   .jev-mcb-bridge {
