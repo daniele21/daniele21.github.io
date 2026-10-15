@@ -7,6 +7,8 @@ interface Track {
   resultUrl?: string;
   sourceUrl?: string;
   resultKind?: 'jev-public-summary' | 'mcb-overview';
+  relatedResultUrl?: string;
+  relatedSourceUrl?: string;
 }
 
 interface Props {
@@ -48,6 +50,8 @@ const selectorLabelFor = (track: Track) => {
           data-result-url={track.resultUrl || ''}
           data-source-url={track.sourceUrl || ''}
           data-result-kind={track.resultKind || ''}
+          data-related-result-url={track.relatedResultUrl || ''}
+          data-related-source-url={track.relatedSourceUrl || ''}
         >
           <span
             class:list={['status-dot', { 'status-dot--live': Boolean(track.resultUrl) }]}
@@ -100,6 +104,29 @@ const selectorLabelFor = (track: Track) => {
       </div>
 
       <div class="jev-summary" data-jev-summary hidden>
+        <div class="jev-mcb-bridge">
+          <div class="jev-mcb-bridge__header">
+            <div>
+              <span class="jev-eyebrow">RELATED EVIDENCE · MODEL CAPABILITY BENCHMARK</span>
+              <h4>JEV and GPT Luna, tested on the same task</h4>
+              <p data-jev-mcb-meta>Intent classification · comparing identical benchmark signatures</p>
+            </div>
+            <a data-jev-mcb-source href="#" target="_blank" rel="noopener noreferrer">MCB source ↗</a>
+          </div>
+          <div class="jev-mcb-rows" data-jev-mcb-rows role="list"></div>
+          <p class="jev-mcb-bridge__note" data-jev-mcb-note>
+            This is Model Capability Benchmark evidence, not a result from the separate Jev vs LLM suite.
+          </p>
+        </div>
+
+        <details class="jev-local-details" data-jev-local-details>
+          <summary>
+            <span>
+              <strong>Explore separate local-routing runs</strong>
+              <small>Different benchmark · includes latency measurements</small>
+            </span>
+            <span aria-hidden="true">+</span>
+          </summary>
         <div class="jev-coverage-banner" role="note">
           <div>
             <span class="jev-eyebrow">EVIDENCE AVAILABLE</span>
@@ -144,6 +171,7 @@ const selectorLabelFor = (track: Track) => {
           <div class="jev-ranking__note" data-jev-partial hidden></div>
         </div>
         <p class="jev-method-note" data-jev-method-note>Runs with the same request count are shown together; identical samples and configurations have not been independently verified.</p>
+        </details>
       </div>
 
       <div class="benchmark-story" data-mcb-story>
@@ -565,7 +593,116 @@ const selectorLabelFor = (track: Track) => {
         if (highlightLabels[2]) highlightLabels[2].textContent = 'FASTEST LOCAL';
       };
 
-      const renderJevRouting = (data, tab) => {
+      const renderMcbIntentComparison = (mcb, tab) => {
+        const container = root.querySelector('[data-jev-mcb-rows]');
+        if (!(container instanceof HTMLElement)) return;
+        container.replaceChildren();
+
+        const source = root.querySelector('[data-jev-mcb-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.relatedSourceUrl || '#';
+        }
+
+        const cells = Array.isArray(mcb?.cells) ? mcb.cells : [];
+        const intent = cells.filter((cell) =>
+          cell.capability_id === 'intent-classification' &&
+          cell.primary_metric === 'accuracy' &&
+          Number.isFinite(Number(cell.primary_value)) &&
+          Number(cell.primary_value) >= 0 &&
+          Number(cell.primary_value) <= 1 &&
+          Number.isInteger(Number(cell.sample_count)) &&
+          Number(cell.sample_count) > 0,
+        );
+
+        const jev = intent.find((cell) => cell.model_key === 'jev-1.13.0');
+        const luna = intent.find((cell) => cell.model_key === 'gpt-5.6-luna');
+        if (
+          !jev || !luna ||
+          jev.benchmark_signature !== luna.benchmark_signature ||
+          jev.sample_count !== luna.sample_count
+        ) {
+          throw new Error('No matching public MCB signature for JEV and GPT Luna');
+        }
+
+        const cohort = intent.filter((cell) =>
+          cell.benchmark_signature === jev.benchmark_signature &&
+          cell.sample_count === jev.sample_count,
+        );
+        const topLocals = cohort
+          .filter((cell) => cell.deployment === 'local' && cell.model_key)
+          .sort((a, b) => Number(b.primary_value) - Number(a.primary_value))
+          .slice(0, 2);
+        const display = [luna, jev, ...topLocals].sort(
+          (a, b) => Number(b.primary_value) - Number(a.primary_value),
+        );
+
+        setText(
+          '[data-jev-mcb-meta]',
+          'Intent classification · ' + jev.sample_count +
+            ' samples/model · shared benchmark signature · accuracy',
+        );
+        setText(
+          '[data-jev-mcb-note]',
+          'Results are published by Model Capability Benchmark (MCB), not the ' +
+            'Jev-vs-LLM routing suite. Matching benchmark signatures and sample sizes ' +
+            'support configuration-level comparison; they do not prove identical ' +
+            'case-level inputs or authorize republication under TypeSafe terms.',
+        );
+
+        display.forEach((cell) => {
+          const row = document.createElement('div');
+          row.className = 'jev-mcb-row';
+          row.setAttribute('role', 'listitem');
+
+          const identity = document.createElement('div');
+          identity.className = 'jev-mcb-row__model';
+          const name = document.createElement('strong');
+          name.textContent = cell.model_key === 'gpt-5.6-luna'
+            ? 'GPT-5.6 Luna'
+            : cell.model_key === 'jev-1.13.0'
+              ? 'JEV 1.13.0'
+              : shortModel(cell.model_key);
+          const category = document.createElement('small');
+          category.textContent =
+            cell.model_key === 'jev-1.13.0' ? 'Decision model · API' :
+              cell.model_key === 'gpt-5.6-luna' ? 'General-purpose LLM · API' :
+                'Local baseline';
+          identity.append(name, category);
+
+          const reading = document.createElement('div');
+          reading.className = 'jev-mcb-row__score';
+          const pct = document.createElement('strong');
+          pct.textContent = formatPct(cell.primary_value);
+          const bar = document.createElement('div');
+          bar.className = 'jev-mcb-row__track';
+          bar.setAttribute('aria-hidden', 'true');
+          const fill = document.createElement('span');
+          fill.className = 'jev-mcb-row__fill';
+          fill.style.width = (Number(cell.primary_value) * 100).toFixed(1) + '%';
+          bar.appendChild(fill);
+          reading.append(pct, bar);
+          row.append(identity, reading);
+          container.appendChild(row);
+        });
+      };
+
+      const renderJevRouting = (data, tab, relatedMcb) => {
+        const sourceHeading = root.querySelector('[data-jev-mcb-meta]');
+        if (relatedMcb) {
+          try {
+            renderMcbIntentComparison(relatedMcb, tab);
+          } catch (cause) {
+            console.warn('Published MCB comparison cannot be verified', cause);
+            setText('[data-jev-mcb-meta]', 'MCB comparison unavailable — inspect the original benchmark source.');
+            const rows = root.querySelector('[data-jev-mcb-rows]');
+            if (rows) rows.replaceChildren();
+          }
+        } else {
+          if (sourceHeading) sourceHeading.textContent = 'Related MCB evidence is temporarily unavailable.';
+          const rows = root.querySelector('[data-jev-mcb-rows]');
+          if (rows) rows.replaceChildren();
+        }
+
         if (
           data?.schema_version !== 1 ||
           data?.benchmark !== 'jev-vs-llm' ||
@@ -623,17 +760,17 @@ const selectorLabelFor = (track: Track) => {
           data.publication.comparison_status === 'complete_provider_comparison';
         setText(
           '[data-result-title]',
-          isDirectComparison ? 'Jev vs LLM · Decision Benchmarks' : 'Routing · Published local baselines',
+          'JEV vs LLM · Published evidence',
         );
         setText(
           '[data-result-question]',
-          isDirectComparison
-            ? 'Published head-to-head decision model and LLM evidence.'
-            : 'The suite contains five experiment types; only a local routing subset is public.',
+          'MCB intent-classification comparison above · separate Jev suite routing evidence below.',
         );
         setText(
           '[data-jev-published-scope]',
-          isDirectComparison ? 'Direct Jev vs LLM comparison published' : 'Jev vs LLM head-to-head not yet published',
+          isDirectComparison
+            ? 'Standalone Jev suite: direct comparison published'
+            : 'Standalone Jev suite: head-to-head not published',
         );
         setText(
           '[data-jev-experiment-count]',
@@ -643,8 +780,9 @@ const selectorLabelFor = (track: Track) => {
           '[data-jev-scope-note]',
           isDirectComparison
             ? 'A reviewed and authorized public comparison is available.'
-            : 'Public figures currently cover ' + providers.join(', ') +
-                ' routing only. Jev/TypeSafe/CLM numerical results are excluded pending publication clearance.',
+            : 'This standalone suite currently publishes ' + providers.join(', ') +
+                ' routing aggregates only. Jev/TypeSafe/CLM metrics remain excluded here ' +
+                'pending publication clearance. The JEV and GPT Luna results above come from MCB.',
         );
 
         const coverageStrip = root.querySelector('[data-jev-stage-coverage]');
@@ -801,7 +939,20 @@ const selectorLabelFor = (track: Track) => {
           const data = await response.json();
           if (currentRequest !== requestId) return;
 
-          if (tab.dataset.resultKind === 'jev-public-summary') renderJevRouting(data, tab);
+          if (tab.dataset.resultKind === 'jev-public-summary') {
+            const relatedUrl = tab.dataset.relatedResultUrl || '';
+            let relatedMcb = null;
+            if (relatedUrl) {
+              try {
+                const relatedResponse = await fetch(relatedUrl);
+                if (relatedResponse.ok) relatedMcb = await relatedResponse.json();
+              } catch (relatedError) {
+                console.warn('Related MCB evidence unavailable', relatedError);
+              }
+            }
+            if (currentRequest !== requestId) return;
+            renderJevRouting(data, tab, relatedMcb);
+          }
           else if (tab.dataset.resultKind === 'mcb-overview') renderMcbOverview(data, tab);
           else throw new Error('Unsupported result adapter');
 
@@ -846,6 +997,177 @@ const selectorLabelFor = (track: Track) => {
 <style>
 
   /* Homepage-sized routing comparison: the numbers are the visual, not a scatter plot. */
+  .jev-mcb-bridge {
+    padding: clamp(18px, 2.8vw, 28px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 95% 5%, color-mix(in srgb, var(--accent-violet) 9%, transparent), transparent 55%),
+      var(--surface-card);
+  }
+
+  .jev-mcb-bridge__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .jev-mcb-bridge__header h4 {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+    line-height: 1.18;
+    letter-spacing: -0.035em;
+    margin: 7px 0 5px;
+  }
+
+  .jev-mcb-bridge__header p, .jev-mcb-bridge__note {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .jev-mcb-bridge__header a {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 760;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .jev-mcb-rows {
+    display: grid;
+    gap: 3px;
+    margin-top: 17px;
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row) {
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) minmax(140px, 1.2fr);
+    gap: 18px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row__model strong),
+  .jev-mcb-rows :global(.jev-mcb-row__score strong) {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.96rem;
+    color: var(--ink-display);
+    font-weight: 780;
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row__model small) {
+    display: block;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    margin-top: 3px;
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row__score) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row__track) {
+    height: 8px;
+    width: min(100%, 240px);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent-blue) 13%, var(--surface-subtle));
+    overflow: hidden;
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row__fill) {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-violet));
+  }
+
+  .jev-mcb-bridge__note {
+    padding-top: 13px;
+    margin-top: 7px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .jev-local-details {
+    margin-top: 14px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    overflow: hidden;
+  }
+
+  .jev-local-details > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 17px 20px;
+    cursor: pointer;
+    list-style: none;
+    color: var(--ink-display);
+  }
+
+  .jev-local-details > summary::-webkit-details-marker { display: none; }
+
+  .jev-local-details > summary strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+  }
+
+  .jev-local-details > summary small {
+    display: block;
+    margin-top: 3px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .jev-local-details > summary > span:last-child {
+    font-size: 1.4rem;
+    color: var(--accent-blue-dark);
+  }
+
+  .jev-local-details[open] > summary > span:last-child {
+    transform: rotate(45deg);
+  }
+
+  .jev-local-details > .jev-coverage-banner,
+  .jev-local-details > .jev-tradeoff,
+  .jev-local-details > .jev-ranking,
+  .jev-local-details > .jev-method-note {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+
+  .jev-local-details > .jev-method-note {
+    margin-bottom: 22px;
+  }
+
+  @media (max-width: 620px) {
+    .jev-mcb-bridge__header {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .jev-mcb-rows :global(.jev-mcb-row) {
+      grid-template-columns: minmax(0, 1fr) minmax(100px, 0.75fr);
+      gap: 10px;
+    }
+    .jev-mcb-rows :global(.jev-mcb-row__score) {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+  }
+
   .jev-summary {
     margin-top: clamp(22px, 3vw, 30px);
   }

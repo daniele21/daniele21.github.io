@@ -217,6 +217,8 @@ export interface MeasureSystemCard {
     resultUrl?: string;
     sourceUrl?: string;
     resultKind?: 'jev-public-summary' | 'mcb-overview';
+    relatedResultUrl?: string;
+    relatedSourceUrl?: string;
   }[];
 }
 

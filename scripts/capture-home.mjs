@@ -198,6 +198,29 @@ try {
       ],
     },
   };
+  const matchedMcbEvidence = {
+    cells: [
+      { model_key: 'gpt-5.6-luna', capability_id: 'intent-classification',
+        primary_metric: 'accuracy', primary_value: 0.8246753246753247,
+        sample_count: 154, benchmark_signature: 'same-mcb-benchmark', deployment: 'api' },
+      { model_key: 'jev-1.13.0', capability_id: 'intent-classification',
+        primary_metric: 'accuracy', primary_value: 0.7467532467532467,
+        sample_count: 154, benchmark_signature: 'same-mcb-benchmark', deployment: 'api' },
+      { model_key: 'decisio-qwen3.5-4b-q4km', capability_id: 'intent-classification',
+        primary_metric: 'accuracy', primary_value: 0.7012987012987013,
+        sample_count: 154, benchmark_signature: 'same-mcb-benchmark', deployment: 'local' },
+      { model_key: 'qwen3.5-9b-q4km', capability_id: 'intent-classification',
+        primary_metric: 'accuracy', primary_value: 0.6948051948051948,
+        sample_count: 154, benchmark_signature: 'same-mcb-benchmark', deployment: 'local' },
+      { model_key: 'jev-other', capability_id: 'intent-classification',
+        primary_metric: 'accuracy', primary_value: 0.99,
+        sample_count: 77, benchmark_signature: 'unrelated', deployment: 'api' },
+    ],
+    models: [],
+    capabilities: [],
+    frontier: { points: [] },
+  };
+
   const jevLayouts = [];
   for (const viewport of [
     { name: 'desktop', width: 1440, height: 1000, expectedColumns: 3 },
@@ -216,8 +239,47 @@ try {
         body: JSON.stringify(jevEvidence),
       }),
     );
+    await page.route('**/experiments/model-capability-benchmark/results/published/models-overview.json', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify(matchedMcbEvidence),
+      }),
+    );
     await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
     await page.locator('[data-track-id="jev-vs-llm-routing"]').click();
+    await page.locator('[data-jev-mcb-rows] .jev-mcb-row').first().waitFor({ state: 'visible' });
+
+    const bridge = await page.evaluate(() => {
+      const rows = [...document.querySelectorAll('[data-jev-mcb-rows] .jev-mcb-row')];
+      const labels = rows.map((row) => row.textContent || '');
+      const sourceNote = document.querySelector('[data-jev-mcb-meta]')?.textContent || '';
+      const details = document.querySelector('[data-jev-local-details]');
+      const row = rows[0];
+      return {
+        names: labels,
+        count: rows.length,
+        consistentSource: sourceNote.includes('154') && sourceNote.includes('shared benchmark signature'),
+        grid: row ? getComputedStyle(row).display : null,
+        localInitiallyClosed: details instanceof HTMLDetailsElement && !details.open,
+      };
+    });
+    if (
+      bridge.count !== 4 ||
+      bridge.grid !== 'grid' ||
+      !bridge.names.some((name) => name.includes('JEV 1.13.0') && name.includes('74.7%')) ||
+      !bridge.names.some((name) => name.includes('GPT-5.6 Luna') && name.includes('82.5%')) ||
+      !bridge.consistentSource ||
+      !bridge.localInitiallyClosed
+    ) {
+      throw new Error(`Missing or non-comparable JEV/GPT benchmark bridge on ${viewport.name}: ${JSON.stringify(bridge)}`);
+    }
+
+    await page.locator('[data-jev-summary]').screenshot({
+      path: path.join(outputDir, `jev-mcb-bridge__${viewport.name}.png`),
+    });
+    await page.locator('[data-jev-local-details] summary').click();
     await page.locator('[data-jev-rows] .jev-model-row').first().waitFor({ state: 'visible' });
 
     const diagnostics = await page.evaluate(() => {

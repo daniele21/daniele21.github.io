@@ -365,13 +365,17 @@ export const landingData: LandingPageData = {
           {
             id: 'jev-vs-llm-routing',
             title: 'JEV vs LLM · Decision Benchmarks',
-            question: 'What published evidence is available across decision workloads?',
+            question: 'What does the published evidence say about decision models versus general LLMs?',
             status: 'PARTIAL PUBLIC EVIDENCE',
             resultUrl:
               'https://raw.githubusercontent.com/daniele21/experiments/dev/experiments/jev-vs-llm/results/published/portfolio-summary.json',
             sourceUrl:
               'https://github.com/daniele21/experiments/blob/feature/public-jev-benchmark-evidence/experiments/jev-vs-llm/results/published/portfolio-summary.json',
             resultKind: 'jev-public-summary',
+            relatedResultUrl:
+              'https://raw.githubusercontent.com/daniele21/experiments/dev/experiments/model-capability-benchmark/results/published/models-overview.json',
+            relatedSourceUrl:
+              'https://github.com/daniele21/experiments/blob/dev/experiments/model-capability-benchmark/results/published/models-overview.json',
           },
           {
             id: 'redactguard-local-anonymization',
