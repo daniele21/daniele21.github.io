@@ -181,7 +181,7 @@ const selectorLabelFor = (track: Track) => {
             <h4>Can a model detect sensitive data without leaking it?</h4>
             <p>Six evaluation datasets cover ambiguous PII, healthcare, hard cases and realistic documents. Choose a dataset to explore what is actually tested.</p>
           </div>
-          <span class="rg-status">Dataset coverage published</span>
+          <span class="rg-status" data-rg-publication-status>Dataset coverage published</span>
         </div>
 
         <div class="rg-dataset-picker" data-rg-datasets role="group" aria-label="Select RedactGuard test dataset"></div>
@@ -206,7 +206,7 @@ const selectorLabelFor = (track: Track) => {
           <div class="rg-performance__heading">
             <div>
               <span class="rg-label">MODEL PERFORMANCE</span>
-              <h4>Privacy effectiveness, not just model accuracy</h4>
+              <h4>What the models actually detected</h4>
             </div>
             <span data-rg-run-status>Awaiting published runs</span>
           </div>
@@ -230,10 +230,10 @@ const selectorLabelFor = (track: Track) => {
             No published model inference scores for this dataset yet. The repository contains the test suite, but the private local runs have not been released as comparable public evidence.
           </p>
           <div class="rg-metric-guide">
-            <span>PII recall <small>detect sensitive data</small></span>
+            <span>System recall <small>PII detected across the full workflow</small></span>
             <span>System leakage <small>data left exposed</small></span>
             <span>Precision <small>avoid false positives</small></span>
-            <span>p95 latency <small>response-time tail</small></span>
+            <span>Observed p95 <small>quality-run response tail, not a repeated speed test</small></span>
           </div>
         </div>
         <div class="rg-matrix" data-rg-matrix hidden>
@@ -1025,7 +1025,18 @@ const selectorLabelFor = (track: Track) => {
         setHidden(root.querySelector('[data-mcb-takeaway]'), true);
         setHidden(root.querySelector('[data-rg-summary]'), false);
 
-        setText('[data-result-eyebrow]', 'PUBLISHED TEST COVERAGE · MODEL SCORES PENDING');
+        setText(
+          '[data-result-eyebrow]',
+          data.publication.has_published_model_metrics
+            ? 'PUBLISHED MODEL RESULTS · REDACTGUARD'
+            : 'PUBLISHED TEST COVERAGE · MODEL SCORES PENDING',
+        );
+        setText(
+          '[data-rg-publication-status]',
+          data.publication.has_published_model_metrics
+            ? data.models.length + ' measured model × dataset results'
+            : 'Dataset coverage published',
+        );
         setText('[data-result-title]', 'RedactGuard · Privacy evaluation');
         setText(
           '[data-result-question]',
@@ -1079,7 +1090,7 @@ const selectorLabelFor = (track: Track) => {
           setHidden(root.querySelector('[data-rg-no-models]'), true);
           setHidden(resultRows, false);
 
-          models.sort((a, b) => b.pii_recall - a.pii_recall);
+          models.sort((a, b) => b.system_pii_recall - a.system_pii_recall);
           models.forEach((entry) => {
             const row = document.createElement('div');
             row.className = 'rg-model-row';
@@ -1088,11 +1099,14 @@ const selectorLabelFor = (track: Track) => {
             name.textContent = entry.model;
             const metrics = document.createElement('span');
             const parts = [
-              'Recall ' + formatPct(entry.pii_recall),
+              'System recall ' + formatPct(entry.system_pii_recall),
               'Leakage ' + formatPct(entry.system_leakage_rate),
             ];
             if (Number.isFinite(entry.precision)) parts.push('Precision ' + formatPct(entry.precision));
-            if (Number.isFinite(entry.latency_p95_ms)) parts.push('p95 ' + formatSeconds(entry.latency_p95_ms));
+            if (Number.isFinite(entry.inference_success_rate)) parts.push('Run success ' + formatPct(entry.inference_success_rate));
+            if (Number.isFinite(entry.latency_p95_ms)) {
+              parts.push('Observed p95 ' + formatSeconds(entry.latency_p95_ms));
+            }
             metrics.textContent = parts.join(' · ');
             row.append(name, metrics);
             resultRows.appendChild(row);
@@ -1110,7 +1124,13 @@ const selectorLabelFor = (track: Track) => {
           button.addEventListener('click', () => setDataset(dataset));
           picker.appendChild(button);
         });
-        setDataset(datasets.find((item) => item.id === 'realistic') || datasets[0]);
+        setDataset(
+          (data.publication.has_published_model_metrics
+            ? datasets.find((item) => item.id === 'challenge' && data.models.some((row) => row.dataset === 'challenge'))
+            : null)
+          || datasets.find((item) => item.id === 'realistic')
+          || datasets[0],
+        );
       };
 
       const selectTab = async (tab) => {
