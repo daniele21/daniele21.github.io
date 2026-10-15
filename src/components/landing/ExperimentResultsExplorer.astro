@@ -211,6 +211,21 @@ const selectorLabelFor = (track: Track) => {
             <span data-rg-run-status>Awaiting published runs</span>
           </div>
           <div data-rg-model-rows class="rg-model-rows" role="list" hidden></div>
+          <div class="rg-pareto" data-rg-pareto hidden>
+            <div class="rg-pareto__head">
+              <div>
+                <span class="rg-label">SAME-RUN QUALITY × LATENCY</span>
+                <strong>Privacy quality vs response time</strong>
+              </div>
+              <span class="rg-pareto__hint">System recall ↑ · p95 latency →</span>
+            </div>
+            <svg data-rg-pareto-plot viewBox="0 0 640 260" role="img"
+              aria-label="RedactGuard system PII recall versus p95 latency within one evaluated run"></svg>
+            <p data-rg-pareto-note class="rg-pareto__note"></p>
+          </div>
+          <p class="rg-pareto__missing" data-rg-pareto-missing hidden>
+            A quality–latency comparison requires at least two models with measured p95 latency and system recall in the same complete run.
+          </p>
           <p data-rg-no-models class="rg-performance__pending">
             No published model inference scores for this dataset yet. The repository contains the test suite, but the private local runs have not been released as comparable public evidence.
           </p>
@@ -220,6 +235,21 @@ const selectorLabelFor = (track: Track) => {
             <span>Precision <small>avoid false positives</small></span>
             <span>p95 latency <small>response-time tail</small></span>
           </div>
+        </div>
+        <div class="rg-matrix" data-rg-matrix hidden>
+          <div class="rg-matrix__heading">
+            <div>
+              <span class="rg-label">CROSS-DATASET EVIDENCE</span>
+              <h4>Model × dataset</h4>
+              <p>Every cell is a measured score for that dataset, not an overall rating.</p>
+            </div>
+            <div class="rg-matrix__metric" role="group" aria-label="RedactGuard matrix metric">
+              <button type="button" data-rg-metric="system_pii_recall" aria-pressed="true">System recall</button>
+              <button type="button" data-rg-metric="system_leakage_rate" aria-pressed="false">System leakage</button>
+            </div>
+          </div>
+          <div class="rg-matrix__scroll" data-rg-matrix-scroll></div>
+          <p class="rg-matrix__note">— means no published measurement for this model and dataset. Missing data is never treated as zero.</p>
         </div>
         <p class="rg-disclosure">Dataset counts are real, versioned test coverage—not benchmark performance. Smoke tests are limited; realistic gold spans have not been independently human-reviewed.</p>
       </div>
@@ -302,6 +332,9 @@ const selectorLabelFor = (track: Track) => {
 </div>
 
 <script>
+  import { redactguardRows } from '../../scripts/redactguardEvidence.js';
+  import { initializeRedactguardAnalytics } from '../../scripts/redactguardPresentation.js';
+
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
   const initExperimentExplorer = () => {
@@ -1007,6 +1040,9 @@ const selectorLabelFor = (track: Track) => {
         const resultRows = root.querySelector('[data-rg-model-rows]');
         if (!(picker instanceof HTMLElement) || !(resultRows instanceof HTMLElement)) return;
         picker.replaceChildren();
+        const updateAnalytics = initializeRedactguardAnalytics(root, data, {
+          formatPct, formatSeconds, shortModel, createSvg, setHidden,
+        });
 
         const setDataset = (dataset) => {
           picker.querySelectorAll('button[data-rg-dataset]').forEach((button) => {
@@ -1031,12 +1067,8 @@ const selectorLabelFor = (track: Track) => {
           }
 
           resultRows.replaceChildren();
-          const models = data.models.filter((row) =>
-            row.dataset === dataset.id &&
-            typeof row.model === 'string' &&
-            Number.isFinite(row.pii_recall) &&
-            Number.isFinite(row.system_leakage_rate),
-          );
+          updateAnalytics(dataset.id);
+          const models = redactguardRows(data, dataset.id);
           if (!data.publication.has_published_model_metrics || !models.length) {
             setText('[data-rg-run-status]', 'No published model run');
             setHidden(resultRows, true);
@@ -1380,6 +1412,193 @@ const selectorLabelFor = (track: Track) => {
   .rg-model-rows :global(.rg-model-row span) {
     font-size: var(--text-caption);
     color: var(--ink-muted);
+  }
+
+  .rg-pareto {
+    margin-top: 18px;
+    padding: clamp(16px, 2.4vw, 24px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 95% 0%, color-mix(in srgb, var(--accent-violet) 9%, transparent), transparent 55%),
+      var(--surface-card);
+  }
+
+  .rg-pareto__head,
+  .rg-matrix__heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .rg-pareto__head strong {
+    display: block;
+    margin-top: 6px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    letter-spacing: -0.02em;
+  }
+
+  .rg-pareto__hint {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    white-space: nowrap;
+  }
+
+  .rg-pareto svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 190px;
+    max-height: 320px;
+    overflow: visible;
+    color: var(--ink-muted);
+    margin-top: 16px;
+  }
+
+  .rg-pareto__note,
+  .rg-pareto__missing,
+  .rg-matrix__note {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  .rg-pareto__missing {
+    margin: 12px 0 0;
+  }
+
+  .rg-matrix {
+    margin-top: clamp(24px, 3vw, 34px);
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .rg-matrix__heading h4 {
+    margin: 5px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.13rem, 1.8vw, 1.42rem);
+    letter-spacing: -0.025em;
+  }
+
+  .rg-matrix__heading p {
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 5px 0 0;
+  }
+
+  .rg-matrix__metric {
+    display: inline-flex;
+    padding: 3px;
+    gap: 2px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+  }
+
+  .rg-matrix__metric button {
+    min-height: var(--touch-target-min);
+    padding: 7px 12px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.83rem;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .rg-matrix__metric button[aria-pressed='true'] {
+    background: color-mix(in srgb, var(--accent-blue) 11%, var(--surface-card));
+    color: var(--accent-blue-dark);
+  }
+
+  .rg-matrix__metric button:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+  }
+
+  .rg-matrix__scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    margin-top: 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table) {
+    width: 100%;
+    min-width: 630px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table caption) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table th),
+  .rg-matrix__scroll :global(.rg-matrix-table td) {
+    text-align: left;
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 0.85rem;
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table thead th) {
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 750;
+    background: var(--surface-subtle);
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table tbody th) {
+    min-width: 140px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-weight: 760;
+    background: var(--surface-card);
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table td.is-selected) {
+    box-shadow: inset 0 -2px color-mix(in srgb, var(--accent-blue) 45%, transparent);
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table td.is-missing) {
+    color: var(--ink-subtle);
+    background: var(--surface-subtle);
+  }
+
+  .rg-matrix__note {
+    margin: 9px 0 0;
+  }
+
+  @media (max-width: 730px) {
+    .rg-pareto__head,
+    .rg-matrix__heading {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .rg-matrix__metric {
+      width: 100%;
+      max-width: 360px;
+    }
+    .rg-matrix__metric button {
+      flex: 1;
+    }
   }
 
   .rg-disclosure {

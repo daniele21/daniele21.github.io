@@ -384,12 +384,13 @@ try {
       reducedMotion: 'reduce',
     });
     const page = await context.newPage();
+    let activeRedactionEvidence = redactionEvidence;
     await page.route('**/redactguard-local-anonymization/results/published/portfolio-summary.json',
       (route) => route.fulfill({
         status: 200,
         contentType: 'application/json',
         headers: { 'access-control-allow-origin': '*' },
-        body: JSON.stringify(redactionEvidence),
+        body: JSON.stringify(activeRedactionEvidence),
       }),
     );
     await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
@@ -430,8 +431,72 @@ try {
     }
 
     await page.locator('[data-rg-summary]').screenshot({
-      path: path.join(outputDir, `redactguard-evidence__${viewport.name}.png`),
+      path: path.join(outputDir, 'redactguard-evidence__' + viewport.name + '.png'),
     });
+
+    // Synthetic metrics are test fixtures ONLY. No numerical model quality
+    // figures are checked into the published RedactGuard evidence artifact.
+    const row = (model, dataset, cohort, recall, leakage, latency) => ({
+      model, dataset, cases: 48,
+      pii_recall: recall,
+      system_pii_recall: recall,
+      system_leakage_rate: leakage,
+      precision: 0.93,
+      latency_p95_ms: latency,
+      provenance: {
+        run_id: cohort, cohort_id: cohort,
+        comparison_scope: 'same_run_exploratory',
+      },
+    });
+    activeRedactionEvidence = {
+      ...redactionEvidence,
+      publication: {
+        ...redactionEvidence.publication,
+        status: 'model_aggregates_published',
+        has_published_model_metrics: true,
+      },
+      models: [
+        row('test-qwen', 'healthcare', 'hc-one', 0.84, 0.16, 760),
+        row('test-nemotron', 'healthcare', 'hc-one', 0.91, 0.09, 1200),
+        row('test-qwen', 'ambiguous', 'amb-one', 0.66, 0.34, 900),
+      ],
+    };
+    await page.locator('[data-track-id="redactguard-local-anonymization"]').click();
+    await page.locator('[data-rg-matrix-scroll] table').waitFor({ state: 'visible' });
+    await page.locator('[data-rg-dataset="healthcare"]').click();
+
+    const measured = await page.evaluate(() => ({
+      matrixVisible: !document.querySelector('[data-rg-matrix]').hidden,
+      rows: document.querySelectorAll('[data-rg-matrix-scroll] tbody tr').length,
+      cells: document.querySelector('[data-rg-matrix-scroll]')?.textContent,
+      paretoVisible: !document.querySelector('[data-rg-pareto]').hidden,
+      dots: document.querySelectorAll('[data-rg-pareto-plot] circle').length,
+      overflow: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+    }));
+    if (!measured.matrixVisible || measured.rows !== 2 ||
+        !measured.cells.includes('84.0%') ||
+        !measured.paretoVisible || measured.dots !== 2 ||
+        measured.overflow !== 0) {
+      throw new Error('Measured RedactGuard UI regression in ' +
+        viewport.name + ': ' + JSON.stringify(measured));
+    }
+    await page.locator('[data-rg-metric="system_leakage_rate"]').click();
+    const leakage = await page.locator('[data-rg-matrix-scroll]').textContent();
+    if (!leakage.includes('16.0%') || !leakage.includes('9.0%')) {
+      throw new Error('RedactGuard metric toggle failed in ' + viewport.name);
+    }
+    await page.locator('[data-rg-summary]').screenshot({
+      path: path.join(outputDir, 'redactguard-measured-fixture__' + viewport.name + '.png'),
+    });
+    await page.locator('[data-rg-dataset="ambiguous"]').click();
+    const crossRun = await page.evaluate(() => ({
+      paretoHidden: document.querySelector('[data-rg-pareto]').hidden,
+      pendingVisible: !document.querySelector('[data-rg-pareto-missing]').hidden,
+    }));
+    if (!crossRun.paretoHidden || !crossRun.pendingVisible) {
+      throw new Error('RedactGuard incorrectly drew an unpaired Pareto: ' +
+        JSON.stringify(crossRun));
+    }
     await page.close();
     await context.close();
   }
