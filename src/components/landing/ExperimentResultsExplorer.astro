@@ -15,6 +15,8 @@ interface Props {
   tracks: Track[];
 }
 
+import '../../styles/redactguardInsights.css';
+
 const { tracks } = Astro.props;
 const sortedTracks = [...tracks].sort((a, b) => Number(Boolean(b.resultUrl)) - Number(Boolean(a.resultUrl)));
 const initialIndex = Math.max(0, sortedTracks.findIndex((track) => Boolean(track.resultUrl)));
@@ -175,86 +177,112 @@ const selectorLabelFor = (track: Track) => {
       </div>
 
       <div class="rg-summary" data-rg-summary hidden>
-        <div class="rg-introduction">
+        <div class="rg-topline">
           <div>
-            <span class="rg-label">THE BENCHMARK</span>
-            <h4>Can a model detect sensitive data without leaking it?</h4>
-            <p>Six evaluation datasets cover ambiguous PII, healthcare, hard cases and realistic documents. Choose a dataset to explore what is actually tested.</p>
+            <span class="rg-label">PRIVACY BENCHMARK</span>
+            <h4>How well do local models protect sensitive data?</h4>
           </div>
-          <span class="rg-status" data-rg-publication-status>Dataset coverage published</span>
+          <span class="rg-status" data-rg-publication-status>Measured evidence</span>
         </div>
 
         <div class="rg-dataset-picker" data-rg-datasets role="group" aria-label="Select RedactGuard test dataset"></div>
 
         <div class="rg-detail" aria-live="polite">
           <div class="rg-detail__main">
-            <span class="rg-label" data-rg-kind>DATASET COVERAGE</span>
+            <span class="rg-label" data-rg-kind>DATASET</span>
             <h4 data-rg-dataset-name>—</h4>
             <p data-rg-focus></p>
-            <a data-rg-dataset-source href="#" target="_blank" rel="noopener noreferrer">
-              Inspect dataset evidence ↗
-            </a>
           </div>
           <div class="rg-detail__count">
             <strong data-rg-count>—</strong>
             <span data-rg-count-unit>test cases</span>
             <small data-rg-extra hidden></small>
           </div>
+          <a class="rg-detail__link" data-rg-dataset-source href="#" target="_blank" rel="noopener noreferrer">
+            Dataset source ↗
+          </a>
         </div>
 
         <div class="rg-performance">
           <div class="rg-performance__heading">
             <div>
-              <span class="rg-label">MODEL PERFORMANCE</span>
-              <h4>What the models actually detected</h4>
+              <span class="rg-label">MEASURED PERFORMANCE</span>
+              <h4>What the results tell us</h4>
             </div>
             <span data-rg-run-status>Awaiting published runs</span>
           </div>
-          <div data-rg-model-rows class="rg-model-rows" role="list" hidden></div>
-          <div class="rg-pareto" data-rg-pareto hidden>
-            <div class="rg-pareto__head">
+
+          <div class="rg-insights" data-rg-insights hidden aria-label="Key results"></div>
+          <div class="rg-takeaway" data-rg-takeaway hidden>
+            <span class="rg-label">KEY TAKEAWAY</span>
+            <p data-rg-takeaway-text></p>
+          </div>
+
+          <div class="rg-comparison" data-rg-comparison hidden>
+            <div class="rg-comparison__heading">
               <div>
-                <span class="rg-label">SAME-RUN QUALITY × LATENCY</span>
-                <strong>Privacy quality vs response time</strong>
+                <h5>Compare the models</h5>
+                <p data-rg-comparison-note>One run · same benchmark workload</p>
               </div>
-              <span class="rg-pareto__hint">System recall ↑ · p95 latency →</span>
+              <div class="rg-legend" aria-label="Metric interpretation">
+                <span><span class="rg-legend__mark rg-legend__mark--recall"></span> Recall ↑</span>
+                <span><span class="rg-legend__mark rg-legend__mark--leakage"></span> Leakage ↓</span>
+              </div>
             </div>
-            <svg data-rg-pareto-plot viewBox="0 0 640 260" role="img"
-              aria-label="RedactGuard system PII recall versus p95 latency within one evaluated run"></svg>
-            <p data-rg-pareto-note class="rg-pareto__note"></p>
+            <div data-rg-model-rows class="rg-model-rows" role="list"></div>
+            <p class="rg-comparison__footnote">System recall includes inference failures. The p95 shown here was observed during quality runs, not a repeated latency benchmark.</p>
           </div>
-          <p class="rg-pareto__missing" data-rg-pareto-missing hidden>
-            A quality–latency comparison requires at least two models with measured p95 latency and system recall in the same complete run.
-          </p>
+
           <p data-rg-no-models class="rg-performance__pending">
-            No published model inference scores for this dataset yet. The repository contains the test suite, but the private local runs have not been released as comparable public evidence.
+            The test dataset is published, but no measured model results are available for this dataset yet.
           </p>
-          <div class="rg-metric-guide">
-            <span>System recall <small>PII detected across the full workflow</small></span>
-            <span>System leakage <small>data left exposed</small></span>
-            <span>Precision <small>avoid false positives</small></span>
-            <span>Observed p95 <small>quality-run response tail, not a repeated speed test</small></span>
-          </div>
         </div>
-        <div class="rg-matrix" data-rg-matrix hidden>
-          <div class="rg-matrix__heading">
-            <div>
-              <span class="rg-label">CROSS-DATASET EVIDENCE</span>
-              <h4>Model × dataset</h4>
-              <p>Every cell is a measured score for that dataset, not an overall rating.</p>
+
+        <details class="rg-advanced" data-rg-advanced hidden>
+          <summary>
+            <span>
+              <strong>Explore deeper evidence</strong>
+              <small>Quality × latency, cross-dataset matrix and methodology</small>
+            </span>
+            <span class="rg-advanced__chevron" aria-hidden="true">+</span>
+          </summary>
+          <div class="rg-advanced__body">
+            <div class="rg-pareto" data-rg-pareto hidden>
+              <div class="rg-pareto__head">
+                <div>
+                  <span class="rg-label">SAME-RUN QUALITY × LATENCY</span>
+                  <strong>Privacy quality vs observed response time</strong>
+                </div>
+                <span class="rg-pareto__hint">System recall ↑ · observed p95 →</span>
+              </div>
+              <svg data-rg-pareto-plot viewBox="0 0 640 260" role="img"
+                aria-label="RedactGuard system PII recall versus observed p95 latency within a single evaluated run"></svg>
+              <p data-rg-pareto-note class="rg-pareto__note"></p>
             </div>
-            <div class="rg-matrix__metric" role="group" aria-label="RedactGuard matrix metric">
-              <button type="button" data-rg-metric="system_pii_recall" aria-pressed="true">System recall</button>
-              <button type="button" data-rg-metric="system_leakage_rate" aria-pressed="false">System leakage</button>
+            <p class="rg-pareto__missing" data-rg-pareto-missing hidden>
+              The quality–latency comparison requires at least two models measured in the same complete run.
+            </p>
+            <div class="rg-matrix" data-rg-matrix hidden>
+              <div class="rg-matrix__heading">
+                <div>
+                  <span class="rg-label">ACROSS DATASETS</span>
+                  <h4>Model × dataset</h4>
+                  <p>Individual dataset scores, never a global rating.</p>
+                </div>
+                <div class="rg-matrix__metric" role="group" aria-label="RedactGuard matrix metric">
+                  <button type="button" data-rg-metric="system_pii_recall" aria-pressed="true">System recall</button>
+                  <button type="button" data-rg-metric="system_leakage_rate" aria-pressed="false">System leakage</button>
+                </div>
+              </div>
+              <div class="rg-matrix__scroll" data-rg-matrix-scroll></div>
+              <p class="rg-matrix__note">— means that this model/dataset has no published measurement, not 0% performance.</p>
             </div>
+            <p class="rg-disclosure">Run comparisons are exploratory. Healthcare and Ambiguous have distinct model cohorts; do not interpret their figures as a controlled leaderboard. Dataset gold spans have not been independently human-reviewed.</p>
           </div>
-          <div class="rg-matrix__scroll" data-rg-matrix-scroll></div>
-          <p class="rg-matrix__note">— means no published measurement for this model and dataset. Missing data is never treated as zero.</p>
-        </div>
-        <p class="rg-disclosure">Dataset counts are real, versioned test coverage—not benchmark performance. Smoke tests are limited; realistic gold spans have not been independently human-reviewed.</p>
+        </details>
       </div>
 
-      <div class="benchmark-story" data-mcb-story>
+            <div class="benchmark-story" data-mcb-story>
         <div class="performance-plot">
           <div class="plot-heading">
             <div>
@@ -333,6 +361,7 @@ const selectorLabelFor = (track: Track) => {
 
 <script>
   import { redactguardRows } from '../../scripts/redactguardEvidence.js';
+  import { renderRedactguardOverview } from '../../scripts/redactguardOverview.js';
   import { initializeRedactguardAnalytics } from '../../scripts/redactguardPresentation.js';
 
   const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -1077,40 +1106,18 @@ const selectorLabelFor = (track: Track) => {
             link.href = 'https://github.com/daniele21/experiments/blob/dev/' + dataset.source_path;
           }
 
-          resultRows.replaceChildren();
           updateAnalytics(dataset.id);
-          const models = redactguardRows(data, dataset.id);
-          if (!data.publication.has_published_model_metrics || !models.length) {
-            setText('[data-rg-run-status]', 'No published model run');
-            setHidden(resultRows, true);
-            setHidden(root.querySelector('[data-rg-no-models]'), false);
-            return;
-          }
-          setText('[data-rg-run-status]', models.length + ' measured model(s)');
-          setHidden(root.querySelector('[data-rg-no-models]'), true);
-          setHidden(resultRows, false);
-
-          models.sort((a, b) => b.system_pii_recall - a.system_pii_recall);
-          models.forEach((entry) => {
-            const row = document.createElement('div');
-            row.className = 'rg-model-row';
-            row.setAttribute('role', 'listitem');
-            const name = document.createElement('strong');
-            name.textContent = entry.model;
-            const metrics = document.createElement('span');
-            const parts = [
-              'System recall ' + formatPct(entry.system_pii_recall),
-              'Leakage ' + formatPct(entry.system_leakage_rate),
-            ];
-            if (Number.isFinite(entry.precision)) parts.push('Precision ' + formatPct(entry.precision));
-            if (Number.isFinite(entry.inference_success_rate)) parts.push('Run success ' + formatPct(entry.inference_success_rate));
-            if (Number.isFinite(entry.latency_p95_ms)) {
-              parts.push('Observed p95 ' + formatSeconds(entry.latency_p95_ms));
-            }
-            metrics.textContent = parts.join(' · ');
-            row.append(name, metrics);
-            resultRows.appendChild(row);
+          const summary = renderRedactguardOverview(root, data, dataset.id, {
+            formatPct, formatSeconds, setHidden,
           });
+          const measuredCount = summary.rows.length;
+          setText(
+            '[data-rg-run-status]',
+            measuredCount
+              ? measuredCount + ' measured model' + (measuredCount === 1 ? '' : 's')
+              : 'No published model run',
+          );
+          setHidden(root.querySelector('[data-rg-no-models]'), measuredCount > 0);
         };
 
         datasets.forEach((dataset) => {

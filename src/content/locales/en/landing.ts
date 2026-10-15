@@ -385,7 +385,7 @@ export const landingData: LandingPageData = {
             resultUrl:
               'https://raw.githubusercontent.com/daniele21/experiments/dev/experiments/redactguard-local-anonymization/results/published/portfolio-summary.json',
             sourceUrl:
-              'https://github.com/daniele21/experiments/blob/feature/redactguard-public-benchmark-evidence/experiments/redactguard-local-anonymization/results/published/portfolio-summary.json',
+              'https://github.com/daniele21/experiments/blob/dev/experiments/redactguard-local-anonymization/results/published/portfolio-summary.json',
             resultKind: 'redactguard-public-summary',
           },
           {
