@@ -110,7 +110,7 @@ for (const fragment of [
   'data-jev-partial',
   'data-jev-published-scope',
   'data-jev-experiment-count',
-  'Jev vs LLM head-to-head not yet published',
+  'Standalone Jev suite: head-to-head not published',
   'data-jev-stage-coverage',
   'data-mcb-story',
   'data-mcb-scope',
