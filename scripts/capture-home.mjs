@@ -337,6 +337,108 @@ try {
     path.join(outputDir, 'jev-layout-check.json'),
     JSON.stringify(jevLayouts, null, 2),
   );
+
+  const redactionEvidence = {
+    schema_version: 1,
+    benchmark: 'redactguard-local-anonymization',
+    publication: {
+      status: 'dataset_evidence_only',
+      has_published_model_metrics: false,
+      contains_raw_pii: false,
+    },
+    datasets: [
+      { id: 'smoke', title: 'Smoke', kind: 'smoke',
+        focus: 'Contract and pipeline checks', cases: 20,
+        source_path: 'experiments/redactguard-local-anonymization/data/smoke/cases.jsonl',
+        results_status: 'no_published_run' },
+      { id: 'healthcare', title: 'Healthcare', kind: 'challenge',
+        focus: 'Clinical and sensitive PII', cases: 48,
+        source_path: 'experiments/redactguard-local-anonymization/data/healthcare/cases.jsonl',
+        results_status: 'no_published_run' },
+      { id: 'ambiguous', title: 'Ambiguous PII', kind: 'challenge',
+        focus: 'Context-dependent private vs public data', cases: 48,
+        source_path: 'experiments/redactguard-local-anonymization/data/ambiguous/cases.jsonl',
+        results_status: 'no_published_run' },
+      { id: 'challenge', title: 'Hard cases', kind: 'challenge',
+        focus: 'Semantic ambiguity and difficult PII', cases: 46,
+        source_path: 'experiments/redactguard-local-anonymization/data/challenge/cases.jsonl',
+        results_status: 'no_published_run' },
+      { id: 'document-e2e', title: 'Document E2E', kind: 'documents',
+        focus: 'Extraction plus privacy evaluation', cases: 5,
+        source_path: 'experiments/redactguard-local-anonymization/data/documents/manifest.jsonl',
+        results_status: 'no_published_run' },
+      { id: 'realistic', title: 'Realistic documents', kind: 'documents',
+        focus: 'Heterogeneous formats and annotated PII', documents: 11, gold_spans: 1566,
+        source_path: 'experiments/redactguard-local-anonymization/data/realistic/annotations/summary.json',
+        results_status: 'no_published_run' },
+    ],
+    models: [],
+  };
+  const redactionLayouts = [];
+  for (const viewport of [
+    { name: 'desktop', width: 1440, height: 950 },
+    { name: 'mobile', width: 390, height: 844 },
+  ]) {
+    const context = await browser.newContext({
+      viewport: { width: viewport.width, height: viewport.height },
+      reducedMotion: 'reduce',
+    });
+    const page = await context.newPage();
+    await page.route('**/redactguard-local-anonymization/results/published/portfolio-summary.json',
+      (route) => route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify(redactionEvidence),
+      }),
+    );
+    await page.goto(\`\${baseUrl}/\`, { waitUntil: 'domcontentloaded' });
+    await page.locator('[data-track-id="redactguard-local-anonymization"]').click();
+    await page.locator('[data-rg-dataset="realistic"]').waitFor({ state: 'visible' });
+
+    const before = await page.evaluate(() => ({
+      count: document.querySelector('[data-rg-count]')?.textContent?.trim(),
+      spans: document.querySelector('[data-rg-extra]')?.textContent?.trim(),
+      pills: document.querySelectorAll('[data-rg-datasets] button').length,
+      resultHidden: document.querySelector('[data-rg-model-rows]')?.hidden,
+      pendingVisible: !document.querySelector('[data-rg-no-models]')?.hidden,
+      activeStyle: getComputedStyle(
+        document.querySelector('[data-rg-dataset="realistic"]'),
+      ).backgroundColor,
+      overflow: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+    }));
+    await page.locator('[data-rg-dataset="healthcare"]').click();
+    const after = await page.evaluate(() => ({
+      count: document.querySelector('[data-rg-count]')?.textContent?.trim(),
+      title: document.querySelector('[data-rg-dataset-name]')?.textContent?.trim(),
+      active: document.querySelector('[data-rg-dataset="healthcare"]')?.getAttribute('aria-pressed'),
+    }));
+
+    redactionLayouts.push({ viewport: viewport.name, before, after });
+    if (
+      before.count !== '11' ||
+      before.spans !== '1,566 gold PII spans' ||
+      before.pills !== 6 ||
+      !before.resultHidden ||
+      !before.pendingVisible ||
+      before.overflow > 0 ||
+      after.count !== '48' ||
+      after.title !== 'Healthcare' ||
+      after.active !== 'true'
+    ) {
+      throw new Error(\`RedactGuard public evidence visual regression: \${JSON.stringify({ viewport, before, after })}\`);
+    }
+
+    await page.locator('[data-rg-summary]').screenshot({
+      path: path.join(outputDir, \`redactguard-evidence__\${viewport.name}.png\`),
+    });
+    await page.close();
+    await context.close();
+  }
+  await fs.writeFile(
+    path.join(outputDir, 'redactguard-layout-check.json'),
+    JSON.stringify(redactionLayouts, null, 2),
+  );
 } finally {
   await browser.close();
 }
