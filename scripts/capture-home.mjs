@@ -464,6 +464,10 @@ try {
     };
     // Independent browser page: fixture modes must not share UI state.
     const measuredPage = await context.newPage();
+    measuredPage.on('pageerror', (e) => console.log('RG_PAGE_ERROR', e.message));
+    measuredPage.on('console', (e) => {
+      if (e.type() === 'error' || e.type() === 'warning') console.log('RG_BROWSER_CONSOLE', e.text());
+    });
     await measuredPage.route('**/redactguard-local-anonymization/results/published/portfolio-summary.json',
       (route) => route.fulfill({
         status: 200,
@@ -474,7 +478,16 @@ try {
     );
     await measuredPage.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
     await measuredPage.locator('[data-track-id="redactguard-local-anonymization"]').click();
-    await measuredPage.locator('[data-rg-insights] .rg-insight-card').first().waitFor({ state: 'visible', timeout: 12000 });
+    await measuredPage.waitForTimeout(850);
+    const measuredDiag = await measuredPage.evaluate(() => ({
+      selected: document.querySelector('[data-rg-dataset][aria-pressed="true"]')?.textContent,
+      status: document.querySelector('[data-rg-run-status]')?.textContent,
+      summaryHidden: document.querySelector('[data-rg-summary]')?.hidden,
+      insightCount: document.querySelectorAll('.rg-insight-card').length,
+      resultState: [...document.querySelectorAll('[data-result], [data-result-error]')].map((x) => ({ tag: x.tagName, hidden: x.hidden, text: x.textContent?.trim().slice(0,100)})),
+    }));
+    console.log('RG_MEASURED_DIAG', JSON.stringify(measuredDiag));
+    await measuredPage.locator('[data-rg-insights] .rg-insight-card').first().waitFor({ state: 'visible', timeout: 5000 });
     await measuredPage.locator('[data-rg-advanced] summary').click();
     await measuredPage.locator('[data-rg-matrix-scroll] table').waitFor({ state: 'visible' });
     await measuredPage.locator('[data-rg-dataset="healthcare"]').click();
