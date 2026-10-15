@@ -216,7 +216,7 @@ export interface MeasureSystemCard {
     status: string;
     resultUrl?: string;
     sourceUrl?: string;
-    resultKind?: 'jev-public-summary' | 'mcb-overview';
+    resultKind?: 'jev-public-summary' | 'mcb-overview' | 'redactguard-public-summary';
     relatedResultUrl?: string;
     relatedSourceUrl?: string;
   }[];
