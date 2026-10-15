@@ -401,7 +401,7 @@ try {
       count: document.querySelector('[data-rg-count]')?.textContent?.trim(),
       spans: document.querySelector('[data-rg-extra]')?.textContent?.trim(),
       pills: document.querySelectorAll('[data-rg-datasets] button').length,
-      resultHidden: document.querySelector('[data-rg-model-rows]')?.hidden,
+      resultHidden: document.querySelector('[data-rg-comparison]')?.hidden,
       pendingVisible: !document.querySelector('[data-rg-no-models]')?.hidden,
       activeStyle: getComputedStyle(
         document.querySelector('[data-rg-dataset="realistic"]'),
@@ -462,9 +462,22 @@ try {
       ],
     };
     await page.locator('[data-track-id="redactguard-local-anonymization"]').click();
+    await page.locator('[data-rg-insights] .rg-insight-card').first().waitFor({ state: 'visible' });
+    await page.locator('[data-rg-advanced] summary').click();
     await page.locator('[data-rg-matrix-scroll] table').waitFor({ state: 'visible' });
     await page.locator('[data-rg-dataset="healthcare"]').click();
 
+    const modelPreview = await page.evaluate(() => ({
+      insightCards: document.querySelectorAll('[data-rg-insights] .rg-insight-card').length,
+      comparisonRows: document.querySelectorAll('[data-rg-model-rows] .rg-model-row').length,
+      recallTracks: document.querySelectorAll('[data-rg-model-rows] .rg-measure--recall .rg-measure__track').length,
+      summaryTitle: document.querySelector('[data-rg-takeaway-text]')?.textContent || '',
+      visibleGrid: getComputedStyle(document.querySelector('[data-rg-model-rows] .rg-model-row')).display,
+    }));
+    if (modelPreview.insightCards !== 3 || modelPreview.comparisonRows !== 2 ||
+        modelPreview.recallTracks !== 2 || modelPreview.visibleGrid !== 'grid') {
+      throw new Error('RedactGuard insight-first model rows regressed: ' + JSON.stringify(modelPreview));
+    }
     const measured = await page.evaluate(() => ({
       matrixVisible: !document.querySelector('[data-rg-matrix]').hidden,
       rows: document.querySelectorAll('[data-rg-matrix-scroll] tbody tr').length,
