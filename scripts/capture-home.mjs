@@ -461,22 +461,11 @@ try {
         row('test-qwen', 'ambiguous', 'amb-one', 0.66, 0.34, 900),
       ],
     };
+    // Re-open the homepage so the second, measured fixture cannot reuse
+    // the previously selected dataset-only client state.
+    await page.reload({ waitUntil: 'domcontentloaded' });
     await page.locator('[data-track-id="redactguard-local-anonymization"]').click();
-    await page.waitForTimeout(1200);
-    const redactionDiagnostics = await page.evaluate(() => ({
-      selected: document.querySelector('[data-track-id="redactguard-local-anonymization"]')?.getAttribute('aria-selected'),
-      tabResultUrl: document.querySelector('[data-track-id="redactguard-local-anonymization"]')?.getAttribute('data-result-url'),
-      cards: document.querySelectorAll('[data-rg-insights] .rg-insight-card').length,
-      cardsHidden: document.querySelector('[data-rg-insights]')?.hidden,
-      resultsHidden: document.querySelector('[data-rg-summary]')?.hidden,
-      performanceLabel: document.querySelector('[data-rg-run-status]')?.textContent,
-      comparisonHidden: document.querySelector('[data-rg-comparison]')?.hidden,
-      loaderVisible: [...document.querySelectorAll('[data-result-loading]')].some(el => !el.hidden),
-      error: document.querySelector('[data-result-error]')?.textContent?.slice(0,120),
-      selectedDataset: document.querySelector('[data-rg-dataset][aria-pressed="true"]')?.textContent,
-    }));
-    console.log('REDACTGUARD_RENDER_CHECK', JSON.stringify(redactionDiagnostics));
-    await page.locator('[data-rg-insights] .rg-insight-card').first().waitFor({ state: 'visible', timeout: 8000 });
+    await page.locator('[data-rg-insights] .rg-insight-card').first().waitFor({ state: 'visible', timeout: 12000 });
     await page.locator('[data-rg-advanced] summary').click();
     await page.locator('[data-rg-matrix-scroll] table').waitFor({ state: 'visible' });
     await page.locator('[data-rg-dataset="healthcare"]').click();
