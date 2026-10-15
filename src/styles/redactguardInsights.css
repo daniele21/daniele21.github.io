@@ -1,3 +1,6 @@
+/* Respect progressive disclosure even when author CSS sets display/grid. */
+.experiment-explorer .rg-summary [hidden] { display: none !important; }
+
 /* RedactGuard: insight-first homepage presentation.
    Global styles intentionally cover JS-created comparison rows. */
 .experiment-explorer .rg-summary {
