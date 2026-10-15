@@ -1110,12 +1110,14 @@ const selectorLabelFor = (track: Track) => {
           const summary = renderRedactguardOverview(root, data, dataset.id, {
             formatPct, formatSeconds, setHidden,
           });
-          const count = summary.rows.length;
+          const measuredCount = summary.rows.length;
           setText(
             '[data-rg-run-status]',
-            count ? count + ' measured model' + (count === 1 ? '' : 's') : 'No published model run',
+            measuredCount
+              ? measuredCount + ' measured model' + (measuredCount === 1 ? '' : 's')
+              : 'No published model run',
           );
-          setHidden(root.querySelector('[data-rg-no-models]'), count > 0);
+          setHidden(root.querySelector('[data-rg-no-models]'), measuredCount > 0);
         };
 
         datasets.forEach((dataset) => {
