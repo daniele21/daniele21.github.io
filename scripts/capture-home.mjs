@@ -462,9 +462,8 @@ try {
       ],
     };
     await page.locator('[data-track-id="redactguard-local-anonymization"]').click();
-    await page.locator('[data-rg-dataset="healthcare"]').waitFor({ state: 'visible' });
-    await page.locator('[data-rg-dataset="healthcare"]').click();
     await page.locator('[data-rg-matrix-scroll] table').waitFor({ state: 'visible' });
+    await page.locator('[data-rg-dataset="healthcare"]').click();
 
     const measured = await page.evaluate(() => ({
       matrixVisible: !document.querySelector('[data-rg-matrix]').hidden,
