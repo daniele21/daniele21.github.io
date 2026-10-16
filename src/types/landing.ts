@@ -140,6 +140,8 @@ export interface BuildStageContent {
 
 export interface ApplicationCard {
   name: string;
+  valueHeadline: string;
+  infrastructureLabel: string;
   tag?: string;
   question: string;
   description: string;

@@ -1,0 +1,686 @@
+---
+/**
+ * TEST / Product Proof Gallery.
+ * Real product logos and screenshots come from the canonical landing data.
+ * Mobile: native snap-scrolling rail, with optional arrow enhancement.
+ * Desktop: three simultaneous project cards.
+ */
+import { landingData } from '../../content/locales/en/landing';
+
+const { testStage } = landingData;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const resolveHref = (href: string) => baseUrl + '/' + href.replace(/^\//, '');
+
+const applicationId = (name: string) =>
+  name === 'RedactGuard' ? 'redact-guard' :
+  name === 'Aura Finance' ? 'aura-finance' : 'closedroom';
+---
+
+<section class="product-gallery" aria-label="Real-world AI application test beds" data-test-gallery>
+  <div class="gallery-intro">
+    <div>
+      <p class="gallery-eyebrow">REAL PRODUCTS · REAL CONSTRAINTS</p>
+      <h3>What happens when the runtime meets a product?</h3>
+    </div>
+    <p class="gallery-hint">Swipe to explore <span aria-hidden="true">→</span></p>
+  </div>
+
+  <div
+    class="gallery-viewport"
+    data-test-viewport
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="RedactGuard, Aura Finance and ClosedRoom"
+    tabindex="0"
+  >
+    <ol class="gallery-track">
+      {testStage.applications.map((app, index) => (
+        <li
+          class="gallery-slide"
+          data-application={applicationId(app.name)}
+          data-tone={app.colorClass}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={index + 1 + ' of ' + testStage.applications.length + ': ' + app.name}
+        >
+          <a
+            class="gallery-card"
+            href={resolveHref(app.href)}
+            aria-label={'Explore ' + app.name + ': ' + app.valueHeadline}
+          >
+            <div class="card-copy">
+              <div class="card-heading-row">
+                <div class="card-identity">
+                  <span class="logo-frame">
+                    <img
+                      src={resolveHref(app.logoPath)}
+                      alt=""
+                      width="40"
+                      height="40"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
+                  <span class="identity-copy">
+                    <strong class="app-name">{app.name}</strong>
+                    <span class="app-category">{app.tag}</span>
+                  </span>
+                </div>
+                <span class="card-index">0{index + 1} / 03</span>
+              </div>
+
+              <h4 class="value-headline">{app.valueHeadline}</h4>
+              <p class="product-question">{app.question}</p>
+            </div>
+
+            <div class="product-preview" data-preview={applicationId(app.name)}>
+              <div class="preview-header" aria-hidden="true">
+                <span class="preview-live-dot"></span>
+                <span>ACTUAL PRODUCT INTERFACE</span>
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M6 14 14 6M7 6h7v7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="preview-window">
+                <img
+                  src={resolveHref(app.imagePath)}
+                  alt={app.name + ' product interface screenshot'}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </div>
+
+            <div class="card-evidence">
+              <div class="test-criteria">
+                <p class="meta-label">WORKLOAD UNDER TEST</p>
+                <div class="feature-list" aria-label={'Test focus for ' + app.name}>
+                  {app.features.map((feature) => <span class="feature-chip">{feature.label}</span>)}
+                </div>
+              </div>
+
+              <div class="infrastructure-link">
+                <span class="infra-label">CONNECTED INFRASTRUCTURE</span>
+                <strong>{app.infrastructureLabel}</strong>
+                <p>{app.whatItTests}</p>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <span>Explore the product</span>
+              <span class="footer-arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <div class="gallery-controls" data-test-controls hidden>
+    <p class="gallery-count" aria-live="polite" aria-atomic="true">
+      <strong data-test-current>01</strong> / 03
+    </p>
+    <div class="gallery-buttons">
+      <button type="button" data-test-prev aria-label="Previous application" disabled>
+        <span aria-hidden="true">←</span>
+      </button>
+      <button type="button" data-test-next aria-label="Next application">
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="gallery-handoff">
+    <div>
+      <span class="handoff-eyebrow">NEXT · MEASURE</span>
+      <p>Real applications expose the limits. <strong>Measurement shows where to improve.</strong></p>
+    </div>
+    <a href="#evidence" class="handoff-link">
+      Explore the evidence <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</section>
+
+<script>
+  function initTestGallery() {
+    const root = document.querySelector<HTMLElement>('[data-test-gallery]');
+    if (!root || root.dataset.galleryReady === 'true') return;
+
+    const viewport = root.querySelector<HTMLElement>('[data-test-viewport]');
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('.gallery-slide'));
+    const controls = root.querySelector<HTMLElement>('[data-test-controls]');
+    const current = root.querySelector<HTMLElement>('[data-test-current]');
+    const prev = root.querySelector<HTMLButtonElement>('[data-test-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-test-next]');
+    if (!viewport || cards.length === 0 || !controls || !current || !prev || !next) return;
+
+    root.dataset.galleryReady = 'true';
+    controls.hidden = false;
+    let active = 0;
+    let pendingFrame = 0;
+
+    const update = () => {
+      pendingFrame = 0;
+      const railLeft = viewport.getBoundingClientRect().left;
+      const distances = cards.map((card) => Math.abs(card.getBoundingClientRect().left - railLeft));
+      active = distances.indexOf(Math.min(...distances));
+      current.textContent = String(active + 1).padStart(2, '0');
+      prev.disabled = active === 0;
+      next.disabled = active === cards.length - 1;
+    };
+
+    const scheduleUpdate = () => {
+      if (pendingFrame) return;
+      pendingFrame = requestAnimationFrame(update);
+    };
+
+    const goTo = (index: number) => {
+      const card = cards[Math.max(0, Math.min(index, cards.length - 1))];
+      if (!card) return;
+      const left = viewport.scrollLeft +
+        card.getBoundingClientRect().left - viewport.getBoundingClientRect().left;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      viewport.scrollTo({ left, behavior: reducedMotion ? 'instant' : 'smooth' });
+    };
+
+    prev.addEventListener('click', () => goTo(active - 1));
+    next.addEventListener('click', () => goTo(active + 1));
+    viewport.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate, { passive: true });
+    update();
+  }
+
+  initTestGallery();
+  document.addEventListener('astro:page-load', initTestGallery);
+</script>
+
+<style>
+  .product-gallery {
+    width: 100%;
+    min-width: 0;
+    container-type: inline-size;
+  }
+
+  .gallery-intro {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    margin-bottom: 19px;
+  }
+
+  .gallery-eyebrow,
+  .meta-label,
+  .infra-label,
+  .handoff-eyebrow {
+    display: block;
+    margin: 0 0 8px;
+    color: var(--accent-blue);
+    font: 800 var(--text-caption)/1.35 var(--font-display);
+    letter-spacing: 0.07em;
+  }
+
+  .gallery-intro h3 {
+    margin: 0;
+    max-width: 710px;
+    color: var(--ink-display);
+    font: 780 clamp(1.14rem, 2.3vw, 1.55rem)/1.24 var(--font-display);
+    letter-spacing: -0.033em;
+  }
+
+  .gallery-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    white-space: nowrap;
+  }
+
+  .gallery-hint span { color: var(--accent-blue); font-size: 19px; }
+
+  .gallery-viewport {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 4px;
+  }
+
+  .gallery-viewport:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  .gallery-track {
+    display: flex;
+    align-items: stretch;
+    gap: 14px;
+    margin: 0;
+    padding: 1px 0 12px;
+    list-style: none;
+  }
+
+  .gallery-slide {
+    --product-accent: var(--accent-blue);
+    --product-soft: var(--surface-blue-subtle);
+    flex: 0 0 calc(100% - 25px);
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .gallery-slide[data-tone='green'] {
+    --product-accent: var(--accent-teal);
+    --product-soft: var(--surface-teal-subtle);
+  }
+
+  .gallery-slide[data-tone='purple'] {
+    --product-accent: var(--accent-violet);
+    --product-soft: color-mix(in srgb, var(--accent-violet) 9%, var(--surface-card));
+  }
+
+  .gallery-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    color: inherit;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-base) var(--ease-out-expo),
+      border-color var(--duration-fast) ease,
+      box-shadow var(--duration-base) ease;
+  }
+
+  .gallery-card::before {
+    content: '';
+    display: block;
+    height: 4px;
+    flex: 0 0 4px;
+    background: var(--product-accent);
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--product-accent) 42%, var(--border-medium));
+    box-shadow: var(--shadow-md);
+  }
+
+  .gallery-card:focus-visible {
+    outline: 3px solid var(--border-focus);
+    outline-offset: -3px;
+  }
+
+  .card-copy {
+    min-height: 180px;
+    padding: 19px 19px 17px;
+    background: radial-gradient(ellipse 80% 70% at 95% 0%, var(--product-soft), transparent 88%);
+  }
+
+  .card-heading-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .card-identity {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .logo-frame {
+    display: grid;
+    place-items: center;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    border: 1px solid color-mix(in srgb, var(--product-accent) 26%, var(--border-medium));
+    border-radius: 13px;
+    background: var(--surface-card);
+    overflow: hidden;
+  }
+
+  .logo-frame img {
+    display: block;
+    width: 37px;
+    height: 37px;
+    object-fit: contain;
+  }
+
+  .identity-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 4px;
+  }
+
+  .app-name {
+    color: var(--ink-display);
+    font: 800 1.04rem/1.18 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .app-category {
+    color: var(--product-accent);
+    font: 750 var(--text-caption)/1.2 var(--font-display);
+    letter-spacing: 0.025em;
+    text-wrap: pretty;
+  }
+
+  .card-index {
+    flex: 0 0 auto;
+    margin-top: 3px;
+    color: var(--ink-subtle);
+    font: 650 var(--text-caption)/1.3 var(--font-mono);
+    white-space: nowrap;
+  }
+
+  .value-headline {
+    margin: 24px 0 9px;
+    max-width: 390px;
+    color: var(--ink-display);
+    font: 830 clamp(1.48rem, 2.7vw, 1.88rem)/1.13 var(--font-display);
+    letter-spacing: -0.045em;
+    text-wrap: pretty;
+  }
+
+  .product-question {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.48;
+  }
+
+  .product-preview {
+    margin: 0 14px;
+    padding: 0;
+    min-width: 0;
+    background: var(--surface-muted);
+    border: 1px solid color-mix(in srgb, var(--product-accent) 23%, var(--border-medium));
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .preview-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 30px;
+    padding: 5px 11px;
+    background: color-mix(in srgb, var(--product-accent) 7%, var(--surface-card));
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--ink-subtle);
+    font: 650 var(--text-caption)/1.2 var(--font-display);
+    letter-spacing: 0.03em;
+  }
+
+  .preview-live-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+    border-radius: 50%;
+    background: var(--product-accent);
+  }
+
+  .preview-header svg {
+    width: 17px;
+    height: 17px;
+    margin-left: auto;
+    color: var(--product-accent);
+  }
+
+  .preview-window {
+    display: grid;
+    place-items: center;
+    height: clamp(190px, 23vw, 244px);
+    overflow: hidden;
+    background: color-mix(in srgb, var(--surface-subtle) 68%, var(--surface-card));
+  }
+
+  .preview-window img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transition: transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  .gallery-slide[data-application='aura-finance'] .preview-window img {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .gallery-card:hover .preview-window img { transform: scale(1.025); }
+
+  .card-evidence {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 18px;
+    padding: 19px 19px 18px;
+  }
+
+  .meta-label, .infra-label {
+    color: var(--ink-subtle);
+    margin-bottom: 9px;
+  }
+
+  .feature-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .feature-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 5px 9px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 7px;
+    background: var(--surface-subtle);
+    color: var(--ink);
+    font-size: var(--text-caption);
+    font-weight: 630;
+    line-height: 1.28;
+  }
+
+  .infrastructure-link {
+    margin-top: auto;
+    padding: 14px;
+    background: var(--product-soft);
+    border: 1px solid color-mix(in srgb, var(--product-accent) 16%, var(--border-subtle));
+    border-radius: var(--radius-sm);
+  }
+
+  .infra-label {
+    color: var(--product-accent);
+    font-size: var(--text-caption);
+  }
+
+  .infrastructure-link strong {
+    display: block;
+    color: var(--ink-display);
+    font: 770 var(--text-body-sm)/1.35 var(--font-display);
+  }
+
+  .infrastructure-link p {
+    margin: 6px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.45;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 57px;
+    padding: 12px 19px;
+    border-top: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--product-accent) 4%, var(--surface-card));
+    color: var(--product-accent);
+    font: 780 var(--text-caption)/1.3 var(--font-display);
+  }
+
+  .footer-arrow {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    border: 1px solid color-mix(in srgb, var(--product-accent) 22%, var(--border-subtle));
+    border-radius: 50%;
+    background: var(--surface-card);
+    font-size: 18px;
+  }
+
+  .gallery-controls[hidden] { display: none; }
+
+  .gallery-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 9px;
+  }
+
+  .gallery-count {
+    margin: 0;
+    font: 650 var(--text-caption)/1.3 var(--font-mono);
+    color: var(--ink-subtle);
+  }
+
+  .gallery-count strong {
+    color: var(--ink-display);
+    font-weight: 800;
+  }
+
+  .gallery-buttons { display: flex; align-items: center; gap: 8px; }
+
+  .gallery-buttons button {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid var(--border-medium);
+    border-radius: 50%;
+    color: var(--ink-display);
+    background: var(--surface-card);
+    cursor: pointer;
+    transition: background var(--duration-fast) ease;
+  }
+
+  .gallery-buttons button span { font-size: 20px; }
+
+  .gallery-buttons button:disabled { opacity: .4; cursor: default; }
+
+  .gallery-buttons button:not(:disabled):hover { background: var(--surface-blue-subtle); }
+
+  .gallery-buttons button:focus-visible,
+  .handoff-link:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 3px;
+  }
+
+  .gallery-handoff {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 17px 24px;
+    margin-top: 26px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-medium);
+  }
+
+  .handoff-eyebrow { margin-bottom: 8px; }
+
+  .gallery-handoff p {
+    margin: 0;
+    max-width: 620px;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.55;
+  }
+
+  .gallery-handoff strong { color: var(--ink-display); font-weight: 730; }
+
+  .handoff-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 10px 15px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    color: var(--accent-blue-dark);
+    background: var(--surface-card);
+    text-decoration: none;
+    font: 760 var(--text-caption)/1.3 var(--font-display);
+  }
+
+  .handoff-link:hover { background: var(--surface-blue-subtle); }
+  .handoff-link span { font-size: 19px; }
+
+  @container (min-width: 550px) {
+    .gallery-slide { flex-basis: min(76%, 475px); }
+    .gallery-hint { display: none; }
+  }
+
+  @container (min-width: 900px) {
+    .gallery-viewport { overflow: visible; scroll-snap-type: none; }
+    .gallery-track {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      padding-bottom: 5px;
+    }
+    .gallery-slide { width: 100%; }
+    .card-copy { padding: 19px 15px 16px; }
+    .card-index { display: none; }
+    .value-headline { font-size: 1.55rem; }
+    .card-evidence { padding: 18px 15px 17px; }
+    .card-footer { padding: 12px 15px; }
+    .preview-window { height: 210px; }
+    .gallery-controls { display: none; }
+  }
+
+  @container (max-width: 350px) {
+    .card-copy { padding: 17px 13px 15px; }
+    .card-evidence { padding: 16px 13px; }
+    .card-footer { padding: 12px 13px; }
+    .value-headline { margin-top: 18px; font-size: 1.4rem; }
+    .card-index { display: none; }
+    .logo-frame { flex-basis: 42px; width: 42px; height: 42px; }
+    .logo-frame img { width: 34px; height: 34px; }
+    .product-preview { margin-inline: 10px; }
+    .preview-window { height: 190px; }
+    .gallery-handoff { margin-top: 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-card, .preview-window img, .gallery-buttons button { transition: none; }
+    .gallery-card:hover, .gallery-card:hover .preview-window img { transform: none; }
+  }
+</style>
