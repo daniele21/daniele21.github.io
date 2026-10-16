@@ -1,607 +1,684 @@
 ---
-interface ComparisonItem {
-  text: string;
-  strength?: boolean;
+/**
+ * DECIDE / Value-first deployment cards.
+ * Native horizontal scrolling and scroll-snap work without JavaScript;
+ * lightweight controls progressively enhance the rail on narrow screens.
+ */
+interface Factor {
+  label: string;
+  value: string;
+  emphasis?: boolean;
 }
 
-interface CriterionRow {
-  dimension: string;
-  detail: string;
-  local: ComparisonItem;
-  hybrid: ComparisonItem;
-  cloud: ComparisonItem;
+interface DeploymentMode {
+  id: 'local' | 'hybrid' | 'cloud';
+  name: string;
+  number: string;
+  eyebrow: string;
+  headline: string;
+  description: string;
+  bestFor: string;
+  factors: Factor[];
 }
 
-const criteria: CriterionRow[] = [
+const modes: DeploymentMode[] = [
   {
-    dimension: 'Privacy',
-    detail: 'Where data is processed',
-    local: { text: 'Stays on device', strength: true },
-    hybrid: { text: 'Split by policy' },
-    cloud: { text: 'Processed remotely' },
+    id: 'local',
+    name: 'Local AI',
+    number: '01',
+    eyebrow: 'ON-DEVICE',
+    headline: 'Privacy and control, by design.',
+    description:
+      'Run AI close to the data. Keep sensitive processing on the device and own the runtime end to end.',
+    bestFor: 'Sensitive workloads, offline reliability and predictable local interactions.',
+    factors: [
+      { label: 'Privacy', value: 'Data stays on device', emphasis: true },
+      { label: 'Latency', value: 'Can work offline', emphasis: true },
+      { label: 'Control', value: 'Own the runtime', emphasis: true },
+      { label: 'Models', value: 'Device-bound' },
+      { label: 'Scale', value: 'Hardware-limited' },
+    ],
   },
   {
-    dimension: 'Network & latency',
-    detail: 'Connectivity dependency',
-    local: { text: 'Works without network', strength: true },
-    hybrid: { text: 'Local fallback' },
-    cloud: { text: 'Network required' },
+    id: 'hybrid',
+    name: 'Hybrid',
+    number: '02',
+    eyebrow: 'POLICY-ROUTED',
+    headline: 'Control where it matters. Power when needed.',
+    description:
+      'Keep critical steps local, then route selected tasks to remote capacity when the workload calls for it.',
+    bestFor: 'Mixed workloads with different privacy, capability and capacity needs.',
+    factors: [
+      { label: 'Privacy', value: 'Split by policy', emphasis: true },
+      { label: 'Latency', value: 'Local fallback possible' },
+      { label: 'Control', value: 'Shared across layers' },
+      { label: 'Models', value: 'Route by workload', emphasis: true },
+      { label: 'Scale', value: 'Cloud burst when needed', emphasis: true },
+    ],
   },
   {
-    dimension: 'Runtime control',
-    detail: 'Deployment & model lifecycle',
-    local: { text: 'You control the runtime', strength: true },
-    hybrid: { text: 'Shared control' },
-    cloud: { text: 'Provider managed' },
-  },
-  {
-    dimension: 'Model capability',
-    detail: 'Largest model available',
-    local: { text: 'Bound by device' },
-    hybrid: { text: 'Routes by workload', strength: true },
-    cloud: { text: 'Frontier models', strength: true },
-  },
-  {
-    dimension: 'Elastic scale',
-    detail: 'Burst capacity',
-    local: { text: 'Fixed by hardware' },
-    hybrid: { text: 'Cloud overflow', strength: true },
-    cloud: { text: 'Elastic', strength: true },
+    id: 'cloud',
+    name: 'Cloud',
+    number: '03',
+    eyebrow: 'REMOTE INFRASTRUCTURE',
+    headline: 'Frontier capability. Elastic scale.',
+    description:
+      'Use hosted models and managed infrastructure when reach, model strength and variable demand take priority.',
+    bestFor: 'High-capability workloads, burst demand and centralized operations.',
+    factors: [
+      { label: 'Privacy', value: 'Remote processing' },
+      { label: 'Latency', value: 'Network-dependent' },
+      { label: 'Control', value: 'Provider-managed' },
+      { label: 'Models', value: 'Frontier access', emphasis: true },
+      { label: 'Scale', value: 'Elastic capacity', emphasis: true },
+    ],
   },
 ];
 ---
 
-<div class="decision-surface">
-  <div class="matrix-card">
-    <table class="matrix-table" aria-label="Local, Hybrid and Cloud workload decision matrix">
-      <colgroup>
-        <col class="col-criteria" />
-        <col class="col-local" />
-        <col class="col-secondary" />
-        <col class="col-secondary" />
-      </colgroup>
-      <thead>
-        <tr>
-          <th scope="col" class="criterion-heading">Decision factor</th>
-          <th scope="col" class="local-column local-column--header">
-            <span class="local-heading">
-              <span class="local-dot" aria-hidden="true"></span>
-              <span>Local AI</span>
-              <span class="focus-label">Local-first lens</span>
-            </span>
-          </th>
-          <th scope="col" class="platform-heading platform-heading--hybrid">
-            <span class="platform-heading-label">
-              <span class="platform-dot" aria-hidden="true"></span>
-              <span>Hybrid</span>
-            </span>
-          </th>
-          <th scope="col" class="platform-heading platform-heading--cloud">
-            <span class="platform-heading-label">
-              <span class="platform-dot" aria-hidden="true"></span>
-              <span>Cloud</span>
-            </span>
-          </th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {criteria.map((row, index) => (
-          <>
-          {index === 3 && (
-            <tr class="group-divider-row">
-              <th colspan="4" class="group-divider-cell">
-                <span>Trade-offs</span>
-                <small>Where Local AI trades capacity for control</small>
-              </th>
-            </tr>
-          )}
-
-          <tr>
-            <th scope="row" class="criterion-cell">
-              <strong>{row.dimension}</strong>
-              <span>{row.detail}</span>
-            </th>
-
-            <td class="comparison-cell local-column" data-label="Local AI">
-              <span class="mobile-cell-label">Local AI</span>
-              <span class:list={['comparison-value', row.local.strength && 'comparison-value--strength']}>
-                {row.local.strength && (
-                  <><span class="sr-only">Strength: </span><span class="status-check" aria-hidden="true">✓</span></>
-                )}
-                <span>{row.local.text}</span>
-              </span>
-            </td>
-
-            <td class="comparison-cell secondary-column hybrid-column" data-label="Hybrid">
-              <span class="mobile-cell-label">Hybrid</span>
-              <span class:list={['comparison-value', row.hybrid.strength && 'comparison-value--secondary-strength']}>
-                {row.hybrid.strength && (
-                  <><span class="sr-only">Strength: </span><span class="status-check" aria-hidden="true">✓</span></>
-                )}
-                <span>{row.hybrid.text}</span>
-              </span>
-            </td>
-
-            <td class="comparison-cell secondary-column cloud-column" data-label="Cloud">
-              <span class="mobile-cell-label">Cloud</span>
-              <span class:list={['comparison-value', row.cloud.strength && 'comparison-value--secondary-strength']}>
-                {row.cloud.strength && (
-                  <><span class="sr-only">Strength: </span><span class="status-check" aria-hidden="true">✓</span></>
-                )}
-                <span>{row.cloud.text}</span>
-              </span>
-            </td>
-          </tr>
-          </>
-        ))}
-
-        <tr class="best-for-row">
-          <th scope="row" class="best-for-heading">Best fit</th>
-          <td class="local-column" data-label="Local AI">
-            <span class="mobile-cell-label">Local AI</span>
-            <strong>Privacy, latency & control</strong>
-          </td>
-          <td class="hybrid-column" data-label="Hybrid">
-            <span class="mobile-cell-label">Hybrid</span>
-            Variable workloads
-          </td>
-          <td class="cloud-column" data-label="Cloud">
-            <span class="mobile-cell-label">Cloud</span>
-            Maximum capability
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="decision-surface" data-decision-cards>
+  <div class="decision-rail-heading">
+    <div>
+      <p class="decision-overline">THREE WAYS TO RUN AI</p>
+      <h3 class="decision-lead">The right architecture depends on the workload.</h3>
+    </div>
+    <p class="decision-hint">Swipe to compare <span aria-hidden="true">→</span></p>
   </div>
 
-  <div class="decision-hook">
-    <div>
-      <h3>Analyzing an AI workload?</h3>
-      <p>I share architecture analyses and trade-off breakdowns regularly.</p>
+  <div
+    class="decision-rail"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="Compare Local AI, Hybrid and Cloud approaches"
+    tabindex="0"
+    data-decision-viewport
+  >
+    <ol class="decision-cards" data-decision-track>
+      {modes.map((mode, index) => (
+        <li
+          class="decision-card"
+          data-mode={mode.id}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={index + 1 + ' of ' + modes.length + ': ' + mode.name}
+        >
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-identity">
+                <span class="card-symbol" aria-hidden="true">
+                  {mode.id === 'local' ? (
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="5.5" y="3" width="17" height="22" rx="4" />
+                      <path d="M11 21h6M10 7h8" />
+                      <rect x="9" y="11" width="10" height="7" rx="1.5" />
+                    </svg>
+                  ) : mode.id === 'hybrid' ? (
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2.5" y="9.5" width="9" height="9" rx="2" />
+                      <rect x="16.5" y="4.5" width="9" height="9" rx="2" />
+                      <path d="M11.5 14h5M21 13.5v6h-8v4" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M8.5 20.5h13a5 5 0 0 0 0-10 7.5 7.5 0 0 0-14.7 1.5 4.25 4.25 0 0 0 1.7 8.5Z" />
+                      <path d="M11 16.5h10M14 13.5v6" />
+                    </svg>
+                  )}
+                </span>
+                <div class="card-labels">
+                  <span class="card-mode">{mode.name}</span>
+                  <span class="card-eyebrow">{mode.eyebrow}</span>
+                </div>
+              </div>
+              <span class="card-number">{mode.number} / 03</span>
+            </div>
+
+            <h4 class="card-headline">{mode.headline}</h4>
+            <p class="card-description">{mode.description}</p>
+
+            <div class="card-divider" aria-hidden="true"></div>
+
+            <p class="factors-label">THE TRADE-OFFS</p>
+            <dl class="factors">
+              {mode.factors.map((factor) => (
+                <div class="factor">
+                  <dt>{factor.label}</dt>
+                  <dd class:list={[factor.emphasis && 'factor--strength']}>
+                    {factor.emphasis && <span class="factor-check" aria-hidden="true">✓</span>}
+                    {factor.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div class="card-conclusion">
+            <span class="conclusion-label">BEST WHEN</span>
+            <p>{mode.bestFor}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <div class="rail-controls" data-decision-controls hidden>
+    <p class="rail-position" aria-live="polite" aria-atomic="true">
+      <strong data-decision-current>01</strong><span> / 03</span>
+    </p>
+    <div class="rail-buttons">
+      <button type="button" class="rail-button" data-decision-prev aria-label="Previous architecture" disabled>
+        <span aria-hidden="true">←</span>
+      </button>
+      <button type="button" class="rail-button" data-decision-next aria-label="Next architecture">
+        <span aria-hidden="true">→</span>
+      </button>
     </div>
-    <a
-      href="https://www.linkedin.com/in/daniele-moltisanti/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="primary-button decision-cta"
-    >
-      <span>Follow on LinkedIn</span>
-      <span aria-hidden="true">↗</span>
+  </div>
+
+  <div class="decision-transition">
+    <div>
+      <span class="transition-label">NEXT · BUILD</span>
+      <p>Choosing where AI should run is the first step. <strong>Making that runtime reliable is the next.</strong></p>
+    </div>
+    <a href="#infrastructure" class="transition-link">
+      Explore the runtime layer <span aria-hidden="true">↗</span>
     </a>
   </div>
 </div>
 
+<script>
+  function initDecisionCards() {
+    const root = document.querySelector<HTMLElement>('[data-decision-cards]');
+    if (!root || root.dataset.decisionReady === 'true') return;
+
+    const viewport = root.querySelector<HTMLElement>('[data-decision-viewport]');
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('.decision-card'));
+    const controls = root.querySelector<HTMLElement>('[data-decision-controls]');
+    const current = root.querySelector<HTMLElement>('[data-decision-current]');
+    const previous = root.querySelector<HTMLButtonElement>('[data-decision-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-decision-next]');
+    if (!viewport || cards.length === 0 || !controls || !current || !previous || !next) return;
+
+    root.dataset.decisionReady = 'true';
+    controls.hidden = false;
+    let activeIndex = 0;
+    let frame = 0;
+
+    const readIndex = () => {
+      const railLeft = viewport.getBoundingClientRect().left;
+      const distances = cards.map((card) =>
+        Math.abs(card.getBoundingClientRect().left - railLeft)
+      );
+      return distances.indexOf(Math.min(...distances));
+    };
+
+    const update = () => {
+      frame = 0;
+      activeIndex = Math.max(0, readIndex());
+      current.textContent = String(activeIndex + 1).padStart(2, '0');
+      previous.disabled = activeIndex === 0;
+      next.disabled = activeIndex === cards.length - 1;
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(update);
+    };
+
+    const goTo = (index: number) => {
+      const target = cards[Math.max(0, Math.min(cards.length - 1, index))];
+      if (!target) return;
+      const left = viewport.scrollLeft +
+        target.getBoundingClientRect().left -
+        viewport.getBoundingClientRect().left;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      viewport.scrollTo({ left, behavior: reducedMotion ? 'instant' : 'smooth' });
+    };
+
+    previous.addEventListener('click', () => goTo(activeIndex - 1));
+    next.addEventListener('click', () => goTo(activeIndex + 1));
+    viewport.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+
+  initDecisionCards();
+  document.addEventListener('astro:page-load', initDecisionCards);
+</script>
+
 <style>
   .decision-surface {
     width: 100%;
+    min-width: 0;
+    container-type: inline-size;
+    --decision-ink: var(--ink-display);
+  }
+
+  .decision-rail-heading {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px 20px;
+    margin-bottom: 19px;
   }
 
-  .matrix-card {
-    --hybrid-ink: color-mix(in srgb, var(--accent-violet) 76%, var(--ink-display));
-    --cloud-ink: color-mix(in srgb, var(--accent-teal) 72%, var(--ink-display));
-    width: 100%;
-    overflow: hidden;
-    background: var(--surface-card);
-    border: 1px solid color-mix(in srgb, var(--ink-display) 11%, transparent);
-    border-radius: 16px;
-    box-shadow: 0 1px 2px color-mix(in srgb, var(--ink-display) 3%, transparent);
-  }
-
-  .matrix-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    text-align: left;
-  }
-
-  .col-criteria { width: 28%; }
-  .col-local { width: 26%; }
-  .col-secondary { width: 23%; }
-
-  .matrix-table th,
-  .matrix-table td {
-    padding: 13px clamp(14px, 1.65vw, 20px);
-    border-bottom: 1px solid var(--border-subtle);
-    vertical-align: middle;
-  }
-
-  .matrix-table thead th {
-    height: 54px;
-    padding-top: 11px;
-    padding-bottom: 11px;
-    background: color-mix(in srgb, var(--surface-subtle) 42%, var(--surface-card));
-    border-bottom-color: var(--border-medium);
-  }
-
-  .criterion-heading,
-  .best-for-heading {
+  .decision-overline,
+  .factors-label,
+  .transition-label,
+  .conclusion-label {
+    display: block;
+    margin: 0 0 8px;
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 720;
-    letter-spacing: 0.075em;
-    color: var(--ink-subtle);
-    text-transform: uppercase;
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: 0.08em;
   }
 
-  .platform-heading {
+  .decision-overline,
+  .transition-label { color: var(--accent-blue); }
+
+  .decision-lead {
+    margin: 0;
+    max-width: 690px;
     font-family: var(--font-display);
-    font-size: 0.88rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-size: clamp(1.14rem, 2.3vw, 1.55rem);
+    font-weight: 760;
+    letter-spacing: -0.036em;
+    line-height: 1.22;
+    color: var(--ink-display);
   }
 
-  .platform-heading-label {
-    display: inline-flex;
+  .decision-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    white-space: nowrap;
+  }
+
+  .decision-hint span { color: var(--accent-blue); font-size: 19px; }
+
+  .decision-rail {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 4px;
+  }
+
+  .decision-rail:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  .decision-cards {
+    display: flex;
+    align-items: stretch;
+    gap: 13px;
+    margin: 0;
+    padding: 1px 0 12px;
+    list-style: none;
+  }
+
+  .decision-card {
+    --mode-accent: var(--accent-blue);
+    --mode-soft: var(--surface-blue-subtle);
+    position: relative;
+    display: flex;
+    flex: 0 0 calc(100% - 28px);
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .decision-card[data-mode='hybrid'] {
+    --mode-accent: var(--accent-violet);
+    --mode-soft: color-mix(in srgb, var(--accent-violet) 9%, var(--surface-card));
+  }
+
+  .decision-card[data-mode='cloud'] {
+    --mode-accent: var(--accent-teal);
+    --mode-soft: var(--surface-teal-subtle);
+  }
+
+  .decision-card::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 4px;
+    flex: 0 0 4px;
+    background: var(--mode-accent);
+  }
+
+  .card-main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding: 22px 23px 16px;
+    background: radial-gradient(
+      ellipse 88% 39% at 95% 0%,
+      var(--mode-soft), transparent 85%
+    );
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .card-identity {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .card-symbol {
+    display: grid;
+    flex: 0 0 44px;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid color-mix(in srgb, var(--mode-accent) 27%, var(--border-medium));
+    border-radius: 12px;
+    background: var(--mode-soft);
+    color: var(--mode-accent);
+  }
+
+  .card-symbol svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .card-labels {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  .card-mode {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .card-eyebrow {
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    font-weight: 640;
+    line-height: 1.3;
+  }
+
+  .card-number {
+    flex: 0 0 auto;
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 620;
+    white-space: nowrap;
+  }
+
+  .card-headline {
+    margin: 27px 0 10px;
+    max-width: 360px;
+    color: var(--decision-ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.3vw, 2rem);
+    font-weight: 830;
+    line-height: 1.13;
+    letter-spacing: -0.048em;
+    text-wrap: pretty;
+  }
+
+  .card-description {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.57;
+  }
+
+  .card-divider {
+    height: 1px;
+    margin: 23px 0 18px;
+    background: var(--border-subtle);
+  }
+
+  .factors-label {
+    margin-bottom: 8px;
+    color: var(--ink-subtle);
+  }
+
+  .factors { margin: 0; }
+
+  .factor {
+    display: grid;
+    grid-template-columns: minmax(0, 83px) minmax(0, 1fr);
+    align-items: baseline;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: var(--text-caption);
+    line-height: 1.42;
+  }
+
+  .factor:last-child { border-bottom: 0; }
+
+  .factor dt {
+    color: var(--ink-subtle);
+    font-weight: 540;
+  }
+
+  .factor dd {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+    margin: 0;
+    color: var(--ink);
+    font-weight: 650;
+  }
+
+  .factor .factor--strength {
+    color: var(--mode-accent);
+    font-weight: 750;
+  }
+
+  .factor-check { flex: 0 0 auto; font-weight: 850; }
+
+  .card-conclusion {
+    flex: 0 0 auto;
+    min-height: 126px;
+    padding: 18px 23px 21px;
+    border-top: 1px solid color-mix(in srgb, var(--mode-accent) 24%, var(--border-subtle));
+    background: var(--mode-soft);
+  }
+
+  .conclusion-label {
+    margin-bottom: 8px;
+    color: var(--mode-accent);
+  }
+
+  .card-conclusion p {
+    margin: 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-body-sm);
+    font-weight: 730;
+    line-height: 1.42;
+  }
+
+  .rail-controls[hidden] { display: none; }
+
+  .rail-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 9px;
+  }
+
+  .rail-position {
+    margin: 0;
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 600;
+  }
+
+  .rail-position strong {
+    color: var(--ink-display);
+    font-weight: 800;
+  }
+
+  .rail-buttons {
+    display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  .platform-dot {
-    width: 5px;
-    height: 5px;
-    flex: 0 0 auto;
+  .rail-button {
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid var(--border-medium);
     border-radius: 50%;
-  }
-
-  .matrix-table thead .platform-heading--hybrid {
-    color: var(--hybrid-ink);
-  }
-
-  .platform-heading--hybrid .platform-dot {
-    background: var(--accent-violet);
-  }
-
-  .matrix-table thead .platform-heading--cloud {
-    color: var(--cloud-ink);
-  }
-
-  .platform-heading--cloud .platform-dot {
-    background: var(--accent-teal);
-  }
-
-  .local-column {
-    background: color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card));
-    border-left: 1px solid color-mix(in srgb, var(--accent-blue) 13%, var(--border-subtle));
-    border-right: 1px solid color-mix(in srgb, var(--accent-blue) 13%, var(--border-subtle));
-  }
-
-  .matrix-table thead .local-column--header {
-    background: color-mix(in srgb, var(--accent-blue) 6%, var(--surface-card));
-    box-shadow: inset 0 2px 0 var(--accent-blue);
-  }
-
-  .local-heading {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 7px;
-    font-family: var(--font-display);
-    font-size: 0.92rem;
-    font-weight: 760;
-    letter-spacing: -0.015em;
-    color: var(--accent-blue-dark);
-  }
-
-  .local-dot {
-    width: 6px;
-    height: 6px;
-    flex: 0 0 auto;
-    border-radius: 50%;
-    background: var(--accent-blue);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue) 10%, transparent);
-  }
-
-  .focus-label {
-    margin-left: 2px;
-    padding-left: 9px;
-    border-left: 1px solid color-mix(in srgb, var(--accent-blue) 23%, transparent);
-    font-size: var(--text-caption);
-    line-height: 1.15;
-    font-weight: 620;
-    color: var(--ink-subtle);
-  }
-
-  .criterion-cell strong {
-    display: block;
-    margin-bottom: 1px;
-    font-family: var(--font-display);
-    font-size: 0.91rem;
-    line-height: 1.25;
-    font-weight: 720;
-    letter-spacing: -0.015em;
+    background: var(--surface-card);
     color: var(--ink-display);
+    cursor: pointer;
+    transition: background var(--duration-fast) ease,
+      border-color var(--duration-fast) ease;
   }
 
-  .criterion-cell > span {
-    display: block;
-    font-size: var(--text-caption);
-    line-height: 1.3;
-    color: var(--ink-subtle);
-    font-weight: 450;
+  .rail-button span { font-size: 20px; }
+
+  .rail-button:not(:disabled):hover {
+    border-color: var(--accent-blue);
+    background: var(--surface-blue-subtle);
   }
 
-  .group-divider-cell {
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
-    background: color-mix(in srgb, var(--surface-subtle) 48%, var(--surface-card));
-    border-top: 1px solid var(--border-medium);
-    border-bottom: 1px solid var(--border-medium) !important;
+  .rail-button:focus-visible,
+  .transition-link:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 3px;
   }
 
-  .group-divider-cell span,
-  .group-divider-cell small {
-    display: inline;
-    font-family: var(--font-display);
-    font-size: var(--text-caption);
-    line-height: 1.2;
-  }
+  .rail-button:disabled { opacity: 0.38; cursor: default; }
 
-  .group-divider-cell span {
-    font-weight: 720;
-    letter-spacing: 0.075em;
-    color: var(--ink-subtle);
-    text-transform: uppercase;
-  }
-
-  .group-divider-cell small {
-    margin-left: 8px;
-    font-weight: 480;
-    color: var(--ink-subtle);
-  }
-
-  .comparison-value {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: var(--text-caption);
-    line-height: 1.35;
-    font-weight: 540;
-    color: var(--ink-muted);
-  }
-
-  .comparison-value--strength {
-    font-family: var(--font-display);
-    font-weight: 680;
-    color: var(--accent-blue-dark);
-  }
-
-  .comparison-value--secondary-strength {
-    padding: 4px 7px;
-    border-radius: 7px;
-    font-family: var(--font-display);
-    font-weight: 680;
-  }
-
-  .hybrid-column .comparison-value--secondary-strength,
-  .hybrid-column .comparison-value--secondary-strength .status-check {
-    color: var(--hybrid-ink);
-  }
-
-  .hybrid-column .comparison-value--secondary-strength {
-    background: color-mix(in srgb, var(--accent-violet) 7%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-violet) 14%, transparent);
-  }
-
-  .cloud-column .comparison-value--secondary-strength,
-  .cloud-column .comparison-value--secondary-strength .status-check {
-    color: var(--cloud-ink);
-  }
-
-  .cloud-column .comparison-value--secondary-strength {
-    background: color-mix(in srgb, var(--accent-teal) 7%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-teal) 14%, transparent);
-  }
-
-  .status-check {
-    flex: 0 0 auto;
-    color: var(--accent-blue);
-    font-size: var(--text-caption);
-    font-weight: 760;
-  }
-
-  .best-for-row th,
-  .best-for-row td {
-    padding-top: 12px;
-    padding-bottom: 13px;
-    border-top: 1px solid var(--border-medium);
-    border-bottom: 0;
-  }
-
-  .best-for-row td {
-    font-size: var(--text-caption);
-    line-height: 1.4;
-    color: var(--ink-muted);
-  }
-
-  .best-for-row .local-column {
-    color: var(--accent-blue-dark);
-  }
-
-  .best-for-row .hybrid-column {
-    color: var(--hybrid-ink);
-  }
-
-  .best-for-row .cloud-column {
-    color: var(--cloud-ink);
-  }
-
-  .best-for-row strong {
-    font-family: var(--font-display);
-    font-weight: 760;
-  }
-
-  .decision-hook {
+  .decision-transition {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding: 14px 16px;
-    border: 1px solid color-mix(in srgb, var(--ink-display) 10%, transparent);
-    border-radius: 14px;
-    background: var(--surface-card);
+    gap: 16px 26px;
+    margin-top: 28px;
+    padding: 24px 0 0;
+    border-top: 1px solid var(--border-medium);
   }
 
-  .decision-hook h3 {
-    margin: 0 0 2px;
-    font-family: var(--font-display);
-    font-size: 0.88rem;
-    line-height: 1.3;
-    font-weight: 720;
-    color: var(--ink-display);
-  }
+  .transition-label { margin-bottom: 8px; }
 
-  .decision-hook p {
+  .decision-transition p {
     margin: 0;
-    font-size: var(--text-caption);
-    line-height: 1.45;
+    max-width: 550px;
     color: var(--ink-muted);
+    font-size: var(--text-body-sm);
+    line-height: 1.58;
   }
 
-  .decision-cta {
-    flex-shrink: 0;
-    /* The journey entrance scale can be 0.985: keep the rendered hit area >=44px. */
+  .decision-transition strong {
+    color: var(--ink-display);
+    font-weight: 750;
+  }
+
+  .transition-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     min-height: 48px;
-    padding-inline: 14px;
-    cursor: pointer;
-    white-space: nowrap;
+    padding: 10px 15px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 770;
+    text-decoration: none;
+    transition: background var(--duration-fast) ease;
   }
 
-  .mobile-cell-label {
-    display: none;
+  .transition-link:hover { background: var(--surface-blue-subtle); }
+  .transition-link span { font-size: 19px; }
+
+  @container (min-width: 510px) {
+    .decision-card { flex-basis: min(76%, 455px); }
+    .decision-hint { display: none; }
   }
 
-  @media (max-width: 760px) {
-    .matrix-card {
-      overflow: hidden;
-      border: 1px solid var(--border-medium);
-      border-radius: 14px;
-      background: var(--surface-card);
+  @container (min-width: 900px) {
+    .decision-rail {
+      overflow: visible;
+      scroll-snap-type: none;
+      outline: none;
     }
 
-    .matrix-table,
-    .matrix-table tbody {
-      display: block;
-      width: 100%;
-    }
-
-    .matrix-table colgroup,
-    .matrix-table thead {
-      display: none;
-    }
-
-    .matrix-table tbody tr {
+    .decision-cards {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin: 0;
-      background: var(--surface-card);
-      border: 0;
-      border-bottom: 1px solid var(--border-medium);
-      border-radius: 0;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+      padding-bottom: 5px;
     }
 
-    .matrix-table th,
-    .matrix-table td {
-      display: block;
-      min-width: 0;
-      padding: 12px 14px;
-      border: 0;
-    }
+    .decision-card { width: 100%; }
 
-    .criterion-cell {
-      grid-column: 1 / -1;
-      border-bottom: 1px solid var(--border-subtle) !important;
-    }
+    .card-main { padding: 23px 21px 16px; }
 
-    .mobile-cell-label {
-      display: block;
-      margin-bottom: 5px;
-      font-family: var(--font-display);
-      font-size: var(--text-caption);
-      line-height: 1.2;
-      font-weight: 720;
-      letter-spacing: 0.035em;
-      color: var(--ink-subtle);
-      text-transform: uppercase;
-    }
+    .card-headline { font-size: 1.65rem; }
 
-    .comparison-cell.local-column {
-      grid-column: 1 / -1;
-      padding-top: 12px;
-      padding-bottom: 12px;
-      border: 0;
-      border-bottom: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-subtle));
-      box-shadow: inset 3px 0 0 var(--accent-blue);
-    }
+    .decision-hint,
+    .rail-controls { display: none; }
+  }
 
-    .comparison-cell.local-column .mobile-cell-label,
-    .best-for-row .local-column .mobile-cell-label {
-      color: var(--accent-blue-dark);
-    }
+  @container (max-width: 340px) {
+    .card-main { padding: 17px 14px 14px; }
+    .card-conclusion { min-height: 0; padding: 17px 14px 19px; }
+    .card-top { flex-wrap: wrap; }
+    .card-headline { margin-top: 20px; font-size: 1.48rem; }
+    .factor { grid-template-columns: minmax(0, 72px) minmax(0, 1fr); gap: 7px; }
+    .card-symbol { flex-basis: 40px; width: 40px; height: 40px; }
+    .card-number { margin-left: auto; }
+    .decision-rail-heading { margin-bottom: 13px; }
+    .decision-hint { white-space: normal; }
+    .decision-transition { margin-top: 24px; }
+  }
 
-    .comparison-cell.hybrid-column .mobile-cell-label,
-    .best-for-row .hybrid-column .mobile-cell-label {
-      color: var(--hybrid-ink);
-    }
-
-    .comparison-cell.cloud-column .mobile-cell-label,
-    .best-for-row .cloud-column .mobile-cell-label {
-      color: var(--cloud-ink);
-    }
-
-    .secondary-column + .secondary-column {
-      border-left: 1px solid var(--border-subtle);
-    }
-
-    .group-divider-row {
-      display: block !important;
-    }
-
-    .group-divider-cell {
-      padding: 12px 14px !important;
-    }
-
-    .group-divider-cell span,
-    .group-divider-cell small {
-      display: block;
-    }
-
-    .group-divider-cell small {
-      margin: 4px 0 0;
-    }
-
-    .best-for-row .best-for-heading {
-      grid-column: 1 / -1;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .best-for-row .local-column {
-      grid-column: 1 / -1;
-      border: 0;
-      border-bottom: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-subtle));
-      box-shadow: inset 3px 0 0 var(--accent-blue);
-    }
-
-    .best-for-row td:last-child {
-      border-left: 1px solid var(--border-subtle);
-    }
-
-    .matrix-table tbody .best-for-row {
-      border-bottom: 0;
-    }
-
-    .decision-hook {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .decision-cta {
-      width: 100%;
-      justify-content: center;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    .rail-button,
+    .transition-link { transition: none; }
   }
 </style>

@@ -56,16 +56,36 @@ test('homepage section surfaces alternate through continuous gradients', () => {
   assert.match(thread, /dir-rtl[\s\S]{0,260}var\(--journey-surface-canvas[\s\S]{0,260}var\(--journey-surface-tint/);
 });
 
-test('decision matrix keeps a local-first hierarchy without losing comparison semantics', () => {
-  const matrix = read('src/components/landing/DecisionTable.astro');
+test('DECIDE keeps all architecture trade-offs in value-first swipeable cards', () => {
+  const cards = read('src/components/landing/DecisionTable.astro');
+  const stage = read('src/components/landing/DecisionStage.astro');
 
-  assert.match(matrix, /Local-first lens/);
-  assert.match(matrix, /Where Local AI trades capacity for control/);
-  assert.match(matrix, /class="mobile-cell-label"/);
-  assert.match(matrix, /class="sr-only">Strength:/);
-  assert.match(matrix, /--cloud-ink:/);
-  assert.doesNotMatch(matrix, /\.hybrid-column\s*\{[\s\S]{0,120}background:/);
-  assert.doesNotMatch(matrix, /\.cloud-column\s*\{[\s\S]{0,120}background:/);
+  for (const mode of ["id: 'local'", "id: 'hybrid'", "id: 'cloud'"]) {
+    assert.match(cards, new RegExp(mode));
+  }
+
+  for (const dimension of ['Privacy', 'Latency', 'Control', 'Models', 'Scale']) {
+    assert.match(cards, new RegExp("label: '" + dimension + "'"));
+  }
+
+  assert.match(cards, /THE TRADE-OFFS/);
+  assert.match(cards, /BEST WHEN/);
+  assert.match(cards, /data-decision-viewport/);
+  assert.match(cards, /aria-roledescription="carousel"/);
+  assert.match(cards, /tabindex="0"/);
+  assert.match(cards, /scroll-snap-type: x mandatory/);
+  assert.match(cards, /scroll-snap-align: start/);
+  assert.match(cards, /@container \(min-width: 900px\)/);
+  assert.match(cards, /grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
+  assert.match(cards, /data-decision-prev/);
+  assert.match(cards, /data-decision-next/);
+  assert.match(cards, /prefers-reduced-motion: reduce/);
+  assert.match(cards, /href="#infrastructure"/);
+  assert.match(cards, /var\(--accent-blue\)/);
+  assert.match(cards, /var\(--accent-violet\)/);
+  assert.match(cards, /var\(--accent-teal\)/);
+  assert.match(stage, /<DecisionTable \/>/);
+  assert.doesNotMatch(cards, /<table|href="https:\/\/www\.linkedin\.com/);
 });
 
 test('homepage identity stays in the shared header without duplicating the hero', () => {
