@@ -463,7 +463,8 @@ const criteria: CriterionRow[] = [
 
   .decision-cta {
     flex-shrink: 0;
-    min-height: var(--touch-target-min);
+    /* The journey entrance scale can be 0.985: keep the rendered hit area >=44px. */
+    min-height: 48px;
     padding-inline: 14px;
     cursor: pointer;
     white-space: nowrap;
