@@ -144,6 +144,85 @@ try {
     await context.close();
   }
 
+  // DECIDE: verify actual mobile horizontal movement and desktop comparison.
+  // Screenshots are review artifacts, not a replacement for DOM/interaction assertions.
+  const decisionChecks = [];
+  for (const viewport of [
+    { name: 'mobile-320', width: 320, height: 700 },
+    { name: 'mobile-390', width: 390, height: 844 },
+    { name: 'tablet-768', width: 768, height: 1024 },
+    { name: 'desktop-1440', width: 1440, height: 1100 },
+  ]) {
+    for (const theme of ['light', 'dark']) {
+      const context = await browser.newContext({
+        viewport: { width: viewport.width, height: viewport.height },
+        reducedMotion: 'reduce',
+      });
+      const page = await context.newPage();
+      try {
+        await page.goto(baseUrl + '/?theme=' + theme, { waitUntil: 'networkidle' });
+        await page.evaluate(() => document.fonts?.ready);
+        const surface = page.locator('#strategy [data-decision-cards]');
+        const initial = await page.evaluate(() => {
+          const region = document.querySelector('#strategy [data-decision-viewport]');
+          const cards = [...document.querySelectorAll('#strategy [data-mode]')];
+          return {
+            theme: document.documentElement.dataset.theme,
+            modeOrder: cards.map((el) => el.dataset.mode),
+            factorsPerCard: cards.map((el) => el.querySelectorAll('.factor').length),
+            snap: region ? getComputedStyle(region).scrollSnapType : null,
+            railScrolls: region ? region.scrollWidth > region.clientWidth + 5 : false,
+            pageOverflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+            cardTextSizes: cards.flatMap((card) =>
+              [...card.querySelectorAll('p, h4, span, dt, dd')]
+                .filter((el) => el.getBoundingClientRect().height > 0 &&
+                  [...el.childNodes].some((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()))
+                .map((el) => Number.parseFloat(getComputedStyle(el).fontSize))
+            ),
+          };
+        });
+
+        await surface.screenshot({
+          path: path.join(outputDir, 'decide__' + viewport.name + '__' + theme + '.png'),
+        });
+
+        let advancedToSecond = true;
+        let advancedToThird = true;
+        if (viewport.width < 1000) {
+          await page.locator('[data-decision-next]').click();
+          await page.waitForFunction(() =>
+            document.querySelector('[data-decision-current]')?.textContent?.trim() === '02'
+          );
+          advancedToSecond = await page.locator('[data-decision-current]').textContent() === '02';
+          await page.locator('[data-decision-next]').click();
+          await page.waitForFunction(() =>
+            document.querySelector('[data-decision-current]')?.textContent?.trim() === '03'
+          );
+          advancedToThird = await page.locator('[data-decision-current]').textContent() === '03';
+        }
+
+        const check = { viewport: viewport.name, ...initial, advancedToSecond, advancedToThird };
+        decisionChecks.push(check);
+        if (
+          initial.theme !== theme ||
+          initial.modeOrder.join(',') !== 'local,hybrid,cloud' ||
+          initial.factorsPerCard.some((count) => count !== 5) ||
+          initial.pageOverflowPx > 0 ||
+          initial.cardTextSizes.some((size) => !Number.isFinite(size) || size < 14) ||
+          (viewport.width < 1000 && (!initial.railScrolls || !initial.snap.includes('mandatory'))) ||
+          (viewport.width === 1440 && initial.railScrolls) ||
+          !advancedToSecond || !advancedToThird
+        ) {
+          throw new Error('DECIDE responsive carousel regression: ' + JSON.stringify(check));
+        }
+      } finally {
+        await page.close();
+        await context.close();
+      }
+    }
+  }
+  await fs.writeFile(path.join(outputDir, 'decide-card-check.json'), JSON.stringify(decisionChecks, null, 2));
+
   // The BUILD redesign must be inspected in both themes, independently of
   // the whole-page journey animation. Element captures make visual PR review
   // practical without changing how navigation or the method path works.
