@@ -40,13 +40,15 @@ const readDiagnostics = async (page) => page.evaluate(() => {
   const actionTargets = Array.from(document.querySelectorAll('.hero-actions a, .primary-button, .secondary-button'))
     .map((node) => {
       const rect = node.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      if (!rect.width || !rect.height || style.display === 'none' || style.visibility === 'hidden') return null;
       return {
         label: node.textContent?.replace(/\s+/g, ' ').trim() || '',
         width: Math.round(rect.width),
         height: Math.round(rect.height),
       };
     })
-    .filter((item) => item.width < 44 || item.height < 44);
+    .filter((item) => item && (item.width < 44 || item.height < 44));
 
   const smallText = Array.from(body.querySelectorAll('*'))
     .map((element) => {
@@ -68,7 +70,7 @@ const readDiagnostics = async (page) => page.evaluate(() => {
       };
     })
     .filter(Boolean)
-    .slice(0, 50);
+    .slice(0, 150);
 
   const stageVisibility = stages.map((stage) => {
     const copy = stage.querySelector('.stage-copy');
