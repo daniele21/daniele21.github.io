@@ -223,6 +223,100 @@ try {
   }
   await fs.writeFile(path.join(outputDir, 'decide-card-check.json'), JSON.stringify(decisionChecks, null, 2));
 
+  // TEST: capture the real logos/screenshots and exercise the mobile card rail.
+  const testGalleryChecks = [];
+  for (const viewport of [
+    { name: 'mobile-320', width: 320, height: 700 },
+    { name: 'mobile-390', width: 390, height: 844 },
+    { name: 'tablet-768', width: 768, height: 1024 },
+    { name: 'desktop-1440', width: 1440, height: 1100 },
+  ]) {
+    for (const theme of ['light', 'dark']) {
+      const context = await browser.newContext({
+        viewport: { width: viewport.width, height: viewport.height },
+        reducedMotion: 'reduce',
+      });
+      const page = await context.newPage();
+      try {
+        await page.goto(baseUrl + '/?theme=' + theme, { waitUntil: 'networkidle' });
+        await page.evaluate(() => document.fonts?.ready);
+        const surface = page.locator('#applications [data-test-gallery]');
+        await surface.scrollIntoViewIfNeeded();
+        await page.evaluate(async () => {
+          const images = [...document.querySelectorAll('#applications .gallery-card img')];
+          await Promise.all(images.map(async (image) => {
+            image.loading = 'eager';
+            try { await image.decode(); } catch { /* captured as naturalWidth = 0 */ }
+          }));
+        });
+
+        const diagnostics = await page.evaluate(() => {
+          const root = document.querySelector('#applications [data-test-gallery]');
+          const rail = root?.querySelector('[data-test-viewport]');
+          const slides = [...(root?.querySelectorAll('.gallery-slide') ?? [])];
+          const images = [...(root?.querySelectorAll('.gallery-card img') ?? [])];
+          const labels = [...(root?.querySelectorAll('.gallery-card h4, .gallery-card p, .gallery-card span') ?? [])];
+          return {
+            theme: document.documentElement.dataset.theme,
+            applications: slides.map((node) => node.getAttribute('data-application')),
+            sources: images.map((node) => node.getAttribute('src')),
+            brokenImages: images.filter((img) => !img.complete || !img.naturalWidth).map((img) => img.src),
+            linksValid: slides.every((slide) => {
+              const link = slide.querySelector('.gallery-card');
+              return link?.getAttribute('href')?.startsWith('/') && link?.getAttribute('href') !== '/';
+            }),
+            scrollSnap: rail ? getComputedStyle(rail).scrollSnapType : '',
+            railScrolls: rail ? rail.scrollWidth > rail.clientWidth + 5 : false,
+            pageOverflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+            tinyLabels: labels
+              .filter((node) => node.getBoundingClientRect().height > 0 &&
+                [...node.childNodes].some((child) => child.nodeType === Node.TEXT_NODE && child.textContent?.trim()) &&
+                Number.parseFloat(getComputedStyle(node).fontSize) < 14)
+              .map((node) => node.textContent?.trim().slice(0, 50)),
+          };
+        });
+        await surface.screenshot({
+          path: path.join(outputDir, 'test__' + viewport.name + '__' + theme + '.png'),
+        });
+
+        let reachedSecond = true;
+        let reachedThird = true;
+        if (viewport.width < 1000) {
+          await page.locator('[data-test-next]').click();
+          await page.waitForFunction(() => document.querySelector('[data-test-current]')?.textContent?.trim() === '02');
+          reachedSecond = (await page.locator('[data-test-current]').textContent())?.trim() === '02';
+          await page.locator('[data-test-next]').click();
+          await page.waitForFunction(() => document.querySelector('[data-test-current]')?.textContent?.trim() === '03');
+          reachedThird = (await page.locator('[data-test-current]').textContent())?.trim() === '03';
+        }
+
+        const check = { viewport: viewport.name, ...diagnostics, reachedSecond, reachedThird };
+        testGalleryChecks.push(check);
+        if (
+          diagnostics.theme !== theme ||
+          diagnostics.applications.join(',') !== 'redact-guard,aura-finance,closedroom' ||
+          diagnostics.sources.length !== 6 ||
+          diagnostics.brokenImages.length !== 0 ||
+          !diagnostics.linksValid ||
+          diagnostics.pageOverflowPx > 0 ||
+          diagnostics.tinyLabels.length > 0 ||
+          (viewport.width < 1000 && (!diagnostics.railScrolls || !diagnostics.scrollSnap.includes('mandatory'))) ||
+          (viewport.width === 1440 && diagnostics.railScrolls) ||
+          !reachedSecond || !reachedThird
+        ) {
+          throw new Error('TEST gallery visual/asset regression: ' + JSON.stringify(check));
+        }
+      } finally {
+        await page.close();
+        await context.close();
+      }
+    }
+  }
+  await fs.writeFile(
+    path.join(outputDir, 'test-gallery-check.json'),
+    JSON.stringify(testGalleryChecks, null, 2),
+  );
+
   // The BUILD redesign must be inspected in both themes, independently of
   // the whole-page journey animation. Element captures make visual PR review
   // practical without changing how navigation or the method path works.
