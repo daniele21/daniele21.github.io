@@ -152,7 +152,7 @@ for (const fragment of ['plane-card__header', 'plane-card__body', 'plane-card__f
 }
 
 for (const [sourcePath, fragment] of [
-  ['src/components/landing/TestStage.astro', '<PlaneCardGrid'],
+  ['src/components/landing/TestStage.astro', '<TestProductGallery'],
   ['src/components/landing/ProjectProofCard.astro', '<PlaneCard'],
 ]) {
   const source = fs.readFileSync(path.resolve(sourcePath), 'utf-8');
