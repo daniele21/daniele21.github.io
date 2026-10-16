@@ -159,3 +159,55 @@ test('BUILD uses semantic brand tokens and supports mobile and dark appearance',
   assert.match(showcase, /aria-label=\{'Explore ' \+ project\.title/);
   assert.doesNotMatch(showcase, /<script[\s>]/);
 });
+
+
+test('TEST is a mobile-first gallery of actual project assets and product value', () => {
+  const stage = read('src/components/landing/TestStage.astro');
+  const gallery = read('src/components/landing/TestProductGallery.astro');
+  const data = read('src/content/locales/en/landing.ts');
+
+  assert.match(stage, /<TestProductGallery \/>/);
+  assert.match(stage, /id="applications"/);
+  assert.doesNotMatch(stage, /<PlaneCardGrid|<ProjectProofCard/);
+
+  assert.match(gallery, /testStage\.applications\.map/);
+  assert.match(gallery, /app\.valueHeadline/);
+  assert.match(gallery, /app\.logoPath/);
+  assert.match(gallery, /app\.imagePath/);
+  assert.match(gallery, /app\.infrastructureLabel/);
+  assert.match(gallery, /app\.features\.map/);
+  assert.match(gallery, /app\.whatItTests/);
+  assert.match(gallery, /href=\{resolveHref\(app\.href\)\}/);
+  assert.match(gallery, /src=\{resolveHref\(app\.imagePath\)\}/);
+  assert.match(gallery, /scroll-snap-type: x mandatory/);
+  assert.match(gallery, /scroll-snap-align: start/);
+  assert.match(gallery, /@container \(min-width: 900px\)/);
+  assert.match(gallery, /grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
+  assert.match(gallery, /data-test-prev/);
+  assert.match(gallery, /data-test-next/);
+  assert.match(gallery, /role="region"/);
+  assert.match(gallery, /tabindex="0"/);
+  assert.match(gallery, /prefers-reduced-motion: reduce/);
+  assert.match(gallery, /href="#evidence"/);
+  assert.doesNotMatch(gallery, /PLACEHOLDER|mockup|WHAT THIS VALIDATES/);
+
+  for (const asset of [
+    'images/redact-guard/logo.png',
+    'images/redact-guard/redactguard-doc-preview.jpg',
+    'images/aura/logo.png',
+    'images/aura-finance/aura-categories-preview.png',
+    'images/closedroom/logo.png',
+    'images/closedroom/recording-preview.jpg',
+  ]) {
+    assert.ok(fs.existsSync('public/' + asset), 'TEST project asset must exist: ' + asset);
+    assert.ok(data.includes("'" + asset + "'"), 'TEST must reuse canonical media: ' + asset);
+  }
+
+  for (const headline of [
+    'Sensitive documents. Local processing.',
+    'Understand transactions on-device.',
+    'Meeting intelligence. Private by default.',
+  ]) {
+    assert.ok(data.includes(headline), 'Missing product benefit: ' + headline);
+  }
+});
