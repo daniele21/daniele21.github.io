@@ -269,6 +269,8 @@ export const landingData: LandingPageData = {
     applications: [
       {
         name: 'RedactGuard',
+        valueHeadline: 'Sensitive documents. Local processing.',
+        infrastructureLabel: 'Korgis · Harnex',
         tag: 'WEB & DESKTOP · PII REDACTION',
         question: 'Can sensitive document processing stay local?',
         description:
@@ -288,6 +290,8 @@ export const landingData: LandingPageData = {
       },
       {
         name: 'Aura Finance',
+        valueHeadline: 'Understand transactions on-device.',
+        infrastructureLabel: 'Harnex · Integration target',
         tag: 'MOBILE · ON-DEVICE PARSING',
         question: 'Can personal transactions be categorized on-device?',
         description:
@@ -307,6 +311,8 @@ export const landingData: LandingPageData = {
       },
       {
         name: 'ClosedRoom',
+        valueHeadline: 'Meeting intelligence. Private by default.',
+        infrastructureLabel: 'Korgis + Local ASR',
         tag: 'MACOS · MEETING INTELLIGENCE',
         question: 'Can meeting intelligence stay inside the room?',
         description:
