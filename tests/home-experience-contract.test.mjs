@@ -92,3 +92,50 @@ test('brand contract keeps motion purposeful and user-controlled', () => {
   const closedRoom = read('src/pages/closedroom.astro');
   assert.doesNotMatch(closedRoom, /setInterval\(/);
 });
+
+
+test('BUILD Architecture Studio preserves device-first hierarchy and shared project data', () => {
+  const showcase = read('src/components/landing/BuildSystemsShowcase.astro');
+  const stage = read('src/components/landing/BuildStage.astro');
+  const data = read('src/content/locales/en/landing.ts');
+
+  assert.match(stage, /<BuildSystemsShowcase\s*\/>/);
+  assert.match(showcase, /const runtimeProjects = buildStage\.projects\.filter/);
+  assert.match(showcase, /const specializedProjects = buildStage\.projects\.filter/);
+  assert.match(showcase, /project\.id === 'korgis' \|\| project\.id === 'harnex'/);
+  assert.match(showcase, /Execution environments/);
+  assert.match(showcase, /Specialized components/);
+  assert.match(showcase, /MAC · DESKTOP & SERVER/);
+  assert.match(showcase, /ANDROID · ON-DEVICE/);
+  assert.match(showcase, /href=\{hrefFor\(project\.href, project\.external\)\}/);
+  assert.match(showcase, /project\.logoPath/);
+  assert.match(data, /id: 'korgis'/);
+  assert.match(data, /id: 'harnex'/);
+  assert.match(data, /id: 'decisio'/);
+  assert.match(data, /id: 'local-asr-server'/);
+  assert.doesNotMatch(showcase, /VISUAL PLACEHOLDER|visual-placeholder/);
+});
+
+test('BUILD uses semantic brand tokens and supports mobile and dark appearance', () => {
+  const showcase = read('src/components/landing/BuildSystemsShowcase.astro');
+
+  for (const token of [
+    '--accent-blue',
+    '--accent-violet',
+    '--surface-card',
+    '--surface-inverse',
+    '--ink-display',
+    '--border-medium',
+    '--font-display',
+  ]) {
+    assert.ok(showcase.includes('var(' + token + ')'), 'BUILD must reuse ' + token);
+  }
+
+  assert.match(showcase, /:global\(html\[data-theme='dark'\]\)/);
+  assert.match(showcase, /@container \(max-width: 740px\)/);
+  assert.match(showcase, /@container \(max-width: 420px\)/);
+  assert.match(showcase, /prefers-reduced-motion: reduce/);
+  assert.match(showcase, /focus-visible/);
+  assert.match(showcase, /aria-label=\{'Explore ' \+ project\.title/);
+  assert.doesNotMatch(showcase, /<script[\s>]/);
+});

@@ -40,13 +40,15 @@ const readDiagnostics = async (page) => page.evaluate(() => {
   const actionTargets = Array.from(document.querySelectorAll('.hero-actions a, .primary-button, .secondary-button'))
     .map((node) => {
       const rect = node.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      if (!rect.width || !rect.height || style.display === 'none' || style.visibility === 'hidden') return null;
       return {
         label: node.textContent?.replace(/\s+/g, ' ').trim() || '',
         width: Math.round(rect.width),
         height: Math.round(rect.height),
       };
     })
-    .filter((item) => item.width < 44 || item.height < 44);
+    .filter((item) => item && (item.width < 44 || item.height < 44));
 
   const smallText = Array.from(body.querySelectorAll('*'))
     .map((element) => {
@@ -68,7 +70,7 @@ const readDiagnostics = async (page) => page.evaluate(() => {
       };
     })
     .filter(Boolean)
-    .slice(0, 50);
+    .slice(0, 150);
 
   const stageVisibility = stages.map((stage) => {
     const copy = stage.querySelector('.stage-copy');
@@ -141,6 +143,72 @@ try {
     await page.close();
     await context.close();
   }
+
+  // The BUILD redesign must be inspected in both themes, independently of
+  // the whole-page journey animation. Element captures make visual PR review
+  // practical without changing how navigation or the method path works.
+  const buildShowcaseChecks = [];
+  for (const viewport of [
+    { name: 'desktop-1440', width: 1440, height: 1100 },
+    { name: 'mobile-390', width: 390, height: 844 },
+  ]) {
+    for (const theme of ['light', 'dark']) {
+      const buildContext = await browser.newContext({
+        viewport: { width: viewport.width, height: viewport.height },
+        reducedMotion: 'reduce',
+      });
+      const buildPage = await buildContext.newPage();
+      try {
+        await buildPage.goto(baseUrl + '/?theme=' + theme, { waitUntil: 'networkidle' });
+        await buildPage.evaluate(() => document.fonts?.ready);
+        const diagnostics = await buildPage.evaluate(() => {
+          const showcase = document.querySelector('#infrastructure .systems-showcase');
+          const runtimes = Array.from(showcase?.querySelectorAll('.runtime-card') ?? []);
+          const primitives = Array.from(showcase?.querySelectorAll('.primitive') ?? []);
+          return {
+            theme: document.documentElement.dataset.theme,
+            runtimeIds: runtimes.map((card) => card.getAttribute('data-system')),
+            primitiveIds: primitives.map((card) => card.getAttribute('data-system')),
+            validLinks: [...runtimes, ...primitives].every(
+              (card) => card.getAttribute('href')?.startsWith('/') && card.getAttribute('href') !== '/'
+            ),
+            horizontalOverflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+            narrowText: [...(showcase?.querySelectorAll('p, h3, h4, span') ?? [])]
+              .filter((node) => {
+                const rect = node.getBoundingClientRect();
+                const style = getComputedStyle(node);
+                return rect.width > 0 && rect.height > 0 &&
+                  style.visibility !== 'hidden' &&
+                  Number.parseFloat(style.fontSize) < 14 &&
+                  [...node.childNodes].some((child) => child.nodeType === Node.TEXT_NODE && child.textContent?.trim());
+              }).map((node) => node.className || node.tagName.toLowerCase()),
+          };
+        });
+        const record = { viewport: viewport.name, ...diagnostics };
+        buildShowcaseChecks.push(record);
+        await buildPage.locator('#infrastructure .systems-showcase').screenshot({
+          path: path.join(outputDir, 'build__' + viewport.name + '__' + theme + '.png'),
+        });
+        if (
+          diagnostics.theme !== theme ||
+          diagnostics.runtimeIds.join(',') !== 'korgis,harnex' ||
+          diagnostics.primitiveIds.join(',') !== 'decisio,local-asr-server' ||
+          !diagnostics.validLinks ||
+          diagnostics.horizontalOverflowPx !== 0 ||
+          diagnostics.narrowText.length > 0
+        ) {
+          throw new Error('BUILD brand/responsive visual regression: ' + JSON.stringify(record));
+        }
+      } finally {
+        await buildPage.close();
+        await buildContext.close();
+      }
+    }
+  }
+  await fs.writeFile(
+    path.join(outputDir, 'build-showcase-check.json'),
+    JSON.stringify(buildShowcaseChecks, null, 2),
+  );
 
   const reducedContext = await browser.newContext({
     viewport: { width: 390, height: 844 },
