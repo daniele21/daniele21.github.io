@@ -268,6 +268,18 @@ try {
             scrollSnap: rail ? getComputedStyle(rail).scrollSnapType : '',
             railScrolls: rail ? rail.scrollWidth > rail.clientWidth + 5 : false,
             pageOverflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+            cardHeights: slides.map((slide) =>
+              Math.round(slide.querySelector('.gallery-card')?.getBoundingClientRect().height || 0)),
+            screenshotHeights: slides.map((slide) =>
+              Math.round(slide.querySelector('.preview-window')?.getBoundingClientRect().height || 0)),
+            typography: {
+              heading: getComputedStyle(root.querySelector('.value-headline')).fontFamily,
+              appName: getComputedStyle(root.querySelector('.app-name')).fontFamily,
+              question: getComputedStyle(root.querySelector('.product-question')).fontFamily,
+              metadata: getComputedStyle(root.querySelector('.app-category')).fontFamily,
+              chips: getComputedStyle(root.querySelector('.feature-chip')).fontFamily,
+              headlineWeight: getComputedStyle(root.querySelector('.value-headline')).fontWeight,
+            },
             tinyLabels: labels
               .filter((node) => node.getBoundingClientRect().height > 0 &&
                 [...node.childNodes].some((child) => child.nodeType === Node.TEXT_NODE && child.textContent?.trim()) &&
@@ -300,6 +312,14 @@ try {
           !diagnostics.linksValid ||
           diagnostics.pageOverflowPx > 0 ||
           diagnostics.tinyLabels.length > 0 ||
+          diagnostics.cardHeights.some((height) =>
+            height <= 0 || height > (viewport.width === 320 ? 760 : viewport.width === 390 ? 710 : 660)) ||
+          diagnostics.screenshotHeights.some((height) => height < 150 || height > 185) ||
+          !diagnostics.typography.heading.includes('Plus Jakarta Sans') ||
+          !diagnostics.typography.appName.includes('Plus Jakarta Sans') ||
+          !diagnostics.typography.question.includes('Inter') ||
+          !diagnostics.typography.metadata.includes('Inter') ||
+          !diagnostics.typography.chips.includes('Inter') ||
           (viewport.width < 1000 && (!diagnostics.railScrolls || !diagnostics.scrollSnap.includes('mandatory'))) ||
           (viewport.width === 1440 && diagnostics.railScrolls) ||
           !reachedSecond || !reachedThird

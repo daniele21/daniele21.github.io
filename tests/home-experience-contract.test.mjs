@@ -176,7 +176,14 @@ test('TEST is a mobile-first gallery of actual project assets and product value'
   assert.match(gallery, /app\.imagePath/);
   assert.match(gallery, /app\.infrastructureLabel/);
   assert.match(gallery, /app\.features\.map/);
-  assert.match(gallery, /app\.whatItTests/);
+  assert.match(gallery, /app\.infrastructureLabel/);
+  assert.match(gallery, /class="card-footer"/);
+  assert.match(gallery, /class="preview-chrome"/);
+  assert.doesNotMatch(gallery, /ACTUAL PRODUCT INTERFACE|CONNECTED INFRASTRUCTURE|class="infrastructure-link"/);
+  for (const token of ['--font-display', '--font-body', '--text-h3', '--text-body-sm', '--text-caption',
+    '--radius-lg', '--surface-card', '--border-medium', '--ink-display']) {
+    assert.ok(gallery.includes('var(' + token + ')'), 'TEST must consume brand token ' + token);
+  }
   assert.match(gallery, /href=\{resolveHref\(app\.href\)\}/);
   assert.match(gallery, /src=\{resolveHref\(app\.imagePath\)\}/);
   assert.match(gallery, /scroll-snap-type: x mandatory/);
