@@ -337,6 +337,102 @@ try {
     JSON.stringify(testGalleryChecks, null, 2),
   );
 
+  // MEASURE: published-first tabs, mobile chart reading and truthful empty states.
+  const measureChecks = [];
+  for (const viewport of [
+    { name: 'mobile-320', width: 320, height: 700 },
+    { name: 'mobile-390', width: 390, height: 844 },
+    { name: 'tablet-768', width: 768, height: 1024 },
+    { name: 'desktop-1440', width: 1440, height: 1100 },
+  ]) {
+    for (const theme of ['light', 'dark']) {
+      const context = await browser.newContext({
+        viewport: { width: viewport.width, height: viewport.height },
+        reducedMotion: 'reduce',
+      });
+      const page = await context.newPage();
+      try {
+        await page.goto(baseUrl + '/?theme=' + theme, { waitUntil: 'networkidle' });
+        await page.evaluate(() => document.fonts?.ready);
+        const stage = page.locator('#evidence .experiment-explorer');
+        await stage.scrollIntoViewIfNeeded();
+        const diagnostics = await page.evaluate(() => {
+          const root = document.querySelector('#evidence .experiment-explorer');
+          const tabs = [...root.querySelectorAll('[data-experiment-tab]')];
+          const index = root.querySelector('.experiment-selector');
+          const svg = root.querySelector('[data-performance-plot]');
+          const scrollPlot = root.querySelector('.plot-canvas');
+          const runSummary = root.querySelector('.run-summary');
+          const titles = [...root.querySelectorAll('h3, h4, .experiment-tab__title, .experiment-tab__availability')];
+          return {
+            theme: document.documentElement.dataset.theme,
+            width: window.innerWidth,
+            pageOverflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+            selectedTab: tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.getAttribute('data-track-id'),
+            publishedCount: tabs.filter((t) => t.dataset.published === 'true').length,
+            unpublishedCount: tabs.filter((t) => t.dataset.published === 'false').length,
+            selectorDisplay: getComputedStyle(index).display,
+            selectorColumns: getComputedStyle(index).gridTemplateColumns,
+            selectorOverflow: index.scrollWidth - index.clientWidth,
+            tabMinHeights: tabs.map((t) => Math.round(t.getBoundingClientRect().height)),
+            chartRegionScrollable: Boolean(scrollPlot?.getAttribute('tabindex') === '0'),
+            chartWidth: svg ? svg.getBoundingClientRect().width : 0,
+            plotWidth: scrollPlot ? scrollPlot.getBoundingClientRect().width : 0,
+            summaryDisplay: getComputedStyle(runSummary).display,
+            fonts: titles.filter((t) => t.getBoundingClientRect().height > 0).map((t) => ({
+              size: Number.parseFloat(getComputedStyle(t).fontSize),
+              family: getComputedStyle(t).fontFamily,
+            })),
+          };
+        });
+
+        await page.locator('#evidence').screenshot({
+          path: path.join(outputDir, 'measure__' + viewport.name + '__' + theme + '.png'),
+        });
+
+        await page.locator('#evidence [data-track-id="vlm-capability"]').click();
+        const unpublished = await page.evaluate(() => {
+          const root = document.querySelector('#evidence .experiment-explorer');
+          return {
+            selected: root.querySelector('[aria-selected="true"]')?.getAttribute('data-track-id'),
+            emptyVisible: !root.querySelector('[data-evidence-empty]')?.hidden,
+            noPublishedNumber: !root.querySelector('[data-evidence-result]') ||
+              root.querySelector('[data-evidence-result]').hidden,
+          };
+        });
+
+        const check = { viewport: viewport.name, ...diagnostics, unpublished };
+        measureChecks.push(check);
+        const isMobile = viewport.width <= 390;
+        if (
+          diagnostics.theme !== theme ||
+          diagnostics.pageOverflowPx > 0 ||
+          diagnostics.publishedCount !== 3 ||
+          diagnostics.unpublishedCount !== 3 ||
+          diagnostics.tabMinHeights.some((height) => height < 44) ||
+          !diagnostics.chartRegionScrollable ||
+          diagnostics.fonts.some((font) => font.size < 14) ||
+          (isMobile && diagnostics.selectorDisplay !== 'grid') ||
+          (isMobile && diagnostics.selectorOverflow > 1) ||
+          (isMobile && diagnostics.chartWidth < 615) ||
+          (isMobile && diagnostics.summaryDisplay !== 'grid') ||
+          unpublished.selected !== 'vlm-capability' ||
+          !unpublished.emptyVisible ||
+          !unpublished.noPublishedNumber
+        ) {
+          throw new Error('MEASURE mobile evidence regression: ' + JSON.stringify(check));
+        }
+      } finally {
+        await page.close();
+        await context.close();
+      }
+    }
+  }
+  await fs.writeFile(
+    path.join(outputDir, 'measure-mobile-check.json'),
+    JSON.stringify(measureChecks, null, 2),
+  );
+
   // The BUILD redesign must be inspected in both themes, independently of
   // the whole-page journey animation. Element captures make visual PR review
   // practical without changing how navigation or the method path works.
