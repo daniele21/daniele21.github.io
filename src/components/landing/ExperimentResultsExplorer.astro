@@ -3572,4 +3572,335 @@ const selectorLabelFor = (track: Track) => {
   @media (prefers-reduced-motion: reduce) {
     .mcb-model-cards :global(.mcb-model-card) { transition: none; }
   }
+
+  /* Mobile-first card rails: horizontal exploration is the primary interaction. */
+  .experiment-rail-guide { display: none; }
+  .experiment-tab__question { display: none; }
+
+  @media (max-width: 680px) {
+    .experiment-index-heading {
+      display: flex;
+      align-items: end;
+      gap: 7px 12px;
+      margin: 0 0 10px;
+    }
+    .experiment-index-heading h3 {
+      font-family: var(--font-display);
+      font-size: 1.13rem;
+      font-weight: 750;
+      letter-spacing: -.02em;
+    }
+    .experiment-index-heading__count { white-space: nowrap; }
+    .experiment-rail-guide {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin-bottom: 10px;
+      color: var(--ink-subtle);
+      font-family: var(--font-display);
+      font-size: var(--text-caption);
+      font-weight: 680;
+    }
+    .experiment-rail-guide > span > span { color: var(--accent-blue); }
+    .experiment-rail-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .experiment-rail-count {
+      display: inline-block;
+      min-width: 59px;
+      font-family: var(--font-mono);
+      font-size: var(--text-caption);
+      font-weight: 690;
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .experiment-rail-actions button {
+      width: var(--touch-target-min);
+      height: var(--touch-target-min);
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-full);
+      background: var(--surface-card);
+      color: var(--ink-display);
+      cursor: pointer;
+      font-size: 21px;
+    }
+    .experiment-rail-actions button:disabled { opacity: .38; cursor: default; }
+    .experiment-rail-actions button:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    .experiment-selector-wrap {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      margin-bottom: 17px;
+    }
+    .experiment-selector {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: var(--space-3);
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 1px 1px 10px;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-strong) transparent;
+    }
+    .experiment-tab {
+      display: flex;
+      flex: 0 0 min(84%, 280px);
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      min-width: 0;
+      min-height: 118px;
+      padding: 16px;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      background: var(--surface-card);
+      box-shadow: var(--shadow-sm);
+      text-align: left;
+    }
+    .experiment-tab[data-published='false'] {
+      min-height: 118px;
+      background: var(--surface-subtle);
+      box-shadow: none;
+    }
+    .experiment-tab[aria-selected='true'] {
+      border-color: var(--accent-blue);
+      background: color-mix(in srgb, var(--accent-blue) 5%, var(--surface-card));
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent-blue) 20%, transparent);
+    }
+    .experiment-tab__copy {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .experiment-tab__title {
+      font-family: var(--font-display);
+      font-size: var(--text-body);
+      font-weight: 740;
+      line-height: 1.25;
+      letter-spacing: -.025em;
+      overflow-wrap: anywhere;
+    }
+    .experiment-tab__availability {
+      display: block;
+      font-family: var(--font-body);
+      font-size: var(--text-caption);
+      font-weight: 650;
+      color: var(--accent-teal);
+    }
+    .experiment-tab[data-published='false'] .experiment-tab__availability {
+      color: var(--ink-subtle);
+    }
+    .experiment-tab__question {
+      display: -webkit-box;
+      max-width: 100%;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      color: var(--ink-muted);
+      font-family: var(--font-body);
+      font-size: var(--text-caption);
+      line-height: 1.4;
+      text-wrap: pretty;
+    }
+    .status-dot { margin: 0; }
+
+    /* Four original scope metrics: now a low-height horizontal card rail. */
+    .run-summary {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: var(--space-2);
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      overscroll-behavior-x: contain;
+      padding: 2px 1px 11px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .run-summary > span,
+    .run-summary > span:nth-child(n+3) {
+      display: flex;
+      flex: 0 0 min(56%, 158px);
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-width: 0;
+      min-height: 74px;
+      padding: 11px 13px;
+      gap: 5px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--surface-card);
+      color: var(--ink-muted);
+      scroll-snap-align: start;
+      font-size: var(--text-caption);
+    }
+    .run-summary > span strong {
+      font-family: var(--font-display);
+      font-size: clamp(1.35rem, 5.2vw, 1.65rem);
+      font-weight: 790;
+      line-height: 1.18;
+      color: var(--ink-display);
+    }
+
+    /* Replace the 2-column KPI grid with short horizontally snapping cards. */
+    .mcb-story .benchmark-highlights {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: var(--space-3);
+      max-width: 100%;
+      overflow-x: auto;
+      margin-top: 15px;
+      padding: 1px 1px 12px;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .mcb-story .highlight, .mcb-story .highlight:last-child {
+      flex: 0 0 min(80%, 235px);
+      min-height: 133px;
+      padding: 16px;
+      grid-column: auto;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      background: var(--surface-card);
+      box-shadow: var(--shadow-sm);
+    }
+    .mcb-story .highlight--accent {
+      border-color: color-mix(in srgb, var(--accent-blue) 34%, var(--border-medium));
+      background: var(--surface-blue-subtle);
+    }
+    .mcb-story .highlight strong {
+      margin: 9px 0 4px;
+      color: var(--ink-display);
+      font-family: var(--font-display);
+      font-size: clamp(1.45rem, 6vw, 1.75rem);
+      font-weight: 780;
+      letter-spacing: -.025em;
+    }
+    .mcb-story .highlight small {
+      color: var(--ink-muted);
+      font-family: var(--font-body);
+      font-size: var(--text-caption);
+      line-height: 1.35;
+    }
+
+    /* One prominent model per swipe; next card remains visible as affordance. */
+    .mcb-cards-viewport {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius-md);
+    }
+    .mcb-cards-viewport:focus-visible, .run-summary:focus-visible,
+    .benchmark-highlights:focus-visible, .experiment-selector:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: -2px;
+    }
+    .mcb-model-cards {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      gap: var(--space-3);
+      min-width: 0;
+      padding: 1px 1px 12px;
+      overflow: visible;
+    }
+    .mcb-model-cards :global(.mcb-model-entry) {
+      flex: 0 0 min(83%, 280px);
+      min-width: 0;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+    .mcb-model-cards :global(.mcb-model-card) {
+      min-height: 142px;
+      padding: 16px;
+      gap: 18px;
+      border-radius: var(--radius-lg);
+    }
+    .mcb-model-cards :global(.mcb-model-card__top) {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .mcb-model-cards :global(.mcb-model-card__top strong) {
+      font-family: var(--font-display);
+      font-size: var(--text-body);
+      font-weight: 780;
+    }
+    .mcb-model-cards :global(.mcb-model-card__metrics) {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+      gap: var(--space-3);
+      margin-top: auto;
+      width: 100%;
+      font-family: var(--font-body);
+      line-height: 1.35;
+    }
+    .mcb-model-cards :global(.mcb-model-card__metrics span) {
+      min-width: 0;
+      display: block;
+      font-size: var(--text-caption);
+      overflow-wrap: anywhere;
+    }
+    .mcb-model-cards :global(.mcb-model-card__metrics span:first-child) {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--ink-display);
+    }
+    .mcb-show-all { margin-top: 8px; }
+
+    /* RedactGuard's actual published insights also become swipeable cards. */
+    .experiment-explorer .rg-insights {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: var(--space-3);
+      overflow-x: auto;
+      max-width: 100%;
+      padding: 1px 1px 12px;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+    .experiment-explorer .rg-insights :global(.rg-insight-card) {
+      flex: 0 0 min(84%, 260px);
+      scroll-snap-align: start;
+      min-height: 132px;
+      padding: 14px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .experiment-tab { transition: none; }
+  }
 </style>
