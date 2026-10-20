@@ -3769,7 +3769,7 @@ const selectorLabelFor = (track: Track) => {
     }
 
     .mcb-highlights-viewport {
-      width: 100%;
+      width: calc(100vw - 70px);
       max-width: 100%;
       min-width: 0;
       overflow-x: auto;
@@ -3800,7 +3800,7 @@ const selectorLabelFor = (track: Track) => {
     }
     .mcb-story .benchmark-highlights {
       width: max-content;
-      min-width: 100%;
+      min-width: max(100%, 700px);
       max-width: none;
       overflow: visible;
       padding-bottom: 12px;
