@@ -376,6 +376,19 @@ try {
           const rail = root.querySelector('[data-experiment-rail]');
           const highlights = root.querySelector('.mcb-highlights-viewport');
           const modelRail = root.querySelector('.mcb-cards-viewport');
+          const modelCard = root.querySelector('[data-mcb-model-cards] [data-mcb-card]');
+          const cardSections = modelCard
+            ? ['topline', 'identity', 'metrics'].map(name =>
+                modelCard.querySelector('.mcb-model-card__' + name)?.getBoundingClientRect()).filter(Boolean)
+            : [];
+          const modelCardGaps = cardSections.slice(1).map((rect, index) =>
+            Math.max(0, rect.top - cardSections[index].bottom));
+          const modelMetrics = modelCard
+            ? [...modelCard.querySelectorAll('.mcb-model-card__metric')].map(node => ({
+                value: node.querySelector('.mcb-model-card__metric-value')?.textContent?.trim(),
+                label: node.querySelector('.mcb-model-card__metric-label')?.textContent?.trim(),
+              }))
+            : [];
           const scope = root.querySelector('.run-summary');
           const story = root.querySelector('[data-mcb-story]');
           const details = root.querySelector('[data-mcb-chart-details]');
@@ -405,6 +418,17 @@ try {
               cardWidths: [...highlights.querySelectorAll('.highlight')].map(el => el.getBoundingClientRect().width),
             } : null,
             modelScrolls: modelRail ? modelRail.scrollWidth > modelRail.clientWidth + 5 : false,
+            modelCardInsight: modelCard ? {
+              role: modelCard.querySelector('.mcb-model-card__role')?.textContent?.trim(),
+              description: modelCard.querySelector('.mcb-model-card__insight')?.textContent?.trim(),
+              name: modelCard.querySelector('.mcb-model-card__name')?.textContent?.trim(),
+              cardHeight: Math.round(modelCard.getBoundingClientRect().height),
+              cardWidth: Math.round(modelCard.getBoundingClientRect().width),
+              largestInternalGap: Math.round(Math.max(0, ...modelCardGaps)),
+              metrics: modelMetrics,
+              display: getComputedStyle(modelCard).display,
+              roleFontPx: Number.parseFloat(getComputedStyle(modelCard.querySelector('.mcb-model-card__role')).fontSize),
+            } : null,
             scopeScrolls: scope ? scope.scrollWidth > scope.clientWidth + 5 : false,
             storyVisible: story ? !story.hidden && !root.querySelector('[data-evidence-result]').hidden : false,
             chartOpen: Boolean(details?.open),
@@ -488,6 +512,20 @@ try {
             diagnostics.highlightLayout?.cardWidths?.some(width => width > diagnostics.evidenceWidth))) ||
           (isMobile && diagnostics.storyVisible && !diagnostics.scopeScrolls) ||
           (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 1 && !diagnostics.modelScrolls) ||
+          (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 0 && (
+            !diagnostics.modelCardInsight?.role ||
+            !diagnostics.modelCardInsight?.description ||
+            !diagnostics.modelCardInsight?.name ||
+            diagnostics.modelCardInsight.display !== 'grid' ||
+            diagnostics.modelCardInsight.cardHeight > 250 ||
+            diagnostics.modelCardInsight.largestInternalGap > 20 ||
+            diagnostics.modelCardInsight.roleFontPx < 14 ||
+            diagnostics.modelCardInsight.metrics?.length !== 2 ||
+            diagnostics.modelCardInsight.metrics[0]?.label !== 'Quality / 100' ||
+            diagnostics.modelCardInsight.metrics[1]?.label !== 'Median p50' ||
+            !diagnostics.modelCardInsight.metrics[0]?.value ||
+            !diagnostics.modelCardInsight.metrics[1]?.value
+          )) ||
           !arrowNavigationWorks ||
           !swipeWorks ||
           (isMobile && diagnostics.evidenceWidth < viewport.width * 0.72) ||
