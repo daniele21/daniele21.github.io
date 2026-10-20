@@ -2878,6 +2878,28 @@ const selectorLabelFor = (track: Track) => {
     outline-offset: -2px;
   }
 
+  /* Tablet-width panels need full-sized chart labels too. */
+  @media (min-width: 681px) and (max-width: 900px) {
+    .chart-swipe-hint {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 12px 0 4px;
+      color: var(--ink-muted);
+      font-size: var(--text-caption);
+    }
+    .chart-swipe-hint span { color: var(--accent-blue); }
+    .plot-canvas, .rg-plot-canvas {
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .plot-canvas .plot-svg { width: 620px; max-width: none; min-width: 620px; }
+    .rg-plot-canvas svg { width: 640px; max-width: none; min-width: 640px; }
+  }
+
   @media (max-width: 680px) {
     .experiment-index-heading {
       align-items: flex-start;
