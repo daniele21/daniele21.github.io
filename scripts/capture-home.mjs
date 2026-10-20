@@ -11,6 +11,20 @@ const viewports = [
   { name: 'mobile-320', width: 320, height: 700 },
 ];
 
+// Exercise the actual control presented at each viewport (native select on phones).
+const selectExperiment = async (page, id) => {
+  const tab = page.locator('[data-experiment-tab][data-track-id="' + id + '"]');
+  if (await tab.isVisible()) {
+    await tab.click();
+    return;
+  }
+  const index = await tab.evaluate((element) =>
+    [...document.querySelectorAll('[data-experiment-tab]')].indexOf(element)
+  );
+  if (index < 0) throw new Error('Missing experiment: ' + id);
+  await page.locator('[data-experiment-mobile-select]').selectOption(String(index));
+};
+
 const selectorFor = (element) => {
   const tag = element.tagName.toLowerCase();
   if (element.id) return `${tag}#${element.id}`;
@@ -634,7 +648,7 @@ try {
       }),
     );
     await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
-    await page.locator('[data-track-id="jev-vs-llm-routing"]').click();
+    await selectExperiment(page, 'jev-vs-llm-routing');
     await page.locator('[data-jev-mcb-rows] .jev-mcb-row').first().waitFor({ state: 'visible' });
 
     const bridge = await page.evaluate(() => {
@@ -780,7 +794,7 @@ try {
       }),
     );
     await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
-    await page.locator('[data-track-id="redactguard-local-anonymization"]').click();
+    await selectExperiment(page, 'redactguard-local-anonymization');
     await page.locator('[data-rg-dataset="realistic"]').waitFor({ state: 'visible' });
 
     const before = await page.evaluate(() => ({
@@ -859,7 +873,7 @@ try {
       }),
     );
     await measuredPage.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
-    await measuredPage.locator('[data-track-id="redactguard-local-anonymization"]').click();
+    await selectExperiment(measuredPage, 'redactguard-local-anonymization');
     // This fixture has no Challenge run. Explicitly choose Healthcare
     // before asserting measured insights, rather than assuming a winner exists.
     await measuredPage.locator('[data-rg-dataset="healthcare"]').waitFor({ state: 'visible' });
