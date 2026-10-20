@@ -413,6 +413,10 @@ try {
           const story = root.querySelector('[data-mcb-story]');
           const details = root.querySelector('[data-mcb-chart-details]');
           const takeaway = root.querySelector('[data-mcb-takeaway]');
+          const findingHeadline = takeaway?.querySelector('[data-readout-title]');
+          const findingText = takeaway?.querySelector('[data-readout]');
+          const highlightsCards = [...root.querySelectorAll('.mcb-highlights-viewport .highlight')];
+          const displayedModelCards = [...root.querySelectorAll('[data-mcb-model-cards] [data-mcb-card]')];
           const summary = root.querySelector('.run-summary');
           const svg = root.querySelector('[data-performance-plot]');
           const titles = [...root.querySelectorAll('h3, h4, .experiment-mobile-chooser label')];
@@ -461,6 +465,33 @@ try {
             headingFamily: getComputedStyle(root.querySelector('.evidence-panel__header h3')).fontFamily,
             fonts: titles.filter((t) => t.getBoundingClientRect().height > 0).map((t) => Number.parseFloat(getComputedStyle(t).fontSize)),
             takeawayBeforeModels: Boolean(takeaway?.compareDocumentPosition(story) & Node.DOCUMENT_POSITION_FOLLOWING),
+            evidenceHierarchy: {
+              roleOrder: [...root.querySelectorAll('[data-mcb-takeaway], .mcb-highlights-viewport, .mcb-scope-heading, .mcb-model-browser')].map(el =>
+                el.matches('[data-mcb-takeaway]') ? 'finding' :
+                el.matches('.mcb-highlights-viewport') ? 'highlights' :
+                el.matches('.mcb-scope-heading') ? 'context' : 'models'),
+              findingShown: Boolean(takeaway && !takeaway.hidden && !root.querySelector('[data-evidence-result]').hidden),
+              findingTitle: findingHeadline?.textContent?.trim() || '',
+              findingDetail: findingText?.textContent?.trim() || '',
+              findingBackground: takeaway ? getComputedStyle(takeaway).backgroundColor : '',
+              mainPanelBackground: getComputedStyle(root.querySelector('.evidence-panel')).backgroundColor,
+              findingFontSize: findingHeadline ? Number.parseFloat(getComputedStyle(findingHeadline).fontSize) : 0,
+              findingDetailSize: findingText ? Number.parseFloat(getComputedStyle(findingText).fontSize) : 0,
+              highlightRoles: highlightsCards.map(el => ({
+                role: el.dataset.highlightRole,
+                label: el.querySelector('span')?.textContent?.trim(),
+                color: getComputedStyle(el).borderTopColor,
+              })),
+              modelDeployments: displayedModelCards.map(el => ({
+                deployment: el.dataset.deployment,
+                insightRole: el.dataset.insightRole,
+                runtimeText: el.querySelector('.mcb-model-card__runtime')?.textContent?.trim(),
+                topBorderColor: getComputedStyle(el).borderTopColor,
+                runtimeTextColor: el.querySelector('.mcb-model-card__runtime')
+                  ? getComputedStyle(el.querySelector('.mcb-model-card__runtime')).color : '',
+              })),
+              scopedAfterHighlights: Boolean(highlights?.compareDocumentPosition(scope) & Node.DOCUMENT_POSITION_FOLLOWING),
+            },
           };
         });
 
@@ -545,6 +576,23 @@ try {
             !heading.fontFamily.includes('Plus Jakarta Sans') ||
             !['700', '800'].includes(heading.fontWeight) || heading.fontSize < 17) ||
           diagnostics.pageOverflowPx > 0 ||
+          diagnostics.evidenceHierarchy.roleOrder.join(',') !== 'finding,highlights,context,models' ||
+          !diagnostics.evidenceHierarchy.scopedAfterHighlights ||
+          diagnostics.evidenceHierarchy.highlightRoles.map(x => x.role).join(',') !== 'best-overall,best-local,fastest-local' ||
+          (diagnostics.evidenceHierarchy.findingShown && (
+            !diagnostics.evidenceHierarchy.findingTitle ||
+            !diagnostics.evidenceHierarchy.findingDetail ||
+            diagnostics.evidenceHierarchy.findingBackground === diagnostics.evidenceHierarchy.mainPanelBackground ||
+            diagnostics.evidenceHierarchy.findingFontSize < 19 ||
+            diagnostics.evidenceHierarchy.findingDetailSize < 14 ||
+            diagnostics.evidenceHierarchy.highlightRoles[0].color === diagnostics.evidenceHierarchy.highlightRoles[1].color ||
+            diagnostics.evidenceHierarchy.modelDeployments.some(x =>
+              !['local', 'api'].includes(x.deployment) ||
+              !['top', 'local', 'fastest', 'rank'].includes(x.insightRole) ||
+              (x.deployment === 'local' && x.runtimeText !== 'Local') ||
+              (x.deployment === 'api' && x.runtimeText !== 'API')
+            )
+          )) ||
           diagnostics.publishedCount !== 3 ||
           diagnostics.unpublishedCount !== 3 ||
           diagnostics.fonts.some((size) => size < 14) ||
