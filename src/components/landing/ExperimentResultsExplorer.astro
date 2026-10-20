@@ -4155,6 +4155,9 @@ const selectorLabelFor = (track: Track) => {
     .mcb-model-cards :global(.mcb-model-card) { transition: none; }
   }
 
+  /* Never display the finding for JEV, RedactGuard, or an unavailable snapshot. */
+  .evidence-takeaway[hidden], .mcb-story[hidden], .run-summary[hidden] { display: none !important; }
+
   /* Evidence hierarchy — one hero finding, measured highlights, muted context.
      Product blue = focus, teal = local identity, violet = API identity.
      Accent colors never imply that a result has passed an arbitrary threshold. */
