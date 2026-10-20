@@ -313,7 +313,8 @@ const selectorLabelFor = (track: Track) => {
       </div>
 
       <div class="mcb-story" data-mcb-story>
-        <div class="benchmark-highlights" aria-label="Swipe through benchmark highlight cards" role="region" tabindex="0">
+        <div class="mcb-highlights-viewport" role="region" tabindex="0" aria-label="Swipe through benchmark highlights">
+          <div class="benchmark-highlights" aria-label="Benchmark highlights">
           <div class="highlight">
             <span>BEST QUALITY</span>
             <strong data-best-quality>—</strong>
@@ -328,6 +329,7 @@ const selectorLabelFor = (track: Track) => {
             <span>FASTEST</span>
             <strong data-fastest>—</strong>
             <small data-fastest-model></small>
+          </div>
           </div>
         </div>
         <section class="mcb-model-browser" aria-label="Compare measured models">
@@ -3766,6 +3768,22 @@ const selectorLabelFor = (track: Track) => {
       color: var(--ink-display);
     }
 
+    .mcb-highlights-viewport {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .mcb-highlights-viewport:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: -2px;
+    }
+
     /* Replace the 2-column KPI grid with short horizontally snapping cards. */
     .mcb-story .benchmark-highlights {
       display: flex;
@@ -3780,8 +3798,15 @@ const selectorLabelFor = (track: Track) => {
       -webkit-overflow-scrolling: touch;
       scrollbar-width: thin;
     }
+    .mcb-story .benchmark-highlights {
+      width: max-content;
+      min-width: 100%;
+      max-width: none;
+      overflow: visible;
+      padding-bottom: 12px;
+    }
     .mcb-story .highlight, .mcb-story .highlight:last-child {
-      flex: 0 0 min(80%, 235px);
+      flex: 0 0 clamp(205px, 70vw, 275px);
       min-height: 133px;
       padding: 16px;
       grid-column: auto;
