@@ -374,7 +374,7 @@ try {
           const root = document.querySelector('#evidence .experiment-explorer');
           const tabs = [...root.querySelectorAll('[data-experiment-tab]')];
           const rail = root.querySelector('[data-experiment-rail]');
-          const highlights = root.querySelector('.benchmark-highlights');
+          const highlights = root.querySelector('.mcb-highlights-viewport');
           const modelRail = root.querySelector('.mcb-cards-viewport');
           const scope = root.querySelector('.run-summary');
           const story = root.querySelector('[data-mcb-story]');
