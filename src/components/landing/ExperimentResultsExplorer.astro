@@ -35,6 +35,13 @@ const selectorLabelFor = (track: Track) => {
 ---
 
 <div class="experiment-explorer" data-experiment-explorer>
+  <div class="experiment-index-heading">
+    <div>
+      <span class="experiment-index-heading__eyebrow">BROWSE THE EVIDENCE</span>
+      <h3>Choose a benchmark</h3>
+    </div>
+    <span class="experiment-index-heading__count">{sortedTracks.filter((track) => Boolean(track.resultUrl)).length} / {sortedTracks.length} published</span>
+  </div>
   <div class="experiment-selector-wrap">
     <div class="experiment-selector" role="tablist" aria-label="Select experiment">
       {sortedTracks.map((track, index) => (
@@ -45,6 +52,7 @@ const selectorLabelFor = (track: Track) => {
           aria-selected={index === initialIndex ? 'true' : 'false'}
           tabindex={index === initialIndex ? '0' : '-1'}
           data-experiment-tab
+          data-published={Boolean(track.resultUrl) ? 'true' : 'false'}
           data-track-id={track.id || ''}
           data-title={track.title}
           data-question={track.question}
@@ -59,7 +67,10 @@ const selectorLabelFor = (track: Track) => {
             class:list={['status-dot', { 'status-dot--live': Boolean(track.resultUrl) }]}
             aria-hidden="true"
           ></span>
-          <span class="experiment-tab__title">{selectorLabelFor(track)}</span>
+          <span class="experiment-tab__copy">
+            <span class="experiment-tab__title">{selectorLabelFor(track)}</span>
+            <span class="experiment-tab__availability">{track.resultUrl ? (track.status.includes('PARTIAL') ? 'Partial evidence' : 'Published results') : 'Not published yet'}</span>
+          </span>
         </button>
       ))}
     </div>
@@ -255,8 +266,11 @@ const selectorLabelFor = (track: Track) => {
                 </div>
                 <span class="rg-pareto__hint">System recall ↑ · observed p95 →</span>
               </div>
-              <svg data-rg-pareto-plot viewBox="0 0 640 260" role="img"
-                aria-label="RedactGuard system PII recall versus observed p95 latency within a single evaluated run"></svg>
+              <p class="chart-swipe-hint">Swipe across the chart for full-size labels <span aria-hidden="true">→</span></p>
+              <div class="rg-plot-canvas" role="region" tabindex="0" aria-label="Horizontally scrollable RedactGuard quality and latency chart">
+                <svg data-rg-pareto-plot viewBox="0 0 640 260" role="img"
+                  aria-label="RedactGuard system PII recall versus observed p95 latency within a single evaluated run"></svg>
+              </div>
               <p data-rg-pareto-note class="rg-pareto__note"></p>
             </div>
             <p class="rg-pareto__missing" data-rg-pareto-missing hidden>
@@ -274,7 +288,7 @@ const selectorLabelFor = (track: Track) => {
                   <button type="button" data-rg-metric="system_leakage_rate" aria-pressed="false">System leakage</button>
                 </div>
               </div>
-              <div class="rg-matrix__scroll" data-rg-matrix-scroll></div>
+              <div class="rg-matrix__scroll" data-rg-matrix-scroll tabindex="0" role="region" aria-label="Scroll horizontally to compare models across datasets"></div>
               <p class="rg-matrix__note">— means that this model/dataset has no published measurement, not 0% performance.</p>
             </div>
             <p class="rg-disclosure">Run comparisons are exploratory. Healthcare and Ambiguous have distinct model cohorts; do not interpret their figures as a controlled leaderboard. Dataset gold spans have not been independently human-reviewed.</p>
@@ -301,13 +315,16 @@ const selectorLabelFor = (track: Track) => {
             </div>
           </div>
 
-          <svg
-            class="plot-svg"
-            data-performance-plot
-            viewBox="0 0 620 250"
-            role="img"
-            aria-label="Quality versus median latency; focus or select a model point for details"
-          ></svg>
+          <p class="chart-swipe-hint">Swipe across the chart to inspect all models <span aria-hidden="true">→</span></p>
+          <div class="plot-canvas" role="region" tabindex="0" aria-label="Horizontally scrollable model quality versus latency chart">
+            <svg
+              class="plot-svg"
+              data-performance-plot
+              viewBox="0 0 620 250"
+              role="img"
+              aria-label="Quality versus median latency; focus or select a model point for details"
+            ></svg>
+          </div>
 
           <div class="plot-selection" data-mcb-detail hidden aria-live="polite">
             <div>
@@ -2801,5 +2818,243 @@ const selectorLabelFor = (track: Track) => {
 
   @media (prefers-reduced-motion: reduce) {
     .experiment-tab { transition: none; }
+  }
+
+  /* MEASURE: published-first selection and mobile-sized scientific graphics.
+     Evidence is still loaded from the existing published artifacts only. */
+  .experiment-index-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 8px 16px;
+    margin-bottom: 12px;
+  }
+  .experiment-index-heading__eyebrow {
+    display: block;
+    color: var(--accent-blue);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 740;
+    letter-spacing: .045em;
+  }
+  .experiment-index-heading h3 {
+    margin: 5px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 760;
+    letter-spacing: -.025em;
+    line-height: 1.25;
+  }
+  .experiment-index-heading__count {
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+  .experiment-tab__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    gap: 3px;
+  }
+  .experiment-tab__availability {
+    display: none;
+    color: var(--ink-subtle);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.3;
+  }
+  .experiment-tab.is-active .experiment-tab__availability {
+    color: var(--accent-blue-dark);
+  }
+  .chart-swipe-hint { display: none; }
+  .plot-canvas, .rg-plot-canvas { min-width: 0; }
+  .plot-canvas:focus-visible, .rg-plot-canvas:focus-visible,
+  .rg-matrix__scroll:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: -2px;
+  }
+
+  @media (max-width: 680px) {
+    .experiment-index-heading {
+      align-items: flex-start;
+      gap: 4px 12px;
+      margin-bottom: 12px;
+    }
+    .experiment-index-heading h3 { font-size: 1.13rem; }
+    .experiment-selector-wrap { margin-bottom: 15px; }
+    .experiment-selector-wrap::after { display: none; }
+
+    /* Two columns replace the cryptic horizontally cropped tab bar.
+       Three published benchmarks appear before unpublished experiments. */
+    .experiment-selector {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0 0 2px;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+    .experiment-tab {
+      min-width: 0;
+      min-height: 69px;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      align-items: flex-start;
+      gap: 8px;
+      text-align: left;
+      scroll-snap-align: none;
+    }
+    .experiment-tab[data-published='false'] {
+      min-height: 59px;
+      background: var(--surface-subtle);
+      border-color: var(--border-subtle);
+    }
+    .experiment-tab__copy { flex: 1; }
+    .experiment-tab__title {
+      font-size: var(--text-caption);
+      line-height: 1.3;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .experiment-tab__availability { display: block; }
+    .status-dot { margin-top: 6px; }
+
+    .evidence-panel {
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .evidence-panel__result { padding: 16px 13px; }
+    .evidence-panel__loading,
+    .evidence-panel__error,
+    .evidence-panel__empty { padding: 17px 14px; }
+    .evidence-panel__empty {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .evidence-panel__header { gap: 6px; }
+    .evidence-panel__header h3 {
+      margin: 8px 0 6px;
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 5vw, 1.45rem);
+      font-weight: 760;
+      line-height: 1.2;
+      letter-spacing: -.028em;
+    }
+    .evidence-panel__header p { font-size: var(--text-body-sm); }
+    .source-link {
+      min-height: var(--touch-target-min);
+      align-self: flex-start;
+    }
+    .run-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 13px;
+    }
+    .run-summary > span {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-width: 0;
+      padding: 9px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      background: var(--surface-subtle);
+      font-size: var(--text-caption);
+      overflow-wrap: anywhere;
+    }
+
+    /* Results before graphs: readers see real observed values first. */
+    .benchmark-story {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 17px;
+      padding-top: 15px;
+    }
+    .benchmark-highlights {
+      order: -1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0;
+      border: 0;
+    }
+    .highlight {
+      min-width: 0;
+      padding: 11px 10px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--surface-card);
+    }
+    .highlight + .highlight { border: 1px solid var(--border-subtle); }
+    .highlight:last-child { grid-column: 1 / -1; }
+    .highlight strong {
+      margin-top: 5px;
+      font-size: clamp(1.13rem, 4.4vw, 1.38rem);
+      font-weight: 760;
+      letter-spacing: -.025em;
+      overflow-wrap: anywhere;
+    }
+    .highlight small { font-size: var(--text-caption); overflow-wrap: anywhere; }
+    .highlight--accent::before { display: none; }
+
+    .performance-plot {
+      min-width: 0;
+      padding: 13px 10px;
+      box-shadow: none;
+    }
+    .plot-toolbar {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .plot-filters { max-width: 100%; }
+    .plot-filters button { min-height: var(--touch-target-min); }
+    .chart-swipe-hint {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 12px 0 4px;
+      color: var(--ink-muted);
+      font-size: var(--text-caption);
+      line-height: 1.4;
+    }
+    .chart-swipe-hint span { color: var(--accent-blue); }
+    .plot-canvas, .rg-plot-canvas {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      border-radius: var(--radius-sm);
+    }
+    .plot-canvas .plot-svg {
+      display: block;
+      width: 620px;
+      max-width: none;
+      min-width: 620px;
+      min-height: 0;
+      margin-top: 0;
+    }
+    .rg-plot-canvas svg {
+      display: block;
+      width: 640px;
+      max-width: none;
+      min-width: 640px;
+    }
+
+    .evidence-takeaway {
+      margin-top: 15px;
+      padding: 14px;
+      gap: 7px;
+    }
+    .rg-summary, .jev-summary { min-width: 0; }
+    .rg-matrix__scroll { overscroll-behavior-inline: contain; }
   }
 </style>
