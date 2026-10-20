@@ -254,6 +254,22 @@ test('MEASURE is published-first and preserves all evidence provenance on mobile
   assert.doesNotMatch(explorer, /data-experiment-mobile-select/);
   assert.match(explorer, /class="mcb-model-cards" role="list" data-mcb-model-cards/);
   assert.match(explorer, /const renderMcbCards = \(points\) =>/);
+  // Model insights are rankings computed from reported evidence, never hardcoded winners.
+  assert.match(explorer, /const highestQuality = \[\.\.\.published\]\.sort/);
+  assert.match(explorer, /const highestLocalQuality = \[\.\.\.localPoints\]\.sort/);
+  assert.match(explorer, /const fastestLocal = \[\.\.\.localPoints\]\.sort/);
+  assert.match(explorer, /TOP QUALITY/);
+  assert.match(explorer, /TOP LOCAL/);
+  assert.match(explorer, /FASTEST LOCAL P50/);
+  assert.match(explorer, /QUALITY RANK/);
+  assert.match(explorer, /mcb-model-card__role/);
+  assert.match(explorer, /mcb-model-card__insight/);
+  assert.match(explorer, /mcb-model-card__metric-value/);
+  assert.match(explorer, /mcb-model-card__metric-label/);
+  assert.match(explorer, /Quality \/ 100/);
+  assert.match(explorer, /Median p50/);
+  assert.match(explorer, /data-mcb-card/);
+  assert.match(explorer, /aria-pressed/);
   assert.match(explorer, /data-mcb-show-all/);
   assert.match(explorer, /class="mcb-chart-details" data-mcb-chart-details open/);
   assert.match(explorer, /class="mcb-method-details"/);
