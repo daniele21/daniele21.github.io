@@ -484,7 +484,8 @@ try {
           (isMobile && (!diagnostics.benchmarkRailVisible || !diagnostics.benchmarkScrolls)) ||
           (isMobile && !diagnostics.benchmarkSnap.includes('mandatory')) ||
           (isMobile && diagnostics.benchmarkCardWidths.some(width => width < 150)) ||
-          (isMobile && diagnostics.storyVisible && !diagnostics.highlightScrolls) ||
+          (isMobile && diagnostics.storyVisible && (!diagnostics.highlightScrolls ||
+            diagnostics.highlightLayout?.cardWidths?.some(width => width > diagnostics.evidenceWidth))) ||
           (isMobile && diagnostics.storyVisible && !diagnostics.scopeScrolls) ||
           (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 1 && !diagnostics.modelScrolls) ||
           !arrowNavigationWorks ||
@@ -492,7 +493,7 @@ try {
           (isMobile && diagnostics.evidenceWidth < viewport.width * 0.72) ||
           (isMobile && diagnostics.chartOpen) ||
           (isMobile && Number.parseFloat(diagnostics.chartMinWidth) < 620) ||
-          (isMobile && diagnostics.summaryDisplay !== 'grid') ||
+          (isMobile && diagnostics.summaryDisplay !== 'flex') ||
           (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount === 0) ||
           !filtersWork ||
           !showAllWorks ||
