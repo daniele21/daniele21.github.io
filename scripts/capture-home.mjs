@@ -373,7 +373,10 @@ try {
         const diagnostics = await page.evaluate(() => {
           const root = document.querySelector('#evidence .experiment-explorer');
           const tabs = [...root.querySelectorAll('[data-experiment-tab]')];
-          const chooser = root.querySelector('[data-experiment-mobile-select]');
+          const rail = root.querySelector('[data-experiment-rail]');
+          const highlights = root.querySelector('.benchmark-highlights');
+          const modelRail = root.querySelector('.mcb-cards-viewport');
+          const scope = root.querySelector('.run-summary');
           const story = root.querySelector('[data-mcb-story]');
           const details = root.querySelector('[data-mcb-chart-details]');
           const takeaway = root.querySelector('[data-mcb-takeaway]');
@@ -386,8 +389,14 @@ try {
             selectedTab: tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.dataset.trackId,
             publishedCount: tabs.filter((t) => t.dataset.published === 'true').length,
             unpublishedCount: tabs.filter((t) => t.dataset.published === 'false').length,
-            mobileChooserVisible: chooser ? getComputedStyle(chooser).display !== 'none' : false,
-            chooserHeight: chooser?.getBoundingClientRect().height || 0,
+            benchmarkRailVisible: rail ? getComputedStyle(rail).display !== 'none' : false,
+            benchmarkScrolls: rail ? rail.scrollWidth > rail.clientWidth + 5 : false,
+            benchmarkSnap: rail ? getComputedStyle(rail).scrollSnapType : '',
+            benchmarkCardWidths: tabs.map(t => Math.round(t.getBoundingClientRect().width)),
+            selectedIndex: tabs.findIndex(t => t.getAttribute('aria-selected') === 'true'),
+            highlightScrolls: highlights ? highlights.scrollWidth > highlights.clientWidth + 5 : false,
+            modelScrolls: modelRail ? modelRail.scrollWidth > modelRail.clientWidth + 5 : false,
+            scopeScrolls: scope ? scope.scrollWidth > scope.clientWidth + 5 : false,
             storyVisible: story ? !story.hidden && !root.querySelector('[data-evidence-result]').hidden : false,
             chartOpen: Boolean(details?.open),
             chartKeyboardFocusable: Boolean(root.querySelector('.plot-canvas[tabindex="0"]')),
@@ -424,16 +433,25 @@ try {
           filtersWork = filtersWork && expanded;
         }
 
+        let arrowNavigationWorks = true;
+        let swipeWorks = true;
         if (isMobile) {
-          await page.locator('#evidence [data-experiment-mobile-select]').selectOption({ label: 'VLM · Not published' }).catch(async () => {
-            const option = await page.locator('#evidence [data-experiment-mobile-select] option').evaluateAll(
-              (options) => options.find((option) => option.textContent.includes('VLM'))?.value
-            );
-            if (option !== undefined) await page.locator('#evidence [data-experiment-mobile-select]').selectOption(option);
-          });
-        } else {
-          await page.locator('#evidence [data-track-id="vlm-capability"]').click();
+          const first = diagnostics.selectedTab;
+          await page.locator('[data-experiment-next]').click();
+          await page.waitForFunction((previous) =>
+            document.querySelector('[data-experiment-tab][aria-selected="true"]')?.dataset.trackId !== previous,
+            first,
+          );
+          const moved = await page.locator('[data-experiment-tab][aria-selected="true"]').getAttribute('data-track-id');
+          await page.locator('[data-experiment-prev]').click();
+          const back = await page.locator('[data-experiment-tab][aria-selected="true"]').getAttribute('data-track-id');
+          arrowNavigationWorks = moved !== first && back === first;
+          const rail = page.locator('[data-experiment-rail]');
+          await rail.evaluate((node) => node.scrollTo({ left: node.scrollWidth, behavior: 'instant' }));
+          swipeWorks = await rail.evaluate((node) => node.scrollLeft > 10);
         }
+
+        await selectExperiment(page, 'vlm-capability');
         const unpublished = await page.evaluate(() => {
           const root = document.querySelector('#evidence .experiment-explorer');
           return {
@@ -443,7 +461,7 @@ try {
           };
         });
 
-        const check = { viewport: viewport.name, ...diagnostics, filtersWork, showAllWorks, unpublished };
+        const check = { viewport: viewport.name, ...diagnostics, filtersWork, showAllWorks, arrowNavigationWorks, swipeWorks, unpublished };
         measureChecks.push(check);
         if (
           diagnostics.theme !== theme ||
@@ -454,7 +472,14 @@ try {
           !diagnostics.chartKeyboardFocusable ||
           !diagnostics.headingFamily.includes('Plus Jakarta Sans') ||
           !diagnostics.takeawayBeforeModels ||
-          (isMobile && (!diagnostics.mobileChooserVisible || diagnostics.chooserHeight < 44)) ||
+          (isMobile && (!diagnostics.benchmarkRailVisible || !diagnostics.benchmarkScrolls)) ||
+          (isMobile && !diagnostics.benchmarkSnap.includes('mandatory')) ||
+          (isMobile && diagnostics.benchmarkCardWidths.some(width => width < 150)) ||
+          (isMobile && diagnostics.storyVisible && !diagnostics.highlightScrolls) ||
+          (isMobile && diagnostics.storyVisible && !diagnostics.scopeScrolls) ||
+          (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 1 && !diagnostics.modelScrolls) ||
+          !arrowNavigationWorks ||
+          !swipeWorks ||
           (isMobile && diagnostics.evidenceWidth < viewport.width * 0.72) ||
           (isMobile && diagnostics.chartOpen) ||
           (isMobile && Number.parseFloat(diagnostics.chartMinWidth) < 620) ||
