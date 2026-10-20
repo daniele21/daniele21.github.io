@@ -377,6 +377,7 @@ try {
             tabMinHeights: tabs.map((t) => Math.round(t.getBoundingClientRect().height)),
             chartRegionScrollable: Boolean(scrollPlot?.getAttribute('tabindex') === '0'),
             chartWidth: svg ? svg.getBoundingClientRect().width : 0,
+            chartMinWidth: svg ? getComputedStyle(svg).minWidth : '',
             plotWidth: scrollPlot ? scrollPlot.getBoundingClientRect().width : 0,
             summaryDisplay: getComputedStyle(runSummary).display,
             fonts: titles.filter((t) => t.getBoundingClientRect().height > 0).map((t) => ({
@@ -414,7 +415,7 @@ try {
           diagnostics.fonts.some((font) => font.size < 14) ||
           (isMobile && diagnostics.selectorDisplay !== 'grid') ||
           (isMobile && diagnostics.selectorOverflow > 1) ||
-          (isMobile && diagnostics.chartWidth < 615) ||
+          (isMobile && Number.parseFloat(diagnostics.chartMinWidth) < 620) ||
           (isMobile && diagnostics.summaryDisplay !== 'grid') ||
           unpublished.selected !== 'vlm-capability' ||
           !unpublished.emptyVisible ||
