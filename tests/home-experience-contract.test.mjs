@@ -358,3 +358,47 @@ test('homepage uses canonical type roles across every narrative stage', () => {
       path + ' must share canonical card typography');
   }
 });
+
+
+test('MEASURE communicates the source-backed finding before scoped results and comparisons', () => {
+  const explorer = read('src/components/landing/ExperimentResultsExplorer.astro');
+  const finding = explorer.indexOf('class="evidence-takeaway" data-mcb-takeaway');
+  const highlights = explorer.indexOf('class="mcb-highlights-viewport"');
+  const scope = explorer.indexOf('class="run-summary" data-mcb-scope');
+  const comparison = explorer.indexOf('class="mcb-model-browser"');
+  assert.ok(finding > 0 && highlights > finding && scope > highlights && comparison > scope,
+    'finding > published highlights > scope > detailed comparison must be the reading order');
+
+  assert.match(explorer, /WHAT THE EVIDENCE SHOWS/);
+  assert.match(explorer, /data-readout-title/);
+  assert.match(explorer, /data-readout/);
+  assert.match(explorer, /data-highlight-role="best-overall"/);
+  assert.match(explorer, /BEST OVERALL QUALITY/);
+  assert.match(explorer, /data-highlight-role="best-local"/);
+  assert.match(explorer, /BEST LOCAL QUALITY/);
+  assert.match(explorer, /data-highlight-role="fastest-local"/);
+  assert.match(explorer, /FASTEST LOCAL P50/);
+  assert.doesNotMatch(explorer, /<span>BALANCE POINT<\/span>/);
+  assert.match(explorer, /const fastestLocal = \[\.\.\.localPoints\]\.sort/);
+  assert.match(explorer, /button\.dataset\.deployment = point\.deployment === 'api'/);
+  assert.match(explorer, /button\.dataset\.insightRole = role === 'TOP QUALITY'/);
+  assert.match(explorer, /data-mcb-model-cards/);
+  assert.match(explorer, /var\(--measure-spotlight-bg\)/);
+  assert.match(explorer, /--measure-spotlight-ink:/);
+  assert.match(explorer, /--measure-local-ink:/);
+  assert.match(explorer, /--measure-api-ink:/);
+  assert.match(explorer, /data-deployment='local'/);
+  assert.match(explorer, /data-deployment='api'/);
+  assert.match(explorer, /data-highlight-role='best-overall'/);
+  assert.match(explorer, /data-highlight-role='best-local'/);
+  assert.match(explorer, /data-highlight-role='fastest-local'/);
+  assert.match(explorer, /\.evidence-takeaway\[hidden\]/);
+
+  // Use accents to classify origin and priority, never to imply fabricated performance.
+  assert.match(explorer, /var\(--accent-blue\)/);
+  assert.match(explorer, /var\(--accent-teal\)/);
+  assert.match(explorer, /var\(--accent-violet\)/);
+  assert.match(explorer, /color-mix\(in srgb/);
+  assert.match(explorer, /Local and API latency are not hardware-matched/);
+  assert.match(explorer, /No fallback or invented performance values are shown/);
+});

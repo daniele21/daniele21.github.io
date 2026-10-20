@@ -118,20 +118,16 @@ const selectorLabelFor = (track: Track) => {
         </a>
       </div>
 
-      <div class="evidence-takeaway" data-mcb-takeaway>
-        <span>TAKEAWAY</span>
-        <div>
+      <div class="evidence-takeaway" data-mcb-takeaway role="note" aria-labelledby="measure-finding-label">
+        <div class="evidence-takeaway__label-row">
+          <span id="measure-finding-label">WHAT THE EVIDENCE SHOWS</span>
+          <span class="evidence-takeaway__provenance">Published result</span>
+        </div>
+        <div class="evidence-takeaway__content">
           <strong data-readout-title></strong>
           <p data-readout></p>
         </div>
       </div>
-      <div class="run-summary" data-mcb-scope aria-label="Swipe through benchmark scope metrics" role="region" tabindex="0">
-        <span><strong data-model-count>—</strong> models</span>
-        <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
-        <span><strong data-dataset>—</strong> <span data-scope-label>dataset</span></span>
-        <span><strong data-runtime>—</strong> <span data-runtime-label>runtime</span></span>
-      </div>
-
       <div class="jev-summary" data-jev-summary hidden>
         <div class="jev-mcb-bridge">
           <div class="jev-mcb-bridge__header">
@@ -313,24 +309,37 @@ const selectorLabelFor = (track: Track) => {
       </div>
 
       <div class="mcb-story" data-mcb-story>
+        <div class="mcb-highlights-heading">
+          <div>
+            <span>MEASURED HIGHLIGHTS</span>
+            <p>Scores and latency from the published snapshot</p>
+          </div>
+        </div>
         <div class="mcb-highlights-viewport" role="region" tabindex="0" aria-label="Swipe through benchmark highlights">
           <div class="benchmark-highlights" aria-label="Benchmark highlights">
-          <div class="highlight">
-            <span>BEST QUALITY</span>
+          <div class="highlight highlight--primary" data-highlight-role="best-overall">
+            <span>BEST OVERALL QUALITY</span>
             <strong data-best-quality>—</strong>
             <small data-best-quality-model></small>
           </div>
-          <div class="highlight highlight--accent">
-            <span>BALANCE POINT</span>
+          <div class="highlight highlight--local" data-highlight-role="best-local">
+            <span>BEST LOCAL QUALITY</span>
             <strong data-balance>—</strong>
             <small data-balance-model></small>
           </div>
-          <div class="highlight">
-            <span>FASTEST</span>
+          <div class="highlight highlight--local" data-highlight-role="fastest-local">
+            <span>FASTEST LOCAL P50</span>
             <strong data-fastest>—</strong>
             <small data-fastest-model></small>
           </div>
           </div>
+        </div>
+        <div class="mcb-scope-heading">EVALUATION SCOPE <span>Context, not performance</span></div>
+        <div class="run-summary" data-mcb-scope aria-label="Swipe through benchmark scope metrics" role="region" tabindex="0">
+          <span><strong data-model-count>—</strong> models</span>
+          <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
+          <span><strong data-dataset>—</strong> <span data-scope-label>dataset</span></span>
+          <span><strong data-runtime>—</strong> <span data-runtime-label>runtime</span></span>
         </div>
         <section class="mcb-model-browser" aria-label="Compare measured models">
           <div class="mcb-model-browser__heading">
@@ -552,6 +561,10 @@ const selectorLabelFor = (track: Track) => {
           const button = document.createElement('button');
           button.type = 'button';
           button.className = 'mcb-model-card';
+          button.dataset.deployment = point.deployment === 'api' ? 'api' : 'local';
+          button.dataset.insightRole = role === 'TOP QUALITY' ? 'top' :
+            role === 'TOP LOCAL' ? 'local' :
+            role === 'FASTEST LOCAL P50' ? 'fastest' : 'rank';
           button.setAttribute('data-mcb-card', key);
           button.setAttribute('aria-pressed', mcbState.selected === key ? 'true' : 'false');
           button.setAttribute('aria-label',
@@ -4140,5 +4153,323 @@ const selectorLabelFor = (track: Track) => {
   }
   @media (prefers-reduced-motion: reduce) {
     .mcb-model-cards :global(.mcb-model-card) { transition: none; }
+  }
+
+  /* Never display the finding for JEV, RedactGuard, or an unavailable snapshot. */
+  .evidence-takeaway[hidden], .mcb-story[hidden], .run-summary[hidden] { display: none !important; }
+
+  /* Evidence hierarchy — one hero finding, measured highlights, muted context.
+     Product blue = focus, teal = local identity, violet = API identity.
+     Accent colors never imply that a result has passed an arbitrary threshold. */
+  .experiment-explorer {
+    --measure-local-ink: color-mix(in srgb, var(--accent-teal) 72%, var(--ink-display));
+    --measure-api-ink: color-mix(in srgb, var(--accent-violet) 78%, var(--ink-display));
+    --measure-spotlight-bg: color-mix(in srgb, var(--ink-display) 83%, var(--accent-blue));
+    --measure-spotlight-ink: var(--ink-inverse);
+    --measure-spotlight-muted: color-mix(in srgb, var(--ink-inverse) 80%, transparent);
+    --measure-spotlight-line: color-mix(in srgb, var(--ink-inverse) 24%, transparent);
+  }
+  :global(html[data-theme='dark']) .experiment-explorer {
+    --measure-spotlight-bg: color-mix(in srgb, var(--surface-card) 76%, var(--accent-blue));
+    --measure-spotlight-ink: var(--ink-display);
+    --measure-spotlight-muted: var(--ink-muted);
+    --measure-spotlight-line: var(--border-medium);
+  }
+
+  .evidence-panel__header {
+    gap: 12px 22px;
+  }
+  .evidence-panel__eyebrow {
+    font-weight: var(--weight-label);
+    letter-spacing: 0.04em;
+  }
+  .evidence-panel__header h3 {
+    font-weight: var(--weight-heading);
+    letter-spacing: -0.03em;
+    line-height: 1.22;
+  }
+  .evidence-panel__header p { color: var(--ink-muted); }
+  .source-link {
+    border-color: var(--border-subtle);
+    color: var(--ink-muted);
+    background: var(--surface-subtle);
+  }
+  .source-link:hover, .source-link:focus-visible {
+    color: var(--accent-blue-dark);
+    border-color: var(--border-strong);
+  }
+
+  /* The finding is the ONLY high-contrast panel in the initial evidence story. */
+  .evidence-takeaway {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 19px;
+    padding: clamp(18px, 2.5vw, 27px);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--measure-spotlight-bg));
+    border-radius: var(--radius-lg);
+    background: var(--measure-spotlight-bg);
+    box-shadow: var(--shadow-md);
+    color: var(--measure-spotlight-ink);
+  }
+  .evidence-takeaway::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 3px;
+    background: var(--accent-blue);
+  }
+  .evidence-takeaway__label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    min-width: 0;
+  }
+  .evidence-takeaway__label-row > span:first-child {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-display);
+    line-height: 1.3;
+    letter-spacing: 0.045em;
+    color: var(--measure-spotlight-ink);
+  }
+  .evidence-takeaway__provenance {
+    padding: 4px 8px;
+    border: 1px solid var(--measure-spotlight-line);
+    border-radius: var(--radius-full);
+    color: var(--measure-spotlight-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    line-height: 1.3;
+  }
+  .evidence-takeaway__content { min-width: 0; }
+  .evidence-takeaway__content strong {
+    display: block;
+    max-width: 800px;
+    margin: 0;
+    color: var(--measure-spotlight-ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.32rem, 2.35vw, 1.9rem);
+    font-weight: var(--weight-display);
+    letter-spacing: -0.032em;
+    line-height: 1.28;
+    text-wrap: pretty;
+  }
+  .evidence-takeaway__content p {
+    display: block;
+    max-width: 760px;
+    margin: 10px 0 0;
+    color: var(--measure-spotlight-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-body-sm);
+    font-weight: var(--weight-body);
+    line-height: 1.52;
+    text-wrap: pretty;
+  }
+
+  .mcb-highlights-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px 20px;
+    margin-top: 22px;
+    margin-bottom: 9px;
+  }
+  .mcb-highlights-heading span,
+  .mcb-scope-heading {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-display);
+    letter-spacing: .035em;
+    line-height: 1.3;
+  }
+  .mcb-highlights-heading p {
+    margin: 4px 0 0;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+  .mcb-story .benchmark-highlights { margin-top: 0; }
+  .mcb-story .highlight {
+    --highlight-ink: var(--ink-display);
+    position: relative;
+    overflow: hidden;
+    background: var(--surface-card);
+    border-color: var(--border-medium);
+    border-top: 3px solid var(--border-strong);
+  }
+  .mcb-story .highlight[data-highlight-role='best-overall'] {
+    --highlight-ink: var(--accent-blue-dark);
+    border-top-color: var(--accent-blue);
+    border-color: color-mix(in srgb, var(--accent-blue) 27%, var(--border-medium));
+    border-top-width: 3px;
+    background: var(--surface-blue-subtle);
+  }
+  .mcb-story .highlight[data-highlight-role='best-local'],
+  .mcb-story .highlight[data-highlight-role='fastest-local'] {
+    --highlight-ink: var(--measure-local-ink);
+    border-top-color: var(--accent-teal);
+    background: color-mix(in srgb, var(--accent-teal) 4%, var(--surface-card));
+  }
+  .mcb-story .highlight > span {
+    display: block;
+    color: var(--highlight-ink);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    letter-spacing: .028em;
+    line-height: 1.35;
+  }
+  .mcb-story .highlight > strong {
+    display: block;
+    margin: 8px 0 4px;
+    color: var(--highlight-ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.58rem, 2.8vw, 2.12rem);
+    font-weight: var(--weight-display);
+    line-height: 1.17;
+    letter-spacing: -.03em;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+  }
+  .mcb-story .highlight > small {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    font-family: var(--font-body);
+    line-height: 1.36;
+  }
+
+  .mcb-scope-heading {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 5px 12px;
+    margin: 17px 0 8px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--ink-muted);
+    font-weight: var(--weight-label);
+  }
+  .mcb-scope-heading > span {
+    color: var(--ink-subtle);
+    font-family: var(--font-body);
+    font-weight: var(--weight-body);
+    letter-spacing: 0;
+  }
+  .mcb-story .run-summary {
+    margin-top: 0;
+  }
+  .mcb-story .run-summary strong {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: var(--weight-heading);
+  }
+
+  .mcb-model-browser {
+    margin-top: 25px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .mcb-model-browser__eyebrow { color: var(--ink-subtle); }
+  .mcb-model-browser__heading h4 { color: var(--ink-display); }
+  .mcb-model-cards :global(.mcb-model-card) {
+    border-top: 3px solid var(--border-strong);
+    background: var(--surface-card);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-deployment='local']) {
+    border-top-color: var(--accent-teal);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-deployment='api']) {
+    border-top-color: var(--accent-violet);
+  }
+  .mcb-model-cards :global(.mcb-model-card__runtime) {
+    border-color: var(--border-subtle);
+    background: var(--surface-subtle);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-deployment='local'] .mcb-model-card__runtime) {
+    color: var(--measure-local-ink);
+    border-color: color-mix(in srgb, var(--accent-teal) 25%, var(--border-subtle));
+    background: var(--surface-teal-subtle);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-deployment='api'] .mcb-model-card__runtime) {
+    color: var(--measure-api-ink);
+    border-color: color-mix(in srgb, var(--accent-violet) 25%, var(--border-subtle));
+    background: color-mix(in srgb, var(--accent-violet) 7%, var(--surface-card));
+  }
+  .mcb-model-cards :global(.mcb-model-card__role) {
+    color: var(--ink-subtle);
+    font-weight: var(--weight-label);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-insight-role='top'] .mcb-model-card__role) {
+    color: var(--accent-blue-dark);
+    font-weight: var(--weight-display);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-insight-role='local'] .mcb-model-card__role),
+  .mcb-model-cards :global(.mcb-model-card[data-insight-role='fastest'] .mcb-model-card__role) {
+    color: var(--measure-local-ink);
+    font-weight: var(--weight-display);
+  }
+  .mcb-model-cards :global(.mcb-model-card__metric-value) {
+    font-size: clamp(1.19rem, 1.9vw, 1.4rem);
+    font-weight: var(--weight-display);
+    color: var(--ink-display);
+  }
+  .mcb-model-cards :global(.mcb-model-card__metric-label) { color: var(--ink-muted); }
+  .mcb-model-cards :global(.mcb-model-card[aria-pressed='true']) {
+    border-color: var(--accent-blue);
+    border-top-color: var(--accent-blue);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-blue) 20%, transparent);
+  }
+  .mcb-list-filters button[data-mcb-filter='local'][aria-pressed='true'] {
+    color: var(--measure-local-ink);
+    background: var(--surface-teal-subtle);
+  }
+  .mcb-list-filters button[data-mcb-filter='api'][aria-pressed='true'] {
+    color: var(--measure-api-ink);
+    background: color-mix(in srgb, var(--accent-violet) 9%, var(--surface-card));
+  }
+
+  @media (max-width: 680px) {
+    .evidence-takeaway {
+      margin-top: 15px;
+      padding: 16px;
+      gap: 11px;
+      border: 1px solid color-mix(in srgb, var(--accent-blue) 24%, var(--measure-spotlight-bg));
+      border-radius: var(--radius-lg);
+      background: var(--measure-spotlight-bg);
+    }
+    .evidence-takeaway__content strong { font-size: clamp(1.28rem, 5vw, 1.55rem); line-height: 1.3; }
+    .evidence-takeaway__content p { font-size: var(--text-body-sm); line-height: 1.5; }
+    .mcb-story .highlight, .mcb-story .highlight:last-child {
+      min-height: 126px;
+      padding: 13px;
+    }
+    .mcb-story .highlight > strong {
+      font-size: clamp(1.42rem, 5.6vw, 1.7rem);
+      margin-top: 7px;
+    }
+    .mcb-highlights-heading { margin-top: 20px; }
+    .mcb-story .run-summary > span,
+    .mcb-story .run-summary > span:nth-child(n+3) {
+      min-height: 65px;
+      padding: 9px 11px;
+      color: var(--ink-subtle);
+      border-color: var(--border-subtle);
+      background: var(--surface-subtle);
+    }
+    .mcb-story .run-summary > span strong {
+      font-size: 1.22rem;
+      color: var(--ink);
+    }
+    .mcb-model-browser { margin-top: 20px; padding-top: 15px; }
+    .mcb-model-cards :global(.mcb-model-card__metric-value) { font-size: 1.22rem; }
   }
 </style>
