@@ -42,6 +42,17 @@ const selectorLabelFor = (track: Track) => {
     </div>
     <span class="experiment-index-heading__count">{sortedTracks.filter((track) => Boolean(track.resultUrl)).length} / {sortedTracks.length} published</span>
   </div>
+  <div class="experiment-mobile-chooser">
+    <label for="measure-benchmark-select">CHOOSE A BENCHMARK</label>
+    <select id="measure-benchmark-select" data-experiment-mobile-select>
+      {sortedTracks.map((track, index) => (
+        <option value={String(index)} selected={index === initialIndex}>
+          {selectorLabelFor(track)} · {track.resultUrl ? (track.status.includes('PARTIAL') ? 'Partial results' : 'Published') : 'Not published'}
+        </option>
+      ))}
+    </select>
+    <p>Published evidence first. Unpublished tracks stay clearly marked.</p>
+  </div>
   <div class="experiment-selector-wrap">
     <div class="experiment-selector" role="tablist" aria-label="Select experiment">
       {sortedTracks.map((track, index) => (
@@ -109,6 +120,13 @@ const selectorLabelFor = (track: Track) => {
         </a>
       </div>
 
+      <div class="evidence-takeaway" data-mcb-takeaway>
+        <span>TAKEAWAY</span>
+        <div>
+          <strong data-readout-title></strong>
+          <p data-readout></p>
+        </div>
+      </div>
       <div class="run-summary" data-mcb-scope aria-label="Benchmark scope">
         <span><strong data-model-count>—</strong> models</span>
         <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
@@ -296,8 +314,42 @@ const selectorLabelFor = (track: Track) => {
         </details>
       </div>
 
-            <div class="benchmark-story" data-mcb-story>
-        <div class="performance-plot">
+      <div class="mcb-story" data-mcb-story>
+        <div class="benchmark-highlights" aria-label="Benchmark highlights">
+          <div class="highlight">
+            <span>BEST QUALITY</span>
+            <strong data-best-quality>—</strong>
+            <small data-best-quality-model></small>
+          </div>
+          <div class="highlight highlight--accent">
+            <span>BALANCE POINT</span>
+            <strong data-balance>—</strong>
+            <small data-balance-model></small>
+          </div>
+          <div class="highlight">
+            <span>FASTEST</span>
+            <strong data-fastest>—</strong>
+            <small data-fastest-model></small>
+          </div>
+        </div>
+        <section class="mcb-model-browser" aria-label="Compare measured models">
+          <div class="mcb-model-browser__heading">
+            <span class="mcb-model-browser__eyebrow">MODEL COMPARISON</span>
+            <h4>Explore measured models</h4>
+            <p>Published aggregate quality and observed p50 latency. Runtimes are not controlled to identical hardware.</p>
+          </div>
+          <div class="mcb-list-filters" role="group" aria-label="Filter measured models by deployment">
+            <button type="button" data-mcb-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-mcb-filter="local" aria-pressed="false">Local</button>
+            <button type="button" data-mcb-filter="api" aria-pressed="false">API</button>
+          </div>
+          <div class="mcb-model-cards" role="list" data-mcb-model-cards aria-label="Published model scores ranked by aggregate quality"></div>
+          <button type="button" class="mcb-show-all" data-mcb-show-all hidden aria-expanded="false">View all measured models</button>
+        </section>
+        <details class="mcb-chart-details" data-mcb-chart-details open>
+          <summary><span><strong>Performance chart & model inspection</strong><small>Quality vs median latency from the published overview</small></span><span aria-hidden="true">+</span></summary>
+          <div class="benchmark-story">
+            <div class="performance-plot">
           <div class="plot-heading">
             <div>
               <span class="plot-heading__eyebrow">QUALITY × LATENCY</span>
@@ -339,33 +391,17 @@ const selectorLabelFor = (track: Track) => {
             <span><i class="legend-line"></i>Pareto frontier</span>
           </div>
         </div>
-
-        <div class="benchmark-highlights" aria-label="Benchmark highlights">
-          <div class="highlight">
-            <span>BEST QUALITY</span>
-            <strong data-best-quality>—</strong>
-            <small data-best-quality-model></small>
           </div>
-          <div class="highlight highlight--accent">
-            <span>BALANCE POINT</span>
-            <strong data-balance>—</strong>
-            <small data-balance-model></small>
+        </details>
+        <details class="mcb-method-details">
+          <summary><span><strong>Methods & limitations</strong><small>What the published snapshot does—and doesn't—support</small></span><span aria-hidden="true">+</span></summary>
+          <div class="mcb-method-details__body">
+            <p>Aggregate quality is reported by the published Model Capability Benchmark. Latency is the reported median (p50); local and API runtimes have different execution environments.</p>
+            <p>These figures describe the published snapshot, not a controlled hardware-normalized leaderboard. Use the linked source for benchmark signatures, tasks and reproducibility details.</p>
           </div>
-          <div class="highlight">
-            <span>FASTEST</span>
-            <strong data-fastest>—</strong>
-            <small data-fastest-model></small>
-          </div>
-        </div>
+        </details>
       </div>
 
-      <div class="evidence-takeaway" data-mcb-takeaway>
-        <span>TAKEAWAY</span>
-        <div>
-          <strong data-readout-title></strong>
-          <p data-readout></p>
-        </div>
-      </div>
     </div>
 
     <div class="evidence-panel__error" data-evidence-error hidden>
