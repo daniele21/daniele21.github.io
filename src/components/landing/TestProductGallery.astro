@@ -214,7 +214,7 @@ const applicationId = (name: string) =>
     margin: 0;
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 720;
+    font-weight: var(--weight-heading);
     line-height: 1.35;
     letter-spacing: 0.045em;
   }
@@ -225,8 +225,8 @@ const applicationId = (name: string) =>
     max-width: 720px;
     color: var(--ink-display);
     font-family: var(--font-display);
-    font-size: var(--text-h3);
-    font-weight: 760;
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-heading);
     letter-spacing: -0.025em;
     line-height: 1.26;
   }
@@ -350,7 +350,7 @@ const applicationId = (name: string) =>
     color: var(--ink-display);
     font-family: var(--font-display);
     font-size: 1.0625rem;
-    font-weight: 760;
+    font-weight: var(--weight-heading);
     letter-spacing: -0.018em;
     line-height: 1.2;
   }
@@ -358,7 +358,7 @@ const applicationId = (name: string) =>
     color: var(--product-accent);
     font-family: var(--font-body);
     font-size: var(--text-caption);
-    font-weight: 650;
+    font-weight: var(--weight-label);
     line-height: 1.28;
     letter-spacing: 0;
   }
@@ -375,8 +375,8 @@ const applicationId = (name: string) =>
     margin: var(--space-4) 0 var(--space-2);
     color: var(--ink-display);
     font-family: var(--font-display);
-    font-size: clamp(1.25rem, 1.85vw, 1.5rem);
-    font-weight: 760;
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-heading);
     line-height: 1.21;
     letter-spacing: -0.028em;
     text-wrap: pretty;
@@ -386,7 +386,7 @@ const applicationId = (name: string) =>
     color: var(--ink-muted);
     font-family: var(--font-body);
     font-size: var(--text-body-sm);
-    font-weight: 450;
+    font-weight: var(--weight-medium);
     line-height: 1.45;
     text-wrap: pretty;
   }
@@ -463,7 +463,7 @@ const applicationId = (name: string) =>
     color: var(--ink);
     font-family: var(--font-body);
     font-size: var(--text-caption);
-    font-weight: 550;
+    font-weight: var(--weight-label);
     line-height: 1.3;
   }
 
@@ -484,12 +484,12 @@ const applicationId = (name: string) =>
     gap: 2px;
     min-width: 0;
   }
-  .runtime-label { color: var(--ink-subtle); font-size: var(--text-caption); font-weight: 650; letter-spacing: 0; }
+  .runtime-label { color: var(--ink-subtle); font-size: var(--text-caption); font-weight: var(--weight-label); letter-spacing: 0; }
   .runtime-link strong {
     color: var(--ink-display);
     font-family: var(--font-body);
     font-size: var(--text-caption);
-    font-weight: 650;
+    font-weight: var(--weight-label);
     line-height: 1.3;
   }
   .explore-link {
@@ -499,7 +499,7 @@ const applicationId = (name: string) =>
     color: var(--product-accent);
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 730;
+    font-weight: var(--weight-heading);
   }
   .explore-link span { font-size: 18px; }
 
@@ -511,8 +511,8 @@ const applicationId = (name: string) =>
     gap: var(--space-3);
     margin-top: var(--space-2);
   }
-  .gallery-count { margin: 0; color: var(--ink-subtle); font-family: var(--font-mono); font-size: var(--text-caption); font-weight: 650; }
-  .gallery-count strong { color: var(--ink-display); font-weight: 800; }
+  .gallery-count { margin: 0; color: var(--ink-subtle); font-family: var(--font-mono); font-size: var(--text-caption); font-weight: var(--weight-label); }
+  .gallery-count strong { color: var(--ink-display); font-weight: var(--weight-display); }
   .gallery-buttons { display: flex; align-items: center; gap: var(--space-2); }
   .gallery-buttons button {
     display: grid;
@@ -553,7 +553,7 @@ const applicationId = (name: string) =>
     font-size: var(--text-body-sm);
     line-height: 1.5;
   }
-  .gallery-handoff strong { color: var(--ink-display); font-weight: 700; }
+  .gallery-handoff strong { color: var(--ink-display); font-weight: var(--weight-heading); }
   .handoff-link {
     display: inline-flex;
     align-items: center;
@@ -568,7 +568,7 @@ const applicationId = (name: string) =>
     text-decoration: none;
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 740;
+    font-weight: var(--weight-heading);
   }
   .handoff-link:hover { background: var(--surface-blue-subtle); }
   .handoff-link span { font-size: 19px; }

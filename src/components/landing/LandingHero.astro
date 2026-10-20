@@ -135,7 +135,7 @@ const linkedinUrl = hero.identity.socials?.find((link) => link.platform === 'lin
     font-size: clamp(1.85rem, 4.35vw, 4.35rem);
     line-height: 1.1;
     letter-spacing: -0.055em;
-    font-weight: 860;
+    font-weight: var(--weight-display);
     color: var(--ink-display);
     white-space: nowrap;
   }
@@ -167,7 +167,7 @@ const linkedinUrl = hero.identity.socials?.find((link) => link.platform === 'lin
     font-family: var(--font-display);
     font-size: clamp(1.32rem, 2.15vw, 2rem);
     line-height: 1.24;
-    font-weight: 760;
+    font-weight: var(--weight-heading);
     letter-spacing: -0.025em;
     color: var(--ink-display);
   }
@@ -182,7 +182,7 @@ const linkedinUrl = hero.identity.socials?.find((link) => link.platform === 'lin
 
   .hero-explanation :global(strong) {
     color: var(--ink-display);
-    font-weight: 740;
+    font-weight: var(--weight-heading);
   }
 
   .hero-position {
@@ -193,7 +193,7 @@ const linkedinUrl = hero.identity.socials?.find((link) => link.platform === 'lin
     margin: 0;
     font-family: var(--font-display);
     font-size: 0.9rem;
-    font-weight: 700;
+    font-weight: var(--weight-heading);
     color: var(--ink);
   }
 
@@ -241,7 +241,7 @@ const linkedinUrl = hero.identity.socials?.find((link) => link.platform === 'lin
     color: var(--accent-blue);
     font-family: var(--font-mono);
     font-size: var(--text-caption);
-    font-weight: 800;
+    font-weight: var(--weight-display);
     line-height: 1.5;
   }
 
@@ -285,7 +285,7 @@ const linkedinUrl = hero.identity.socials?.find((link) => link.platform === 'lin
 
   .trust-role {
     color: var(--ink);
-    font-weight: 690;
+    font-weight: var(--weight-heading);
   }
 
   .hero-trust a {
@@ -293,7 +293,7 @@ const linkedinUrl = hero.identity.socials?.find((link) => link.platform === 'lin
     align-items: center;
     gap: 5px;
     color: var(--ink-muted);
-    font-weight: 650;
+    font-weight: var(--weight-label);
     text-decoration: none;
     transition: color var(--duration-fast) ease;
   }

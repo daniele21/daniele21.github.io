@@ -180,7 +180,7 @@ test('TEST is a mobile-first gallery of actual project assets and product value'
   assert.match(gallery, /class="card-footer"/);
   assert.match(gallery, /class="preview-chrome"/);
   assert.doesNotMatch(gallery, /ACTUAL PRODUCT INTERFACE|CONNECTED INFRASTRUCTURE|class="infrastructure-link"/);
-  for (const token of ['--font-display', '--font-body', '--text-h3', '--text-body-sm', '--text-caption',
+  for (const token of ['--font-display', '--font-body', '--text-card-title', '--text-body-sm', '--text-caption',
     '--radius-lg', '--surface-card', '--border-medium', '--ink-display']) {
     assert.ok(gallery.includes('var(' + token + ')'), 'TEST must consume brand token ' + token);
   }
@@ -228,7 +228,7 @@ test('MEASURE is published-first and preserves all evidence provenance on mobile
   assert.match(stage, /<StageRail number=\{4\} side="right" isFinal \/>/);
   assert.match(stage, /<ExperimentResultsExplorer tracks=\{experiments\.tracks \|\| \[\]\} \/>/);
   assert.match(stage, /--font-display/);
-  assert.match(stage, /--text-h2/);
+  assert.match(stage, /--text-section-title-mobile/);
   assert.match(stage, /--touch-target-min/);
 
   assert.match(explorer, /sortedTracks = \[\.\.\.tracks\]\.sort/);
@@ -292,4 +292,69 @@ test('MEASURE is published-first and preserves all evidence provenance on mobile
   assert.match(explorer, /SOURCE UNAVAILABLE/);
   assert.match(explorer, /NO PUBLIC SNAPSHOT YET/);
   assert.match(explorer, /No fallback or invented performance values are shown/);
+});
+
+
+test('homepage uses canonical type roles across every narrative stage', () => {
+  const tokens = read('src/styles/tokens.css');
+  const layout = read('src/layouts/BaseLayout.astro');
+  const reset = read('src/styles/reset.css');
+  const plane = read('src/components/landing/PlaneTemplate.astro');
+  const evidence = read('src/components/landing/EvidenceStage.astro');
+  const about = read('src/components/landing/AboutSignal.astro');
+
+  assert.match(layout, /family=Inter:wght@400;500;600;700;800/);
+  assert.match(layout, /Plus\+Jakarta\+Sans:ital,wght@0,500;0,600;0,700;0,800/);
+  assert.match(reset, /font-family:\s*var\(--font-body\)/);
+
+  for (const token of [
+    '--text-section-title:', '--text-section-title-mobile:',
+    '--text-section-intro:', '--text-section-intro-mobile:',
+    '--text-card-title:', '--text-feature-title:', '--text-kpi:',
+    '--weight-body:', '--weight-medium:', '--weight-label:',
+    '--weight-heading:', '--weight-display:',
+    '--leading-section-title:', '--tracking-section-title:',
+  ]) {
+    assert.ok(tokens.includes(token), 'Missing canonical typography role ' + token);
+  }
+
+  for (const [name, source] of [['DECIDE/BUILD/TEST', plane], ['MEASURE', evidence], ['ABOUT', about]]) {
+    assert.match(source, /font-size:\s*var\(--text-section-title\)/, name + ' should share desktop title scale');
+    assert.match(source, /font-size:\s*var\(--text-section-title-mobile\)/, name + ' should share phone title scale');
+    assert.match(source, /font-weight:\s*var\(--weight-display\)/, name + ' should use real loaded display weight');
+    assert.match(source, /letter-spacing:\s*var\(--tracking-section-title\)/, name + ' should share heading tracking');
+    assert.match(source, /font-size:\s*var\(--text-section-intro-mobile\)/, name + ' should share phone intro scale');
+  }
+
+  for (const path of [
+    'src/components/landing/LandingHero.astro',
+    'src/components/landing/DecisionTable.astro',
+    'src/components/landing/BuildSystemsShowcase.astro',
+    'src/components/landing/TestProductGallery.astro',
+    'src/components/landing/ExperimentResultsExplorer.astro',
+    'src/components/landing/EvidenceStage.astro',
+    'src/components/landing/AboutSignal.astro',
+    'src/components/landing/StageRail.astro',
+    'src/components/landing/MethodThread.astro',
+    'src/components/landing/PlaneTemplate.astro',
+    'src/components/layout/SiteHeader.astro',
+    'src/components/layout/SiteFooter.astro',
+  ]) {
+    const source = read(path);
+    assert.doesNotMatch(source, /font-weight:\s*(?:4[1-9]\d|5\d\d|6\d\d|7\d\d|8\d\d)\s*;/,
+      path + ' must not introduce ad-hoc unsourced weights');
+    assert.doesNotMatch(source, /font-family:\s*['"](?:Arial|Helvetica|Roboto|Georgia)/,
+      path + ' must not introduce a third non-brand font');
+  }
+
+  for (const path of [
+    'src/components/landing/DecisionTable.astro',
+    'src/components/landing/BuildSystemsShowcase.astro',
+    'src/components/landing/TestProductGallery.astro',
+    'src/components/landing/ExperimentResultsExplorer.astro',
+  ]) {
+    const source = read(path);
+    assert.match(source, /var\(--text-card-title\)|var\(--text-feature-title\)/,
+      path + ' must share canonical card typography');
+  }
 });

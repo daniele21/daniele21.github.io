@@ -115,10 +115,10 @@ const titleId = `${id}-title`;
     max-width: 100%;
     margin: 0 0 var(--space-3);
     font-family: var(--font-display);
-    font-size: clamp(1.75rem, 3.1vw, 2.95rem);
-    line-height: 1.08;
-    letter-spacing: -0.042em;
-    font-weight: 820;
+    font-size: var(--text-section-title);
+    line-height: var(--leading-section-title);
+    letter-spacing: var(--tracking-section-title);
+    font-weight: var(--weight-display);
     color: var(--ink-display);
     text-wrap: pretty;
   }
@@ -126,7 +126,7 @@ const titleId = `${id}-title`;
   .plane-intro .stage-intro {
     max-width: 680px;
     margin: 0;
-    font-size: clamp(1rem, 1.25vw, 1.12rem);
+    font-size: var(--text-section-intro);
     line-height: 1.6;
     color: var(--ink-muted);
     text-wrap: pretty;
@@ -157,7 +157,6 @@ const titleId = `${id}-title`;
     .plane-section.stage-left .plane-intro,
     .plane-section.stage-right .plane-intro { align-self: flex-start; }
 
-    .plane-intro .stage-heading { font-size: clamp(1.65rem, 5vw, 2.35rem); }
   }
 
   @media (max-width: 760px) {
@@ -166,8 +165,8 @@ const titleId = `${id}-title`;
       padding-right: 12px;
     }
 
-    .plane-intro .stage-heading { font-size: clamp(1.45rem, 6vw, 1.95rem); }
-    .plane-intro .stage-intro { font-size: 0.98rem; }
+    .plane-intro .stage-heading { font-size: var(--text-section-title-mobile); }
+    .plane-intro .stage-intro { font-size: var(--text-section-intro-mobile); }
   }
 
   @media (max-width: 540px) {
