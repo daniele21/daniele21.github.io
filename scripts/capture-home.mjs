@@ -337,7 +337,7 @@ try {
     JSON.stringify(testGalleryChecks, null, 2),
   );
 
-  // MEASURE: published-first tabs, mobile chart reading and truthful empty states.
+  // MEASURE: editorial phone layout, real-data model comparisons and honest empty states.
   const measureChecks = [];
   for (const viewport of [
     { name: 'mobile-320', width: 320, height: 700 },
@@ -359,31 +359,31 @@ try {
         const diagnostics = await page.evaluate(() => {
           const root = document.querySelector('#evidence .experiment-explorer');
           const tabs = [...root.querySelectorAll('[data-experiment-tab]')];
-          const index = root.querySelector('.experiment-selector');
+          const chooser = root.querySelector('[data-experiment-mobile-select]');
+          const story = root.querySelector('[data-mcb-story]');
+          const details = root.querySelector('[data-mcb-chart-details]');
+          const takeaway = root.querySelector('[data-mcb-takeaway]');
+          const summary = root.querySelector('.run-summary');
           const svg = root.querySelector('[data-performance-plot]');
-          const scrollPlot = root.querySelector('.plot-canvas');
-          const runSummary = root.querySelector('.run-summary');
-          const titles = [...root.querySelectorAll('h3, h4, .experiment-tab__title, .experiment-tab__availability')];
+          const titles = [...root.querySelectorAll('h3, h4, .experiment-mobile-chooser label')];
           return {
             theme: document.documentElement.dataset.theme,
-            width: window.innerWidth,
             pageOverflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
-            selectedTab: tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.getAttribute('data-track-id'),
+            selectedTab: tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.dataset.trackId,
             publishedCount: tabs.filter((t) => t.dataset.published === 'true').length,
             unpublishedCount: tabs.filter((t) => t.dataset.published === 'false').length,
-            selectorDisplay: getComputedStyle(index).display,
-            selectorColumns: getComputedStyle(index).gridTemplateColumns,
-            selectorOverflow: index.scrollWidth - index.clientWidth,
-            tabMinHeights: tabs.map((t) => Math.round(t.getBoundingClientRect().height)),
-            chartRegionScrollable: Boolean(scrollPlot?.getAttribute('tabindex') === '0'),
-            chartWidth: svg ? svg.getBoundingClientRect().width : 0,
+            mobileChooserVisible: chooser ? getComputedStyle(chooser).display !== 'none' : false,
+            chooserHeight: chooser?.getBoundingClientRect().height || 0,
+            storyVisible: story ? !story.hidden && !root.querySelector('[data-evidence-result]').hidden : false,
+            chartOpen: Boolean(details?.open),
+            chartKeyboardFocusable: Boolean(root.querySelector('.plot-canvas[tabindex="0"]')),
             chartMinWidth: svg ? getComputedStyle(svg).minWidth : '',
-            plotWidth: scrollPlot ? scrollPlot.getBoundingClientRect().width : 0,
-            summaryDisplay: getComputedStyle(runSummary).display,
-            fonts: titles.filter((t) => t.getBoundingClientRect().height > 0).map((t) => ({
-              size: Number.parseFloat(getComputedStyle(t).fontSize),
-              family: getComputedStyle(t).fontFamily,
-            })),
+            evidenceWidth: root.getBoundingClientRect().width,
+            modelCardCount: root.querySelectorAll('[data-mcb-model-cards] [data-mcb-card]').length,
+            summaryDisplay: getComputedStyle(summary).display,
+            headingFamily: getComputedStyle(root.querySelector('.evidence-panel__header h3')).fontFamily,
+            fonts: titles.filter((t) => t.getBoundingClientRect().height > 0).map((t) => Number.parseFloat(getComputedStyle(t).fontSize)),
+            takeawayBeforeModels: Boolean(takeaway?.compareDocumentPosition(story) & Node.DOCUMENT_POSITION_FOLLOWING),
           };
         });
 
@@ -391,37 +391,68 @@ try {
           path: path.join(outputDir, 'measure__' + viewport.name + '__' + theme + '.png'),
         });
 
-        await page.locator('#evidence [data-track-id="vlm-capability"]').click();
+        const isMobile = viewport.width <= 390;
+        let filtersWork = true;
+        let showAllWorks = true;
+        if (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 3) {
+          filtersWork = false; // Regression: initial list must be compact.
+        } else if (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 0) {
+          const localFilter = page.locator('.mcb-list-filters [data-mcb-filter="local"]');
+          await localFilter.click();
+          filtersWork = (await localFilter.getAttribute('aria-pressed')) === 'true';
+          const showAll = page.locator('[data-mcb-show-all]');
+          if (await showAll.isVisible()) {
+            await showAll.click();
+            showAllWorks = (await showAll.getAttribute('aria-expanded')) === 'true';
+          }
+          await page.locator('[data-mcb-chart-details] summary').click();
+          const expanded = await page.locator('[data-mcb-chart-details]').evaluate((el) => el.open);
+          filtersWork = filtersWork && expanded;
+        }
+
+        if (isMobile) {
+          await page.locator('#evidence [data-experiment-mobile-select]').selectOption({ label: 'VLM · Not published' }).catch(async () => {
+            const option = await page.locator('#evidence [data-experiment-mobile-select] option').evaluateAll(
+              (options) => options.find((option) => option.textContent.includes('VLM'))?.value
+            );
+            if (option !== undefined) await page.locator('#evidence [data-experiment-mobile-select]').selectOption(option);
+          });
+        } else {
+          await page.locator('#evidence [data-track-id="vlm-capability"]').click();
+        }
         const unpublished = await page.evaluate(() => {
           const root = document.querySelector('#evidence .experiment-explorer');
           return {
-            selected: root.querySelector('[aria-selected="true"]')?.getAttribute('data-track-id'),
-            emptyVisible: !root.querySelector('[data-evidence-empty]')?.hidden,
-            noPublishedNumber: !root.querySelector('[data-evidence-result]') ||
-              root.querySelector('[data-evidence-result]').hidden,
+            selected: root.querySelector('[aria-selected="true"]')?.dataset.trackId,
+            emptyVisible: !root.querySelector('[data-evidence-empty]').hidden,
+            resultHidden: root.querySelector('[data-evidence-result]').hidden,
           };
         });
 
-        const check = { viewport: viewport.name, ...diagnostics, unpublished };
+        const check = { viewport: viewport.name, ...diagnostics, filtersWork, showAllWorks, unpublished };
         measureChecks.push(check);
-        const isMobile = viewport.width <= 390;
         if (
           diagnostics.theme !== theme ||
           diagnostics.pageOverflowPx > 0 ||
           diagnostics.publishedCount !== 3 ||
           diagnostics.unpublishedCount !== 3 ||
-          diagnostics.tabMinHeights.some((height) => height < 44) ||
-          !diagnostics.chartRegionScrollable ||
-          diagnostics.fonts.some((font) => font.size < 14) ||
-          (isMobile && diagnostics.selectorDisplay !== 'grid') ||
-          (isMobile && diagnostics.selectorOverflow > 1) ||
+          diagnostics.fonts.some((size) => size < 14) ||
+          !diagnostics.chartKeyboardFocusable ||
+          !diagnostics.headingFamily.includes('Plus Jakarta Sans') ||
+          !diagnostics.takeawayBeforeModels ||
+          (isMobile && (!diagnostics.mobileChooserVisible || diagnostics.chooserHeight < 44)) ||
+          (isMobile && diagnostics.evidenceWidth < viewport.width * 0.72) ||
+          (isMobile && diagnostics.chartOpen) ||
           (isMobile && Number.parseFloat(diagnostics.chartMinWidth) < 620) ||
           (isMobile && diagnostics.summaryDisplay !== 'grid') ||
+          (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount === 0) ||
+          !filtersWork ||
+          !showAllWorks ||
           unpublished.selected !== 'vlm-capability' ||
           !unpublished.emptyVisible ||
-          !unpublished.noPublishedNumber
+          !unpublished.resultHidden
         ) {
-          throw new Error('MEASURE mobile evidence regression: ' + JSON.stringify(check));
+          throw new Error('MEASURE editorial mobile regression: ' + JSON.stringify(check));
         }
       } finally {
         await page.close();
@@ -429,10 +460,7 @@ try {
       }
     }
   }
-  await fs.writeFile(
-    path.join(outputDir, 'measure-mobile-check.json'),
-    JSON.stringify(measureChecks, null, 2),
-  );
+  await fs.writeFile(path.join(outputDir, 'measure-mobile-check.json'), JSON.stringify(measureChecks, null, 2));
 
   // The BUILD redesign must be inspected in both themes, independently of
   // the whole-page journey animation. Element captures make visual PR review
