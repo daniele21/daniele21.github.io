@@ -173,12 +173,18 @@ const experiments = measureStage.systems[0];
   }
 
   @media (max-width: 540px) {
-    .evidence-stage { padding: 48px 0 70px; }
+    .evidence-stage { padding: 43px 0 64px; }
+
+    /* Reserve only the continuous path gutter, not a second card gutter. */
+    .evidence-shell :global(.stage-rail) {
+      left: 0;
+      right: auto;
+    }
 
     .evidence-layout {
-      gap: 24px;
-      padding-left: 42px;
-      padding-right: 4px;
+      gap: 19px;
+      padding-left: 28px;
+      padding-right: 0;
     }
 
     .evidence-heading { font-size: var(--text-h2); line-height: 1.16; }
