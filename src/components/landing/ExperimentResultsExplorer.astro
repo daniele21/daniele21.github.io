@@ -425,6 +425,12 @@ const selectorLabelFor = (track: Track) => {
       root.dataset.ready = 'true';
 
       const tabs = Array.from(root.querySelectorAll('[data-experiment-tab]'));
+      const mobileChooser = root.querySelector('[data-experiment-mobile-select]');
+      const chartDetails = root.querySelector('[data-mcb-chart-details]');
+      if (chartDetails instanceof HTMLDetailsElement) {
+        // Details remain open in static HTML without JS; progressively collapse on phones.
+        chartDetails.open = !window.matchMedia('(max-width: 680px)').matches;
+      }
       const loading = root.querySelector('[data-evidence-loading]');
       const empty = root.querySelector('[data-evidence-empty]');
       const result = root.querySelector('[data-evidence-result]');
@@ -481,7 +487,71 @@ const selectorLabelFor = (track: Track) => {
         points: [],
         filter: 'all',
         selected: null,
+        showAll: false,
       };
+
+      const renderMcbCards = (points) => {
+        const region = root.querySelector('[data-mcb-model-cards]');
+        const toggle = root.querySelector('[data-mcb-show-all]');
+        if (!(region instanceof HTMLElement)) return;
+        region.replaceChildren();
+
+        const ranked = [...points].sort((a, b) =>
+          b.qualityNumber - a.qualityNumber || a.latencyNumber - b.latencyNumber);
+        const displayed = mcbState.showAll ? ranked : ranked.slice(0, 3);
+
+        displayed.forEach((point) => {
+          const key = point.model_signature || point.model_key;
+          const entry = document.createElement('div');
+          entry.className = 'mcb-model-entry';
+          entry.setAttribute('role', 'listitem');
+
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'mcb-model-card';
+          button.setAttribute('data-mcb-card', key);
+          button.setAttribute('aria-pressed', mcbState.selected === key ? 'true' : 'false');
+          button.setAttribute('aria-label',
+            shortModel(point.model_key) + ', ' + point.qualityNumber.toFixed(1) +
+            ' out of 100 aggregate quality, median ' + formatSeconds(point.latencyNumber) +
+            ', ' + (point.deployment === 'api' ? 'API' : 'local') + ' runtime');
+          const top = document.createElement('span');
+          top.className = 'mcb-model-card__top';
+          const model = document.createElement('strong');
+          model.textContent = shortModel(point.model_key);
+          const environment = document.createElement('span');
+          environment.className = 'mcb-model-card__runtime';
+          environment.textContent = point.deployment === 'api' ? 'API' : 'Local';
+          top.append(model, environment);
+
+          const metrics = document.createElement('span');
+          metrics.className = 'mcb-model-card__metrics';
+          const quality = document.createElement('span');
+          quality.textContent = point.qualityNumber.toFixed(1) + ' / 100 quality';
+          const latency = document.createElement('span');
+          latency.textContent = formatSeconds(point.latencyNumber) + ' p50';
+          metrics.append(quality, latency);
+          button.append(top, metrics);
+          button.addEventListener('click', () => focusMcbPoint(point));
+          entry.appendChild(button);
+          region.appendChild(entry);
+        });
+
+        if (toggle instanceof HTMLButtonElement) {
+          toggle.hidden = ranked.length <= 3;
+          toggle.textContent = mcbState.showAll
+            ? 'Show fewer models'
+            : 'View all ' + ranked.length + ' measured models';
+          toggle.setAttribute('aria-expanded', mcbState.showAll ? 'true' : 'false');
+        }
+      };
+      const showAllModels = root.querySelector('[data-mcb-show-all]');
+      if (showAllModels instanceof HTMLButtonElement) {
+        showAllModels.addEventListener('click', () => {
+          mcbState.showAll = !mcbState.showAll;
+          if (typeof mcbState.redraw === 'function') mcbState.redraw();
+        });
+      }
 
       const focusMcbPoint = (point) => {
         if (!point) return;
@@ -497,6 +567,10 @@ const selectorLabelFor = (track: Track) => {
           const selected = group.getAttribute('data-mcb-point') === mcbState.selected;
           group.classList.toggle('is-selected', selected);
           group.setAttribute('aria-pressed', selected ? 'true' : 'false');
+        });
+        root.querySelectorAll('[data-mcb-card]').forEach((button) => {
+          button.setAttribute('aria-pressed',
+            button.getAttribute('data-mcb-card') === mcbState.selected ? 'true' : 'false');
         });
       };
 
@@ -525,6 +599,7 @@ const selectorLabelFor = (track: Track) => {
           const visible = points
             .filter((point) => mcbState.filter === 'all' || point.deployment === mcbState.filter)
             .sort((a, b) => a.latencyNumber - b.latencyNumber);
+          renderMcbCards(visible);
           if (!visible.length) return;
 
           const W = 620;
@@ -1194,6 +1269,9 @@ const selectorLabelFor = (track: Track) => {
       };
 
       const selectTab = async (tab) => {
+        if (mobileChooser instanceof HTMLSelectElement) {
+          mobileChooser.value = String(tabs.indexOf(tab));
+        }
         tabs.forEach((candidate) => {
           const active = candidate === tab;
           candidate.classList.toggle('is-active', active);
@@ -1243,6 +1321,13 @@ const selectorLabelFor = (track: Track) => {
           showOnly('error');
         }
       };
+
+      if (mobileChooser instanceof HTMLSelectElement) {
+        mobileChooser.addEventListener('change', () => {
+          const tab = tabs[Number(mobileChooser.value)];
+          if (tab instanceof HTMLButtonElement) selectTab(tab);
+        });
+      }
 
       tabs.forEach((tab, index) => {
         if (!(tab instanceof HTMLButtonElement)) return;
