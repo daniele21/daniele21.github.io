@@ -187,7 +187,7 @@ const scopeFor = (id: string) =>
     margin: 0;
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 800;
+    font-weight: var(--weight-display);
     letter-spacing: 0.11em;
     line-height: 1.4;
     text-transform: uppercase;
@@ -273,7 +273,7 @@ const scopeFor = (id: string) =>
     gap: 12px;
     color: var(--ink-subtle);
     font-size: var(--text-caption);
-    font-weight: 700;
+    font-weight: var(--weight-heading);
     line-height: 1.25;
   }
 
@@ -295,7 +295,7 @@ const scopeFor = (id: string) =>
     flex: 0 0 auto;
     color: var(--ink-subtle);
     font-size: var(--text-caption);
-    font-weight: 600;
+    font-weight: var(--weight-label);
     white-space: nowrap;
   }
 
@@ -333,8 +333,8 @@ const scopeFor = (id: string) =>
   .runtime-card__identity h4 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(1.7rem, 3vw, 2.6rem);
-    font-weight: 800;
+    font-size: var(--text-feature-title);
+    font-weight: var(--weight-display);
     letter-spacing: -0.055em;
     line-height: 1.15;
     color: var(--ink-display);
@@ -344,7 +344,7 @@ const scopeFor = (id: string) =>
     margin: 0 0 9px;
     color: var(--ink-display);
     font-size: var(--text-body-sm);
-    font-weight: 700;
+    font-weight: var(--weight-heading);
     line-height: 1.45;
   }
 
@@ -415,7 +415,7 @@ const scopeFor = (id: string) =>
     color: var(--system-accent);
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 750;
+    font-weight: var(--weight-heading);
     white-space: nowrap;
   }
 
@@ -500,8 +500,8 @@ const scopeFor = (id: string) =>
 
   .primitive__title {
     font-family: var(--font-display);
-    font-size: clamp(1.25rem, 2vw, 1.4rem);
-    font-weight: 800;
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-display);
     letter-spacing: -0.045em;
     line-height: 1.2;
   }
@@ -517,7 +517,7 @@ const scopeFor = (id: string) =>
     margin-top: 9px;
     color: #b9cdec;
     font-size: var(--text-caption);
-    font-weight: 600;
+    font-weight: var(--weight-label);
     text-transform: capitalize;
   }
 
