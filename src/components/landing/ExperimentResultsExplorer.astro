@@ -42,19 +42,16 @@ const selectorLabelFor = (track: Track) => {
     </div>
     <span class="experiment-index-heading__count">{sortedTracks.filter((track) => Boolean(track.resultUrl)).length} / {sortedTracks.length} published</span>
   </div>
-  <div class="experiment-mobile-chooser">
-    <label for="measure-benchmark-select">CHOOSE A BENCHMARK</label>
-    <select id="measure-benchmark-select" data-experiment-mobile-select>
-      {sortedTracks.map((track, index) => (
-        <option value={String(index)} selected={index === initialIndex}>
-          {selectorLabelFor(track)} · {track.resultUrl ? (track.status.includes('PARTIAL') ? 'Partial results' : 'Published') : 'Not published'}
-        </option>
-      ))}
-    </select>
-    <p>Published evidence first. Unpublished tracks stay clearly marked.</p>
+  <div class="experiment-rail-guide">
+    <span>SWIPE TO EXPLORE <span aria-hidden="true">→</span></span>
+    <div class="experiment-rail-actions">
+      <span class="experiment-rail-count" data-experiment-position aria-live="polite">01 / {String(sortedTracks.length).padStart(2, '0')}</span>
+      <button type="button" data-experiment-prev aria-label="Previous benchmark" disabled>←</button>
+      <button type="button" data-experiment-next aria-label="Next benchmark">→</button>
+    </div>
   </div>
   <div class="experiment-selector-wrap">
-    <div class="experiment-selector" role="tablist" aria-label="Select experiment">
+    <div class="experiment-selector" role="tablist" aria-label="Swipe through benchmarks and tap to select" data-experiment-rail>
       {sortedTracks.map((track, index) => (
         <button
           type="button"
@@ -81,6 +78,7 @@ const selectorLabelFor = (track: Track) => {
           <span class="experiment-tab__copy">
             <span class="experiment-tab__title">{selectorLabelFor(track)}</span>
             <span class="experiment-tab__availability">{track.resultUrl ? (track.status.includes('PARTIAL') ? 'Partial evidence' : 'Published results') : 'Not published yet'}</span>
+            <span class="experiment-tab__question">{track.question}</span>
           </span>
         </button>
       ))}
@@ -127,7 +125,7 @@ const selectorLabelFor = (track: Track) => {
           <p data-readout></p>
         </div>
       </div>
-      <div class="run-summary" data-mcb-scope aria-label="Benchmark scope">
+      <div class="run-summary" data-mcb-scope aria-label="Swipe through benchmark scope metrics" role="region" tabindex="0">
         <span><strong data-model-count>—</strong> models</span>
         <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
         <span><strong data-dataset>—</strong> <span data-scope-label>dataset</span></span>
@@ -315,7 +313,7 @@ const selectorLabelFor = (track: Track) => {
       </div>
 
       <div class="mcb-story" data-mcb-story>
-        <div class="benchmark-highlights" aria-label="Benchmark highlights">
+        <div class="benchmark-highlights" aria-label="Swipe through benchmark highlight cards" role="region" tabindex="0">
           <div class="highlight">
             <span>BEST QUALITY</span>
             <strong data-best-quality>—</strong>
@@ -343,7 +341,9 @@ const selectorLabelFor = (track: Track) => {
             <button type="button" data-mcb-filter="local" aria-pressed="false">Local</button>
             <button type="button" data-mcb-filter="api" aria-pressed="false">API</button>
           </div>
-          <div class="mcb-model-cards" role="list" data-mcb-model-cards aria-label="Published model scores ranked by aggregate quality"></div>
+          <div class="mcb-cards-viewport" role="region" tabindex="0" aria-label="Swipe through published measured model scores">
+            <div class="mcb-model-cards" role="list" data-mcb-model-cards aria-label="Published model scores ranked by aggregate quality"></div>
+          </div>
           <button type="button" class="mcb-show-all" data-mcb-show-all hidden aria-expanded="false">View all measured models</button>
         </section>
         <details class="mcb-chart-details" data-mcb-chart-details open>
@@ -425,7 +425,10 @@ const selectorLabelFor = (track: Track) => {
       root.dataset.ready = 'true';
 
       const tabs = Array.from(root.querySelectorAll('[data-experiment-tab]'));
-      const mobileChooser = root.querySelector('[data-experiment-mobile-select]');
+      const experimentRail = root.querySelector('[data-experiment-rail]');
+      const previousExperiment = root.querySelector('[data-experiment-prev]');
+      const nextExperiment = root.querySelector('[data-experiment-next]');
+      const experimentPosition = root.querySelector('[data-experiment-position]');
       const chartDetails = root.querySelector('[data-mcb-chart-details]');
       if (chartDetails instanceof HTMLDetailsElement) {
         // Details remain open in static HTML without JS; progressively collapse on phones.
@@ -1269,8 +1272,19 @@ const selectorLabelFor = (track: Track) => {
       };
 
       const selectTab = async (tab) => {
-        if (mobileChooser instanceof HTMLSelectElement) {
-          mobileChooser.value = String(tabs.indexOf(tab));
+        const index = tabs.indexOf(tab);
+        if (experimentPosition) experimentPosition.textContent =
+          String(index + 1).padStart(2, '0') + ' / ' + String(tabs.length).padStart(2, '0');
+        if (previousExperiment instanceof HTMLButtonElement) previousExperiment.disabled = index <= 0;
+        if (nextExperiment instanceof HTMLButtonElement) nextExperiment.disabled = index >= tabs.length - 1;
+        if (experimentRail instanceof HTMLElement && tab instanceof HTMLElement &&
+            window.matchMedia('(max-width: 680px)').matches) {
+          const left = experimentRail.scrollLeft +
+            tab.getBoundingClientRect().left - experimentRail.getBoundingClientRect().left;
+          experimentRail.scrollTo({
+            left,
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+          });
         }
         tabs.forEach((candidate) => {
           const active = candidate === tab;
@@ -1322,11 +1336,16 @@ const selectorLabelFor = (track: Track) => {
         }
       };
 
-      if (mobileChooser instanceof HTMLSelectElement) {
-        mobileChooser.addEventListener('change', () => {
-          const tab = tabs[Number(mobileChooser.value)];
-          if (tab instanceof HTMLButtonElement) selectTab(tab);
-        });
+      const moveExperiment = (delta) => {
+        const selected = tabs.findIndex((item) => item.getAttribute('aria-selected') === 'true');
+        const next = tabs[Math.max(0, Math.min(tabs.length - 1, selected + delta))];
+        if (next instanceof HTMLButtonElement) selectTab(next);
+      };
+      if (previousExperiment instanceof HTMLButtonElement) {
+        previousExperiment.addEventListener('click', () => moveExperiment(-1));
+      }
+      if (nextExperiment instanceof HTMLButtonElement) {
+        nextExperiment.addEventListener('click', () => moveExperiment(1));
       }
 
       tabs.forEach((tab, index) => {
