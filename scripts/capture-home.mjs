@@ -371,6 +371,26 @@ try {
         const stage = page.locator('#evidence .experiment-explorer');
         await stage.scrollIntoViewIfNeeded();
         const diagnostics = await page.evaluate(() => {
+          const sectionStyle = (node) => {
+            if (!(node instanceof HTMLElement)) return null;
+            const css = getComputedStyle(node);
+            return {
+              fontFamily: css.fontFamily,
+              fontSize: Number.parseFloat(css.fontSize),
+              fontWeight: css.fontWeight,
+              lineHeight: Number.parseFloat(css.lineHeight),
+              tracking: css.letterSpacing,
+            };
+          };
+          const sectionHeadings = [...document.querySelectorAll('[data-stage] .stage-heading')].map(sectionStyle);
+          const sectionIntros = [...document.querySelectorAll('[data-stage] .stage-intro')].map(sectionStyle);
+          const aboutHeading = sectionStyle(document.querySelector('#about-title'));
+          const aboutIntro = sectionStyle(document.querySelector('.about-summary'));
+          const heroHeading = sectionStyle(document.querySelector('.hero-heading'));
+          const cardHeadings = [
+            '.card-headline', '.runtime-card__identity h4', '.value-headline',
+            '.mcb-model-card__name'
+          ].map(selector => sectionStyle(document.querySelector(selector))).filter(Boolean);
           const root = document.querySelector('#evidence .experiment-explorer');
           const tabs = [...root.querySelectorAll('[data-experiment-tab]')];
           const rail = root.querySelector('[data-experiment-rail]');
@@ -398,6 +418,7 @@ try {
           const titles = [...root.querySelectorAll('h3, h4, .experiment-mobile-chooser label')];
           return {
             theme: document.documentElement.dataset.theme,
+            typographyAudit: { sectionHeadings, sectionIntros, aboutHeading, aboutIntro, heroHeading, cardHeadings },
             pageOverflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
             selectedTab: tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.dataset.trackId,
             publishedCount: tabs.filter((t) => t.dataset.published === 'true').length,
@@ -498,6 +519,31 @@ try {
         measureChecks.push(check);
         if (
           diagnostics.theme !== theme ||
+          diagnostics.typographyAudit.sectionHeadings.length !== 4 ||
+          diagnostics.typographyAudit.sectionIntros.length !== 4 ||
+          diagnostics.typographyAudit.sectionHeadings.some(heading =>
+            !heading?.fontFamily.includes('Plus Jakarta Sans') || heading.fontWeight !== '800' ||
+            !Number.isFinite(heading.fontSize)) ||
+          Math.max(...diagnostics.typographyAudit.sectionHeadings.map(heading => heading.fontSize)) -
+            Math.min(...diagnostics.typographyAudit.sectionHeadings.map(heading => heading.fontSize)) > 0.6 ||
+          diagnostics.typographyAudit.sectionIntros.some(intro =>
+            !intro?.fontFamily.includes('Inter') || intro.fontSize < 15) ||
+          (viewport.width <= 760 &&
+            Math.max(...diagnostics.typographyAudit.sectionIntros.map(intro => intro.fontSize)) -
+              Math.min(...diagnostics.typographyAudit.sectionIntros.map(intro => intro.fontSize)) > 0.6) ||
+          !diagnostics.typographyAudit.aboutHeading?.fontFamily.includes('Plus Jakarta Sans') ||
+          diagnostics.typographyAudit.aboutHeading.fontWeight !== '800' ||
+          Math.abs(diagnostics.typographyAudit.aboutHeading.fontSize -
+            diagnostics.typographyAudit.sectionHeadings[0].fontSize) > 0.6 ||
+          !diagnostics.typographyAudit.aboutIntro?.fontFamily.includes('Inter') ||
+          (viewport.width <= 760 && Math.abs(diagnostics.typographyAudit.aboutIntro.fontSize -
+            diagnostics.typographyAudit.sectionIntros[0].fontSize) > 0.6) ||
+          !diagnostics.typographyAudit.heroHeading?.fontFamily.includes('Plus Jakarta Sans') ||
+          diagnostics.typographyAudit.heroHeading.fontWeight !== '800' ||
+          diagnostics.typographyAudit.cardHeadings.length < 3 ||
+          diagnostics.typographyAudit.cardHeadings.some(heading =>
+            !heading.fontFamily.includes('Plus Jakarta Sans') ||
+            !['700', '800'].includes(heading.fontWeight) || heading.fontSize < 17) ||
           diagnostics.pageOverflowPx > 0 ||
           diagnostics.publishedCount !== 3 ||
           diagnostics.unpublishedCount !== 3 ||
