@@ -180,7 +180,7 @@ test('TEST is a mobile-first gallery of actual project assets and product value'
   assert.match(gallery, /class="card-footer"/);
   assert.match(gallery, /class="preview-chrome"/);
   assert.doesNotMatch(gallery, /ACTUAL PRODUCT INTERFACE|CONNECTED INFRASTRUCTURE|class="infrastructure-link"/);
-  for (const token of ['--font-display', '--font-body', '--text-h3', '--text-body-sm', '--text-caption',
+  for (const token of ['--font-display', '--font-body', '--text-card-title', '--text-body-sm', '--text-caption',
     '--radius-lg', '--surface-card', '--border-medium', '--ink-display']) {
     assert.ok(gallery.includes('var(' + token + ')'), 'TEST must consume brand token ' + token);
   }
@@ -228,7 +228,7 @@ test('MEASURE is published-first and preserves all evidence provenance on mobile
   assert.match(stage, /<StageRail number=\{4\} side="right" isFinal \/>/);
   assert.match(stage, /<ExperimentResultsExplorer tracks=\{experiments\.tracks \|\| \[\]\} \/>/);
   assert.match(stage, /--font-display/);
-  assert.match(stage, /--text-h2/);
+  assert.match(stage, /--text-section-title-mobile/);
   assert.match(stage, /--touch-target-min/);
 
   assert.match(explorer, /sortedTracks = \[\.\.\.tracks\]\.sort/);
