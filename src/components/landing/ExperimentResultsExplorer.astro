@@ -35,6 +35,24 @@ const selectorLabelFor = (track: Track) => {
 ---
 
 <div class="experiment-explorer" data-experiment-explorer>
+  <div class="experiment-index-heading">
+    <div>
+      <span class="experiment-index-heading__eyebrow">BROWSE THE EVIDENCE</span>
+      <h3>Choose a benchmark</h3>
+    </div>
+    <span class="experiment-index-heading__count">{sortedTracks.filter((track) => Boolean(track.resultUrl)).length} / {sortedTracks.length} published</span>
+  </div>
+  <div class="experiment-mobile-chooser">
+    <label for="measure-benchmark-select">CHOOSE A BENCHMARK</label>
+    <select id="measure-benchmark-select" data-experiment-mobile-select>
+      {sortedTracks.map((track, index) => (
+        <option value={String(index)} selected={index === initialIndex}>
+          {selectorLabelFor(track)} · {track.resultUrl ? (track.status.includes('PARTIAL') ? 'Partial results' : 'Published') : 'Not published'}
+        </option>
+      ))}
+    </select>
+    <p>Published evidence first. Unpublished tracks stay clearly marked.</p>
+  </div>
   <div class="experiment-selector-wrap">
     <div class="experiment-selector" role="tablist" aria-label="Select experiment">
       {sortedTracks.map((track, index) => (
@@ -45,6 +63,7 @@ const selectorLabelFor = (track: Track) => {
           aria-selected={index === initialIndex ? 'true' : 'false'}
           tabindex={index === initialIndex ? '0' : '-1'}
           data-experiment-tab
+          data-published={Boolean(track.resultUrl) ? 'true' : 'false'}
           data-track-id={track.id || ''}
           data-title={track.title}
           data-question={track.question}
@@ -59,7 +78,10 @@ const selectorLabelFor = (track: Track) => {
             class:list={['status-dot', { 'status-dot--live': Boolean(track.resultUrl) }]}
             aria-hidden="true"
           ></span>
-          <span class="experiment-tab__title">{selectorLabelFor(track)}</span>
+          <span class="experiment-tab__copy">
+            <span class="experiment-tab__title">{selectorLabelFor(track)}</span>
+            <span class="experiment-tab__availability">{track.resultUrl ? (track.status.includes('PARTIAL') ? 'Partial evidence' : 'Published results') : 'Not published yet'}</span>
+          </span>
         </button>
       ))}
     </div>
@@ -98,6 +120,13 @@ const selectorLabelFor = (track: Track) => {
         </a>
       </div>
 
+      <div class="evidence-takeaway" data-mcb-takeaway>
+        <span>TAKEAWAY</span>
+        <div>
+          <strong data-readout-title></strong>
+          <p data-readout></p>
+        </div>
+      </div>
       <div class="run-summary" data-mcb-scope aria-label="Benchmark scope">
         <span><strong data-model-count>—</strong> models</span>
         <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
@@ -255,8 +284,11 @@ const selectorLabelFor = (track: Track) => {
                 </div>
                 <span class="rg-pareto__hint">System recall ↑ · observed p95 →</span>
               </div>
-              <svg data-rg-pareto-plot viewBox="0 0 640 260" role="img"
-                aria-label="RedactGuard system PII recall versus observed p95 latency within a single evaluated run"></svg>
+              <p class="chart-swipe-hint">Swipe across the chart for full-size labels <span aria-hidden="true">→</span></p>
+              <div class="rg-plot-canvas" role="region" tabindex="0" aria-label="Horizontally scrollable RedactGuard quality and latency chart">
+                <svg data-rg-pareto-plot viewBox="0 0 640 260" role="img"
+                  aria-label="RedactGuard system PII recall versus observed p95 latency within a single evaluated run"></svg>
+              </div>
               <p data-rg-pareto-note class="rg-pareto__note"></p>
             </div>
             <p class="rg-pareto__missing" data-rg-pareto-missing hidden>
@@ -274,7 +306,7 @@ const selectorLabelFor = (track: Track) => {
                   <button type="button" data-rg-metric="system_leakage_rate" aria-pressed="false">System leakage</button>
                 </div>
               </div>
-              <div class="rg-matrix__scroll" data-rg-matrix-scroll></div>
+              <div class="rg-matrix__scroll" data-rg-matrix-scroll tabindex="0" role="region" aria-label="Scroll horizontally to compare models across datasets"></div>
               <p class="rg-matrix__note">— means that this model/dataset has no published measurement, not 0% performance.</p>
             </div>
             <p class="rg-disclosure">Run comparisons are exploratory. Healthcare and Ambiguous have distinct model cohorts; do not interpret their figures as a controlled leaderboard. Dataset gold spans have not been independently human-reviewed.</p>
@@ -282,47 +314,7 @@ const selectorLabelFor = (track: Track) => {
         </details>
       </div>
 
-            <div class="benchmark-story" data-mcb-story>
-        <div class="performance-plot">
-          <div class="plot-heading">
-            <div>
-              <span class="plot-heading__eyebrow">QUALITY × LATENCY</span>
-              <strong>Local routing frontier</strong>
-            </div>
-            <span class="plot-heading__note">Accuracy vs p50 latency</span>
-          </div>
-
-          <div class="plot-toolbar" data-mcb-toolbar hidden>
-            <span>Quality <span aria-hidden="true">↑</span> &nbsp;·&nbsp; Median latency <span aria-hidden="true">→</span></span>
-            <div class="plot-filters" role="group" aria-label="Filter models by deployment">
-              <button type="button" data-mcb-filter="all" aria-pressed="true">All</button>
-              <button type="button" data-mcb-filter="local" aria-pressed="false">Local</button>
-              <button type="button" data-mcb-filter="api" aria-pressed="false">API</button>
-            </div>
-          </div>
-
-          <svg
-            class="plot-svg"
-            data-performance-plot
-            viewBox="0 0 620 250"
-            role="img"
-            aria-label="Quality versus median latency; focus or select a model point for details"
-          ></svg>
-
-          <div class="plot-selection" data-mcb-detail hidden aria-live="polite">
-            <div>
-              <span class="plot-selection__eyebrow">INSPECT MODEL</span>
-              <strong data-mcb-selected-name>—</strong>
-            </div>
-            <span data-mcb-selected-metrics>—</span>
-          </div>
-
-          <div class="plot-legend">
-            <span><i class="legend-dot legend-dot--all"></i>Measured model</span>
-            <span><i class="legend-line"></i>Pareto frontier</span>
-          </div>
-        </div>
-
+      <div class="mcb-story" data-mcb-story>
         <div class="benchmark-highlights" aria-label="Benchmark highlights">
           <div class="highlight">
             <span>BEST QUALITY</span>
@@ -340,15 +332,76 @@ const selectorLabelFor = (track: Track) => {
             <small data-fastest-model></small>
           </div>
         </div>
+        <section class="mcb-model-browser" aria-label="Compare measured models">
+          <div class="mcb-model-browser__heading">
+            <span class="mcb-model-browser__eyebrow">MODEL COMPARISON</span>
+            <h4>Explore measured models</h4>
+            <p>Published aggregate quality and observed p50 latency. Runtimes are not controlled to identical hardware.</p>
+          </div>
+          <div class="mcb-list-filters" role="group" aria-label="Filter measured models by deployment">
+            <button type="button" data-mcb-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-mcb-filter="local" aria-pressed="false">Local</button>
+            <button type="button" data-mcb-filter="api" aria-pressed="false">API</button>
+          </div>
+          <div class="mcb-model-cards" role="list" data-mcb-model-cards aria-label="Published model scores ranked by aggregate quality"></div>
+          <button type="button" class="mcb-show-all" data-mcb-show-all hidden aria-expanded="false">View all measured models</button>
+        </section>
+        <details class="mcb-chart-details" data-mcb-chart-details open>
+          <summary><span><strong>Performance chart & model inspection</strong><small>Quality vs median latency from the published overview</small></span><span aria-hidden="true">+</span></summary>
+          <div class="benchmark-story">
+            <div class="performance-plot">
+          <div class="plot-heading">
+            <div>
+              <span class="plot-heading__eyebrow">QUALITY × LATENCY</span>
+              <strong>Local routing frontier</strong>
+            </div>
+            <span class="plot-heading__note">Accuracy vs p50 latency</span>
+          </div>
+
+          <div class="plot-toolbar" data-mcb-toolbar hidden>
+            <span>Quality <span aria-hidden="true">↑</span> &nbsp;·&nbsp; Median latency <span aria-hidden="true">→</span></span>
+            <div class="plot-filters" role="group" aria-label="Filter models by deployment">
+              <button type="button" data-mcb-filter="all" aria-pressed="true">All</button>
+              <button type="button" data-mcb-filter="local" aria-pressed="false">Local</button>
+              <button type="button" data-mcb-filter="api" aria-pressed="false">API</button>
+            </div>
+          </div>
+
+          <p class="chart-swipe-hint">Swipe across the chart to inspect all models <span aria-hidden="true">→</span></p>
+          <div class="plot-canvas" role="region" tabindex="0" aria-label="Horizontally scrollable model quality versus latency chart">
+            <svg
+              class="plot-svg"
+              data-performance-plot
+              viewBox="0 0 620 250"
+              role="img"
+              aria-label="Quality versus median latency; focus or select a model point for details"
+            ></svg>
+          </div>
+
+          <div class="plot-selection" data-mcb-detail hidden aria-live="polite">
+            <div>
+              <span class="plot-selection__eyebrow">INSPECT MODEL</span>
+              <strong data-mcb-selected-name>—</strong>
+            </div>
+            <span data-mcb-selected-metrics>—</span>
+          </div>
+
+          <div class="plot-legend">
+            <span><i class="legend-dot legend-dot--all"></i>Measured model</span>
+            <span><i class="legend-line"></i>Pareto frontier</span>
+          </div>
+        </div>
+          </div>
+        </details>
+        <details class="mcb-method-details">
+          <summary><span><strong>Methods & limitations</strong><small>What the published snapshot does—and doesn't—support</small></span><span aria-hidden="true">+</span></summary>
+          <div class="mcb-method-details__body">
+            <p>Aggregate quality is reported by the published Model Capability Benchmark. Latency is the reported median (p50); local and API runtimes have different execution environments.</p>
+            <p>These figures describe the published snapshot, not a controlled hardware-normalized leaderboard. Use the linked source for benchmark signatures, tasks and reproducibility details.</p>
+          </div>
+        </details>
       </div>
 
-      <div class="evidence-takeaway" data-mcb-takeaway>
-        <span>TAKEAWAY</span>
-        <div>
-          <strong data-readout-title></strong>
-          <p data-readout></p>
-        </div>
-      </div>
     </div>
 
     <div class="evidence-panel__error" data-evidence-error hidden>
@@ -372,6 +425,12 @@ const selectorLabelFor = (track: Track) => {
       root.dataset.ready = 'true';
 
       const tabs = Array.from(root.querySelectorAll('[data-experiment-tab]'));
+      const mobileChooser = root.querySelector('[data-experiment-mobile-select]');
+      const chartDetails = root.querySelector('[data-mcb-chart-details]');
+      if (chartDetails instanceof HTMLDetailsElement) {
+        // Details remain open in static HTML without JS; progressively collapse on phones.
+        chartDetails.open = !window.matchMedia('(max-width: 680px)').matches;
+      }
       const loading = root.querySelector('[data-evidence-loading]');
       const empty = root.querySelector('[data-evidence-empty]');
       const result = root.querySelector('[data-evidence-result]');
@@ -428,7 +487,71 @@ const selectorLabelFor = (track: Track) => {
         points: [],
         filter: 'all',
         selected: null,
+        showAll: false,
       };
+
+      const renderMcbCards = (points) => {
+        const region = root.querySelector('[data-mcb-model-cards]');
+        const toggle = root.querySelector('[data-mcb-show-all]');
+        if (!(region instanceof HTMLElement)) return;
+        region.replaceChildren();
+
+        const ranked = [...points].sort((a, b) =>
+          b.qualityNumber - a.qualityNumber || a.latencyNumber - b.latencyNumber);
+        const displayed = mcbState.showAll ? ranked : ranked.slice(0, 3);
+
+        displayed.forEach((point) => {
+          const key = point.model_signature || point.model_key;
+          const entry = document.createElement('div');
+          entry.className = 'mcb-model-entry';
+          entry.setAttribute('role', 'listitem');
+
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'mcb-model-card';
+          button.setAttribute('data-mcb-card', key);
+          button.setAttribute('aria-pressed', mcbState.selected === key ? 'true' : 'false');
+          button.setAttribute('aria-label',
+            shortModel(point.model_key) + ', ' + point.qualityNumber.toFixed(1) +
+            ' out of 100 aggregate quality, median ' + formatSeconds(point.latencyNumber) +
+            ', ' + (point.deployment === 'api' ? 'API' : 'local') + ' runtime');
+          const top = document.createElement('span');
+          top.className = 'mcb-model-card__top';
+          const model = document.createElement('strong');
+          model.textContent = shortModel(point.model_key);
+          const environment = document.createElement('span');
+          environment.className = 'mcb-model-card__runtime';
+          environment.textContent = point.deployment === 'api' ? 'API' : 'Local';
+          top.append(model, environment);
+
+          const metrics = document.createElement('span');
+          metrics.className = 'mcb-model-card__metrics';
+          const quality = document.createElement('span');
+          quality.textContent = point.qualityNumber.toFixed(1) + ' / 100 quality';
+          const latency = document.createElement('span');
+          latency.textContent = formatSeconds(point.latencyNumber) + ' p50';
+          metrics.append(quality, latency);
+          button.append(top, metrics);
+          button.addEventListener('click', () => focusMcbPoint(point));
+          entry.appendChild(button);
+          region.appendChild(entry);
+        });
+
+        if (toggle instanceof HTMLButtonElement) {
+          toggle.hidden = ranked.length <= 3;
+          toggle.textContent = mcbState.showAll
+            ? 'Show fewer models'
+            : 'View all ' + ranked.length + ' measured models';
+          toggle.setAttribute('aria-expanded', mcbState.showAll ? 'true' : 'false');
+        }
+      };
+      const showAllModels = root.querySelector('[data-mcb-show-all]');
+      if (showAllModels instanceof HTMLButtonElement) {
+        showAllModels.addEventListener('click', () => {
+          mcbState.showAll = !mcbState.showAll;
+          if (typeof mcbState.redraw === 'function') mcbState.redraw();
+        });
+      }
 
       const focusMcbPoint = (point) => {
         if (!point) return;
@@ -444,6 +567,10 @@ const selectorLabelFor = (track: Track) => {
           const selected = group.getAttribute('data-mcb-point') === mcbState.selected;
           group.classList.toggle('is-selected', selected);
           group.setAttribute('aria-pressed', selected ? 'true' : 'false');
+        });
+        root.querySelectorAll('[data-mcb-card]').forEach((button) => {
+          button.setAttribute('aria-pressed',
+            button.getAttribute('data-mcb-card') === mcbState.selected ? 'true' : 'false');
         });
       };
 
@@ -472,6 +599,7 @@ const selectorLabelFor = (track: Track) => {
           const visible = points
             .filter((point) => mcbState.filter === 'all' || point.deployment === mcbState.filter)
             .sort((a, b) => a.latencyNumber - b.latencyNumber);
+          renderMcbCards(visible);
           if (!visible.length) return;
 
           const W = 620;
@@ -1141,6 +1269,9 @@ const selectorLabelFor = (track: Track) => {
       };
 
       const selectTab = async (tab) => {
+        if (mobileChooser instanceof HTMLSelectElement) {
+          mobileChooser.value = String(tabs.indexOf(tab));
+        }
         tabs.forEach((candidate) => {
           const active = candidate === tab;
           candidate.classList.toggle('is-active', active);
@@ -1190,6 +1321,13 @@ const selectorLabelFor = (track: Track) => {
           showOnly('error');
         }
       };
+
+      if (mobileChooser instanceof HTMLSelectElement) {
+        mobileChooser.addEventListener('change', () => {
+          const tab = tabs[Number(mobileChooser.value)];
+          if (tab instanceof HTMLButtonElement) selectTab(tab);
+        });
+      }
 
       tabs.forEach((tab, index) => {
         if (!(tab instanceof HTMLButtonElement)) return;
@@ -1884,7 +2022,7 @@ const selectorLabelFor = (track: Track) => {
     border-radius: var(--radius-full);
     background: var(--surface-card);
     color: var(--ink-muted);
-    font-size: 0.7rem;
+    font-size: var(--text-caption);
   }
 
   .jev-stage-coverage :global(.jev-stage-coverage__item.is-published) {
@@ -2801,5 +2939,618 @@ const selectorLabelFor = (track: Track) => {
 
   @media (prefers-reduced-motion: reduce) {
     .experiment-tab { transition: none; }
+  }
+
+  /* MEASURE: published-first selection and mobile-sized scientific graphics.
+     Evidence is still loaded from the existing published artifacts only. */
+  .experiment-index-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 8px 16px;
+    margin-bottom: 12px;
+  }
+  .experiment-index-heading__eyebrow {
+    display: block;
+    color: var(--accent-blue);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 740;
+    letter-spacing: .045em;
+  }
+  .experiment-index-heading h3 {
+    margin: 5px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 760;
+    letter-spacing: -.025em;
+    line-height: 1.25;
+  }
+  .experiment-index-heading__count {
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+  .experiment-tab__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    gap: 3px;
+  }
+  .experiment-tab__availability {
+    display: none;
+    color: var(--ink-subtle);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.3;
+  }
+  .experiment-tab.is-active .experiment-tab__availability {
+    color: var(--accent-blue-dark);
+  }
+  .chart-swipe-hint { display: none; }
+  .plot-canvas, .rg-plot-canvas { min-width: 0; }
+  .plot-canvas:focus-visible, .rg-plot-canvas:focus-visible,
+  .rg-matrix__scroll:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: -2px;
+  }
+
+  /* Tablet-width panels need full-sized chart labels too. */
+  @media (min-width: 681px) and (max-width: 900px) {
+    .chart-swipe-hint {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 12px 0 4px;
+      color: var(--ink-muted);
+      font-size: var(--text-caption);
+    }
+    .chart-swipe-hint span { color: var(--accent-blue); }
+    .plot-canvas, .rg-plot-canvas {
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .plot-canvas .plot-svg { width: 620px; max-width: none; min-width: 620px; }
+    .rg-plot-canvas svg { width: 640px; max-width: none; min-width: 640px; }
+  }
+
+  @media (max-width: 680px) {
+    .experiment-index-heading {
+      align-items: flex-start;
+      gap: 4px 12px;
+      margin-bottom: 12px;
+    }
+    .experiment-index-heading h3 { font-size: 1.13rem; }
+    .experiment-selector-wrap { margin-bottom: 15px; }
+    .experiment-selector-wrap::after { display: none; }
+
+    /* Two columns replace the cryptic horizontally cropped tab bar.
+       Three published benchmarks appear before unpublished experiments. */
+    .experiment-selector {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0 0 2px;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+    .experiment-tab {
+      min-width: 0;
+      min-height: 69px;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      align-items: flex-start;
+      gap: 8px;
+      text-align: left;
+      scroll-snap-align: none;
+    }
+    .experiment-tab[data-published='false'] {
+      min-height: 59px;
+      background: var(--surface-subtle);
+      border-color: var(--border-subtle);
+    }
+    .experiment-tab__copy { flex: 1; }
+    .experiment-tab__title {
+      font-size: var(--text-caption);
+      line-height: 1.3;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .experiment-tab__availability { display: block; }
+    .status-dot { margin-top: 6px; }
+
+    .evidence-panel {
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .evidence-panel__result { padding: 16px 13px; }
+    .evidence-panel__loading,
+    .evidence-panel__error,
+    .evidence-panel__empty { padding: 17px 14px; }
+    .evidence-panel__empty {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .evidence-panel__header { gap: 6px; }
+    .evidence-panel__header h3 {
+      margin: 8px 0 6px;
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 5vw, 1.45rem);
+      font-weight: 760;
+      line-height: 1.2;
+      letter-spacing: -.028em;
+    }
+    .evidence-panel__header p { font-size: var(--text-body-sm); }
+    .source-link {
+      min-height: var(--touch-target-min);
+      align-self: flex-start;
+    }
+    .run-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 13px;
+    }
+    .run-summary > span {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-width: 0;
+      padding: 9px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      background: var(--surface-subtle);
+      font-size: var(--text-caption);
+      overflow-wrap: anywhere;
+    }
+
+    /* Results before graphs: readers see real observed values first. */
+    .benchmark-story {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 17px;
+      padding-top: 15px;
+    }
+    .benchmark-highlights {
+      order: -1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0;
+      border: 0;
+    }
+    .highlight {
+      min-width: 0;
+      padding: 11px 10px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--surface-card);
+    }
+    .highlight + .highlight { border: 1px solid var(--border-subtle); }
+    .highlight:last-child { grid-column: 1 / -1; }
+    .highlight strong {
+      margin-top: 5px;
+      font-size: clamp(1.13rem, 4.4vw, 1.38rem);
+      font-weight: 760;
+      letter-spacing: -.025em;
+      overflow-wrap: anywhere;
+    }
+    .highlight small { font-size: var(--text-caption); overflow-wrap: anywhere; }
+    .highlight--accent::before { display: none; }
+
+    .performance-plot {
+      min-width: 0;
+      padding: 13px 10px;
+      box-shadow: none;
+    }
+    .plot-toolbar {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .plot-filters { max-width: 100%; }
+    .plot-filters button { min-height: var(--touch-target-min); }
+    .chart-swipe-hint {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 12px 0 4px;
+      color: var(--ink-muted);
+      font-size: var(--text-caption);
+      line-height: 1.4;
+    }
+    .chart-swipe-hint span { color: var(--accent-blue); }
+    .plot-canvas, .rg-plot-canvas {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      border-radius: var(--radius-sm);
+    }
+    .plot-canvas .plot-svg {
+      display: block;
+      width: 620px;
+      max-width: none;
+      min-width: 620px;
+      min-height: 0;
+      margin-top: 0;
+    }
+    .rg-plot-canvas svg {
+      display: block;
+      width: 640px;
+      max-width: none;
+      min-width: 640px;
+    }
+
+    .evidence-takeaway {
+      margin-top: 15px;
+      padding: 14px;
+      gap: 7px;
+    }
+    .rg-summary, .jev-summary { min-width: 0; }
+    .rg-matrix__scroll { overscroll-behavior-inline: contain; }
+  }
+
+  /* Evidence Stories: mobile is a concise narrative, not a shrunk dashboard. */
+  .experiment-mobile-chooser { display: none; }
+  .mcb-story { min-width: 0; }
+  .mcb-story .benchmark-story {
+    display: block;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .mcb-story .benchmark-highlights {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 17px;
+    padding: 0;
+    border: none;
+  }
+  .mcb-story .highlight {
+    min-width: 0;
+    padding: 13px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+  }
+  .mcb-story .highlight + .highlight {
+    border: 1px solid var(--border-subtle);
+  }
+  .mcb-story .highlight--accent::before { display: none; }
+
+  .mcb-model-browser {
+    margin-top: 18px;
+    min-width: 0;
+  }
+  .mcb-model-browser__eyebrow {
+    color: var(--accent-blue);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 720;
+    letter-spacing: .04em;
+  }
+  .mcb-model-browser__heading h4 {
+    margin: 6px 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 760;
+    letter-spacing: -.025em;
+    line-height: 1.3;
+    color: var(--ink-display);
+  }
+  .mcb-model-browser__heading p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+  .mcb-list-filters {
+    display: inline-flex;
+    max-width: 100%;
+    gap: 3px;
+    padding: 3px;
+    margin: 12px 0;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    background: var(--surface-subtle);
+  }
+  .mcb-list-filters button {
+    min-width: 57px;
+    min-height: var(--touch-target-min);
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 690;
+    cursor: pointer;
+  }
+  .mcb-list-filters button[aria-pressed='true'] {
+    color: var(--accent-blue-dark);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+  .mcb-model-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+    min-width: 0;
+  }
+  .mcb-model-cards :global(.mcb-model-entry) { min-width: 0; }
+  .mcb-model-cards :global(.mcb-model-card) {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 96px;
+    padding: 14px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    color: var(--ink-display);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--duration-fast) ease, background var(--duration-fast) ease;
+  }
+  .mcb-model-cards :global(.mcb-model-card[aria-pressed='true']) {
+    border-color: var(--accent-blue);
+    background: color-mix(in srgb, var(--accent-blue) 3%, var(--surface-card));
+  }
+  .mcb-model-cards :global(.mcb-model-card:focus-visible) {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+  .mcb-model-cards :global(.mcb-model-card__top) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 9px;
+    width: 100%;
+  }
+  .mcb-model-cards :global(.mcb-model-card__top strong) {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-body-sm);
+    font-weight: 720;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+  .mcb-model-cards :global(.mcb-model-card__runtime) {
+    flex: 0 0 auto;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.35;
+  }
+  .mcb-model-cards :global(.mcb-model-card__metrics) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin-top: auto;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+  .mcb-model-cards :global(.mcb-model-card__metrics span:first-child) {
+    color: var(--ink-display);
+    font-weight: 700;
+  }
+  .mcb-show-all {
+    width: 100%;
+    min-height: var(--touch-target-min);
+    padding: 11px;
+    margin-top: 10px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: 730;
+    cursor: pointer;
+  }
+  .mcb-show-all[hidden] { display: none; }
+
+  .mcb-chart-details, .mcb-method-details {
+    margin-top: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+  }
+  .mcb-chart-details > summary, .mcb-method-details > summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    min-height: 58px;
+    padding: 12px 15px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .mcb-chart-details > summary::-webkit-details-marker,
+  .mcb-method-details > summary::-webkit-details-marker { display: none; }
+  .mcb-chart-details > summary:focus-visible,
+  .mcb-method-details > summary:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: -3px;
+  }
+  .mcb-chart-details > summary strong, .mcb-method-details > summary strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-body-sm);
+    font-weight: 720;
+    color: var(--ink-display);
+  }
+  .mcb-chart-details > summary small, .mcb-method-details > summary small {
+    display: block;
+    margin-top: 3px;
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.35;
+  }
+  .mcb-chart-details > summary > span:last-child,
+  .mcb-method-details > summary > span:last-child {
+    flex: 0 0 auto;
+    font-size: 22px;
+    color: var(--accent-blue);
+  }
+  .mcb-chart-details[open] > summary > span:last-child,
+  .mcb-method-details[open] > summary > span:last-child {
+    transform: rotate(45deg);
+  }
+  .mcb-chart-details > .benchmark-story { padding: 0 12px 13px; }
+  .mcb-method-details__body {
+    padding: 0 15px 15px;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+  .mcb-method-details__body p { margin: 10px 0 0; }
+
+  @media (max-width: 680px) {
+    .experiment-index-heading, .experiment-selector-wrap { display: none; }
+    .experiment-mobile-chooser {
+      display: block;
+      margin-bottom: 14px;
+      font-family: var(--font-body);
+    }
+    .experiment-mobile-chooser label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--accent-blue);
+      font-family: var(--font-display);
+      font-size: var(--text-caption);
+      font-weight: 730;
+      letter-spacing: .04em;
+    }
+    .experiment-mobile-chooser select {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      min-height: 48px;
+      padding: 10px 36px 10px 13px;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      background: var(--surface-card);
+      color: var(--ink-display);
+      font-family: var(--font-display);
+      font-size: var(--text-body-sm);
+      font-weight: 690;
+      text-overflow: ellipsis;
+      cursor: pointer;
+    }
+    .experiment-mobile-chooser p {
+      margin: 6px 0 0;
+      color: var(--ink-subtle);
+      font-size: var(--text-caption);
+      line-height: 1.4;
+    }
+
+    .evidence-panel {
+      border: 0;
+      border-radius: 0;
+      overflow: visible;
+      background: transparent;
+      box-shadow: none;
+    }
+    .evidence-panel__result {
+      padding: 0;
+    }
+    .evidence-panel__header h3 {
+      font-size: clamp(1.3rem, 5vw, 1.65rem);
+      line-height: 1.22;
+    }
+    .evidence-panel__eyebrow {
+      font-size: var(--text-caption);
+      letter-spacing: .02em;
+    }
+    .evidence-panel__header p {
+      font-size: var(--text-body-sm);
+      line-height: 1.5;
+    }
+    .evidence-takeaway {
+      display: block;
+      margin-top: 14px;
+      padding: 0 0 13px;
+      border: 0;
+      border-bottom: 1px solid var(--border-medium);
+      border-radius: 0;
+      background: transparent;
+    }
+    .evidence-takeaway > span {
+      color: var(--accent-blue-dark);
+      font-size: var(--text-caption);
+    }
+    .evidence-takeaway strong {
+      margin-top: 5px;
+      font-size: var(--text-body);
+      line-height: 1.45;
+    }
+    .evidence-takeaway p {
+      font-size: var(--text-caption);
+      line-height: 1.48;
+    }
+    .run-summary { margin-top: 13px; }
+    .run-summary > span { padding: 9px 11px; }
+    .run-summary > span:nth-child(n+3) {
+      padding: 2px 0;
+      border: none;
+      background: transparent;
+      color: var(--ink-subtle);
+    }
+    .mcb-story .benchmark-highlights {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 15px;
+    }
+    .mcb-story .highlight { padding: 11px; }
+    .mcb-story .highlight:last-child { grid-column: 1/-1; }
+    .mcb-story .highlight strong { font-size: clamp(1.12rem, 4.7vw, 1.36rem); }
+    .mcb-model-browser { margin-top: 22px; }
+    .mcb-model-browser__heading h4 { font-size: 1.125rem; }
+    .mcb-model-cards { grid-template-columns: 1fr; gap: 8px; }
+    .mcb-model-cards :global(.mcb-model-card) { min-height: 83px; padding: 12px; gap: 8px; }
+    .mcb-model-cards :global(.mcb-model-card__top) { flex-wrap: nowrap; }
+    .mcb-model-cards :global(.mcb-model-card__metrics) {
+      display: flex;
+      justify-content: flex-start;
+      gap: 8px 18px;
+    }
+    .mcb-chart-details { margin-top: 18px; }
+    .mcb-chart-details .performance-plot {
+      padding: 11px 7px 10px;
+      border: 0;
+      box-shadow: none;
+    }
+    .mcb-chart-details .plot-toolbar { display: none; }
+    .mcb-chart-details .plot-svg { min-height: 0; }
+    .mcb-chart-details .plot-heading__note { font-size: var(--text-caption); }
+    .mcb-chart-details .plot-selection { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mcb-model-cards :global(.mcb-model-card) { transition: none; }
   }
 </style>

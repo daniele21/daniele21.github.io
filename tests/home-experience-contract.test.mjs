@@ -218,3 +218,53 @@ test('TEST is a mobile-first gallery of actual project assets and product value'
     assert.ok(data.includes(headline), 'Missing product benefit: ' + headline);
   }
 });
+
+
+test('MEASURE is published-first and preserves all evidence provenance on mobile', () => {
+  const stage = read('src/components/landing/EvidenceStage.astro');
+  const explorer = read('src/components/landing/ExperimentResultsExplorer.astro');
+  const data = read('src/content/locales/en/landing.ts');
+
+  assert.match(stage, /<StageRail number=\{4\} side="right" isFinal \/>/);
+  assert.match(stage, /<ExperimentResultsExplorer tracks=\{experiments\.tracks \|\| \[\]\} \/>/);
+  assert.match(stage, /--font-display/);
+  assert.match(stage, /--text-h2/);
+  assert.match(stage, /--touch-target-min/);
+
+  assert.match(explorer, /sortedTracks = \[\.\.\.tracks\]\.sort/);
+  assert.match(explorer, /BROWSE THE EVIDENCE/);
+  assert.match(explorer, /published<\/span>/);
+  assert.match(explorer, /data-published=\{Boolean\(track\.resultUrl\)/);
+  assert.match(explorer, /Not published yet/);
+  assert.match(explorer, /experiment-tab__availability/);
+  assert.match(explorer, /@media \(max-width: 680px\)/);
+  assert.match(explorer, /data-experiment-mobile-select/);
+  assert.match(explorer, /CHOOSE A BENCHMARK/);
+  assert.match(explorer, /mobileChooser\.addEventListener\('change'/);
+  assert.match(explorer, /@media \(max-width: 680px\)/);
+  assert.match(explorer, /\.experiment-selector-wrap \{ display: none; \}/);
+  assert.match(explorer, /class="mcb-model-cards" role="list" data-mcb-model-cards/);
+  assert.match(explorer, /const renderMcbCards = \(points\) =>/);
+  assert.match(explorer, /data-mcb-show-all/);
+  assert.match(explorer, /class="mcb-chart-details" data-mcb-chart-details open/);
+  assert.match(explorer, /class="mcb-method-details"/);
+  assert.match(explorer, /chartDetails\.open = !window\.matchMedia/);
+  assert.match(explorer, /\.evidence-panel__result\s*\{\s*padding: 0;/);
+  assert.match(explorer, /data-performance-plot/);
+  assert.match(explorer, /class="plot-canvas" role="region" tabindex="0"/);
+  assert.match(explorer, /class="rg-plot-canvas" role="region" tabindex="0"/);
+  assert.match(explorer, /data-rg-matrix-scroll tabindex="0"/);
+  assert.match(explorer, /\.plot-canvas \.plot-svg\s*\{[\s\S]*?width: 620px/);
+  assert.match(explorer, /var\(--font-display\)/);
+  assert.match(explorer, /var\(--font-body\)/);
+  assert.match(explorer, /var\(--text-caption\)/);
+
+  // No synthetic summary numbers: actual data still resolves at runtime.
+  assert.match(data, /id: 'model-capability'/);
+  assert.match(data, /id: 'jev-vs-llm-routing'/);
+  assert.match(data, /id: 'redactguard-local-anonymization'/);
+  assert.match(data, /id: 'diarization'/);
+  assert.match(explorer, /SOURCE UNAVAILABLE/);
+  assert.match(explorer, /NO PUBLIC SNAPSHOT YET/);
+  assert.match(explorer, /No fallback or invented performance values are shown/);
+});

@@ -91,9 +91,9 @@ const experiments = measureStage.systems[0];
     margin: 0;
     color: var(--ink-display);
     font-family: var(--font-display);
-    font-size: clamp(2rem, 2.9vw, 3rem);
-    font-weight: 850;
-    letter-spacing: -0.048em;
+    font-size: clamp(1.8rem, 2.9vw, 2.75rem);
+    font-weight: 760;
+    letter-spacing: -0.032em;
     line-height: 1.05;
   }
 
@@ -173,13 +173,27 @@ const experiments = measureStage.systems[0];
   }
 
   @media (max-width: 540px) {
-    .evidence-layout {
-      padding-left: 42px;
-      padding-right: 4px;
+    .evidence-stage { padding: 43px 0 64px; }
+
+    /* Reserve only the continuous path gutter, not a second card gutter. */
+    .evidence-shell :global(.stage-rail) {
+      left: 0;
+      right: auto;
     }
 
+    .evidence-layout {
+      gap: 19px;
+      padding-left: 28px;
+      padding-right: 0;
+    }
+
+    .evidence-heading { font-size: var(--text-h2); line-height: 1.16; }
+    .evidence-intro { font-size: var(--text-body-sm); line-height: 1.5; }
+
     .experiments-toolbar {
-      align-items: flex-start;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
     .experiments-toolbar__meta,
@@ -188,7 +202,8 @@ const experiments = measureStage.systems[0];
     }
 
     .experiments-toolbar a {
-      min-height: auto;
+      min-height: var(--touch-target-min);
+      padding: 7px 0 7px 10px;
     }
   }
 </style>

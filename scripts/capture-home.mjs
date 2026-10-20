@@ -11,6 +11,20 @@ const viewports = [
   { name: 'mobile-320', width: 320, height: 700 },
 ];
 
+// Exercise the actual control presented at each viewport (native select on phones).
+const selectExperiment = async (page, id) => {
+  const tab = page.locator('[data-experiment-tab][data-track-id="' + id + '"]');
+  if (await tab.isVisible()) {
+    await tab.click();
+    return;
+  }
+  const index = await tab.evaluate((element) =>
+    [...document.querySelectorAll('[data-experiment-tab]')].indexOf(element)
+  );
+  if (index < 0) throw new Error('Missing experiment: ' + id);
+  await page.locator('[data-experiment-mobile-select]').selectOption(String(index));
+};
+
 const selectorFor = (element) => {
   const tag = element.tagName.toLowerCase();
   if (element.id) return `${tag}#${element.id}`;
@@ -337,6 +351,131 @@ try {
     JSON.stringify(testGalleryChecks, null, 2),
   );
 
+  // MEASURE: editorial phone layout, real-data model comparisons and honest empty states.
+  const measureChecks = [];
+  for (const viewport of [
+    { name: 'mobile-320', width: 320, height: 700 },
+    { name: 'mobile-390', width: 390, height: 844 },
+    { name: 'tablet-768', width: 768, height: 1024 },
+    { name: 'desktop-1440', width: 1440, height: 1100 },
+  ]) {
+    for (const theme of ['light', 'dark']) {
+      const context = await browser.newContext({
+        viewport: { width: viewport.width, height: viewport.height },
+        reducedMotion: 'reduce',
+      });
+      const page = await context.newPage();
+      try {
+        await page.goto(baseUrl + '/?theme=' + theme, { waitUntil: 'networkidle' });
+        await page.evaluate(() => document.fonts?.ready);
+        const stage = page.locator('#evidence .experiment-explorer');
+        await stage.scrollIntoViewIfNeeded();
+        const diagnostics = await page.evaluate(() => {
+          const root = document.querySelector('#evidence .experiment-explorer');
+          const tabs = [...root.querySelectorAll('[data-experiment-tab]')];
+          const chooser = root.querySelector('[data-experiment-mobile-select]');
+          const story = root.querySelector('[data-mcb-story]');
+          const details = root.querySelector('[data-mcb-chart-details]');
+          const takeaway = root.querySelector('[data-mcb-takeaway]');
+          const summary = root.querySelector('.run-summary');
+          const svg = root.querySelector('[data-performance-plot]');
+          const titles = [...root.querySelectorAll('h3, h4, .experiment-mobile-chooser label')];
+          return {
+            theme: document.documentElement.dataset.theme,
+            pageOverflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+            selectedTab: tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.dataset.trackId,
+            publishedCount: tabs.filter((t) => t.dataset.published === 'true').length,
+            unpublishedCount: tabs.filter((t) => t.dataset.published === 'false').length,
+            mobileChooserVisible: chooser ? getComputedStyle(chooser).display !== 'none' : false,
+            chooserHeight: chooser?.getBoundingClientRect().height || 0,
+            storyVisible: story ? !story.hidden && !root.querySelector('[data-evidence-result]').hidden : false,
+            chartOpen: Boolean(details?.open),
+            chartKeyboardFocusable: Boolean(root.querySelector('.plot-canvas[tabindex="0"]')),
+            chartMinWidth: svg ? getComputedStyle(svg).minWidth : '',
+            evidenceWidth: root.getBoundingClientRect().width,
+            modelCardCount: root.querySelectorAll('[data-mcb-model-cards] [data-mcb-card]').length,
+            summaryDisplay: getComputedStyle(summary).display,
+            headingFamily: getComputedStyle(root.querySelector('.evidence-panel__header h3')).fontFamily,
+            fonts: titles.filter((t) => t.getBoundingClientRect().height > 0).map((t) => Number.parseFloat(getComputedStyle(t).fontSize)),
+            takeawayBeforeModels: Boolean(takeaway?.compareDocumentPosition(story) & Node.DOCUMENT_POSITION_FOLLOWING),
+          };
+        });
+
+        await page.locator('#evidence').screenshot({
+          path: path.join(outputDir, 'measure__' + viewport.name + '__' + theme + '.png'),
+        });
+
+        const isMobile = viewport.width <= 390;
+        let filtersWork = true;
+        let showAllWorks = true;
+        if (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 3) {
+          filtersWork = false; // Regression: initial list must be compact.
+        } else if (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 0) {
+          const localFilter = page.locator('.mcb-list-filters [data-mcb-filter="local"]');
+          await localFilter.click();
+          filtersWork = (await localFilter.getAttribute('aria-pressed')) === 'true';
+          const showAll = page.locator('[data-mcb-show-all]');
+          if (await showAll.isVisible()) {
+            await showAll.click();
+            showAllWorks = (await showAll.getAttribute('aria-expanded')) === 'true';
+          }
+          await page.locator('[data-mcb-chart-details] summary').click();
+          const expanded = await page.locator('[data-mcb-chart-details]').evaluate((el) => el.open);
+          filtersWork = filtersWork && expanded;
+        }
+
+        if (isMobile) {
+          await page.locator('#evidence [data-experiment-mobile-select]').selectOption({ label: 'VLM · Not published' }).catch(async () => {
+            const option = await page.locator('#evidence [data-experiment-mobile-select] option').evaluateAll(
+              (options) => options.find((option) => option.textContent.includes('VLM'))?.value
+            );
+            if (option !== undefined) await page.locator('#evidence [data-experiment-mobile-select]').selectOption(option);
+          });
+        } else {
+          await page.locator('#evidence [data-track-id="vlm-capability"]').click();
+        }
+        const unpublished = await page.evaluate(() => {
+          const root = document.querySelector('#evidence .experiment-explorer');
+          return {
+            selected: root.querySelector('[aria-selected="true"]')?.dataset.trackId,
+            emptyVisible: !root.querySelector('[data-evidence-empty]').hidden,
+            resultHidden: root.querySelector('[data-evidence-result]').hidden,
+          };
+        });
+
+        const check = { viewport: viewport.name, ...diagnostics, filtersWork, showAllWorks, unpublished };
+        measureChecks.push(check);
+        if (
+          diagnostics.theme !== theme ||
+          diagnostics.pageOverflowPx > 0 ||
+          diagnostics.publishedCount !== 3 ||
+          diagnostics.unpublishedCount !== 3 ||
+          diagnostics.fonts.some((size) => size < 14) ||
+          !diagnostics.chartKeyboardFocusable ||
+          !diagnostics.headingFamily.includes('Plus Jakarta Sans') ||
+          !diagnostics.takeawayBeforeModels ||
+          (isMobile && (!diagnostics.mobileChooserVisible || diagnostics.chooserHeight < 44)) ||
+          (isMobile && diagnostics.evidenceWidth < viewport.width * 0.72) ||
+          (isMobile && diagnostics.chartOpen) ||
+          (isMobile && Number.parseFloat(diagnostics.chartMinWidth) < 620) ||
+          (isMobile && diagnostics.summaryDisplay !== 'grid') ||
+          (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount === 0) ||
+          !filtersWork ||
+          !showAllWorks ||
+          unpublished.selected !== 'vlm-capability' ||
+          !unpublished.emptyVisible ||
+          !unpublished.resultHidden
+        ) {
+          throw new Error('MEASURE editorial mobile regression: ' + JSON.stringify(check));
+        }
+      } finally {
+        await page.close();
+        await context.close();
+      }
+    }
+  }
+  await fs.writeFile(path.join(outputDir, 'measure-mobile-check.json'), JSON.stringify(measureChecks, null, 2));
+
   // The BUILD redesign must be inspected in both themes, independently of
   // the whole-page journey animation. Element captures make visual PR review
   // practical without changing how navigation or the method path works.
@@ -509,7 +648,7 @@ try {
       }),
     );
     await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
-    await page.locator('[data-track-id="jev-vs-llm-routing"]').click();
+    await selectExperiment(page, 'jev-vs-llm-routing');
     await page.locator('[data-jev-mcb-rows] .jev-mcb-row').first().waitFor({ state: 'visible' });
 
     const bridge = await page.evaluate(() => {
@@ -655,7 +794,7 @@ try {
       }),
     );
     await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
-    await page.locator('[data-track-id="redactguard-local-anonymization"]').click();
+    await selectExperiment(page, 'redactguard-local-anonymization');
     await page.locator('[data-rg-dataset="realistic"]').waitFor({ state: 'visible' });
 
     const before = await page.evaluate(() => ({
@@ -734,7 +873,7 @@ try {
       }),
     );
     await measuredPage.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
-    await measuredPage.locator('[data-track-id="redactguard-local-anonymization"]').click();
+    await selectExperiment(measuredPage, 'redactguard-local-anonymization');
     // This fixture has no Challenge run. Explicitly choose Healthcare
     // before asserting measured insights, rather than assuming a winner exists.
     await measuredPage.locator('[data-rg-dataset="healthcare"]').waitFor({ state: 'visible' });
