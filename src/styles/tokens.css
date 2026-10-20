@@ -69,6 +69,7 @@
   --text-section-title-mobile: clamp(1.6rem, 6.8vw, 2.1rem);
   --text-section-intro: clamp(1rem, 1.25vw, 1.12rem);
   --text-card-title: clamp(1.2rem, 1.75vw, 1.5rem);
+  --text-feature-title: clamp(1.45rem, 2.6vw, 2.1rem);
   --text-card-body: var(--text-body-sm);
   --text-kpi: clamp(1.15rem, 2vw, 1.55rem);
 
