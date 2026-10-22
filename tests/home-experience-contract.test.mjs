@@ -245,7 +245,7 @@ test('MEASURE is published-first and preserves all evidence provenance on mobile
   assert.match(explorer, /data-mcb-model-cards/);
   assert.match(explorer, /class="mcb-cards-viewport" role="region" tabindex="0"/);
   assert.match(explorer, /\.experiment-selector\s*\{[\s\S]*?scroll-snap-type: x mandatory/);
-  assert.match(explorer, /class="mcb-highlights-viewport" role="region" tabindex="0"/);
+  assert.match(explorer, /class="mcb-highlights-viewport" aria-label="Benchmark highlights"/);
   assert.match(explorer, /\.mcb-highlights-viewport\s*\{[\s\S]*?scroll-snap-type: x mandatory/);
   assert.match(explorer, /\.mcb-cards-viewport\s*\{[\s\S]*?scroll-snap-type: x mandatory/);
   assert.match(explorer, /\.run-summary\s*\{[\s\S]*?scroll-snap-type: x proximity/);
