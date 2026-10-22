@@ -413,7 +413,7 @@ test('MEASURE communicates the source-backed finding before scoped results and c
 
 test('header switches to compact navigation before desktop links collide', () => {
   const header = read('src/components/layout/SiteHeader.astro');
-  assert.match(header, /@media \(max-width: 1440px\)/);
+  assert.match(header, /@media \(max-width: 1700px\)/);
   assert.match(header, /\.menu-toggle \{ display: block; \}/);
   assert.match(header, /\.site-nav\s*\{\s*position: absolute;/);
   assert.match(header, /aria-expanded="false"/);
