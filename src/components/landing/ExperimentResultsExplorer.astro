@@ -324,7 +324,7 @@ const selectorLabelFor = (track: Track) => {
             <p>Two numbers that put the finding in context</p>
           </div>
         </div>
-        <div class="mcb-highlights-viewport" role="region" tabindex="0" aria-label="Swipe through benchmark highlights">
+        <div class="mcb-highlights-viewport" aria-label="Benchmark highlights">
           <div class="benchmark-highlights" aria-label="Benchmark highlights">
           <div class="highlight highlight--local" data-highlight-role="best-local">
             <span>BEST LOCAL QUALITY</span>
@@ -349,7 +349,7 @@ const selectorLabelFor = (track: Track) => {
               <strong data-fastest>—</strong>
               <span data-fastest-model></span>
             </div>
-        <section class="mcb-model-browser" aria-label="Compare measured models">
+            <section class="mcb-model-browser" aria-label="Compare measured models">
           <div class="mcb-model-browser__heading">
             <span class="mcb-model-browser__eyebrow">MODEL COMPARISON</span>
             <h4>Explore measured models</h4>
@@ -365,8 +365,8 @@ const selectorLabelFor = (track: Track) => {
             <div class="mcb-model-cards" role="list" data-mcb-model-cards aria-label="Published model scores ranked by aggregate quality"></div>
           </div>
           <button type="button" class="mcb-show-all" data-mcb-show-all hidden aria-expanded="false">View all measured models</button>
-        </section>
-        <details class="mcb-chart-details" data-mcb-chart-details>
+            </section>
+            <details class="mcb-chart-details" data-mcb-chart-details>
           <summary><span><strong>Performance chart & model inspection</strong><small>Quality vs median latency from the published overview</small></span><span aria-hidden="true">+</span></summary>
           <div class="benchmark-story">
             <div class="performance-plot">
@@ -412,14 +412,14 @@ const selectorLabelFor = (track: Track) => {
           </div>
         </div>
           </div>
-        </details>
+            </details>
           </div>
         </details>
         <details class="mcb-method-details">
           <summary><span><strong>Methods & limitations</strong><small>Scope, caveats and source details</small></span><span aria-hidden="true">+</span></summary>
           <div class="mcb-method-details__body">
-        <div class="mcb-scope-heading">EVALUATION SCOPE <span>Context, not performance</span></div>
-        <div class="run-summary" data-mcb-scope aria-label="Swipe through benchmark scope metrics" role="region" tabindex="0">
+            <div class="mcb-scope-heading">EVALUATION SCOPE <span>Context, not performance</span></div>
+            <div class="run-summary" data-mcb-scope aria-label="Swipe through benchmark scope metrics" role="region" tabindex="0">
           <span><strong data-model-count>—</strong> models</span>
           <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
           <span><strong data-dataset>—</strong> <span data-scope-label>dataset</span></span>
