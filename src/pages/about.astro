@@ -4,41 +4,10 @@ import { aboutData } from '../content/locales/en/about';
 import LinkedInIcon from '../components/icons/LinkedInIcon.astro';
 import GitHubIcon from '../components/icons/GitHubIcon.astro';
 
-const { profile, now, experience, cta } = aboutData;
+const { profile, hero, story, impact, projects, principles, beyond, direction, cta } = aboutData;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
 const asset = (path: string) => `${baseUrl}/${path.replace(/^\//, '')}`;
-const selectedRoles = experience.roles.slice(0, 3);
-const currentFocus = now.items.slice(0, 3);
-
-const workAreas = [
-  {
-    title: 'GenAI systems',
-    body: 'LLM evaluation, retrieval, integration and production architecture - starting from the product problem rather than a model catalogue.',
-  },
-  {
-    title: 'Local & on-device AI',
-    body: 'Understanding what can move from cloud APIs to infrastructure and devices we control, and where that trade-off actually creates value.',
-  },
-  {
-    title: 'AI engineering & strategy',
-    body: 'Connecting technical choices with privacy, performance, operating constraints and the decisions teams need to make.',
-  },
-];
-
-const proofPoints = [
-  {
-    title: 'Enterprise AI delivery',
-    body: `I lead and design AI initiatives in complex production environments at ${profile.affiliation}.`,
-  },
-  {
-    title: 'Hands-on systems',
-    body: 'I build the infrastructure and proving grounds myself: local inference, Android runtimes, speech, product applications and measurement tooling.',
-  },
-  {
-    title: 'Public technical work',
-    body: 'I use stAI tuned, GitHub and LinkedIn to document architecture trade-offs, experiments and what survives contact with real systems.',
-  },
-];
+const route = (href: string) => href.startsWith('/') ? `${baseUrl}${href}` : href;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -48,63 +17,33 @@ const jsonLd = {
   worksFor: { '@type': 'Organization', name: profile.affiliation },
   alumniOf: { '@type': 'EducationalOrganization', name: 'Politecnico di Milano' },
   url: 'https://daniele21.github.io/about',
-  sameAs: [profile.socialLinks.linkedin, profile.socialLinks.github],
-  knowsAbout: ['Generative AI Systems', 'Local AI', 'On-device inference', 'AI Architecture', 'AI Strategy'],
+  sameAs: [profile.socialLinks.linkedin, profile.socialLinks.github, profile.socialLinks.staituned],
+  knowsAbout: ['AI Strategy', 'Generative AI', 'Applied Machine Learning', 'Local AI', 'On-device inference', 'AI Product Engineering'],
 };
 ---
 
-<BaseLayout
-  title="About Daniele Moltisanti - GenAI, Local AI & AI Architecture"
-  description="AI engineer and strategy lead working on GenAI systems, Local AI and evidence-led architecture decisions across Local, Hybrid and Cloud."
-  jsonLd={jsonLd}
->
+<BaseLayout title={aboutData.metaTitle} description={aboutData.metaDescription} jsonLd={jsonLd}>
   <div class="about-page">
     <div class="about-shell">
       <section class="about-hero" aria-labelledby="about-title">
         <div class="hero-copy">
-          <h1 id="about-title">I work where GenAI architecture, product constraints and hands-on engineering meet.</h1>
+          <p class="eyebrow">{hero.eyebrow}</p>
+          <h1 id="about-title"><span>{hero.titleLead}</span> {hero.titleClose}</h1>
           <p class="hero-lead">
-            I'm <strong>{profile.name}</strong>, an AI engineer and strategy lead based in {profile.location}. I work on GenAI systems broadly, with a particular focus on Local and on-device AI - and on deciding what should run Local, Hybrid or Cloud.
+            I'm <strong>{profile.name}</strong>, based in {profile.location}. {hero.lead}
           </p>
-          <div class="hero-meta">
+          <div class="hero-meta" aria-label="Current role">
             <span>{profile.headline}</span>
-            <span aria-hidden="true">·</span>
+            <span class="meta-divider" aria-hidden="true">·</span>
             <span>{profile.affiliation}</span>
           </div>
           <div class="hero-actions">
-            <a
-              href={profile.socialLinks.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="primary-button"
-            >
+            <a class="primary-button" href="#projects">Explore what I'm building <span aria-hidden="true">↓</span></a>
+            <a class="hero-text-link" href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
               Connect on LinkedIn <span aria-hidden="true">↗</span>
             </a>
-            <div class="hero-social-links" aria-label="Social profiles">
-              <a
-                href={profile.socialLinks.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="hero-social-btn"
-                aria-label="LinkedIn profile"
-                title="LinkedIn"
-              >
-                <LinkedInIcon size={18} />
-              </a>
-              <a
-                href={profile.socialLinks.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="hero-social-btn"
-                aria-label="GitHub profile"
-                title="GitHub"
-              >
-                <GitHubIcon size={18} />
-              </a>
-            </div>
           </div>
         </div>
-
         <div class="hero-portrait-wrap">
           <img
             src={asset(profile.portraitPath)}
@@ -117,120 +56,128 @@ const jsonLd = {
         </div>
       </section>
 
-      <section class="about-section" aria-labelledby="work-title">
+      <section class="about-section story-section" aria-labelledby="story-title">
         <header class="section-heading">
-          <h2 id="work-title">What I work on</h2>
-          <p>Three areas, one recurring question: what architecture makes this AI workload useful, controllable and sustainable?</p>
-        </header>
-        <div class="row-list">
-          {workAreas.map((area) => (
-            <article class="info-row">
-              <h3>{area.title}</h3>
-              <p>{area.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section class="about-section proof-section" aria-labelledby="proof-title">
-        <header class="section-heading">
-          <h2 id="proof-title">Why my perspective may be useful</h2>
-          <p>The architectural point of view comes from building systems, operating inside enterprise constraints and documenting the trade-offs in public.</p>
-        </header>
-        <div class="proof-grid">
-          {proofPoints.map((point) => (
-            <article class="proof-card">
-              <h3>{point.title}</h3>
-              <p>{point.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section class="about-section" aria-labelledby="now-title">
-        <header class="section-heading">
-          <h2 id="now-title">What I'm exploring now</h2>
-          <p>Current technical questions I’m using to push the Local / Hybrid / Cloud boundary.</p>
-        </header>
-        <div class="current-list">
-          {currentFocus.map((item) => (
-            <article class="current-row">
-              <div>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </div>
-              <span>{item.status}</span>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section class="about-section" aria-labelledby="track-title">
-        <header class="section-heading">
-          <h2 id="track-title">Selected track record</h2>
-          <p>Enough context to understand where the perspective comes from. LinkedIn has the full chronology.</p>
-        </header>
-        <div class="experience-list">
-          {selectedRoles.map((role) => (
-            <article class="experience-row">
-              <div class="experience-meta">
-                <strong>{role.company}</strong>
-                <span>{role.period}</span>
-              </div>
-              <div>
-                <h3>{role.role}</h3>
-                <p>{role.description}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div class="track-links">
-          <div class="track-social-links" aria-label="Social profiles">
-            <a
-              href={profile.socialLinks.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="track-social-btn"
-              aria-label="LinkedIn profile"
-              title="LinkedIn"
-            >
-              <LinkedInIcon size={18} />
-            </a>
-            <a
-              href={profile.socialLinks.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="track-social-btn"
-              aria-label="GitHub profile"
-              title="GitHub"
-            >
-              <GitHubIcon size={18} />
-            </a>
+          <div>
+            <p class="eyebrow">{story.kicker}</p>
+            <h2 id="story-title">{story.title}</h2>
           </div>
+          <p>My perspective comes from working with AI in large organizations and building small, testable systems on my own.</p>
+        </header>
+        <div class="story-layout">
+          <div class="story-copy">
+            {story.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+          <aside class="story-thesis" aria-label="What drives my work">
+            <span class="thesis-marker" aria-hidden="true">↗</span>
+            <p>{story.emphasis}</p>
+            <span class="thesis-attribution">Strategy, engineering and product</span>
+          </aside>
         </div>
+      </section>
+
+      <section class="about-section impact-section" aria-labelledby="impact-title">
+        <header class="section-heading">
+          <div>
+            <p class="eyebrow">{impact.kicker}</p>
+            <h2 id="impact-title">{impact.title}</h2>
+          </div>
+          <p>{impact.intro}</p>
+        </header>
+        <div class="impact-grid" aria-label="Selected professional outcomes">
+          {impact.metrics.map((metric) => (
+            <article class="impact-item">
+              <strong class="metric-value">{metric.value}</strong>
+              <h3>{metric.label}</h3>
+              <p>{metric.context}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="about-section projects-section" id="projects" aria-labelledby="projects-title">
+        <header class="section-heading">
+          <div>
+            <p class="eyebrow">{projects.kicker}</p>
+            <h2 id="projects-title">{projects.title}</h2>
+          </div>
+          <p>{projects.intro}</p>
+        </header>
+        <div class="project-grid">
+          {projects.items.map((project, index) => (
+            <a class="project-card" href={route(project.href)}>
+              <div class="project-card-top">
+                <span class="project-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                <span class="project-category">{project.category}</span>
+              </div>
+              <h3>{project.name}</h3>
+              <span class="project-purpose">{project.purpose}</span>
+              <p>{project.description}</p>
+              <span class="project-visit">Explore project <span aria-hidden="true">↗</span></span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="about-section principles-section" aria-labelledby="principles-title">
+        <header class="section-heading">
+          <div>
+            <p class="eyebrow">{principles.kicker}</p>
+            <h2 id="principles-title">{principles.title}</h2>
+          </div>
+          <p>{principles.intro}</p>
+        </header>
+        <div class="principles-list">
+          {principles.items.map((principle, index) => (
+            <article class="principle-row">
+              <span class="principle-number" aria-hidden="true">0{index + 1}</span>
+              <h3>{principle.title}</h3>
+              <p>{principle.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="about-section beyond-section" aria-labelledby="beyond-title">
+        <header class="section-heading">
+          <div>
+            <p class="eyebrow">{beyond.kicker}</p>
+            <h2 id="beyond-title">{beyond.title}</h2>
+          </div>
+          <p>Sharing ideas, reviewing other people's work and learning in public are part of how I improve my own.</p>
+        </header>
+        <div class="beyond-grid">
+          {beyond.items.map((item) => (
+            <article class="beyond-card">
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              {item.href && item.linkLabel && (
+                <a href={item.href} target="_blank" rel="noopener noreferrer">
+                  {item.linkLabel} <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="direction-section" aria-labelledby="direction-title">
+        <p class="eyebrow">{direction.kicker}</p>
+        <h2 id="direction-title">{direction.title}</h2>
+        <p>{direction.description}</p>
       </section>
 
       <section class="about-cta" aria-labelledby="about-cta-title">
-        <div>
+        <div class="about-cta-copy">
           <h2 id="about-cta-title">{cta.title}</h2>
           <p>{cta.description}</p>
         </div>
         <div class="about-cta-actions">
-          <a
-            href={cta.primaryActionHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="primary-button"
-          >
-            {cta.primaryActionLabel}
+          <a class="primary-button" href={cta.primaryActionHref} target="_blank" rel="noopener noreferrer">
+            <LinkedInIcon size={17} /> {cta.primaryActionLabel}
           </a>
-          <a
-            href={cta.secondaryActionHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="secondary-button"
-          >
-            {cta.secondaryActionLabel}
+          <a class="secondary-button" href={cta.secondaryActionHref} target="_blank" rel="noopener noreferrer">
+            <GitHubIcon size={17} /> {cta.secondaryActionLabel}
           </a>
         </div>
       </section>
@@ -241,7 +188,7 @@ const jsonLd = {
 <style>
   .about-page {
     background: var(--surface-canvas);
-    padding: clamp(28px, 4vw, 48px) 0 clamp(72px, 9vw, 118px);
+    padding: clamp(28px, 4vw, 48px) 0 clamp(72px, 9vw, 116px);
   }
 
   .about-shell {
@@ -249,77 +196,88 @@ const jsonLd = {
     margin-inline: auto;
   }
 
+  .eyebrow {
+    margin: 0 0 17px;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 740;
+    line-height: 1.5;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
   .about-hero {
-    min-height: min(680px, calc(100svh - var(--header-height) - 28px));
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(230px, 300px);
-    gap: clamp(44px, 7vw, 90px);
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 285px);
+    gap: clamp(36px, 6vw, 82px);
     align-items: center;
-    padding: clamp(54px, 7vw, 88px) 0;
+    min-height: min(620px, calc(100svh - var(--header-height) - 28px));
+    padding: clamp(48px, 7vw, 88px) 0;
     border-bottom: 1px solid var(--border-medium);
   }
 
+  .hero-copy { min-width: 0; }
+
   .hero-copy h1 {
     max-width: 790px;
-    margin: 0 0 22px;
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 5vw, 4.4rem);
-    line-height: 1.04;
-    letter-spacing: -0.055em;
-    font-weight: 850;
+    margin: 0 0 24px;
     color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 4.7vw, 4.3rem);
+    font-weight: 850;
+    letter-spacing: -0.052em;
+    line-height: 1.07;
     text-wrap: balance;
   }
 
+  .hero-copy h1 span { display: block; }
+
   .hero-lead {
-    max-width: 720px;
+    max-width: 710px;
     margin: 0;
-    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
-    line-height: 1.68;
     color: var(--ink-muted);
+    font-size: clamp(1rem, 1.45vw, 1.15rem);
+    line-height: 1.72;
+    text-wrap: pretty;
   }
 
-  .hero-lead strong {
-    color: var(--ink-display);
-    font-weight: 720;
-  }
+  .hero-lead strong { color: var(--ink-display); font-weight: 720; }
 
   .hero-meta {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
+    align-items: center;
     gap: 7px;
     margin-top: 18px;
-    font-size: 0.8rem;
     color: var(--ink-subtle);
+    font-size: 0.81rem;
+    line-height: 1.5;
   }
 
   .hero-actions {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 28px;
+    align-items: center;
+    gap: 15px 24px;
+    margin-top: 30px;
   }
 
-  .hero-actions button,
-  .about-cta button { cursor: pointer; }
-
-  .secondary-link,
-  .track-links a {
-    color: var(--ink-muted);
+  .hero-text-link {
+    color: var(--ink-display);
+    font-size: 0.88rem;
+    font-weight: 720;
     text-decoration: none;
-    font-size: 0.84rem;
-    font-weight: 680;
+    text-underline-offset: 4px;
   }
 
-  .secondary-link:hover,
-  .track-links a:hover { color: var(--accent-blue-dark); }
+  .hero-text-link:hover,
+  .hero-text-link:focus-visible { color: var(--accent-blue-dark); text-decoration: underline; }
 
   .hero-portrait-wrap {
     overflow: hidden;
     border: 1px solid var(--border-medium);
-    border-radius: clamp(24px, 3vw, 34px);
+    border-radius: clamp(22px, 3vw, 32px);
     background: var(--surface-subtle);
     box-shadow: var(--shadow-card);
   }
@@ -333,162 +291,292 @@ const jsonLd = {
   }
 
   .about-section {
-    padding: clamp(64px, 8vw, 100px) 0;
+    padding: clamp(64px, 7.5vw, 98px) 0;
     border-bottom: 1px solid var(--border-medium);
+    scroll-margin-top: calc(var(--header-height) + 18px);
   }
 
   .section-heading {
     display: grid;
-    grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1fr);
-    gap: clamp(26px, 5vw, 64px);
-    align-items: start;
+    grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1fr);
+    align-items: end;
+    gap: clamp(20px, 4.5vw, 58px);
     margin-bottom: clamp(30px, 4vw, 46px);
   }
 
-  .section-heading h2 {
+  .section-heading .eyebrow { margin-bottom: 11px; }
+
+  .section-heading h2,
+  .direction-section h2 {
+    max-width: 590px;
     margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.8rem, 3vw, 2.65rem);
-    line-height: 1.1;
-    letter-spacing: -0.04em;
-    font-weight: 820;
     color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.95rem, 3.2vw, 2.8rem);
+    font-weight: 830;
+    line-height: 1.12;
+    letter-spacing: -0.041em;
+    text-wrap: balance;
   }
 
   .section-heading > p {
-    max-width: 620px;
-    margin: 3px 0 0;
-    font-size: 0.96rem;
-    line-height: 1.65;
+    margin: 0 0 3px;
     color: var(--ink-muted);
+    font-size: 0.96rem;
+    line-height: 1.7;
+    text-wrap: pretty;
   }
 
-  .row-list,
-  .current-list,
-  .experience-list { border-top: 1px solid var(--border-medium); }
-
-  .info-row,
-  .current-row,
-  .experience-row {
+  .story-layout {
     display: grid;
-    grid-template-columns: minmax(180px, 0.48fr) minmax(0, 1fr);
-    gap: clamp(22px, 4vw, 54px);
-    padding: 21px 0;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr);
+    gap: clamp(28px, 5vw, 68px);
+    align-items: start;
+  }
+
+  .story-copy { display: grid; gap: 18px; }
+
+  .story-copy p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.98rem;
+    line-height: 1.77;
+    text-wrap: pretty;
+  }
+
+  .story-thesis {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 25px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-subtle);
+  }
+
+  .thesis-marker {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    line-height: 1;
+  }
+
+  .story-thesis p {
+    margin: 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.8vw, 1.36rem);
+    font-weight: 725;
+    line-height: 1.43;
+    letter-spacing: -0.02em;
+  }
+
+  .thesis-attribution {
+    color: var(--ink-subtle);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--border-medium);
+  }
+
+  .impact-item {
+    min-width: 0;
+    padding: 28px clamp(18px, 2.6vw, 34px) 12px;
+  }
+
+  .impact-item:first-child { padding-left: 0; }
+  .impact-item + .impact-item { border-left: 1px solid var(--border-subtle); }
+
+  .metric-value {
+    display: block;
+    margin-bottom: 15px;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 5vw, 4.25rem);
+    font-weight: 850;
+    line-height: 1;
+    letter-spacing: -0.065em;
+  }
+
+  .impact-item h3,
+  .principle-row h3,
+  .beyond-card h3 {
+    margin: 0 0 9px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1.04rem;
+    font-weight: 770;
+    line-height: 1.4;
+  }
+
+  .impact-item p,
+  .principle-row p,
+  .beyond-card p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.87rem;
+    line-height: 1.65;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: clamp(22px, 3vw, 30px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    color: inherit;
+    text-decoration: none;
+    transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .project-card:hover,
+  .project-card:focus-visible {
+    transform: translateY(-3px);
+    border-color: var(--accent-blue);
+    box-shadow: var(--shadow-md);
+  }
+
+  .project-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 29px;
+  }
+
+  .project-number {
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+  }
+
+  .project-category {
+    padding: 5px 10px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-subtle);
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+    line-height: 1.3;
+  }
+
+  .project-card h3 {
+    margin: 0 0 4px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.42rem, 2.5vw, 1.88rem);
+    font-weight: 820;
+    letter-spacing: -0.038em;
+    line-height: 1.2;
+  }
+
+  .project-purpose {
+    color: var(--accent-blue-dark);
+    font-size: 0.81rem;
+    font-weight: 725;
+    line-height: 1.5;
+  }
+
+  .project-card p {
+    margin: 14px 0 22px;
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+    line-height: 1.67;
+    text-wrap: pretty;
+  }
+
+  .project-visit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--ink-display);
+    font-size: 0.82rem;
+    font-weight: 750;
+  }
+
+  .project-card:hover .project-visit { color: var(--accent-blue-dark); }
+
+  .principles-list { border-top: 1px solid var(--border-medium); }
+
+  .principle-row {
+    display: grid;
+    grid-template-columns: 52px minmax(190px, 0.85fr) minmax(0, 1.35fr);
+    gap: clamp(14px, 3vw, 35px);
+    align-items: baseline;
+    padding: 25px 0;
     border-bottom: 1px solid var(--border-subtle);
   }
 
-  .info-row h3,
-  .current-row h3,
-  .experience-row h3,
-  .proof-card h3 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1rem;
-    line-height: 1.4;
-    font-weight: 780;
-    color: var(--ink-display);
+  .principle-number {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
   }
 
-  .info-row p,
-  .current-row p,
-  .experience-row p,
-  .proof-card p {
-    margin: 0;
-    font-size: 0.88rem;
-    line-height: 1.62;
-    color: var(--ink-muted);
-  }
+  .principle-row h3 { margin: 0; }
 
-  .proof-grid {
+  .beyond-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
   }
 
-  .proof-card {
-    padding: 22px;
+  .beyond-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 190px;
+    padding: 23px;
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
     background: var(--surface-card);
   }
 
-  .proof-card h3 { margin-bottom: 8px; }
-
-  .current-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-  }
-
-  .current-row h3 { margin-bottom: 5px; }
-
-  .current-row > span {
-    padding: 5px 9px;
-    border-radius: var(--radius-full);
-    background: var(--surface-subtle);
-    border: 1px solid var(--border-subtle);
-    font-size: 0.72rem;
-    color: var(--ink-muted);
-    white-space: nowrap;
-  }
-
-  .experience-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .experience-meta strong {
-    font-family: var(--font-display);
-    font-size: 0.92rem;
-    color: var(--ink-display);
-  }
-
-  .experience-meta span {
-    font-size: 0.76rem;
-    color: var(--ink-subtle);
-  }
-
-  .experience-row h3 { margin-bottom: 5px; }
-
-  .track-links {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 16px 24px;
-    margin-top: 22px;
-  }
-
-  .hero-social-links,
-  .track-social-links {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .hero-social-btn,
-  .track-social-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--surface-card);
-    border: 1px solid var(--border-medium);
-    color: var(--ink-muted);
-    text-decoration: none;
-    transition: all var(--duration-fast) ease;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .hero-social-btn:hover,
-  .hero-social-btn:focus-visible,
-  .track-social-btn:hover,
-  .track-social-btn:focus-visible {
+  .beyond-card a {
+    margin-top: auto;
+    padding-top: 18px;
     color: var(--accent-blue-dark);
-    border-color: var(--accent-blue);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    font-size: 0.82rem;
+    font-weight: 720;
+    text-decoration: none;
+  }
+
+  .beyond-card a:hover,
+  .beyond-card a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
+
+  .direction-section {
+    margin-top: clamp(60px, 8vw, 102px);
+    padding: clamp(29px, 5vw, 54px);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 95% 5%, color-mix(in srgb, var(--accent-blue) 9%, transparent), transparent 46%),
+      var(--surface-subtle);
+  }
+
+  .direction-section h2 { max-width: 700px; }
+
+  .direction-section > p:last-child {
+    max-width: 750px;
+    margin: 19px 0 0;
+    color: var(--ink-muted);
+    font-size: 1rem;
+    line-height: 1.75;
   }
 
   .about-cta {
@@ -496,49 +584,71 @@ const jsonLd = {
     align-items: center;
     justify-content: space-between;
     gap: 30px;
-    margin-top: clamp(62px, 8vw, 100px);
-    padding: clamp(26px, 4vw, 40px);
-    border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, var(--border-medium));
-    border-radius: var(--radius-lg);
-    background: color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card));
+    padding: clamp(64px, 8vw, 95px) 0 0;
   }
 
+  .about-cta-copy { min-width: 0; }
+
   .about-cta h2 {
-    margin: 0 0 6px;
-    font-family: var(--font-display);
-    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+    margin: 0 0 9px;
     color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.8vw, 2.35rem);
+    letter-spacing: -0.035em;
+    line-height: 1.2;
   }
 
   .about-cta p {
-    max-width: 650px;
+    max-width: 530px;
     margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.55;
     color: var(--ink-muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
   }
 
-  .about-cta-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-  }
+  .about-cta-actions { display: flex; gap: 10px; flex-shrink: 0; }
 
-  @media (max-width: 820px) {
-    .about-hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-portrait-wrap { max-width: 280px; order: -1; }
-    .section-heading { grid-template-columns: 1fr; gap: 10px; }
-    .proof-grid { grid-template-columns: 1fr; }
-  }
+  .about-cta-actions a { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
 
-  @media (max-width: 620px) {
-    .info-row,
-    .experience-row { grid-template-columns: 1fr; gap: 7px; }
-    .current-row { grid-template-columns: 1fr; gap: 12px; }
-    .current-row > span { width: fit-content; }
+  @media (max-width: 900px) {
+    .about-hero {
+      min-height: auto;
+      grid-template-columns: minmax(0, 1fr) minmax(175px, 220px);
+      gap: 30px;
+    }
     .about-cta { align-items: flex-start; flex-direction: column; }
-    .about-cta-actions { width: 100%; flex-direction: column; }
-    .about-cta-actions a { width: 100%; justify-content: center; }
+  }
+
+  @media (max-width: 760px) {
+    .about-hero { grid-template-columns: 1fr; }
+    .hero-portrait-wrap { max-width: 200px; order: -1; }
+    .section-heading { grid-template-columns: 1fr; gap: 14px; }
+    .story-layout { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: 1fr; }
+    .impact-item, .impact-item:first-child { padding: 20px 0; }
+    .impact-item + .impact-item { border-left: 0; border-top: 1px solid var(--border-subtle); }
+    .principle-row { grid-template-columns: 40px minmax(0, 1fr); gap: 7px 15px; }
+    .principle-row p { grid-column: 2; }
+    .beyond-grid { grid-template-columns: 1fr; }
+    .beyond-card { min-height: auto; }
+  }
+
+  @media (max-width: 600px) {
+    .about-page { padding-top: 22px; }
+    .about-hero { padding: 34px 0 52px; }
+    .hero-portrait-wrap { max-width: 140px; }
+    .hero-meta .meta-divider { display: none; }
+    .hero-meta { flex-direction: column; align-items: flex-start; gap: 2px; }
+    .hero-actions { align-items: stretch; flex-direction: column; }
+    .hero-actions .primary-button { justify-content: center; }
+    .project-grid { grid-template-columns: 1fr; }
+    .about-cta-actions { flex-direction: column; align-items: stretch; width: 100%; }
+    .about-cta-actions a { justify-content: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card { transition: none; }
+    .project-card:hover,
+    .project-card:focus-visible { transform: none; }
   }
 </style>

@@ -1,169 +1,87 @@
-/**
- * Types for the world-class /about editorial personal page data schema.
- */
-
-export interface AboutStat {
+/** Focused, evidence-led content schema for the public About page. */
+export interface AboutMetric {
+  value: string;
   label: string;
-  metric: string;
-  detail: string;
-  tag: string;
+  context: string;
 }
 
-export interface NowFocusItem {
-  id: string;
-  tag: string;
-  title: string;
-  description: string;
-  status: string;
-}
-
-export interface NarrativeChapter {
-  number: string;
-  kicker: string;
-  title: string;
-  timeframe: string;
-  paragraphs: string[];
-  pullQuote?: string;
-  keyTakeaway?: string;
-  tags?: string[];
-}
-
-export interface ManifestoPrinciple {
-  number: string;
-  kicker: string;
-  quote: string;
-  title: string;
-  description: string;
-  takeaway: string;
-  icon: string;
-}
-
-export interface ToolkitCategory {
-  title: string;
-  kicker: string;
-  icon: string;
-  items: {
-    name: string;
-    description: string;
-    badge?: string;
-  }[];
-}
-
-export interface CareerRole {
-  company: string;
-  companyUrl?: string;
-  role: string;
-  period: string;
-  location: string;
-  badge?: string;
-  description: string;
-  responsibilities: string[];
-  technologies: string[];
-}
-
-export interface DivulgationHighlight {
-  title: string;
-  topic: string;
-  readTime: string;
-  url: string;
-  summary: string;
-  badge?: string;
-  keyInsight?: string;
-}
-
-export interface RecognitionItem {
-  year: string;
-  title: string;
-  organization: string;
-  description: string;
-  badge: string;
-  url?: string;
-}
-
-export interface EducationItem {
-  degree: string;
-  institution: string;
-  location: string;
-  period: string;
-  details: string;
-  badge?: string;
-}
-
-export interface AboutProfile {
+export interface AboutProject {
   name: string;
-  headline: string;
-  subheadline: string;
-  tagline: string;
-  location: string;
-  locationStatus: string;
-  affiliation: string;
-  affiliationRole: string;
-  portraitPath: string;
-  portraitAlt: string;
-  leadParagraph: string;
-  badges: string[];
-  stats: AboutStat[];
-  socialLinks: {
-    linkedin: string;
-    github: string;
-    staituned: string;
-    email: string;
-  };
+  category: 'Infrastructure' | 'Application';
+  purpose: string;
+  description: string;
+  href: string;
+}
+
+export interface AboutPrinciple {
+  title: string;
+  description: string;
+}
+
+export interface AboutHighlight {
+  title: string;
+  description: string;
+  href?: string;
+  linkLabel?: string;
 }
 
 export interface AboutContent {
   metaTitle: string;
   metaDescription: string;
-  profile: AboutProfile;
-  now: {
-    kicker: string;
-    title: string;
-    subtitle: string;
-    lastUpdated: string;
-    items: NowFocusItem[];
+  profile: {
+    name: string;
+    headline: string;
+    affiliation: string;
+    location: string;
+    portraitPath: string;
+    portraitAlt: string;
+    socialLinks: {
+      linkedin: string;
+      github: string;
+      staituned: string;
+    };
+  };
+  hero: {
+    eyebrow: string;
+    titleLead: string;
+    titleClose: string;
+    lead: string;
   };
   story: {
     kicker: string;
     title: string;
-    subtitle: string;
-    chapters: NarrativeChapter[];
+    paragraphs: string[];
+    emphasis: string;
   };
-  manifesto: {
+  impact: {
     kicker: string;
     title: string;
-    subtitle: string;
-    principles: ManifestoPrinciple[];
+    intro: string;
+    metrics: AboutMetric[];
   };
-  toolkit: {
+  projects: {
     kicker: string;
     title: string;
-    subtitle: string;
-    categories: ToolkitCategory[];
+    intro: string;
+    items: AboutProject[];
   };
-  experience: {
+  principles: {
     kicker: string;
     title: string;
-    subtitle: string;
-    roles: CareerRole[];
+    intro: string;
+    items: AboutPrinciple[];
   };
-  divulgation: {
+  beyond: {
     kicker: string;
     title: string;
-    subtitle: string;
-    staiTunedSummary: string;
-    staiTunedMetrics: { label: string; value: string }[];
-    featuredArticles: DivulgationHighlight[];
-    mentorshipSummary: string;
+    items: AboutHighlight[];
   };
-  recognition: {
+  direction: {
     kicker: string;
     title: string;
-    subtitle: string;
-    awards: RecognitionItem[];
-    education: EducationItem[];
+    description: string;
   };
   cta: {
-    kicker: string;
     title: string;
     description: string;
     primaryActionLabel: string;
