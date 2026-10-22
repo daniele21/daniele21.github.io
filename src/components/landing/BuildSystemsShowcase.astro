@@ -1,0 +1,627 @@
+---
+/**
+ * BUILD / Architecture Studio
+ * Two execution environments, followed by cross-workload primitives.
+ * Uses the shared home palette and the canonical landing project data.
+ */
+import { landingData } from '../../content/locales/en/landing';
+
+const { buildStage } = landingData;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const hrefFor = (href: string, external?: boolean) => {
+  if (external || href.startsWith('http')) return href;
+  return baseUrl + '/' + href.replace(/^\//, '');
+};
+
+const runtimeProjects = buildStage.projects.filter(
+  (project) => project.id === 'korgis' || project.id === 'harnex',
+);
+const specializedProjects = buildStage.projects.filter(
+  (project) => project.id !== 'korgis' && project.id !== 'harnex',
+);
+
+const platformFor = (id: string) =>
+  id === 'harnex' ? 'ANDROID · ON-DEVICE' : 'MAC · DESKTOP & SERVER';
+const scopeFor = (id: string) =>
+  id === 'harnex' ? 'Android · Offline · On-device' : 'macOS · Workstation · Server';
+---
+
+<section class="systems-showcase" aria-label="Reusable local AI infrastructure">
+  <div class="showcase-head">
+    <h3 class="showcase-heading">Execution environments</h3>
+    <p>Two platforms. Dedicated runtimes.</p>
+  </div>
+
+  <div class="runtime-grid">
+    {runtimeProjects.map((project, index) => (
+      <a
+        class="runtime-card"
+        data-system={project.id}
+        href={hrefFor(project.href, project.external)}
+        aria-label={'Explore ' + project.title + ': ' + platformFor(project.id)}
+      >
+        <div class="runtime-card__body">
+          <div class="runtime-card__platform">
+            <span class="platform-info">
+              {project.id === 'korgis' ? (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2.5" y="4" width="19" height="13" rx="2" />
+                  <path d="M8 21h8M12 17v4" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="6.5" y="2" width="11" height="20" rx="2.7" />
+                  <path d="M11 19h2" />
+                </svg>
+              )}
+              {platformFor(project.id)}
+            </span>
+            <span class="platform-counter">0{index + 1} / 04</span>
+          </div>
+
+          <div class="runtime-card__layout">
+            <div class="runtime-card__copy">
+              <div class="runtime-card__identity">
+                {project.logoPath && (
+                  <img src={hrefFor(project.logoPath)} alt="" width="36" height="36" loading="lazy" decoding="async" />
+                )}
+                <h4>{project.title}</h4>
+              </div>
+              {project.layer && <p class="runtime-card__role">{project.layer}</p>}
+              <p class="runtime-card__summary">{project.summary}</p>
+            </div>
+
+            <div class="device-stage" aria-hidden="true">
+              {project.id === 'korgis' ? (
+                <svg viewBox="0 0 180 180" fill="none" focusable="false">
+                  <rect class="device-frame" x="9" y="30" width="162" height="103" rx="10" stroke-width="2" />
+                  <rect class="device-display" x="16" y="37" width="148" height="88" rx="5" />
+                  <circle class="device-muted" cx="27" cy="45" r="2" />
+                  <circle class="device-muted" cx="36" cy="45" r="2" />
+                  <rect class="device-strong" x="27" y="59" width="88" height="7" rx="3.5" />
+                  <rect class="device-accent" x="27" y="79" width="65" height="4" rx="2" />
+                  <rect class="device-line" x="27" y="92" width="120" height="3" rx="1.5" />
+                  <rect class="device-line" x="27" y="101" width="103" height="3" rx="1.5" />
+                  <rect class="device-line" x="27" y="110" width="82" height="3" rx="1.5" />
+                  <rect class="device-neck" x="78" y="133" width="24" height="15" />
+                  <path class="device-base" d="M65 147h50l6 6H59z" />
+                  <rect class="device-neck" x="42" y="153" width="96" height="5" rx="2.5" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 180 180" fill="none" focusable="false">
+                  <rect class="device-frame" x="50" y="2" width="80" height="175" rx="18" stroke-width="2" />
+                  <rect class="device-display" x="56" y="9" width="68" height="160" rx="13" />
+                  <rect class="device-muted" x="76" y="14" width="28" height="5" rx="2.5" />
+                  <rect class="device-strong" x="65" y="36" width="50" height="6" rx="3" />
+                  <rect class="device-line" x="65" y="49" width="32" height="3" rx="1.5" />
+                  <rect class="device-panel" x="65" y="69" width="50" height="28" rx="5" />
+                  <rect class="device-accent" x="71" y="76" width="23" height="4" rx="2" />
+                  <rect class="device-line" x="71" y="84" width="34" height="3" rx="1.5" />
+                  <rect class="device-panel" x="65" y="104" width="50" height="28" rx="5" />
+                  <rect class="device-accent" x="71" y="111" width="22" height="4" rx="2" />
+                  <rect class="device-line" x="71" y="120" width="34" height="3" rx="1.5" />
+                  <rect class="device-muted" x="82" y="159" width="16" height="3" rx="1.5" />
+                </svg>
+              )}
+            </div>
+          </div>
+        </div>
+        <div class="runtime-card__footer">
+          <span>{scopeFor(project.id)}</span>
+          <span class="runtime-card__cta">Explore <span aria-hidden="true">↗</span></span>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <div class="primitives">
+    <div class="primitives__head">
+      <h3>Specialized components</h3>
+      <p>Built for specific workloads</p>
+    </div>
+
+    <div class="primitive-grid">
+      {specializedProjects.map((project) => (
+        <a
+          class="primitive"
+          data-system={project.id}
+          href={hrefFor(project.href, project.external)}
+          aria-label={'Explore ' + project.title}
+        >
+          <span class="primitive__icon" aria-hidden="true">
+            {project.id === 'decisio' ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+                <path d="M12 3 21 12 12 21 3 12Z" />
+                <path d="M9 12h6" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M3 8c3-4 5 4 9 0s6-2 9-1M3 13c3-4 5 4 9 0s6-2 9-1M3 18c3-4 5 4 9 0s6-2 9-1" />
+              </svg>
+            )}
+          </span>
+          <span class="primitive__copy">
+            <span class="primitive__title">{project.title}</span>
+            <span class="primitive__summary">{project.summary}</span>
+            {project.status && (
+              <span class="primitive__status">{project.status.toLowerCase()}</span>
+            )}
+          </span>
+          <span class="primitive__arrow" aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </div>
+
+    <p class="primitives__foot">
+      {String(buildStage.projects.length).padStart(2, '0')} reusable systems
+      <span aria-hidden="true"> · </span>
+      {String(runtimeProjects.length).padStart(2, '0')} execution environments
+      <span aria-hidden="true"> · </span>
+      {String(specializedProjects.length).padStart(2, '0')} specialized components
+    </p>
+  </div>
+
+  <p class="showcase-disclaimer">
+    Each system solves a different execution problem. Real product integrations are shown in the following TEST stage.
+  </p>
+</section>
+
+<style>
+  .systems-showcase {
+    width: 100%;
+    min-width: 0;
+    container-type: inline-size;
+  }
+
+  .showcase-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .showcase-heading,
+  .primitives__head h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-display);
+    letter-spacing: 0.11em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+  }
+
+  .showcase-head p,
+  .primitives__head p {
+    margin: 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+
+  .runtime-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .runtime-card {
+    --system-accent: var(--accent-blue);
+    --system-soft: var(--surface-blue-subtle);
+    --device-frame: #203859;
+    --device-display: #101d31;
+    --device-line: #67809f;
+    --device-panel: var(--surface-blue-subtle);
+    --device-strong: #8eb2ff;
+    --device-muted: #8da4bf;
+    --device-neck: #849bb9;
+    --device-base: #b6c6dc;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 330px;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color var(--duration-base) ease,
+                background var(--duration-base) ease,
+                transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  .runtime-card[data-system='harnex'] {
+    --system-accent: var(--accent-violet);
+    --system-soft: color-mix(in srgb, var(--accent-violet) 8%, var(--surface-card));
+    --device-frame: #242a4c;
+    --device-display: #f0f2ff;
+    --device-line: #a7abd0;
+    --device-panel: #dfdcf7;
+    --device-strong: #7260c2;
+    --device-muted: #9297b9;
+  }
+
+  .runtime-card:hover {
+    border-color: color-mix(in srgb, var(--system-accent) 55%, var(--border-medium));
+    transform: translateY(-2px);
+    background: var(--surface-card-hover);
+  }
+
+  .runtime-card:focus-visible,
+  .primitive:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 3px;
+  }
+
+  .runtime-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding: 25px 27px 17px;
+  }
+
+  .runtime-card__platform {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    line-height: 1.25;
+  }
+
+  .platform-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+  }
+
+  .platform-info svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    color: var(--system-accent);
+  }
+
+  .platform-counter {
+    flex: 0 0 auto;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-label);
+    white-space: nowrap;
+  }
+
+  .runtime-card__layout {
+    display: grid;
+    flex: 1;
+    grid-template-columns: minmax(0, 1fr) minmax(104px, 36%);
+    align-items: center;
+    gap: 12px;
+    min-height: 218px;
+  }
+
+  .runtime-card__copy {
+    min-width: 0;
+    padding-top: 18px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .runtime-card__identity {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 13px;
+  }
+
+  .runtime-card__identity img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+  }
+
+  .runtime-card__identity h4 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-feature-title);
+    font-weight: var(--weight-display);
+    letter-spacing: -0.055em;
+    line-height: 1.15;
+    color: var(--ink-display);
+  }
+
+  .runtime-card__role {
+    margin: 0 0 9px;
+    color: var(--ink-display);
+    font-size: var(--text-body-sm);
+    font-weight: var(--weight-heading);
+    line-height: 1.45;
+  }
+
+  .runtime-card__summary {
+    margin: 0;
+    max-width: 320px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.6;
+  }
+
+  .device-stage {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  .device-stage::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 14% 0;
+    border-radius: 50%;
+    background: var(--system-soft);
+  }
+
+  .device-stage svg {
+    width: 100%;
+    height: 100%;
+    max-width: 205px;
+    max-height: 205px;
+    overflow: visible;
+    filter: drop-shadow(0 12px 12px rgba(8, 19, 51, 0.1));
+  }
+
+  .device-frame { fill: var(--device-frame); stroke: var(--system-accent); }
+  .device-display { fill: var(--device-display); }
+  .device-strong { fill: var(--device-strong); }
+  .device-muted { fill: var(--device-muted); }
+  .device-accent { fill: var(--system-accent); }
+  .device-line { fill: var(--device-line); }
+  .device-panel { fill: var(--device-panel); }
+  .device-neck { fill: var(--device-neck); }
+  .device-base { fill: var(--device-base); }
+
+  .runtime-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 61px;
+    padding: 12px 27px;
+    border-top: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--system-accent) 2%, var(--surface-card));
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+
+  .runtime-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    color: var(--system-accent);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    white-space: nowrap;
+  }
+
+  .runtime-card__cta span {
+    font-size: 18px;
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .runtime-card:hover .runtime-card__cta span {
+    transform: translate(2px, -2px);
+  }
+
+  .primitives {
+    margin-top: 16px;
+    overflow: hidden;
+    padding: 26px 30px 23px;
+    border-radius: var(--radius-lg);
+    background: var(--surface-inverse);
+    color: #fff;
+  }
+
+  .primitives__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.23);
+  }
+
+  .primitives__head h3 { color: #fff; }
+  .primitives__head p { color: #becbe0; }
+
+  .primitive-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 20px 0 10px;
+  }
+
+  .primitive {
+    display: grid;
+    grid-template-columns: 39px minmax(0, 1fr) 16px;
+    gap: 12px;
+    align-items: start;
+    min-width: 0;
+    min-height: 112px;
+    padding: 6px 22px 8px 0;
+    border-radius: var(--radius-sm);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .primitive + .primitive {
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    padding-left: 22px;
+    padding-right: 0;
+  }
+
+  .primitive:hover .primitive__title,
+  .primitive:focus-visible .primitive__title {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .primitive__icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(189, 209, 251, 0.4);
+    border-radius: 9px;
+    color: #9fbdff;
+  }
+
+  .primitive__icon svg { width: 20px; height: 20px; }
+
+  .primitive__copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .primitive__title {
+    font-family: var(--font-display);
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-display);
+    letter-spacing: -0.045em;
+    line-height: 1.2;
+  }
+
+  .primitive__summary {
+    margin-top: 6px;
+    color: #becbe0;
+    font-size: var(--text-caption);
+    line-height: 1.58;
+  }
+
+  .primitive__status {
+    margin-top: 9px;
+    color: #b9cdec;
+    font-size: var(--text-caption);
+    font-weight: var(--weight-label);
+    text-transform: capitalize;
+  }
+
+  .primitive__arrow {
+    margin-top: 3px;
+    color: #9fbdff;
+    font-size: 19px;
+  }
+
+  .primitives__foot {
+    margin: 15px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    color: #bdc9de;
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  .showcase-disclaimer {
+    margin: 18px 0 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    line-height: 1.6;
+  }
+
+  :global(html[data-theme='dark']) .primitives {
+    border: 1px solid var(--border-medium);
+    background: var(--surface-card);
+    color: var(--ink);
+  }
+
+  :global(html[data-theme='dark']) .primitives__head h3,
+  :global(html[data-theme='dark']) .primitive {
+    color: var(--ink-display);
+  }
+
+  :global(html[data-theme='dark']) .primitives__head p,
+  :global(html[data-theme='dark']) .primitive__summary,
+  :global(html[data-theme='dark']) .primitive__status,
+  :global(html[data-theme='dark']) .primitives__foot {
+    color: var(--ink-muted);
+  }
+
+  :global(html[data-theme='dark']) .primitives__head,
+  :global(html[data-theme='dark']) .primitive + .primitive,
+  :global(html[data-theme='dark']) .primitives__foot {
+    border-color: var(--border-medium);
+  }
+
+  :global(html[data-theme='dark']) .primitive__icon,
+  :global(html[data-theme='dark']) .primitive__arrow {
+    color: var(--accent-blue);
+  }
+
+  @container (max-width: 920px) {
+    .runtime-card__layout { grid-template-columns: minmax(0, 1fr) 31%; gap: 4px; }
+    .runtime-card__body { padding: 22px; }
+    .runtime-card__footer { padding-inline: 22px; }
+    .runtime-card__identity h4 { font-size: 2rem; }
+  }
+
+  @container (max-width: 740px) {
+    .showcase-head { flex-direction: column; align-items: flex-start; gap: 3px; margin-bottom: 14px; }
+    .runtime-grid { grid-template-columns: 1fr; gap: 13px; }
+    .runtime-card { min-height: 315px; }
+    .runtime-card__layout { grid-template-columns: minmax(0, 1fr) 132px; gap: 8px; min-height: 205px; }
+    .runtime-card__body { padding: 21px 19px 14px; }
+    .runtime-card__footer { min-height: 55px; padding: 11px 19px; }
+    .runtime-card__identity h4 { font-size: 2.25rem; }
+    .device-stage svg { max-width: 144px; max-height: 144px; }
+    .primitives { padding: 20px 19px 18px; }
+    .primitives__head { flex-direction: column; align-items: flex-start; gap: 7px; }
+    .primitive-grid { grid-template-columns: 1fr; padding: 16px 0 0; }
+    .primitive { min-height: 0; grid-template-columns: 34px minmax(0, 1fr) 14px; padding: 8px 0 20px; }
+    .primitive + .primitive { border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.18); padding: 21px 0 8px; }
+    .primitive__title { font-size: 1.25rem; }
+    .showcase-disclaimer { margin-top: 14px; }
+  }
+
+  @container (max-width: 420px) {
+    .runtime-card__layout { grid-template-columns: minmax(0, 1fr) 96px; min-height: 201px; }
+    .runtime-card__copy { padding-top: 18px; }
+    .runtime-card__identity { gap: 7px; }
+    .runtime-card__identity h4 { font-size: 1.8rem; }
+    .runtime-card__identity img { width: 30px; height: 30px; }
+    .runtime-card__role { font-size: var(--text-caption); }
+    .runtime-card__footer { flex-wrap: wrap; gap: 4px; }
+  }
+
+  @container (max-width: 300px) {
+    .runtime-card__layout { grid-template-columns: minmax(0, 1fr) 70px; gap: 3px; }
+    .runtime-card__body { padding: 16px 12px 12px; }
+    .runtime-card__footer { padding-inline: 12px; }
+    .runtime-card__identity h4 { font-size: 1.5rem; }
+    .device-stage svg { max-width: 90px; }
+    .platform-info { gap: 5px; }
+    .platform-counter { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .runtime-card,
+    .runtime-card__cta span {
+      transition: none;
+    }
+    .runtime-card:hover { transform: none; }
+  }
+</style>

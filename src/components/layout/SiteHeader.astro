@@ -100,10 +100,17 @@ function getHref(href: string) {
     box-shadow: var(--shadow-sm);
   }
 
+  /*
+   * The homepage/content shell is 1140px; five question-length nav links plus
+   * the full identity cannot fit in that width. Give the shared header its own
+   * wider shell, then reserve non-shrinking tracks for nav/actions. The identity
+   * is the only track allowed to shrink, without painting over its neighbour.
+   */
   .header-inner {
+    --shell-max-width: 1440px;
     height: 100%;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) max-content max-content;
     align-items: center;
     gap: clamp(12px, 1.7vw, 26px);
   }
@@ -112,6 +119,8 @@ function getHref(href: string) {
     display: inline-flex;
     align-items: center;
     gap: 9px;
+    min-width: 0;
+    max-width: 100%;
     min-height: var(--touch-target-min);
     text-decoration: none;
     color: inherit;
@@ -139,27 +148,33 @@ function getHref(href: string) {
     flex-direction: column;
     line-height: 1.22;
     min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .brand-name {
     font-family: var(--font-display);
     font-size: var(--text-caption);
-    font-weight: 760;
+    font-weight: var(--weight-heading);
     letter-spacing: -0.012em;
     color: var(--ink-display);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .brand-role {
     font-family: var(--font-body);
-    font-size: 0.7rem;
-    font-weight: 500;
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
     color: var(--ink-muted);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .site-nav {
-    min-width: 0;
+    min-width: max-content;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -191,14 +206,16 @@ function getHref(href: string) {
   }
 
   .nav-link-text {
-    font-size: clamp(0.68rem, 0.72vw, 0.76rem);
-    font-weight: 580;
+    font-size: var(--text-caption);
+    font-weight: var(--weight-label);
     letter-spacing: -0.015em;
     line-height: 1.15;
     white-space: nowrap;
     text-align: center;
     transition: color var(--duration-fast) ease;
   }
+
+  .nav-link-icon { display: none; }
 
   .nav-link::after {
     content: '';
@@ -244,11 +261,11 @@ function getHref(href: string) {
   }
 
   .header-cta-btn {
-    min-height: 36px;
-    padding: 6px 13px;
+    min-height: var(--touch-target-min);
+    padding: 8px 13px;
     border-radius: var(--radius-full);
     font-size: var(--text-caption);
-    font-weight: 670;
+    font-weight: var(--weight-heading);
     white-space: nowrap;
     cursor: pointer;
     display: inline-flex;
@@ -259,8 +276,8 @@ function getHref(href: string) {
   .theme-toggle {
     display: grid;
     place-items: center;
-    width: 36px;
-    height: 36px;
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
     padding: 0;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-full);
@@ -293,9 +310,9 @@ function getHref(href: string) {
 
   .menu-toggle {
     display: none;
-    width: 38px;
-    height: 38px;
-    padding: 9px;
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+    padding: 12px;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-full);
     background: var(--surface-card);
@@ -311,16 +328,14 @@ function getHref(href: string) {
     background: var(--ink);
   }
 
-  @media (max-width: 1200px) {
-    .brand-role { display: none; }
-    .site-nav { gap: 6px; }
-    .nav-link { padding: 4px 6px; }
-    .nav-link-text { font-size: 0.67rem; }
-  }
-
-  @media (max-width: 980px) {
+  /*
+   * At and below 1450px, move the full navigation into the accessible menu.
+   * Breakpoints decide presentation only: constrained grid tracks and text
+   * overflow protection prevent collisions at every intermediate width/zoom.
+   */
+  @media (max-width: 1450px) {
     .header-inner {
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: minmax(0, 1fr) max-content;
     }
 
     .menu-toggle { display: block; }
@@ -334,7 +349,7 @@ function getHref(href: string) {
       flex-direction: column;
       align-items: stretch;
       gap: 0;
-      padding: 12px max(20px, calc((100vw - var(--shell-max)) / 2));
+      padding: 12px max(20px, calc((100vw - var(--shell-max-width)) / 2));
       background: color-mix(in srgb, var(--surface-card) 98%, transparent);
       border-bottom: 1px solid var(--border-medium);
       box-shadow: var(--shadow-md);
@@ -354,12 +369,13 @@ function getHref(href: string) {
     }
 
     .nav-link-icon {
+      display: flex;
       color: var(--accent-blue);
     }
 
     .nav-link-text {
       font-size: 0.92rem;
-      font-weight: 600;
+      font-weight: var(--weight-label);
       text-align: left;
     }
 
@@ -367,9 +383,14 @@ function getHref(href: string) {
     .nav-link::after { display: none; }
   }
 
+  @media (max-width: 820px) {
+    /* The full role lives in the hero; on phones the header stays legible. */
+    .brand-role { display: none; }
+  }
+
   @media (max-width: 620px) {
     .header-cta-btn { display: none; }
     .brand-signature { width: 34px; }
-    .brand-name { font-size: 0.78rem; }
+    .brand-name { font-size: var(--text-caption); }
   }
 </style>

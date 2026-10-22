@@ -1,0 +1,4614 @@
+---
+interface Track {
+  id?: string;
+  title: string;
+  question: string;
+  status: string;
+  resultUrl?: string;
+  sourceUrl?: string;
+  resultKind?: 'jev-public-summary' | 'mcb-overview' | 'redactguard-public-summary';
+  relatedResultUrl?: string;
+  relatedSourceUrl?: string;
+}
+
+interface Props {
+  tracks: Track[];
+}
+
+import '../../styles/redactguardInsights.css';
+
+const { tracks } = Astro.props;
+const sortedTracks = [...tracks].sort((a, b) => Number(Boolean(b.resultUrl)) - Number(Boolean(a.resultUrl)));
+const initialIndex = Math.max(0, sortedTracks.findIndex((track) => Boolean(track.resultUrl)));
+
+const selectorLabelFor = (track: Track) => {
+  const labels: Record<string, string> = {
+    'jev-vs-llm-routing': 'JEV vs LLM',
+    'model-capability': 'Model Capability',
+    'redactguard-local-anonymization': 'RedactGuard',
+    'vlm-capability': 'VLM',
+    'image-generation': 'Image Gen',
+    diarization: 'Diarization',
+  };
+  return labels[track.id || ''] || track.title;
+};
+---
+
+<div class="experiment-explorer" data-experiment-explorer>
+  <div class="experiment-index-heading">
+    <div>
+      <h3>Benchmarks</h3>
+    </div>
+    <span class="experiment-index-heading__count">{sortedTracks.filter((track) => Boolean(track.resultUrl)).length} / {sortedTracks.length} published</span>
+  </div>
+  <div class="experiment-mobile-chooser">
+    <label for="measure-benchmark-select">Choose a benchmark</label>
+    <select id="measure-benchmark-select" data-experiment-mobile-select>
+      {sortedTracks.map((track, index) => (
+        <option value={index} selected={index === initialIndex}>
+          {selectorLabelFor(track)}{track.resultUrl ? '' : ' · Coming soon'}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div class="experiment-rail-guide">
+    <span>SWIPE TO EXPLORE <span aria-hidden="true">→</span></span>
+    <div class="experiment-rail-actions">
+      <span class="experiment-rail-count" data-experiment-position aria-live="polite">01 / {String(sortedTracks.length).padStart(2, '0')}</span>
+      <button type="button" data-experiment-prev aria-label="Previous benchmark" disabled>←</button>
+      <button type="button" data-experiment-next aria-label="Next benchmark">→</button>
+    </div>
+  </div>
+  <div class="experiment-selector-wrap">
+    <div class="experiment-selector" role="tablist" aria-label="Swipe through benchmarks and tap to select" data-experiment-rail>
+      {sortedTracks.map((track, index) => (
+        <button
+          type="button"
+          class:list={['experiment-tab', { 'is-active': index === initialIndex }]}
+          role="tab"
+          aria-selected={index === initialIndex ? 'true' : 'false'}
+          tabindex={index === initialIndex ? '0' : '-1'}
+          data-experiment-tab
+          data-published={Boolean(track.resultUrl) ? 'true' : 'false'}
+          data-track-id={track.id || ''}
+          data-title={track.title}
+          data-question={track.question}
+          data-status={track.status}
+          data-result-url={track.resultUrl || ''}
+          data-source-url={track.sourceUrl || ''}
+          data-result-kind={track.resultKind || ''}
+          data-related-result-url={track.relatedResultUrl || ''}
+          data-related-source-url={track.relatedSourceUrl || ''}
+        >
+          <span
+            class:list={['status-dot', { 'status-dot--live': Boolean(track.resultUrl) }]}
+            aria-hidden="true"
+          ></span>
+          <span class="experiment-tab__copy">
+            <span class="experiment-tab__title">{selectorLabelFor(track)}</span>
+            <span class="experiment-tab__availability">{track.resultUrl ? (track.status.includes('PARTIAL') ? 'Partial evidence' : 'Published results') : 'Not published yet'}</span>
+            <span class="experiment-tab__question">{track.question}</span>
+          </span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <section class="evidence-panel" aria-live="polite" aria-label="Selected experiment evidence">
+    <div class="evidence-panel__loading" data-evidence-loading hidden>
+      Loading published evidence…
+    </div>
+
+    <div class="evidence-panel__empty" data-evidence-empty hidden>
+      <div class="evidence-panel__empty-icon" aria-hidden="true">↗</div>
+      <div>
+        <span class="evidence-panel__eyebrow">NO PUBLIC SNAPSHOT YET</span>
+        <h3 data-empty-title></h3>
+        <p data-empty-question></p>
+        <p class="evidence-panel__empty-note">
+          Real runs exist outside the published repository snapshot. This view stays empty until a
+          versioned evidence artifact is available.
+        </p>
+      </div>
+    </div>
+
+    <div class="evidence-panel__result" data-evidence-result hidden>
+      <div class="evidence-panel__header">
+        <div>
+          <span class="evidence-panel__eyebrow">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span data-result-eyebrow>PUBLISHED BENCHMARK SNAPSHOT</span>
+          </span>
+          <h3 data-result-title></h3>
+          <p data-result-question></p>
+        </div>
+        <a class="source-link" data-result-source href="#" target="_blank" rel="noopener noreferrer">
+          Source <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <div class="evidence-takeaway" data-mcb-takeaway role="note" aria-labelledby="measure-finding-label">
+        <div class="evidence-takeaway__label-row">
+          <span id="measure-finding-label">WHAT THE EVIDENCE SHOWS</span>
+          <span class="evidence-takeaway__provenance">Published result</span>
+        </div>
+        <div class="evidence-takeaway__content">
+          <strong data-readout-title></strong>
+          <p data-readout></p>
+        </div>
+      </div>
+      <div class="jev-summary" data-jev-summary hidden>
+        <div class="jev-mcb-bridge">
+          <div class="jev-mcb-bridge__header">
+            <div>
+              <span class="jev-eyebrow">RELATED EVIDENCE · MODEL CAPABILITY BENCHMARK</span>
+              <h4>JEV and GPT Luna, tested on the same task</h4>
+              <p data-jev-mcb-meta>Intent classification · comparing identical benchmark signatures</p>
+            </div>
+            <a data-jev-mcb-source href="#" target="_blank" rel="noopener noreferrer">MCB source ↗</a>
+          </div>
+          <div class="jev-mcb-rows" data-jev-mcb-rows role="list"></div>
+          <p class="jev-mcb-bridge__note" data-jev-mcb-note>
+            This is Model Capability Benchmark evidence, not a result from the separate Jev vs LLM suite.
+          </p>
+        </div>
+
+        <details class="jev-local-details" data-jev-local-details>
+          <summary>
+            <span>
+              <strong>Explore separate local-routing runs</strong>
+              <small>Different benchmark · includes latency measurements</small>
+            </span>
+            <span aria-hidden="true">+</span>
+          </summary>
+        <div class="jev-coverage-banner" role="note">
+          <div>
+            <span class="jev-eyebrow">EVIDENCE AVAILABLE</span>
+            <strong data-jev-published-scope>—</strong>
+            <p data-jev-scope-note></p>
+          </div>
+          <span class="jev-coverage-banner__count" data-jev-experiment-count>—</span>
+          <div class="jev-stage-coverage" data-jev-stage-coverage aria-label="Public evidence by experiment type"></div>
+        </div>
+        <div class="jev-tradeoff">
+          <div class="jev-tradeoff__main">
+            <span class="jev-eyebrow">WHAT THE RESULTS SHOW</span>
+            <strong data-jev-takeaway-headline>—</strong>
+            <p data-jev-takeaway-description></p>
+          </div>
+          <div class="jev-tradeoff__numbers">
+            <div>
+              <span>Accuracy difference</span>
+              <strong data-jev-quality-gap>—</strong>
+            </div>
+            <div>
+              <span>Median response time</span>
+              <strong data-jev-speed-comparison>—</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="jev-ranking">
+          <div class="jev-ranking__header">
+            <div>
+              <span class="jev-eyebrow">ROUTING · EQUAL REQUEST COUNT</span>
+              <h4>How local models compare</h4>
+            </div>
+            <span data-jev-coverage>—</span>
+          </div>
+          <div class="jev-ranking__columns" aria-hidden="true">
+            <span>Model</span>
+            <span>Accuracy <small>Higher is better ↑</small></span>
+            <span>Median latency <small>Lower is better ↓</small></span>
+          </div>
+          <div class="jev-ranking__rows" data-jev-rows role="list"></div>
+          <div class="jev-ranking__note" data-jev-partial hidden></div>
+        </div>
+        <p class="jev-method-note" data-jev-method-note>Runs with the same request count are shown together; identical samples and configurations have not been independently verified.</p>
+        </details>
+      </div>
+
+      <div class="rg-summary" data-rg-summary hidden>
+        <div class="rg-topline">
+          <div>
+            <span class="rg-label">PRIVACY BENCHMARK</span>
+            <h4>How well do local models protect sensitive data?</h4>
+          </div>
+          <span class="rg-status" data-rg-publication-status>Measured evidence</span>
+        </div>
+
+        <div class="rg-dataset-picker" data-rg-datasets role="group" aria-label="Select RedactGuard test dataset"></div>
+
+        <div class="rg-detail" aria-live="polite">
+          <div class="rg-detail__main">
+            <span class="rg-label" data-rg-kind>DATASET</span>
+            <h4 data-rg-dataset-name>—</h4>
+            <p data-rg-focus></p>
+          </div>
+          <div class="rg-detail__count">
+            <strong data-rg-count>—</strong>
+            <span data-rg-count-unit>test cases</span>
+            <small data-rg-extra hidden></small>
+          </div>
+          <a class="rg-detail__link" data-rg-dataset-source href="#" target="_blank" rel="noopener noreferrer">
+            Dataset source ↗
+          </a>
+        </div>
+
+        <div class="rg-performance">
+          <div class="rg-performance__heading">
+            <div>
+              <span class="rg-label">MEASURED PERFORMANCE</span>
+              <h4>What the results tell us</h4>
+            </div>
+            <span data-rg-run-status>Awaiting published runs</span>
+          </div>
+
+          <div class="rg-insights" data-rg-insights hidden aria-label="Key results"></div>
+          <div class="rg-takeaway" data-rg-takeaway hidden>
+            <span class="rg-label">KEY TAKEAWAY</span>
+            <p data-rg-takeaway-text></p>
+          </div>
+
+          <div class="rg-comparison" data-rg-comparison hidden>
+            <div class="rg-comparison__heading">
+              <div>
+                <h5>Compare the models</h5>
+                <p data-rg-comparison-note>One run · same benchmark workload</p>
+              </div>
+              <div class="rg-legend" aria-label="Metric interpretation">
+                <span><span class="rg-legend__mark rg-legend__mark--recall"></span> Recall ↑</span>
+                <span><span class="rg-legend__mark rg-legend__mark--leakage"></span> Leakage ↓</span>
+              </div>
+            </div>
+            <div data-rg-model-rows class="rg-model-rows" role="list"></div>
+            <p class="rg-comparison__footnote">System recall includes inference failures. The p95 shown here was observed during quality runs, not a repeated latency benchmark.</p>
+          </div>
+
+          <p data-rg-no-models class="rg-performance__pending">
+            The test dataset is published, but no measured model results are available for this dataset yet.
+          </p>
+        </div>
+
+        <details class="rg-advanced" data-rg-advanced hidden>
+          <summary>
+            <span>
+              <strong>Explore deeper evidence</strong>
+              <small>Quality × latency, cross-dataset matrix and methodology</small>
+            </span>
+            <span class="rg-advanced__chevron" aria-hidden="true">+</span>
+          </summary>
+          <div class="rg-advanced__body">
+            <div class="rg-pareto" data-rg-pareto hidden>
+              <div class="rg-pareto__head">
+                <div>
+                  <span class="rg-label">SAME-RUN QUALITY × LATENCY</span>
+                  <strong>Privacy quality vs observed response time</strong>
+                </div>
+                <span class="rg-pareto__hint">System recall ↑ · observed p95 →</span>
+              </div>
+              <p class="chart-swipe-hint">Swipe across the chart for full-size labels <span aria-hidden="true">→</span></p>
+              <div class="rg-plot-canvas" role="region" tabindex="0" aria-label="Horizontally scrollable RedactGuard quality and latency chart">
+                <svg data-rg-pareto-plot viewBox="0 0 640 260" role="img"
+                  aria-label="RedactGuard system PII recall versus observed p95 latency within a single evaluated run"></svg>
+              </div>
+              <p data-rg-pareto-note class="rg-pareto__note"></p>
+            </div>
+            <p class="rg-pareto__missing" data-rg-pareto-missing hidden>
+              The quality–latency comparison requires at least two models measured in the same complete run.
+            </p>
+            <div class="rg-matrix" data-rg-matrix hidden>
+              <div class="rg-matrix__heading">
+                <div>
+                  <span class="rg-label">ACROSS DATASETS</span>
+                  <h4>Model × dataset</h4>
+                  <p>Individual dataset scores, never a global rating.</p>
+                </div>
+                <div class="rg-matrix__metric" role="group" aria-label="RedactGuard matrix metric">
+                  <button type="button" data-rg-metric="system_pii_recall" aria-pressed="true">System recall</button>
+                  <button type="button" data-rg-metric="system_leakage_rate" aria-pressed="false">System leakage</button>
+                </div>
+              </div>
+              <div class="rg-matrix__scroll" data-rg-matrix-scroll tabindex="0" role="region" aria-label="Scroll horizontally to compare models across datasets"></div>
+              <p class="rg-matrix__note">— means that this model/dataset has no published measurement, not 0% performance.</p>
+            </div>
+            <p class="rg-disclosure">Run comparisons are exploratory. Healthcare and Ambiguous have distinct model cohorts; do not interpret their figures as a controlled leaderboard. Dataset gold spans have not been independently human-reviewed.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="mcb-story" data-mcb-story>
+        <div class="mcb-highlights-heading">
+          <div>
+            <span>AT A GLANCE</span>
+            <p>Two numbers that put the finding in context</p>
+          </div>
+        </div>
+        <div class="mcb-highlights-viewport" aria-label="Benchmark highlights">
+          <div class="benchmark-highlights" aria-label="Benchmark highlights">
+          <div class="highlight highlight--local" data-highlight-role="best-local">
+            <span>BEST LOCAL QUALITY</span>
+            <strong data-balance>—</strong>
+            <small data-balance-model></small>
+          </div>
+          <div class="highlight highlight--primary" data-highlight-role="best-overall">
+            <span>BEST OVERALL QUALITY</span>
+            <strong data-best-quality>—</strong>
+            <small data-best-quality-model></small>
+          </div>
+          </div>
+        </div>
+        <details class="mcb-explore-details" data-mcb-explore-details>
+          <summary>
+            <span><strong>Compare models and speed</strong><small>Scores, latency and all measured models</small></span>
+            <span aria-hidden="true">+</span>
+          </summary>
+          <div class="mcb-explore-details__body">
+            <div class="mcb-fastest-note">
+              <span>Fastest local</span>
+              <strong data-fastest>—</strong>
+              <span data-fastest-model></span>
+            </div>
+            <section class="mcb-model-browser" aria-label="Compare measured models">
+          <div class="mcb-model-browser__heading">
+            <span class="mcb-model-browser__eyebrow">MODEL COMPARISON</span>
+            <h4>Explore measured models</h4>
+            <p>Compare published scores. Local and API latency are not hardware-matched.</p>
+          </div>
+          <div class="mcb-list-filters" role="group" aria-label="Filter measured models by deployment">
+            <button type="button" data-mcb-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-mcb-filter="local" aria-pressed="false">Local</button>
+            <button type="button" data-mcb-filter="api" aria-pressed="false">API</button>
+          </div>
+          <p class="mcb-model-browser__swipe">SWIPE TO COMPARE <span aria-hidden="true">→</span></p>
+          <div class="mcb-cards-viewport" role="region" tabindex="0" aria-label="Swipe through published measured model scores">
+            <div class="mcb-model-cards" role="list" data-mcb-model-cards aria-label="Published model scores ranked by aggregate quality"></div>
+          </div>
+          <button type="button" class="mcb-show-all" data-mcb-show-all hidden aria-expanded="false">View all measured models</button>
+            </section>
+            <details class="mcb-chart-details" data-mcb-chart-details>
+          <summary><span><strong>Performance chart & model inspection</strong><small>Quality vs median latency from the published overview</small></span><span aria-hidden="true">+</span></summary>
+          <div class="benchmark-story">
+            <div class="performance-plot">
+          <div class="plot-heading">
+            <div>
+              <span class="plot-heading__eyebrow">QUALITY × LATENCY</span>
+              <strong>Local routing frontier</strong>
+            </div>
+            <span class="plot-heading__note">Accuracy vs p50 latency</span>
+          </div>
+
+          <div class="plot-toolbar" data-mcb-toolbar hidden>
+            <span>Quality <span aria-hidden="true">↑</span> &nbsp;·&nbsp; Median latency <span aria-hidden="true">→</span></span>
+            <div class="plot-filters" role="group" aria-label="Filter models by deployment">
+              <button type="button" data-mcb-filter="all" aria-pressed="true">All</button>
+              <button type="button" data-mcb-filter="local" aria-pressed="false">Local</button>
+              <button type="button" data-mcb-filter="api" aria-pressed="false">API</button>
+            </div>
+          </div>
+
+          <p class="chart-swipe-hint">Swipe across the chart to inspect all models <span aria-hidden="true">→</span></p>
+          <div class="plot-canvas" role="region" tabindex="0" aria-label="Horizontally scrollable model quality versus latency chart">
+            <svg
+              class="plot-svg"
+              data-performance-plot
+              viewBox="0 0 620 250"
+              role="img"
+              aria-label="Quality versus median latency; focus or select a model point for details"
+            ></svg>
+          </div>
+
+          <div class="plot-selection" data-mcb-detail hidden aria-live="polite">
+            <div>
+              <span class="plot-selection__eyebrow">INSPECT MODEL</span>
+              <strong data-mcb-selected-name>—</strong>
+            </div>
+            <span data-mcb-selected-metrics>—</span>
+          </div>
+
+          <div class="plot-legend">
+            <span><i class="legend-dot legend-dot--all"></i>Measured model</span>
+            <span><i class="legend-line"></i>Pareto frontier</span>
+          </div>
+        </div>
+          </div>
+            </details>
+          </div>
+        </details>
+        <details class="mcb-method-details">
+          <summary><span><strong>Methods & limitations</strong><small>Scope, caveats and source details</small></span><span aria-hidden="true">+</span></summary>
+          <div class="mcb-method-details__body">
+            <div class="mcb-scope-heading">EVALUATION SCOPE <span>Context, not performance</span></div>
+            <div class="run-summary" data-mcb-scope aria-label="Swipe through benchmark scope metrics" role="region" tabindex="0">
+          <span><strong data-model-count>—</strong> models</span>
+          <span><strong data-request-count>—</strong> <span data-count-label>requests</span></span>
+          <span><strong data-dataset>—</strong> <span data-scope-label>dataset</span></span>
+          <span><strong data-runtime>—</strong> <span data-runtime-label>runtime</span></span>
+        </div>
+
+            <p>Aggregate quality is reported by the published Model Capability Benchmark. Latency is the reported median (p50); local and API runtimes have different execution environments.</p>
+            <p>These figures describe the published snapshot, not a controlled hardware-normalized leaderboard. Use the linked source for benchmark signatures, tasks and reproducibility details.</p>
+          </div>
+        </details>
+      </div>
+
+    </div>
+
+    <div class="evidence-panel__error" data-evidence-error hidden>
+      <span class="evidence-panel__eyebrow">SOURCE UNAVAILABLE</span>
+      <h3>Published evidence could not be loaded.</h3>
+      <p>No fallback or invented performance values are shown.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { redactguardRows } from '../../scripts/redactguardEvidence.js';
+  import { renderRedactguardOverview } from '../../scripts/redactguardOverview.js';
+  import { initializeRedactguardAnalytics } from '../../scripts/redactguardPresentation.js';
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+
+  const initExperimentExplorer = () => {
+    document.querySelectorAll('[data-experiment-explorer]').forEach((root) => {
+      if (!(root instanceof HTMLElement) || root.dataset.ready === 'true') return;
+      root.dataset.ready = 'true';
+
+      const tabs = Array.from(root.querySelectorAll('[data-experiment-tab]'));
+      const experimentRail = root.querySelector('[data-experiment-rail]');
+      const mobileSelector = root.querySelector('[data-experiment-mobile-select]');
+      const previousExperiment = root.querySelector('[data-experiment-prev]');
+      const nextExperiment = root.querySelector('[data-experiment-next]');
+      const experimentPosition = root.querySelector('[data-experiment-position]');
+      const loading = root.querySelector('[data-evidence-loading]');
+      const empty = root.querySelector('[data-evidence-empty]');
+      const result = root.querySelector('[data-evidence-result]');
+      const error = root.querySelector('[data-evidence-error]');
+
+      let requestId = 0;
+
+      const setHidden = (node, hidden) => {
+        if (node instanceof HTMLElement) node.hidden = hidden;
+      };
+
+      const setText = (selector, value) => {
+        const node = root.querySelector(selector);
+        if (node) node.textContent = value ?? '';
+      };
+
+      const showOnly = (target) => {
+        setHidden(loading, target !== 'loading');
+        setHidden(empty, target !== 'empty');
+        setHidden(result, target !== 'result');
+        setHidden(error, target !== 'error');
+      };
+
+      const shortModel = (value) => {
+        const model = String(value || '');
+        return model
+          .replace(/^qwen3\.5-/i, 'Qwen 3.5 ')
+          .replace(/^nemotron-nano-/i, 'Nemotron ')
+          .replace(/-q4km$/i, ' Q4')
+          .replace(/-q8$/i, ' Q8')
+          .replace(/-/g, ' ')
+          .replace(/\b(\d+(?:\.\d+)?)b\b/gi, '$1B');
+      };
+
+      const formatPct = (value) => {
+        const number = Number(value);
+        return Number.isFinite(number) ? `${(number * 100).toFixed(1)}%` : '—';
+      };
+
+      const formatSeconds = (value) => {
+        const number = Number(value);
+        if (!Number.isFinite(number)) return '—';
+        if (number < 1000) return `${Math.round(number)} ms`;
+        return `${(number / 1000).toFixed(1)} s`;
+      };
+
+      const createSvg = (tag, attrs = {}) => {
+        const node = document.createElementNS(SVG_NS, tag);
+        Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value)));
+        return node;
+      };
+
+      const mcbState = {
+        points: [],
+        filter: 'all',
+        selected: null,
+        showAll: false,
+      };
+
+      const renderMcbCards = (points) => {
+        const region = root.querySelector('[data-mcb-model-cards]');
+        const toggle = root.querySelector('[data-mcb-show-all]');
+        if (!(region instanceof HTMLElement)) return;
+        region.replaceChildren();
+
+        const ranked = [...points].sort((a, b) =>
+          b.qualityNumber - a.qualityNumber || a.latencyNumber - b.latencyNumber);
+        const displayed = mcbState.showAll ? ranked : ranked.slice(0, 3);
+        const published = mcbState.points;
+        const highestQuality = [...published].sort((a, b) =>
+          b.qualityNumber - a.qualityNumber || a.latencyNumber - b.latencyNumber)[0];
+        const localPoints = published.filter((point) => point.deployment === 'local');
+        const highestLocalQuality = [...localPoints].sort((a, b) =>
+          b.qualityNumber - a.qualityNumber || a.latencyNumber - b.latencyNumber)[0];
+        const fastestLocal = [...localPoints].sort((a, b) =>
+          a.latencyNumber - b.latencyNumber || b.qualityNumber - a.qualityNumber)[0];
+        const pointKey = (point) => point?.model_signature || point?.model_key;
+
+        const insightFor = (point, index) => {
+          const key = pointKey(point);
+          if (key === pointKey(highestQuality)) {
+            return {
+              role: 'TOP QUALITY',
+              insight: 'Highest aggregate score in this published snapshot.',
+            };
+          }
+          if (point.deployment === 'local' && key === pointKey(highestLocalQuality)) {
+            return {
+              role: 'TOP LOCAL',
+              insight: 'Highest aggregate score among local models.',
+            };
+          }
+          if (point.deployment === 'local' && key === pointKey(fastestLocal)) {
+            return {
+              role: 'FASTEST LOCAL P50',
+              insight: 'Lowest reported p50 among local models.',
+            };
+          }
+          return {
+            role: 'QUALITY RANK ' + String(index + 1).padStart(2, '0'),
+            insight: 'Aggregate quality rank within the current ' +
+              (mcbState.filter === 'all' ? 'published' : mcbState.filter.toUpperCase()) + ' view.',
+          };
+        };
+
+        displayed.forEach((point, index) => {
+          const key = pointKey(point);
+          const { role, insight } = insightFor(point, index);
+          const entry = document.createElement('div');
+          entry.className = 'mcb-model-entry';
+          entry.setAttribute('role', 'listitem');
+
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'mcb-model-card';
+          button.dataset.deployment = point.deployment === 'api' ? 'api' : 'local';
+          button.dataset.insightRole = role === 'TOP QUALITY' ? 'top' :
+            role === 'TOP LOCAL' ? 'local' :
+            role === 'FASTEST LOCAL P50' ? 'fastest' : 'rank';
+          button.setAttribute('data-mcb-card', key);
+          button.setAttribute('aria-pressed', mcbState.selected === key ? 'true' : 'false');
+          button.setAttribute('aria-label',
+            role + ': ' + shortModel(point.model_key) + ', ' +
+            point.qualityNumber.toFixed(1) + ' out of 100 aggregate quality, ' +
+            formatSeconds(point.latencyNumber) + ' median p50, ' +
+            (point.deployment === 'api' ? 'API' : 'local') + ' runtime');
+
+          const top = document.createElement('span');
+          top.className = 'mcb-model-card__topline';
+          const roleLabel = document.createElement('span');
+          roleLabel.className = 'mcb-model-card__role';
+          roleLabel.textContent = role;
+          const environment = document.createElement('span');
+          environment.className = 'mcb-model-card__runtime';
+          environment.textContent = point.deployment === 'api' ? 'API' : 'Local';
+          top.append(roleLabel, environment);
+
+          const identity = document.createElement('span');
+          identity.className = 'mcb-model-card__identity';
+          const model = document.createElement('strong');
+          model.className = 'mcb-model-card__name';
+          model.textContent = shortModel(point.model_key);
+          const explanation = document.createElement('span');
+          explanation.className = 'mcb-model-card__insight';
+          explanation.textContent = insight;
+          identity.append(model, explanation);
+
+          const metrics = document.createElement('span');
+          metrics.className = 'mcb-model-card__metrics';
+          const metric = (value, label) => {
+            const cell = document.createElement('span');
+            cell.className = 'mcb-model-card__metric';
+            const number = document.createElement('strong');
+            number.className = 'mcb-model-card__metric-value';
+            number.textContent = value;
+            const caption = document.createElement('small');
+            caption.className = 'mcb-model-card__metric-label';
+            caption.textContent = label;
+            cell.append(number, caption);
+            return cell;
+          };
+          metrics.append(
+            metric(point.qualityNumber.toFixed(1), 'Quality / 100'),
+            metric(formatSeconds(point.latencyNumber), 'Median p50'),
+          );
+          button.append(top, identity, metrics);
+          button.addEventListener('click', () => focusMcbPoint(point));
+          entry.appendChild(button);
+          region.appendChild(entry);
+        });
+
+        if (toggle instanceof HTMLButtonElement) {
+          toggle.hidden = ranked.length <= 3;
+          toggle.textContent = mcbState.showAll
+            ? 'Show fewer models'
+            : 'View all ' + ranked.length + ' measured models';
+          toggle.setAttribute('aria-expanded', mcbState.showAll ? 'true' : 'false');
+        }
+      };
+      const showAllModels = root.querySelector('[data-mcb-show-all]');
+      if (showAllModels instanceof HTMLButtonElement) {
+        showAllModels.addEventListener('click', () => {
+          mcbState.showAll = !mcbState.showAll;
+          if (typeof mcbState.redraw === 'function') mcbState.redraw();
+        });
+      }
+
+      const focusMcbPoint = (point) => {
+        if (!point) return;
+        mcbState.selected = point.model_signature || point.model_key;
+        setText('[data-mcb-selected-name]', shortModel(point.model_key));
+        setText(
+          '[data-mcb-selected-metrics]',
+          point.qualityNumber.toFixed(1) + ' / 100 quality · ' +
+            formatSeconds(point.latencyNumber) + ' p50 · ' +
+            (point.deployment === 'api' ? 'API' : 'Local'),
+        );
+        root.querySelectorAll('[data-mcb-point]').forEach((group) => {
+          const selected = group.getAttribute('data-mcb-point') === mcbState.selected;
+          group.classList.toggle('is-selected', selected);
+          group.setAttribute('aria-pressed', selected ? 'true' : 'false');
+        });
+        root.querySelectorAll('[data-mcb-card]').forEach((button) => {
+          button.setAttribute('aria-pressed',
+            button.getAttribute('data-mcb-card') === mcbState.selected ? 'true' : 'false');
+        });
+      };
+
+      const plotMcbOverview = (data) => {
+        const svg = root.querySelector('[data-performance-plot]');
+        if (!(svg instanceof SVGElement)) return [];
+
+        const points = Array.isArray(data?.frontier?.points)
+          ? data.frontier.points
+              .map((point) => ({
+                ...point,
+                qualityNumber: Number(point.quality),
+                latencyNumber: Number(point.latency_p50_ms),
+              }))
+              .filter(
+                (point) =>
+                  Number.isFinite(point.qualityNumber) &&
+                  Number.isFinite(point.latencyNumber) &&
+                  point.latencyNumber > 0,
+              )
+          : [];
+        mcbState.points = points;
+
+        const redraw = () => {
+          while (svg.firstChild) svg.removeChild(svg.firstChild);
+          const visible = points
+            .filter((point) => mcbState.filter === 'all' || point.deployment === mcbState.filter)
+            .sort((a, b) => a.latencyNumber - b.latencyNumber);
+          renderMcbCards(visible);
+          if (!visible.length) return;
+
+          const W = 620;
+          const H = 250;
+          const pad = { left: 46, right: 22, top: 16, bottom: 38 };
+          const innerW = W - pad.left - pad.right;
+          const innerH = H - pad.top - pad.bottom;
+          const minLatency = Math.min(...visible.map((point) => point.latencyNumber)) / 1.25;
+          const maxLatency = Math.max(...visible.map((point) => point.latencyNumber)) * 1.3;
+          const logMin = Math.log10(minLatency);
+          const logSpan = Math.max(0.01, Math.log10(maxLatency) - logMin);
+          const x = (value) => pad.left + (Math.log10(value) - logMin) / logSpan * innerW;
+          const y = (value) => pad.top + (100 - value) / 100 * innerH;
+
+          const grid = createSvg('g', { class: 'plot-grid' });
+          const labels = createSvg('g', { class: 'plot-axis-labels' });
+          [0, 25, 50, 75, 100].forEach((tick) => {
+            const yy = y(tick);
+            grid.appendChild(createSvg('line', {
+              x1: pad.left, y1: yy, x2: W - pad.right, y2: yy,
+            }));
+            const text = createSvg('text', { x: pad.left - 10, y: yy + 4, 'text-anchor': 'end' });
+            text.textContent = String(tick);
+            labels.appendChild(text);
+          });
+
+          [250, 500, 1000, 2000, 5000, 10000, 20000]
+            .filter((tick) => tick >= minLatency && tick <= maxLatency)
+            .forEach((tick) => {
+              const xx = x(tick);
+              grid.appendChild(createSvg('line', {
+                x1: xx, x2: xx, y1: pad.top, y2: H - pad.bottom,
+              }));
+              const text = createSvg('text', {
+                x: xx, y: H - 12, 'text-anchor': 'middle',
+              });
+              text.textContent = formatSeconds(tick);
+              labels.appendChild(text);
+            });
+          svg.appendChild(grid);
+          svg.appendChild(labels);
+
+          // The projected artifact carries the comparability-aware Pareto flags.
+          // Do not reconstruct a mixed local/API Pareto from visual positions.
+          const frontier = visible
+            .filter((point) => point.pareto_latency === true)
+            .sort((a, b) => a.latencyNumber - b.latencyNumber);
+          if (frontier.length > 1) {
+            svg.appendChild(createSvg('polyline', {
+              class: 'plot-frontier',
+              points: frontier.map((point) => x(point.latencyNumber) + ',' + y(point.qualityNumber)).join(' '),
+            }));
+          }
+
+          visible.forEach((point) => {
+            const key = point.model_signature || point.model_key;
+            const group = createSvg('g', {
+              class: 'plot-point plot-interactive',
+              role: 'button',
+              tabindex: '0',
+              'aria-pressed': 'false',
+              'aria-label': shortModel(point.model_key) + ', quality ' +
+                point.qualityNumber.toFixed(1) + '/100, p50 ' +
+                formatSeconds(point.latencyNumber) + ', ' + point.deployment,
+              'data-mcb-point': key,
+            });
+            const isApi = point.deployment === 'api';
+            const circle = createSvg('circle', {
+              cx: x(point.latencyNumber),
+              cy: y(point.qualityNumber),
+              r: point.pareto_latency ? 7 : 6,
+              class: (isApi ? 'is-api' : 'is-local') +
+                (point.pareto_latency ? ' is-frontier' : ''),
+            });
+            const hit = createSvg('circle', {
+              cx: x(point.latencyNumber),
+              cy: y(point.qualityNumber),
+              r: 16,
+              class: 'plot-hit-area',
+            });
+            const title = createSvg('title');
+            title.textContent = group.getAttribute('aria-label') || '';
+            group.appendChild(circle);
+            group.appendChild(hit);
+            group.appendChild(title);
+            group.addEventListener('click', () => focusMcbPoint(point));
+            group.addEventListener('focus', () => focusMcbPoint(point));
+            group.addEventListener('mouseenter', () => focusMcbPoint(point));
+            group.addEventListener('keydown', (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                focusMcbPoint(point);
+              }
+            });
+            svg.appendChild(group);
+          });
+
+          const selectedPoint = visible.find(
+            (point) => (point.model_signature || point.model_key) === mcbState.selected,
+          );
+          focusMcbPoint(selectedPoint || [...visible].sort(
+            (a, b) => b.qualityNumber - a.qualityNumber,
+          )[0]);
+        };
+
+        const toolbar = root.querySelector('[data-mcb-toolbar]');
+        setHidden(toolbar, false);
+        setHidden(root.querySelector('[data-mcb-detail]'), false);
+        root.querySelectorAll('[data-mcb-filter]').forEach((button) => {
+          button.setAttribute('aria-pressed',
+            button.getAttribute('data-mcb-filter') === mcbState.filter ? 'true' : 'false');
+        });
+        mcbState.redraw = redraw;
+        redraw();
+        return points;
+      };
+
+      root.querySelectorAll('[data-mcb-filter]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const filter = button.getAttribute('data-mcb-filter');
+          if (!['all', 'local', 'api'].includes(filter)) return;
+          mcbState.filter = filter;
+          root.querySelectorAll('[data-mcb-filter]').forEach((option) => {
+            option.setAttribute('aria-pressed',
+              option.getAttribute('data-mcb-filter') === filter ? 'true' : 'false');
+          });
+          if (typeof mcbState.redraw === 'function') mcbState.redraw();
+        });
+      });
+
+      const renderMcbOverview = (data, tab) => {
+        setHidden(root.querySelector('[data-rg-summary]'), true);
+        setText('[data-result-eyebrow]', 'PUBLISHED BENCHMARK SNAPSHOT');
+        setHidden(root.querySelector('[data-jev-summary]'), true);
+        setHidden(root.querySelector('[data-mcb-scope]'), false);
+        setHidden(root.querySelector('[data-mcb-story]'), false);
+        setHidden(root.querySelector('[data-mcb-takeaway]'), false);
+        setHidden(root.querySelector('[data-jev-toolbar]'), true);
+        setHidden(root.querySelector('[data-jev-detail]'), true);
+        setHidden(root.querySelector('[data-jev-evidence-note]'), true);
+        const points = plotMcbOverview(data);
+        if (!points.length) throw new Error('No published MCB frontier points');
+
+        const models = Array.isArray(data?.models) ? data.models : [];
+        const capabilities = Array.isArray(data?.capabilities) ? data.capabilities : [];
+        const cells = Array.isArray(data?.cells) ? data.cells : [];
+
+        const overallBest = [...points].sort(
+          (a, b) => Number(b.quality) - Number(a.quality),
+        )[0];
+
+        const localPoints = points.filter((point) => point.deployment === 'local');
+        const bestLocal = [...localPoints].sort(
+          (a, b) => Number(b.quality) - Number(a.quality),
+        )[0];
+        const fastestLocal = [...localPoints].sort(
+          (a, b) => Number(a.latency_p50_ms) - Number(b.latency_p50_ms),
+        )[0];
+
+        setText('[data-result-title]', tab.dataset.title || 'Model Capability Benchmark');
+        setText('[data-result-question]', tab.dataset.question || '');
+        setText('[data-model-count]', String(models.length || points.length));
+        setText('[data-request-count]', String(cells.length || '—'));
+        setText('[data-count-label]', 'published cells');
+        setText('[data-dataset]', String(capabilities.length || '—'));
+        setText('[data-scope-label]', 'capabilities');
+        setText('[data-runtime]', '2');
+        setText('[data-runtime-label]', 'execution modes');
+
+        setText('[data-best-quality]', `${Number(overallBest.quality).toFixed(1)}`);
+        setText('[data-best-quality-model]', shortModel(overallBest.model_key));
+
+        setText(
+          '[data-balance]',
+          bestLocal
+            ? `${Number(bestLocal.quality).toFixed(1)} · ${formatSeconds(bestLocal.latency_p50_ms)}`
+            : '—',
+        );
+        setText(
+          '[data-balance-model]',
+          bestLocal ? `${shortModel(bestLocal.model_key)} · best local quality` : '',
+        );
+
+        setText(
+          '[data-fastest]',
+          fastestLocal ? formatSeconds(fastestLocal.latency_p50_ms) : '—',
+        );
+        setText(
+          '[data-fastest-model]',
+          fastestLocal
+            ? `${shortModel(fastestLocal.model_key)} · ${Number(fastestLocal.quality).toFixed(1)} quality`
+            : '',
+        );
+
+        if (bestLocal && overallBest) {
+          const qualityGap = Number(overallBest.quality) - Number(bestLocal.quality);
+          const speedRatio =
+            Number(bestLocal.latency_p50_ms) / Number(overallBest.latency_p50_ms);
+
+          setText(
+            '[data-readout-title]',
+            `${shortModel(bestLocal.model_key)} is the strongest local point in the published snapshot.`,
+          );
+          setText(
+            '[data-readout]',
+            `${Number(bestLocal.quality).toFixed(1)} aggregate quality at ${formatSeconds(bestLocal.latency_p50_ms)} p50. The top overall point is ${shortModel(overallBest.model_key)} at ${Number(overallBest.quality).toFixed(1)}, a ${qualityGap.toFixed(1)}-point gap${Number.isFinite(speedRatio) ? ` while the local point is ${speedRatio.toFixed(1)}× slower` : ''}.`,
+          );
+        }
+
+        const source = root.querySelector('[data-result-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        }
+
+        const heading = root.querySelector('.plot-heading__eyebrow');
+        if (heading) heading.textContent = 'MODEL CAPABILITY × LATENCY';
+
+        const plotTitle = root.querySelector('.plot-heading strong');
+        if (plotTitle) plotTitle.textContent = 'Model performance map';
+
+        const plotNote = root.querySelector('.plot-heading__note');
+        if (plotNote) plotNote.textContent = 'Quality / 100 · Log-scale p50';
+
+        const legend = root.querySelector('.plot-legend');
+        if (legend) {
+          legend.innerHTML =
+            '<span><i class="legend-dot legend-dot--local"></i>Local</span><span><i class="legend-dot legend-dot--api"></i>API</span><span>Different runtime environments</span>';
+        }
+
+        const highlightLabels = root.querySelectorAll('.highlight > span');
+        if (highlightLabels[0]) highlightLabels[0].textContent = 'BEST OVERALL';
+        if (highlightLabels[1]) highlightLabels[1].textContent = 'BEST LOCAL';
+        if (highlightLabels[2]) highlightLabels[2].textContent = 'FASTEST LOCAL';
+      };
+
+      const renderMcbIntentComparison = (mcb, tab) => {
+        const container = root.querySelector('[data-jev-mcb-rows]');
+        if (!(container instanceof HTMLElement)) return;
+        container.replaceChildren();
+
+        const source = root.querySelector('[data-jev-mcb-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.relatedSourceUrl || '#';
+        }
+
+        const cells = Array.isArray(mcb?.cells) ? mcb.cells : [];
+        const intent = cells.filter((cell) =>
+          cell.capability_id === 'intent-classification' &&
+          cell.primary_metric === 'accuracy' &&
+          Number.isFinite(Number(cell.primary_value)) &&
+          Number(cell.primary_value) >= 0 &&
+          Number(cell.primary_value) <= 1 &&
+          Number.isInteger(Number(cell.sample_count)) &&
+          Number(cell.sample_count) > 0,
+        );
+
+        const jev = intent.find((cell) => cell.model_key === 'jev-1.13.0');
+        const luna = intent.find((cell) => cell.model_key === 'gpt-5.6-luna');
+        if (
+          !jev || !luna ||
+          jev.benchmark_signature !== luna.benchmark_signature ||
+          jev.sample_count !== luna.sample_count
+        ) {
+          throw new Error('No matching public MCB signature for JEV and GPT Luna');
+        }
+
+        const cohort = intent.filter((cell) =>
+          cell.benchmark_signature === jev.benchmark_signature &&
+          cell.sample_count === jev.sample_count,
+        );
+        const topLocals = cohort
+          .filter((cell) => cell.deployment === 'local' && cell.model_key)
+          .sort((a, b) => Number(b.primary_value) - Number(a.primary_value))
+          .slice(0, 2);
+        const display = [luna, jev, ...topLocals].sort(
+          (a, b) => Number(b.primary_value) - Number(a.primary_value),
+        );
+
+        setText(
+          '[data-jev-mcb-meta]',
+          'Intent classification · ' + jev.sample_count +
+            ' samples/model · shared benchmark signature · accuracy',
+        );
+        setText(
+          '[data-jev-mcb-note]',
+          'Results are published by Model Capability Benchmark (MCB), not the ' +
+            'Jev-vs-LLM routing suite. Matching benchmark signatures and sample sizes ' +
+            'support configuration-level comparison; they do not prove identical ' +
+            'case-level inputs or authorize republication under TypeSafe terms.',
+        );
+
+        display.forEach((cell) => {
+          const row = document.createElement('div');
+          row.className = 'jev-mcb-row';
+          row.setAttribute('role', 'listitem');
+
+          const identity = document.createElement('div');
+          identity.className = 'jev-mcb-row__model';
+          const name = document.createElement('strong');
+          name.textContent = cell.model_key === 'gpt-5.6-luna'
+            ? 'GPT-5.6 Luna'
+            : cell.model_key === 'jev-1.13.0'
+              ? 'JEV 1.13.0'
+              : shortModel(cell.model_key);
+          const category = document.createElement('small');
+          category.textContent =
+            cell.model_key === 'jev-1.13.0' ? 'Decision model · API' :
+              cell.model_key === 'gpt-5.6-luna' ? 'General-purpose LLM · API' :
+                'Local baseline';
+          identity.append(name, category);
+
+          const reading = document.createElement('div');
+          reading.className = 'jev-mcb-row__score';
+          const pct = document.createElement('strong');
+          pct.textContent = formatPct(cell.primary_value);
+          const bar = document.createElement('div');
+          bar.className = 'jev-mcb-row__track';
+          bar.setAttribute('aria-hidden', 'true');
+          const fill = document.createElement('span');
+          fill.className = 'jev-mcb-row__fill';
+          fill.style.width = (Number(cell.primary_value) * 100).toFixed(1) + '%';
+          bar.appendChild(fill);
+          reading.append(pct, bar);
+          row.append(identity, reading);
+          container.appendChild(row);
+        });
+      };
+
+      const renderJevRouting = (data, tab, relatedMcb) => {
+        setHidden(root.querySelector('[data-rg-summary]'), true);
+        setText('[data-result-eyebrow]', 'PUBLISHED BENCHMARK EVIDENCE · MIXED SOURCES');
+        const sourceHeading = root.querySelector('[data-jev-mcb-meta]');
+        if (relatedMcb) {
+          try {
+            renderMcbIntentComparison(relatedMcb, tab);
+          } catch (cause) {
+            console.warn('Published MCB comparison cannot be verified', cause);
+            setText('[data-jev-mcb-meta]', 'MCB comparison unavailable — inspect the original benchmark source.');
+            const rows = root.querySelector('[data-jev-mcb-rows]');
+            if (rows) rows.replaceChildren();
+          }
+        } else {
+          if (sourceHeading) sourceHeading.textContent = 'Related MCB evidence is temporarily unavailable.';
+          const rows = root.querySelector('[data-jev-mcb-rows]');
+          if (rows) rows.replaceChildren();
+        }
+
+        if (
+          data?.schema_version !== 1 ||
+          data?.benchmark !== 'jev-vs-llm' ||
+          data?.publication?.restricted_jev_typesafe_clm_metrics_included !== false ||
+          !Array.isArray(data?.experiments)
+        ) {
+          throw new Error('Invalid or unreviewed Jev public evidence manifest');
+        }
+        const rows = Array.isArray(data?.routing?.models) ? data.routing.models : [];
+        const validRows = rows
+          .map((row) => ({
+            ...row,
+            accuracyValue: Number(row.accuracy),
+            latencyValue: Number(row.latency_p50_ms),
+            cases: Number(row.requests),
+          }))
+          .filter((row) =>
+            Number.isFinite(row.accuracyValue) &&
+            Number.isFinite(row.latencyValue) && row.latencyValue > 0 &&
+            Number.isFinite(row.cases) && row.cases > 0,
+          );
+        if (!validRows.length) throw new Error('No comparable routing evidence');
+
+        // Equal dataset size is necessary before presenting model rankings.
+        const coverage = new Map();
+        validRows.forEach((row) =>
+          coverage.set(row.cases, (coverage.get(row.cases) || 0) + 1),
+        );
+        const commonCaseCount = [...coverage.keys()].sort(
+          (a, b) => coverage.get(b) - coverage.get(a) || b - a,
+        )[0];
+        const comparable = validRows
+          .filter((row) => row.cases === commonCaseCount)
+          .sort((a, b) => b.accuracyValue - a.accuracyValue);
+        const partial = validRows.filter((row) => row.cases !== commonCaseCount);
+        if (comparable.length < 2) throw new Error('Insufficient matched routing runs');
+
+        const bestQuality = comparable[0];
+        // Compare the two independently observable endpoints on matched cases:
+        // highest accuracy versus lowest median latency. No subjective threshold.
+        const alternative = [...comparable]
+          .sort((a, b) => a.latencyValue - b.latencyValue)[0];
+        const speedup = bestQuality.latencyValue / alternative.latencyValue;
+        const accuracyLoss = (bestQuality.accuracyValue - alternative.accuracyValue) * 100;
+        const sameModel = bestQuality.model === alternative.model;
+
+        const experimentItems = data.experiments;
+        const publishedExperiments = experimentItems.filter(
+          (item) => item.status === 'published_subset' || item.status === 'published',
+        );
+        const providers = Array.isArray(data?.routing?.providers)
+          ? data.routing.providers
+          : [...new Set(validRows.map((row) => String(row.provider || 'unknown')))];
+        const isDirectComparison =
+          data.publication.comparison_status === 'complete_provider_comparison';
+        setText(
+          '[data-result-title]',
+          'JEV vs LLM · Published evidence',
+        );
+        setText(
+          '[data-result-question]',
+          'MCB intent-classification comparison above · separate Jev suite routing evidence below.',
+        );
+        setText(
+          '[data-jev-published-scope]',
+          isDirectComparison
+            ? 'Standalone Jev suite: direct comparison published'
+            : 'Standalone Jev suite: head-to-head not published',
+        );
+        setText(
+          '[data-jev-experiment-count]',
+          publishedExperiments.length + '/' + experimentItems.length + ' experiments',
+        );
+        setText(
+          '[data-jev-scope-note]',
+          isDirectComparison
+            ? 'A reviewed and authorized public comparison is available.'
+            : 'This standalone suite currently publishes ' + providers.join(', ') +
+                ' routing aggregates only. Jev/TypeSafe/CLM metrics remain excluded here ' +
+                'pending publication clearance. The JEV and GPT Luna results above come from MCB.',
+        );
+
+        const coverageStrip = root.querySelector('[data-jev-stage-coverage]');
+        if (coverageStrip instanceof HTMLElement) {
+          coverageStrip.replaceChildren();
+          const names = {
+            routing: 'Routing', calibration: 'Calibration', scaling: 'Scaling',
+            workflow: 'Workflow', agent: 'Hybrid agent',
+          };
+          experimentItems.forEach((item) => {
+            const published = item.status === 'published_subset' || item.status === 'published';
+            const node = document.createElement('span');
+            node.className = 'jev-stage-coverage__item' +
+              (published ? ' is-published' : '');
+            node.textContent = (published ? '● ' : '○ ') +
+              (names[item.id] || item.id) +
+              (published ? ' · subset' : ' · unpublished');
+            coverageStrip.appendChild(node);
+          });
+        }
+        setText('[data-model-count]', String(validRows.length));
+        setText('[data-request-count]', String(
+          validRows.reduce((sum, row) => sum + row.cases, 0),
+        ));
+        setText('[data-count-label]', 'model-requests');
+        setText('[data-dataset]', String(commonCaseCount));
+        setText('[data-scope-label]', 'requests per grouped model');
+        setText('[data-runtime]', 'Local');
+        setText('[data-runtime-label]', 'execution');
+
+        setText(
+          '[data-jev-takeaway-headline]',
+          sameModel
+            ? 'Best accuracy and speed in one model.'
+            : speedup.toFixed(1) + '× faster.',
+        );
+        setText(
+          '[data-jev-takeaway-description]',
+          sameModel
+            ? 'In this published comparison it has both the highest accuracy and the shortest median response time.'
+            : shortModel(alternative.model) + ' vs ' + shortModel(bestQuality.model) +
+                ': ' + accuracyLoss.toFixed(1) +
+                ' fewer accuracy points with a much shorter median response time.',
+        );
+        setText(
+          '[data-jev-quality-gap]',
+          sameModel ? 'No trade-off' : '−' + accuracyLoss.toFixed(1) + ' pts',
+        );
+        setText(
+          '[data-jev-speed-comparison]',
+          formatSeconds(alternative.latencyValue) + ' vs ' +
+            formatSeconds(bestQuality.latencyValue),
+        );
+        setText(
+          '[data-jev-coverage]',
+          comparable.length + ' models · ' + commonCaseCount + ' requests each',
+        );
+        setText(
+          '[data-jev-method-note]',
+          'Grouping uses equal request counts, not verified identical test cases. ' +
+          'Results are descriptive local baselines, not a controlled Jev-vs-LLM comparison.',
+        );
+
+        const container = root.querySelector('[data-jev-rows]');
+        if (!(container instanceof HTMLElement)) throw new Error('Missing JEV comparison list');
+        container.replaceChildren();
+
+        const make = (tag, cls, value) => {
+          const node = document.createElement(tag);
+          if (cls) node.className = cls;
+          if (value != null) node.textContent = String(value);
+          return node;
+        };
+        comparable.forEach((row) => {
+          const isQuality = row.model === bestQuality.model;
+          const isAlternative = !sameModel && row.model === alternative.model;
+          const item = make('div', 'jev-model-row' + (isAlternative ? ' is-alternative' : ''), null);
+          item.setAttribute('role', 'listitem');
+
+          const nameCell = make('div', 'jev-model-row__name', null);
+          nameCell.appendChild(make('strong', '', shortModel(row.model)));
+          if (isQuality) nameCell.appendChild(make('small', '', 'Most accurate'));
+          else if (isAlternative) nameCell.appendChild(make('small', '', 'Fastest response'));
+
+          const accuracyCell = make('div', 'jev-model-row__accuracy', null);
+          const accuracyTop = make('div', 'jev-model-row__accuracy-head', null);
+          accuracyTop.appendChild(make('strong', '', formatPct(row.accuracyValue)));
+          accuracyCell.appendChild(accuracyTop);
+          accuracyCell.appendChild(make('small', 'jev-model-row__mobile-label', 'Accuracy'));
+          const bar = make('div', 'jev-model-row__track', null);
+          bar.setAttribute('aria-hidden', 'true');
+          const fill = make('span', 'jev-model-row__fill', null);
+          fill.style.width = Math.max(0, Math.min(100, row.accuracyValue * 100)).toFixed(1) + '%';
+          bar.appendChild(fill);
+          accuracyCell.appendChild(bar);
+
+          const latencyCell = make('div', 'jev-model-row__latency', null);
+          latencyCell.appendChild(make('strong', '', formatSeconds(row.latencyValue)));
+          latencyCell.appendChild(make('small', '', 'Median response'));
+          item.appendChild(nameCell);
+          item.appendChild(accuracyCell);
+          item.appendChild(latencyCell);
+          container.appendChild(item);
+        });
+
+        const partialNotice = root.querySelector('[data-jev-partial]');
+        if (partial.length && partialNotice instanceof HTMLElement) {
+          partialNotice.replaceChildren();
+          const label = make('strong', '', 'Separate shorter run: ');
+          partialNotice.appendChild(label);
+          partialNotice.appendChild(document.createTextNode(
+            partial.map((row) =>
+              shortModel(row.model) + ' · ' + row.cases + ' cases · ' +
+              formatPct(row.accuracyValue) + ' accuracy · ' +
+              formatSeconds(row.latencyValue) + ' p50',
+            ).join('; ') + '. Excluded from the ranking.',
+          ));
+        }
+        setHidden(partialNotice, !partial.length);
+
+        const source = root.querySelector('[data-result-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        }
+
+        setHidden(root.querySelector('[data-jev-summary]'), false);
+        setHidden(root.querySelector('[data-mcb-scope]'), true);
+        setHidden(root.querySelector('[data-mcb-story]'), true);
+        setHidden(root.querySelector('[data-mcb-takeaway]'), true);
+      };
+
+      const renderRedactGuard = (data, tab) => {
+        if (
+          data?.schema_version !== 1 ||
+          data?.benchmark !== 'redactguard-local-anonymization' ||
+          !Array.isArray(data?.datasets) ||
+          !Array.isArray(data?.models) ||
+          typeof data?.publication?.has_published_model_metrics !== 'boolean' ||
+          data?.publication?.contains_raw_pii !== false
+        ) {
+          throw new Error('Invalid RedactGuard public evidence');
+        }
+
+        const datasets = data.datasets.filter((item) =>
+          item && typeof item.id === 'string' &&
+          Number.isInteger(item.cases ?? item.documents) &&
+          (item.cases ?? item.documents) > 0,
+        );
+        if (!datasets.length) throw new Error('No published RedactGuard datasets');
+        setHidden(root.querySelector('[data-jev-summary]'), true);
+        setHidden(root.querySelector('[data-mcb-scope]'), true);
+        setHidden(root.querySelector('[data-mcb-story]'), true);
+        setHidden(root.querySelector('[data-mcb-takeaway]'), true);
+        setHidden(root.querySelector('[data-rg-summary]'), false);
+
+        setText(
+          '[data-result-eyebrow]',
+          data.publication.has_published_model_metrics
+            ? 'PUBLISHED MODEL RESULTS · REDACTGUARD'
+            : 'PUBLISHED TEST COVERAGE · MODEL SCORES PENDING',
+        );
+        setText(
+          '[data-rg-publication-status]',
+          data.publication.has_published_model_metrics
+            ? data.models.length + ' measured model × dataset results'
+            : 'Dataset coverage published',
+        );
+        setText('[data-result-title]', 'RedactGuard · Privacy evaluation');
+        setText(
+          '[data-result-question]',
+          'How well can sensitive data be identified across difficult contexts and document types?',
+        );
+        const source = root.querySelector('[data-result-source]');
+        if (source instanceof HTMLAnchorElement) {
+          source.href = tab.dataset.sourceUrl || tab.dataset.resultUrl || '#';
+        }
+
+        const picker = root.querySelector('[data-rg-datasets]');
+        const resultRows = root.querySelector('[data-rg-model-rows]');
+        if (!(picker instanceof HTMLElement) || !(resultRows instanceof HTMLElement)) return;
+        picker.replaceChildren();
+        const updateAnalytics = initializeRedactguardAnalytics(root, data, {
+          formatPct, formatSeconds, shortModel, createSvg, setHidden,
+        });
+
+        const setDataset = (dataset) => {
+          picker.querySelectorAll('button[data-rg-dataset]').forEach((button) => {
+            const active = button.dataset.rgDataset === dataset.id;
+            button.classList.toggle('is-selected', active);
+            button.setAttribute('aria-pressed', active ? 'true' : 'false');
+          });
+          const isDocuments = Number.isInteger(dataset.documents);
+          const count = isDocuments ? dataset.documents : dataset.cases;
+          setText('[data-rg-kind]', (dataset.kind || 'test suite').toUpperCase() + ' · SOURCE-VERIFIED');
+          setText('[data-rg-dataset-name]', dataset.title);
+          setText('[data-rg-focus]', dataset.focus);
+          setText('[data-rg-count]', String(count));
+          setText('[data-rg-count-unit]', isDocuments ? 'annotated documents' : 'test cases');
+          setText('[data-rg-extra]',
+            Number.isInteger(dataset.gold_spans) ? dataset.gold_spans.toLocaleString('en-US') + ' gold PII spans' : '',
+          );
+          setHidden(root.querySelector('[data-rg-extra]'), !Number.isInteger(dataset.gold_spans));
+          const link = root.querySelector('[data-rg-dataset-source]');
+          if (link instanceof HTMLAnchorElement) {
+            link.href = 'https://github.com/daniele21/experiments/blob/dev/' + dataset.source_path;
+          }
+
+          updateAnalytics(dataset.id);
+          const summary = renderRedactguardOverview(root, data, dataset.id, {
+            formatPct, formatSeconds, setHidden,
+          });
+          const measuredCount = summary.rows.length;
+          setText(
+            '[data-rg-run-status]',
+            measuredCount
+              ? measuredCount + ' measured model' + (measuredCount === 1 ? '' : 's')
+              : 'No published model run',
+          );
+          setHidden(root.querySelector('[data-rg-no-models]'), measuredCount > 0);
+        };
+
+        datasets.forEach((dataset) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'rg-dataset-pill';
+          button.dataset.rgDataset = dataset.id;
+          const count = dataset.documents ?? dataset.cases;
+          button.textContent = dataset.title + ' · ' + count;
+          button.setAttribute('aria-pressed', 'false');
+          button.addEventListener('click', () => setDataset(dataset));
+          picker.appendChild(button);
+        });
+        setDataset(
+          (data.publication.has_published_model_metrics
+            ? datasets.find((item) => item.id === 'challenge' && data.models.some((row) => row.dataset === 'challenge'))
+            : null)
+          || datasets.find((item) => item.id === 'realistic')
+          || datasets[0],
+        );
+      };
+
+      const selectTab = async (tab) => {
+        const index = tabs.indexOf(tab);
+        if (mobileSelector instanceof HTMLSelectElement) mobileSelector.value = String(index);
+        if (experimentPosition) experimentPosition.textContent =
+          String(index + 1).padStart(2, '0') + ' / ' + String(tabs.length).padStart(2, '0');
+        if (previousExperiment instanceof HTMLButtonElement) previousExperiment.disabled = index <= 0;
+        if (nextExperiment instanceof HTMLButtonElement) nextExperiment.disabled = index >= tabs.length - 1;
+        if (experimentRail instanceof HTMLElement && tab instanceof HTMLElement &&
+            window.matchMedia('(max-width: 680px)').matches) {
+          const left = experimentRail.scrollLeft +
+            tab.getBoundingClientRect().left - experimentRail.getBoundingClientRect().left;
+          experimentRail.scrollTo({
+            left,
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+          });
+        }
+        tabs.forEach((candidate) => {
+          const active = candidate === tab;
+          candidate.classList.toggle('is-active', active);
+          candidate.setAttribute('aria-selected', active ? 'true' : 'false');
+          candidate.setAttribute('tabindex', active ? '0' : '-1');
+        });
+
+        const currentRequest = ++requestId;
+        const resultUrl = tab.dataset.resultUrl || '';
+        if (!resultUrl) {
+          setText('[data-empty-title]', tab.dataset.title || 'Experiment');
+          setText('[data-empty-question]', tab.dataset.question || '');
+          showOnly('empty');
+          return;
+        }
+
+        showOnly('loading');
+
+        try {
+          const response = await fetch(resultUrl, { cache: 'no-store' });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const data = await response.json();
+          if (currentRequest !== requestId) return;
+
+          if (tab.dataset.resultKind === 'jev-public-summary') {
+            const relatedUrl = tab.dataset.relatedResultUrl || '';
+            let relatedMcb = null;
+            if (relatedUrl) {
+              try {
+                const relatedResponse = await fetch(relatedUrl);
+                if (relatedResponse.ok) relatedMcb = await relatedResponse.json();
+              } catch (relatedError) {
+                console.warn('Related MCB evidence unavailable', relatedError);
+              }
+            }
+            if (currentRequest !== requestId) return;
+            renderJevRouting(data, tab, relatedMcb);
+          }
+          else if (tab.dataset.resultKind === 'mcb-overview') renderMcbOverview(data, tab);
+          else if (tab.dataset.resultKind === 'redactguard-public-summary') renderRedactGuard(data, tab);
+          else throw new Error('Unsupported result adapter');
+
+          showOnly('result');
+        } catch (cause) {
+          if (currentRequest !== requestId) return;
+          console.warn('Experiment evidence unavailable', cause);
+          showOnly('error');
+        }
+      };
+
+      const moveExperiment = (delta) => {
+        const selected = tabs.findIndex((item) => item.getAttribute('aria-selected') === 'true');
+        const next = tabs[Math.max(0, Math.min(tabs.length - 1, selected + delta))];
+        if (next instanceof HTMLButtonElement) selectTab(next);
+      };
+      if (previousExperiment instanceof HTMLButtonElement) {
+        previousExperiment.addEventListener('click', () => moveExperiment(-1));
+      }
+      if (nextExperiment instanceof HTMLButtonElement) {
+        nextExperiment.addEventListener('click', () => moveExperiment(1));
+      }
+
+      if (mobileSelector instanceof HTMLSelectElement) {
+        mobileSelector.addEventListener('change', () => {
+          const tab = tabs[Number(mobileSelector.value)];
+          if (tab instanceof HTMLButtonElement) selectTab(tab);
+        });
+      }
+
+      tabs.forEach((tab, index) => {
+        if (!(tab instanceof HTMLButtonElement)) return;
+
+        tab.addEventListener('click', () => selectTab(tab));
+        tab.addEventListener('keydown', (event) => {
+          if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+          event.preventDefault();
+          const delta = event.key === 'ArrowRight' ? 1 : -1;
+          const nextIndex = (index + delta + tabs.length) % tabs.length;
+          const next = tabs[nextIndex];
+          if (next instanceof HTMLButtonElement) {
+            next.focus();
+            next.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+            selectTab(next);
+          }
+        });
+      });
+
+      const initial =
+        tabs.find((tab) => tab instanceof HTMLButtonElement && tab.getAttribute('aria-selected') === 'true') ??
+        tabs.find((tab) => tab instanceof HTMLButtonElement && Boolean(tab.dataset.resultUrl)) ??
+        tabs[0];
+      if (initial instanceof HTMLButtonElement) selectTab(initial);
+    });
+  };
+
+  initExperimentExplorer();
+  document.addEventListener('astro:page-load', initExperimentExplorer);
+</script>
+
+<style>
+
+  .rg-summary {
+    margin-top: 22px;
+  }
+
+  .rg-label {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-display);
+    letter-spacing: 0.065em;
+  }
+
+  .rg-introduction {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 18px;
+  }
+
+  .rg-introduction h4,
+  .rg-performance__heading h4 {
+    margin: 6px 0;
+    font-family: var(--font-display);
+    color: var(--ink-display);
+    font-size: clamp(1.1rem, 1.8vw, 1.45rem);
+    letter-spacing: -0.025em;
+  }
+
+  .rg-introduction p {
+    max-width: 680px;
+    margin: 0;
+    font-size: 0.94rem;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  .rg-status,
+  .rg-performance__heading > span {
+    color: var(--accent-blue-dark);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, var(--border-medium));
+    background: color-mix(in srgb, var(--accent-blue) 5%, var(--surface-card));
+    border-radius: var(--radius-full);
+    padding: 6px 10px;
+    white-space: nowrap;
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+  }
+
+  .rg-dataset-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .rg-dataset-picker :global(.rg-dataset-pill) {
+    min-height: var(--touch-target-min);
+    padding: 8px 13px;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-medium);
+    background: var(--surface-card);
+    color: var(--ink-muted);
+  }
+
+  .rg-dataset-picker :global(.rg-dataset-pill.is-selected) {
+    border-color: color-mix(in srgb, var(--accent-blue) 50%, var(--border-medium));
+    background: color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card));
+    color: var(--accent-blue-dark);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--accent-blue) 7%, transparent);
+  }
+
+  .rg-dataset-picker :global(.rg-dataset-pill:focus-visible) {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+  }
+
+  .rg-detail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(160px, 0.32fr);
+    gap: 22px;
+    margin-top: 18px;
+    padding: clamp(20px, 2.8vw, 28px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border-medium));
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent-violet) 12%, transparent), transparent 42%),
+      linear-gradient(130deg, color-mix(in srgb, var(--accent-blue) 6%, var(--surface-card)), var(--surface-card));
+  }
+
+  .rg-detail__main h4 {
+    margin: 7px 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2vw, 1.65rem);
+    letter-spacing: -0.035em;
+    color: var(--ink-display);
+  }
+
+  .rg-detail__main p {
+    margin: 0 0 14px;
+    color: var(--ink-muted);
+    font-size: 0.93rem;
+    line-height: 1.5;
+  }
+
+  .rg-detail__main a {
+    display: inline-flex;
+    min-height: var(--touch-target-min);
+    align-items: center;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    text-decoration: none;
+  }
+
+  .rg-detail__count {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 18px;
+    border-left: 1px solid var(--border-medium);
+  }
+
+  .rg-detail__count strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 4vw, 3.2rem);
+    font-weight: var(--weight-display);
+    letter-spacing: -0.06em;
+    line-height: 1;
+  }
+
+  .rg-detail__count span,
+  .rg-detail__count small {
+    margin-top: 6px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .rg-performance {
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .rg-performance__heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .rg-performance__pending {
+    margin: 12px 0;
+    max-width: 730px;
+    color: var(--ink-muted);
+    font-size: 0.93rem;
+    line-height: 1.6;
+  }
+
+  .rg-metric-guide {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .rg-metric-guide > span {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    border-top: 2px solid color-mix(in srgb, var(--accent-blue) 32%, var(--border-subtle));
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-weight: var(--weight-heading);
+    font-size: var(--text-caption);
+  }
+
+  .rg-metric-guide small {
+    color: var(--ink-muted);
+    margin-top: 4px;
+    font-weight: var(--weight-medium);
+    font-size: var(--text-caption);
+    line-height: 1.45;
+  }
+
+  .rg-model-rows {
+    display: grid;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .rg-model-rows :global(.rg-model-row) {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+  }
+
+  .rg-model-rows :global(.rg-model-row strong) {
+    font-family: var(--font-display);
+    color: var(--ink-display);
+    font-size: 0.9rem;
+  }
+
+  .rg-model-rows :global(.rg-model-row span) {
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+  }
+
+  .rg-pareto {
+    margin-top: 18px;
+    padding: clamp(16px, 2.4vw, 24px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 95% 0%, color-mix(in srgb, var(--accent-violet) 9%, transparent), transparent 55%),
+      var(--surface-card);
+  }
+
+  .rg-pareto__head,
+  .rg-matrix__heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .rg-pareto__head strong {
+    display: block;
+    margin-top: 6px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    letter-spacing: -0.02em;
+  }
+
+  .rg-pareto__hint {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    white-space: nowrap;
+  }
+
+  .rg-pareto svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 190px;
+    max-height: 320px;
+    overflow: visible;
+    color: var(--ink-muted);
+    margin-top: 16px;
+  }
+
+  .rg-pareto__note,
+  .rg-pareto__missing,
+  .rg-matrix__note {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  .rg-pareto__missing {
+    margin: 12px 0 0;
+  }
+
+  .rg-matrix {
+    margin-top: clamp(24px, 3vw, 34px);
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .rg-matrix__heading h4 {
+    margin: 5px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.13rem, 1.8vw, 1.42rem);
+    letter-spacing: -0.025em;
+  }
+
+  .rg-matrix__heading p {
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 5px 0 0;
+  }
+
+  .rg-matrix__metric {
+    display: inline-flex;
+    padding: 3px;
+    gap: 2px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+  }
+
+  .rg-matrix__metric button {
+    min-height: var(--touch-target-min);
+    padding: 7px 12px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-weight: var(--weight-heading);
+    font-size: var(--text-caption);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .rg-matrix__metric button[aria-pressed='true'] {
+    background: color-mix(in srgb, var(--accent-blue) 11%, var(--surface-card));
+    color: var(--accent-blue-dark);
+  }
+
+  .rg-matrix__metric button:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+  }
+
+  .rg-matrix__scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    margin-top: 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table) {
+    width: 100%;
+    min-width: 630px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table caption) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table th),
+  .rg-matrix__scroll :global(.rg-matrix-table td) {
+    text-align: left;
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: var(--text-caption);
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table thead th) {
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    background: var(--surface-subtle);
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table tbody th) {
+    min-width: 140px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-weight: var(--weight-heading);
+    background: var(--surface-card);
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table td.is-selected) {
+    box-shadow: inset 0 -2px color-mix(in srgb, var(--accent-blue) 45%, transparent);
+  }
+
+  .rg-matrix__scroll :global(.rg-matrix-table td.is-missing) {
+    color: var(--ink-subtle);
+    background: var(--surface-subtle);
+  }
+
+  .rg-matrix__note {
+    margin: 9px 0 0;
+  }
+
+  @media (max-width: 730px) {
+    .rg-pareto__head,
+    .rg-matrix__heading {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .rg-matrix__metric {
+      width: 100%;
+      max-width: 360px;
+    }
+    .rg-matrix__metric button {
+      flex: 1;
+    }
+  }
+
+  .rg-disclosure {
+    margin: 18px 0 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 730px) {
+    .rg-introduction,
+    .rg-performance__heading {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .rg-detail {
+      grid-template-columns: 1fr;
+    }
+    .rg-detail__count {
+      border-left: 0;
+      padding-left: 0;
+      border-top: 1px solid var(--border-medium);
+      padding-top: 15px;
+    }
+    .rg-metric-guide {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+
+
+  /* Homepage-sized routing comparison: the numbers are the visual, not a scatter plot. */
+  .jev-mcb-bridge {
+    padding: clamp(18px, 2.8vw, 28px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 95% 5%, color-mix(in srgb, var(--accent-violet) 9%, transparent), transparent 55%),
+      var(--surface-card);
+  }
+
+  .jev-mcb-bridge__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .jev-mcb-bridge__header h4 {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+    line-height: 1.18;
+    letter-spacing: -0.035em;
+    margin: 7px 0 5px;
+  }
+
+  .jev-mcb-bridge__header p, .jev-mcb-bridge__note {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .jev-mcb-bridge__header a {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .jev-mcb-rows {
+    display: grid;
+    gap: 3px;
+    margin-top: 17px;
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row) {
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) minmax(140px, 1.2fr);
+    gap: 18px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row__model strong),
+  .jev-mcb-rows :global(.jev-mcb-row__score strong) {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.96rem;
+    color: var(--ink-display);
+    font-weight: var(--weight-display);
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row__model small) {
+    display: block;
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    margin-top: 3px;
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row__score) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row__track) {
+    height: 8px;
+    width: min(100%, 240px);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent-blue) 13%, var(--surface-subtle));
+    overflow: hidden;
+  }
+
+  .jev-mcb-rows :global(.jev-mcb-row__fill) {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-violet));
+  }
+
+  .jev-mcb-bridge__note {
+    padding-top: 13px;
+    margin-top: 7px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .jev-local-details {
+    margin-top: 14px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    overflow: hidden;
+  }
+
+  .jev-local-details > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 17px 20px;
+    cursor: pointer;
+    list-style: none;
+    color: var(--ink-display);
+  }
+
+  .jev-local-details > summary::-webkit-details-marker { display: none; }
+
+  .jev-local-details > summary strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+  }
+
+  .jev-local-details > summary small {
+    display: block;
+    margin-top: 3px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .jev-local-details > summary > span:last-child {
+    font-size: 1.4rem;
+    color: var(--accent-blue-dark);
+  }
+
+  .jev-local-details[open] > summary > span:last-child {
+    transform: rotate(45deg);
+  }
+
+  .jev-local-details > .jev-coverage-banner,
+  .jev-local-details > .jev-tradeoff,
+  .jev-local-details > .jev-ranking,
+  .jev-local-details > .jev-method-note {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+
+  .jev-local-details > .jev-method-note {
+    margin-bottom: 22px;
+  }
+
+  @media (max-width: 620px) {
+    .jev-mcb-bridge__header {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .jev-mcb-rows :global(.jev-mcb-row) {
+      grid-template-columns: minmax(0, 1fr) minmax(100px, 0.75fr);
+      gap: 10px;
+    }
+    .jev-mcb-rows :global(.jev-mcb-row__score) {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+  }
+
+  .jev-summary {
+    margin-top: clamp(22px, 3vw, 30px);
+  }
+
+  .jev-eyebrow {
+    display: block;
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-display);
+    letter-spacing: 0.07em;
+  }
+
+  .jev-coverage-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 15px 18px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+  }
+
+  .jev-coverage-banner strong {
+    display: block;
+    margin-top: 5px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    font-weight: var(--weight-heading);
+  }
+
+  .jev-coverage-banner p {
+    max-width: 790px;
+    margin: 5px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  .jev-stage-coverage {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .jev-stage-coverage :global(.jev-stage-coverage__item) {
+    padding: 4px 8px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-card);
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .jev-stage-coverage :global(.jev-stage-coverage__item.is-published) {
+    border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border-subtle));
+    color: var(--accent-blue-dark);
+    background: color-mix(in srgb, var(--accent-blue) 6%, var(--surface-card));
+  }
+
+  .jev-coverage-banner__count {
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 620px) {
+    .jev-coverage-banner {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  .jev-tradeoff {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(230px, 0.72fr);
+    gap: clamp(18px, 3vw, 36px);
+    align-items: center;
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--accent-violet) 11%, transparent), transparent 55%),
+      linear-gradient(110deg, color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card)), var(--surface-card));
+  }
+
+  .jev-tradeoff__main > strong {
+    display: block;
+    margin-top: 10px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.7vw, 2.15rem);
+    font-weight: var(--weight-display);
+    line-height: 1.13;
+    letter-spacing: -0.045em;
+  }
+
+  .jev-tradeoff__main p {
+    max-width: 610px;
+    margin: 10px 0 0;
+    color: var(--ink-muted);
+    font-size: 0.94rem;
+    line-height: 1.58;
+  }
+
+  .jev-tradeoff__numbers {
+    display: grid;
+    gap: 14px;
+    padding-left: clamp(12px, 2vw, 24px);
+    border-left: 1px solid var(--border-medium);
+  }
+
+  .jev-tradeoff__numbers > div {
+    display: grid;
+    gap: 4px;
+  }
+
+  .jev-tradeoff__numbers span {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .jev-tradeoff__numbers strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+    font-weight: var(--weight-display);
+    letter-spacing: -0.025em;
+  }
+
+  .jev-ranking {
+    margin-top: clamp(22px, 3vw, 30px);
+  }
+
+  .jev-ranking__header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .jev-ranking__header h4 {
+    margin: 5px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.12rem, 1.8vw, 1.4rem);
+    letter-spacing: -0.03em;
+  }
+
+  .jev-ranking__header > span {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .jev-ranking__columns,
+  :global(.jev-model-row) {
+    display: grid;
+    grid-template-columns: minmax(170px, 1.1fr) minmax(180px, 1.45fr) minmax(120px, 0.65fr);
+    align-items: center;
+    gap: 20px;
+  }
+
+  .jev-ranking__columns {
+    padding: 0 16px 10px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+  }
+
+  .jev-ranking__columns > span:last-child {
+    text-align: right;
+  }
+
+  .jev-ranking__columns small {
+    display: block;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+  }
+
+  .jev-ranking__rows {
+    display: grid;
+    gap: 7px;
+  }
+
+  :global(.jev-model-row) {
+    padding: 14px 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--surface-card) 90%, var(--surface-subtle));
+  }
+
+  :global(.jev-model-row.is-alternative) {
+    border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border-subtle));
+    background: color-mix(in srgb, var(--accent-blue) 5%, var(--surface-card));
+  }
+
+  :global(.jev-model-row__name strong),
+  :global(.jev-model-row__latency strong),
+  :global(.jev-model-row__accuracy strong) {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 0.94rem;
+    font-weight: var(--weight-display);
+    line-height: 1.3;
+  }
+
+  :global(.jev-model-row__name small),
+  :global(.jev-model-row__latency small) {
+    display: block;
+    margin-top: 3px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.3;
+  }
+
+  :global(.jev-model-row__accuracy-head) {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+  }
+
+  :global(.jev-model-row__track) {
+    height: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-blue) 11%, var(--surface-subtle));
+  }
+
+  :global(.jev-model-row__fill) {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--accent-blue), color-mix(in srgb, var(--accent-blue) 70%, var(--accent-violet)));
+  }
+
+  :global(.jev-model-row__latency) {
+    text-align: right;
+  }
+  
+  .jev-ranking__note:empty {
+    display: none;
+  }
+
+  :global(.jev-model-row__mobile-label) {
+    display: none;
+    margin: 2px 0 7px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .jev-ranking__note {
+    margin-top: 14px;
+    padding: 12px 15px;
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  .jev-ranking__note :global(strong) {
+    color: var(--ink-display);
+  }
+
+  .jev-method-note {
+    margin: 16px 0 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 790px) {
+    .jev-tradeoff {
+      grid-template-columns: 1fr;
+    }
+
+    .jev-tradeoff__numbers {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+      padding: 16px 0 0;
+    }
+
+    .jev-ranking__columns,
+    :global(.jev-model-row) {
+      grid-template-columns: minmax(120px, 1.2fr) minmax(120px, 1fr) minmax(76px, 0.6fr);
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .jev-ranking__columns {
+      display: none;
+    }
+
+    :global(.jev-model-row) {
+      grid-template-columns: minmax(0, 1fr) minmax(86px, 0.55fr);
+      gap: 12px;
+      padding: 14px;
+    }
+
+    :global(.jev-model-row__name) {
+      grid-column: 1 / -1;
+    }
+
+    :global(.jev-model-row__accuracy) {
+      grid-column: 1;
+    }
+
+    :global(.jev-model-row__latency) {
+      grid-column: 2;
+    }
+
+    :global(.jev-model-row__mobile-label) {
+      display: block;
+    }
+
+    .jev-tradeoff__numbers {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+
+  .experiment-explorer { min-width: 0; }
+
+  .experiment-selector-wrap {
+    position: relative;
+    margin-bottom: 14px;
+  }
+
+  .experiment-selector-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 34px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--journey-surface-tint, var(--surface-subtle)));
+    pointer-events: none;
+  }
+
+  .experiment-selector {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px 36px 6px 2px;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+
+  .experiment-selector::-webkit-scrollbar { display: none; }
+
+  .experiment-tab {
+    flex: 0 0 auto;
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 13px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--surface-card) 82%, var(--surface-subtle));
+    color: var(--ink-muted);
+    cursor: pointer;
+    scroll-snap-align: start;
+    transition:
+      border-color var(--duration-fast) ease,
+      background-color var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
+  }
+
+  .experiment-tab:hover,
+  .experiment-tab:focus-visible {
+    border-color: color-mix(in srgb, var(--accent-blue) 36%, var(--border-medium));
+    color: var(--ink-display);
+  }
+
+  .experiment-tab.is-active {
+    border-color: color-mix(in srgb, var(--accent-blue) 52%, var(--border-medium));
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card)), var(--surface-card));
+    color: var(--ink-display);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--accent-blue) 7%, transparent);
+  }
+
+  .experiment-tab__title {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    white-space: nowrap;
+  }
+
+  .status-dot,
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--ink-subtle);
+  }
+
+  .status-dot--live,
+  .live-dot {
+    background: var(--accent-blue);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-blue) 10%, transparent);
+  }
+
+  .evidence-panel {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 24%, var(--border-medium));
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(circle at 92% 3%, color-mix(in srgb, var(--accent-blue) 13%, transparent), transparent 31%),
+      radial-gradient(circle at 5% 100%, color-mix(in srgb, var(--accent-violet) 7%, transparent), transparent 34%),
+      linear-gradient(145deg, color-mix(in srgb, var(--surface-card) 96%, var(--accent-blue) 4%), var(--surface-card));
+    box-shadow:
+      0 24px 60px rgba(8, 19, 51, 0.07),
+      inset 0 1px 0 color-mix(in srgb, white 64%, transparent);
+  }
+
+  [hidden] { display: none !important; }
+
+  .evidence-panel__loading,
+  .evidence-panel__error {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(22px, 3vw, 32px);
+  }
+
+  .evidence-panel__empty {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+    padding: 22px 24px;
+  }
+
+  .evidence-panel__empty-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent-blue) 8%, var(--surface-card));
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: var(--weight-display);
+  }
+
+  .evidence-panel__result {
+    position: relative;
+    z-index: 1;
+    padding: clamp(24px, 3.2vw, 38px);
+  }
+
+  .evidence-panel__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-display);
+    letter-spacing: 0.055em;
+  }
+
+  .evidence-panel__empty h3,
+  .evidence-panel__error h3 {
+    margin: 6px 0 4px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+  }
+
+  .evidence-panel__empty p,
+  .evidence-panel__error p {
+    max-width: 680px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  .evidence-panel__empty-note {
+    max-width: 640px !important;
+    margin-top: 8px !important;
+    color: var(--ink-subtle) !important;
+  }
+
+  .evidence-panel__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .evidence-panel__header h3 {
+    margin: 10px 0 5px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.55rem, 2.5vw, 2.15rem);
+    font-weight: var(--weight-display);
+    letter-spacing: -0.045em;
+    line-height: 1.06;
+  }
+
+  .evidence-panel__header p {
+    max-width: 720px;
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .source-link {
+    flex: 0 0 auto;
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    text-decoration: none;
+  }
+
+  .run-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px 18px;
+    margin-top: 18px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .run-summary span {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .run-summary strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-weight: var(--weight-heading);
+  }
+
+  .benchmark-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(200px, 0.72fr);
+    gap: clamp(20px, 3vw, 34px);
+    align-items: stretch;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .performance-plot {
+    min-width: 0;
+    padding: 18px 18px 12px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 16%, var(--border-subtle));
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card)), var(--surface-card));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 60%, transparent);
+  }
+
+  .plot-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .plot-heading__eyebrow,
+  .highlight > span,
+  .evidence-takeaway > span {
+    display: block;
+    color: var(--ink-subtle);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    letter-spacing: 0.045em;
+  }
+
+  .plot-heading strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1rem;
+  }
+
+  .plot-heading__note {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .plot-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .plot-filters {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-subtle);
+  }
+
+  .plot-filters button {
+    min-height: var(--touch-target-min);
+    padding: 5px 11px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    cursor: pointer;
+  }
+
+  .plot-filters button[aria-pressed='true'] {
+    background: var(--surface-card);
+    color: var(--accent-blue-dark);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .plot-svg :global(.plot-interactive) {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .plot-svg :global(.plot-interactive .plot-hit-area) {
+    fill: transparent;
+    stroke: none;
+  }
+
+  .plot-svg :global(.plot-interactive.is-selected circle:not(.plot-hit-area)),
+  .plot-svg :global(.plot-interactive:focus-visible circle:not(.plot-hit-area)) {
+    stroke: var(--ink-display);
+    stroke-width: 3.2px;
+    filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent-blue) 36%, transparent));
+  }
+
+  .plot-selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-top: 6px;
+    padding: 11px 12px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--accent-blue) 4%, var(--surface-card));
+  }
+
+  .plot-selection > div {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+  }
+
+  .plot-selection__eyebrow {
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    letter-spacing: 0.06em;
+  }
+
+  .plot-selection strong {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+  }
+
+  .plot-selection > span {
+    flex: 0 0 auto;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    text-align: right;
+  }
+
+  @media (max-width: 600px) {
+    .plot-selection {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .plot-selection > span { text-align: left; }
+  }
+
+  .plot-svg {
+    width: 100%;
+    height: auto;
+    min-height: 210px;
+    margin-top: 6px;
+    overflow: visible;
+  }
+
+  .plot-svg :global(.plot-grid line) {
+    stroke: color-mix(in srgb, var(--ink-subtle) 16%, transparent);
+    stroke-width: 1;
+  }
+
+  .plot-svg :global(.plot-axis-labels text) {
+    fill: var(--ink-subtle);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+  }
+
+  .plot-svg :global(.plot-frontier) {
+    fill: none;
+    stroke: var(--accent-blue);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--accent-blue) 18%, transparent));
+  }
+
+  .plot-svg :global(.plot-point circle) {
+    fill: color-mix(in srgb, var(--accent-violet) 62%, var(--accent-blue));
+    stroke: var(--surface-card);
+    stroke-width: 3;
+  }
+
+  .plot-svg :global(.plot-point circle.is-local) {
+    fill: var(--accent-blue);
+  }
+
+  .plot-svg :global(.plot-point circle.is-api) {
+    fill: var(--accent-violet);
+  }
+
+  .plot-svg :global(.plot-point circle.is-frontier) {
+    stroke-width: 3.5;
+    filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent-blue) 26%, transparent));
+  }
+
+  .plot-svg :global(.plot-point text) {
+    fill: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-label);
+  }
+
+  .plot-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+  }
+
+  .plot-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent-violet) 62%, var(--accent-blue));
+  }
+
+  .legend-dot--local {
+    background: var(--accent-blue);
+  }
+
+  .legend-dot--api {
+    background: var(--accent-violet);
+  }
+
+  .legend-dot--pilot {
+    border: 2px solid var(--accent-violet);
+    background: var(--surface-card);
+  }
+
+  .plot-svg :global(.plot-point circle.is-pilot) {
+    fill: var(--surface-card);
+    stroke: var(--accent-violet);
+    stroke-width: 3;
+  }
+
+  .plot-evidence-note {
+    margin: 6px 0 10px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.45;
+  }
+
+  .legend-line {
+    width: 18px;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: var(--accent-blue);
+  }
+
+  .benchmark-highlights {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    border-left: 1px solid var(--border-subtle);
+    padding-left: clamp(18px, 2.4vw, 26px);
+  }
+
+  .highlight {
+    flex: 1 1 0;
+    padding: 14px 0;
+  }
+
+  .highlight + .highlight {
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .highlight--accent {
+    position: relative;
+  }
+
+  .highlight--accent::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 15px;
+    bottom: 15px;
+    width: 3px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(180deg, var(--accent-blue), var(--accent-violet));
+  }
+
+  .highlight strong {
+    display: block;
+    margin-top: 6px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    font-weight: var(--weight-display);
+    letter-spacing: -0.04em;
+  }
+
+  .highlight small {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+
+  .evidence-takeaway {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+    margin-top: 24px;
+    padding: 18px 20px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 13%, var(--border-subtle));
+    border-radius: var(--radius-md);
+    background:
+      linear-gradient(100deg, color-mix(in srgb, var(--accent-blue) 7%, var(--surface-card)), color-mix(in srgb, var(--accent-violet) 3%, var(--surface-card)));
+  }
+
+  .evidence-takeaway strong {
+    display: block;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: var(--weight-display);
+    line-height: 1.4;
+  }
+
+  .evidence-takeaway p {
+    max-width: 760px;
+    margin: 4px 0 0;
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+
+  html[data-theme='dark'] .evidence-panel {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+  }
+
+  @media (max-width: 900px) {
+    .benchmark-story {
+      grid-template-columns: 1fr;
+    }
+
+    .benchmark-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+      padding: 12px 0 0;
+    }
+
+    .highlight {
+      padding: 12px 14px;
+    }
+
+    .highlight + .highlight {
+      border-top: 0;
+      border-left: 1px solid var(--border-subtle);
+    }
+
+    .highlight--accent::before {
+      display: none;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .evidence-panel__header {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .source-link { min-height: auto; }
+
+    .evidence-takeaway {
+      grid-template-columns: 1fr;
+      gap: 7px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .benchmark-highlights {
+      grid-template-columns: 1fr;
+    }
+
+    .highlight + .highlight {
+      border-left: 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .plot-heading {
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .plot-svg {
+      min-height: 180px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .experiment-tab { transition: none; }
+  }
+
+  /* MEASURE: published-first selection and mobile-sized scientific graphics.
+     Evidence is still loaded from the existing published artifacts only. */
+  .experiment-index-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 8px 16px;
+    margin-bottom: 12px;
+  }
+  .experiment-index-heading__eyebrow {
+    display: block;
+    color: var(--accent-blue);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    letter-spacing: .045em;
+  }
+  .experiment-index-heading h3 {
+    margin: 5px 0 0;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-heading);
+    letter-spacing: -.025em;
+    line-height: 1.25;
+  }
+  .experiment-index-heading__count {
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+  .experiment-tab__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    gap: 3px;
+  }
+  .experiment-tab__availability {
+    display: none;
+    color: var(--ink-subtle);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.3;
+  }
+  .experiment-tab.is-active .experiment-tab__availability {
+    color: var(--accent-blue-dark);
+  }
+  .chart-swipe-hint { display: none; }
+  .plot-canvas, .rg-plot-canvas { min-width: 0; }
+  .plot-canvas:focus-visible, .rg-plot-canvas:focus-visible,
+  .rg-matrix__scroll:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: -2px;
+  }
+
+  /* Tablet-width panels need full-sized chart labels too. */
+  @media (min-width: 681px) and (max-width: 900px) {
+    .chart-swipe-hint {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 12px 0 4px;
+      color: var(--ink-muted);
+      font-size: var(--text-caption);
+    }
+    .chart-swipe-hint span { color: var(--accent-blue); }
+    .plot-canvas, .rg-plot-canvas {
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .plot-canvas .plot-svg { width: 620px; max-width: none; min-width: 620px; }
+    .rg-plot-canvas svg { width: 640px; max-width: none; min-width: 640px; }
+  }
+
+  @media (max-width: 680px) {
+    .experiment-index-heading {
+      align-items: flex-start;
+      gap: 4px 12px;
+      margin-bottom: 12px;
+    }
+    .experiment-index-heading h3 { font-size: var(--text-card-title); }
+    .experiment-selector-wrap { margin-bottom: 15px; }
+    .experiment-selector-wrap::after { display: none; }
+
+    /* Two columns replace the cryptic horizontally cropped tab bar.
+       Three published benchmarks appear before unpublished experiments. */
+    .experiment-selector {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0 0 2px;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+    .experiment-tab {
+      min-width: 0;
+      min-height: 69px;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      align-items: flex-start;
+      gap: 8px;
+      text-align: left;
+      scroll-snap-align: none;
+    }
+    .experiment-tab[data-published='false'] {
+      min-height: 59px;
+      background: var(--surface-subtle);
+      border-color: var(--border-subtle);
+    }
+    .experiment-tab__copy { flex: 1; }
+    .experiment-tab__title {
+      font-size: var(--text-caption);
+      line-height: 1.3;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .experiment-tab__availability { display: block; }
+    .status-dot { margin-top: 6px; }
+
+    .evidence-panel {
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .evidence-panel__result { padding: 16px 13px; }
+    .evidence-panel__loading,
+    .evidence-panel__error,
+    .evidence-panel__empty { padding: 17px 14px; }
+    .evidence-panel__empty {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .evidence-panel__header { gap: 6px; }
+    .evidence-panel__header h3 {
+      margin: 8px 0 6px;
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 5vw, 1.45rem);
+      font-weight: var(--weight-heading);
+      line-height: 1.2;
+      letter-spacing: -.028em;
+    }
+    .evidence-panel__header p { font-size: var(--text-body-sm); }
+    .source-link {
+      min-height: var(--touch-target-min);
+      align-self: flex-start;
+    }
+    .run-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 13px;
+    }
+    .run-summary > span {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-width: 0;
+      padding: 9px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      background: var(--surface-subtle);
+      font-size: var(--text-caption);
+      overflow-wrap: anywhere;
+    }
+
+    /* Results before graphs: readers see real observed values first. */
+    .benchmark-story {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 17px;
+      padding-top: 15px;
+    }
+    .benchmark-highlights {
+      order: -1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0;
+      border: 0;
+    }
+    .highlight {
+      min-width: 0;
+      padding: 11px 10px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--surface-card);
+    }
+    .highlight + .highlight { border: 1px solid var(--border-subtle); }
+    .highlight:last-child { grid-column: 1 / -1; }
+    .highlight strong {
+      margin-top: 5px;
+      font-size: clamp(1.13rem, 4.4vw, 1.38rem);
+      font-weight: var(--weight-heading);
+      letter-spacing: -.025em;
+      overflow-wrap: anywhere;
+    }
+    .highlight small { font-size: var(--text-caption); overflow-wrap: anywhere; }
+    .highlight--accent::before { display: none; }
+
+    .performance-plot {
+      min-width: 0;
+      padding: 13px 10px;
+      box-shadow: none;
+    }
+    .plot-toolbar {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .plot-filters { max-width: 100%; }
+    .plot-filters button { min-height: var(--touch-target-min); }
+    .chart-swipe-hint {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 12px 0 4px;
+      color: var(--ink-muted);
+      font-size: var(--text-caption);
+      line-height: 1.4;
+    }
+    .chart-swipe-hint span { color: var(--accent-blue); }
+    .plot-canvas, .rg-plot-canvas {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      border-radius: var(--radius-sm);
+    }
+    .plot-canvas .plot-svg {
+      display: block;
+      width: 620px;
+      max-width: none;
+      min-width: 620px;
+      min-height: 0;
+      margin-top: 0;
+    }
+    .rg-plot-canvas svg {
+      display: block;
+      width: 640px;
+      max-width: none;
+      min-width: 640px;
+    }
+
+    .evidence-takeaway {
+      margin-top: 15px;
+      padding: 14px;
+      gap: 7px;
+    }
+    .rg-summary, .jev-summary { min-width: 0; }
+    .rg-matrix__scroll { overscroll-behavior-inline: contain; }
+  }
+
+  /* Evidence Stories: mobile is a concise narrative, not a shrunk dashboard. */
+  .experiment-mobile-chooser { display: none; }
+  .mcb-story { min-width: 0; }
+  .mcb-story .benchmark-story {
+    display: block;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .mcb-story .benchmark-highlights {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 17px;
+    padding: 0;
+    border: none;
+  }
+  .mcb-story .highlight {
+    min-width: 0;
+    padding: 13px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+  }
+  .mcb-story .highlight + .highlight {
+    border: 1px solid var(--border-subtle);
+  }
+  .mcb-story .highlight--accent::before { display: none; }
+
+  .mcb-model-browser {
+    margin-top: 18px;
+    min-width: 0;
+  }
+  .mcb-model-browser__eyebrow {
+    color: var(--accent-blue);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    letter-spacing: .04em;
+  }
+  .mcb-model-browser__heading h4 {
+    margin: 6px 0;
+    font-family: var(--font-display);
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-heading);
+    letter-spacing: -.025em;
+    line-height: 1.3;
+    color: var(--ink-display);
+  }
+  .mcb-model-browser__heading p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+  .mcb-list-filters {
+    display: inline-flex;
+    max-width: 100%;
+    gap: 3px;
+    padding: 3px;
+    margin: 12px 0;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    background: var(--surface-subtle);
+  }
+  .mcb-list-filters button {
+    min-width: 57px;
+    min-height: var(--touch-target-min);
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    cursor: pointer;
+  }
+  .mcb-list-filters button[aria-pressed='true'] {
+    color: var(--accent-blue-dark);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+  }
+  .mcb-model-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+    min-width: 0;
+  }
+  .mcb-model-cards :global(.mcb-model-entry) { min-width: 0; }
+  .mcb-model-cards :global(.mcb-model-card) {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 96px;
+    padding: 14px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    color: var(--ink-display);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--duration-fast) ease, background var(--duration-fast) ease;
+  }
+  .mcb-model-cards :global(.mcb-model-card[aria-pressed='true']) {
+    border-color: var(--accent-blue);
+    background: color-mix(in srgb, var(--accent-blue) 3%, var(--surface-card));
+  }
+  .mcb-model-cards :global(.mcb-model-card:focus-visible) {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+  .mcb-model-cards :global(.mcb-model-card__top) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 9px;
+    width: 100%;
+  }
+  .mcb-model-cards :global(.mcb-model-card__top strong) {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-body-sm);
+    font-weight: var(--weight-heading);
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+  .mcb-model-cards :global(.mcb-model-card__runtime) {
+    flex: 0 0 auto;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.35;
+  }
+  .mcb-model-cards :global(.mcb-model-card__metrics) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin-top: auto;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+  .mcb-model-cards :global(.mcb-model-card__metrics span:first-child) {
+    color: var(--ink-display);
+    font-weight: var(--weight-heading);
+  }
+  .mcb-show-all {
+    width: 100%;
+    min-height: var(--touch-target-min);
+    padding: 11px;
+    margin-top: 10px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--surface-blue-subtle);
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    cursor: pointer;
+  }
+  .mcb-show-all[hidden] { display: none; }
+
+  .mcb-chart-details, .mcb-method-details {
+    margin-top: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+  }
+  .mcb-chart-details > summary, .mcb-method-details > summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    min-height: 58px;
+    padding: 12px 15px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .mcb-chart-details > summary::-webkit-details-marker,
+  .mcb-method-details > summary::-webkit-details-marker { display: none; }
+  .mcb-chart-details > summary:focus-visible,
+  .mcb-method-details > summary:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: -3px;
+  }
+  .mcb-chart-details > summary strong, .mcb-method-details > summary strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-body-sm);
+    font-weight: var(--weight-heading);
+    color: var(--ink-display);
+  }
+  .mcb-chart-details > summary small, .mcb-method-details > summary small {
+    display: block;
+    margin-top: 3px;
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    color: var(--ink-muted);
+    line-height: 1.35;
+  }
+  .mcb-chart-details > summary > span:last-child,
+  .mcb-method-details > summary > span:last-child {
+    flex: 0 0 auto;
+    font-size: 22px;
+    color: var(--accent-blue);
+  }
+  .mcb-chart-details[open] > summary > span:last-child,
+  .mcb-method-details[open] > summary > span:last-child {
+    transform: rotate(45deg);
+  }
+  .mcb-chart-details > .benchmark-story { padding: 0 12px 13px; }
+  .mcb-method-details__body {
+    padding: 0 15px 15px;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.55;
+  }
+  .mcb-method-details__body p { margin: 10px 0 0; }
+
+  @media (max-width: 680px) {
+    .experiment-index-heading, .experiment-selector-wrap { display: none; }
+    .experiment-mobile-chooser {
+      display: block;
+      margin-bottom: 14px;
+      font-family: var(--font-body);
+    }
+    .experiment-mobile-chooser label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--accent-blue);
+      font-family: var(--font-display);
+      font-size: var(--text-caption);
+      font-weight: var(--weight-heading);
+      letter-spacing: .04em;
+    }
+    .experiment-mobile-chooser select {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      min-height: 48px;
+      padding: 10px 36px 10px 13px;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      background: var(--surface-card);
+      color: var(--ink-display);
+      font-family: var(--font-display);
+      font-size: var(--text-body-sm);
+      font-weight: var(--weight-heading);
+      text-overflow: ellipsis;
+      cursor: pointer;
+    }
+    .experiment-mobile-chooser p {
+      margin: 6px 0 0;
+      color: var(--ink-subtle);
+      font-size: var(--text-caption);
+      line-height: 1.4;
+    }
+
+    .evidence-panel {
+      border: 0;
+      border-radius: 0;
+      overflow: visible;
+      background: transparent;
+      box-shadow: none;
+    }
+    .evidence-panel__result {
+      padding: 0;
+    }
+    .evidence-panel__header h3 {
+      font-size: clamp(1.3rem, 5vw, 1.65rem);
+      line-height: 1.22;
+    }
+    .evidence-panel__eyebrow {
+      font-size: var(--text-caption);
+      letter-spacing: .02em;
+    }
+    .evidence-panel__header p {
+      font-size: var(--text-body-sm);
+      line-height: 1.5;
+    }
+    .evidence-takeaway {
+      display: block;
+      margin-top: 14px;
+      padding: 0 0 13px;
+      border: 0;
+      border-bottom: 1px solid var(--border-medium);
+      border-radius: 0;
+      background: transparent;
+    }
+    .evidence-takeaway > span {
+      color: var(--accent-blue-dark);
+      font-size: var(--text-caption);
+    }
+    .evidence-takeaway strong {
+      margin-top: 5px;
+      font-size: var(--text-body);
+      line-height: 1.45;
+    }
+    .evidence-takeaway p {
+      font-size: var(--text-caption);
+      line-height: 1.48;
+    }
+    .run-summary { margin-top: 13px; }
+    .run-summary > span { padding: 9px 11px; }
+    .run-summary > span:nth-child(n+3) {
+      padding: 2px 0;
+      border: none;
+      background: transparent;
+      color: var(--ink-subtle);
+    }
+    .mcb-story .benchmark-highlights {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 15px;
+    }
+    .mcb-story .highlight { padding: 11px; }
+    .mcb-story .highlight:last-child { grid-column: 1/-1; }
+    .mcb-story .highlight strong { font-size: clamp(1.12rem, 4.7vw, 1.36rem); }
+    .mcb-model-browser { margin-top: 22px; }
+    .mcb-model-browser__heading h4 { font-size: var(--text-card-title); }
+    .mcb-model-cards { grid-template-columns: 1fr; gap: 8px; }
+    .mcb-model-cards :global(.mcb-model-card) { min-height: 83px; padding: 12px; gap: 8px; }
+    .mcb-model-cards :global(.mcb-model-card__top) { flex-wrap: nowrap; }
+    .mcb-model-cards :global(.mcb-model-card__metrics) {
+      display: flex;
+      justify-content: flex-start;
+      gap: 8px 18px;
+    }
+    .mcb-chart-details { margin-top: 18px; }
+    .mcb-chart-details .performance-plot {
+      padding: 11px 7px 10px;
+      border: 0;
+      box-shadow: none;
+    }
+    .mcb-chart-details .plot-toolbar { display: none; }
+    .mcb-chart-details .plot-svg { min-height: 0; }
+    .mcb-chart-details .plot-heading__note { font-size: var(--text-caption); }
+    .mcb-chart-details .plot-selection { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mcb-model-cards :global(.mcb-model-card) { transition: none; }
+  }
+
+  /* Mobile-first card rails: horizontal exploration is the primary interaction. */
+  .experiment-rail-guide { display: none; }
+  .experiment-tab__question { display: none; }
+
+  @media (max-width: 680px) {
+    .experiment-index-heading {
+      display: flex;
+      align-items: end;
+      gap: 7px 12px;
+      margin: 0 0 10px;
+    }
+    .experiment-index-heading h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-card-title);
+      font-weight: var(--weight-heading);
+      letter-spacing: -.02em;
+    }
+    .experiment-index-heading__count { white-space: nowrap; }
+    .experiment-rail-guide {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin-bottom: 10px;
+      color: var(--ink-subtle);
+      font-family: var(--font-display);
+      font-size: var(--text-caption);
+      font-weight: var(--weight-heading);
+    }
+    .experiment-rail-guide > span > span { color: var(--accent-blue); }
+    .experiment-rail-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .experiment-rail-count {
+      display: inline-block;
+      min-width: 59px;
+      font-family: var(--font-mono);
+      font-size: var(--text-caption);
+      font-weight: var(--weight-heading);
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .experiment-rail-actions button {
+      width: var(--touch-target-min);
+      height: var(--touch-target-min);
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-full);
+      background: var(--surface-card);
+      color: var(--ink-display);
+      cursor: pointer;
+      font-size: 21px;
+    }
+    .experiment-rail-actions button:disabled { opacity: .38; cursor: default; }
+    .experiment-rail-actions button:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    .experiment-selector-wrap {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      margin-bottom: 17px;
+    }
+    .experiment-selector {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: var(--space-3);
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 1px 1px 10px;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-strong) transparent;
+    }
+    .experiment-tab {
+      display: flex;
+      flex: 0 0 min(84%, 280px);
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      min-width: 0;
+      min-height: 118px;
+      padding: 16px;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      background: var(--surface-card);
+      box-shadow: var(--shadow-sm);
+      text-align: left;
+    }
+    .experiment-tab[data-published='false'] {
+      min-height: 118px;
+      background: var(--surface-subtle);
+      box-shadow: none;
+    }
+    .experiment-tab[aria-selected='true'] {
+      border-color: var(--accent-blue);
+      background: color-mix(in srgb, var(--accent-blue) 5%, var(--surface-card));
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent-blue) 20%, transparent);
+    }
+    .experiment-tab__copy {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .experiment-tab__title {
+      font-family: var(--font-display);
+      font-size: var(--text-body);
+      font-weight: var(--weight-heading);
+      line-height: 1.25;
+      letter-spacing: -.025em;
+      overflow-wrap: anywhere;
+    }
+    .experiment-tab__availability {
+      display: block;
+      font-family: var(--font-body);
+      font-size: var(--text-caption);
+      font-weight: var(--weight-label);
+      color: var(--accent-teal);
+    }
+    .experiment-tab[data-published='false'] .experiment-tab__availability {
+      color: var(--ink-subtle);
+    }
+    .experiment-tab__question {
+      display: -webkit-box;
+      max-width: 100%;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      color: var(--ink-muted);
+      font-family: var(--font-body);
+      font-size: var(--text-caption);
+      line-height: 1.4;
+      text-wrap: pretty;
+    }
+    .status-dot { margin: 0; }
+
+    /* Four original scope metrics: now a low-height horizontal card rail. */
+    .run-summary {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: var(--space-2);
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      overscroll-behavior-x: contain;
+      padding: 2px 1px 11px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .run-summary > span,
+    .run-summary > span:nth-child(n+3) {
+      display: flex;
+      flex: 0 0 min(56%, 158px);
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-width: 0;
+      min-height: 74px;
+      padding: 11px 13px;
+      gap: 5px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--surface-card);
+      color: var(--ink-muted);
+      scroll-snap-align: start;
+      font-size: var(--text-caption);
+    }
+    .run-summary > span strong {
+      font-family: var(--font-display);
+      font-size: clamp(1.35rem, 5.2vw, 1.65rem);
+      font-weight: var(--weight-display);
+      line-height: 1.18;
+      color: var(--ink-display);
+    }
+
+    .mcb-highlights-viewport {
+      width: calc(100vw - 70px);
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .mcb-highlights-viewport:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: -2px;
+    }
+
+    /* Replace the 2-column KPI grid with short horizontally snapping cards. */
+    .mcb-story .benchmark-highlights {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: var(--space-3);
+      max-width: 100%;
+      overflow-x: auto;
+      margin-top: 15px;
+      padding: 1px 1px 12px;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .mcb-story .benchmark-highlights {
+      width: max-content;
+      min-width: max(100%, 700px);
+      max-width: none;
+      overflow: visible;
+      padding-bottom: 12px;
+    }
+    .mcb-story .highlight, .mcb-story .highlight:last-child {
+      flex: 0 0 clamp(205px, 70vw, 275px);
+      min-height: 133px;
+      padding: 16px;
+      grid-column: auto;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      background: var(--surface-card);
+      box-shadow: var(--shadow-sm);
+    }
+    .mcb-story .highlight--accent {
+      border-color: color-mix(in srgb, var(--accent-blue) 34%, var(--border-medium));
+      background: var(--surface-blue-subtle);
+    }
+    .mcb-story .highlight strong {
+      margin: 9px 0 4px;
+      color: var(--ink-display);
+      font-family: var(--font-display);
+      font-size: clamp(1.45rem, 6vw, 1.75rem);
+      font-weight: var(--weight-display);
+      letter-spacing: -.025em;
+    }
+    .mcb-story .highlight small {
+      color: var(--ink-muted);
+      font-family: var(--font-body);
+      font-size: var(--text-caption);
+      line-height: 1.35;
+    }
+
+    /* One prominent model per swipe; next card remains visible as affordance. */
+    .mcb-cards-viewport {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius-md);
+    }
+    .mcb-cards-viewport:focus-visible, .run-summary:focus-visible,
+    .benchmark-highlights:focus-visible, .experiment-selector:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: -2px;
+    }
+    .mcb-model-cards {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      gap: var(--space-3);
+      min-width: 0;
+      padding: 1px 1px 12px;
+      overflow: visible;
+    }
+    .mcb-model-cards :global(.mcb-model-entry) {
+      flex: 0 0 min(83%, 280px);
+      min-width: 0;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+    .mcb-model-cards :global(.mcb-model-card) {
+      min-height: 142px;
+      padding: 16px;
+      gap: 18px;
+      border-radius: var(--radius-lg);
+    }
+    .mcb-model-cards :global(.mcb-model-card__top) {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .mcb-model-cards :global(.mcb-model-card__top strong) {
+      font-family: var(--font-display);
+      font-size: var(--text-body);
+      font-weight: var(--weight-display);
+    }
+    .mcb-model-cards :global(.mcb-model-card__metrics) {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+      gap: var(--space-3);
+      margin-top: auto;
+      width: 100%;
+      font-family: var(--font-body);
+      line-height: 1.35;
+    }
+    .mcb-model-cards :global(.mcb-model-card__metrics span) {
+      min-width: 0;
+      display: block;
+      font-size: var(--text-caption);
+      overflow-wrap: anywhere;
+    }
+    .mcb-model-cards :global(.mcb-model-card__metrics span:first-child) {
+      font-weight: var(--weight-display);
+      font-size: 1.05rem;
+      color: var(--ink-display);
+    }
+    .mcb-show-all { margin-top: 8px; }
+
+    /* RedactGuard's actual published insights also become swipeable cards. */
+    .experiment-explorer .rg-insights {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: var(--space-3);
+      overflow-x: auto;
+      max-width: 100%;
+      padding: 1px 1px 12px;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+    .experiment-explorer .rg-insights :global(.rg-insight-card) {
+      flex: 0 0 min(84%, 260px);
+      scroll-snap-align: start;
+      min-height: 132px;
+      padding: 14px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .experiment-tab { transition: none; }
+  }
+
+  /* Insight-first comparison: semantic roles + compact evidence, never empty flex spacers. */
+  .mcb-model-browser__swipe { display: none; }
+  .mcb-model-cards :global(.mcb-model-card) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    gap: 9px;
+    min-height: 0;
+    padding: 14px 15px;
+    border-radius: var(--radius-lg);
+  }
+  .mcb-model-cards :global(.mcb-model-card__topline) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 9px;
+    min-width: 0;
+    width: 100%;
+  }
+  .mcb-model-cards :global(.mcb-model-card__role) {
+    min-width: 0;
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    letter-spacing: .025em;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+  .mcb-model-cards :global(.mcb-model-card__runtime) {
+    flex: 0 0 auto;
+    padding: 1px 7px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    background: var(--surface-subtle);
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-label);
+    line-height: 1.35;
+  }
+  .mcb-model-cards :global(.mcb-model-card__identity) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 0;
+  }
+  .mcb-model-cards :global(.mcb-model-card__name) {
+    max-width: 100%;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-heading);
+    letter-spacing: -.025em;
+    line-height: 1.22;
+    overflow-wrap: anywhere;
+  }
+  .mcb-model-cards :global(.mcb-model-card__insight) {
+    max-width: 100%;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-body);
+    line-height: 1.38;
+    text-wrap: pretty;
+  }
+  .mcb-model-cards :global(.mcb-model-card__metrics) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    min-width: 0;
+    width: 100%;
+    margin: 2px 0 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--ink-display);
+  }
+  .mcb-model-cards :global(.mcb-model-card__metrics > .mcb-model-card__metric) {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    color: var(--ink-display);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    line-height: 1.25;
+  }
+  .mcb-model-cards :global(.mcb-model-card__metrics > .mcb-model-card__metric:first-child) {
+    font-weight: var(--weight-medium);
+    font-size: var(--text-caption);
+  }
+  .mcb-model-cards :global(.mcb-model-card__metric-value) {
+    display: block;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: clamp(1.07rem, 1.6vw, 1.25rem);
+    font-weight: var(--weight-display);
+    line-height: 1.17;
+    letter-spacing: -.025em;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .mcb-model-cards :global(.mcb-model-card__metric-label) {
+    display: block;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    line-height: 1.3;
+  }
+  .mcb-model-cards :global(.mcb-model-card[aria-pressed='true']) {
+    border-color: var(--accent-blue);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-blue) 19%, transparent);
+  }
+  @media (max-width: 680px) {
+    .mcb-model-browser__swipe {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin: 8px 0;
+      color: var(--ink-subtle);
+      font-family: var(--font-display);
+      font-size: var(--text-caption);
+      font-weight: var(--weight-heading);
+    }
+    .mcb-model-browser__swipe span { color: var(--accent-blue); }
+    .mcb-model-cards :global(.mcb-model-entry) {
+      flex-basis: min(88%, 280px);
+    }
+    .mcb-model-cards :global(.mcb-model-card) {
+      min-height: 0;
+      padding: 13px 14px;
+      gap: 8px;
+    }
+    .mcb-model-cards :global(.mcb-model-card__name) { font-size: 1.125rem; }
+    .mcb-model-cards :global(.mcb-model-card__metrics) {
+      display: grid;
+      margin-top: 2px;
+      gap: 8px;
+      padding-top: 9px;
+    }
+    .mcb-model-cards :global(.mcb-model-card__metric-value) { font-size: 1.15rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mcb-model-cards :global(.mcb-model-card) { transition: none; }
+  }
+
+  /* Never display the finding for JEV, RedactGuard, or an unavailable snapshot. */
+  .evidence-takeaway[hidden], .mcb-story[hidden], .run-summary[hidden] { display: none !important; }
+
+  /* Evidence hierarchy — one hero finding, measured highlights, muted context.
+     Product blue = focus, teal = local identity, violet = API identity.
+     Accent colors never imply that a result has passed an arbitrary threshold. */
+  .experiment-explorer {
+    --measure-local-ink: color-mix(in srgb, var(--accent-teal) 72%, var(--ink-display));
+    --measure-api-ink: color-mix(in srgb, var(--accent-violet) 78%, var(--ink-display));
+    --measure-spotlight-bg: color-mix(in srgb, var(--ink-display) 83%, var(--accent-blue));
+    --measure-spotlight-ink: var(--ink-inverse);
+    --measure-spotlight-muted: color-mix(in srgb, var(--ink-inverse) 80%, transparent);
+    --measure-spotlight-line: color-mix(in srgb, var(--ink-inverse) 24%, transparent);
+  }
+  :global(html[data-theme='dark']) .experiment-explorer {
+    --measure-spotlight-bg: color-mix(in srgb, var(--surface-card) 76%, var(--accent-blue));
+    --measure-spotlight-ink: var(--ink-display);
+    --measure-spotlight-muted: var(--ink-muted);
+    --measure-spotlight-line: var(--border-medium);
+  }
+
+  .evidence-panel__header {
+    gap: 12px 22px;
+  }
+  .evidence-panel__eyebrow {
+    font-weight: var(--weight-label);
+    letter-spacing: 0.04em;
+  }
+  .evidence-panel__header h3 {
+    font-weight: var(--weight-heading);
+    letter-spacing: -0.03em;
+    line-height: 1.22;
+  }
+  .evidence-panel__header p { color: var(--ink-muted); }
+  .source-link {
+    border-color: var(--border-subtle);
+    color: var(--ink-muted);
+    background: var(--surface-subtle);
+  }
+  .source-link:hover, .source-link:focus-visible {
+    color: var(--accent-blue-dark);
+    border-color: var(--border-strong);
+  }
+
+  /* The finding is the ONLY high-contrast panel in the initial evidence story. */
+  .evidence-takeaway {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 19px;
+    padding: clamp(18px, 2.5vw, 27px);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--measure-spotlight-bg));
+    border-radius: var(--radius-lg);
+    background: var(--measure-spotlight-bg);
+    box-shadow: var(--shadow-md);
+    color: var(--measure-spotlight-ink);
+  }
+  .evidence-takeaway::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 3px;
+    background: var(--accent-blue);
+  }
+  .evidence-takeaway__label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    min-width: 0;
+  }
+  .evidence-takeaway__label-row > span:first-child {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-display);
+    line-height: 1.3;
+    letter-spacing: 0.045em;
+    color: var(--measure-spotlight-ink);
+  }
+  .evidence-takeaway__provenance {
+    padding: 4px 8px;
+    border: 1px solid var(--measure-spotlight-line);
+    border-radius: var(--radius-full);
+    color: var(--measure-spotlight-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    line-height: 1.3;
+  }
+  .evidence-takeaway__content { min-width: 0; }
+  .evidence-takeaway__content strong {
+    display: block;
+    max-width: 800px;
+    margin: 0;
+    color: var(--measure-spotlight-ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.32rem, 2.35vw, 1.9rem);
+    font-weight: var(--weight-display);
+    letter-spacing: -0.032em;
+    line-height: 1.28;
+    text-wrap: pretty;
+  }
+  .evidence-takeaway__content p {
+    display: block;
+    max-width: 760px;
+    margin: 10px 0 0;
+    color: var(--measure-spotlight-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-body-sm);
+    font-weight: var(--weight-body);
+    line-height: 1.52;
+    text-wrap: pretty;
+  }
+
+  .mcb-highlights-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px 20px;
+    margin-top: 22px;
+    margin-bottom: 9px;
+  }
+  .mcb-highlights-heading span,
+  .mcb-scope-heading {
+    color: var(--accent-blue-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-display);
+    letter-spacing: .035em;
+    line-height: 1.3;
+  }
+  .mcb-highlights-heading p {
+    margin: 4px 0 0;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+  }
+  .mcb-story .benchmark-highlights { margin-top: 0; }
+  .mcb-story .highlight {
+    --highlight-ink: var(--ink-display);
+    position: relative;
+    overflow: hidden;
+    background: var(--surface-card);
+    border-color: var(--border-medium);
+    border-top: 3px solid var(--border-strong);
+  }
+  .mcb-story .highlight[data-highlight-role='best-overall'] {
+    --highlight-ink: var(--accent-blue-dark);
+    border-top-color: var(--accent-blue);
+    border-color: color-mix(in srgb, var(--accent-blue) 27%, var(--border-medium));
+    border-top-width: 3px;
+    background: var(--surface-blue-subtle);
+  }
+  .mcb-story .highlight[data-highlight-role='best-local'],
+  .mcb-story .highlight[data-highlight-role='fastest-local'] {
+    --highlight-ink: var(--measure-local-ink);
+    border-top-color: var(--accent-teal);
+    background: color-mix(in srgb, var(--accent-teal) 4%, var(--surface-card));
+  }
+  .mcb-story .highlight > span {
+    display: block;
+    color: var(--highlight-ink);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    letter-spacing: .028em;
+    line-height: 1.35;
+  }
+  .mcb-story .highlight > strong {
+    display: block;
+    margin: 8px 0 4px;
+    color: var(--highlight-ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.58rem, 2.8vw, 2.12rem);
+    font-weight: var(--weight-display);
+    line-height: 1.17;
+    letter-spacing: -.03em;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+  }
+  .mcb-story .highlight > small {
+    color: var(--ink-muted);
+    font-size: var(--text-caption);
+    font-family: var(--font-body);
+    line-height: 1.36;
+  }
+
+  .mcb-scope-heading {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 5px 12px;
+    margin: 17px 0 8px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--ink-muted);
+    font-weight: var(--weight-label);
+  }
+  .mcb-scope-heading > span {
+    color: var(--ink-subtle);
+    font-family: var(--font-body);
+    font-weight: var(--weight-body);
+    letter-spacing: 0;
+  }
+  .mcb-story .run-summary {
+    margin-top: 0;
+  }
+  .mcb-story .run-summary strong {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: var(--weight-heading);
+  }
+
+  .mcb-model-browser {
+    margin-top: 25px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .mcb-model-browser__eyebrow { color: var(--ink-subtle); }
+  .mcb-model-browser__heading h4 { color: var(--ink-display); }
+  .mcb-model-cards :global(.mcb-model-card) {
+    border-top: 3px solid var(--border-strong);
+    background: var(--surface-card);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-deployment='local']) {
+    border-top-color: var(--accent-teal);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-deployment='api']) {
+    border-top-color: var(--accent-violet);
+  }
+  .mcb-model-cards :global(.mcb-model-card__runtime) {
+    border-color: var(--border-subtle);
+    background: var(--surface-subtle);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-deployment='local'] .mcb-model-card__runtime) {
+    color: var(--measure-local-ink);
+    border-color: color-mix(in srgb, var(--accent-teal) 25%, var(--border-subtle));
+    background: var(--surface-teal-subtle);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-deployment='api'] .mcb-model-card__runtime) {
+    color: var(--measure-api-ink);
+    border-color: color-mix(in srgb, var(--accent-violet) 25%, var(--border-subtle));
+    background: color-mix(in srgb, var(--accent-violet) 7%, var(--surface-card));
+  }
+  .mcb-model-cards :global(.mcb-model-card__role) {
+    color: var(--ink-subtle);
+    font-weight: var(--weight-label);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-insight-role='top'] .mcb-model-card__role) {
+    color: var(--accent-blue-dark);
+    font-weight: var(--weight-display);
+  }
+  .mcb-model-cards :global(.mcb-model-card[data-insight-role='local'] .mcb-model-card__role),
+  .mcb-model-cards :global(.mcb-model-card[data-insight-role='fastest'] .mcb-model-card__role) {
+    color: var(--measure-local-ink);
+    font-weight: var(--weight-display);
+  }
+  .mcb-model-cards :global(.mcb-model-card__metric-value) {
+    font-size: clamp(1.19rem, 1.9vw, 1.4rem);
+    font-weight: var(--weight-display);
+    color: var(--ink-display);
+  }
+  .mcb-model-cards :global(.mcb-model-card__metric-label) { color: var(--ink-muted); }
+  .mcb-model-cards :global(.mcb-model-card[aria-pressed='true']) {
+    border-color: var(--accent-blue);
+    border-top-color: var(--accent-blue);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-blue) 20%, transparent);
+  }
+  .mcb-list-filters button[data-mcb-filter='local'][aria-pressed='true'] {
+    color: var(--measure-local-ink);
+    background: var(--surface-teal-subtle);
+  }
+  .mcb-list-filters button[data-mcb-filter='api'][aria-pressed='true'] {
+    color: var(--measure-api-ink);
+    background: color-mix(in srgb, var(--accent-violet) 9%, var(--surface-card));
+  }
+
+  @media (max-width: 680px) {
+    .evidence-takeaway {
+      margin-top: 15px;
+      padding: 16px;
+      gap: 11px;
+      border: 1px solid color-mix(in srgb, var(--accent-blue) 24%, var(--measure-spotlight-bg));
+      border-radius: var(--radius-lg);
+      background: var(--measure-spotlight-bg);
+    }
+    .evidence-takeaway__content strong { font-size: clamp(1.28rem, 5vw, 1.55rem); line-height: 1.3; }
+    .evidence-takeaway__content p { font-size: var(--text-body-sm); line-height: 1.5; }
+    .mcb-story .highlight, .mcb-story .highlight:last-child {
+      min-height: 126px;
+      padding: 13px;
+    }
+    .mcb-story .highlight > strong {
+      font-size: clamp(1.42rem, 5.6vw, 1.7rem);
+      margin-top: 7px;
+    }
+    .mcb-highlights-heading { margin-top: 20px; }
+    .mcb-story .run-summary > span,
+    .mcb-story .run-summary > span:nth-child(n+3) {
+      min-height: 65px;
+      padding: 9px 11px;
+      color: var(--ink-subtle);
+      border-color: var(--border-subtle);
+      background: var(--surface-subtle);
+    }
+    .mcb-story .run-summary > span strong {
+      font-size: 1.22rem;
+      color: var(--ink);
+    }
+    .mcb-model-browser { margin-top: 20px; padding-top: 15px; }
+    .mcb-model-cards :global(.mcb-model-card__metric-value) { font-size: 1.22rem; }
+  }
+
+  /* Mobile-first Measure reading flow. The evidence is the product, not a dashboard. */
+  .experiment-mobile-chooser { display: none; }
+  .experiment-index-heading { align-items: center; margin-bottom: 12px; }
+  .experiment-index-heading h3 { font-size: var(--text-card-title); }
+  .experiment-index-heading__count { color: var(--ink-subtle); }
+  .evidence-panel {
+    border-color: var(--border-medium);
+    background: var(--surface-card);
+    box-shadow: none;
+  }
+  .evidence-takeaway {
+    padding: 19px 22px;
+    gap: 9px;
+    border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--border-medium));
+    border-left: 4px solid var(--accent-blue);
+    background: var(--surface-blue-subtle);
+    box-shadow: none;
+    color: var(--ink-display);
+  }
+  .evidence-takeaway::before { display: none; }
+  .evidence-takeaway__label-row > span:first-child { color: var(--accent-blue-dark); }
+  .evidence-takeaway__provenance { color: var(--ink-muted); border-color: var(--border-subtle); }
+  .evidence-takeaway__content strong { color: var(--ink-display); font-size: clamp(1.2rem, 2.3vw, 1.65rem); }
+  .evidence-takeaway__content p { color: var(--ink-muted); }
+  .mcb-highlights-heading { margin-top: 20px; margin-bottom: 10px; }
+  .mcb-highlights-heading span { color: var(--ink-display); }
+  .mcb-highlights-heading p { color: var(--ink-subtle); }
+  .mcb-story .benchmark-highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow: hidden; }
+  .mcb-story .highlight, .mcb-story .highlight[data-highlight-role='best-overall'],
+  .mcb-story .highlight[data-highlight-role='best-local'] {
+    min-height: 0;
+    padding: 15px;
+    border: 0;
+    border-radius: 0;
+    border-top: 0;
+    background: var(--surface-card);
+    box-shadow: none;
+  }
+  .mcb-story .highlight + .highlight { border-left: 1px solid var(--border-subtle); }
+  .mcb-story .highlight > span { color: var(--ink-muted); font-size: var(--text-caption); }
+  .mcb-story .highlight[data-highlight-role='best-local'] > span { color: var(--measure-local-ink); }
+  .mcb-story .highlight > strong { color: var(--ink-display); font-size: clamp(1.4rem, 2.1vw, 1.75rem); }
+  .mcb-explore-details, .mcb-chart-details, .mcb-method-details {
+    margin-top: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    box-shadow: none;
+  }
+  .mcb-explore-details > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 64px;
+    padding: 13px 16px;
+    list-style: none;
+    cursor: pointer;
+  }
+  .mcb-explore-details > summary::-webkit-details-marker { display: none; }
+  .mcb-explore-details > summary strong { display: block; color: var(--ink-display); font-family: var(--font-display); font-size: var(--text-body-sm); }
+  .mcb-explore-details > summary small { display: block; margin-top: 3px; color: var(--ink-muted); font-size: var(--text-caption); }
+  .mcb-explore-details > summary > span:last-child { flex-shrink: 0; font-size: 22px; color: var(--accent-blue); }
+  .mcb-explore-details[open] > summary > span:last-child { transform: rotate(45deg); }
+  .mcb-explore-details > summary:focus-visible { outline: 2px solid var(--border-focus); outline-offset: -3px; }
+  .mcb-explore-details__body { padding: 0 14px 16px; border-top: 1px solid var(--border-subtle); }
+  .mcb-fastest-note { display: flex; flex-wrap: wrap; align-items: baseline; gap: 5px 12px; padding: 13px 0 4px; color: var(--ink-muted); font-size: var(--text-caption); }
+  .mcb-fastest-note strong { color: var(--measure-local-ink); font-size: var(--text-body-sm); }
+  .mcb-explore-details .mcb-model-browser { margin-top: 9px; padding-top: 0; border-top: 0; }
+  .mcb-method-details__body .mcb-scope-heading { margin-top: 7px; }
+  .mcb-method-details__body .run-summary { margin: 8px 0 15px; }
+  @media (max-width: 760px) {
+    /* Undo the former 700px horizontal KPI carousel: both facts fit the viewport. */
+    .mcb-highlights-viewport { width: 100%; max-width: 100%; overflow: visible; scroll-snap-type: none; }
+    .mcb-story .benchmark-highlights {
+      display: grid;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 0;
+      padding: 0;
+      overflow: hidden;
+      scroll-snap-type: none;
+    }
+    .experiment-index-heading { margin-bottom: 6px; }
+    .experiment-index-heading__count { font-size: var(--text-caption); }
+    .experiment-mobile-chooser { display: flex; flex-direction: column; gap: 6px; margin: 9px 0 14px; }
+    .experiment-mobile-chooser label { color: var(--ink-muted); font-size: var(--text-caption); font-weight: var(--weight-label); }
+    .experiment-mobile-chooser select {
+      width: 100%; min-height: 48px; padding: 11px 14px;
+      border: 1px solid var(--border-medium); border-radius: var(--radius-md);
+      background: var(--surface-card); color: var(--ink-display);
+      font: inherit; font-size: var(--text-body-sm);
+    }
+    .experiment-selector-wrap, .experiment-rail-guide { display: none; }
+    .evidence-panel__result { padding: 17px 14px; }
+    .evidence-panel__header { align-items: flex-start; }
+    .evidence-panel__header h3 { font-size: 1.3rem; line-height: 1.25; }
+    .evidence-takeaway { margin-top: 16px; padding: 15px 14px; gap: 10px; }
+    .evidence-takeaway__content strong { font-size: 1.3rem; line-height: 1.3; }
+    .evidence-takeaway__provenance { display: none; }
+    .mcb-highlights-heading p { display: none; }
+    .mcb-story .benchmark-highlights { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+    .mcb-story .highlight, .mcb-story .highlight:last-child { min-height: 0; padding: 12px 10px; }
+    .mcb-story .highlight > strong { font-size: 1.35rem; }
+    .mcb-explore-details > summary { min-height: 62px; }
+    .mcb-explore-details__body { padding-inline: 10px; }
+    .mcb-method-details__body .run-summary > span { min-height: 0; }
+  }
+  @media (max-width: 360px) {
+    .mcb-story .benchmark-highlights { grid-template-columns: 1fr; }
+    .mcb-story .highlight + .highlight { border-left: 0; border-top: 1px solid var(--border-subtle); }
+    .evidence-panel__header { flex-wrap: wrap; }
+  }
+</style>

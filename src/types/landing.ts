@@ -120,6 +120,9 @@ export interface BuildProject {
   evidence: string;
   imagePath?: string;
   imageAlt?: string;
+  layer?: string;
+  status?: string;
+  external?: boolean;
 }
 
 export interface BuildStageContent {
@@ -137,6 +140,8 @@ export interface BuildStageContent {
 
 export interface ApplicationCard {
   name: string;
+  valueHeadline: string;
+  infrastructureLabel: string;
   tag?: string;
   question: string;
   description: string;
@@ -148,6 +153,7 @@ export interface ApplicationCard {
   colorClass: string;
   linkLabel: string;
   whatItTests: string;
+  relationship?: string;
 }
 
 export interface TestStageContent {
@@ -205,6 +211,17 @@ export interface MeasureSystemCard {
   statusType: 'planned' | 'verified' | 'authoritative';
   href: string;
   ctaLabel: string;
+  tracks?: {
+    id?: string;
+    title: string;
+    question: string;
+    status: string;
+    resultUrl?: string;
+    sourceUrl?: string;
+    resultKind?: 'jev-public-summary' | 'mcb-overview' | 'redactguard-public-summary';
+    relatedResultUrl?: string;
+    relatedSourceUrl?: string;
+  }[];
 }
 
 export interface MeasureStageContent {

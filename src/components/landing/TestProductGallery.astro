@@ -1,0 +1,608 @@
+---
+/**
+ * TEST / Product Proof Gallery.
+ * Real product logos and screenshots come from the canonical landing data.
+ * Mobile: native snap-scrolling rail, with optional arrow enhancement.
+ * Desktop: three simultaneous project cards.
+ */
+import { landingData } from '../../content/locales/en/landing';
+
+const { testStage } = landingData;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const resolveHref = (href: string) => baseUrl + '/' + href.replace(/^\//, '');
+
+const applicationId = (name: string) =>
+  name === 'RedactGuard' ? 'redact-guard' :
+  name === 'Aura Finance' ? 'aura-finance' : 'closedroom';
+---
+
+<section class="product-gallery" aria-label="Real-world AI application test beds" data-test-gallery>
+  <div class="gallery-intro">
+    <div>
+      <p class="gallery-eyebrow">REAL PRODUCTS · REAL CONSTRAINTS</p>
+      <h3>What happens when the runtime meets a product?</h3>
+      <p class="gallery-subtitle">Three applications, three different workload constraints.</p>
+    </div>
+    <p class="gallery-hint">Swipe to explore <span aria-hidden="true">→</span></p>
+  </div>
+
+  <div
+    class="gallery-viewport"
+    data-test-viewport
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="RedactGuard, Aura Finance and ClosedRoom"
+    tabindex="0"
+  >
+    <ol class="gallery-track">
+      {testStage.applications.map((app, index) => (
+        <li
+          class="gallery-slide"
+          data-application={applicationId(app.name)}
+          data-tone={app.colorClass}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={index + 1 + ' of ' + testStage.applications.length + ': ' + app.name}
+        >
+          <a
+            class="gallery-card"
+            href={resolveHref(app.href)}
+            aria-label={'Explore ' + app.name + ': ' + app.valueHeadline}
+          >
+            <div class="card-copy">
+              <div class="card-heading-row">
+                <div class="card-identity">
+                  <span class="logo-frame">
+                    <img
+                      src={resolveHref(app.logoPath)}
+                      alt=""
+                      width="40"
+                      height="40"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
+                  <span class="identity-copy">
+                    <strong class="app-name">{app.name}</strong>
+                    <span class="app-category">{app.tag}</span>
+                  </span>
+                </div>
+                <span class="card-header-arrow" aria-hidden="true">↗</span>
+              </div>
+
+              <h4 class="value-headline">{app.valueHeadline}</h4>
+              <p class="product-question">{app.question}</p>
+            </div>
+
+            <div class="product-preview" data-preview={applicationId(app.name)}>
+              <div class="preview-chrome" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="preview-window">
+                <img
+                  src={resolveHref(app.imagePath)}
+                  alt={app.name + ' product interface screenshot'}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </div>
+
+            <div class="card-evidence">
+              <p class="meta-label">WORKLOAD UNDER TEST</p>
+              <div class="feature-list" aria-label={'Test focus for ' + app.name}>
+                {app.features.map((feature) => <span class="feature-chip">{feature.label}</span>)}
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <span class="runtime-link">
+                <span class="runtime-label">RUNTIME</span>
+                <strong>{app.infrastructureLabel}</strong>
+              </span>
+              <span class="explore-link">
+                View project <span aria-hidden="true">↗</span>
+              </span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <div class="gallery-controls" data-test-controls hidden>
+    <p class="gallery-count" aria-live="polite" aria-atomic="true">
+      <strong data-test-current>01</strong> / 03
+    </p>
+    <div class="gallery-buttons">
+      <button type="button" data-test-prev aria-label="Previous application" disabled>
+        <span aria-hidden="true">←</span>
+      </button>
+      <button type="button" data-test-next aria-label="Next application">
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="gallery-handoff">
+    <div>
+      <span class="handoff-eyebrow">NEXT · MEASURE</span>
+      <p>Real applications expose the limits. <strong>Measurement shows where to improve.</strong></p>
+    </div>
+    <a href="#evidence" class="handoff-link">
+      Explore the evidence <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</section>
+
+<script>
+  function initTestGallery() {
+    const root = document.querySelector<HTMLElement>('[data-test-gallery]');
+    if (!root || root.dataset.galleryReady === 'true') return;
+
+    const viewport = root.querySelector<HTMLElement>('[data-test-viewport]');
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('.gallery-slide'));
+    const controls = root.querySelector<HTMLElement>('[data-test-controls]');
+    const current = root.querySelector<HTMLElement>('[data-test-current]');
+    const prev = root.querySelector<HTMLButtonElement>('[data-test-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-test-next]');
+    if (!viewport || cards.length === 0 || !controls || !current || !prev || !next) return;
+
+    root.dataset.galleryReady = 'true';
+    controls.hidden = false;
+    let active = 0;
+    let pendingFrame = 0;
+
+    const update = () => {
+      pendingFrame = 0;
+      const railLeft = viewport.getBoundingClientRect().left;
+      const distances = cards.map((card) => Math.abs(card.getBoundingClientRect().left - railLeft));
+      active = distances.indexOf(Math.min(...distances));
+      current.textContent = String(active + 1).padStart(2, '0');
+      prev.disabled = active === 0;
+      next.disabled = active === cards.length - 1;
+    };
+
+    const scheduleUpdate = () => {
+      if (pendingFrame) return;
+      pendingFrame = requestAnimationFrame(update);
+    };
+
+    const goTo = (index: number) => {
+      const card = cards[Math.max(0, Math.min(index, cards.length - 1))];
+      if (!card) return;
+      const left = viewport.scrollLeft +
+        card.getBoundingClientRect().left - viewport.getBoundingClientRect().left;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      viewport.scrollTo({ left, behavior: reducedMotion ? 'instant' : 'smooth' });
+    };
+
+    prev.addEventListener('click', () => goTo(active - 1));
+    next.addEventListener('click', () => goTo(active + 1));
+    viewport.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate, { passive: true });
+    update();
+  }
+
+  initTestGallery();
+  document.addEventListener('astro:page-load', initTestGallery);
+</script>
+
+<style>
+  /* Explicit brand typography. Headings = Jakarta, editorial/body = Inter. */
+  .product-gallery {
+    width: 100%;
+    min-width: 0;
+    container-type: inline-size;
+    font-family: var(--font-body);
+    color: var(--ink);
+  }
+
+  .gallery-intro {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    margin-bottom: var(--space-5);
+  }
+
+  .gallery-eyebrow,
+  .meta-label,
+  .runtime-label,
+  .handoff-eyebrow {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+    line-height: 1.35;
+    letter-spacing: 0.045em;
+  }
+  .gallery-eyebrow, .handoff-eyebrow { color: var(--accent-blue); }
+
+  .gallery-intro h3 {
+    margin: var(--space-2) 0 0;
+    max-width: 720px;
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-heading);
+    letter-spacing: -0.025em;
+    line-height: 1.26;
+  }
+
+  .gallery-subtitle {
+    margin: var(--space-2) 0 0;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-body-sm);
+    line-height: 1.5;
+  }
+
+  .gallery-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    color: var(--ink-subtle);
+    font-size: var(--text-caption);
+  }
+  .gallery-hint span { color: var(--accent-blue); font-size: 19px; }
+
+  .gallery-viewport {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-sm);
+  }
+  .gallery-viewport:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+  .gallery-track {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 1px 0 var(--space-3);
+    list-style: none;
+  }
+
+  .gallery-slide {
+    --product-accent: var(--accent-blue);
+    --product-soft: var(--surface-blue-subtle);
+    flex: 0 0 calc(100% - 25px);
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .gallery-slide[data-tone='green'] {
+    --product-accent: var(--accent-teal);
+    --product-soft: var(--surface-teal-subtle);
+  }
+  .gallery-slide[data-tone='purple'] {
+    --product-accent: var(--accent-violet);
+    --product-soft: color-mix(in srgb, var(--accent-violet) 8%, var(--surface-card));
+  }
+
+  .gallery-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-medium);
+    border-top: 2px solid var(--product-accent);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    box-shadow: var(--shadow-sm);
+    color: inherit;
+    text-decoration: none;
+    transition: transform var(--duration-fast) ease,
+      border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  }
+  .gallery-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--product-accent) 40%, var(--border-medium));
+    box-shadow: var(--shadow-md);
+  }
+  .gallery-card:focus-visible {
+    outline: 3px solid var(--border-focus);
+    outline-offset: -3px;
+  }
+
+  .card-copy { padding: var(--space-4) var(--space-4) var(--space-3); }
+  .card-heading-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+  .card-identity {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: var(--space-3);
+  }
+  .logo-frame {
+    display: grid;
+    flex: 0 0 44px;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid color-mix(in srgb, var(--product-accent) 27%, var(--border-medium));
+    border-radius: var(--radius-sm);
+    background: var(--surface-card);
+    overflow: hidden;
+  }
+  .logo-frame img { display: block; width: 34px; height: 34px; object-fit: contain; }
+  .identity-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+
+  .app-name {
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: var(--weight-heading);
+    letter-spacing: -0.018em;
+    line-height: 1.2;
+  }
+  .app-category {
+    color: var(--product-accent);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-label);
+    line-height: 1.28;
+    letter-spacing: 0;
+  }
+  .card-header-arrow {
+    flex: 0 0 auto;
+    color: var(--product-accent);
+    font-size: 20px;
+    line-height: 1.35;
+    transition: transform var(--duration-fast) ease;
+  }
+  .gallery-card:hover .card-header-arrow { transform: translate(2px, -2px); }
+
+  .value-headline {
+    margin: var(--space-4) 0 var(--space-2);
+    color: var(--ink-display);
+    font-family: var(--font-display);
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-heading);
+    line-height: 1.21;
+    letter-spacing: -0.028em;
+    text-wrap: pretty;
+  }
+  .product-question {
+    margin: 0;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-body-sm);
+    font-weight: var(--weight-medium);
+    line-height: 1.45;
+    text-wrap: pretty;
+  }
+
+  .product-preview {
+    overflow: hidden;
+    min-width: 0;
+    margin: 0 var(--space-3);
+    border: 1px solid color-mix(in srgb, var(--product-accent) 18%, var(--border-medium));
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+  }
+  .preview-chrome {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 22px;
+    padding: 0 var(--space-3);
+    background: color-mix(in srgb, var(--product-accent) 5%, var(--surface-subtle));
+  }
+  .preview-chrome span {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border-strong);
+  }
+  .preview-chrome span:first-child { background: #ed676d; }
+  .preview-chrome span:nth-child(2) { background: #e7bc50; }
+  .preview-chrome span:nth-child(3) { background: #4bbd8e; }
+
+  .preview-window {
+    display: grid;
+    place-items: center;
+    height: 176px;
+    overflow: hidden;
+    background: var(--surface-subtle);
+  }
+  .preview-window img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transition: transform var(--duration-fast) ease;
+  }
+  .gallery-slide[data-application='aura-finance'] .preview-window img {
+    object-fit: contain;
+    object-position: center;
+  }
+  .gallery-card:hover .preview-window img { transform: scale(1.02); }
+
+  .card-evidence {
+    flex: 1;
+    padding: var(--space-3) var(--space-4) var(--space-3);
+  }
+  .meta-label {
+    color: var(--ink-subtle);
+    letter-spacing: 0.035em;
+  }
+  .feature-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: var(--space-2);
+  }
+  .feature-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 29px;
+    padding: 5px 9px;
+    border-radius: var(--radius-full);
+    background: var(--product-soft);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-label);
+    line-height: 1.3;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+    min-height: 52px;
+    padding: var(--space-2) var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--product-accent) 3%, var(--surface-card));
+  }
+  .runtime-link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .runtime-label { color: var(--ink-subtle); font-size: var(--text-caption); font-weight: var(--weight-label); letter-spacing: 0; }
+  .runtime-link strong {
+    color: var(--ink-display);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-label);
+    line-height: 1.3;
+  }
+  .explore-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--product-accent);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+  }
+  .explore-link span { font-size: 18px; }
+
+  .gallery-controls[hidden] { display: none; }
+  .gallery-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+  .gallery-count { margin: 0; color: var(--ink-subtle); font-family: var(--font-mono); font-size: var(--text-caption); font-weight: var(--weight-label); }
+  .gallery-count strong { color: var(--ink-display); font-weight: var(--weight-display); }
+  .gallery-buttons { display: flex; align-items: center; gap: var(--space-2); }
+  .gallery-buttons button {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    color: var(--ink-display);
+    background: var(--surface-card);
+    cursor: pointer;
+    transition: background var(--duration-fast) ease;
+  }
+  .gallery-buttons button span { font-size: 20px; }
+  .gallery-buttons button:disabled { opacity: .4; cursor: default; }
+  .gallery-buttons button:not(:disabled):hover { background: var(--surface-blue-subtle); }
+  .gallery-buttons button:focus-visible, .handoff-link:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 3px;
+  }
+  .gallery-handoff {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-6);
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-medium);
+  }
+  .handoff-eyebrow { display: block; margin-bottom: var(--space-2); }
+  .gallery-handoff p {
+    margin: 0;
+    max-width: 620px;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-body-sm);
+    line-height: 1.5;
+  }
+  .gallery-handoff strong { color: var(--ink-display); font-weight: var(--weight-heading); }
+  .handoff-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 48px;
+    padding: 10px 15px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    color: var(--accent-blue-dark);
+    background: var(--surface-card);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-heading);
+  }
+  .handoff-link:hover { background: var(--surface-blue-subtle); }
+  .handoff-link span { font-size: 19px; }
+
+  @container (min-width: 550px) {
+    .gallery-slide { flex-basis: min(76%, 475px); }
+    .gallery-hint { display: none; }
+  }
+  @container (min-width: 900px) {
+    .gallery-viewport { overflow: visible; scroll-snap-type: none; }
+    .gallery-track {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-4);
+      padding-bottom: 4px;
+    }
+    .gallery-slide { width: 100%; }
+    .card-copy { padding: var(--space-4) var(--space-4) var(--space-3); }
+    .card-evidence { padding: var(--space-3) var(--space-4); }
+    .preview-window { height: 176px; }
+    .gallery-controls { display: none; }
+  }
+  @container (max-width: 350px) {
+    .card-copy { padding: var(--space-3); }
+    .card-evidence { padding: var(--space-3); }
+    .card-footer { padding: var(--space-3); }
+    .logo-frame { flex-basis: 40px; width: 40px; height: 40px; }
+    .logo-frame img { width: 31px; height: 31px; }
+    .card-header-arrow { display: none; }
+    .value-headline { font-size: 1.24rem; }
+    .preview-window { height: 158px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-card, .preview-window img, .card-header-arrow, .gallery-buttons button { transition: none; }
+    .gallery-card:hover, .gallery-card:hover .preview-window img, .gallery-card:hover .card-header-arrow { transform: none; }
+  }
+</style>

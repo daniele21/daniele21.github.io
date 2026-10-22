@@ -30,9 +30,7 @@ const expectedRoutes = [
   'korgis/index.html',
   'harnex/index.html',
   'local-asr-server/index.html',
-  'traffic-monitoring/index.html',
-  'traffic-monitoring-android/index.html',
-  'performance-lab/index.html',
+  'decisio/index.html',
   'thank-you/index.html',
   'privacy/index.html',
 ];
@@ -104,7 +102,35 @@ for (const sourcePath of planeConsumers) {
 }
 
 const evidenceStageSource = fs.readFileSync(path.resolve('src/components/landing/EvidenceStage.astro'), 'utf-8');
-for (const fragment of ['method-stage evidence-stage', '<StageRail number={4}', '<EvidenceMatrix />']) {
+const explorerSource = fs.readFileSync(path.resolve('src/components/landing/ExperimentResultsExplorer.astro'), 'utf-8');
+for (const fragment of [
+  'data-jev-summary',
+  'data-jev-rows',
+  'data-jev-quality-gap',
+  'data-jev-partial',
+  'data-jev-published-scope',
+  'data-jev-experiment-count',
+  'Standalone Jev suite: head-to-head not published',
+  'data-jev-stage-coverage',
+  'data-mcb-story',
+  'data-mcb-scope',
+  'data-rg-summary',
+  'data-rg-datasets',
+  'data-rg-model-rows',
+  'data-rg-no-models',
+  'redactguard-public-summary',
+]) {
+  if (!explorerSource.includes(fragment)) {
+    console.error(`❌ Experiment explorer is missing the JEV/MCB progressive disclosure contract: ${fragment}`);
+    errors++;
+  }
+}
+if (explorerSource.includes('const plotRouting =')) {
+  console.error('❌ JEV should not render the technical scatter chart on the homepage.');
+  errors++;
+}
+
+for (const fragment of ['method-stage evidence-stage', '<StageRail number={4}', '<ExperimentResultsExplorer', 'tracks={experiments.tracks || []}']) {
   if (!evidenceStageSource.includes(fragment)) {
     console.error(`❌ EvidenceStage is missing its dedicated Measure-stage contract fragment: ${fragment}`);
     errors++;
@@ -126,7 +152,7 @@ for (const fragment of ['plane-card__header', 'plane-card__body', 'plane-card__f
 }
 
 for (const [sourcePath, fragment] of [
-  ['src/components/landing/TestStage.astro', '<PlaneCardGrid'],
+  ['src/components/landing/TestStage.astro', '<TestProductGallery'],
   ['src/components/landing/ProjectProofCard.astro', '<PlaneCard'],
 ]) {
   const source = fs.readFileSync(path.resolve(sourcePath), 'utf-8');
@@ -290,6 +316,7 @@ const publicImages = [
   'images/local-llm-server/logo.svg',
   'images/harness/logo.png',
   'images/harness/logo.svg',
+  'images/decisio/logo.png',
   'images/local-llm-server/overview.png',
   'images/harness/architecture-hero.png',
   'images/harness/harness-overview.png',
@@ -302,14 +329,10 @@ const publicImages = [
   'images/aura-finance/aura-categories-preview.png',
   'images/closedroom/meeting-analysis.jpg',
   'images/closedroom/recording-preview.jpg',
-  'images/traffic-monitoring/overview.png',
-  'images/traffic-monitoring-android/overview.png',
   'images/strategy/decision-framework.svg',
   'images/strategy/local-vs-hybrid-vs-cloud-native-final.svg',
   'images/strategy/tradeoff-guide.svg',
   'images/harness/harness-app-icon-light.png',
-  'images/performance-lab/mark.svg',
-  'images/performance-lab/mark.png',
   'images/redact-guard-android/redactguard-android-review.svg',
   'images/redact-guard-android/redactguard-android-import.svg',
   'images/redact-guard-android/redactguard-android-export.svg',
@@ -332,7 +355,6 @@ console.log('\n🔍 6. Verifying dynamic favicon resolution across routes...');
 const expectedFavicons = {
   'harnex/index.html': 'images/harness/harness-app-icon-light.png',
   'korgis/index.html': 'images/local-llm-server/logo.png',
-  'performance-lab/index.html': 'images/performance-lab/mark.svg',
   'redact-guard/index.html': 'images/redact-guard/logo.png',
   'redact-guard-android/index.html': 'images/redact-guard/logo.png',
   'closedroom/index.html': 'images/closedroom/logo.png',
