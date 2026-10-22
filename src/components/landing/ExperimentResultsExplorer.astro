@@ -4568,6 +4568,19 @@ const selectorLabelFor = (track: Track) => {
   .mcb-method-details__body .mcb-scope-heading { margin-top: 7px; }
   .mcb-method-details__body .run-summary { margin: 8px 0 15px; }
   @media (max-width: 760px) {
+    /* Undo the former 700px horizontal KPI carousel: both facts fit the viewport. */
+    .mcb-highlights-viewport { width: 100%; max-width: 100%; overflow: visible; scroll-snap-type: none; }
+    .mcb-story .benchmark-highlights {
+      display: grid;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 0;
+      padding: 0;
+      overflow: hidden;
+      scroll-snap-type: none;
+    }
     .experiment-index-heading { margin-bottom: 6px; }
     .experiment-index-heading__count { font-size: var(--text-caption); }
     .experiment-mobile-chooser { display: flex; flex-direction: column; gap: 6px; margin: 9px 0 14px; }
