@@ -320,7 +320,8 @@ function getHref(href: string) {
     .nav-link-text { font-size: var(--text-caption); }
   }
 
-  @media (max-width: 1100px) {
+  /* Switch to the compact navigation before text and links compete for space. */
+  @media (max-width: 1440px) {
     .header-inner {
       grid-template-columns: auto 1fr auto;
     }
