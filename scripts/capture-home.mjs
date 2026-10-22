@@ -351,7 +351,9 @@ try {
     JSON.stringify(testGalleryChecks, null, 2),
   );
 
-  // MEASURE: editorial phone layout, real-data model comparisons and honest empty states.
+  // MEASURE: verify the evidence-first mobile experience and progressively
+  // disclosed comparisons. This intentionally does not require the legacy
+  // horizontal KPI carousel or a chart visible before the user asks for it.
   const measureChecks = [];
   for (const viewport of [
     { name: 'mobile-320', width: 320, height: 700 },
@@ -370,128 +372,76 @@ try {
         await page.evaluate(() => document.fonts?.ready);
         const stage = page.locator('#evidence .experiment-explorer');
         await stage.scrollIntoViewIfNeeded();
-        const diagnostics = await page.evaluate(() => {
-          const sectionStyle = (node) => {
-            if (!(node instanceof HTMLElement)) return null;
-            const css = getComputedStyle(node);
-            return {
-              fontFamily: css.fontFamily,
-              fontSize: Number.parseFloat(css.fontSize),
-              fontWeight: css.fontWeight,
-              lineHeight: Number.parseFloat(css.lineHeight),
-              tracking: css.letterSpacing,
-            };
-          };
-          const sectionHeadings = [...document.querySelectorAll('[data-stage] .stage-heading')].map(sectionStyle);
-          const sectionIntros = [...document.querySelectorAll('[data-stage] .stage-intro')].map(sectionStyle);
-          const aboutHeading = sectionStyle(document.querySelector('#about-title'));
-          const aboutIntro = sectionStyle(document.querySelector('.about-summary'));
-          const heroHeading = sectionStyle(document.querySelector('.hero-heading'));
-          const cardHeadings = [
-            '.card-headline', '.runtime-card__identity h4', '.value-headline',
-            '.mcb-model-card__name'
-          ].map(selector => sectionStyle(document.querySelector(selector))).filter(Boolean);
-          const root = document.querySelector('#evidence .experiment-explorer');
+        await page.waitForFunction(() => {
+          const root = document.querySelector('[data-experiment-explorer]');
+          if (!root) return false;
+          return ['[data-evidence-result]', '[data-evidence-error]', '[data-evidence-empty]']
+            .some(selector => root.querySelector(selector)?.hidden === false);
+        }, { timeout: 15000 });
+
+        const initial = await page.evaluate(() => {
+          const root = document.querySelector('#evidence [data-experiment-explorer]');
+          const visible = node => node && node.getBoundingClientRect().width > 0 &&
+            node.getBoundingClientRect().height > 0 &&
+            getComputedStyle(node).visibility !== 'hidden';
+          const result = root.querySelector('[data-evidence-result]');
+          const highlights = [...root.querySelectorAll('.mcb-highlights-viewport .highlight')];
+          const summary = root.querySelector('.mcb-highlights-viewport');
+          const mobileSelect = root.querySelector('[data-experiment-mobile-select]');
+          const chooser = root.querySelector('.experiment-mobile-chooser');
           const tabs = [...root.querySelectorAll('[data-experiment-tab]')];
-          const rail = root.querySelector('[data-experiment-rail]');
-          const highlights = root.querySelector('.mcb-highlights-viewport');
-          const modelRail = root.querySelector('.mcb-cards-viewport');
-          const modelCard = root.querySelector('[data-mcb-model-cards] [data-mcb-card]');
-          const cardSections = modelCard
-            ? ['topline', 'identity', 'metrics'].map(name =>
-                modelCard.querySelector('.mcb-model-card__' + name)?.getBoundingClientRect()).filter(Boolean)
-            : [];
-          const modelCardGaps = cardSections.slice(1).map((rect, index) =>
-            Math.max(0, rect.top - cardSections[index].bottom));
-          const modelMetrics = modelCard
-            ? [...modelCard.querySelectorAll('.mcb-model-card__metric')].map(node => ({
-                value: node.querySelector('.mcb-model-card__metric-value')?.textContent?.trim(),
-                label: node.querySelector('.mcb-model-card__metric-label')?.textContent?.trim(),
-              }))
-            : [];
-          const scope = root.querySelector('.run-summary');
-          const story = root.querySelector('[data-mcb-story]');
-          const details = root.querySelector('[data-mcb-chart-details]');
           const takeaway = root.querySelector('[data-mcb-takeaway]');
-          const findingHeadline = takeaway?.querySelector('[data-readout-title]');
-          const findingText = takeaway?.querySelector('[data-readout]');
-          const highlightsCards = [...root.querySelectorAll('.mcb-highlights-viewport .highlight')];
-          const displayedModelCards = [...root.querySelectorAll('[data-mcb-model-cards] [data-mcb-card]')];
-          const summary = root.querySelector('.run-summary');
-          const svg = root.querySelector('[data-performance-plot]');
-          const titles = [...root.querySelectorAll('h3, h4, .experiment-mobile-chooser label')];
+          const headerBrand = document.querySelector('.site-header .brand');
+          const headerNav = document.querySelector('.site-header .site-nav');
+          const navMenu = document.querySelector('.site-header [data-menu-toggle]');
+          const finding = root.querySelector('[data-readout-title]');
+          const findingDetail = root.querySelector('[data-readout]');
+          const explore = root.querySelector('[data-mcb-explore-details]');
+          const chart = root.querySelector('[data-mcb-chart-details]');
+          const methods = root.querySelector('.mcb-method-details');
+          const bounds = node => {
+            const rect = node?.getBoundingClientRect();
+            return rect ? { left: rect.left, right: rect.right, width: rect.width } : null;
+          };
           return {
             theme: document.documentElement.dataset.theme,
-            typographyAudit: { sectionHeadings, sectionIntros, aboutHeading, aboutIntro, heroHeading, cardHeadings },
             pageOverflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
-            selectedTab: tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.dataset.trackId,
-            publishedCount: tabs.filter((t) => t.dataset.published === 'true').length,
-            unpublishedCount: tabs.filter((t) => t.dataset.published === 'false').length,
-            benchmarkRailVisible: rail ? getComputedStyle(rail).display !== 'none' : false,
-            benchmarkScrolls: rail ? rail.scrollWidth > rail.clientWidth + 5 : false,
-            benchmarkSnap: rail ? getComputedStyle(rail).scrollSnapType : '',
-            benchmarkCardWidths: tabs.map(t => Math.round(t.getBoundingClientRect().width)),
-            selectedIndex: tabs.findIndex(t => t.getAttribute('aria-selected') === 'true'),
-            highlightScrolls: highlights ? highlights.scrollWidth > highlights.clientWidth + 5 : false,
-            highlightLayout: highlights ? {
-              width: highlights.getBoundingClientRect().width,
-              clientWidth: highlights.clientWidth,
-              scrollWidth: highlights.scrollWidth,
-              overflowX: getComputedStyle(highlights).overflowX,
-              trackWidth: highlights.firstElementChild?.getBoundingClientRect().width,
-              trackDisplay: highlights.firstElementChild ? getComputedStyle(highlights.firstElementChild).display : null,
-              cardWidths: [...highlights.querySelectorAll('.highlight')].map(el => el.getBoundingClientRect().width),
-            } : null,
-            modelScrolls: modelRail ? modelRail.scrollWidth > modelRail.clientWidth + 5 : false,
-            modelCardInsight: modelCard ? {
-              role: modelCard.querySelector('.mcb-model-card__role')?.textContent?.trim(),
-              description: modelCard.querySelector('.mcb-model-card__insight')?.textContent?.trim(),
-              name: modelCard.querySelector('.mcb-model-card__name')?.textContent?.trim(),
-              cardHeight: Math.round(modelCard.getBoundingClientRect().height),
-              cardWidth: Math.round(modelCard.getBoundingClientRect().width),
-              largestInternalGap: Math.round(Math.max(0, ...modelCardGaps)),
-              metrics: modelMetrics,
-              display: getComputedStyle(modelCard).display,
-              roleFontPx: Number.parseFloat(getComputedStyle(modelCard.querySelector('.mcb-model-card__role')).fontSize),
-            } : null,
-            scopeScrolls: scope ? scope.scrollWidth > scope.clientWidth + 5 : false,
-            storyVisible: story ? !story.hidden && !root.querySelector('[data-evidence-result]').hidden : false,
-            chartOpen: Boolean(details?.open),
-            chartKeyboardFocusable: Boolean(root.querySelector('.plot-canvas[tabindex="0"]')),
-            chartMinWidth: svg ? getComputedStyle(svg).minWidth : '',
-            evidenceWidth: root.getBoundingClientRect().width,
-            modelCardCount: root.querySelectorAll('[data-mcb-model-cards] [data-mcb-card]').length,
-            summaryDisplay: getComputedStyle(summary).display,
-            headingFamily: getComputedStyle(root.querySelector('.evidence-panel__header h3')).fontFamily,
-            fonts: titles.filter((t) => t.getBoundingClientRect().height > 0).map((t) => Number.parseFloat(getComputedStyle(t).fontSize)),
-            takeawayBeforeModels: Boolean(takeaway?.compareDocumentPosition(story) & Node.DOCUMENT_POSITION_FOLLOWING),
-            evidenceHierarchy: {
-              roleOrder: [...root.querySelectorAll('[data-mcb-takeaway], .mcb-highlights-viewport, .mcb-scope-heading, .mcb-model-browser')].map(el =>
-                el.matches('[data-mcb-takeaway]') ? 'finding' :
-                el.matches('.mcb-highlights-viewport') ? 'highlights' :
-                el.matches('.mcb-scope-heading') ? 'context' : 'models'),
-              findingShown: Boolean(takeaway && !takeaway.hidden && !root.querySelector('[data-evidence-result]').hidden),
-              findingTitle: findingHeadline?.textContent?.trim() || '',
-              findingDetail: findingText?.textContent?.trim() || '',
-              findingBackground: takeaway ? getComputedStyle(takeaway).backgroundColor : '',
-              mainPanelBackground: getComputedStyle(root.querySelector('.evidence-panel')).backgroundColor,
-              findingFontSize: findingHeadline ? Number.parseFloat(getComputedStyle(findingHeadline).fontSize) : 0,
-              findingDetailSize: findingText ? Number.parseFloat(getComputedStyle(findingText).fontSize) : 0,
-              highlightRoles: highlightsCards.map(el => ({
-                role: el.dataset.highlightRole,
-                label: el.querySelector('span')?.textContent?.trim(),
-                color: getComputedStyle(el).borderTopColor,
-              })),
-              modelDeployments: displayedModelCards.map(el => ({
-                deployment: el.dataset.deployment,
-                insightRole: el.dataset.insightRole,
-                runtimeText: el.querySelector('.mcb-model-card__runtime')?.textContent?.trim(),
-                topBorderColor: getComputedStyle(el).borderTopColor,
-                runtimeTextColor: el.querySelector('.mcb-model-card__runtime')
-                  ? getComputedStyle(el.querySelector('.mcb-model-card__runtime')).color : '',
-              })),
-              scopedAfterHighlights: Boolean(highlights?.compareDocumentPosition(scope) & Node.DOCUMENT_POSITION_FOLLOWING),
-            },
+            selected: tabs.find(t => t.getAttribute('aria-selected') === 'true')?.dataset.trackId,
+            published: tabs.filter(t => t.dataset.published === 'true').length,
+            unpublished: tabs.filter(t => t.dataset.published === 'false').length,
+            resultVisible: !result.hidden,
+            headline: finding?.textContent?.trim() || '',
+            detail: findingDetail?.textContent?.trim() || '',
+            findingVisible: visible(takeaway),
+            findingBackground: takeaway ? getComputedStyle(takeaway).backgroundColor : '',
+            panelBackground: getComputedStyle(root.querySelector('.evidence-panel')).backgroundColor,
+            headlineSize: finding ? parseFloat(getComputedStyle(finding).fontSize) : 0,
+            highlights: highlights.map(node => ({
+              role: node.dataset.highlightRole,
+              label: node.querySelector('span')?.textContent?.trim(),
+              value: node.querySelector('strong')?.textContent?.trim(),
+              bounds: bounds(node),
+            })),
+            overviewWidth: summary?.clientWidth ?? 0,
+            overviewScrollWidth: summary?.scrollWidth ?? 0,
+            experimentSelectVisible: visible(chooser) && visible(mobileSelect),
+            experimentRailVisible: visible(root.querySelector('.experiment-selector-wrap')),
+            selectedOption: mobileSelect?.value,
+            explorerClosed: !explore?.open,
+            chartClosed: !chart?.open,
+            methodsClosed: !methods?.open,
+            comparisonWithinDisclosure: Boolean(explore?.contains(root.querySelector('.mcb-model-browser'))),
+            scopeWithinMethods: Boolean(methods?.contains(root.querySelector('[data-mcb-scope]'))),
+            contentOrder: [...root.querySelectorAll(
+              '[data-mcb-takeaway], .mcb-highlights-viewport, .mcb-explore-details, .mcb-method-details'
+            )].map(node =>
+              node.matches('[data-mcb-takeaway]') ? 'finding' :
+              node.matches('.mcb-highlights-viewport') ? 'highlights' :
+              node.matches('.mcb-explore-details') ? 'explore' : 'methods'
+            ),
+            headerBrand: bounds(headerBrand),
+            headerNav: bounds(headerNav),
+            headerMenuVisible: visible(navMenu),
           };
         });
 
@@ -499,141 +449,77 @@ try {
           path: path.join(outputDir, 'measure__' + viewport.name + '__' + theme + '.png'),
         });
 
-        const isMobile = viewport.width <= 390;
-        let filtersWork = true;
-        let showAllWorks = true;
-        if (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 3) {
-          filtersWork = false; // Regression: initial list must be compact.
-        } else if (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 0) {
-          const localFilter = page.locator('.mcb-list-filters [data-mcb-filter="local"]');
-          await localFilter.click();
-          filtersWork = (await localFilter.getAttribute('aria-pressed')) === 'true';
-          const showAll = page.locator('[data-mcb-show-all]');
-          if (await showAll.isVisible()) {
-            await showAll.click();
-            showAllWorks = (await showAll.getAttribute('aria-expanded')) === 'true';
-          }
-          await page.locator('[data-mcb-chart-details] summary').click();
-          const expanded = await page.locator('[data-mcb-chart-details]').evaluate((el) => el.open);
-          filtersWork = filtersWork && expanded;
+        const isPhone = viewport.width <= 390;
+        let switchWorks = true;
+        if (isPhone) {
+          await selectExperiment(page, 'vlm-capability');
+          switchWorks = (await page.locator('[data-experiment-tab][aria-selected="true"]')
+            .getAttribute('data-track-id')) === 'vlm-capability' &&
+            await page.locator('[data-evidence-empty]').isVisible();
+          await selectExperiment(page, 'model-capability');
+          await page.locator('[data-evidence-result]').waitFor({ state: 'visible' });
+          switchWorks = switchWorks &&
+            (await page.locator('[data-experiment-tab][aria-selected="true"]')
+              .getAttribute('data-track-id')) === 'model-capability';
         }
 
-        let arrowNavigationWorks = true;
-        let swipeWorks = true;
-        if (isMobile) {
-          const first = diagnostics.selectedTab;
-          await page.locator('[data-experiment-next]').click();
-          await page.waitForFunction((previous) =>
-            document.querySelector('[data-experiment-tab][aria-selected="true"]')?.dataset.trackId !== previous,
-            first,
-          );
-          const moved = await page.locator('[data-experiment-tab][aria-selected="true"]').getAttribute('data-track-id');
-          await page.locator('[data-experiment-prev]').click();
-          const back = await page.locator('[data-experiment-tab][aria-selected="true"]').getAttribute('data-track-id');
-          arrowNavigationWorks = moved !== first && back === first;
-          const rail = page.locator('[data-experiment-rail]');
-          await rail.evaluate((node) => node.scrollTo({ left: node.scrollWidth, behavior: 'instant' }));
-          swipeWorks = await rail.evaluate((node) => node.scrollLeft > 10);
+        await page.locator('[data-mcb-explore-details] > summary').click();
+        const exploreOpen = await page.locator('[data-mcb-explore-details]').evaluate(node => node.open);
+        const localFilter = page.locator('.mcb-list-filters [data-mcb-filter="local"]');
+        await localFilter.click();
+        const filterWorks = (await localFilter.getAttribute('aria-pressed')) === 'true' &&
+          await page.locator('[data-mcb-model-cards] [data-mcb-card]').count() > 0;
+        const showAll = page.locator('[data-mcb-show-all]');
+        let showAllWorks = true;
+        if (await showAll.isVisible()) {
+          await showAll.click();
+          showAllWorks = (await showAll.getAttribute('aria-expanded')) === 'true';
         }
+        await page.locator('[data-mcb-chart-details] > summary').click();
+        const chartOpen = await page.locator('[data-mcb-chart-details]').evaluate(node => node.open);
+        const plotFocusable = (await page.locator('.plot-canvas').getAttribute('tabindex')) === '0';
+        await page.locator('.mcb-method-details > summary').click();
+        const methodsOpen = await page.locator('.mcb-method-details').evaluate(node => node.open);
+        const scopedCount = (await page.locator('[data-mcb-scope]').textContent())?.trim() || '';
 
         await selectExperiment(page, 'vlm-capability');
-        const unpublished = await page.evaluate(() => {
-          const root = document.querySelector('#evidence .experiment-explorer');
-          return {
-            selected: root.querySelector('[aria-selected="true"]')?.dataset.trackId,
-            emptyVisible: !root.querySelector('[data-evidence-empty]').hidden,
-            resultHidden: root.querySelector('[data-evidence-result]').hidden,
-          };
-        });
+        const unpublishedVisible = await page.locator('[data-evidence-empty]').isVisible();
+        const unpublishedSelected = await page.locator(
+          '[data-experiment-tab][aria-selected="true"]'
+        ).getAttribute('data-track-id');
 
-        const check = { viewport: viewport.name, ...diagnostics, filtersWork, showAllWorks, arrowNavigationWorks, swipeWorks, unpublished };
+        const check = {
+          viewport: viewport.name, ...initial, switchWorks, exploreOpen, filterWorks,
+          showAllWorks, chartOpen, plotFocusable, methodsOpen, scopedCount,
+          unpublishedVisible, unpublishedSelected,
+        };
         measureChecks.push(check);
+
         if (
-          diagnostics.theme !== theme ||
-          diagnostics.typographyAudit.sectionHeadings.length !== 4 ||
-          diagnostics.typographyAudit.sectionIntros.length !== 4 ||
-          diagnostics.typographyAudit.sectionHeadings.some(heading =>
-            !heading?.fontFamily.includes('Plus Jakarta Sans') || heading.fontWeight !== '800' ||
-            !Number.isFinite(heading.fontSize)) ||
-          Math.max(...diagnostics.typographyAudit.sectionHeadings.map(heading => heading.fontSize)) -
-            Math.min(...diagnostics.typographyAudit.sectionHeadings.map(heading => heading.fontSize)) > 0.6 ||
-          diagnostics.typographyAudit.sectionIntros.some(intro =>
-            !intro?.fontFamily.includes('Inter') || intro.fontSize < 15) ||
-          (viewport.width <= 760 &&
-            Math.max(...diagnostics.typographyAudit.sectionIntros.map(intro => intro.fontSize)) -
-              Math.min(...diagnostics.typographyAudit.sectionIntros.map(intro => intro.fontSize)) > 0.6) ||
-          !diagnostics.typographyAudit.aboutHeading?.fontFamily.includes('Plus Jakarta Sans') ||
-          diagnostics.typographyAudit.aboutHeading.fontWeight !== '800' ||
-          Math.abs(diagnostics.typographyAudit.aboutHeading.fontSize -
-            diagnostics.typographyAudit.sectionHeadings[0].fontSize) > 0.6 ||
-          !diagnostics.typographyAudit.aboutIntro?.fontFamily.includes('Inter') ||
-          (viewport.width <= 760 && Math.abs(diagnostics.typographyAudit.aboutIntro.fontSize -
-            diagnostics.typographyAudit.sectionIntros[0].fontSize) > 0.6) ||
-          !diagnostics.typographyAudit.heroHeading?.fontFamily.includes('Plus Jakarta Sans') ||
-          diagnostics.typographyAudit.heroHeading.fontWeight !== '800' ||
-          diagnostics.typographyAudit.cardHeadings.length < 3 ||
-          diagnostics.typographyAudit.cardHeadings.some(heading =>
-            !heading.fontFamily.includes('Plus Jakarta Sans') ||
-            !['700', '800'].includes(heading.fontWeight) || heading.fontSize < 17) ||
-          diagnostics.pageOverflowPx > 0 ||
-          diagnostics.evidenceHierarchy.roleOrder.join(',') !== 'finding,highlights,context,models' ||
-          !diagnostics.evidenceHierarchy.scopedAfterHighlights ||
-          diagnostics.evidenceHierarchy.highlightRoles.map(x => x.role).join(',') !== 'best-overall,best-local,fastest-local' ||
-          (diagnostics.evidenceHierarchy.findingShown && (
-            !diagnostics.evidenceHierarchy.findingTitle ||
-            !diagnostics.evidenceHierarchy.findingDetail ||
-            diagnostics.evidenceHierarchy.findingBackground === diagnostics.evidenceHierarchy.mainPanelBackground ||
-            diagnostics.evidenceHierarchy.findingFontSize < 19 ||
-            diagnostics.evidenceHierarchy.findingDetailSize < 14 ||
-            diagnostics.evidenceHierarchy.highlightRoles[0].color === diagnostics.evidenceHierarchy.highlightRoles[1].color ||
-            diagnostics.evidenceHierarchy.modelDeployments.some(x =>
-              !['local', 'api'].includes(x.deployment) ||
-              !['top', 'local', 'fastest', 'rank'].includes(x.insightRole) ||
-              (x.deployment === 'local' && x.runtimeText !== 'Local') ||
-              (x.deployment === 'api' && x.runtimeText !== 'API')
-            )
-          )) ||
-          diagnostics.publishedCount !== 3 ||
-          diagnostics.unpublishedCount !== 3 ||
-          diagnostics.fonts.some((size) => size < 14) ||
-          !diagnostics.chartKeyboardFocusable ||
-          !diagnostics.headingFamily.includes('Plus Jakarta Sans') ||
-          !diagnostics.takeawayBeforeModels ||
-          (isMobile && (!diagnostics.benchmarkRailVisible || !diagnostics.benchmarkScrolls)) ||
-          (isMobile && !diagnostics.benchmarkSnap.includes('mandatory')) ||
-          (isMobile && diagnostics.benchmarkCardWidths.some(width => width < 150)) ||
-          (isMobile && diagnostics.storyVisible && (!diagnostics.highlightScrolls ||
-            diagnostics.highlightLayout?.cardWidths?.some(width => width > diagnostics.evidenceWidth))) ||
-          (isMobile && diagnostics.storyVisible && !diagnostics.scopeScrolls) ||
-          (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 1 && !diagnostics.modelScrolls) ||
-          (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount > 0 && (
-            !diagnostics.modelCardInsight?.role ||
-            !diagnostics.modelCardInsight?.description ||
-            !diagnostics.modelCardInsight?.name ||
-            diagnostics.modelCardInsight.display !== 'grid' ||
-            diagnostics.modelCardInsight.cardHeight > 250 ||
-            diagnostics.modelCardInsight.largestInternalGap > 20 ||
-            diagnostics.modelCardInsight.roleFontPx < 14 ||
-            diagnostics.modelCardInsight.metrics?.length !== 2 ||
-            diagnostics.modelCardInsight.metrics[0]?.label !== 'Quality / 100' ||
-            diagnostics.modelCardInsight.metrics[1]?.label !== 'Median p50' ||
-            !diagnostics.modelCardInsight.metrics[0]?.value ||
-            !diagnostics.modelCardInsight.metrics[1]?.value
-          )) ||
-          !arrowNavigationWorks ||
-          !swipeWorks ||
-          (isMobile && diagnostics.evidenceWidth < viewport.width * 0.72) ||
-          (isMobile && diagnostics.chartOpen) ||
-          (isMobile && Number.parseFloat(diagnostics.chartMinWidth) < 620) ||
-          (isMobile && diagnostics.summaryDisplay !== 'flex') ||
-          (isMobile && diagnostics.storyVisible && diagnostics.modelCardCount === 0) ||
-          !filtersWork ||
-          !showAllWorks ||
-          unpublished.selected !== 'vlm-capability' ||
-          !unpublished.emptyVisible ||
-          !unpublished.resultHidden
+          initial.theme !== theme ||
+          initial.pageOverflowPx > 0 ||
+          initial.selected !== 'model-capability' ||
+          initial.published !== 3 || initial.unpublished !== 3 ||
+          !initial.resultVisible || !initial.findingVisible ||
+          !initial.headline || !initial.detail || initial.headlineSize < 19 ||
+          initial.findingBackground === initial.panelBackground ||
+          initial.highlights.map(metric => metric.role).join(',') !==
+            'best-local,best-overall' ||
+          initial.highlights.some(metric => !metric.value || metric.value === '—') ||
+          initial.highlights.some(metric => metric.bounds?.width < 75) ||
+          initial.overviewScrollWidth > initial.overviewWidth + 4 ||
+          initial.contentOrder.join(',') !== 'finding,highlights,explore,methods' ||
+          !initial.explorerClosed || !initial.chartClosed || !initial.methodsClosed ||
+          !initial.comparisonWithinDisclosure || !initial.scopeWithinMethods ||
+          (isPhone && (!initial.experimentSelectVisible || initial.experimentRailVisible)) ||
+          (!isPhone && (!initial.experimentRailVisible || initial.experimentSelectVisible)) ||
+          !initial.headerBrand || initial.headerBrand.right > viewport.width ||
+          !initial.headerMenuVisible ||
+          !switchWorks || !exploreOpen || !filterWorks || !showAllWorks ||
+          !chartOpen || !plotFocusable || !methodsOpen || !scopedCount ||
+          !unpublishedVisible || unpublishedSelected !== 'vlm-capability'
         ) {
-          throw new Error('MEASURE editorial mobile regression: ' + JSON.stringify(check));
+          throw new Error('MEASURE progressive disclosure regression: ' + JSON.stringify(check));
         }
       } finally {
         await page.close();

@@ -232,7 +232,7 @@ test('MEASURE is published-first and preserves all evidence provenance on mobile
   assert.match(stage, /--touch-target-min/);
 
   assert.match(explorer, /sortedTracks = \[\.\.\.tracks\]\.sort/);
-  assert.match(explorer, /BROWSE THE EVIDENCE/);
+  assert.match(explorer, /<h3>Benchmarks<\/h3>/);
   assert.match(explorer, /published<\/span>/);
   assert.match(explorer, /data-published=\{Boolean\(track\.resultUrl\)/);
   assert.match(explorer, /Not published yet/);
@@ -245,13 +245,15 @@ test('MEASURE is published-first and preserves all evidence provenance on mobile
   assert.match(explorer, /data-mcb-model-cards/);
   assert.match(explorer, /class="mcb-cards-viewport" role="region" tabindex="0"/);
   assert.match(explorer, /\.experiment-selector\s*\{[\s\S]*?scroll-snap-type: x mandatory/);
-  assert.match(explorer, /class="mcb-highlights-viewport" role="region" tabindex="0"/);
+  assert.match(explorer, /class="mcb-highlights-viewport" aria-label="Benchmark highlights"/);
   assert.match(explorer, /\.mcb-highlights-viewport\s*\{[\s\S]*?scroll-snap-type: x mandatory/);
   assert.match(explorer, /\.mcb-cards-viewport\s*\{[\s\S]*?scroll-snap-type: x mandatory/);
   assert.match(explorer, /\.run-summary\s*\{[\s\S]*?scroll-snap-type: x proximity/);
   assert.match(explorer, /@media \(max-width: 680px\)/);
-  assert.match(explorer, /\.experiment-selector-wrap\s*\{[\s\S]*?display: block/);
-  assert.doesNotMatch(explorer, /data-experiment-mobile-select/);
+  assert.match(explorer, /data-experiment-mobile-select/);
+  assert.match(explorer, /mobileSelector\.addEventListener\('change'/);
+  assert.match(explorer, /\.experiment-mobile-chooser select/);
+  assert.match(explorer, /\.experiment-selector-wrap, \.experiment-rail-guide \{ display: none; \}/);
   assert.match(explorer, /class="mcb-model-cards" role="list" data-mcb-model-cards/);
   assert.match(explorer, /const renderMcbCards = \(points\) =>/);
   // Model insights are rankings computed from reported evidence, never hardcoded winners.
@@ -260,7 +262,7 @@ test('MEASURE is published-first and preserves all evidence provenance on mobile
   assert.match(explorer, /const fastestLocal = \[\.\.\.localPoints\]\.sort/);
   assert.match(explorer, /TOP QUALITY/);
   assert.match(explorer, /TOP LOCAL/);
-  assert.match(explorer, /FASTEST LOCAL P50/);
+  assert.match(explorer, /<span>Fastest local<\/span>/);
   assert.match(explorer, /QUALITY RANK/);
   assert.match(explorer, /mcb-model-card__role/);
   assert.match(explorer, /mcb-model-card__insight/);
@@ -271,9 +273,12 @@ test('MEASURE is published-first and preserves all evidence provenance on mobile
   assert.match(explorer, /data-mcb-card/);
   assert.match(explorer, /aria-pressed/);
   assert.match(explorer, /data-mcb-show-all/);
-  assert.match(explorer, /class="mcb-chart-details" data-mcb-chart-details open/);
+  assert.match(explorer, /class="mcb-explore-details" data-mcb-explore-details/);
+  assert.match(explorer, /class="mcb-chart-details" data-mcb-chart-details>/);
+  assert.doesNotMatch(explorer, /class="mcb-chart-details" data-mcb-chart-details open/);
   assert.match(explorer, /class="mcb-method-details"/);
-  assert.match(explorer, /chartDetails\.open = !window\.matchMedia/);
+  assert.match(explorer, /mcb-explore-details__body/);
+  assert.match(explorer, /data-mcb-scope/);
   assert.match(explorer, /\.evidence-panel__result\s*\{\s*padding: 0;/);
   assert.match(explorer, /data-performance-plot/);
   assert.match(explorer, /class="plot-canvas" role="region" tabindex="0"/);
@@ -366,8 +371,11 @@ test('MEASURE communicates the source-backed finding before scoped results and c
   const highlights = explorer.indexOf('class="mcb-highlights-viewport"');
   const scope = explorer.indexOf('class="run-summary" data-mcb-scope');
   const comparison = explorer.indexOf('class="mcb-model-browser"');
-  assert.ok(finding > 0 && highlights > finding && scope > highlights && comparison > scope,
-    'finding > published highlights > scope > detailed comparison must be the reading order');
+  assert.ok(finding > 0 && highlights > finding && comparison > highlights && scope > comparison,
+    'finding > at-a-glance metrics > opt-in comparison > methodology scope must be the reading order');
+  assert.match(explorer, /<details class="mcb-explore-details"/);
+  assert.match(explorer, /<details class="mcb-method-details"/);
+  assert.match(explorer, /<strong data-fastest>/);
 
   assert.match(explorer, /WHAT THE EVIDENCE SHOWS/);
   assert.match(explorer, /data-readout-title/);
@@ -376,8 +384,8 @@ test('MEASURE communicates the source-backed finding before scoped results and c
   assert.match(explorer, /BEST OVERALL QUALITY/);
   assert.match(explorer, /data-highlight-role="best-local"/);
   assert.match(explorer, /BEST LOCAL QUALITY/);
-  assert.match(explorer, /data-highlight-role="fastest-local"/);
-  assert.match(explorer, /FASTEST LOCAL P50/);
+  assert.doesNotMatch(explorer, /data-highlight-role="fastest-local"/);
+  assert.match(explorer, /data-fastest-model/);
   assert.doesNotMatch(explorer, /<span>BALANCE POINT<\/span>/);
   assert.match(explorer, /const fastestLocal = \[\.\.\.localPoints\]\.sort/);
   assert.match(explorer, /button\.dataset\.deployment = point\.deployment === 'api'/);
@@ -391,7 +399,7 @@ test('MEASURE communicates the source-backed finding before scoped results and c
   assert.match(explorer, /data-deployment='api'/);
   assert.match(explorer, /data-highlight-role='best-overall'/);
   assert.match(explorer, /data-highlight-role='best-local'/);
-  assert.match(explorer, /data-highlight-role='fastest-local'/);
+  assert.match(explorer, /\.mcb-fastest-note/);
   assert.match(explorer, /\.evidence-takeaway\[hidden\]/);
 
   // Use accents to classify origin and priority, never to imply fabricated performance.
@@ -401,4 +409,12 @@ test('MEASURE communicates the source-backed finding before scoped results and c
   assert.match(explorer, /color-mix\(in srgb/);
   assert.match(explorer, /Local and API latency are not hardware-matched/);
   assert.match(explorer, /No fallback or invented performance values are shown/);
+});
+
+test('header switches to compact navigation before desktop links collide', () => {
+  const header = read('src/components/layout/SiteHeader.astro');
+  assert.match(header, /@media \(max-width: 1700px\)/);
+  assert.match(header, /\.menu-toggle \{ display: block; \}/);
+  assert.match(header, /\.site-nav\s*\{\s*position: absolute;/);
+  assert.match(header, /aria-expanded="false"/);
 });
