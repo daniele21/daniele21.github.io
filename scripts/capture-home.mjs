@@ -124,6 +124,76 @@ const browser = await chromium.launch({ headless: true });
 const report = [];
 
 try {
+  // Header collision contract: test the actual rendered bounds across the
+  // compact/full-navigation breakpoint, including widths where the old 1140px
+  // shell made the role paint over the first navigation item.
+  const headerChecks = [];
+  for (const width of [320, 390, 620, 768, 1024, 1280, 1440, 1450, 1451, 1600, 1700, 1920]) {
+    const context = await browser.newContext({
+      viewport: { width, height: 900 },
+      reducedMotion: 'reduce',
+    });
+    const page = await context.newPage();
+    try {
+      await page.goto(baseUrl + '/', { waitUntil: 'networkidle' });
+      await page.evaluate(() => document.fonts?.ready);
+      const layout = await page.evaluate(() => {
+        const header = document.querySelector('.site-header');
+        const brand = header?.querySelector('.brand');
+        const role = header?.querySelector('.brand-role');
+        const nav = header?.querySelector('.site-nav');
+        const actions = header?.querySelector('.header-actions');
+        const toggle = header?.querySelector('[data-menu-toggle]');
+        const links = [...(nav?.querySelectorAll('.nav-link') ?? [])];
+        const visible = el => el && getComputedStyle(el).display !== 'none' &&
+          getComputedStyle(el).visibility !== 'hidden';
+        const rect = el => {
+          if (!el) return null;
+          const box = el.getBoundingClientRect();
+          return { left: box.left, right: box.right, width: box.width };
+        };
+        return {
+          width: window.innerWidth,
+          documentOverflow: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+          brand: rect(brand),
+          role: visible(role) ? rect(role) : null,
+          navigation: visible(nav) ? rect(nav) : null,
+          actions: rect(actions),
+          navLinks: visible(nav) ? links.map(rect) : [],
+          menuVisible: Boolean(visible(toggle)),
+        };
+      });
+      const navExpected = width > 1450;
+      const noCollision = layout.brand && layout.actions &&
+        layout.brand.right + 4 <= (layout.navigation?.left ?? layout.actions.left) &&
+        (!layout.navigation || layout.navigation.right + 4 <= layout.actions.left) &&
+        (!layout.role || layout.role.right <= layout.brand.right + 1);
+      const linksFit = !layout.navigation ||
+        layout.navLinks.every(box => box.left >= layout.navigation.left - 1 &&
+          box.right <= layout.navigation.right + 1);
+      let menuWorks = true;
+      if (!navExpected) {
+        const toggle = page.locator('.site-header [data-menu-toggle]');
+        await toggle.click();
+        menuWorks = await toggle.getAttribute('aria-expanded') === 'true' &&
+          await page.locator('.site-header .site-nav').isVisible();
+        await page.keyboard.press('Escape');
+        menuWorks = menuWorks && await toggle.getAttribute('aria-expanded') === 'false';
+      }
+      const record = { ...layout, navExpected, noCollision, linksFit, menuWorks };
+      headerChecks.push(record);
+      if (!noCollision || !linksFit || layout.documentOverflow > 0 ||
+          Boolean(layout.navigation) !== navExpected ||
+          layout.menuVisible === navExpected || !menuWorks) {
+        throw new Error('Header collision or navigation regression: ' + JSON.stringify(record));
+      }
+    } finally {
+      await page.close();
+      await context.close();
+    }
+  }
+  await fs.writeFile(path.join(outputDir, 'header-collision-check.json'), JSON.stringify(headerChecks, null, 2));
+
   for (const viewport of viewports) {
     const context = await browser.newContext({
       viewport: { width: viewport.width, height: viewport.height },

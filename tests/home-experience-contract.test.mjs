@@ -411,9 +411,16 @@ test('MEASURE communicates the source-backed finding before scoped results and c
   assert.match(explorer, /No fallback or invented performance values are shown/);
 });
 
-test('header switches to compact navigation before desktop links collide', () => {
+test('shared header separates identity, navigation, and actions without collision', () => {
   const header = read('src/components/layout/SiteHeader.astro');
-  assert.match(header, /@media \(max-width: 1700px\)/);
+  assert.match(header, /--shell-max-width: 1440px/);
+  assert.match(header, /grid-template-columns: minmax\(0, 1fr\) max-content max-content/);
+  assert.match(header, /@media \(max-width: 1450px\)/);
+  assert.match(header, /grid-template-columns: minmax\(0, 1fr\) max-content/);
+  assert.match(header, /\.brand\s*\{[^}]*min-width: 0/s);
+  assert.match(header, /\.brand-text\s*\{[^}]*overflow: hidden/s);
+  assert.match(header, /\.brand-role\s*\{[^}]*text-overflow: ellipsis/s);
+  assert.match(header, /@media \(max-width: 820px\)/);
   assert.match(header, /\.menu-toggle \{ display: block; \}/);
   assert.match(header, /\.site-nav\s*\{\s*position: absolute;/);
   assert.match(header, /aria-expanded="false"/);
