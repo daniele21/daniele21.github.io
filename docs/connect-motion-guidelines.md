@@ -13,7 +13,7 @@ This page is a **digital first impression**, not a product dashboard. Its one jo
 
 1. **The entrance** — name/portrait → accent line → LOCAL-FIRST thesis → connection actions. One run per page load, finished in under one second. No autoplay loops.
 2. **The story** — a luminous line progresses through Strategy → Build → Control as the visitor scrolls. Each numbered stop has a quiet active state; content is always available, whether JS runs or not.
-3. **The interaction** — buttons lift slightly on hover (fine pointer only) and respond on press; the QR panel fades/scales into view when opened. No large page parallax.
+3. **The interaction** — buttons lift slightly on hover (fine pointer only) and respond on press; the share action responds immediately and buttons show short feedback on hover/press. No large page parallax.
 
 ## Non-negotiable constraints
 
@@ -21,8 +21,8 @@ This page is a **digital first impression**, not a product dashboard. Its one jo
 - No looping visual effects, timers driving scroll animation, or `transition: all`.
 - Prefer opacity and transform; never animate layout size or position.
 - No hidden essential content in no-JavaScript mode.
-- The experience is functional with `prefers-reduced-motion: reduce`, including the QR and all four contact paths.
-- Keep touch targets at least 44px; keyboard focus must remain visible.
+- The experience is functional with `prefers-reduced-motion: reduce`, including Save contact, LinkedIn, Share card and the portfolio link.
+- Keep touch targets at least 44px; keyboard focus must remain visible. One dominant full-width vCard CTA, then two equal LinkedIn/Share actions: no redundant QR control.
 - A quick scroll must not leave a step in a false active state. On scroll, requestAnimationFrame reads the three step rectangles and updates a single CSS custom property and active class.
 
 ## QA and proof
