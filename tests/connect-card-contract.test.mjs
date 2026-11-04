@@ -47,7 +47,7 @@ test('motion is purposeful, compositor-friendly, and progressive', () => {
     '--motion-ease:', '@keyframes arrive', '@keyframes lineReveal',
     '.value-list::after {', '--signal-progress', 'requestAnimationFrame(updateJourney)',
     'IntersectionObserver', 'data-motion-reveal', 'prefers-reduced-motion: no-preference',
-    'prefers-reduced-motion:reduce', '.overlay:not([hidden]) .qr-dialog',
+    'prefers-reduced-motion:reduce', '.secondary-actions { animation: arrive',
   ]) assert.ok(page.includes(expected), 'missing motion feature: ' + expected);
   for (const bad of ['transition: all', 'animation: infinite', 'rotateY(']) {
     assert.equal(page.includes(bad), false, 'disallowed motion: ' + bad);
@@ -56,25 +56,30 @@ test('motion is purposeful, compositor-friendly, and progressive', () => {
   assert.ok(page.includes('!motionPreference.matches'), 'motion JS should respect user settings');
 });
 
-test('portrait and QR are local optimized assets with correct dimensions', () => {
+test('portrait remains optimized and QR components are removed', () => {
   const portrait = get('public/images/connect-portrait.webp');
   assert.equal(portrait.toString('ascii', 0, 4), 'RIFF');
   assert.equal(portrait.toString('ascii', 8, 12), 'WEBP');
-  const qr = get('public/images/connect-qr.png');
-  assert.equal(qr.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
-  assert.equal(qr.readUInt32BE(16), 585);
-  assert.equal(qr.readUInt32BE(20), 585);
   assert.ok(page.includes('src={portraitSrc}'));
-  assert.ok(page.includes('src={qrSrc}'));
-  assert.ok(page.includes('id="show-qr"'));
-  assert.ok(page.includes('id="qr-overlay"'));
+  for (const removed of ['qr-overlay', 'show-qr', 'qr-dialog', 'qrSrc', 'setQRVisible']) {
+    assert.equal(page.includes(removed), false, 'QR feature must be absent: ' + removed);
+  }
+});
+
+test('contact CTAs have meaningful hierarchy and accessible names', () => {
+  for (const expected of [
+    'class="action primary"', 'class="secondary-actions"', 'class="action linkedin"',
+    'class="action share"', 'id="share"', 'action__icon', 'action__copy',
+    'Add to your contacts', 'Share card', 'min-height: 66px',
+    'min-height: 55px', 'focus-visible', '@media (hover:hover) and (pointer:fine)',
+  ]) assert.ok(page.includes(expected), 'missing premium CTA requirement: ' + expected);
 });
 
 test('save, share, LinkedIn and portfolio remain available', () => {
   for(const required of [
     'href={vcardUrl}', 'Save contact', 'www.linkedin.com/in/daniele-moltisanti/',
     'navigator.share', 'navigator.clipboard.writeText', 'https://daniele21.github.io/connect',
-    'aria-modal="true"', 'Escape', 'id="qr-close"', 'href={portfolioUrl}',
+    'id="share"', 'href={portfolioUrl}',
   ]) assert.ok(page.includes(required), 'missing working action: ' + required);
   assert.ok(vcard.includes('BEGIN:VCARD'));
   assert.ok(vcard.includes('FN:Daniele Moltisanti'));
