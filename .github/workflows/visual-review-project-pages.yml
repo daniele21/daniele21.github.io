@@ -53,6 +53,9 @@ jobs:
       - name: Capture 7 featured project routes across 4 viewports
         run: node scripts/capture-project-pages.mjs
 
+      - name: Verify digital card mobile and desktop front/back
+        run: node scripts/capture-connect-card.mjs
+
       - name: Upload rendered review artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -61,5 +64,6 @@ jobs:
           path: |
             visual-review-home/
             visual-review/
+            visual-review-connect/
           if-no-files-found: error
           retention-days: 7
