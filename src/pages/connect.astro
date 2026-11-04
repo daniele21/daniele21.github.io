@@ -34,6 +34,8 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
   --line: rgba(164,180,237,.18);
   --violet: #b392ff;
   --electric: #69afff;
+  --motion-ease: cubic-bezier(.18, .77, .19, 1);
+  --motion-tap: cubic-bezier(.2, .8, .2, 1);
 }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -126,9 +128,25 @@ button, a { -webkit-tap-highlight-color: transparent; }
   border: 1px solid rgba(174,179,238,.26); border-radius:13px;
   background: rgba(68,80,136,.13); color:#f5f6ff;
   font-size:14px; font-weight:700; line-height:1.2; cursor:pointer;
-  transition: border-color .16s ease, background .16s ease;
+  position: relative;
+  overflow: hidden;
+  transition: transform .22s var(--motion-tap), border-color .2s ease, background .2s ease;
 }
 .action:where(:hover,:focus-visible) { border-color:rgba(189,192,255,.6); background:rgba(97,101,177,.23); }
+.action:active { transform:scale(.975); }
+.action.primary::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset: -30% -50%;
+  background: linear-gradient(105deg, transparent 39%, rgba(255,255,255,.17) 49%, transparent 59%);
+  transform: translateX(-100%);
+  transition: transform .55s var(--motion-tap);
+}
+@media (hover:hover) and (pointer:fine) {
+  .action:hover { transform:translateY(-2px); }
+  .action.primary:hover::after { transform:translateX(100%); }
+}
 .action.primary { background:linear-gradient(110deg,#7656c1,#366bb6); border-color:rgba(175,177,245,.5); }
 .action.primary:where(:hover,:focus-visible) { background:linear-gradient(110deg,#8869d5,#477cc9); }
 .action svg { width:18px; height:18px; stroke:currentColor; stroke-width:1.9; fill:none; stroke-linecap:round; stroke-linejoin:round; }
@@ -140,6 +158,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
   transition:color .16s ease;
 }
 .quiet-button:where(:hover,:focus-visible) { color:#fff; }
+.quiet-button svg { transition: transform .2s var(--motion-tap); }
+@media (hover:hover) and (pointer:fine) {
+  .quiet-button:hover svg { transform: translateY(-2px); }
+}
 .quiet-button svg { width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.8; }
 .hero-foot {
   display:flex; align-items:center; gap:12px; width:fit-content; min-height:50px;
@@ -154,6 +176,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .hero-foot:hover svg { transform: translateY(3px); }
 .details { padding-top: 27px; padding-bottom: 31px; }
 .details h2 {
+  scroll-margin-top: 24px;
   max-width:650px; margin:0 0 15px;
   font-size:clamp(30px,7.6vw,52px); font-weight:810; line-height:1.11; letter-spacing:-.056em;
 }
@@ -165,12 +188,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .value-list::before {
   content: ""; position:absolute; z-index:0;
   width:1px; left:21px; top:28px; bottom:32px;
-  background:linear-gradient(180deg,#986bfa 0%,rgba(103,148,241,.6) 51%,rgba(103,148,241,.12) 100%);
+  background: rgba(140,153,223,.22);
 }
 .value-row { position:relative; z-index:1; display:grid; grid-template-columns:44px minmax(0,1fr); gap:16px; min-height:94px; padding:0 0 20px; }
 .value-row:last-child { padding-bottom:0; min-height:70px; }
 .value-index {
-  display:grid; place-items:center; width:42px; height:42px;
+  position:relative; display:grid; place-items:center; width:42px; height:42px;
   border-radius:13px; border:1px solid rgba(165,158,239,.34);
   background:#121735;
   color:#d6c5ff; font-size:13px; font-weight:740;
@@ -179,6 +202,42 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 .value-heading { margin:1px 0 5px; font-size:19px; font-weight:780; letter-spacing:-.033em; }
 .value-copy { margin:0; color:#b9c4de; font-size:15px; line-height:1.5; }
+
+/* The signature motion: a signal travels through Strategy → Build → Control.
+   The positions are driven by a single batched scroll read, not keyframe loops. */
+.value-list { --signal-progress: 0; }
+.value-list::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  width: 2px;
+  left: 20.5px;
+  top: 28px;
+  bottom: 32px;
+  background: linear-gradient(180deg, #ba87ff, #60b5ff);
+  box-shadow: 0 0 12px rgba(117,134,255,.5);
+  transform: scaleY(var(--signal-progress));
+  transform-origin: top center;
+  transition: transform .64s var(--motion-ease);
+}
+.value-index { transition: transform .28s var(--motion-ease), color .25s ease; }
+.value-index::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1px solid rgba(117,172,255,.55);
+  border-radius: 16px;
+  opacity: 0;
+  transform: scale(.88);
+  transition: opacity .24s ease, transform .3s var(--motion-ease);
+  pointer-events: none;
+}
+.value-row.is-active .value-index { transform: scale(1.045); color: #fff; }
+.value-row.is-active .value-index::after { opacity: 1; transform: scale(1); }
+.value-heading { transition: color .2s ease; }
+.value-row.is-active .value-heading { color: #d0c1ff; }
+
 .principle {
   position:relative; max-width:700px; margin-top:41px; padding:11px 0 8px 24px;
   border-left:2px solid #8e82ee;
@@ -205,6 +264,16 @@ footer { padding:19px clamp(22px,6vw,64px) 30px; background:transparent; color:#
 .qr-dialog h3 { margin:4px 0 8px; font-size:24px; letter-spacing:-.04em; }
 .qr-dialog p { margin:0 0 19px; font-size:14px; color:#b2bddc; line-height:1.5; }
 .qr-dialog img { display:block; width:min(100%,245px); height:auto; aspect-ratio:1; object-fit:contain; margin:0 auto; border-radius:13px; border:9px solid #fff; }
+/* The modal emerges from the tap with a short, calm transition. */
+@media (prefers-reduced-motion: no-preference) {
+  .overlay:not([hidden]) { animation: veilIn .18s ease-out both; }
+  .overlay:not([hidden]) .qr-dialog { animation: dialogIn .3s var(--motion-ease) both; }
+  @keyframes veilIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes dialogIn {
+    from { opacity:0; transform:translateY(14px) scale(.965); }
+    to { opacity:1; transform:translateY(0) scale(1); }
+  }
+}
 .qr-dialog .qr-address { margin:14px 0 0; color:#d0d5ff; font-size:12px; }
 .close { position:absolute; top:12px; right:15px; width:44px; height:44px; border:0; background:transparent; color:white; font-size:27px; cursor:pointer; }
 .toast { position:fixed; bottom:max(18px,env(safe-area-inset-bottom)); left:50%; transform:translate(-50%,20px); z-index:35; pointer-events:none; opacity:0; padding:12px 16px; border-radius:12px; background:#dcdafe; color:#161431; font-size:13px; font-weight:700; box-shadow:0 8px 34px #0007; transition:.18s; white-space:nowrap; }
@@ -224,14 +293,42 @@ footer { padding:19px clamp(22px,6vw,64px) 30px; background:transparent; color:#
   .hero-foot { margin-top:35px; }
   .details { padding-top:32px; }
   .value-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:26px; max-width:none; margin-top:40px; }
-  .value-list::before { top:20px; bottom:auto; height:1px; width:auto; left:20px; right:20px; background:linear-gradient(90deg,#9b77eb,#70adff,rgba(103,148,241,.16)); }
+  .value-list::before { top:20px; bottom:auto; height:1px; width:auto; left:20px; right:20px; background:rgba(140,153,223,.22); }
+  .value-list::after {
+    top:19.5px; bottom:auto; height:2px; width:auto; left:20px; right:20px;
+    background:linear-gradient(90deg,#b889ff,#66baff);
+    transform:scaleX(var(--signal-progress)); transform-origin:left center;
+  }
   .value-row { display:block; min-height:0; padding:0; }
   .value-row:last-child { min-height:0; }
   .value-index { margin-bottom:18px; }
   .principle { margin-top:55px; }
 }
+/* One memorable first impression, then scroll-responsive motion. No infinite loops.
+   These are compositor-friendly opacity/transform animations only. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes arrive {
+    from { opacity:0; transform:translateY(13px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  @keyframes lineReveal {
+    from { opacity:.4; transform:scaleX(.04); }
+    to { opacity:1; transform:scaleX(1); }
+  }
+  .top { animation: arrive .56s var(--motion-ease) both; }
+  .micro-line { transform-origin:left center; animation: lineReveal .64s var(--motion-ease) .13s both; }
+  .hero-main { animation: arrive .67s var(--motion-ease) .15s both; }
+  .hero-actions { animation: arrive .58s var(--motion-ease) .34s both; }
+  .utility { animation: arrive .48s var(--motion-ease) .42s both; }
+  /* Progressive enhancement: content remains visible if scripting is disabled. */
+  .motion-enabled [data-motion-reveal]:not(.is-revealed) { opacity:.86; transform:translateY(10px); }
+  .motion-enabled [data-motion-reveal] { transition:opacity .56s var(--motion-ease), transform .56s var(--motion-ease); }
+}
 @media (prefers-reduced-motion:reduce) {
-  *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; }
+  *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; }
+  .value-list::after { transform: none !important; }
+  :where(.action,.quiet-button svg,.hero-foot svg,.value-index) { transform:none!important; }
+  .motion-enabled [data-motion-reveal] { opacity:1!important; transform:none!important; }
 }
 </style>
 </head>
@@ -252,14 +349,14 @@ footer { padding:19px clamp(22px,6vw,64px) 30px; background:transparent; color:#
     <a class="hero-foot" href="#strategy-title">Strategy meets execution <svg viewBox="0 0 24 24"><path d="M12 3v17m-6-6 6 6 6-6"/></svg></a>
   </header>
   <section class="details" aria-labelledby="strategy-title">
-<h2 id="strategy-title">Strategic vision.<br><span>Hands-on execution.</span></h2>
+<h2 id="strategy-title" data-motion-reveal>Strategic vision.<br><span>Hands-on execution.</span></h2>
     <p class="subhead">Enterprise AI leadership. Hands-on product building.</p>
     <div class="value-list">
       <div class="value-row"><span class="value-index">01</span><div><h3 class="value-heading">STRATEGY</h3><p class="value-copy">Value, feasibility &amp; costs.</p></div></div>
       <div class="value-row"><span class="value-index">02</span><div><h3 class="value-heading">BUILD</h3><p class="value-copy">From concept to real products.</p></div></div>
       <div class="value-row"><span class="value-index">03</span><div><h3 class="value-heading">CONTROL</h3><p class="value-copy">Privacy. Independence. Local AI.</p></div></div>
     </div>
-    <div class="principle"><h3 class="principle-title">LOCAL-FIRST <span class="neq">≠</span><br><span class="only">LOCAL-ONLY</span></h3><p class="principle-text">Local where it works.<br>Cloud where it adds value.</p></div>
+    <div class="principle" data-motion-reveal><h3 class="principle-title">LOCAL-FIRST <span class="neq">≠</span><br><span class="only">LOCAL-ONLY</span></h3><p class="principle-text">Local where it works.<br>Cloud where it adds value.</p></div>
     <div class="bottom-link"><span>Curious what I've built?</span><a href={portfolioUrl}>Explore my work →</a></div>
   </section>
   <footer>Daniele Moltisanti · Local-first AI</footer>
@@ -274,6 +371,41 @@ footer { padding:19px clamp(22px,6vw,64px) 30px; background:transparent; color:#
   const closeQR = document.getElementById('qr-close');
   const shareButton = document.getElementById('share');
   const toast = document.getElementById('toast');
+
+  // Shared motion system: one entrance, one scroll-driven journey, and contextual micro-feedback.
+  // Reduced-motion visitors receive the same content and actions without animated states.
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!motionPreference.matches && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('motion-enabled');
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add('is-revealed');
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0.08, rootMargin: '0px 0px -7% 0px' });
+    document.querySelectorAll('[data-motion-reveal]').forEach(element => revealObserver.observe(element));
+
+    const journey = document.querySelector<HTMLElement>('.value-list');
+    const steps = [...document.querySelectorAll<HTMLElement>('.value-row')];
+    if (journey && steps.length) {
+      let frame = 0;
+      const updateJourney = () => {
+        frame = 0;
+        const activationLine = window.innerHeight * .72;
+        const offsets = steps.map(step => step.getBoundingClientRect().top);
+        let active = -1;
+        offsets.forEach((top, index) => { if (top <= activationLine) active = index; });
+        journey.style.setProperty('--signal-progress', String((active + 1) / steps.length));
+        steps.forEach((step, index) => step.classList.toggle('is-active', index === active));
+      };
+      const scheduleJourney = () => { if (!frame) frame = requestAnimationFrame(updateJourney); };
+      window.addEventListener('scroll', scheduleJourney, { passive: true });
+      window.addEventListener('resize', scheduleJourney, { passive: true });
+      scheduleJourney();
+    }
+  }
+
   let toastTimeout: ReturnType<typeof setTimeout> | undefined;
   let focusBeforeDialog: HTMLElement | null = null;
 
