@@ -21,15 +21,25 @@ test('native mobile-first /connect is no longer an image collage', () => {
     'Privacy. Independence. Local AI.',
     'LOCAL-FIRST <span class="neq">≠</span>',
     'Cloud where it adds value.',
-    '@media(max-width:360px)',
-    '@media(min-width:680px)',
-    '@media(prefers-reduced-motion:reduce)',
+    '@media (max-width:380px)',
+    '@media (min-width:760px)',
+    '@media (prefers-reduced-motion:reduce)',
   ]) assert.ok(page.includes(required), 'missing approved brand/content: ' + required);
 
   for (const forbidden of [
     'flyer-continuum', 'network-card-back.png', 'card-flip',
     'front-tab', 'back-tab', 'rotateY(', 'backface-visibility',
   ]) assert.equal(page.includes(forbidden), false, 'obsolete print-image presentation: ' + forbidden);
+});
+
+test('design remains one connected surface rather than visually divided panels', () => {
+  assert.ok(page.includes('Deliberately one canvas'));
+  assert.ok(page.includes('<a class="hero-foot" href="#strategy-title">'));
+  assert.ok(page.includes('.value-list::before {'));
+  assert.ok(page.includes('Enterprise AI leadership. Hands-on product building.'));
+  for (const old of ['min-height:660px', 'height:330px', 'border-top:1px solid rgba(109,125,198,.23)']) {
+    assert.equal(page.includes(old), false, 'old discontinuous layout: ' + old);
+  }
 });
 
 test('portrait and QR are local optimized assets with correct dimensions', () => {
