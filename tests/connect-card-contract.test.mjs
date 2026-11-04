@@ -44,7 +44,7 @@ test('digital card shares link and provides contact + portfolio without employer
   assert.match(cardPage, /navigator\\.share/);
   assert.match(cardPage, /navigator\\.clipboard/);
   assert.match(cardPage, /daniele-moltisanti\\.vcf/);
-  assert.match(cardPage, /www\\.linkedin\\.com\\/in\\/daniele-moltisanti/);
+  assert.ok(cardPage.includes('www.linkedin.com/in/daniele-moltisanti/'));
   assert.match(vcf, /FN:Daniele Moltisanti/);
   assert.doesNotMatch(vcf, /Sky Italia|TEL:/);
   assert.doesNotMatch(cardPage, /Sky Italia/);
