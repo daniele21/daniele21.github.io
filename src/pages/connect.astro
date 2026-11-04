@@ -96,7 +96,11 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
         caption.textContent = flipped ? '02 / 02 — Back' : '01 / 02 — Front';
       }
 
-      card?.addEventListener('click', () => setFlipped(!card.classList.contains('is-flipped')));
+      let lastSwipeAt = 0;
+      card?.addEventListener('click', () => {
+        if (Date.now() - lastSwipeAt < 600) return;
+        setFlipped(!card.classList.contains('is-flipped'));
+      });
       frontTab?.addEventListener('click', () => setFlipped(false));
       backTab?.addEventListener('click', () => setFlipped(true));
 
@@ -114,6 +118,7 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
         const dx = point.screenX - initialTouchX;
         const dy = point.screenY - initialTouchY;
         if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          lastSwipeAt = Date.now();
           setFlipped(dx < 0);
         }
       }, { passive: true });
