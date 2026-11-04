@@ -47,6 +47,9 @@ jobs:
           cat /tmp/product-experience-http.log
           exit 1
 
+      - name: Verify digital card mobile-first experience
+        run: node scripts/capture-connect-card.mjs
+
       - name: Capture home across 4 viewports plus reduced motion
         run: node scripts/capture-home.mjs
 
@@ -61,5 +64,6 @@ jobs:
           path: |
             visual-review-home/
             visual-review/
+            visual-review-connect/
           if-no-files-found: error
           retention-days: 7

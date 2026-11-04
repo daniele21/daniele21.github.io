@@ -1,0 +1,472 @@
+---
+/** Mobile-first networking profile: the same brand and messaging as the flyer,
+ * deliberately rebuilt as semantic content rather than stretching print PNGs. */
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const portraitSrc = `${base}/images/connect-portrait.webp`;
+const vcardUrl = `${base}/daniele-moltisanti.vcf`;
+const portfolioUrl = `${base}/`;
+const canonicalUrl = 'https://daniele21.github.io/connect';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#080c20" />
+  <meta name="description" content="Daniele Moltisanti — AI Strategy Leader & AI Builder. Local-first. Your AI. Your Data. Your Control." />
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="Daniele Moltisanti · LOCAL-FIRST." />
+  <meta property="og:description" content="Strategic vision. Hands-on execution. Local where it works. Cloud where it adds value." />
+  <meta property="og:image" content="https://daniele21.github.io/images/network-card-front.png" />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href={canonicalUrl} />
+  <link rel="icon" href={`${base}/favicon.png`} type="image/png" />
+  <title>Daniele Moltisanti · Local-first Digital Card</title>
+  <style is:global>
+:root {
+  color-scheme: dark;
+  --base: #080d20;
+  --paper: #eef2ff;
+  --body: #b8c4df;
+  --muted: #9eaaca;
+  --line: rgba(164,180,237,.18);
+  --violet: #b392ff;
+  --electric: #69afff;
+  --motion-ease: cubic-bezier(.18, .77, .19, 1);
+  --motion-tap: cubic-bezier(.2, .8, .2, 1);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: #050918;
+  color: var(--paper);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+:where(button, a):focus-visible { outline: 3px solid #c7dcff; outline-offset: 4px; }
+.page {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  width: min(100%, 980px);
+  margin-inline: auto;
+  background:
+    radial-gradient(ellipse 75% 24% at 116% 20%, rgba(46,83,179,.23), transparent 77%),
+    radial-gradient(ellipse 86% 32% at -19% 66%, rgba(108,62,198,.13), transparent 76%),
+    radial-gradient(ellipse 75% 22% at 105% 94%, rgba(37,82,181,.13), transparent 78%),
+    linear-gradient(170deg, #080c1e 0%, #0d1330 52%, #080c1e 100%);
+}
+/* Deliberately one canvas, not a hero stacked over a second background. */
+.page::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  width: 370px;
+  height: 580px;
+  right: -270px;
+  top: 180px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(106,78,236,.20), transparent 68%);
+  filter: blur(18px);
+}
+.hero, .details { position: relative; padding-inline: clamp(22px, 6vw, 64px); }
+.hero {
+  padding-top: max(28px, env(safe-area-inset-top));
+  padding-bottom: 22px;
+}
+.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
+.identity { padding-top: 9px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.name { color: #f5f5ff; font-size: clamp(20px, 5.2vw, 26px); letter-spacing: -.048em; line-height: 1.12; font-weight: 800; }
+.role { color: var(--body); font-size: clamp(12px, 3.35vw, 15px); line-height: 1.5; }
+.portrait-wrap {
+  flex: 0 0 auto;
+  width: clamp(76px, 22vw, 104px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #555e75;
+  box-shadow: 0 0 0 1px rgba(169,167,242,.35), 0 8px 27px rgba(0,0,0,.28);
+}
+.portrait-wrap img { display:block; width:100%; height:100%; object-fit:cover; object-position:50% 28%; transform:scale(1.24); }
+.micro-line {
+  width: 44px;
+  height: 3px;
+  margin-top: clamp(34px, 5vw, 54px);
+  border-radius: 4px;
+  background: linear-gradient(90deg, #bb7afa, #5db5ff);
+  box-shadow: 0 0 13px rgba(96,125,255,.35);
+}
+.hero-main { margin-top: 18px; max-width: 720px; }
+.local {
+  margin: 0 0 20px;
+  font-size: clamp(43px, 11.2vw, 94px);
+  font-weight: 860;
+  line-height: 1;
+  letter-spacing: -.072em;
+  white-space: nowrap;
+}
+.local span {
+  color: transparent;
+  background: linear-gradient(103deg, #c68df9 0%, #9b72ec 40%, #5caaff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.promise { margin:0; max-width: 510px; font-size: clamp(22px, 5.5vw, 33px); line-height:1.19; font-weight:740; letter-spacing:-.04em; }
+.hero-support { margin: 15px 0 0; color: #b7c2df; font-size: 15px; line-height:1.5; }
+/* Action hierarchy: one clear contact CTA, two polished networking options. */
+.hero-actions {
+  display: grid;
+  gap: 11px;
+  max-width: 530px;
+  margin-top: 29px;
+}
+.secondary-actions {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 11px;
+}
+.action {
+  display: flex;
+  position: relative;
+  align-items: center;
+  min-width: 0;
+  min-height: 55px;
+  gap: 11px;
+  padding: 0 14px;
+  overflow: hidden;
+  border: 1px solid rgba(178,192,248,.21);
+  border-radius: 16px;
+  color: #f6f7ff;
+  background: linear-gradient(132deg,rgba(53,62,113,.46),rgba(28,39,80,.46));
+  box-shadow: inset 0 1px rgba(255,255,255,.045);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 720;
+  transition: transform .22s var(--motion-tap), border-color .2s ease, box-shadow .23s ease, background .23s ease;
+}
+.action.primary {
+  min-height: 66px;
+  padding-inline: 15px 18px;
+  border-color: rgba(186,189,255,.62);
+  background: linear-gradient(116deg,#825aca 0%,#635fcf 40%,#306cad 100%);
+  box-shadow: 0 9px 28px rgba(64,79,181,.19), inset 0 1px rgba(255,255,255,.19);
+}
+.action.primary::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset: -45% -50%;
+  background: linear-gradient(108deg,transparent 42%,rgba(255,255,255,.15) 50%,transparent 58%);
+  transform: translateX(-100%);
+  transition: transform .65s var(--motion-tap);
+}
+.action.linkedin { border-color: rgba(103,164,239,.33); }
+.action.share { border-color: rgba(172,162,244,.28); }
+.action__icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  color: #c8dcff;
+  background: rgba(104,129,209,.13);
+  border: 1px solid rgba(166,183,255,.12);
+}
+.action.primary .action__icon {
+  width: 38px;
+  height: 38px;
+  color: #fff;
+  background: rgba(241,238,255,.16);
+  border-color: rgba(255,255,255,.20);
+}
+.action__icon svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round; }
+.action__copy { display:flex; flex:1 1 auto; min-width:0; flex-direction:column; gap:3px; text-align:left; }
+.action__label { font-weight: 750; letter-spacing: -.015em; white-space: nowrap; }
+.action__meta { font-size: 12px; color: rgba(255,255,255,.80); font-weight: 500; letter-spacing: -.004em; }
+.action__end { width: 17px; height: 17px; flex: 0 0 auto; color: rgba(255,255,255,.80); stroke: currentColor; stroke-width: 1.85; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.secondary-actions .action__label { font-size: 14px; }
+.secondary-actions .action__end { opacity: .68; }
+.action:focus-visible { outline: 3px solid #c7dcff; outline-offset: 3px; }
+.action:active { transform: scale(.98); }
+@media (hover:hover) and (pointer:fine) {
+  .action:hover { transform: translateY(-2px); border-color: rgba(189,207,255,.64); box-shadow: 0 12px 26px rgba(17,23,75,.27),inset 0 1px rgba(255,255,255,.08); }
+  .action.primary:hover { box-shadow: 0 13px 31px rgba(70,80,184,.30),inset 0 1px rgba(255,255,255,.25); }
+  .action.primary:hover::after { transform: translateX(100%); }
+}
+.hero-foot {
+  display:flex; align-items:center; gap:12px; width:fit-content; min-height:50px;
+  padding-top:4px; margin-top:29px;
+  color:#d2d6ed; font-size:14px; font-weight:600;
+}
+.hero-foot::before {
+  content: ""; display:block; width:25px; height:1px;
+  background: linear-gradient(90deg, #a47eeb, #6fbcff);
+}
+.hero-foot svg { width:17px; height:17px; stroke:#9ec9ff; fill:none; stroke-width:1.8; transition:transform .16s ease; }
+.hero-foot:hover svg { transform: translateY(3px); }
+.details { padding-top: 27px; padding-bottom: 31px; }
+.details h2 {
+  scroll-margin-top: 24px;
+  max-width:650px; margin:0 0 15px;
+  font-size:clamp(30px,7.6vw,52px); font-weight:810; line-height:1.11; letter-spacing:-.056em;
+}
+.details h2 span { color:transparent; background:linear-gradient(105deg,#cf9dff,#659fff); background-clip:text; -webkit-background-clip:text; }
+.details .subhead { color:var(--body); line-height:1.5; max-width:550px; margin:0; font-size:15px; }
+.section-tag { display:none; }
+/* Strategy -> build -> control, a connected sequence instead of separated boxes. */
+.value-list { position:relative; display:grid; max-width:670px; margin-top:38px; gap:0; }
+.value-list::before {
+  content: ""; position:absolute; z-index:0;
+  width:1px; left:21px; top:28px; bottom:32px;
+  background: rgba(140,153,223,.22);
+}
+.value-row { position:relative; z-index:1; display:grid; grid-template-columns:44px minmax(0,1fr); gap:16px; min-height:94px; padding:0 0 20px; }
+.value-row:last-child { padding-bottom:0; min-height:70px; }
+.value-index {
+  position:relative; display:grid; place-items:center; width:42px; height:42px;
+  border-radius:13px; border:1px solid rgba(165,158,239,.34);
+  background:#121735;
+  color:#d6c5ff; font-size:13px; font-weight:740;
+  font-variant-numeric:tabular-nums;
+  box-shadow:0 0 0 5px #0d132e;
+}
+.value-heading { margin:1px 0 5px; font-size:19px; font-weight:780; letter-spacing:-.033em; }
+.value-copy { margin:0; color:#b9c4de; font-size:15px; line-height:1.5; }
+
+/* The signature motion: a signal travels through Strategy → Build → Control.
+   The positions are driven by a single batched scroll read, not keyframe loops. */
+.value-list { --signal-progress: 0; }
+.value-list::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  width: 2px;
+  left: 20.5px;
+  top: 28px;
+  bottom: 32px;
+  background: linear-gradient(180deg, #ba87ff, #60b5ff);
+  box-shadow: 0 0 12px rgba(117,134,255,.5);
+  transform: scaleY(var(--signal-progress));
+  transform-origin: top center;
+  transition: transform .64s var(--motion-ease);
+}
+.value-index { transition: transform .28s var(--motion-ease), color .25s ease; }
+.value-index::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1px solid rgba(117,172,255,.55);
+  border-radius: 16px;
+  opacity: 0;
+  transform: scale(.88);
+  transition: opacity .24s ease, transform .3s var(--motion-ease);
+  pointer-events: none;
+}
+.value-row.is-active .value-index { transform: scale(1.045); color: #fff; }
+.value-row.is-active .value-index::after { opacity: 1; transform: scale(1); }
+.value-heading { transition: color .2s ease; }
+.value-row.is-active .value-heading { color: #d0c1ff; }
+
+.principle {
+  position:relative; max-width:700px; margin-top:41px; padding:11px 0 8px 24px;
+  border-left:2px solid #8e82ee;
+  background:radial-gradient(ellipse 87% 100% at 0% 50%,rgba(70,61,157,.17),transparent);
+}
+.principle-title {
+  font-size:clamp(27px,7vw,42px); font-weight:830; letter-spacing:-.06em; line-height:1.08;
+  margin:0 0 13px;
+}
+.principle-title .neq { color:#c18bfa; }
+.principle-title .only { color:transparent; background:linear-gradient(110deg,#b48cff,#70adff); background-clip:text;-webkit-background-clip:text; }
+.principle-text { font-size:16px; line-height:1.55; margin:0; color:#c8d2e8; }
+.bottom-link {
+  border-top:1px solid var(--line); margin-top:42px; padding-top:17px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  color:#aebbd6; font-size:14px; line-height:1.4;
+}
+.bottom-link a { min-height:49px; display:inline-flex; align-items:center; gap:10px; color:#d6c1ff; font-weight:740; }
+.bottom-link a:where(:hover,:focus-visible) { color:#fff; }
+footer { padding:19px clamp(22px,6vw,64px) 30px; background:transparent; color:#8794b8; font-size:12px; text-align:left; }
+.toast { position:fixed; bottom:max(18px,env(safe-area-inset-bottom)); left:50%; transform:translate(-50%,20px); z-index:35; pointer-events:none; opacity:0; padding:12px 16px; border-radius:12px; background:#dcdafe; color:#161431; font-size:13px; font-weight:700; box-shadow:0 8px 34px #0007; transition:.18s; white-space:nowrap; }
+.toast.show { opacity:1; transform:translate(-50%,0); }
+@media (max-width:380px) {
+  .hero, .details { padding-inline:19px; }
+  .local { font-size: clamp(40px,11.25vw,44px); }
+  .secondary-actions { gap:8px; }
+  .secondary-actions .action { padding-inline:10px; gap:7px; }
+  .secondary-actions .action__icon { width:30px; height:30px; }
+  .secondary-actions .action__end { display:none; }
+  .name { font-size:20px; }
+}
+@media (min-width:760px) {
+  .hero { padding-top:50px; }
+  .micro-line { margin-top:48px; }
+  .hero-main { margin-top:23px; }
+  .hero-actions { margin-top:33px; }
+  .hero-foot { margin-top:35px; }
+  .details { padding-top:32px; }
+  .value-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:26px; max-width:none; margin-top:40px; }
+  .value-list::before { top:20px; bottom:auto; height:1px; width:auto; left:20px; right:20px; background:rgba(140,153,223,.22); }
+  .value-list::after {
+    top:19.5px; bottom:auto; height:2px; width:auto; left:20px; right:20px;
+    background:linear-gradient(90deg,#b889ff,#66baff);
+    transform:scaleX(var(--signal-progress)); transform-origin:left center;
+  }
+  .value-row { display:block; min-height:0; padding:0; }
+  .value-row:last-child { min-height:0; }
+  .value-index { margin-bottom:18px; }
+  .principle { margin-top:55px; }
+}
+/* One memorable first impression, then scroll-responsive motion. No infinite loops.
+   These are compositor-friendly opacity/transform animations only. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes arrive {
+    from { opacity:0; transform:translateY(13px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  @keyframes lineReveal {
+    from { opacity:.4; transform:scaleX(.04); }
+    to { opacity:1; transform:scaleX(1); }
+  }
+  .top { animation: arrive .56s var(--motion-ease) both; }
+  .micro-line { transform-origin:left center; animation: lineReveal .64s var(--motion-ease) .13s both; }
+  .hero-main { animation: arrive .67s var(--motion-ease) .15s both; }
+  .hero-actions { animation: arrive .58s var(--motion-ease) .34s both; }
+  .secondary-actions { animation: arrive .48s var(--motion-ease) .42s both; }
+  /* Progressive enhancement: content remains visible if scripting is disabled. */
+  .motion-enabled [data-motion-reveal]:not(.is-revealed) { opacity:.86; transform:translateY(10px); }
+  .motion-enabled [data-motion-reveal] { transition:opacity .56s var(--motion-ease), transform .56s var(--motion-ease); }
+}
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; }
+  .value-list::after { transform: none !important; }
+  :where(.action,.hero-foot svg,.value-index) { transform:none!important; }
+  .motion-enabled [data-motion-reveal] { opacity:1!important; transform:none!important; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="hero" id="top">
+    <div class="top">
+      <div class="identity"><strong class="name">Daniele Moltisanti</strong><div class="role">AI Strategy Leader &amp; AI Builder</div></div>
+      <div class="portrait-wrap"><img src={portraitSrc} width="1012" height="899" loading="eager" decoding="async" fetchpriority="high" alt="Portrait of Daniele Moltisanti"></div>
+    </div>
+    <div class="micro-line" aria-hidden="true"></div>
+    <div class="hero-main"><h1 class="local">LOCAL-<span>FIRST.</span></h1><p class="promise">Your AI. Your Data.<br>Your Control.</p><p class="hero-support">Private by design. Cloud by choice.</p></div>
+    <div class="hero-actions" aria-label="Connect with Daniele">
+      <a class="action primary" download="Daniele-Moltisanti.vcf" href={vcardUrl}>
+        <span class="action__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 18v3h16v-3"/></svg></span>
+        <span class="action__copy"><span class="action__label">Save contact</span><span class="action__meta">Add to your contacts</span></span>
+        <svg class="action__end" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+      </a>
+      <div class="secondary-actions">
+        <a class="action linkedin" href="https://www.linkedin.com/in/daniele-moltisanti/" target="_blank" rel="noopener noreferrer">
+          <span class="action__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 9v10M5 5v.1M10 19v-7c0-3 8-4 8 2v5M10 10v9"/></svg></span>
+          <span class="action__label">LinkedIn</span>
+          <svg class="action__end" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg>
+        </a>
+        <button class="action share" type="button" id="share">
+          <span class="action__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 15V3m-4 4 4-4 4 4M5 13v8h14v-8"/></svg></span>
+          <span class="action__label">Share card</span>
+        </button>
+      </div>
+    </div>
+    <a class="hero-foot" href="#strategy-title">Strategy meets execution <svg viewBox="0 0 24 24"><path d="M12 3v17m-6-6 6 6 6-6"/></svg></a>
+  </header>
+  <section class="details" aria-labelledby="strategy-title">
+<h2 id="strategy-title" data-motion-reveal>Strategic vision.<br><span>Hands-on execution.</span></h2>
+    <p class="subhead">Enterprise AI leadership. Hands-on product building.</p>
+    <div class="value-list">
+      <div class="value-row"><span class="value-index">01</span><div><h3 class="value-heading">STRATEGY</h3><p class="value-copy">Value, feasibility &amp; costs.</p></div></div>
+      <div class="value-row"><span class="value-index">02</span><div><h3 class="value-heading">BUILD</h3><p class="value-copy">From concept to real products.</p></div></div>
+      <div class="value-row"><span class="value-index">03</span><div><h3 class="value-heading">CONTROL</h3><p class="value-copy">Privacy. Independence. Local AI.</p></div></div>
+    </div>
+    <div class="principle" data-motion-reveal><h3 class="principle-title">LOCAL-FIRST <span class="neq">≠</span><br><span class="only">LOCAL-ONLY</span></h3><p class="principle-text">Local where it works.<br>Cloud where it adds value.</p></div>
+    <div class="bottom-link"><span>Curious what I've built?</span><a href={portfolioUrl}>Explore my work →</a></div>
+  </section>
+  <footer>Daniele Moltisanti · Local-first AI</footer>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite">Link copied</div>
+
+
+<script>
+  const shareButton = document.getElementById('share');
+  const toast = document.getElementById('toast');
+
+  // Shared motion system: one entrance, one scroll-driven journey, and contextual micro-feedback.
+  // Reduced-motion visitors receive the same content and actions without animated states.
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!motionPreference.matches && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('motion-enabled');
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add('is-revealed');
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0.08, rootMargin: '0px 0px -7% 0px' });
+    document.querySelectorAll('[data-motion-reveal]').forEach(element => revealObserver.observe(element));
+
+    const journey = document.querySelector<HTMLElement>('.value-list');
+    const steps = [...document.querySelectorAll<HTMLElement>('.value-row')];
+    if (journey && steps.length) {
+      let frame = 0;
+      const updateJourney = () => {
+        frame = 0;
+        const activationLine = window.innerHeight * .72;
+        const offsets = steps.map(step => step.getBoundingClientRect().top);
+        let active = -1;
+        offsets.forEach((top, index) => { if (top <= activationLine) active = index; });
+        journey.style.setProperty('--signal-progress', String((active + 1) / steps.length));
+        steps.forEach((step, index) => step.classList.toggle('is-active', index === active));
+      };
+      const scheduleJourney = () => { if (!frame) frame = requestAnimationFrame(updateJourney); };
+      window.addEventListener('scroll', scheduleJourney, { passive: true });
+      window.addEventListener('resize', scheduleJourney, { passive: true });
+      scheduleJourney();
+    }
+  }
+
+  let toastTimeout: ReturnType<typeof setTimeout> | undefined;
+  function notify(message: string) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('show');
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+  shareButton?.addEventListener('click', async () => {
+    const link = 'https://daniele21.github.io/connect';
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Daniele Moltisanti · Local-first',
+          text: 'Your AI. Your Data. Your Control.',
+          url: link,
+        });
+        return;
+      } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(link);
+      notify('Card link copied');
+    } catch {
+      notify('Open daniele21.github.io/connect to share');
+    }
+  });
+</script>
+</body>
+</html>
