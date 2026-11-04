@@ -40,7 +40,9 @@ try {
 
       await page.locator('#show-qr').click();
       await page.locator('#qr-overlay').waitFor({ state: 'visible' });
-      await page.waitForFunction(() => document.querySelector('#qr-overlay img')?.naturalWidth >= 585, { timeout: 5000 });
+      await page.waitForFunction(() => document.querySelector('#qr-overlay img')?.naturalWidth >= 585, undefined, { timeout: 5000 });
+      const qrBounds = await page.locator('#qr-overlay img').boundingBox();
+      assert.ok(qrBounds && Math.abs(qrBounds.width - qrBounds.height) <= 2, 'QR must be square for reliable scanning');
       await page.screenshot({ path: `${outputDir}/${label}-qr.png` });
       await page.keyboard.press('Escape');
       assert.equal(await page.locator('#qr-overlay').isVisible(), false);
