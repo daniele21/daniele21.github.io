@@ -5,47 +5,56 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const get = (p) => readFileSync(path.join(root, p));
-const cardPage = get('src/pages/connect.astro').toString('utf8');
+const get = (name) => readFileSync(path.join(root, name));
+const page = get('src/pages/connect.astro').toString('utf8');
+const vcard = get('public/daniele-moltisanti.vcf').toString('utf8');
 
-function readPngSize(filePath) {
-  const bytes = get(filePath);
-  assert.equal(bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', 'PNG signature');
-  return [bytes.readUInt32BE(16), bytes.readUInt32BE(20)];
-}
-
-test('approved flyer assets remain unchanged in the digital card', () => {
-  assert.deepEqual(readPngSize('public/images/network-card-front.png'), [1050, 600]);
-  assert.deepEqual(readPngSize('public/images/network-card-back.png'), [1672, 941]);
-  assert.ok(cardPage.includes('network-card-front.png'));
-  assert.ok(cardPage.includes('network-card-back.png'));
-});
-
-test('front and back are stacked in a continuous, responsive layout', () => {
-  const front = cardPage.indexOf('class="flyer-image flyer-front"');
-  const back = cardPage.indexOf('class="flyer-image flyer-back"');
-  assert.ok(front >= 0 && back > front, 'the approved back should follow the front');
+test('native mobile-first /connect is no longer an image collage', () => {
   for (const required of [
-    '.flyer-continuum {',
-    'width: 100%;',
-    'height: auto;',
-    'object-fit: contain;',
-    'margin-top: -4.55%;',
-    'clip-path: inset(0 0 4% 0);',
-    'clip-path: inset(4% 0 0 0);',
-  ]) assert.ok(cardPage.includes(required), 'missing responsive visual continuity: ' + required);
-  for (const forbidden of ['id="card-flip"', 'id="front-tab"', 'id="back-tab"', 'rotateY(', 'setFlipped(', 'backface-visibility']) {
-    assert.equal(cardPage.includes(forbidden), false, 'outdated flip behavior: ' + forbidden);
-  }
+    '<h1 class="local">LOCAL-<span>FIRST.</span></h1>',
+    'Your AI. Your Data.',
+    'Strategic vision.',
+    'Hands-on execution.',
+    'Strategy meets execution',
+    'Value, feasibility',
+    'From concept to real products.',
+    'Privacy. Independence. Local AI.',
+    'LOCAL-FIRST <span class="neq">≠</span>',
+    'Cloud where it adds value.',
+    '@media(max-width:360px)',
+    '@media(min-width:680px)',
+    '@media(prefers-reduced-motion:reduce)',
+  ]) assert.ok(page.includes(required), 'missing approved brand/content: ' + required);
+
+  for (const forbidden of [
+    'flyer-continuum', 'network-card-back.png', 'card-flip',
+    'front-tab', 'back-tab', 'rotateY(', 'backface-visibility',
+  ]) assert.equal(page.includes(forbidden), false, 'obsolete print-image presentation: ' + forbidden);
 });
 
-test('digital card shares link and provides contact + portfolio without employer affiliation', () => {
-  const vcf = get('public/daniele-moltisanti.vcf').toString('utf8');
-  assert.ok(cardPage.includes('navigator.share'));
-  assert.ok(cardPage.includes('navigator.clipboard'));
-  assert.ok(cardPage.includes('daniele-moltisanti.vcf'));
-  assert.ok(cardPage.includes('www.linkedin.com/in/daniele-moltisanti/'));
-  assert.match(vcf, /FN:Daniele Moltisanti/);
-  assert.doesNotMatch(vcf, /Sky Italia|TEL:/);
-  assert.doesNotMatch(cardPage, /Sky Italia/);
+test('portrait and QR are local optimized assets with correct dimensions', () => {
+  const portrait = get('public/images/connect-portrait.webp');
+  assert.equal(portrait.toString('ascii', 0, 4), 'RIFF');
+  assert.equal(portrait.toString('ascii', 8, 12), 'WEBP');
+  const qr = get('public/images/connect-qr.png');
+  assert.equal(qr.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+  assert.equal(qr.readUInt32BE(16), 585);
+  assert.equal(qr.readUInt32BE(20), 585);
+  assert.ok(page.includes('src={portraitSrc}'));
+  assert.ok(page.includes('src={qrSrc}'));
+  assert.ok(page.includes('id="show-qr"'));
+  assert.ok(page.includes('id="qr-overlay"'));
+});
+
+test('save, share, LinkedIn and portfolio remain available', () => {
+  for(const required of [
+    'href={vcardUrl}', 'Save contact', 'www.linkedin.com/in/daniele-moltisanti/',
+    'navigator.share', 'navigator.clipboard.writeText', 'https://daniele21.github.io/connect',
+    'aria-modal="true"', 'Escape', 'id="qr-close"', 'href={portfolioUrl}',
+  ]) assert.ok(page.includes(required), 'missing working action: ' + required);
+  assert.ok(vcard.includes('BEGIN:VCARD'));
+  assert.ok(vcard.includes('FN:Daniele Moltisanti'));
+  assert.equal(vcard.includes('Sky Italia'), false);
+  assert.equal(page.includes('Sky Italia'), false);
+  assert.equal(vcard.includes('TEL:'), false);
 });
