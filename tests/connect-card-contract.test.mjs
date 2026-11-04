@@ -24,6 +24,13 @@ test('digital business card uses the supplied originals (Canva front + approved 
   assert.match(cardPage, /src=\{backImage\} width="1672" height="941"/);
 });
 
+test('back side is shown directly, never as a mirrored 3D backface', () => {
+  assert.match(cardPage, /card-button\\.is-flipped \\.card-back \\{/);
+  assert.match(cardPage, /visibility:\\s*visible/);
+  assert.match(cardPage, /card\\.querySelector\\('\\.card-back'\\)\\?\\.setAttribute\\('aria-hidden'/);
+  assert.doesNotMatch(cardPage, /rotateY\\(|transform-style:\\s*preserve-3d|backface-visibility/);
+});
+
 test('digital card supports flipping, sharing and saving the contact', () => {
   assert.match(cardPage, /card-flip/);
   assert.match(cardPage, /setFlipped/);
