@@ -3,8 +3,8 @@ import { mkdir } from 'node:fs/promises';
 import { chromium } from 'playwright';
 
 /**
- * Verify the actual rendered /connect experience rather than only its markup:
- * the back must not render as a mirrored copy of the front on mobile.
+ * Visual QA for the continuous two-image business card.
+ * Both approved flyer sides must be visible and aligned in the same column.
  */
 const url = process.env.CONNECT_PREVIEW_URL || 'http://127.0.0.1:4321/connect/';
 const folder = 'visual-review-connect';
@@ -21,49 +21,47 @@ try {
     try {
       const response = await page.goto(url, { waitUntil: 'networkidle' });
       assert.equal(response?.status(), 200, 'Digital card should load: ' + label);
-      await page.locator('.card-front img').waitFor({ state: 'visible' });
-
-      await page.screenshot({ path: `${folder}/${label}-front.png`, fullPage: true });
-
-      await page.locator('#back-tab').click();
-      await page.waitForFunction(() => {
-        const front = document.querySelector('.card-front');
-        const back = document.querySelector('.card-back');
-        return front && back
-          && getComputedStyle(front).visibility === 'hidden'
-          && getComputedStyle(back).visibility === 'visible'
-          && getComputedStyle(back).opacity === '1';
-      });
+      await page.locator('.flyer-front').waitFor({ state: 'visible' });
+      await page.locator('.flyer-back').waitFor({ state: 'visible' });
 
       const state = await page.evaluate(() => {
-        const back = document.querySelector('.card-back img');
-        const card = document.querySelector('#card-flip');
-        const face = document.querySelector('.card-back');
-        const rotator = document.querySelector('.card-rotator');
+        const front = document.querySelector('.flyer-front');
+        const back = document.querySelector('.flyer-back');
+        if (!front || !back) return null;
+        const a = front.getBoundingClientRect();
+        const b = back.getBoundingClientRect();
+        const rect = (r) => ({
+          top: r.top, bottom: r.bottom, left: r.left, right: r.right,
+          width: r.width, height: r.height,
+        });
         return {
-          filename: back?.getAttribute('src') || '',
-          width: back?.naturalWidth,
-          height: back?.naturalHeight,
-          visible: face && getComputedStyle(face).visibility,
-          transform: rotator && getComputedStyle(rotator).transform,
-          caption: document.querySelector('#card-caption')?.textContent,
-          pressed: card?.getAttribute('aria-pressed'),
+          front: { src: front.getAttribute('src'), complete: front.complete, width: front.naturalWidth, height: front.naturalHeight, rect: rect(a) },
+          back: { src: back.getAttribute('src'), complete: back.complete, width: back.naturalWidth, height: back.naturalHeight, rect: rect(b) },
+          seam: getComputedStyle(back).marginTop,
+          frontMask: getComputedStyle(front).maskImage,
+          backMask: getComputedStyle(back).maskImage,
         };
       });
-      assert.ok(state.filename.endsWith('/images/network-card-back.png'), 'Back must use the approved Drive artwork');
-      assert.equal(state.width, 1672);
-      assert.equal(state.height, 941);
-      assert.equal(state.visible, 'visible');
-      assert.equal(state.transform, 'none', 'The back should never be mirrored by 3D transforms');
-      assert.equal(state.caption, '02 / 02 — Back');
-      assert.equal(state.pressed, 'true');
 
-      await page.screenshot({ path: `${folder}/${label}-back.png`, fullPage: true });
+      assert.ok(state, 'Both flyer images must exist');
+      assert.ok(state.front.src.endsWith('/images/network-card-front.png'));
+      assert.ok(state.back.src.endsWith('/images/network-card-back.png'));
+      assert.ok(state.front.complete && state.back.complete, 'Images must finish loading');
+      assert.equal(state.front.width, 1050);
+      assert.equal(state.front.height, 600);
+      assert.equal(state.back.width, 1672);
+      assert.equal(state.back.height, 941);
+      assert.ok(Math.abs(state.front.rect.left - state.back.rect.left) <= 1, 'Left edges must align');
+      assert.ok(Math.abs(state.front.rect.width - state.back.rect.width) <= 1, 'Cards must have the same rendered width');
+      assert.ok(state.back.rect.top > state.front.rect.top, 'The back should follow the front');
+      assert.ok(state.back.rect.top < state.front.rect.bottom, 'The two sides should overlap slightly for visual continuity');
+      assert.notEqual(state.frontMask, 'none');
+      assert.notEqual(state.backMask, 'none');
+      assert.equal(await page.locator('#front-tab, #back-tab, #card-flip').count(), 0);
+      assert.equal(await page.locator('.action-primary').count(), 1);
 
-      await page.locator('#front-tab').click();
-      await page.waitForFunction(() => getComputedStyle(document.querySelector('.card-front')).visibility === 'visible');
-      assert.equal(await page.locator('#card-caption').textContent(), '01 / 02 — Front');
-      console.log(`PASS /connect ${label}: front -> original approved back -> front`);
+      await page.screenshot({ path: `${folder}/${label}-continuous-front-back.png`, fullPage: true });
+      console.log(`PASS /connect ${label}: both original images aligned and joined continuously`);
     } finally {
       await page.close();
     }
