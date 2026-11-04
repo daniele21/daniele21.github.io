@@ -50,7 +50,7 @@ try {
           pressed: card?.getAttribute('aria-pressed'),
         };
       });
-      assert.match(state.filename, /network-card-back\\.png$/);
+      assert.ok(state.filename.endsWith('/images/network-card-back.png'), 'Back must use the approved Drive artwork');
       assert.equal(state.width, 1672);
       assert.equal(state.height, 941);
       assert.equal(state.visible, 'visible');
