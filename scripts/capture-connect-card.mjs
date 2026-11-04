@@ -38,8 +38,8 @@ try {
           front: { src: front.getAttribute('src'), complete: front.complete, width: front.naturalWidth, height: front.naturalHeight, rect: rect(a) },
           back: { src: back.getAttribute('src'), complete: back.complete, width: back.naturalWidth, height: back.naturalHeight, rect: rect(b) },
           seam: getComputedStyle(back).marginTop,
-          frontMask: getComputedStyle(front).maskImage,
-          backMask: getComputedStyle(back).maskImage,
+          frontClip: getComputedStyle(front).clipPath,
+          backClip: getComputedStyle(back).clipPath,
         };
       });
 
@@ -55,8 +55,8 @@ try {
       assert.ok(Math.abs(state.front.rect.width - state.back.rect.width) <= 1, 'Cards must have the same rendered width');
       assert.ok(state.back.rect.top > state.front.rect.top, 'The back should follow the front');
       assert.ok(state.back.rect.top < state.front.rect.bottom, 'The two sides should overlap slightly for visual continuity');
-      assert.notEqual(state.frontMask, 'none');
-      assert.notEqual(state.backMask, 'none');
+      assert.ok(state.frontClip.includes('inset('), 'Front outer export margin should be clipped');
+      assert.ok(state.backClip.includes('inset('), 'Back outer export margin should be clipped');
       assert.equal(await page.locator('#front-tab, #back-tab, #card-flip').count(), 0);
       assert.equal(await page.locator('.action-primary').count(), 1);
 
