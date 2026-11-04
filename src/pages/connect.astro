@@ -45,10 +45,10 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
 
         <button class="card-button" id="card-flip" type="button" aria-label="Show back of the card" aria-pressed="false">
           <span class="card-rotator">
-            <span class="card-face card-front">
+            <span class="card-face card-front" aria-hidden="false">
               <img src={frontImage} width="1050" height="600" alt="Front of the original Local-First flyer: Daniele Moltisanti, AI Strategy Leader and AI Builder. Your AI. Your Data. Your Control." loading="eager" fetchpriority="high" />
             </span>
-            <span class="card-face card-back">
+            <span class="card-face card-back" aria-hidden="true">
               <img src={backImage} width="1672" height="941" alt="Back of the original flyer: Strategic vision, hands-on execution. Strategy, Build and Control. Local-first does not mean local-only." loading="eager" />
             </span>
           </span>
@@ -87,6 +87,8 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
       function setFlipped(flipped: boolean) {
         if (!card || !frontTab || !backTab || !caption) return;
         card.classList.toggle('is-flipped', flipped);
+        card.querySelector('.card-front')?.setAttribute('aria-hidden', String(flipped));
+        card.querySelector('.card-back')?.setAttribute('aria-hidden', String(!flipped));
         card.setAttribute('aria-pressed', String(flipped));
         card.setAttribute('aria-label', flipped ? 'Show front of the card' : 'Show back of the card');
         frontTab.classList.toggle('active', !flipped);
@@ -187,21 +189,34 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
     background: none;
     color: inherit;
     cursor: pointer;
-    perspective: 1400px;
     -webkit-tap-highlight-color: transparent;
   }
+  /* Avoid 3D backface rendering: grouping effects can flatten the scene and
+     expose the mirrored front on mobile browsers. Each side is a plain image. */
   .card-rotator {
     display: block;
     width: 100%;
     height: 100%;
     position: relative;
-    transform-style: preserve-3d;
-    transition: transform .62s cubic-bezier(.2,.8,.2,1);
     filter: drop-shadow(0 20px 36px rgba(0,0,0,.25));
   }
-  .card-button.is-flipped .card-rotator { transform: rotateY(180deg); }
-  .card-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; border-radius: 5.1% / 8.9%; background: #080d22; }
-  .card-back { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 5.1% / 8.9%;
+    background: #080d22;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .16s ease, visibility 0s linear .16s;
+  }
+  .card-front { opacity: 1; visibility: visible; }
+  .card-button.is-flipped .card-front { opacity: 0; visibility: hidden; }
+  .card-button.is-flipped .card-back {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .16s ease, visibility 0s;
+  }
   .card-face img { display: block; width: 100%; height: 100%; object-fit: contain; }
   .card-caption { text-align: center; color: #a5aec9; font-size: .72rem; letter-spacing: .09em; margin: 12px 0 0; }
   .actions { margin: clamp(18px, 4vh, 40px) auto 0; display: grid; width: min(100%, 680px); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -238,7 +253,7 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
     .card-caption { margin-top: 10px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .card-rotator { transition: none; }
+    .card-face { transition: none; }
     .action { transition: none; }
   }
 </style>
