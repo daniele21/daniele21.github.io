@@ -71,6 +71,40 @@ try {
       await page.close();
     }
   }
+
+  // The regular capture loop tests the no-animation accessibility variant.
+  // This second pass verifies the opt-in motion journey and modal choreography.
+  const animated = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 1,
+    reducedMotion: 'no-preference',
+  });
+  try {
+    await animated.goto(url, { waitUntil: 'networkidle' });
+    const heroMotion = await animated.locator('.hero-main').evaluate(
+      el => getComputedStyle(el).animationName,
+    );
+    assert.ok(heroMotion.includes('arrive'), 'The claim should have one short entrance animation');
+    const path = animated.locator('.value-list');
+    await animated.locator('.value-row').last().scrollIntoViewIfNeeded();
+    await animated.waitForFunction(() =>
+      document.querySelector('.value-list')?.style.getPropertyValue('--signal-progress') === '1'
+      && document.querySelector('.value-row:last-child')?.classList.contains('is-active'),
+    );
+    const trace = await path.evaluate(el => getComputedStyle(el, '::after').transform);
+    assert.notEqual(trace, 'none', 'Journey trace should respond to scrolling');
+    await animated.screenshot({ path: `${outputDir}/mobile-active-journey.png`, fullPage: true });
+    await animated.locator('#show-qr').click();
+    const qrMotion = await animated.locator('.qr-dialog').evaluate(
+      el => getComputedStyle(el).animationName,
+    );
+    assert.ok(qrMotion.includes('dialogIn'), 'QR panel should animate on user action');
+    await animated.keyboard.press('Escape');
+    assert.equal(await animated.locator('#qr-overlay').isVisible(), false);
+    console.log('PASS /connect: one-shot entrance + scroll-reactive trace + modal motion');
+  } finally {
+    await animated.close();
+  }
 } finally {
   await browser.close();
 }
