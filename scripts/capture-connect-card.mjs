@@ -26,7 +26,7 @@ try {
       assert.equal(response?.status(), 200);
       assert.equal(await page.locator('h1.local').innerText(), 'LOCAL-FIRST.');
       assert.equal(await page.locator('.value-row').count(), 3);
-      assert.equal(await page.locator('.flyer-continuum, #card-flip, #front-tab, #back-tab').count(), 0);
+      assert.equal(await page.locator('.flyer-continuum, #card-flip, #front-tab, #back-tab, #show-qr, #qr-overlay').count(), 0);
       assert.equal(await page.locator('a:has-text("Save contact")').count(), 1);
       assert.ok((await page.locator('a:has-text("Save contact")').getAttribute('href'))?.endsWith('/daniele-moltisanti.vcf'));
       assert.ok((await page.locator('.portrait-wrap img').evaluate((img) => img.naturalWidth)) > 500);
@@ -51,29 +51,37 @@ try {
       assert.notEqual(flow.timeline, 'auto', 'Stages should share one connected signal path');
       if (viewport.width < 760) assert.ok(flow.heroHeight < 630, 'Mobile hero should not create a large empty break');
 
-      await page.screenshot({ path: `${outputDir}/${label}-profile.png`, fullPage: true });
+      const actions = await page.evaluate(() => {
+        const primary = document.querySelector('.action.primary');
+        const linkedin = document.querySelector('.action.linkedin');
+        const share = document.querySelector('.action.share');
+        if (!(primary && linkedin && share)) return null;
+        const get = el => ({ height: el.getBoundingClientRect().height, width: el.getBoundingClientRect().width });
+        return { primary: get(primary), linkedin: get(linkedin), share: get(share) };
+      });
+      assert.ok(actions, 'All three networking CTAs must exist');
+      assert.ok(actions.primary.height >= 64, 'Primary action must be a comfortable touch target');
+      assert.ok(actions.linkedin.height >= 52 && actions.share.height >= 52, 'Secondary actions must be touch-friendly');
+      assert.ok(actions.primary.width > actions.linkedin.width, 'Primary action must be visually dominant');
+      assert.ok(Math.abs(actions.linkedin.width - actions.share.width) <= 2, 'Secondary actions should align');
+      assert.equal((await page.locator('.action.share').innerText()).trim(), 'Share card');
+      assert.ok(await page.locator('.action.primary').isVisible());
+      assert.ok(await page.locator('.action.linkedin').isVisible());
 
-      await page.locator('#show-qr').click();
-      await page.locator('#qr-overlay').waitFor({ state: 'visible' });
-      await page.waitForFunction(() => document.querySelector('#qr-overlay img')?.naturalWidth >= 585, undefined, { timeout: 5000 });
-      const qrBounds = await page.locator('#qr-overlay img').boundingBox();
-      assert.ok(qrBounds && Math.abs(qrBounds.width - qrBounds.height) <= 2, 'QR must be square for reliable scanning');
-      await page.screenshot({ path: `${outputDir}/${label}-qr.png` });
-      await page.keyboard.press('Escape');
-      assert.equal(await page.locator('#qr-overlay').isVisible(), false);
+      await page.screenshot({ path: `${outputDir}/${label}-profile.png`, fullPage: true });
 
       await page.locator('#share').click();
       await page.waitForFunction(() => window.__lastShared?.url === 'https://daniele21.github.io/connect');
       assert.equal(await page.locator('a:has-text("LinkedIn")').getAttribute('target'), '_blank');
 
-      console.log('PASS /connect: ' + label + ' mobile-first content, contact, QR, share and no overflow');
+      console.log('PASS /connect: ' + label + ' mobile-first content, premium CTAs, share and no overflow');
     } finally {
       await page.close();
     }
   }
 
   // The regular capture loop tests the no-animation accessibility variant.
-  // This second pass verifies the opt-in motion journey and modal choreography.
+  // This second pass verifies the opt-in motion journey and contact action feedback.
   const animatedContext = await browser.newContext({
     viewport: { width: 390, height: 844 },
     deviceScaleFactor: 1,
@@ -97,15 +105,16 @@ try {
     assert.notEqual(trace, 'none', 'Journey trace should respond to scrolling');
     await animated.screenshot({ path: `${outputDir}/mobile-active-journey.png`, fullPage: true });
     await animated.waitForTimeout(350);
-    await animated.locator('#show-qr').click();
-    const qrMotion = await animated.locator('.qr-dialog').evaluate(
-      el => getComputedStyle(el).animationName,
-    );
-    assert.ok(qrMotion.includes('dialogIn'), 'QR panel should animate on user action');
-    await animated.waitForTimeout(330);
-    await animated.keyboard.press('Escape');
-    assert.equal(await animated.locator('#qr-overlay').isVisible(), false);
-    console.log('PASS /connect: one-shot entrance + scroll-reactive trace + modal motion');
+    const primary = animated.locator('.action.primary');
+    await primary.hover();
+    await animated.waitForTimeout(300);
+    const pressedHover = await primary.evaluate(el => ({
+      transform: getComputedStyle(el).transform,
+      borderColor: getComputedStyle(el).borderColor,
+    }));
+    assert.notEqual(pressedHover.transform, 'none', 'Primary CTA should lift subtly on fine-pointer hover');
+    await animated.screenshot({ path: `${outputDir}/mobile-premium-ctas.png`, fullPage: true });
+    console.log('PASS /connect: one-shot entrance + scroll-reactive trace + premium CTA hover');
   } finally {
     await animated.close();
     await animatedContext.close(); // flush the short motion-preview .webm artifact
