@@ -14,12 +14,14 @@ function readPngSize(filePath) {
   return [bytes.readUInt32BE(16), bytes.readUInt32BE(20)];
 }
 
-test('digital business card uses the supplied, equally sized Canva artwork', () => {
+test('digital business card uses the supplied originals (Canva front + approved Drive back)', () => {
   assert.deepEqual(readPngSize('public/images/network-card-front.png'), [1050, 600]);
-  assert.deepEqual(readPngSize('public/images/network-card-back.png'), [1050, 600]);
+  assert.deepEqual(readPngSize('public/images/network-card-back.png'), [1672, 941]);
   assert.match(cardPage, /network-card-front\.png/);
   assert.match(cardPage, /network-card-back\.png/);
   assert.match(cardPage, /aspect-ratio: 1050 \/ 600/);
+  assert.match(cardPage, /object-fit: contain/);
+  assert.match(cardPage, /src=\{backImage\} width="1672" height="941"/);
 });
 
 test('digital card supports flipping, sharing and saving the contact', () => {
