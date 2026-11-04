@@ -14,38 +14,37 @@ function readPngSize(filePath) {
   return [bytes.readUInt32BE(16), bytes.readUInt32BE(20)];
 }
 
-test('digital business card uses the supplied originals (Canva front + approved Drive back)', () => {
+test('approved flyer assets remain unchanged in the digital card', () => {
   assert.deepEqual(readPngSize('public/images/network-card-front.png'), [1050, 600]);
   assert.deepEqual(readPngSize('public/images/network-card-back.png'), [1672, 941]);
-  assert.match(cardPage, /network-card-front\.png/);
-  assert.match(cardPage, /network-card-back\.png/);
-  assert.match(cardPage, /aspect-ratio: 1050 \/ 600/);
-  assert.match(cardPage, /object-fit: contain/);
-  assert.match(cardPage, /src=\{backImage\} width="1672" height="941"/);
+  assert.match(cardPage, /network-card-front\\.png/);
+  assert.match(cardPage, /network-card-back\\.png/);
 });
 
-test('back side is shown directly, never as a mirrored 3D backface', () => {
-  assert.ok(cardPage.includes('.card-button.is-flipped .card-back {'));
-  assert.ok(cardPage.includes('visibility: visible;'));
-  assert.ok(cardPage.includes("card.querySelector('.card-back')?.setAttribute('aria-hidden'"));
-  for (const forbidden of ['rotateY(', 'transform-style: preserve-3d', 'backface-visibility']) {
-    assert.equal(cardPage.includes(forbidden), false, forbidden + ' must not return');
+test('front and back are stacked in a continuous, responsive layout', () => {
+  const front = cardPage.indexOf('class="flyer-image flyer-front"');
+  const back = cardPage.indexOf('class="flyer-image flyer-back"');
+  assert.ok(front >= 0 && back > front, 'the approved back should follow the front');
+  for (const required of [
+    '.flyer-continuum {',
+    'width: 100%;',
+    'height: auto;',
+    'object-fit: contain;',
+    'margin-top: -2.5%;',
+    'mask-image: linear-gradient(to bottom, #000 0%, #000 96%, transparent 100%)',
+    'mask-image: linear-gradient(to bottom, transparent 0%, #000 4%, #000 100%)',
+  ]) assert.ok(cardPage.includes(required), 'missing responsive visual continuity: ' + required);
+  for (const forbidden of ['id="card-flip"', 'id="front-tab"', 'id="back-tab"', 'rotateY(', 'setFlipped(', 'backface-visibility']) {
+    assert.equal(cardPage.includes(forbidden), false, 'outdated flip behavior: ' + forbidden);
   }
 });
 
-test('digital card supports flipping, sharing and saving the contact', () => {
-  assert.match(cardPage, /card-flip/);
-  assert.match(cardPage, /setFlipped/);
-  assert.match(cardPage, /navigator\.share/);
-  assert.match(cardPage, /navigator\.clipboard/);
-  assert.match(cardPage, /daniele-moltisanti\.vcf/);
-  assert.match(cardPage, /www\.linkedin\.com\/in\/daniele-moltisanti/);
-  assert.match(cardPage, /prefers-reduced-motion/);
-});
-
-test('digital contact avoids exposing employment affiliation and personal phone', () => {
+test('digital card shares link and provides contact + portfolio without employer affiliation', () => {
   const vcf = get('public/daniele-moltisanti.vcf').toString('utf8');
-  assert.match(vcf, /BEGIN:VCARD/);
+  assert.match(cardPage, /navigator\\.share/);
+  assert.match(cardPage, /navigator\\.clipboard/);
+  assert.match(cardPage, /daniele-moltisanti\\.vcf/);
+  assert.match(cardPage, /www\\.linkedin\\.com\\/in\\/daniele-moltisanti/);
   assert.match(vcf, /FN:Daniele Moltisanti/);
   assert.doesNotMatch(vcf, /Sky Italia|TEL:/);
   assert.doesNotMatch(cardPage, /Sky Italia/);
