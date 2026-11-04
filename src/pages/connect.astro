@@ -1,7 +1,8 @@
 ---
 /**
- * Lightweight event-networking card. The two sides are original Canva PNGs:
- * never reconstruct the artwork as HTML or re-render the portrait / QR.
+ * Lightweight event-networking card. The two images are approved original
+ * flyer exports. Keep their artwork intact and present them as a single
+ * vertically continuous mobile-first experience.
  * Standalone layout intentionally avoids the full site navigation in a quick-scan flow.
  */
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -36,25 +37,29 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
         <span class="topline-brand">LOCAL-FIRST<span class="dot">.</span></span>
       </header>
 
-      <section class="experience" aria-label="Daniele Moltisanti digital business card">
-        <div class="card-toolbar" aria-label="Choose side">
-          <button class="side-tab active" type="button" id="front-tab" aria-pressed="true">Front</button>
-          <button class="side-tab" type="button" id="back-tab" aria-pressed="false">Back</button>
-          <span class="flip-hint">Tap the card to flip <span aria-hidden="true">↻</span></span>
+      <section class="experience" aria-labelledby="flyer-title">
+        <h1 id="flyer-title" class="sr-only">Daniele Moltisanti — Local-first AI strategy and product building</h1>
+        <div class="flyer-continuum" aria-label="Front and back of the original Local-first flyer, presented vertically">
+          <img
+            class="flyer-image flyer-front"
+            src={frontImage}
+            width="1050"
+            height="600"
+            alt="Front: Daniele Moltisanti, AI Strategy Leader and AI Builder. Local-first. Your AI. Your Data. Your Control."
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+          <img
+            class="flyer-image flyer-back"
+            src={backImage}
+            width="1672"
+            height="941"
+            alt="Back: Strategic vision, hands-on execution. Strategy, Build and Control. Local-first is not local-only."
+            loading="eager"
+            decoding="async"
+          />
         </div>
-
-        <button class="card-button" id="card-flip" type="button" aria-label="Show back of the card" aria-pressed="false">
-          <span class="card-rotator">
-            <span class="card-face card-front" aria-hidden="false">
-              <img src={frontImage} width="1050" height="600" alt="Front of the original Local-First flyer: Daniele Moltisanti, AI Strategy Leader and AI Builder. Your AI. Your Data. Your Control." loading="eager" fetchpriority="high" />
-            </span>
-            <span class="card-face card-back" aria-hidden="true">
-              <img src={backImage} width="1672" height="941" alt="Back of the original flyer: Strategic vision, hands-on execution. Strategy, Build and Control. Local-first does not mean local-only." loading="eager" />
-            </span>
-          </span>
-        </button>
-
-        <p class="card-caption" id="card-caption" aria-live="polite">01 / 02 — Front</p>
       </section>
 
       <nav class="actions" aria-label="Contact and sharing">
@@ -77,53 +82,8 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
     </main>
 
     <script>
-      const card = document.getElementById('card-flip');
-      const frontTab = document.getElementById('front-tab');
-      const backTab = document.getElementById('back-tab');
-      const caption = document.getElementById('card-caption');
       const shareButton = document.getElementById('share-button');
       const shareStatus = document.getElementById('share-status');
-
-      function setFlipped(flipped: boolean) {
-        if (!card || !frontTab || !backTab || !caption) return;
-        card.classList.toggle('is-flipped', flipped);
-        card.querySelector('.card-front')?.setAttribute('aria-hidden', String(flipped));
-        card.querySelector('.card-back')?.setAttribute('aria-hidden', String(!flipped));
-        card.setAttribute('aria-pressed', String(flipped));
-        card.setAttribute('aria-label', flipped ? 'Show front of the card' : 'Show back of the card');
-        frontTab.classList.toggle('active', !flipped);
-        backTab.classList.toggle('active', flipped);
-        frontTab.setAttribute('aria-pressed', String(!flipped));
-        backTab.setAttribute('aria-pressed', String(flipped));
-        caption.textContent = flipped ? '02 / 02 — Back' : '01 / 02 — Front';
-      }
-
-      let lastSwipeAt = 0;
-      card?.addEventListener('click', () => {
-        if (Date.now() - lastSwipeAt < 600) return;
-        setFlipped(!card.classList.contains('is-flipped'));
-      });
-      frontTab?.addEventListener('click', () => setFlipped(false));
-      backTab?.addEventListener('click', () => setFlipped(true));
-
-      let initialTouchX = 0;
-      let initialTouchY = 0;
-      card?.addEventListener('touchstart', (event) => {
-        const point = event.changedTouches[0];
-        if (!point) return;
-        initialTouchX = point.screenX;
-        initialTouchY = point.screenY;
-      }, { passive: true });
-      card?.addEventListener('touchend', (event) => {
-        const point = event.changedTouches[0];
-        if (!point) return;
-        const dx = point.screenX - initialTouchX;
-        const dy = point.screenY - initialTouchY;
-        if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4) {
-          lastSwipeAt = Date.now();
-          setFlipped(dx < 0);
-        }
-      }, { passive: true });
 
       shareButton?.addEventListener('click', async () => {
         const shareUrl = 'https://daniele21.github.io/connect';
@@ -174,51 +134,56 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
   .eyebrow { font-size: .72rem; letter-spacing: .18em; color: #99a3ce; font-weight: 700; }
   .topline-brand { font-size: .82rem; color: #eff0ff; letter-spacing: .045em; font-weight: 800; }
   .dot { color: #a98dff; }
-  .experience { flex: 0 0 auto; width: 100%; }
-  .card-toolbar { display: flex; align-items: center; gap: 5px; margin-bottom: 14px; }
-  .side-tab { background: transparent; color: #aeb7d4; border: 1px solid transparent; border-radius: 100px; padding: 8px 14px; font-size: .85rem; cursor: pointer; }
-  .side-tab.active { color: #fff; background: rgba(118, 105, 199, .2); border-color: rgba(159, 145, 240, .48); }
-  .flip-hint { color: #9aa5c4; margin-left: auto; font-size: .78rem; }
-  .card-button {
-    display: block;
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1050 / 600;
-    border: 0;
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
     padding: 0;
-    background: none;
-    color: inherit;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
-  /* Avoid 3D backface rendering: grouping effects can flatten the scene and
-     expose the mirrored front on mobile browsers. Each side is a plain image. */
-  .card-rotator {
-    display: block;
-    width: 100%;
-    height: 100%;
+  .experience { flex: 0 0 auto; width: 100%; }
+  .flyer-continuum {
     position: relative;
-    filter: drop-shadow(0 20px 36px rgba(0,0,0,.25));
+    isolation: isolate;
+    width: 100%;
+    overflow: hidden;
+    border-radius: clamp(14px, 3vw, 28px);
+    background: linear-gradient(160deg, #090e24 0%, #12122f 55%, #171048 100%);
+    box-shadow: 0 24px 58px rgba(0, 0, 0, .32);
   }
-  .card-face {
+  .flyer-continuum::after {
+    content: '';
+    pointer-events: none;
     position: absolute;
     inset: 0;
-    overflow: hidden;
-    border-radius: 5.1% / 8.9%;
-    background: #080d22;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity .16s ease, visibility 0s linear .16s;
+    z-index: 2;
+    border: 1px solid rgba(157, 157, 228, .24);
+    border-radius: inherit;
   }
-  .card-front { opacity: 1; visibility: visible; }
-  .card-button.is-flipped .card-front { opacity: 0; visibility: hidden; }
-  .card-button.is-flipped .card-back {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity .16s ease, visibility 0s;
+  .flyer-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin: 0;
   }
-  .card-face img { display: block; width: 100%; height: 100%; object-fit: contain; }
-  .card-caption { text-align: center; color: #a5aec9; font-size: .72rem; letter-spacing: .09em; margin: 12px 0 0; }
+  /* A subtle crossfade hides the gray export border between the two
+     approved images, preserving both pieces of original artwork. */
+  .flyer-front {
+    position: relative;
+    z-index: 1;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 92%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 92%, transparent 100%);
+  }
+  .flyer-back {
+    margin-top: -3.8%;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 100%);
+  }
   .actions { margin: clamp(18px, 4vh, 40px) auto 0; display: grid; width: min(100%, 680px); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .action {
     display: flex;
@@ -246,14 +211,10 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
   footer { text-align: center; color: #838eb7; font-size: .75rem; margin-top: auto; padding-top: clamp(22px, 5vh, 56px); letter-spacing: .02em; }
   @media (max-width: 540px) {
     .topline { padding-bottom: clamp(22px, 6vh, 55px); }
-    .flip-hint { font-size: .73rem; }
     .actions { gap: 9px; }
     .action { font-size: .83rem; min-height: 49px; border-radius: 12px; padding: 10px 6px; }
-    .card-toolbar { margin-bottom: 9px; }
-    .card-caption { margin-top: 10px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .card-face { transition: none; }
     .action { transition: none; }
   }
 </style>
