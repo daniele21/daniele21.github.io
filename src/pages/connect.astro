@@ -1,0 +1,239 @@
+---
+/**
+ * Lightweight event-networking card. The two sides are original Canva PNGs:
+ * never reconstruct the artwork as HTML or re-render the portrait / QR.
+ * Standalone layout intentionally avoids the full site navigation in a quick-scan flow.
+ */
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const frontImage = `${base}/images/network-card-front.png`;
+const backImage = `${base}/images/network-card-back.png`;
+const vcardUrl = `${base}/daniele-moltisanti.vcf`;
+const portfolioUrl = `${base}/`;
+const linkedinUrl = 'https://www.linkedin.com/in/daniele-moltisanti/';
+const canonicalUrl = 'https://daniele21.github.io/connect';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b1025" />
+    <meta name="description" content="Daniele Moltisanti — AI Strategy Leader & AI Builder. Local-first. Your AI. Your Data. Your Control." />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="Daniele Moltisanti · LOCAL-FIRST." />
+    <meta property="og:description" content="Strategic vision. Hands-on execution. Local where it works. Cloud where it adds value." />
+    <meta property="og:image" content="https://daniele21.github.io/images/network-card-front.png" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href={`${base}/favicon.png`} type="image/png" />
+    <title>Daniele Moltisanti · Digital Card</title>
+  </head>
+  <body>
+    <main class="digital-card-page">
+      <header class="topline">
+        <span class="eyebrow">DIGITAL BUSINESS CARD</span>
+        <span class="topline-brand">LOCAL-FIRST<span class="dot">.</span></span>
+      </header>
+
+      <section class="experience" aria-label="Daniele Moltisanti digital business card">
+        <div class="card-toolbar" aria-label="Choose side">
+          <button class="side-tab active" type="button" id="front-tab" aria-pressed="true">Front</button>
+          <button class="side-tab" type="button" id="back-tab" aria-pressed="false">Back</button>
+          <span class="flip-hint">Tap the card to flip <span aria-hidden="true">↻</span></span>
+        </div>
+
+        <button class="card-button" id="card-flip" type="button" aria-label="Show back of the card" aria-pressed="false">
+          <span class="card-rotator">
+            <span class="card-face card-front">
+              <img src={frontImage} width="1050" height="600" alt="Front of the original Local-First flyer: Daniele Moltisanti, AI Strategy Leader and AI Builder. Your AI. Your Data. Your Control." loading="eager" fetchpriority="high" />
+            </span>
+            <span class="card-face card-back">
+              <img src={backImage} width="1050" height="600" alt="Back of the original flyer: Strategic vision, hands-on execution. Strategy, Build and Control. Local-first does not mean local-only." loading="eager" />
+            </span>
+          </span>
+        </button>
+
+        <p class="card-caption" id="card-caption" aria-live="polite">01 / 02 — Front</p>
+      </section>
+
+      <nav class="actions" aria-label="Contact and sharing">
+        <a class="action action-primary" href={vcardUrl} download="Daniele-Moltisanti.vcf">
+          <span aria-hidden="true">↓</span> Save contact
+        </a>
+        <a class="action action-secondary" href={linkedinUrl} target="_blank" rel="noopener noreferrer">
+          LinkedIn <span aria-hidden="true">↗</span>
+        </a>
+        <button class="action action-secondary" id="share-button" type="button">
+          <span aria-hidden="true">↗</span> Share this card
+        </button>
+        <a class="action action-text" href={portfolioUrl}>
+          Explore my work <span aria-hidden="true">→</span>
+        </a>
+      </nav>
+      <p class="share-status" id="share-status" role="status" aria-live="polite"></p>
+
+      <footer>Private by design. Cloud by choice.</footer>
+    </main>
+
+    <script>
+      const card = document.getElementById('card-flip');
+      const frontTab = document.getElementById('front-tab');
+      const backTab = document.getElementById('back-tab');
+      const caption = document.getElementById('card-caption');
+      const shareButton = document.getElementById('share-button');
+      const shareStatus = document.getElementById('share-status');
+
+      function setFlipped(flipped: boolean) {
+        if (!card || !frontTab || !backTab || !caption) return;
+        card.classList.toggle('is-flipped', flipped);
+        card.setAttribute('aria-pressed', String(flipped));
+        card.setAttribute('aria-label', flipped ? 'Show front of the card' : 'Show back of the card');
+        frontTab.classList.toggle('active', !flipped);
+        backTab.classList.toggle('active', flipped);
+        frontTab.setAttribute('aria-pressed', String(!flipped));
+        backTab.setAttribute('aria-pressed', String(flipped));
+        caption.textContent = flipped ? '02 / 02 — Back' : '01 / 02 — Front';
+      }
+
+      card?.addEventListener('click', () => setFlipped(!card.classList.contains('is-flipped')));
+      frontTab?.addEventListener('click', () => setFlipped(false));
+      backTab?.addEventListener('click', () => setFlipped(true));
+
+      let initialTouchX = 0;
+      let initialTouchY = 0;
+      card?.addEventListener('touchstart', (event) => {
+        const point = event.changedTouches[0];
+        if (!point) return;
+        initialTouchX = point.screenX;
+        initialTouchY = point.screenY;
+      }, { passive: true });
+      card?.addEventListener('touchend', (event) => {
+        const point = event.changedTouches[0];
+        if (!point) return;
+        const dx = point.screenX - initialTouchX;
+        const dy = point.screenY - initialTouchY;
+        if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          setFlipped(dx < 0);
+        }
+      }, { passive: true });
+
+      shareButton?.addEventListener('click', async () => {
+        const shareUrl = 'https://daniele21.github.io/connect';
+        const payload = { title: 'Daniele Moltisanti · LOCAL-FIRST.', text: 'AI Strategy Leader & AI Builder', url: shareUrl };
+        if (navigator.share) {
+          try {
+            await navigator.share(payload);
+            return;
+          } catch (error) {
+            if ((error as Error).name === 'AbortError') return;
+          }
+        }
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          if (shareStatus) shareStatus.textContent = 'Link copied — ready to share.';
+        } catch {
+          if (shareStatus) shareStatus.textContent = `Share this link: ${shareUrl}`;
+        }
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(html) { min-height: 100%; color-scheme: dark; }
+  :global(body) {
+    margin: 0;
+    min-height: 100svh;
+    color: #f7f8ff;
+    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(ellipse 70% 45% at 50% 56%, rgba(72, 50, 151, .29), transparent),
+      radial-gradient(ellipse 55% 30% at 80% 100%, rgba(28, 83, 193, .22), transparent),
+      #080c1d;
+  }
+  :global(button), :global(a) { font: inherit; }
+  :global(button:focus-visible), :global(a:focus-visible) { outline: 3px solid #8edbff; outline-offset: 4px; }
+  .digital-card-page {
+    width: min(100%, 1060px);
+    padding: max(24px, env(safe-area-inset-top)) clamp(16px, 4vw, 44px) max(32px, env(safe-area-inset-bottom));
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+  }
+  .topline { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-bottom: clamp(24px, 6vh, 66px); }
+  .eyebrow { font-size: .72rem; letter-spacing: .18em; color: #99a3ce; font-weight: 700; }
+  .topline-brand { font-size: .82rem; color: #eff0ff; letter-spacing: .045em; font-weight: 800; }
+  .dot { color: #a98dff; }
+  .experience { flex: 0 0 auto; width: 100%; }
+  .card-toolbar { display: flex; align-items: center; gap: 5px; margin-bottom: 14px; }
+  .side-tab { background: transparent; color: #aeb7d4; border: 1px solid transparent; border-radius: 100px; padding: 8px 14px; font-size: .85rem; cursor: pointer; }
+  .side-tab.active { color: #fff; background: rgba(118, 105, 199, .2); border-color: rgba(159, 145, 240, .48); }
+  .flip-hint { color: #9aa5c4; margin-left: auto; font-size: .78rem; }
+  .card-button {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1050 / 600;
+    border: 0;
+    padding: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    perspective: 1400px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .card-rotator {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .62s cubic-bezier(.2,.8,.2,1);
+    filter: drop-shadow(0 20px 36px rgba(0,0,0,.25));
+  }
+  .card-button.is-flipped .card-rotator { transform: rotateY(180deg); }
+  .card-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; border-radius: 5.1% / 8.9%; }
+  .card-back { transform: rotateY(180deg); }
+  .card-face img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .card-caption { text-align: center; color: #a5aec9; font-size: .72rem; letter-spacing: .09em; margin: 12px 0 0; }
+  .actions { margin: clamp(18px, 4vh, 40px) auto 0; display: grid; width: min(100%, 680px); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    min-height: 51px;
+    padding: 13px 15px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: .95rem;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid rgba(184, 179, 237, .32);
+    color: #f7f8ff;
+    background: rgba(51, 52, 98, .28);
+    transition: background .15s, border-color .15s;
+  }
+  .action:hover { border-color: #b99aff; background: rgba(116, 99, 206, .22); }
+  .action-primary { background: linear-gradient(112deg, #785bdb, #375cae); border-color: #9a8ae9; }
+  .action-primary:hover { background: linear-gradient(112deg, #866de4, #4571c9); }
+  .action-text { border-color: transparent; background: transparent; color: #bdb5ff; }
+  .share-status { min-height: 1rem; text-align: center; color: #c3beff; font-size: .82rem; margin: 11px auto 0; }
+  footer { text-align: center; color: #838eb7; font-size: .75rem; margin-top: auto; padding-top: clamp(22px, 5vh, 56px); letter-spacing: .02em; }
+  @media (max-width: 540px) {
+    .topline { padding-bottom: clamp(22px, 6vh, 55px); }
+    .flip-hint { font-size: .73rem; }
+    .actions { gap: 9px; }
+    .action { font-size: .83rem; min-height: 49px; border-radius: 12px; padding: 10px 6px; }
+    .card-toolbar { margin-bottom: 9px; }
+    .card-caption { margin-top: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card-rotator { transition: none; }
+    .action { transition: none; }
+  }
+</style>
