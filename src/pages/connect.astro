@@ -1,221 +1,192 @@
 ---
-/**
- * Lightweight event-networking card. The two images are approved original
- * flyer exports. Keep their artwork intact and present them as a single
- * vertically continuous mobile-first experience.
- * Standalone layout intentionally avoids the full site navigation in a quick-scan flow.
- */
+/** Mobile-first networking profile: the same brand and messaging as the flyer,
+ * deliberately rebuilt as semantic content rather than stretching print PNGs. */
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const frontImage = `${base}/images/network-card-front.png`;
-const backImage = `${base}/images/network-card-back.png`;
+const portraitSrc = `${base}/images/connect-portrait.webp`;
+const qrSrc = `${base}/images/connect-qr.png`;
 const vcardUrl = `${base}/daniele-moltisanti.vcf`;
 const portfolioUrl = `${base}/`;
-const linkedinUrl = 'https://www.linkedin.com/in/daniele-moltisanti/';
 const canonicalUrl = 'https://daniele21.github.io/connect';
 ---
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0b1025" />
-    <meta name="description" content="Daniele Moltisanti — AI Strategy Leader & AI Builder. Local-first. Your AI. Your Data. Your Control." />
-    <meta property="og:type" content="profile" />
-    <meta property="og:title" content="Daniele Moltisanti · LOCAL-FIRST." />
-    <meta property="og:description" content="Strategic vision. Hands-on execution. Local where it works. Cloud where it adds value." />
-    <meta property="og:image" content="https://daniele21.github.io/images/network-card-front.png" />
-    <meta property="og:url" content={canonicalUrl} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="canonical" href={canonicalUrl} />
-    <link rel="icon" href={`${base}/favicon.png`} type="image/png" />
-    <title>Daniele Moltisanti · Digital Card</title>
-  </head>
-  <body>
-    <main class="digital-card-page">
-      <header class="topline">
-        <span class="eyebrow">DIGITAL BUSINESS CARD</span>
-        <span class="topline-brand">LOCAL-FIRST<span class="dot">.</span></span>
-      </header>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#080c20" />
+  <meta name="description" content="Daniele Moltisanti — AI Strategy Leader & AI Builder. Local-first. Your AI. Your Data. Your Control." />
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="Daniele Moltisanti · LOCAL-FIRST." />
+  <meta property="og:description" content="Strategic vision. Hands-on execution. Local where it works. Cloud where it adds value." />
+  <meta property="og:image" content="https://daniele21.github.io/images/network-card-front.png" />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href={canonicalUrl} />
+  <link rel="icon" href={`${base}/favicon.png`} type="image/png" />
+  <title>Daniele Moltisanti · Local-first Digital Card</title>
+  <style is:global>
+:root{--bg:#080c20;--ink:#f8f9ff;--sub:#a9b5d2;--muted:#8995b2;--accent:#a28cff;--blue:#438cfb;--stroke:rgba(166,174,239,.17);--radius:24px;color-scheme:dark;}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100svh;background:#080c20;color:var(--ink);font-family:Inter, ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible{outline:3px solid #b1d4ff;outline-offset:4px}
+.page{max-width:900px;margin:auto;isolation:isolate;position:relative;overflow:hidden;background:radial-gradient(ellipse 85% 33% at 85% 26%,rgba(64,68,147,.15),transparent 70%),var(--bg)}
+.hero{padding:calc(max(env(safe-area-inset-top),24px) + 6px) clamp(22px,6vw,58px) 52px;min-height:660px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.hero:before{content:"";position:absolute;z-index:-1;pointer-events:none;width:125%;height:330px;right:-44%;bottom:-190px;border-radius:55% 50% 0 0;transform:rotate(-19deg);background:radial-gradient(ellipse at 30% 12%,rgba(120,78,255,.76),transparent 54%),linear-gradient(150deg,#33137c 18%,#193d9f 47%,#1169db 85%);box-shadow:0 -2px 26px rgba(95,124,255,.45),0 -1px 0 1px rgba(108,206,255,.5);filter:blur(.15px)}
+.hero:after{content:"";z-index:-1;position:absolute;pointer-events:none;inset:55% -10% 0;background:radial-gradient(ellipse 45% 48% at 90% 92%,rgba(33,97,236,.27),transparent),radial-gradient(ellipse 56% 48% at 46% 100%,rgba(85,45,178,.32),transparent)}
+.top{display:flex;align-items:start;justify-content:space-between;gap:12px}
+.identity{display:flex;flex-direction:column;gap:5px;padding-top:8px;max-width:65%}
+.name{font-weight:800;font-size:clamp(18px,5.4vw,25px);letter-spacing:-.045em;line-height:1.08}
+.role{color:#bbc5e0;font-size:clamp(12px,3.4vw,15px);line-height:1.45;max-width:240px}
+.portrait-wrap{flex:0 0 auto;width:clamp(78px,23vw,108px);height:clamp(78px,23vw,108px);border-radius:50%;overflow:hidden;background:#656b77;box-shadow:0 8px 28px rgba(0,0,0,.36),0 0 0 2px rgba(180,179,255,.18)}
+.portrait-wrap img{width:100%;height:100%;object-fit:cover;object-position:50% 28%;display:block;transform:scale(1.24)}
+.micro-line{height:3px;width:44px;background:linear-gradient(90deg,#af5efa,#49aeff);border-radius:30px;box-shadow:0 0 13px rgba(103,135,255,.5);margin-top:34px}
+.hero-main{margin-top:19px;max-width:700px}
+.local{font-size:clamp(45px,11.1vw,94px);line-height:.96;letter-spacing:-.073em;font-weight:900;margin:0 0 24px;white-space:nowrap}
+.local span{background:linear-gradient(105deg,#cc80f8 5%,#905cff 32%,#4d98ff 85%);color:transparent;background-clip:text;-webkit-background-clip:text}
+.promise{font-size:clamp(21px,5.5vw,34px);font-weight:720;letter-spacing:-.037em;line-height:1.22;margin:0;max-width:500px}
+.hero-support{color:#b3bed8;font-size:15px;line-height:1.5;margin:19px 0 0;max-width:420px}
+.hero-actions{margin-top:31px;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:10px;max-width:510px}
+.action{min-height:52px;display:flex;align-items:center;justify-content:center;gap:9px;border-radius:14px;border:1px solid rgba(192,186,255,.36);background:rgba(70,77,137,.14);color:white;font-weight:720;font-size:14px;cursor:pointer;transition:background .2s ease,transform .2s ease;white-space:nowrap}
+.action:hover{background:rgba(132,117,230,.25);transform:translateY(-1px)}
+.action.primary{background:linear-gradient(112deg,#7b60d5,#335fb2);border-color:rgba(155,173,249,.65);box-shadow:0 4px 18px rgba(41,63,162,.15)}
+.action.primary:hover{background:linear-gradient(112deg,#9875f7,#477ce0)}
+.action svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.utility{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.quiet-button{background:transparent;border:0;min-height:44px;padding:7px 12px 7px 3px;cursor:pointer;color:#bdc9e4;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.quiet-button svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2}
+.hero-foot{color:#a7b2d5;position:relative;display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-top:auto;padding-top:34px}
+.hero-foot svg{width:16px;height:16px;stroke:#c9cfff;stroke-width:1.8;fill:none}
+.details{position:relative;background:linear-gradient(175deg,#0e1430 0%,#0a1026 63%,#090d20 100%);padding:56px clamp(22px,6vw,58px) 58px;border-top:1px solid rgba(109,125,198,.23)}
+.section-tag{color:#a8a2f7;font-size:11px;letter-spacing:.2em;font-weight:800;margin:0 0 22px}
+.details h2{font-size:clamp(31px,7vw,49px);line-height:1.08;letter-spacing:-.055em;font-weight:820;margin:0 0 14px;max-width:560px}
+.details h2 span{background:linear-gradient(100deg,#c97bfd,#5f9eff);color:transparent;background-clip:text;-webkit-background-clip:text}
+.details .subhead{font-size:15px;color:#b1bdd9;margin:0 0 29px;max-width:440px;line-height:1.5}
+.value-list{border-top:1px solid var(--stroke);max-width:640px}
+.value-row{display:grid;grid-template-columns:42px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--stroke);align-items:start}
+.value-index{font-size:13px;font-weight:790;color:#937be2;margin-top:3px;font-variant-numeric:tabular-nums}
+.value-heading{font-size:19px;font-weight:780;letter-spacing:-.035em;margin:0 0 5px}
+.value-copy{font-size:15px;color:#b2bbd2;line-height:1.45;margin:0}
+.principle{max-width:680px;margin-top:45px;position:relative;background:linear-gradient(135deg,rgba(93,78,185,.13),rgba(28,80,164,.14));border:1px solid rgba(122,131,226,.3);border-radius:20px;padding:25px 22px;box-shadow:inset 0 1px rgba(255,255,255,.04)}
+.principle:before{content:"";position:absolute;top:-1px;left:21px;width:74px;height:2px;background:linear-gradient(90deg,#bb77f7,#4a9cf9);border-radius:5px}
+.principle-title{font-size:clamp(23px,6.3vw,37px);letter-spacing:-.055em;font-weight:870;line-height:1.08;margin:0 0 10px}
+.principle-title .neq{color:#bb78f8}.principle-title .only{background:linear-gradient(95deg,#aa7dfa,#61a1ff);color:transparent;background-clip:text;-webkit-background-clip:text}
+.principle-text{font-size:15px;line-height:1.45;color:#d0d9ec;margin:0}
+.bottom-link{border-top:1px solid rgba(122,131,226,.21);margin-top:29px;padding-top:28px;display:flex;gap:10px;align-items:center;justify-content:space-between;color:#bfc9e4;font-size:14px;font-weight:650}
+.bottom-link a{min-height:48px;display:flex;align-items:center;gap:8px;color:#d0bcff}
+footer{font-size:11px;color:#8493b8;text-align:center;padding:18px 25px 30px;background:#090d20}
+.overlay{position:fixed;inset:0;display:grid;place-items:center;z-index:20;background:rgba(3,6,17,.82);padding:22px;backdrop-filter:blur(12px)}.overlay[hidden]{display:none}
+.qr-dialog{background:linear-gradient(155deg,#171c3e,#10142e);border:1px solid rgba(172,181,248,.3);border-radius:25px;box-shadow:0 26px 100px rgba(0,0,0,.4);width:min(100%,390px);padding:24px;position:relative;text-align:center}
+.qr-dialog h3{margin:4px 0 8px;font-size:24px;letter-spacing:-.04em}.qr-dialog p{margin:0 0 19px;font-size:13px;color:#b2bddc;line-height:1.5}
+.qr-dialog img{width:min(100%,245px);display:block;margin:0 auto;border-radius:13px;border:9px solid #fff}
+.qr-dialog .qr-address{color:#d0d5ff;font-size:12px;letter-spacing:.005em;margin:14px 0 0}
+.close{position:absolute;right:15px;top:12px;background:transparent;color:white;border:0;width:44px;height:44px;font-size:27px;cursor:pointer}
+.toast{position:fixed;bottom:max(18px,env(safe-area-inset-bottom));left:50%;transform:translate(-50%,20px);background:#dcdafe;color:#161431;padding:12px 16px;border-radius:12px;font-size:13px;font-weight:700;box-shadow:0 8px 34px #0007;opacity:0;pointer-events:none;transition:.18s;white-space:nowrap;z-index:35}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:360px){.hero{padding-left:17px;padding-right:17px}.details{padding-left:17px;padding-right:17px}.local{font-size:43px}.hero-actions{gap:7px}.action{font-size:13px}.portrait-wrap{width:76px;height:76px}}
+@media(min-width:680px){.hero{min-height:630px;padding-top:52px}.hero-main{margin-top:38px}.hero-actions{margin-top:37px}.details{padding-top:62px}.details .value-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;border:0;max-width:none}.value-row{display:block;border:1px solid var(--stroke);border-radius:16px;padding:21px 18px;min-height:172px}.value-index{display:block;margin-bottom:16px}.principle{max-width:none}.hero:before{width:85%;right:-18%;height:370px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
 
-      <section class="experience" aria-labelledby="flyer-title">
-        <h1 id="flyer-title" class="sr-only">Daniele Moltisanti — Local-first AI strategy and product building</h1>
-        <div class="flyer-continuum" aria-label="Front and back of the original Local-first flyer, presented vertically">
-          <img
-            class="flyer-image flyer-front"
-            src={frontImage}
-            width="1050"
-            height="600"
-            alt="Front: Daniele Moltisanti, AI Strategy Leader and AI Builder. Local-first. Your AI. Your Data. Your Control."
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-          />
-          <img
-            class="flyer-image flyer-back"
-            src={backImage}
-            width="1672"
-            height="941"
-            alt="Back: Strategic vision, hands-on execution. Strategy, Build and Control. Local-first is not local-only."
-            loading="eager"
-            decoding="async"
-          />
-        </div>
-      </section>
+@media(max-width:390px){.hero{min-height:610px}.hero-actions{margin-top:25px}}
 
-      <nav class="actions" aria-label="Contact and sharing">
-        <a class="action action-primary" href={vcardUrl} download="Daniele-Moltisanti.vcf">
-          <span aria-hidden="true">↓</span> Save contact
-        </a>
-        <a class="action action-secondary" href={linkedinUrl} target="_blank" rel="noopener noreferrer">
-          LinkedIn <span aria-hidden="true">↗</span>
-        </a>
-        <button class="action action-secondary" id="share-button" type="button">
-          <span aria-hidden="true">↗</span> Share this card
-        </button>
-        <a class="action action-text" href={portfolioUrl}>
-          Explore my work <span aria-hidden="true">→</span>
-        </a>
-      </nav>
-      <p class="share-status" id="share-status" role="status" aria-live="polite"></p>
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="hero" id="top">
+    <div class="top">
+      <div class="identity"><strong class="name">Daniele Moltisanti</strong><div class="role">AI Strategy Leader &amp; AI Builder</div></div>
+      <div class="portrait-wrap"><img src={portraitSrc} width="1012" height="899" loading="eager" decoding="async" fetchpriority="high" alt="Portrait of Daniele Moltisanti"></div>
+    </div>
+    <div class="micro-line" aria-hidden="true"></div>
+    <div class="hero-main"><h1 class="local">LOCAL-<span>FIRST.</span></h1><p class="promise">Your AI. Your Data.<br>Your Control.</p><p class="hero-support">Private by design. Cloud by choice.</p></div>
+    <div class="hero-actions">
+      <a class="action primary" download="Daniele-Moltisanti.vcf" href={vcardUrl}><svg viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 18v3h16v-3"/></svg>Save contact</a>
+      <a class="action" href="https://www.linkedin.com/in/daniele-moltisanti/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M5 8v11M5 5v.1M10 19v-7c0-3 8-4 8 2v5M10 10v9"/></svg>LinkedIn</a>
+    </div>
+    <div class="utility"><button class="quiet-button" type="button" id="show-qr" aria-haspopup="dialog"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM15 15h2v2h-2zM19 19h2v2h-2zM20 13h1v3h-1z"/></svg>Show QR</button><button class="quiet-button" type="button" id="share"><svg viewBox="0 0 24 24"><path d="M12 15V3m-4 4 4-4 4 4M5 13v8h14v-8"/></svg>Share card</button></div>
+    <div class="hero-foot">Strategy meets execution <svg viewBox="0 0 24 24"><path d="M12 3v17m-6-6 6 6 6-6"/></svg></div>
+  </header>
+  <section class="details" aria-labelledby="strategy-title">
+    <p class="section-tag">WHAT I BRING</p><h2 id="strategy-title">Strategic vision.<br><span>Hands-on execution.</span></h2>
+    <p class="subhead">Enterprise AI experience. Real-world AI building.</p>
+    <div class="value-list">
+      <div class="value-row"><span class="value-index">01</span><div><h3 class="value-heading">STRATEGY</h3><p class="value-copy">Value, feasibility &amp; costs.</p></div></div>
+      <div class="value-row"><span class="value-index">02</span><div><h3 class="value-heading">BUILD</h3><p class="value-copy">From concept to real products.</p></div></div>
+      <div class="value-row"><span class="value-index">03</span><div><h3 class="value-heading">CONTROL</h3><p class="value-copy">Privacy. Independence. Local AI.</p></div></div>
+    </div>
+    <div class="principle"><h3 class="principle-title">LOCAL-FIRST <span class="neq">≠</span><br><span class="only">LOCAL-ONLY</span></h3><p class="principle-text">Local where it works.<br>Cloud where it adds value.</p></div>
+    <div class="bottom-link"><span>Curious what I've built?</span><a href={portfolioUrl}>Explore my work →</a></div>
+  </section>
+  <footer>Daniele Moltisanti · Local-first AI</footer>
+</main>
+<div class="overlay" id="qr-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="qr-title"><div class="qr-dialog"><button type="button" class="close" aria-label="Close QR" id="qr-close">×</button><h3 id="qr-title">Connect with me</h3><p>Scan to open my digital business card</p><img src={qrSrc} width="585" height="585" loading="lazy" decoding="async" alt="QR code to daniele21.github.io/connect"><div class="qr-address">daniele21.github.io/connect</div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite">Link copied</div>
 
-      <footer>Private by design. Cloud by choice.</footer>
-    </main>
 
-    <script>
-      const shareButton = document.getElementById('share-button');
-      const shareStatus = document.getElementById('share-status');
+<script>
+  const overlay = document.getElementById('qr-overlay');
+  const showQR = document.getElementById('show-qr');
+  const closeQR = document.getElementById('qr-close');
+  const shareButton = document.getElementById('share');
+  const toast = document.getElementById('toast');
+  let toastTimeout: ReturnType<typeof setTimeout> | undefined;
+  let focusBeforeDialog: HTMLElement | null = null;
 
-      shareButton?.addEventListener('click', async () => {
-        const shareUrl = 'https://daniele21.github.io/connect';
-        const payload = { title: 'Daniele Moltisanti · LOCAL-FIRST.', text: 'AI Strategy Leader & AI Builder', url: shareUrl };
-        if (navigator.share) {
-          try {
-            await navigator.share(payload);
-            return;
-          } catch (error) {
-            if ((error as Error).name === 'AbortError') return;
-          }
-        }
-        try {
-          await navigator.clipboard.writeText(shareUrl);
-          if (shareStatus) shareStatus.textContent = 'Link copied — ready to share.';
-        } catch {
-          if (shareStatus) shareStatus.textContent = `Share this link: ${shareUrl}`;
-        }
-      });
-    </script>
-  </body>
+  function setQRVisible(visible: boolean) {
+    if (!overlay || !showQR || !closeQR) return;
+    overlay.hidden = !visible;
+    document.body.style.overflow = visible ? 'hidden' : '';
+    if (visible) {
+      focusBeforeDialog = document.activeElement as HTMLElement;
+      closeQR.focus();
+    } else {
+      (focusBeforeDialog || showQR).focus();
+    }
+  }
+  showQR?.addEventListener('click', () => setQRVisible(true));
+  closeQR?.addEventListener('click', () => setQRVisible(false));
+  overlay?.addEventListener('click', (event) => {
+    if (event.target === overlay) setQRVisible(false);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (!overlay || overlay.hidden) return;
+    if (event.key === 'Escape') setQRVisible(false);
+    if (event.key === 'Tab' && !event.shiftKey) {
+      event.preventDefault();
+      closeQR?.focus();
+    }
+    if (event.key === 'Tab' && event.shiftKey) {
+      event.preventDefault();
+      closeQR?.focus();
+    }
+  });
+
+  function notify(message: string) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('show');
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+  shareButton?.addEventListener('click', async () => {
+    const link = 'https://daniele21.github.io/connect';
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Daniele Moltisanti · Local-first',
+          text: 'Your AI. Your Data. Your Control.',
+          url: link,
+        });
+        return;
+      } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(link);
+      notify('Card link copied');
+    } catch {
+      notify('Open daniele21.github.io/connect to share');
+    }
+  });
+</script>
+</body>
 </html>
-
-<style>
-  :global(*) { box-sizing: border-box; }
-  :global(html) { min-height: 100%; color-scheme: dark; }
-  :global(body) {
-    margin: 0;
-    min-height: 100svh;
-    color: #f7f8ff;
-    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background:
-      radial-gradient(ellipse 70% 45% at 50% 56%, rgba(72, 50, 151, .29), transparent),
-      radial-gradient(ellipse 55% 30% at 80% 100%, rgba(28, 83, 193, .22), transparent),
-      #080c1d;
-  }
-  :global(button), :global(a) { font: inherit; }
-  :global(button:focus-visible), :global(a:focus-visible) { outline: 3px solid #8edbff; outline-offset: 4px; }
-  .digital-card-page {
-    width: min(100%, 1060px);
-    padding: max(24px, env(safe-area-inset-top)) clamp(16px, 4vw, 44px) max(32px, env(safe-area-inset-bottom));
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 100svh;
-  }
-  .topline { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-bottom: clamp(24px, 6vh, 66px); }
-  .eyebrow { font-size: .72rem; letter-spacing: .18em; color: #99a3ce; font-weight: 700; }
-  .topline-brand { font-size: .82rem; color: #eff0ff; letter-spacing: .045em; font-weight: 800; }
-  .dot { color: #a98dff; }
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-  .experience { flex: 0 0 auto; width: 100%; }
-  .flyer-continuum {
-    position: relative;
-    isolation: isolate;
-    width: 100%;
-    overflow: hidden;
-    border-radius: clamp(14px, 3vw, 28px);
-    background: linear-gradient(160deg, #090e24 0%, #12122f 55%, #171048 100%);
-    box-shadow: 0 24px 58px rgba(0, 0, 0, .32);
-  }
-  .flyer-continuum::after {
-    content: '';
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    border: 1px solid rgba(157, 157, 228, .24);
-    border-radius: inherit;
-  }
-  .flyer-image {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    margin: 0;
-  }
-  /* The original PNGs have light-colored export margins around the artwork.
-     Hide only the touching outermost 4% strips so the two navy panels meet
-     without a bright horizontal seam. The source assets stay unchanged. */
-  .flyer-front {
-    position: relative;
-    z-index: 1;
-    -webkit-clip-path: inset(0 0 4% 0);
-    clip-path: inset(0 0 4% 0);
-  }
-  .flyer-back {
-    margin-top: -4.55%;
-    -webkit-clip-path: inset(4% 0 0 0);
-    clip-path: inset(4% 0 0 0);
-  }
-  .actions { margin: clamp(18px, 4vh, 40px) auto 0; display: grid; width: min(100%, 680px); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  .action {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 9px;
-    min-height: 51px;
-    padding: 13px 15px;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: .95rem;
-    cursor: pointer;
-    text-align: center;
-    border: 1px solid rgba(184, 179, 237, .32);
-    color: #f7f8ff;
-    background: rgba(51, 52, 98, .28);
-    transition: background .15s, border-color .15s;
-  }
-  .action:hover { border-color: #b99aff; background: rgba(116, 99, 206, .22); }
-  .action-primary { background: linear-gradient(112deg, #785bdb, #375cae); border-color: #9a8ae9; }
-  .action-primary:hover { background: linear-gradient(112deg, #866de4, #4571c9); }
-  .action-text { border-color: transparent; background: transparent; color: #bdb5ff; }
-  .share-status { min-height: 1rem; text-align: center; color: #c3beff; font-size: .82rem; margin: 11px auto 0; }
-  footer { text-align: center; color: #838eb7; font-size: .75rem; margin-top: auto; padding-top: clamp(22px, 5vh, 56px); letter-spacing: .02em; }
-  @media (max-width: 540px) {
-    .topline { padding-bottom: clamp(22px, 6vh, 55px); }
-    .actions { gap: 9px; }
-    .action { font-size: .83rem; min-height: 49px; border-radius: 12px; padding: 10px 6px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .action { transition: none; }
-  }
-</style>
