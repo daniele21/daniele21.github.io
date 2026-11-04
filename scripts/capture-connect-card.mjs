@@ -36,6 +36,21 @@ try {
       }));
       assert.ok(width.scroll <= width.viewport + 2, label + ' must not scroll sideways: ' + JSON.stringify(width));
 
+      const flow = await page.evaluate(() => ({
+        heroBackground: getComputedStyle(document.querySelector('.hero')).backgroundColor,
+        detailsBackground: getComputedStyle(document.querySelector('.details')).backgroundColor,
+        heroHeight: document.querySelector('.hero').getBoundingClientRect().height,
+        href: document.querySelector('.hero-foot')?.getAttribute('href'),
+        heading: document.querySelector('#strategy-title')?.textContent,
+        timeline: getComputedStyle(document.querySelector('.value-list'), '::before').height,
+      }));
+      assert.equal(flow.heroBackground, 'rgba(0, 0, 0, 0)', 'Hero should share the same background as details');
+      assert.equal(flow.detailsBackground, 'rgba(0, 0, 0, 0)', 'Details should share the same background as hero');
+      assert.equal(flow.href, '#strategy-title', 'The reading transition must be navigable');
+      assert.ok(flow.heading?.includes('Hands-on execution.'), 'Strategy section should immediately follow hero');
+      assert.notEqual(flow.timeline, 'auto', 'Stages should share one connected signal path');
+      if (viewport.width < 760) assert.ok(flow.heroHeight < 630, 'Mobile hero should not create a large empty break');
+
       await page.screenshot({ path: `${outputDir}/${label}-profile.png`, fullPage: true });
 
       await page.locator('#show-qr').click();
