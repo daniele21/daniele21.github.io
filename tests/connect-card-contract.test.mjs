@@ -11,7 +11,7 @@ const vcard = get('public/daniele-moltisanti.vcf').toString('utf8');
 
 test('native mobile-first /connect is no longer an image collage', () => {
   for (const required of [
-    '<h1 class="local">LOCAL-<span>FIRST.</span></h1>',
+    '<h1 class="local">AI <span>Local-First.</span></h1>',
     'Your AI. Your Data.',
     'Strategic vision.',
     'Hands-on execution.',
