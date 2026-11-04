@@ -42,6 +42,20 @@ test('design remains one connected surface rather than visually divided panels',
   }
 });
 
+test('motion is purposeful, compositor-friendly, and progressive', () => {
+  for (const expected of [
+    '--motion-ease:', '@keyframes arrive', '@keyframes lineReveal',
+    '.value-list::after {', '--signal-progress', 'requestAnimationFrame(updateJourney)',
+    'IntersectionObserver', 'data-motion-reveal', 'prefers-reduced-motion: no-preference',
+    'prefers-reduced-motion:reduce', '.overlay:not([hidden]) .qr-dialog',
+  ]) assert.ok(page.includes(expected), 'missing motion feature: ' + expected);
+  for (const bad of ['transition: all', 'animation: infinite', 'rotateY(']) {
+    assert.equal(page.includes(bad), false, 'disallowed motion: ' + bad);
+  }
+  assert.ok(page.includes('animation:none!important'), 'reduced motion must disable animation');
+  assert.ok(page.includes('!motionPreference.matches'), 'motion JS should respect user settings');
+});
+
 test('portrait and QR are local optimized assets with correct dimensions', () => {
   const portrait = get('public/images/connect-portrait.webp');
   assert.equal(portrait.toString('ascii', 0, 4), 'RIFF');
