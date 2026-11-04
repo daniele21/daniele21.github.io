@@ -171,18 +171,19 @@ const canonicalUrl = 'https://daniele21.github.io/connect';
     object-fit: contain;
     margin: 0;
   }
-  /* A subtle crossfade hides the gray export border between the two
-     approved images, preserving both pieces of original artwork. */
+  /* The original PNGs have light-colored export margins around the artwork.
+     Hide only the touching outermost 4% strips so the two navy panels meet
+     without a bright horizontal seam. The source assets stay unchanged. */
   .flyer-front {
     position: relative;
     z-index: 1;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 96%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 96%, transparent 100%);
+    -webkit-clip-path: inset(0 0 4% 0);
+    clip-path: inset(0 0 4% 0);
   }
   .flyer-back {
-    margin-top: -2.5%;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 4%, #000 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, #000 4%, #000 100%);
+    margin-top: -4.55%;
+    -webkit-clip-path: inset(4% 0 0 0);
+    clip-path: inset(4% 0 0 0);
   }
   .actions { margin: clamp(18px, 4vh, 40px) auto 0; display: grid; width: min(100%, 680px); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .action {
