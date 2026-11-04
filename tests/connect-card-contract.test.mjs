@@ -30,9 +30,9 @@ test('front and back are stacked in a continuous, responsive layout', () => {
     'width: 100%;',
     'height: auto;',
     'object-fit: contain;',
-    'margin-top: -2.5%;',
-    'mask-image: linear-gradient(to bottom, #000 0%, #000 96%, transparent 100%)',
-    'mask-image: linear-gradient(to bottom, transparent 0%, #000 4%, #000 100%)',
+    'margin-top: -4.55%;',
+    'clip-path: inset(0 0 4% 0);',
+    'clip-path: inset(4% 0 0 0);',
   ]) assert.ok(cardPage.includes(required), 'missing responsive visual continuity: ' + required);
   for (const forbidden of ['id="card-flip"', 'id="front-tab"', 'id="back-tab"', 'rotateY(', 'setFlipped(', 'backface-visibility']) {
     assert.equal(cardPage.includes(forbidden), false, 'outdated flip behavior: ' + forbidden);
