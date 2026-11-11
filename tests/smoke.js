@@ -397,6 +397,40 @@ for (const { from, target } of expectedRedirects) {
   }
 }
 
+console.log('\n🔍 8. Verifying standalone Pausio mobile capture...');
+const captureArtifacts = [
+  'pausio/index.html',
+  'pausio/capture.css',
+  'pausio/capture.js',
+];
+for (const asset of captureArtifacts) {
+  const target = path.join(distDir, asset);
+  if (!fs.existsSync(target) || fs.statSync(target).size === 0) {
+    console.error(`❌ Pausio mobile artifact missing or empty: ${asset}`);
+    errors++;
+  } else {
+    console.log(`  ✓ Pausio capture asset verified: ${asset}`);
+  }
+}
+const captureIndex = path.join(distDir, 'pausio/index.html');
+const captureScript = path.join(distDir, 'pausio/capture.js');
+if (fs.existsSync(captureIndex) && fs.existsSync(captureScript)) {
+  const html = fs.readFileSync(captureIndex, 'utf-8');
+  const js = fs.readFileSync(captureScript, 'utf-8');
+  const contracts = [
+    [html.includes('id="record-start"'), 'Record button'],
+    [html.includes('id="download-video"'), 'On-device download button'],
+    [html.includes('./capture.css') && html.includes('./capture.js'), 'Relative URLs under /pausio/'],
+    [js.includes('new MediaRecorder(stream'), 'Browser video recorder'],
+    [js.includes('URL.createObjectURL(output)'), 'Offline blob video download'],
+    [js.includes('els.download.download = outputName'), 'Downloaded file name'],
+    [!js.includes('fetch(') && !js.includes('XMLHttpRequest'), 'No automatic remote uploads'],
+  ];
+  for (const [passes, label] of contracts) {
+    if (!passes) { console.error(`❌ Pausio capture contract failed: ${label}`); errors++; }
+  }
+}
+
 if (errors > 0) {
   console.error(`\n❌ Verification completed with ${errors} error(s).`);
   process.exit(1);
